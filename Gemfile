@@ -2,12 +2,11 @@
 
 source "https://rubygems.org"
 
-# Specify your gem's dependencies in ea.gemspec
 gemspec
 
-gem "irb"
-gem "rake", "~> 13.0"
+# Local path dependency for development
+gem "lutaml-uml", path: "../lutaml-uml"
 
+gem "canon", path: "../canon"
+gem "rake"
 gem "rspec", "~> 3.0"
-
-gem "rubocop", "~> 1.21"

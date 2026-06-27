@@ -1,0 +1,73 @@
+# frozen_string_literal: true
+
+module Ea
+  module Diagram
+      module Util
+        # Convert a style hash to a CSS string
+        #
+        # @param style_hash [Hash] Style properties (e.g., { stroke: "#000" })
+        # @return [String] CSS string (e.g., "stroke:#000;fill:none")
+        def style_to_css(style_hash)
+          style_hash.map { |k, v| "#{k}:#{v}" }.join(";")
+        end
+
+        # Parse geometry offsets
+        def parse_geometry_offsets(geometry_string)
+          geometry = parse_ea_geometry(geometry_string)
+
+          [
+            geometry[:source_offset_x].to_i,
+            geometry[:source_offset_y].to_i,
+            geometry[:target_offset_x].to_i,
+            geometry[:target_offset_y].to_i,
+          ]
+        rescue TypeError, NoMethodError
+          [0, 0, 0, 0]
+        end
+
+        def parse_ea_geometry(geometry_string) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+          return nil if geometry_string.nil? || geometry_string.strip.empty?
+
+          data = {}
+          begin
+            geometry = geometry_string
+              .gsub(/\s/, "")
+              .downcase
+              .split(";")
+              .to_h { |pair| pair.split("=") }
+
+            geometry.each do |k, v|
+              if v.include?(",")
+                # waypoints
+                data[:waypoints] ||= []
+                x_str, y_str = v.split(",")
+                data[:waypoints] << { x: x_str.to_i, y: y_str.to_i }
+              else
+                key = case k
+                      when "sx"
+                        data[:has_relative_coords] ||= true
+                        "source_offset_x"
+                      when "sy"
+                        data[:has_relative_coords] ||= true
+                        "source_offset_y"
+                      when "ex"
+                        data[:has_relative_coords] ||= true
+                        "target_offset_x"
+                      when "ey"
+                        data[:has_relative_coords] ||= true
+                        "target_offset_y"
+                      else
+                        k
+                      end
+
+                data[key.to_sym] = v.to_i
+              end
+            end
+          rescue ArgumentError, TypeError
+            data = {}
+          end
+          data
+        end
+      end
+    end
+end
