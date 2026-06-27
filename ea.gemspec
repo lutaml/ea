@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "lib/ea/version"
+require_relative "lib/ea"
 
 Gem::Specification.new do |spec|
   spec.name = "ea"
@@ -8,23 +8,14 @@ Gem::Specification.new do |spec|
   spec.authors = ["Ribose Inc."]
   spec.email = ["open.source@ribose.com"]
 
-  spec.summary = "Enterprise Architect data file parser"
-  spec.description = "EA is a Ruby library for parsing Enterprise Architect data files, including QEA. It provides an easy-to-use interface for extracting information from EA models, making it easier to work with EA data in Ruby applications."
+  spec.summary = "Standalone Enterprise Architect data file parser"
+  spec.description = "ea is a standalone Ruby gem for parsing Enterprise Architect data files (QEA format, Sparx XMI). It provides QEA database parsing, EA diagram rendering, and EA data validation. The UML bridge (Ea::Qea.to_uml) optionally requires the lutaml-uml gem."
   spec.homepage = "https://github.com/lutaml/ea"
   spec.required_ruby_version = ">= 3.2.0"
-  # spec.metadata["allowed_push_host"] = "TODO: Set to your gem server 'https://example.com'"
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/lutaml/ea"
   spec.metadata["changelog_uri"] = "https://github.com/lutaml/ea/blob/main/CHANGELOG.md"
 
-  # Uncomment the line below to require MFA for gem pushes.
-  # This helps protect your gem from supply chain attacks by ensuring
-  # no one can publish a new version without multi-factor authentication.
-  # See: https://guides.rubygems.org/mfa-requirement-opt-in/
-  # spec.metadata["rubygems_mfa_required"] = "true"
-
-  # Specify which files should be added to the gem when it is released.
-  # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
   gemspec = File.basename(__FILE__)
   spec.files = IO.popen(%w[git ls-files -z], chdir: __dir__, err: IO::NULL) do |ls|
     ls.readlines("\x0", chomp: true).reject do |f|
@@ -36,9 +27,14 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  # Uncomment to register a new dependency of your gem
-  # spec.add_dependency "example-gem", "~> 1.0"
+  # Core dependencies — standalone parser needs only these
+  spec.add_dependency "sqlite3"
+  spec.add_dependency "rubyzip"
+  spec.add_dependency "xmi", "~> 0.5", ">= 0.5.2"
+  spec.add_dependency "nokogiri", "~> 1.18"
+  spec.add_dependency "liquid"
+  spec.add_dependency "thor", "~> 1.4"
 
-  # For more information and examples about making a new gem, check out our
-  # guide at: https://guides.rubygems.org/make-your-own-gem/
+  # Optional: required only for Ea::Qea.to_uml / Ea::Qea.parse (UML bridge)
+  spec.add_dependency "lutaml-uml"
 end
