@@ -27,7 +27,13 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  # Core dependencies — standalone parser needs only these
+  # Core dependencies — standalone parser needs only these.
+  # `lutaml-uml` is intentionally NOT declared here: the gem is usable
+  # standalone (QEA, XMI, Diagram, Transformations). The optional
+  # UML bridge (Ea::Qea.to_uml) lazy-requires `lutaml/uml` inside the
+  # method body and raises a clear error if the gem is not installed.
+  spec.add_dependency "lutaml-model"
+  spec.add_dependency "lutaml-path"
   spec.add_dependency "sqlite3"
   spec.add_dependency "rubyzip"
   spec.add_dependency "xmi", "~> 0.5", ">= 0.5.2"
@@ -35,6 +41,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "liquid"
   spec.add_dependency "thor", "~> 1.4"
 
-  # Optional: required only for Ea::Qea.to_uml / Ea::Qea.parse (UML bridge)
-  spec.add_dependency "lutaml-uml"
+  # Development-only — provides the UML bridge used by the spec suite.
+  spec.add_development_dependency "lutaml-uml"
 end

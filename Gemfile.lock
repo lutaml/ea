@@ -16,9 +16,7 @@ PATH
   remote: ../lutaml-uml
   specs:
     lutaml-uml (0.2.0)
-      liquid
       lutaml-model (~> 0.8.0)
-      lutaml-path
       rubyzip (~> 2.3)
 
 PATH
@@ -26,7 +24,8 @@ PATH
   specs:
     ea (0.1.0)
       liquid
-      lutaml-uml
+      lutaml-model
+      lutaml-path
       nokogiri (~> 1.18)
       rubyzip
       sqlite3
