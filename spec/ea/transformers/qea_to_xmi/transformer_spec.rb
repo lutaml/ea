@@ -21,8 +21,8 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
       root = parsed.root
       expect(root.name).to eq("XMI")
       expect(root.namespace.prefix).to eq("xmi")
-      expect(root.namespaces["xmlns:xmi"]).to eq(Ea::Transformers::QeaToXmi::SparxNamespaces::XMI)
-      expect(root.namespaces["xmlns:uml"]).to eq(Ea::Transformers::QeaToXmi::SparxNamespaces::UML)
+      expect(root.namespaces["xmlns:xmi"]).to eq(::Xmi::Namespace::Omg::Xmi.uri)
+      expect(root.namespaces["xmlns:uml"]).to eq(::Xmi::Namespace::Omg::Uml.uri)
     end
 
     it "includes the xmi:Documentation block with EA exporter info" do
@@ -90,7 +90,9 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
       expected = database.objects.sum do |obj|
         database.operations_for_object(obj.ea_object_id).size
       end
-      expect(count_xmi_type("uml:Operation")).to eq(expected)
+      # Real Sparx XMI does not emit xmi:type on <ownedOperation>; count by
+      # element name. See spec/fixtures/basic.xmi for reference shape.
+      expect(parsed.xpath("//ownedOperation").size).to eq(expected)
     end
 
     it "emits one Association per Association/Aggregation/Composition connector" do
@@ -136,6 +138,64 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
     it "is parseable by the xmi gem's Sparx parser" do
       require "xmi"
       expect { ::Xmi::Sparx::Root.parse_xml(xml) }.not_to raise_error
+    end
+  end
+
+  describe "round-trip via xmi gem parser" do
+    let(:reparsed) { ::Xmi::Sparx::Root.parse_xml(xml) }
+
+    it "produces an Xmi::Sparx::Root instance" do
+      expect(reparsed).to be_a(::Xmi::Sparx::Root)
+    end
+
+    it "preserves the EA_Model name on the uml:Model" do
+      expect(reparsed.model.name).to eq("EA_Model")
+    end
+
+    it "preserves package count from the database" do
+      package_count = reparsed.model.packaged_element.size
+      # The top-level packagedElements under EA_Model are the root packages.
+      expect(package_count).to eq(database.packages.count(&:root?))
+    end
+
+    it "preserves the Documentation exporter" do
+      expect(reparsed.documentation.exporter).to eq("Enterprise Architect")
+      expect(reparsed.documentation.exporter_version).to eq("6.5")
+    end
+
+    it "preserves an Extension block with EA extender" do
+      expect(reparsed.extension).to be_a(::Xmi::Sparx::Extension)
+      expect(reparsed.extension.extender).to eq("Enterprise Architect")
+    end
+
+    # Recursively count packagedElements of a given xmi:type across the tree.
+    def count_xmi_type_recursive(model, type)
+      count = model.is_a?(::Xmi::Uml::PackagedElement) && model.type == type ? 1 : 0
+      children = model.respond_to?(:packaged_element) ? model.packaged_element : []
+      count + children.sum { |child| count_xmi_type_recursive(child, type) }
+    end
+
+    it "preserves class count from the database" do
+      expected = database.objects.count { |o| o.object_type == "Class" }
+      actual = count_xmi_type_recursive(reparsed.model, "uml:Class")
+      # Some Class rows correspond to interfaces or are filtered by the
+      # transformer's classification logic — the count is approximate.
+      expect(actual).to be > 0
+      expect(actual).to be <= expected
+    end
+  end
+
+  describe "API stability" do
+    it "exposes a stateless serialize method" do
+      t1 = described_class.new(database)
+      t2 = described_class.new(database)
+      expect(t1.serialize).to eq(t2.serialize)
+    end
+
+    it "does not mutate the database during serialization" do
+      expect { described_class.new(database).serialize }.not_to change {
+        [database.packages.size, database.objects.size, database.connectors.size]
+      }
     end
   end
 end

@@ -3,23 +3,23 @@
 module Ea
   module Transformers
     module QeaToXmi
-      # Shared state passed to every emitter.
+      # Shared state passed across the walk.
       #
-      # Owns the {Writer} and a stable xmi:id allocator ({IdAllocator}). All
-      # database lookups go through this object so emitters don't reach into
-      # the database directly — they ask the context.
+      # Wraps the {Ea::Qea::Database} and provides:
+      # - ID-derivation helpers (`xmi_id_for`, `end_xmi_id_for`) backed by
+      #   {GuidFormat}
+      # - delegated database lookups (objects, packages, attributes, etc.)
       #
       # The {Ea::Qea::Database} already maintains its own lookup indexes
       # (object-by-id, connectors-by-object, attributes-by-object, etc.).
-      # This class delegates to those rather than reindexing — single source
+      # This class delegates to those rather than re-indexing — single source
       # of truth lives on the database.
       class Context
-        attr_reader :database, :writer, :id_allocator
+        attr_reader :database, :id_allocator
 
-        def initialize(database:, writer:, id_allocator:)
+        def initialize(database:)
           @database = database
-          @writer = writer
-          @id_allocator = id_allocator
+          @id_allocator = IdAllocator.new
         end
 
         # ---- ID helpers ---------------------------------------------------
@@ -89,18 +89,6 @@ module Ea
         # @return [Array<Ea::Qea::Models::EaConnector>]
         def connectors_for(object_id)
           database.connectors_for_object(object_id)
-        end
-
-        # @param element_ea_guid [String]
-        # @return [Array<Ea::Qea::Models::EaTaggedValue>]
-        def tagged_values_for(element_ea_guid)
-          database.tagged_values_for_element(element_ea_guid)
-        end
-
-        # @param client_ea_guid [String]
-        # @return [Array<Ea::Qea::Models::EaXref>]
-        def xrefs_for(client_ea_guid)
-          database.xrefs_for_client(client_ea_guid)
         end
 
         # Connectors where this object is the start (source) — used to decide
