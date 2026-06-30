@@ -16,10 +16,13 @@ module Ea
     # instance specifications, association ends). For a tool-agnostic
     # UML document → XMI path, use UmlToXmi.
     module QeaToXmi
-      autoload :Transformer, "ea/transformers/qea_to_xmi/transformer"
-      autoload :Context,     "ea/transformers/qea_to_xmi/context"
-      autoload :IdAllocator, "ea/transformers/qea_to_xmi/id_allocator"
-      autoload :GuidFormat,  "ea/transformers/qea_to_xmi/guid_format"
+      autoload :Transformer,    "ea/transformers/qea_to_xmi/transformer"
+      autoload :Context,        "ea/transformers/qea_to_xmi/context"
+      autoload :IdAllocator,    "ea/transformers/qea_to_xmi/id_allocator"
+      autoload :GuidFormat,     "ea/transformers/qea_to_xmi/guid_format"
+      autoload :Cardinality,    "ea/transformers/qea_to_xmi/cardinality"
+      autoload :XmlSanitizer,   "ea/transformers/qea_to_xmi/xml_sanitizer"
+      autoload :AssociationEnd, "ea/transformers/qea_to_xmi/association_end"
     end
   end
 end

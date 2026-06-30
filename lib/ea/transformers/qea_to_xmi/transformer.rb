@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "xmi"
-require "nokogiri"
 
 module Ea
   module Transformers
@@ -13,13 +12,15 @@ module Ea
       # Xmi::Uml::OwnedAttribute, Xmi::Uml::OwnedEnd, etc.) from each
       # QEA row, then asks the xmi gem to render them via
       # `to_xml(use_prefix: true)` to produce Sparx XMI in the canonical
-      # mixed-prefix style.
+      # mixed-prefix style. The serialized output is run through
+      # {XmlSanitizer} to strip truly-empty elements that the xmi gem's
+      # round-trip-oriented VALUE_MAP emits but Sparx XMI does not.
       #
-      # Element-kind dispatch (Class vs Enumeration vs DataType vs Instance)
-      # lives in {#build_classifier} as a single case statement. Adding a
-      # new element kind = adding one branch there. Polymorphism for XMI
-      # element shape lives in the xmi gem's models (xmi:type discriminator
-      # on PackagedElement), not here.
+      # Element-kind dispatch (Class vs Enumeration vs DataType vs
+      # Instance) is registry-driven — see CLASSIFIER_BUILDERS. Adding
+      # a new kind = adding one entry to that hash, no method change.
+      # Polymorphism for XMI element shape lives in the xmi gem's models
+      # (xmi:type discriminator on PackagedElement), not here.
       #
       # This is the FULL-FIDELITY path — no Lutaml::Uml::Document
       # intermediate. Sparx-specific concepts (multiplicities, tagged
@@ -42,7 +43,20 @@ module Ea
           "Usage"       => :dependency,
         }.freeze
 
-        UNLIMITED_TOKENS = %w[* *-1 unbounded].freeze
+        # OCP registry: maps EaObject#transformer_type to the builder
+        # that constructs the corresponding Xmi::Uml element. To add a
+        # new element kind (Signal, Interface, ...), append one entry
+        # here — `build_classifier` requires no edit.
+        #
+        # Builders are lambdas evaluated via `instance_exec`, so they
+        # run inside the Transformer instance and can call its private
+        # helpers without `send`/`public_send` dispatch.
+        CLASSIFIER_BUILDERS = {
+          class:       ->(obj) { build_class(obj) },
+          enumeration: ->(obj) { build_enumeration(obj) },
+          data_type:   ->(obj) { build_data_type(obj) },
+          instance:    ->(obj) { build_instance(obj) },
+        }.freeze
 
         def initialize(database)
           @database = database
@@ -51,33 +65,7 @@ module Ea
 
         # @return [String] XMI XML document
         def serialize
-          strip_empty_elements(build_root.to_xml(use_prefix: true))
-        end
-
-        # The xmi gem's UML models declare `value_map: Xmi::VALUE_MAP` on every
-        # child-element mapping. That VALUE_MAP is round-trip-oriented: it
-        # forces empty-element emission (`<generalization/>`, `<ownedEnd/>`,
-        # etc.) so the parser can preserve absence vs. emptiness on the way
-        # back in. For *generation* from a QEA database, those empty elements
-        # are pure noise — they bloat the output and break count-parity with
-        # real Sparx XMI.
-        #
-        # Phase 2 will move this concern into the xmi gem by introducing a
-        # generation-friendly value_map. Until then, this method strips
-        # truly-empty elements (no children, no text, no attributes) from
-        # the serialized output. Elements carrying attributes (e.g.
-        # `<generalization general="..."/>`) are preserved.
-        def strip_empty_elements(xml)
-          doc = Nokogiri::XML(xml)
-          removed = 1
-          while removed.positive?
-            removed = 0
-            doc.xpath("//*[not(node()) and not(@*)]").each do |node|
-              node.remove
-              removed += 1
-            end
-          end
-          doc.to_xml
+          XmlSanitizer.call(build_root.to_xml(use_prefix: true))
         end
 
         private
@@ -174,16 +162,14 @@ module Ea
           notes_in(pkg).map { |obj| build_comment(obj) }
         end
 
-        # ---- Classifier objects (Class / Enumeration / DataType / Instance)
+        # ---- Classifier dispatch (OCP registry) --------------------------
 
         def build_classifier(obj)
           kind = obj.transformer_type || obj.object_type&.downcase&.to_sym
-          case kind
-          when :class        then build_class(obj)
-          when :enumeration  then build_enumeration(obj)
-          when :data_type    then build_data_type(obj)
-          when :instance     then build_instance(obj)
-          end
+          builder = CLASSIFIER_BUILDERS[kind]
+          return nil unless builder
+
+          instance_exec(obj, &builder)
         end
 
         def build_class(obj)
@@ -257,13 +243,14 @@ module Ea
         # ---- Leaf element builders --------------------------------------
 
         def build_attribute(attr)
+          parent_guid = parent_guid_for_attribute(attr)
           ::Xmi::Uml::OwnedAttribute.new(
             type: "uml:Property",
             id: @context.xmi_id_for(attr),
             name: attr.name,
             uml_type: type_reference_model(attr.type, attr.classifier),
-            upper_value: upper_value_for(attr),
-            lower_value: lower_value_for(attr),
+            upper_value: build_upper_value(attr.upperbound, seed: "mult-attr-#{attr.id}-upper", parent_guid: parent_guid),
+            lower_value: build_lower_value(attr.lowerbound, seed: "mult-attr-#{attr.id}-lower", parent_guid: parent_guid),
           )
         end
 
@@ -307,6 +294,12 @@ module Ea
           )
         end
 
+        # Sparx serialisation order for `uml:Association` is
+        # destination member-end first, source member-end second.
+        # Reordering these breaks round-trip fidelity with Sparx EA
+        # (the importer treats the first member-end as the destination
+        # role). Don't reorder without verifying against a Sparx
+        # round-trip fixture.
         def build_association(conn)
           dest_end = build_association_end(conn, side: :destination)
           src_end  = build_association_end(conn, side: :source)
@@ -316,10 +309,10 @@ module Ea
             id: @context.xmi_id_for(conn),
             name: conn.name,
             member_ends: [
-              ::Xmi::Uml::MemberEnd.new(idref: dest_end[:xmi_id]),
-              ::Xmi::Uml::MemberEnd.new(idref: src_end[:xmi_id]),
+              ::Xmi::Uml::MemberEnd.new(idref: dest_end.xmi_id),
+              ::Xmi::Uml::MemberEnd.new(idref: src_end.xmi_id),
             ],
-            owned_end: [dest_end[:model], src_end[:model]],
+            owned_end: [dest_end.model, src_end.model],
           )
         end
 
@@ -328,7 +321,7 @@ module Ea
           target_id = side == :source ? conn.start_object_id : conn.end_object_id
           target_obj = @context.object_by_id(target_id)
           target_ref = target_obj ? @context.xmi_id_for(target_obj) : nil
-          bounds = parse_cardinality(cardinality_for(conn, side))
+          bounds = Cardinality.parse(cardinality_for(conn, side))
 
           model = ::Xmi::Uml::OwnedEnd.new(
             type: "uml:Property",
@@ -336,44 +329,39 @@ module Ea
             name: role_name_for(conn, side),
             association: @context.xmi_id_for(conn),
             uml_type: target_ref ? ::Xmi::Uml::Type.new(idref: target_ref) : nil,
-            upper_value: build_upper_value(bounds && bounds[:upper], "mult-#{conn.connector_id}-#{side}-upper"),
-            lower_value: build_lower_value(bounds && bounds[:lower], "mult-#{conn.connector_id}-#{side}-lower"),
+            upper_value: build_upper_value(bounds[:upper], seed: "mult-#{conn.connector_id}-#{side}-upper", parent_guid: conn.ea_guid),
+            lower_value: build_lower_value(bounds[:lower], seed: "mult-#{conn.connector_id}-#{side}-lower", parent_guid: conn.ea_guid),
           )
 
-          { xmi_id: end_id, model: model }
+          AssociationEnd.new(end_id, model)
         end
 
         # ---- Multiplicity helpers ---------------------------------------
 
-        def upper_value_for(attr)
-          return nil if attr.upperbound.nil? || attr.upperbound.to_s.empty?
-
-          build_upper_value(normalize_upper(attr.upperbound), "mult-attr-#{attr.id}-upper")
-        end
-
-        def lower_value_for(attr)
-          return nil if attr.lowerbound.nil? || attr.lowerbound.to_s.empty?
-
-          build_lower_value(normalize_lower(attr.lowerbound), "mult-attr-#{attr.id}-lower")
-        end
-
-        def build_upper_value(value, seed)
-          return nil if value.nil?
-
+        # Always emit both bounds — UML defaults (lower=0, upper=-1) are
+        # used when the EA field is blank. Matches real Sparx XMI, which
+        # never omits `<upperValue>`/`<lowerValue>` on a Property.
+        def build_upper_value(raw, seed:, parent_guid:)
           ::Xmi::Uml::UpperValue.new(
             type: "uml:LiteralUnlimitedNatural",
-            id: @context.id_allocator.for_multiplicity(:upper, seed: seed),
-            value: value,
+            id: @context.id_allocator.allocate(
+              prefix: IdAllocator::LITERAL_INTEGER,
+              seed: seed,
+              parent_guid: parent_guid,
+            ),
+            value: Cardinality.normalize_upper(raw),
           )
         end
 
-        def build_lower_value(value, seed)
-          return nil if value.nil?
-
+        def build_lower_value(raw, seed:, parent_guid:)
           ::Xmi::Uml::LowerValue.new(
             type: "uml:LiteralInteger",
-            id: @context.id_allocator.for_multiplicity(:lower, seed: seed),
-            value: value,
+            id: @context.id_allocator.allocate(
+              prefix: IdAllocator::LITERAL_INTEGER,
+              seed: seed,
+              parent_guid: parent_guid,
+            ),
+            value: Cardinality.normalize_lower(raw),
           )
         end
 
@@ -398,8 +386,9 @@ module Ea
         def build_return_parameter(op)
           ::Xmi::Uml::OwnedParameter.new(
             id: @context.id_allocator.allocate(
-              prefix: "RT",
+              prefix: IdAllocator::RETURN_PARAMETER,
               seed: "return-#{op.operationid}",
+              parent_guid: op.ea_guid,
             ),
             name: "return",
             direction: "return",
@@ -467,36 +456,12 @@ module Ea
           side == :source ? conn.sourcerole : conn.destrole
         end
 
-        def normalize_upper(raw)
-          UNLIMITED_TOKENS.include?(raw.to_s.strip.downcase) ? "-1" : raw.to_s
-        end
-
-        def normalize_lower(raw)
-          raw.to_s
-        end
-
-        # EA cardinality format: ".." separates bounds, e.g. "1..*", "0..1".
-        # Single number means exact (e.g. "1" → lower=upper=1).
-        def parse_cardinality(raw)
-          return nil if raw.nil? || raw.to_s.empty?
-
-          stripped = raw.to_s.strip
-          return parse_range(stripped) if stripped.include?("..")
-
-          single = normalize_bound(stripped)
-          { lower: single, upper: single }
-        end
-
-        def parse_range(stripped)
-          lower, upper = stripped.split("..", 2)
-          { lower: normalize_bound(lower), upper: normalize_bound(upper) }
-        end
-
-        def normalize_bound(token)
-          return "-1" if token.nil? || token.strip.empty?
-          return "-1" if token.strip == "*"
-
-          token.strip
+        # The owning element for an attribute's synthesised IDs is the
+        # attribute's classifier (parent object), not the attribute
+        # itself — Sparx encodes the parent class GUID in the suffix.
+        def parent_guid_for_attribute(attr)
+          parent = @context.object_by_id(attr.ea_object_id)
+          parent&.ea_guid
         end
       end
     end
