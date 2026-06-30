@@ -1,5 +1,4 @@
 # frozen_string_literal: true
 
-module Ea
-  VERSION = "0.1.0"
-end
+# VERSION is defined in lib/ea.rb. This file exists for gemspec compatibility.
+Ea::VERSION
