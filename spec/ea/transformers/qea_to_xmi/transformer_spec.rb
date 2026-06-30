@@ -169,19 +169,75 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
     end
 
     # Recursively count packagedElements of a given xmi:type across the tree.
+    # Only UmlModel and PackagedElement own packaged_element children — check
+    # explicitly via is_a? rather than respond_to? so the contract stays
+    # visible in the spec.
     def count_xmi_type_recursive(model, type)
       count = model.is_a?(::Xmi::Uml::PackagedElement) && model.type == type ? 1 : 0
-      children = model.respond_to?(:packaged_element) ? model.packaged_element : []
+      children = if model.is_a?(::Xmi::Uml::PackagedElement) || model.is_a?(::Xmi::Uml::UmlModel)
+                   model.packaged_element
+                 else
+                   []
+                 end
       count + children.sum { |child| count_xmi_type_recursive(child, type) }
     end
 
     it "preserves class count from the database" do
-      expected = database.objects.count { |o| o.object_type == "Class" }
+      # Filter matches EaObject#transformer_type: Class and Interface
+      # rows map to :class; Enumeration-stereotype Class rows map to
+      # :enumeration and are not counted here.
+      expected = database.objects.count { |o| o.transformer_type == :class }
       actual = count_xmi_type_recursive(reparsed.model, "uml:Class")
-      # Some Class rows correspond to interfaces or are filtered by the
-      # transformer's classification logic — the count is approximate.
-      expect(actual).to be > 0
-      expect(actual).to be <= expected
+      expect(actual).to eq(expected)
+    end
+
+    it "preserves enumeration count from the database" do
+      expected = database.objects.count { |o| o.transformer_type == :enumeration }
+      actual = count_xmi_type_recursive(reparsed.model, "uml:Enumeration")
+      expect(actual).to eq(expected)
+    end
+
+    it "preserves data_type count from the database" do
+      expected = database.objects.count { |o| o.transformer_type == :data_type }
+      actual = count_xmi_type_recursive(reparsed.model, "uml:DataType") +
+               count_xmi_type_recursive(reparsed.model, "uml:PrimitiveType")
+      expect(actual).to eq(expected)
+    end
+
+    it "preserves instance count from the database" do
+      expected = database.objects.count { |o| o.transformer_type == :instance }
+      actual = count_xmi_type_recursive(reparsed.model, "uml:InstanceSpecification")
+      expect(actual).to eq(expected)
+    end
+  end
+
+  describe "Phase 2 gaps (intentionally absent — see TODO.next/21 §2)" do
+    # These specs assert that attributes the xmi gem doesn't yet model
+    # are absent from the output. When the xmi gem adds support for
+    # each, flip the assertion to positive and wire up the attribute
+    # in the Transformer.
+
+    it "does not emit visibility on Property" do
+      expect(parsed.xpath("//ownedAttribute[@visibility]")).to be_empty
+    end
+
+    it "does not emit isAbstract on packagedElement" do
+      expect(parsed.xpath("//packagedElement[@isAbstract]")).to be_empty
+    end
+
+    it "does not emit aggregation on ownedEnd" do
+      expect(parsed.xpath("//ownedEnd[@aggregation]")).to be_empty
+    end
+
+    it "does not emit classifier on InstanceSpecification" do
+      expect(parsed.xpath("//packagedElement[@classifier]")).to be_empty
+    end
+
+    it "does not emit upperValue/lowerValue on ownedEnd (xmi gem schema gap)" do
+      # OwnedEnd uses `upper`/`lower` Integer attrs, not child elements.
+      # See TODO.next/26 for the deferred fix.
+      expect(parsed.xpath("//ownedEnd/upperValue")).to be_empty
+      expect(parsed.xpath("//ownedEnd/lowerValue")).to be_empty
     end
   end
 
