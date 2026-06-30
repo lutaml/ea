@@ -1,25 +1,4 @@
 PATH
-  remote: ../canon
-  specs:
-    canon (0.2.11)
-      diff-lcs
-      json
-      moxml (~> 0.1.22)
-      nokogiri
-      paint
-      rainbow
-      table_tennis
-      thor
-      unicode-name
-
-PATH
-  remote: ../lutaml-uml
-  specs:
-    lutaml-uml (0.2.0)
-      lutaml-model (~> 0.8.0)
-      rubyzip (~> 2.3)
-
-PATH
   remote: .
   specs:
     ea (0.1.0)
@@ -35,14 +14,33 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
+    activesupport (5.2.8.1)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 0.7, < 2)
+      minitest (~> 5.1)
+      tzinfo (~> 1.1)
     base64 (0.3.0)
     bigdecimal (4.1.2)
+    blankslate (3.1.3)
+    canon (0.2.11)
+      diff-lcs
+      json
+      moxml (~> 0.1.22)
+      nokogiri
+      paint
+      rainbow
+      table_tennis
+      thor
+      unicode-name
     concurrent-ruby (1.3.6)
     csv (3.3.5)
     diff-lcs (1.6.2)
     ffi (1.17.4)
     ffi (1.17.4-arm64-darwin)
     ffi (1.17.4-x86_64-linux-gnu)
+    hashie (4.1.0)
+    i18n (1.15.2)
+      concurrent-ruby (~> 1.0)
     json (2.19.9)
     liquid (5.12.0)
       bigdecimal
@@ -59,8 +57,15 @@ GEM
       thor
     lutaml-path (0.1.0)
       parslet
+    lutaml-uml (0.2.0)
+      activesupport (~> 5.0)
+      hashie (~> 4.1.0)
+      parslet (~> 1.7.1)
+      ruby-graphviz (~> 1.2)
+      thor (~> 1.0)
     memo_wise (1.13.0)
     mini_portile2 (2.8.9)
+    minitest (5.27.0)
     moxml (0.1.24)
     nokogiri (1.19.3)
       mini_portile2 (~> 2.8.2)
@@ -71,10 +76,12 @@ GEM
       racc (~> 1.4)
     ostruct (0.6.3)
     paint (2.3.0)
-    parslet (2.0.0)
+    parslet (1.7.1)
+      blankslate (>= 2.0, <= 4.0)
     racc (1.8.1)
     rainbow (3.1.1)
     rake (13.4.2)
+    rexml (3.4.4)
     rspec (3.13.2)
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
@@ -88,6 +95,8 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
     rspec-support (3.13.7)
+    ruby-graphviz (1.2.5)
+      rexml
     rubyzip (2.4.1)
     sqlite3 (2.9.5)
       mini_portile2 (~> 2.8.0)
@@ -101,6 +110,9 @@ GEM
       paint (~> 2.3)
       unicode-display_width (~> 3.1)
     thor (1.5.0)
+    thread_safe (0.3.6)
+    tzinfo (1.2.11)
+      thread_safe (~> 0.1)
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)
     unicode-emoji (4.2.0)
@@ -118,17 +130,19 @@ PLATFORMS
   x86_64-linux-gnu
 
 DEPENDENCIES
-  canon!
+  canon
   ea!
-  lutaml-uml!
+  lutaml-uml (~> 0.2.0, >= 0)
   rake
   rspec (~> 3.0)
 
 CHECKSUMS
+  activesupport (5.2.8.1) sha256=f0498c616e1b243c7b56d67920c389f959c186ad7031569e80335b42e1d22564
   base64 (0.3.0) sha256=27337aeabad6ffae05c265c450490628ef3ebd4b67be58257393227588f5a97b
   bigdecimal (4.1.2) sha256=53d217666027eab4280346fba98e7d5b66baaae1b9c3c1c0ffe89d48188a3fbd
+  blankslate (3.1.3) sha256=dd3373df0478cb82e83a7711469ea2bc3ce11fdfdd0acbdb3eec25191a59933b
   bundler (4.0.11) sha256=5bcec0fb78302e48d02ee46f10ee6e6942be647ba5b44a6d1ddfda9a240ce785
-  canon (0.2.11)
+  canon (0.2.11) sha256=446b65e07afafa53c4f67007a5577b79d292d77010ddfed38c331f62bc1d61d1
   concurrent-ruby (1.3.6) sha256=6b56837e1e7e5292f9864f34b69c5a2cbc75c0cf5338f1ce9903d10fa762d5ab
   csv (3.3.5) sha256=6e5134ac3383ef728b7f02725d9872934f523cb40b961479f69cf3afa6c8e73f
   diff-lcs (1.6.2) sha256=9ae0d2cba7d4df3075fe8cd8602a8604993efc0dfa934cff568969efb1909962
@@ -136,28 +150,33 @@ CHECKSUMS
   ffi (1.17.4) sha256=bcd1642e06f0d16fc9e09ac6d49c3a7298b9789bcb58127302f934e437d60acf
   ffi (1.17.4-arm64-darwin) sha256=19071aaf1419251b0a46852abf960e77330a3b334d13a4ab51d58b31a937001b
   ffi (1.17.4-x86_64-linux-gnu) sha256=9d3db14c2eae074b382fa9c083fe95aec6e0a1451da249eab096c34002bc752d
+  hashie (4.1.0) sha256=7890dcb9ec18a4b66acec797018c73824b89cef5eb8cda36e8e8501845e87a09
+  i18n (1.15.2) sha256=00f9eb62412fe593b2a65a97daa75300d37abb8f7202ec748e94b6d46a9dd1b5
   json (2.19.9) sha256=9b9025b7cdddafa38d316eca0b2358488e42d417045c1b90d216a9fefe46b79a
   liquid (5.12.0) sha256=5a3c2c2430cd925d21c53e4ed9abea52cd0a9da53b541422f81dee79aca2a673
   lutaml-model (0.8.16) sha256=9c3a112d7356e57b9c30b84b8cdf751aa23b1a068275e497ee6b9cd8fbfe11ab
   lutaml-path (0.1.0) sha256=3db3a8aae7b814783908ec50dce1071fe2ecb7a05d31e2ad7ffca331900ffecc
-  lutaml-uml (0.2.0)
+  lutaml-uml (0.2.0) sha256=ca3d3f8a4821791f583476f93b5625358314030913f991dfdbc5285210f59c51
   memo_wise (1.13.0) sha256=30220c38c4cef410849bc73553c58664dc2c91c6379e4a1df22aea02358b716b
   mini_portile2 (2.8.9) sha256=0cd7c7f824e010c072e33f68bc02d85a00aeb6fce05bb4819c03dfd3c140c289
+  minitest (5.27.0) sha256=2d3b17f8a36fe7801c1adcffdbc38233b938eb0b4966e97a6739055a45fa77d5
   moxml (0.1.24) sha256=9a3d482ce8140fe4eb142a32ee14ddc6fb7a8d8bbe7f5a940f19c837d4aea6ac
   nokogiri (1.19.3) sha256=78312cbac32a40c812780d9678221b79d51288eec00054c1a8d15f7ce05960e8
   nokogiri (1.19.3-arm64-darwin) sha256=71b9bd424b1b7abc18b05052a1a3cfd3627abdca62be280854cc411791357e42
   nokogiri (1.19.3-x86_64-linux-gnu) sha256=2f5078620fe12e83669b5b17311b32532a8153d02eee7ad06948b926d6080976
   ostruct (0.6.3) sha256=95a2ed4a4bd1d190784e666b47b2d3f078e4a9efda2fccf18f84ddc6538ed912
   paint (2.3.0) sha256=327d623e4038619d5bd99ae5db07973859cd78400c7f0329eea283cef8e83be5
-  parslet (2.0.0) sha256=d45130695d39b43d7e6a91f4d2ec66b388a8d822bae38de9b4de9a5fbde1f606
+  parslet (1.7.1) sha256=045eedfc2e34db3bdcb10e035e058443795d8f513d2e9c9ec512ec743471c328
   racc (1.8.1) sha256=4a7f6929691dbec8b5209a0b373bc2614882b55fc5d2e447a21aaa691303d62f
   rainbow (3.1.1) sha256=039491aa3a89f42efa1d6dec2fc4e62ede96eb6acd95e52f1ad581182b79bc6a
   rake (13.4.2) sha256=cb825b2bd5f1f8e91ca37bddb4b9aaf345551b4731da62949be002fa89283701
+  rexml (3.4.4) sha256=19e0a2c3425dfbf2d4fc1189747bdb2f849b6c5e74180401b15734bc97b5d142
   rspec (3.13.2) sha256=206284a08ad798e61f86d7ca3e376718d52c0bc944626b2349266f239f820587
   rspec-core (3.13.6) sha256=a8823c6411667b60a8bca135364351dda34cd55e44ff94c4be4633b37d828b2d
   rspec-expectations (3.13.5) sha256=33a4d3a1d95060aea4c94e9f237030a8f9eae5615e9bd85718fe3a09e4b58836
   rspec-mocks (3.13.8) sha256=086ad3d3d17533f4237643de0b5c42f04b66348c28bf6b9c2d3f4a3b01af1d47
   rspec-support (3.13.7) sha256=0640e5570872aafefd79867901deeeeb40b0c9875a36b983d85f54fb7381c47c
+  ruby-graphviz (1.2.5) sha256=1c2bb44e3f6da9e2b829f5e7fd8d75a521485fb6b4d1fc66ff0f93f906121504
   rubyzip (2.4.1) sha256=8577c88edc1fde8935eb91064c5cb1aef9ad5494b940cf19c775ee833e075615
   sqlite3 (2.9.5) sha256=04572973a3f943ad50a8adfffc8dd752a5f06e4c3db2026f71838fed8a982606
   sqlite3 (2.9.5-arm64-darwin) sha256=d0cf444a70fc9395d513cfbcc1e6719e224aa645314e3824cb0474c721425aa2
@@ -165,6 +184,8 @@ CHECKSUMS
   strscan (3.1.8) sha256=aae2db611a225559f21ffbb71765c9a4e60fd262534a9ea84f4f11c7f32f679e
   table_tennis (0.0.7) sha256=b45b50dc7714e3bea5b31d2ad2b7d6bdc2995fc7a686976017c17424e1094a28
   thor (1.5.0) sha256=e3a9e55fe857e44859ce104a84675ab6e8cd59c650a49106a05f55f136425e73
+  thread_safe (0.3.6) sha256=9ed7072821b51c57e8d6b7011a8e282e25aeea3a4065eab326e43f66f063b05a
+  tzinfo (1.2.11) sha256=6501f6a12175ca0243118b83f7c7c2b7978aaec7a0980550a124d007ad6361b6
   unicode-display_width (3.2.0) sha256=0cdd96b5681a5949cdbc2c55e7b420facae74c4aaf9a9815eee1087cb1853c42
   unicode-emoji (4.2.0) sha256=519e69150f75652e40bf736106cfbc8f0f73aa3fb6a65afe62fefa7f80b0f80f
   unicode-name (1.14.0) sha256=b350dcdeb503748c8ad05c472e8078570fbf3231a73be53431c15db10bbedbdd
