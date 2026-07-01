@@ -32,6 +32,13 @@ PATH
       lutaml-model (~> 0.8.0)
       rubyzip (~> 2.3)
 
+PATH
+  remote: /Users/mulgogi/src/lutaml/xmi
+  specs:
+    xmi (0.5.11)
+      lutaml-model (~> 0.8.17)
+      nokogiri
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -109,9 +116,6 @@ GEM
     unicode-name (1.14.0)
       unicode-types (~> 1.11)
     unicode-types (1.11.0)
-    xmi (0.5.11)
-      lutaml-model (~> 0.8.17)
-      nokogiri
 
 PLATFORMS
   arm64-darwin-23
@@ -125,6 +129,7 @@ DEPENDENCIES
   lutaml-uml (~> 0.2.0, >= 0)!
   rake
   rspec (~> 3.0)
+  xmi!
 
 CHECKSUMS
   base64 (0.3.0) sha256=27337aeabad6ffae05c265c450490628ef3ebd4b67be58257393227588f5a97b
@@ -172,7 +177,7 @@ CHECKSUMS
   unicode-emoji (4.2.0) sha256=519e69150f75652e40bf736106cfbc8f0f73aa3fb6a65afe62fefa7f80b0f80f
   unicode-name (1.14.0) sha256=b350dcdeb503748c8ad05c472e8078570fbf3231a73be53431c15db10bbedbdd
   unicode-types (1.11.0) sha256=81d1201273260fa89b85471e7eebb93a51bb4e5f078a525508dcae7835d176f9
-  xmi (0.5.11) sha256=3c94bc6e289d6f88a0a043f70d9938cf2a90421ef946def1bd4a3766e4e70d6e
+  xmi (0.5.11)
 
 BUNDLED WITH
   4.0.11

@@ -177,6 +177,8 @@ module Ea
             type: class_xmi_type(obj),
             id: @context.xmi_id_for(obj),
             name: obj.name,
+            visibility: Visibility.from_scope(obj.scope),
+            is_abstract: Visibility.boolean_from_flag(obj.abstract),
             generalization: generalizations_for(obj),
             owned_attribute: attributes_for(obj),
             owned_operation: operations_for(obj),
@@ -188,6 +190,7 @@ module Ea
             type: "uml:Enumeration",
             id: @context.xmi_id_for(obj),
             name: obj.name,
+            visibility: Visibility.from_scope(obj.scope),
             owned_literal: enum_literals(obj),
           )
         end
@@ -197,6 +200,7 @@ module Ea
             type: primitive?(obj) ? "uml:PrimitiveType" : "uml:DataType",
             id: @context.xmi_id_for(obj),
             name: obj.name,
+            visibility: Visibility.from_scope(obj.scope),
             owned_attribute: attributes_for(obj),
             owned_operation: operations_for(obj),
           )
@@ -207,6 +211,9 @@ module Ea
             type: "uml:InstanceSpecification",
             id: @context.xmi_id_for(obj),
             name: obj.name,
+            visibility: Visibility.from_scope(obj.scope),
+            classifier: classifier_ref_for(obj),
+            slot: slots_for(obj),
           )
         end
 
@@ -248,6 +255,10 @@ module Ea
             type: "uml:Property",
             id: @context.xmi_id_for(attr),
             name: attr.name,
+            visibility: Visibility.from_scope(attr.scope),
+            is_static: Visibility.boolean_from_flag(attr.isstatic),
+            is_ordered: Visibility.boolean_from_flag(attr.isordered),
+            is_derived: Visibility.boolean_from_flag(attr.derived),
             uml_type: type_reference_model(attr.type, attr.classifier),
             upper_value: build_upper_value(attr.upperbound, seed: "mult-attr-#{attr.id}-upper", parent_guid: parent_guid),
             lower_value: build_lower_value(attr.lowerbound, seed: "mult-attr-#{attr.id}-lower", parent_guid: parent_guid),
@@ -258,6 +269,11 @@ module Ea
           ::Xmi::Uml::OwnedOperation.new(
             id: @context.xmi_id_for(op),
             name: op.name,
+            visibility: Visibility.from_scope(op.scope),
+            is_static: Visibility.boolean_from_flag(op.isstatic),
+            is_abstract: Visibility.boolean_from_flag(op.abstract),
+            is_query: Visibility.boolean_from_flag(op.pure),
+            concurrency: op.concurrency&.downcase,
             owned_parameter: operation_parameters(op),
           )
         end
@@ -322,11 +338,14 @@ module Ea
           target_obj = @context.object_by_id(target_id)
           target_ref = target_obj ? @context.xmi_id_for(target_obj) : nil
           bounds = Cardinality.parse(cardinality_for(conn, side))
+          containment = containment_for(conn, side)
 
           model = ::Xmi::Uml::OwnedEnd.new(
             type: "uml:Property",
             id: end_id,
             name: role_name_for(conn, side),
+            visibility: visibility_for_end(conn, side),
+            aggregation: Visibility.aggregation_from_containment(containment),
             association: @context.xmi_id_for(conn),
             uml_type: target_ref ? ::Xmi::Uml::Type.new(idref: target_ref) : nil,
             upper_value: build_upper_value(bounds[:upper], seed: "mult-#{conn.connector_id}-#{side}-upper", parent_guid: conn.ea_guid),
@@ -456,12 +475,41 @@ module Ea
           side == :source ? conn.sourcerole : conn.destrole
         end
 
+        def containment_for(conn, side)
+          side == :source ? conn.sourcecontainment : conn.destcontainment
+        end
+
+        # EA's t_connector does not expose per-end visibility (the
+        # source/dest scopes are stored only on the role's target
+        # object, which has its own visibility). Leave ownedEnd
+        # visibility unset unless a future schema change exposes it.
+        def visibility_for_end(_conn, _side)
+          nil
+        end
+
         # The owning element for an attribute's synthesised IDs is the
         # attribute's classifier (parent object), not the attribute
         # itself — Sparx encodes the parent class GUID in the suffix.
         def parent_guid_for_attribute(attr)
           parent = @context.object_by_id(attr.ea_object_id)
           parent&.ea_guid
+        end
+
+        # InstanceSpecification classifier reference. EA stores this
+        # in t_object.pdata1 as the classifier's ea_object_id.
+        def classifier_ref_for(obj)
+          classifier_id = obj.pdata1&.to_i
+          return nil if classifier_id.nil? || classifier_id.zero?
+
+          classifier = @context.object_by_id(classifier_id)
+          classifier ? @context.xmi_id_for(classifier) : nil
+        end
+
+        # InstanceSpecification slots (RunState / attribute values).
+        # Phase 1 emits no slots; Phase 2 will walk t_object.RunState
+        # and t_attribute for instance value specifications.
+        def slots_for(obj)
+          []
         end
       end
     end

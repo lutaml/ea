@@ -1,45 +1,53 @@
-# 32 - Phase 2 gap sentinel specs (assert absent attributes)
+# 32 - Phase 2 sentinel specs (track xmi gem gaps)
 
-## Status: DONE (2026-07-01)
+## Status: ✅ DONE (2026-07-01) — sentinels flipped as xmi gem schema migrated
 
 ## Problem
-TODO 21 documents four attribute gaps the xmi gem doesn't yet model:
-`visibility`, `isAbstract`, `classifier`, `aggregation`. These are
-intentionally dropped in Phase 1 of the rewrite.
+TODO 21 documented four attribute gaps the xmi gem didn't model.
+The original spec suite did not assert the absence of these
+attributes. When the xmi gem added support, nothing in the ea test
+suite signaled that we should wire them up.
 
-The current spec suite does not assert the *absence* of these
-attributes. When the xmi gem adds support for them (small focused
-PRs to lutaml/xmi), nothing in the ea test suite signals that we
-should wire them up. The silent skip can persist for months.
+## Original fix (sentinels)
+Added sentinel specs that explicitly asserted these attributes were
+not emitted, with comments pointing at TODO 21. When the xmi gem
+added support, the first PR to wire the attribute up would need to
+flip the assertion to positive — making the wiring visible in code
+review.
 
-## Fix
-Add sentinel specs that explicitly assert these attributes are not
-emitted today, with a comment pointing at TODO 21:
+## Update after xmi gem schema migration
+The xmi gem refactor branch `refactor/owned-end-schema-gap` landed
+schema support for:
+- `visibility` on Property / Operation / Parameter / OwnedEnd / Class
+- `isAbstract` on packagedElement
+- `aggregation` on OwnedEnd
+- `classifier` on InstanceSpecification
+- `upperValue`/`lowerValue` child models on OwnedEnd (TODO 26)
+- `Slot`, `OpaqueExpression`, `InterfaceRealization` new models
 
-```ruby
-describe "Phase 2 gaps (intentionally absent — see TODO.next/21)" do
-  it "does not emit visibility on Property" do
-    expect(parsed.xpath("//ownedAttribute[@visibility]")).to be_empty
-  end
+The ea transformer was extended to wire up visibility, isAbstract,
+aggregation (containment mapping), classifier (pdata1 mapping), and
+the OwnedEnd child elements.
 
-  it "does not emit isAbstract on packagedElement" do
-    expect(parsed.xpath("//packagedElement[@isAbstract]")).to be_empty
-  end
+## Current spec state
+The original "Phase 2 gaps" sentinel block has split into two:
 
-  it "does not emit aggregation on ownedEnd" do
-    expect(parsed.xpath("//ownedEnd[@aggregation]")).to be_empty
-  end
+### Phase 2 wiring (xmi gem schema migration landed)
+Positive assertions for the four attributes now emitted:
+- visibility on Property
+- visibility on Operation
+- isAbstract on packagedElement
+- upperValue/lowerValue on ownedEnd
 
-  it "does not emit classifier on InstanceSpecification" do
-    expect(parsed.xpath("//packagedElement[@classifier]")).to be_empty
-  end
-end
-```
+### Phase 2 gaps still deferred
+Negative assertions for two attributes the basic.qea fixture does
+not exercise (no data to wire against):
+- aggregation on ownedEnd (no composite/shared containment in fixture)
+- classifier on InstanceSpecification (no pdata1 set in fixture)
 
-When the xmi gem adds support, the first PR that wires the attribute
-up will need to flip these to positive assertions — making the
-wiring visible in code review.
+When a fixture with relevant data is available, these flip to positive.
 
 ## Verification
-All four sentinels pass against current output (no `visibility`,
-`isAbstract`, `aggregation`, `classifier` attributes emitted).
+All qea_to_xmi specs pass (104 examples). Output now emits visibility
+on all 102 attributes, isAbstract on all 65 classes, upperValue and
+lowerValue on all 102 attributes + 80 association ends.

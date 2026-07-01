@@ -21,6 +21,7 @@ module Ea
       autoload :IdAllocator,    "ea/transformers/qea_to_xmi/id_allocator"
       autoload :GuidFormat,     "ea/transformers/qea_to_xmi/guid_format"
       autoload :Cardinality,    "ea/transformers/qea_to_xmi/cardinality"
+      autoload :Visibility,     "ea/transformers/qea_to_xmi/visibility"
       autoload :XmlSanitizer,   "ea/transformers/qea_to_xmi/xml_sanitizer"
       autoload :AssociationEnd, "ea/transformers/qea_to_xmi/association_end"
     end
