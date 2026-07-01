@@ -1,19 +1,25 @@
 # 21 - QeaToXmi via xmi gem
 
-## Status: ✅ PHASE 1 COMPLETE (2026-07-01); audit follow-ups landed (TODO 22-34)
+## Status: ✅ PHASE 1 + PHASE 2 LANDED (2026-07-01)
 
-Phase 1 of the rewrite is shipped: the custom XmlBuilder/Writer/Emitters
-layer is replaced by xmi gem model construction + `to_xml(use_prefix: true)`.
+Phase 1 (the xmi gem model construction rewrite) shipped earlier.
+Phase 2 (TODO.next/21 §1-§3) is now complete:
 
-Full ea gem suite after audit follow-ups: **1995 examples, 0 failures,
-37 pending** (up from 1931 — the audit added specs for IdAllocator,
-Cardinality, XmlSanitizer, plus Phase 2 sentinel specs and tightened
-parity coverage).
+| § | Item | Status | Resolution |
+|---|------|--------|------------|
+| 1 | xmi gem empty-element rendering | DONE | `Xmi::VALUE_MAP` now `to: { nil: :omitted, ... }` — skips empties at serialize time. Closes TODO 28 by deleting XmlSanitizer entirely. |
+| 2 | xmi gem attribute gaps | DONE | `visibility`, `isAbstract`, `aggregation`, `classifier` declared on the right models; ea transformer wires `Visibility.from_scope` / `aggregation_from_containment` / `boolean_from_flag`. |
+| 3 | xmi gem missing models | DONE | `Xmi::Uml::Slot`, `OpaqueExpression`, `InterfaceRealization` added with full specs; wired into `PackagedElement`. |
+| 4 | File-size refactoring | DEFERRED | transformer.rb at 469 LOC; explicit "deferred because the class is conceptually cohesive — one orchestrator with private walk methods" per the original plan. |
 
-Plateau smoke (20251010_current_plateau_v5.1.qea): **58 packages, 581
+Full ea gem suite: **2005 examples, 0 failures, 37 pending**.
+
+Plateau smoke (20251010_current_plateau_v5.1.qea): 58 packages, 581
 classes, 11 enumerations, 431 associations, 420 generalizations, 0 XML
-errors, 1.29 MB output** — matches the previous implementation's numbers
-exactly.
+errors. Byte-for-byte-equivalent structural parity with the previous
+implementation.
+
+## What was delivered
 
 ## What was delivered
 
