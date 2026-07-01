@@ -211,33 +211,44 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
     end
   end
 
-  describe "Phase 2 gaps (intentionally absent — see TODO.next/21 §2)" do
-    # These specs assert that attributes the xmi gem doesn't yet model
-    # are absent from the output. When the xmi gem adds support for
-    # each, flip the assertion to positive and wire up the attribute
-    # in the Transformer.
+  describe "Phase 2 wiring (xmi gem schema migration landed)" do
+    # These specs assert that the attributes the xmi gem now models
+    # are present in the output. The schema migration in the xmi gem
+    # (refactor/owned-end-schema-gap) closed TODO.next/26 fully and
+    # wired up the Phase 2 attribute gaps from TODO.next/21 §2.
 
-    it "does not emit visibility on Property" do
-      expect(parsed.xpath("//ownedAttribute[@visibility]")).to be_empty
+    it "emits visibility on Property (from t_attribute.scope)" do
+      expect(parsed.xpath("//ownedAttribute[@visibility]")).not_to be_empty
     end
 
-    it "does not emit isAbstract on packagedElement" do
-      expect(parsed.xpath("//packagedElement[@isAbstract]")).to be_empty
+    it "emits visibility on Operation (from t_operation.scope)" do
+      expect(parsed.xpath("//ownedOperation[@visibility]")).not_to be_empty
     end
 
-    it "does not emit aggregation on ownedEnd" do
+    it "emits isAbstract on packagedElement (from t_object.abstract)" do
+      expect(parsed.xpath("//packagedElement[@isAbstract]")).not_to be_empty
+    end
+
+    it "emits upperValue/lowerValue on ownedEnd (TODO 26 closed)" do
+      expect(parsed.xpath("//ownedEnd/upperValue")).not_to be_empty
+      expect(parsed.xpath("//ownedEnd/lowerValue")).not_to be_empty
+    end
+  end
+
+  describe "Phase 2 gaps still deferred (see TODO.next/21 §2)" do
+    # These gaps remain because the basic.qea fixture doesn't carry
+    # data that exercises them. The xmi gem now models the attributes;
+    # wiring on the ea side will flip these to positive assertions
+    # when a fixture with relevant data is available, or when the
+    # InstanceSpecification pdata1 / connector containment fields are
+    # walked explicitly.
+
+    it "does not emit aggregation on ownedEnd (no composite in fixture)" do
       expect(parsed.xpath("//ownedEnd[@aggregation]")).to be_empty
     end
 
-    it "does not emit classifier on InstanceSpecification" do
+    it "does not emit classifier on InstanceSpecification (no pdata1 set in fixture)" do
       expect(parsed.xpath("//packagedElement[@classifier]")).to be_empty
-    end
-
-    it "does not emit upperValue/lowerValue on ownedEnd (xmi gem schema gap)" do
-      # OwnedEnd uses `upper`/`lower` Integer attrs, not child elements.
-      # See TODO.next/26 for the deferred fix.
-      expect(parsed.xpath("//ownedEnd/upperValue")).to be_empty
-      expect(parsed.xpath("//ownedEnd/lowerValue")).to be_empty
     end
   end
 
