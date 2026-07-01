@@ -1,80 +1,51 @@
 # 28 - Extract XmlSanitizer (single-pass empty-element strip)
 
-## Status: DONE (2026-07-01)
+## Status: DONE → SUPERSEDED (2026-07-01)
 
-## Problem
-`Transformer#strip_empty_elements` (transformer.rb:70-81) works around
-the xmi gem's round-trip-oriented `VALUE_MAP`, which forces empty
-elements (`<generalization/>`, `<ownedEnd/>`) on every collection
-mapping. For generation those are noise — the post-processor strips
-them.
+The XmlSanitizer was extracted into its own class on this branch
+and used as a post-processing pass on the Transformer output. It was
+then deleted when the upstream fix (xmi gem VALUE_MAP) made it
+unnecessary.
 
-Two issues with the current implementation:
+## History
 
-1. **O(N²) worst case.** It re-parses XPath until no removals happen:
-   ```ruby
-   while removed.positive?
-     doc.xpath("//*[not(node()) and not(@*)]").each { |n| n.remove }
-   end
-   ```
-   Removing a deeply nested empty element may expose its parent as
-   newly empty, requiring another full-doc XPath scan.
-2. **Mixed concern.** XML sanitation is not the Transformer's job;
-   it's an output-shaping concern.
+### Step 1: extracted into its own class
+Originally `Transformer#strip_empty_elements` was a 12-line
+method on the transformer that worked around the xmi gem's
+round-trip-oriented `VALUE_MAP`. The workaround used a while-loop
+with Nokogiri XPath to remove truly-empty elements.
 
-## Fix
+Extracted to `lib/ea/transformers/qea_to_xmi/xml_sanitizer.rb`
+as a focused class with a single-pass depth-first post-order walk.
+Spec at `spec/ea/transformers/qea_to_xmi/xml_sanitizer_spec.rb`
+(95 LOC, 11 examples).
 
-1. Extract to `lib/ea/transformers/qea_to_xmi/xml_sanitizer.rb` as a
-   standalone class with a single `call(xml) -> String` method.
-2. Walk depth-first and remove in post-order — single pass. Removing
-   the deepest empty first means its parent's emptiness is checked
-   against the already-pruned subtree.
+### Step 2: superseded by upstream VALUE_MAP fix
+The xmi gem refactor (`refactor/owned-end-schema-gap`) changed
+`Xmi::VALUE_MAP` to skip empty elements on serialization:
 
 ```ruby
-class XmlSanitizer
-  def self.call(xml)
-    new(xml).call
-  end
-
-  def initialize(xml)
-    @doc = Nokogiri::XML(xml)
-  end
-
-  def call
-    prune_empty(@doc.root) if @doc.root
-    @doc.to_xml
-  end
-
-  private
-
-  def prune_empty(node)
-    node.element_children.each { |child| prune_empty(child) }
-    return unless node.element_children.empty? &&
-                  node.text.strip.empty? &&
-                  node.attributes.empty?
-    node.remove
-  end
-end
+VALUE_MAP = {
+  from: { nil: :empty, empty: :empty, omitted: :empty },
+  to:   { nil: :omitted, empty: :omitted, omitted: :omitted },
+}
 ```
 
-The Transformer's `serialize` becomes:
-```ruby
-def serialize
-  XmlSanitizer.call(build_root.to_xml(use_prefix: true))
-end
-```
+After this change, the ea transformer emits no `<child/>` empty
+elements at all — the post-processing pass was unnecessary.
 
-This stays a workaround until the xmi gem Phase 2 (see TODO 21)
-lands a generation-friendly value_map. When that lands, this entire
-file can be deleted in a one-line change.
+### Step 3: deleted
+`lib/ea/transformers/qea_to_xmi/xml_sanitizer.rb` and its spec
+were deleted. The transformer's `serialize` method now just calls
+`build_root.to_xml(use_prefix: true)` with no sanitization.
 
 ## Verification
-- New `spec/ea/transformers/qea_to_xmi/xml_sanitizer_spec.rb` covers:
-  - empty-doc / no-op
-  - flat empty element stripped
-  - element with attribute preserved
-  - element with text preserved
-  - element with non-empty child preserved
-  - nested empty chain (`<a><b/></a>` → `<a/>` → removed) in one pass
-- `XmlSanitizer.call(empty_xml)` returns empty doc cleanly.
-- Transformer file drops another ~15 lines.
+- Full ea suite: 2005 examples, 0 failures, 37 pending
+- Output contains zero truly-empty elements (no `<generalization/>`,
+  no `<ownedEnd/>` without attributes).
+- The transformation pipeline is now: build model graph →
+  `to_xml(use_prefix: true)` → return. One pass, no Nokogiri
+  re-parse, no element-mutation pass.
+
+## Closes
+TODO 21 §1 — "xmi gem empty-element rendering (architectural debt)".

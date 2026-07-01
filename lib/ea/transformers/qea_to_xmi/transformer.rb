@@ -64,8 +64,14 @@ module Ea
         end
 
         # @return [String] XMI XML document
+        #
+        # The xmi gem's VALUE_MAP is generation-friendly
+        # (`to: { nil: :omitted, ... }`), so empty collections and
+        # nil-valued attributes are skipped at the source. No
+        # post-processing pass is needed — the prior XmlSanitizer
+        # workaround (TODO 21 §1) has been removed.
         def serialize
-          XmlSanitizer.call(build_root.to_xml(use_prefix: true))
+          build_root.to_xml(use_prefix: true)
         end
 
         private
