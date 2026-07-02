@@ -531,20 +531,75 @@ module Ea
         end
 
         # InstanceSpecification classifier reference. EA stores this
-        # in t_object.pdata1 as the classifier's ea_object_id.
+        # directly in t_object.classifier as the classifier's
+        # ea_object_id (NOT pdata1, which is a separate column used
+        # for other purposes on InstanceSpecification rows).
         def classifier_ref_for(obj)
-          classifier_id = obj.pdata1&.to_i
-          return nil if classifier_id.nil? || classifier_id.zero?
+          classifier_id = obj.classifier.to_i
+          return nil if classifier_id.zero?
 
           classifier = @context.object_by_id(classifier_id)
           classifier ? @context.xmi_id_for(classifier) : nil
         end
 
-        # InstanceSpecification slots (RunState / attribute values).
-        # Phase 1 emits no slots; Phase 2 will walk t_object.RunState
-        # and t_attribute for instance value specifications.
+        # InstanceSpecification slots, parsed from EA's RunState column.
+        # Each `@VAR;Variable=<name>;Value=<v>;Op=<op>;@ENDVAR;` block
+        # becomes one UML Slot with an OpaqueExpression value. The
+        # `definingFeature` is resolved by looking up the named
+        # attribute on the instance's classifier.
         def slots_for(obj)
-          []
+          RunState.parse(obj.runstate).map do |binding|
+            build_slot(obj, binding)
+          end
+        end
+
+        def build_slot(instance, binding)
+          ::Xmi::Uml::Slot.new(
+            type: "uml:Slot",
+            id: slot_id_for(instance, binding),
+            defining_feature: defining_feature_for(instance, binding),
+            value: [build_slot_value(instance, binding)],
+          )
+        end
+
+        def build_slot_value(instance, binding)
+          ::Xmi::Uml::OpaqueExpression.new(
+            type: "uml:OpaqueExpression",
+            id: opaque_expression_id_for(instance, binding),
+            body_attribute: binding.body,
+          )
+        end
+
+        def slot_id_for(instance, binding)
+          @context.id_allocator.allocate(
+            prefix: IdAllocator::SLOT,
+            seed: "slot-#{instance.ea_object_id}-#{binding.variable}",
+            parent_guid: instance.ea_guid,
+          )
+        end
+
+        def opaque_expression_id_for(instance, binding)
+          @context.id_allocator.allocate(
+            prefix: IdAllocator::OPAQUE_EXPRESSION,
+            seed: "oe-#{instance.ea_object_id}-#{binding.variable}",
+            parent_guid: instance.ea_guid,
+          )
+        end
+
+        # Resolve the definingFeature EAID for a RunState binding by
+        # looking up the named attribute on the instance's classifier.
+        # Returns nil when the classifier or attribute can't be found —
+        # the slot still emits, just without the definingFeature ref.
+        def defining_feature_for(instance, binding)
+          classifier_id = instance.classifier.to_i
+          return nil if classifier_id.zero?
+
+          classifier = @context.object_by_id(classifier_id)
+          return nil unless classifier
+
+          attr = @context.attributes_for(classifier.ea_object_id)
+            .find { |a| a.name == binding.variable }
+          attr ? @context.xmi_id_for(attr) : nil
         end
       end
     end

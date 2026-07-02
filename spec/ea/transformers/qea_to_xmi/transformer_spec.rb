@@ -233,6 +233,29 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
       expect(parsed.xpath("//ownedEnd/upperValue")).not_to be_empty
       expect(parsed.xpath("//ownedEnd/lowerValue")).not_to be_empty
     end
+
+    it "emits slots on InstanceSpecification from t_object.runstate (TODO 35 closed)" do
+      # 22 slots in basic.qea — one per RunState @VAR block across the
+      # fixture's instance specifications.
+      expect(parsed.xpath("//slot").size).to eq(22)
+    end
+
+    it "emits each slot with an OpaqueExpression body (Sparx convention)" do
+      bodies = parsed.xpath("//slot/value[@type='uml:OpaqueExpression']/@body").map(&:value)
+      expect(bodies).to all(match(/\A=./))
+    end
+
+    it "emits definingFeature on slots whose instance has a classifier" do
+      # InstanceSpecifications with pdata1 set resolve to a classifier
+      # attribute; slots without a classifier omit definingFeature.
+      with_df = parsed.xpath("//slot[@definingFeature]")
+      expect(with_df).not_to be_empty
+    end
+
+    it "synthesises EAID_SL and EAID_OE prefixes per Sparx convention" do
+      expect(xml).to include("EAID_SL")
+      expect(xml).to include("EAID_OE")
+    end
   end
 
   describe "Phase 2 gaps still deferred (see TODO.next/21 §2)" do
@@ -243,12 +266,14 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
     # InstanceSpecification pdata1 / connector containment fields are
     # walked explicitly.
 
-    it "does not emit aggregation on ownedEnd (no composite in fixture)" do
-      expect(parsed.xpath("//ownedEnd[@aggregation]")).to be_empty
+    it "emits classifier on InstanceSpecification (from t_object.classifier)" do
+      expect(parsed.xpath("//packagedElement[@classifier]")).not_to be_empty
     end
 
-    it "does not emit classifier on InstanceSpecification (no pdata1 set in fixture)" do
-      expect(parsed.xpath("//packagedElement[@classifier]")).to be_empty
+    it "emits aggregation on ownedEnd only when EA indicates composite/shared" do
+      # basic.qea has no composite/shared containment, so the count
+      # is 0. Flip to positive when a fixture carries one.
+      expect(parsed.xpath("//ownedEnd[@aggregation]")).to be_empty
     end
   end
 
