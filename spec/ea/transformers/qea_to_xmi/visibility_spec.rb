@@ -65,20 +65,20 @@ RSpec.describe Ea::Transformers::QeaToXmi::Visibility do
   end
 
   describe ".boolean_from_flag" do
-    it "maps '1' to 'true'" do
-      expect(described_class.boolean_from_flag("1")).to eq("true")
+    it "maps '1' to true" do
+      expect(described_class.boolean_from_flag("1")).to be(true)
     end
 
-    it "maps 1 (integer) to 'true'" do
-      expect(described_class.boolean_from_flag(1)).to eq("true")
+    it "maps 1 (integer) to true" do
+      expect(described_class.boolean_from_flag(1)).to be(true)
     end
 
-    it "maps '0' to 'false'" do
-      expect(described_class.boolean_from_flag("0")).to eq("false")
+    it "maps '0' to false" do
+      expect(described_class.boolean_from_flag("0")).to be(false)
     end
 
-    it "maps 0 (integer) to 'false'" do
-      expect(described_class.boolean_from_flag(0)).to eq("false")
+    it "maps 0 (integer) to false" do
+      expect(described_class.boolean_from_flag(0)).to be(false)
     end
 
     it "returns nil for nil" do
