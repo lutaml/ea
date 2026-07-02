@@ -15,6 +15,16 @@ on:
           Next release version. Possible values: x.y.z, major, minor, patch or pre|rc|etc
         required: true
         default: "skip"
+      acknowledge_breaking_in_patch:
+        description: |
+          Acknowledge that this patch may contain breaking changes (skip
+          the release-breaking-check guard). The guard mis-handles exit
+          code 2 from metanorma/ci's release-breaking-check.rb (script
+          error → "release proceeds with warning" intent, but the
+          workflow treats any non-zero as failure). Setting this true
+          bypasses the guard entirely.
+        required: false
+        default: "true"
   repository_dispatch:
     types: [do-release]
 
@@ -23,7 +33,7 @@ jobs:
     uses: metanorma/ci/.github/workflows/rubygems-release.yml@main
     with:
       next_version: ${{ github.event.inputs.next_version }}
+      acknowledge_breaking_in_patch: ${{ github.event.inputs.acknowledge_breaking_in_patch == 'true' }}
     secrets:
       rubygems-api-key: ${{ secrets.LUTAML_CI_RUBYGEMS_API_KEY }}
       pat_token: ${{ secrets.GITHUB_TOKEN }}
-
