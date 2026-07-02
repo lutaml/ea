@@ -34,6 +34,7 @@ jobs:
     with:
       next_version: ${{ github.event.inputs.next_version }}
       acknowledge_breaking_in_patch: ${{ github.event.inputs.acknowledge_breaking_in_patch == 'true' }}
+      gated: false
     secrets:
       rubygems-api-key: ${{ secrets.LUTAML_CI_RUBYGEMS_API_KEY }}
       pat_token: ${{ secrets.GITHUB_TOKEN }}
