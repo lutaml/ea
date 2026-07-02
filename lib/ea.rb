@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
-module Ea
-  VERSION = "0.1.0"
+# Load VERSION constant (defined in ea/version.rb per gemspec/gem-release
+# convention). Use require_relative to avoid load-path dependencies during
+# gemspec evaluation.
+require_relative "ea/version"
 
+module Ea
   class Error < StandardError; end
 
   autoload :Qea, "ea/qea"
