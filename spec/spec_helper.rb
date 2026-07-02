@@ -3,8 +3,19 @@
 require "bundler/setup"
 require "fileutils"
 require "lutaml/uml"
-require "lutaml/uml_repository"
 require "ea"
+
+# The UML bridge depends on `lutaml/uml_repository`, which is not yet
+# released (no published version of lutaml-uml ships the file — see
+# TODO.next/20). When the local path checkout provides it, load it;
+# otherwise skip — the bridge specs guard on its presence via the
+# `Lutaml::UmlRepository` constant.
+begin
+  require "lutaml/uml_repository"
+rescue LoadError
+  # Bridge specs that need uml_repository are skipped at runtime via
+  # `before { skip "..." unless defined?(Lutaml::UmlRepository) }`.
+end
 
 RSpec.configure do |config|
   config.example_status_persistence_file_path = ".rspec_status"
