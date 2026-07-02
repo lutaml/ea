@@ -59,11 +59,13 @@ module Ea
         end
 
         # @param raw [String, Integer, nil] EA's abstract flag ("1"/"0")
-        # @return [String, nil] "true" or "false", or nil if unspecified.
+        # @return [Boolean, nil] true / false, or nil if unspecified.
+        #   Returns actual Ruby booleans (not strings) — the xmi gem's
+        #   `is_*` attributes are typed as `:boolean`.
         def boolean_from_flag(raw)
           return nil if raw.nil? || raw.to_s.strip.empty?
 
-          raw.to_s == "1" ? "true" : "false"
+          raw.to_s == "1"
         end
       end
     end

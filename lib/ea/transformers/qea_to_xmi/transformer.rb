@@ -186,6 +186,7 @@ module Ea
             visibility: Visibility.from_scope(obj.scope),
             is_abstract: Visibility.boolean_from_flag(obj.abstract),
             generalization: generalizations_for(obj),
+            interface_realization: interface_realizations_for(obj),
             owned_attribute: attributes_for(obj),
             owned_operation: operations_for(obj),
           )
@@ -236,6 +237,15 @@ module Ea
         def generalizations_for(obj)
           inheritance_connectors(obj, "Generalization")
             .filter_map { |conn| build_generalization(conn) }
+        end
+
+        # Realization connectors point from a Class (client) to an
+        # Interface (supplier). Sparx's strict OMG output emits these
+        # as `<interfaceRealization>` children of the client class
+        # rather than as package-level `<packagedElement type=
+        # "uml:Realization">`. We do the same.
+        def interface_realizations_for(obj)
+          realization_connectors(obj).map { |conn| build_interface_realization(conn) }
         end
 
         def attributes_for(obj)
@@ -300,6 +310,18 @@ module Ea
             type: "uml:Generalization",
             id: @context.xmi_id_for(conn),
             general: @context.xmi_id_for(parent),
+          )
+        end
+
+        def build_interface_realization(conn)
+          supplier = @context.object_by_id(conn.end_object_id)
+          ::Xmi::Uml::InterfaceRealization.new(
+            type: "uml:InterfaceRealization",
+            id: @context.xmi_id_for(conn),
+            name: conn.name,
+            client: @context.xmi_id_for(conn.start_object_id),
+            supplier: supplier ? @context.xmi_id_for(supplier) : nil,
+            contract: supplier ? @context.xmi_id_for(supplier) : nil,
           )
         end
 
@@ -430,6 +452,13 @@ module Ea
           @context.connectors_for(obj.ea_object_id).select do |conn|
             conn.start_object_id == obj.ea_object_id && conn.connector_type == type
           end
+        end
+
+        # Realization connectors owned by this class — those where
+        # this object is the source (client) and the connector type
+        # is Realization. Each emits an `<interfaceRealization>`.
+        def realization_connectors(obj)
+          inheritance_connectors(obj, "Realization")
         end
 
         def classifiers_in(pkg)
