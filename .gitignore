@@ -9,3 +9,6 @@
 
 # rspec failure tracking
 .rspec_status
+
+# Library gem: lockfile should not be committed (causes CI release issues).
+/Gemfile.lock
