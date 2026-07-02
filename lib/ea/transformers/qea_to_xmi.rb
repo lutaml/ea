@@ -22,6 +22,7 @@ module Ea
       autoload :GuidFormat,     "ea/transformers/qea_to_xmi/guid_format"
       autoload :Cardinality,    "ea/transformers/qea_to_xmi/cardinality"
       autoload :Visibility,     "ea/transformers/qea_to_xmi/visibility"
+      autoload :RunState,       "ea/transformers/qea_to_xmi/run_state"
       autoload :AssociationEnd, "ea/transformers/qea_to_xmi/association_end"
     end
   end

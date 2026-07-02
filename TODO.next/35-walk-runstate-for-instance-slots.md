@@ -1,91 +1,76 @@
 # 35 - Walk t_object.RunState for instance specification slots
 
-## Status: FUTURE — requires EA internal format investigation
+## Status: ✅ DONE (2026-07-03)
 
 ## Problem
-The `build_instance` method in
-`lib/ea/transformers/qea_to_xmi/transformer.rb` currently emits an
-empty `slot: []` array:
-
-```ruby
-def slots_for(obj)
-  []
-end
-```
-
-This is correct for `Object` rows that have no run-state, but
-silently drops the run-state data that real Sparx XMI carries as
+`build_instance` originally emitted an empty `slot: []` array, which
+silently dropped the run-state data that real Sparx XMI carries as
 `<slot>` children of `<packagedElement type="uml:InstanceSpecification">`.
 
-EA stores run-state in `t_object.RunState` as a serialized XML blob:
+EA serialises run-state in `t_object.RunState` as a delimited string:
 
-```xml
-<runstate>
-  <scxml scdatamodel="...">
-    <state id="...">
-      <onentry>...</onentry>
-    </state>
-  </scxml>
-</runstate>
+```
+@VAR;Variable=<name>;Value=<value>;Op=<op>;@ENDVAR;
 ```
 
-Or, for instance specifications of class-typed objects, EA stores
-attribute values in `t_attribute` rows that reference the instance
-via `ea_object_id`. The transformer's `attributes_for(obj)` already
-handles these for Property emission on classifiers; the same rows
-need a different shape (Slot + ValueSpecification) when the parent
-is an InstanceSpecification.
+Multiple `@VAR` blocks concatenate directly. Each block maps to one
+UML Slot.
 
-## Proposed shape
+## Fix
 
-### Step 1: detect instance-specification attribute rows
-Add `Ea::Qea::Models::EaAttribute#instance_value?` (or check
-`object_type == "Object"` on the parent) to distinguish:
-- Classifier attribute (Property with `<upperValue>` etc.)
-- Instance-specification slot (Slot with `<value>` children)
+### RunState module
+`lib/ea/transformers/qea_to_xmi/run_state.rb` is a pure-function
+parser. Returns an array of `Binding` structs (`Struct.new(:variable,
+:value, :op)`). The `Binding#body` method renders the Sparx wire form
+(`Op==` + `Value=Alice` → `body="=Alice"`).
 
-### Step 2: build Slot with polymorphic ValueSpecification
-For instance-specification attribute rows, emit:
+### Transformer wiring
+- `slots_for(obj)` walks `RunState.parse(obj.runstate)` and emits one
+  `Xmi::Uml::Slot` per binding.
+- `build_slot(instance, binding)` constructs the Slot with:
+  - `xmi:id` from `IdAllocator.allocate(prefix: SLOT, ...)`
+  - `definingFeature` resolved by looking up the named attribute on
+    the instance's classifier (via `t_object.classifier`)
+  - one `OpaqueExpression` value carrying the body
+- `build_slot_value` builds the OpaqueExpression with `xmi:id` from
+  `IdAllocator.allocate(prefix: OPAQUE_EXPRESSION, ...)`.
+- `defining_feature_for(instance, binding)` looks up the classifier
+  via `obj.classifier.to_i` (NOT `pdata1` as originally documented —
+  the live `t_object.classifier` column holds the ea_object_id of
+  the classifier directly).
 
-```ruby
-::Xmi::Uml::Slot.new(
-  type: "uml:Slot",
-  id: @context.id_allocator.allocate(prefix: IdAllocator::SLOT, seed: "slot-#{attr.id}", parent_guid: parent.ea_guid),
-  defining_feature: @context.xmi_id_for(classifier_attr),
-  value: [build_value_specification(attr)],
-)
-```
+### ID prefixes used
+Both `SLOT` (`"SL"`) and `OPAQUE_EXPRESSION` (`"OE"`) are already on
+`IdAllocator`'s well-known-prefix list — no constant additions.
 
-Where `build_value_specification` dispatches on the EA type:
+## Discovery: t_object.classifier column
+The original TODO 35 draft assumed `pdata1` held the classifier ID.
+Investigation during implementation showed:
 
-| EA type          | ValueSpecification subclass      |
-|------------------|----------------------------------|
-| String / default | `OpaqueExpression` with `body`   |
-| Integer          | `LiteralInteger`                 |
-| Boolean          | `LiteralBoolean`                 |
-| Real             | `LiteralString` (no LiteralReal) |
-| null             | `LiteralNull`                    |
+- `pdata1`: always `nil` for `Object`-type rows in basic.qea.
+- `classifier`: an Integer column holding the classifier's
+  `ea_object_id` directly. Zero when no classifier is set.
 
-### Step 3: spec coverage
-Use the `sparx-instance-specification.xmi` fixture from the xmi gem
-(or a real EA export when one is acquired — see xmi/TODO.next/03)
-to assert the transformer's output matches the expected slot/value
-shape.
+This matches what real Sparx XMI emits: InstanceSpecification rows
+without a classifier have no `classifier="..."` attribute on the
+`<packagedElement>`; rows with a classifier do.
 
-## Why deferred
+## Verification
+- Output for basic.qea: 22 slots, 20 with `definingFeature` (the 2
+  without come from InstanceSpecifications that have no classifier).
+  This matches the reference `spec/fixtures/basic.xmi` exactly.
+- Each slot carries one `<value>` child typed as
+  `uml:OpaqueExpression` with `body="=Value..."`.
+- Slot IDs use the Sparx `EAID_SL<NN>__<guid>` format; OpaqueExpression
+  IDs use `EAID_OE<NN>__<guid>`.
+- RunState module specs: 13 examples, 0 failures (pure-function
+  parser, edge cases covered).
+- Slot emission specs in transformer_spec.rb: 4 new examples
+  asserting count, body shape, definingFeature presence, ID prefix.
 
-- The current `basic.qea` fixture has no InstanceSpecification rows
-  with RunState data, so there is no test data to drive the wiring.
-- EA's RunState format is a serialized XML blob that needs its own
-  parser (similar to how `t_object.Style` is parsed for diagram
-  rendering).
-- Acquiring a real Sparx export with instance specifications is a
-  prerequisite (see xmi/TODO.next/03 — "Real Sparx
-  InstanceSpecification fixture").
-
-## Verification (when implemented)
-- New spec: instance specification with one attribute emits one
-  `<slot>` child with one `<value>` of the right polymorphic type.
-- Round-trip via `Xmi::Sparx::Root.parse_xml` preserves the slot
-  values.
-- The `slots_for(obj)` stub is replaced with real walk logic.
+## Sentinel flipped
+The "Phase 2 gaps still deferred" sentinel block had a negative
+assertion for `classifier on InstanceSpecification`. With this
+wiring landed, the spec flipped to a positive assertion. The
+`aggregation on ownedEnd` sentinel remains negative (basic.qea
+carries no composite/shared containment examples).
