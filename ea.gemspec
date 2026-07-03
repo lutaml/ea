@@ -46,4 +46,10 @@ Gem::Specification.new do |spec|
   # (Lutaml::Uml::UmlClass, etc.). 1.x renamed these constants; the bridge
   # will need separate work before unpinning.
   spec.add_development_dependency "lutaml-uml", "~> 0.2.0"
+
+  # Development-only — Rakefile's default task runs spec + rubocop.
+  # Without this, `bundle exec rake` (invoked by metanorma/ci's
+  # rubygems-release workflow during release) fails with
+  # `LoadError: cannot load such file -- rubocop/rake_task`.
+  spec.add_development_dependency "rubocop"
 end
