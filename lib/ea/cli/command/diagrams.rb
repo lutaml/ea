@@ -6,16 +6,20 @@ module Ea
       # `ea diagrams ACTION FILE [NAME]`
       #
       # Actions:
-      #   list FILE           — list diagrams in a QEA/XMI file (standalone)
-      #   extract FILE NAME   — render the named diagram from a LUR file to SVG
+      #   list FILE           — list diagrams in a QEA/XMI/LUR file (standalone)
+      #   extract FILE NAME   — render the named diagram to SVG
       #
-      # `list` reads the EA database directly (no lutaml-uml required).
-      # `extract` delegates to {Ea::Diagram::Extractor}, which requires a
-      # `.lur` (Lutaml UML Repository) file. To render diagrams from a QEA,
-      # first convert it to `.lur` via the `lutaml` gem.
+      # `list` reads the EA database directly (no lutaml-uml required
+      # for QEA; XMI parsing via xmi gem only).
+      #
+      # `extract` accepts QEA, XMI, or LUR. The Repository is built
+      # from the input file via `RepositoryBuilder` (single source of
+      # truth — QEA/XMI are parsed via `Ea::Transformations`, LUR is
+      # loaded natively via `Repository.from_file`).
       class Diagrams < Base
+        include RepositoryBuilder
+
         ACTIONS = %w[list extract].freeze
-        LUR_EXT = ".lur"
 
         def call
           case action
@@ -43,8 +47,8 @@ module Ea
         end
 
         def extract
-          validate_lur!(file_path)
-          result = extractor.extract_one(file_path, name, extract_options)
+          repository = RepositoryBuilder.build_repository(file_path)
+          result = extractor.extract_one(repository, name, extract_options)
           raise Ea::Cli::Error, result[:message] unless result[:success]
 
           path = result[:path] || write_output(result.fetch(:svg_content),
@@ -60,16 +64,6 @@ module Ea
           opts = {}
           opts[:output] = options[:output] if options[:output]
           opts
-        end
-
-        def validate_lur!(path)
-          return if path.end_with?(LUR_EXT)
-
-          raise Ea::Cli::UnsupportedFormat.new(
-            path,
-            "diagrams extract requires a #{LUR_EXT} file; " \
-            "convert from QEA via the lutaml gem first",
-          )
         end
 
         def diagram_type_label(diagram)

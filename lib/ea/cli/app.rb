@@ -62,6 +62,15 @@ module Ea
         Command::Convert.new(file: file, **symbolize(options)).call
       end
 
+      desc "spa FILE", "Generate single-page app (SPA) from QEA/XMI/LUR"
+      option :output, type: :string,
+                      desc: "Output path (default: <basename>.html)"
+      option :mode, type: :string, default: "single_file",
+                    desc: "Output mode: single_file | multi_file"
+      def spa(file)
+        Command::Spa.new(file: file, **symbolize(options)).call
+      end
+
       private
 
       def symbolize(opts)
