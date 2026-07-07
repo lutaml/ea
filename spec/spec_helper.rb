@@ -2,14 +2,24 @@
 
 require "bundler/setup"
 require "fileutils"
-require "lutaml/uml"
+
+# Load the optional UML bridge gems. Both `lutaml/uml` and
+# `lutaml/uml_repository` are unreleased in their required forms
+# (TODO.next/20): the published lutaml-uml 0.2.x doesn't ship
+# `uml_repository`, and recent class additions (Generalization, etc.)
+# may not be on the published 0.2.x line either. Local sibling-path
+# development provides them; CI's rubygems pull may not.
+#
+# Each spec file that needs the bridge guards its examples on
+# `defined?(::Lutaml::Uml)` / `defined?(::Lutaml::UmlRepository)`.
+begin
+  require "lutaml/uml"
+rescue LoadError
+  # Bridge specs skip at runtime.
+end
+
 require "ea"
 
-# The UML bridge depends on `lutaml/uml_repository`, which is not yet
-# released (no published version of lutaml-uml ships the file — see
-# TODO.next/20). When the local path checkout provides it, load it;
-# otherwise skip — the bridge specs guard on its presence via the
-# `Lutaml::UmlRepository` constant.
 begin
   require "lutaml/uml_repository"
 rescue LoadError
