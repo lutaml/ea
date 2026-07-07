@@ -12,3 +12,6 @@
 
 # Library gem: lockfile should not be committed (causes CI release issues).
 /Gemfile.lock
+
+# Test artifacts from CLI invocations without --output
+*.svg

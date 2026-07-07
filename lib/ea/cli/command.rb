@@ -10,6 +10,8 @@ module Ea
       autoload :Stats, "ea/cli/command/stats"
       autoload :Parse, "ea/cli/command/parse"
       autoload :Convert, "ea/cli/command/convert"
+      autoload :Spa, "ea/cli/command/spa"
+      autoload :RepositoryBuilder, "ea/cli/command/repository_builder"
     end
   end
 end

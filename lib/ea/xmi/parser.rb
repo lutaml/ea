@@ -243,6 +243,78 @@ module Ea
         ::Lutaml::Uml::Document.new.tap do |doc|
           doc.name = xmi_model.model.name
           doc.packages = build_packages(xmi_model.model)
+          aggregate_document_extensions(doc)
+        end
+      end
+
+      # Walk every package in the tree and aggregate document-level
+      # collections from per-package state. This brings the XMI
+      # parser output to parity with the QEA parser, which populates
+      # `document.diagrams` and `document.associations` directly
+      # during transformation.
+      def aggregate_document_extensions(doc)
+        diagrams = []
+        class_associations = []
+        walk_packages(doc.packages) do |pkg|
+          diagrams.concat(pkg.diagrams || [])
+          pkg.classes&.each { |k| class_associations.concat(k.associations || []) }
+        end
+        package_associations = build_package_level_associations
+        doc.diagrams = diagrams
+        doc.associations = class_associations + package_associations
+      end
+
+      def walk_packages(packages, &block)
+        return unless packages
+
+        packages.each do |pkg|
+          yield pkg
+          walk_packages(pkg.packages, &block)
+        end
+      end
+
+      # Walks the raw XMI tree and collects every `<packagedElement
+      # xmi:type="uml:Association">` at any depth. Each becomes a
+      # `Lutaml::Uml::Association` with owner_end / member_end resolved
+      # from the `<memberEnd idref="...">` children. These are
+      # document-level relationships — UML associations live at the
+      # package level, not inside the participating classes.
+      def build_package_level_associations
+        result = []
+        walk_xmi_packaged_elements(@xmi_root_model.model) do |element|
+          next unless element.type?("uml:Association")
+
+          assoc = build_package_association(element)
+          result << assoc if assoc
+        end
+        result
+      end
+
+      def build_package_association(element)
+        member_ends = element.member_ends || []
+        return nil if member_ends.empty?
+
+        owner_ref = member_ends.first&.idref
+        member_ref = member_ends.last&.idref
+
+        ::Lutaml::Uml::Association.new.tap do |a|
+          a.xmi_id = element.id
+          a.name = element.name
+          a.owner_end = lookup_entity_name(owner_ref) || owner_ref
+          a.member_end = lookup_entity_name(member_ref) || member_ref
+          a.owner_end_xmi_id = owner_ref
+          a.member_end_xmi_id = member_ref
+        end
+      end
+
+      def walk_xmi_packaged_elements(node, &block)
+        return unless node.is_a?(::Xmi::Uml::PackagedElement) ||
+                      node.is_a?(::Xmi::Uml::UmlModel)
+        return unless node.packaged_element
+
+        node.packaged_element.each do |element|
+          yield element
+          walk_xmi_packaged_elements(element, &block)
         end
       end
 
@@ -265,6 +337,7 @@ module Ea
           pkg.classes = build_classes(package)
           pkg.enums = build_enums(package)
           pkg.data_types = build_data_types(package)
+          pkg.instances = build_instances(package)
           pkg.diagrams = build_diagrams(package.id)
         end
       end
@@ -274,10 +347,33 @@ module Ea
 
         klasses = package.packaged_element.select do |e|
           e.type?("uml:Class") || e.type?("uml:AssociationClass") ||
-            e.type?("uml:Interface")
+            e.type?("uml:Interface") || e.type?("uml:Signal") ||
+            e.type?("uml:Component")
         end
 
         klasses.map { |klass| build_class(klass) }
+      end
+
+      # Walks `<packagedElement xmi:type="uml:InstanceSpecification">`
+      # children of a package. Each becomes a `Lutaml::Uml::Instance`
+      # with name, xmi_id, classifier (resolved via id_name_mapping),
+      # and definition. Mirrors the QEA factory's InstanceTransformer.
+      def build_instances(package)
+        return [] if package.packaged_element.nil?
+
+        package.packaged_element
+          .select { |e| e.type?("uml:InstanceSpecification") }
+          .map { |spec| build_instance(spec) }
+      end
+
+      def build_instance(spec)
+        ::Lutaml::Uml::Instance.new.tap do |instance|
+          instance.xmi_id = spec.id
+          instance.name = spec.name
+          instance.definition = doc_node_attribute_value(spec.id, "documentation")
+          classifier_ref = spec.classifier
+          instance.classifier = lookup_entity_name(classifier_ref) if classifier_ref
+        end
       end
 
       def build_class(klass) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize,Metrics:CyclomaticComplexity,Metrics:PerceivedComplexity
