@@ -231,13 +231,7 @@ module Ea
         end
 
         # Maps UML connector classes to their style type names.
-        # New connector types are added here — no method changes needed.
-        CONNECTOR_TYPE_MAP = {
-          Lutaml::Uml::Generalization => "generalization",
-          Lutaml::Uml::Association => "association",
-          Lutaml::Uml::Dependency => "dependency",
-          Lutaml::Uml::Realization => "realization",
-        }.freeze
+        # Built lazily — see {#connector_type_map}.
 
         # Association sub-type precedence for style resolution
         ASSOCIATION_SUBTYPE_MAP = {
@@ -251,18 +245,39 @@ module Ea
         def determine_connector_type(connector)
           return "association" unless connector
 
-          type_name = CONNECTOR_TYPE_MAP[connector.class]
+          type_name = connector_type_map[connector.class]
           return type_name if type_name && type_name != "association"
           return determine_association_type(connector) if type_name == "association"
 
           "association"
         end
 
+        # Maps UML connector classes to their style type names.
+        # Built lazily on first call so the resolver can be loaded
+        # without `lutaml/uml` installed (the ea gem is standalone;
+        # lutaml-uml is an optional bridge dependency). Adding a new
+        # connector type = adding one entry here.
+        def connector_type_map
+          @connector_type_map ||= build_connector_type_map
+        end
+
+        def build_connector_type_map
+          map = {}
+          return map unless defined?(::Lutaml::Uml)
+
+          map[::Lutaml::Uml::Generalization] = "generalization"
+          map[::Lutaml::Uml::Association] = "association"
+          map[::Lutaml::Uml::Dependency] = "dependency"
+          map[::Lutaml::Uml::Realization] = "realization"
+          map
+        end
+
         # Determine specific association type
         # @param connector [Object] Association connector
         # @return [String] Specific association type
         def determine_association_type(connector)
-          return "association" unless connector.is_a?(Lutaml::Uml::Association)
+          return "association" unless defined?(::Lutaml::Uml::Association)
+          return "association" unless connector.is_a?(::Lutaml::Uml::Association)
 
           [connector.owner_end_type, connector.member_end_type].each do |type|
             resolved = ASSOCIATION_SUBTYPE_MAP[type&.downcase]
