@@ -497,24 +497,30 @@ module Ea
           }
         end
 
-        # Determine element type from UML element
+        # Determine element type from UML element. Lazy-resolves
+        # Lutaml::Uml::* classes so the file loads cleanly without
+        # lutaml-uml installed.
         def element_type(uml_element)
+          return "unknown" unless defined?(::Lutaml::Uml)
+
           case uml_element
-          when Lutaml::Uml::UmlClass then "class"
-          when Lutaml::Uml::Package then "package"
-          when Lutaml::Uml::DataType then "datatype"
-          when Lutaml::Uml::Enum then "enumeration"
-          when Lutaml::Uml::Instance then "instance"
+          when ::Lutaml::Uml::UmlClass then "class"
+          when ::Lutaml::Uml::Package then "package"
+          when ::Lutaml::Uml::DataType then "datatype"
+          when ::Lutaml::Uml::Enum then "enumeration"
+          when ::Lutaml::Uml::Instance then "instance"
           else "unknown"
           end
         end
 
         # Determine connector type
         def connector_type(connector)
+          return "connector" unless defined?(::Lutaml::Uml)
+
           case connector
-          when Lutaml::Uml::Association then "association"
-          when Lutaml::Uml::Generalization then "generalization"
-          when Lutaml::Uml::Dependency then "dependency"
+          when ::Lutaml::Uml::Association then "association"
+          when ::Lutaml::Uml::Generalization then "generalization"
+          when ::Lutaml::Uml::Dependency then "dependency"
           else "connector"
           end
         end
