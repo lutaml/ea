@@ -29,7 +29,7 @@ module Ea
             return Lutaml::UmlRepository::Repository.from_file(path)
           end
 
-          document = Ea::Transformations.parse(path)
+          document = Ea::Transformations.to_uml(path)
           require_lutaml_uml_repository!
           Lutaml::UmlRepository::Repository.from_document(document)
         end

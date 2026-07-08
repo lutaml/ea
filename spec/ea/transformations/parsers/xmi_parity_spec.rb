@@ -11,8 +11,8 @@ RSpec.describe "XMI parser parity with QEA" do
   let(:qea_path) { fixtures_path("basic.qea") }
   let(:xmi_path) { fixtures_path("basic.xmi") }
 
-  let(:qea_document) { Ea::Transformations.parse(qea_path) }
-  let(:xmi_document) { Ea::Transformations.parse(xmi_path) }
+  let(:qea_document) { Ea::Transformations.to_uml(qea_path) }
+  let(:xmi_document) { Ea::Transformations.to_uml(xmi_path) }
 
   def self.walk_for_total(node, acc)
     acc[:packages] += 1

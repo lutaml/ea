@@ -10,7 +10,7 @@ module Ea
       # details, diagram list, and member navigation in a browser.
       #
       # Pipeline:
-      #   1. Ea::Transformations.parse(file) → Lutaml::Uml::Document
+      #   1. Ea::Transformations.to_uml(file) → Lutaml::Uml::Document
       #   2. Lutaml::UmlRepository::Repository.from_document(document)
       #   3. Lutaml::UmlRepository::StaticSite::Generator.new(repo, ...).generate
       #
