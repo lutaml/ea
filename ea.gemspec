@@ -45,7 +45,7 @@ Gem::Specification.new do |spec|
   # Pinned to 0.2.x: the spec suite and bridge code target the pre-1.0 API
   # (Lutaml::Uml::UmlClass, etc.). 1.x renamed these constants; the bridge
   # will need separate work before unpinning.
-  spec.add_development_dependency "lutaml-uml", "~> 0.2.0"
+  spec.add_development_dependency "lutaml-uml", "~> 0.5"
 
   # Development-only — Rakefile's default task runs spec + rubocop.
   # Without this, `bundle exec rake` (invoked by metanorma/ci's
