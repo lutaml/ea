@@ -1,25 +1,8 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-begin
-  require "lutaml/uml_repository/repository"
-rescue LoadError
-  # The lutaml-uml gem is not yet released with this file (TODO.next/20).
-  # The whole spec file will be skipped at the example level below.
-end
+require "lutaml/uml_repository/repository"
 require "tmpdir"
-
-# Skip every example in this file when the bridge dependency is
-# missing. The spec exercises `Ea::Diagram::Extractor` against a
-# Lutaml::UmlRepository, which requires the `lutaml-uml` gem's
-# `uml_repository` namespace — currently unreleased.
-RSpec.configure do |c|
-  c.before(:each, file_path: %r{spec/ea/diagram/extractor_spec\.rb}) do
-    next if defined?(::Lutaml::UmlRepository)
-
-    skip "lutaml/uml_repository not available (TODO.next/20)"
-  end
-end
 
 RSpec.describe Ea::Diagram::Extractor do
   let(:extractor) { described_class.new }
