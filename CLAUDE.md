@@ -16,12 +16,40 @@ usable standalone — `lutaml-uml` is an optional dependency for the UML bridge.
 
 **Dependency graph**:
 ```
-ea (standalone — sqlite3, rubyzip, nokogiri, xmi, liquid)
-  └── [optional] lutaml-uml (for Ea::Qea.to_uml bridge → Lutaml::Uml::Document)
+ea (standalone — lutaml-model, lutaml-path, sqlite3, rubyzip, xmi, nokogiri, liquid, thor)
+  └── [optional, dev] lutaml-uml (for Ea::Bridge::* → Lutaml::Uml::Document)
 
 lutaml-uml (UML metamodel + UmlRepository + SPA — no dependency on ea)
   └── lutaml-lml
           └── lutaml (meta-bundle)
+```
+
+**Architecture — pure parse vs bridge**:
+
+The ea gem has TWO entry points:
+
+```ruby
+# PURE — no lutaml-uml dependency. Returns internal EA model.
+Ea.parse("model.qea")   # → Ea::Qea::Database (SQLite tables as Ruby models)
+Ea.parse("model.xmi")   # → Xmi::Sparx::Root   (xmi gem's typed Sparx model)
+
+# BRIDGE — requires optional lutaml-uml. Returns tool-agnostic UML.
+Ea.to_uml("model.qea")  # → Lutaml::Uml::Document (for cross-vendor output)
+Ea.to_uml("model.xmi")  # → Lutaml::Uml::Document
+```
+
+All lutaml-uml-dependent code lives under `Ea::Bridge::*`:
+- `Ea::Bridge::QeaToUml` — transforms Ea::Qea::Database → Lutaml::Uml::Document
+- `Ea::Bridge::XmiToUml` — transforms Xmi::Sparx::Root → Lutaml::Uml::Document
+
+The bridge is lazy-loaded — `require "ea"` does NOT load lutaml-uml. Only calling
+`Ea.to_uml(...)` (or CLI commands that use it: `ea spa`, `ea diagrams extract`)
+triggers the bridge code path.
+
+**Native QEA↔XMI round-trip** (no lutaml-uml):
+```
+Ea::Transformers::QeaToXmi  — Ea::Qea::Database → Sparx XMI string
+Ea::Transformers::UmlToXmi  — Lutaml::Uml::Document → Sparx XMI (bridge)
 ```
 
 **XMI parsing**: `Ea::Xmi::Parser` is hard-wired to the Sparx schema

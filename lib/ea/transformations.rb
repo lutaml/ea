@@ -33,8 +33,57 @@ module Ea
         @engine = engine
       end
 
+      # Parse an EA file into its native representation.
+      #
+      # Pure entry point — does NOT require `lutaml-uml`. Returns:
+      #   .qea → Ea::Qea::Database
+      #   .xmi → Xmi::Sparx::Root
+      #
+      # To get a Lutaml::Uml::Document instead, use {to_uml}.
+      #
+      # @param file_path [String] path to a .qea or .xmi file
+      # @param options [Hash] parser options (e.g. config: for QEA)
+      # @return [Ea::Qea::Database, Xmi::Sparx::Root]
       def parse(file_path, options = {})
-        engine.parse(file_path, options)
+        ext = File.extname(file_path).downcase
+        case ext
+        when ".qea"
+          Ea::Qea.load(file_path, options[:config])
+        when ".xmi", ".xml"
+          Ea::Xmi.load(file_path)
+        else
+          raise Ea::Error,
+                "Unsupported file extension #{ext.inspect}. " \
+                "Supported: .qea, .xmi"
+        end
+      end
+
+      # Transform an EA file (or pre-parsed model) into a
+      # `Lutaml::Uml::Document`.
+      #
+      # Bridge entry point — requires the optional `lutaml-uml` gem.
+      # Lazy-loads the bridge code on first call.
+      #
+      # @param path_or_model [String, Ea::Qea::Database, Xmi::Sparx::Root]
+      # @param options [Hash] transformation options
+      # @return [Lutaml::Uml::Document]
+      def to_uml(path_or_model, options = {})
+        model = if path_or_model.is_a?(String)
+                  parse(path_or_model, options)
+                else
+                  path_or_model
+                end
+
+        case model
+        when Ea::Qea::Database
+          Ea::Bridge::QeaToUml.transform(model, options)
+        when ::Xmi::Sparx::Root
+          Ea::Bridge::XmiToUml.transform(model)
+        else
+          raise Ea::Error,
+                "Cannot transform #{model.class} to Lutaml::Uml::Document. " \
+                "Expected Ea::Qea::Database or Xmi::Sparx::Root."
+        end
       end
 
       def detect_parser(file_path)

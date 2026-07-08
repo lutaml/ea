@@ -31,5 +31,22 @@ module Ea
       autoload :ConnectorDrop, "ea/xmi/liquid_drops/connector_drop"
       autoload :SourceTargetDrop, "ea/xmi/liquid_drops/source_target_drop"
     end
+
+    module_function
+
+    # Parse an XMI file into the xmi gem's typed Sparx model.
+    #
+    # Pure entry point — does NOT require `lutaml-uml`. Returns the
+    # `Xmi::Sparx::Root` model tree from the `xmi` gem. This is the
+    # internal EA-native representation for XMI files.
+    #
+    # To get a `Lutaml::Uml::Document` instead (requires the optional
+    # `lutaml-uml` gem), use `Ea::Bridge::XmiToUml.transform(root)`.
+    #
+    # @param path [String] path to a .xmi file
+    # @return [Xmi::Sparx::Root]
+    def load(path)
+      ::Xmi::Sparx::Root.parse_xml(File.read(path))
+    end
   end
 end
