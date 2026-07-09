@@ -3,6 +3,6 @@
 
 $LOAD_PATH.unshift(File.expand_path("../lib", __dir__))
 
-require "ea"
+require_relative "../lib/ea"
 require "ea/cli"
 Ea::Cli::App.start(ARGV)
