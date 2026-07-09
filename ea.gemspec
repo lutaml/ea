@@ -36,7 +36,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "lutaml-path"
   spec.add_dependency "sqlite3"
   spec.add_dependency "rubyzip"
-  spec.add_dependency "xmi", "~> 0.5", ">= 0.5.2"
+  spec.add_dependency "xmi", "~> 0.6", ">= 0.6.0"
   spec.add_dependency "nokogiri", "~> 1.18"
   spec.add_dependency "liquid"
   spec.add_dependency "thor", "~> 1.4"
@@ -45,7 +45,12 @@ Gem::Specification.new do |spec|
   spec.add_dependency "benchmark"
 
   # Development-only — provides the UML bridge used by the spec suite.
-  spec.add_development_dependency "lutaml-uml", "~> 0.5"
+  # The bridge targets Lutaml::Uml::Document / UmlClass / Association /
+  # etc., all of which remain on those names from 0.2 through 0.5+
+  # (no rename happened despite the major-version bump cadence). Pinned
+  # to 0.5+ to pick up the repository/SPA refinements the spec suite
+  # exercises; verified compatible with the bridge code.
+  spec.add_development_dependency "lutaml-uml", "~> 0.5.0"
 
   # Development-only — Rakefile's default task runs spec + rubocop.
   # Without this, `bundle exec rake` (invoked by metanorma/ci's
