@@ -45,7 +45,7 @@ RSpec.describe Ea::Transformations::Parsers::XmiParser do
   describe "#parse" do
     context "with valid XMI content" do
       let(:xmi_content) do
-        File.read(File.join(__dir__, "../../../../../lutaml-uml/examples/xmi/basic.xmi"))
+        File.read(fixtures_path("basic.xmi"))
       end
       let(:complex_file) do
         file = Tempfile.new(["complex", ".xmi"])
@@ -291,7 +291,7 @@ RSpec.describe Ea::Transformations::Parsers::XmiParser do
       let(:options) { { validate_output: true } }
 
       let(:xmi_content) do
-        File.read(File.join(__dir__, "../../../../../lutaml-uml/examples/xmi/basic.xmi"))
+        File.read(fixtures_path("basic.xmi"))
       end
 
       let(:valid_xmi_file) do
@@ -342,6 +342,7 @@ RSpec.describe Ea::Transformations::Parsers::XmiParser do
     end
 
     before do
+      skip "requires sibling lutaml-uml checkout with plateau XMI" unless File.exist?(large_xmi_path)
       skip "Large XMI fixture not found" unless File.exist?(large_xmi_path)
     end
 

@@ -5,6 +5,12 @@ require "canon"
 require "support/svg_comparison_helper"
 
 RSpec.describe "EA Diagram SVG Accuracy" do
+  # Skip all examples when the sibling lutaml-uml checkout (which carries
+  # EA-generated reference SVGs) isn't available.
+  before(:all) do
+    ref = File.expand_path("../../../../lutaml-uml/examples/xmi/Images", __dir__)
+    skip "requires sibling lutaml-uml checkout with reference SVGs" unless Dir.exist?(ref)
+  end
   # Path to test repository (within ea gem)
   lur_path = File.expand_path("../../../examples/lur/basic.lur", __dir__)
 
