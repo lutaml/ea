@@ -8,7 +8,7 @@ RSpec.describe "End-to-end parsing via Transformations", :integration do
   end
 
   let(:xmi_path) do
-    File.expand_path("../../../../../lutaml-uml/examples/xmi/basic.xmi",
+    File.expand_path("../fixtures/basic.xmi",
                      __dir__)
   end
 
