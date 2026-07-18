@@ -5,6 +5,13 @@ require "thor"
 module Ea
   module Cli
     class App < Thor
+      # Shared kwargs for any command that writes to a file. Keeping
+      # the short-form alias in one place makes the CLI surface
+      # consistent and the convention a single source of truth:
+      # changing `-o` everywhere is a one-line edit, not a per-command
+      # search, and every output-bearing command honours the same flag.
+      OUTPUT_OPTION = { type: :string, aliases: :o }.freeze
+
       class << self
         def exit_on_failure?
           true
@@ -28,7 +35,7 @@ module Ea
       desc "diagrams ACTION FILE [NAME]",
            "Diagram operations: list FILE | extract NAME FILE"
       option :format, type: :string, default: "table"
-      option :output, type: :string, desc: "Output path (extract only)"
+      option :output, **OUTPUT_OPTION, desc: "Output path (extract only)"
       def diagrams(action, file = nil, name = nil)
         Command::Diagrams
           .new(action: action, file: file, name: name, **symbolize(options))
@@ -56,15 +63,15 @@ module Ea
 
       desc "convert FILE", "Convert between EA formats (e.g. QEA → XMI)"
       option :to, type: :string, required: true, desc: "Target format: xmi"
-      option :output, type: :string, desc: "Output path"
+      option :output, **OUTPUT_OPTION, desc: "Output path"
       option :format, type: :string, default: "table"
       def convert(file)
         Command::Convert.new(file: file, **symbolize(options)).call
       end
 
       desc "spa FILE", "Generate single-page app (SPA) from QEA/XMI/LUR"
-      option :output, type: :string,
-                      desc: "Output path (default: <basename>.html)"
+      option :output, **OUTPUT_OPTION,
+             desc: "Output path (default: <basename>.html)"
       option :mode, type: :string, default: "single_file",
                     desc: "Output mode: single_file | multi_file"
       def spa(file)
