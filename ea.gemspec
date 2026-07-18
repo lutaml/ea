@@ -48,9 +48,9 @@ Gem::Specification.new do |spec|
   # The bridge targets Lutaml::Uml::Document / UmlClass / Association /
   # etc., all of which remain on those names from 0.2 through 0.5+
   # (no rename happened despite the major-version bump cadence). Pinned
-  # to 0.5+ to pick up the repository/SPA refinements the spec suite
-  # exercises; verified compatible with the bridge code.
-  spec.add_development_dependency "lutaml-uml", "~> 0.5.0"
+  # to 0.5.2+ to pick up the WelcomeView custom-logo fix
+  # (lutaml/lutaml-uml#119) exercised indirectly via the SPA command.
+  spec.add_development_dependency "lutaml-uml", ">= 0.5.2"
 
   # Development-only — Rakefile's default task runs spec + rubocop.
   # Without this, `bundle exec rake` (invoked by metanorma/ci's
