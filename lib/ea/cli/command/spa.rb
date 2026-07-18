@@ -29,6 +29,7 @@ module Ea
             output: output_path,
             mode: mode,
             output_strategy: strategy,
+            config_path: resolve_config_path,
           }.compact
 
           Lutaml::UmlRepository::StaticSite::Generator
@@ -46,6 +47,19 @@ module Ea
 
         def resolve_output_path
           options[:output] || default_output_path
+        end
+
+        def resolve_config_path
+          path = options[:config]
+          return nil unless path
+
+          expanded = File.expand_path(path)
+          unless File.exist?(expanded)
+            raise Ea::Cli::FileNotFound,
+                  "Config file not found: #{path}"
+          end
+
+          expanded
         end
 
         def default_output_path

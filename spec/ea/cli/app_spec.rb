@@ -61,4 +61,41 @@ RSpec.describe Ea::Cli::App do
       expect(File.size(@convert_out)).to be > 1_000
     end
   end
+
+  describe "config flag" do
+    let(:qea_fixture) { fixtures_path("basic.qea") }
+
+    after { FileUtils.rm_f([@spa_out, @tmp_config].compact) }
+
+    it "exposes -c as alias for --config on the spa command" do
+      output = capture_stdout { described_class.start(%w[help spa]) }
+      expect(output).to match(/-c,\s+\[--config=CONFIG\]/)
+    end
+
+    it "applies the config title to the generated SPA" do
+      @spa_out = "/tmp/ea_cli_app_spa_config_spec.html"
+      @tmp_config = "/tmp/ea_cli_app_spa_config_spec.yml"
+      File.write(@tmp_config, <<~YAML)
+        metadata:
+          title: "Spec Test Title"
+          description: "Spec test description."
+      YAML
+
+      capture_stdout do
+        described_class.start(%W[spa #{qea_fixture} -o #{@spa_out} -c #{@tmp_config}])
+      end
+
+      content = File.read(@spa_out)
+      expect(content).to include("Spec Test Title")
+      expect(content).to include("Spec test description.")
+    end
+
+    it "raises FileNotFound when the config path does not exist" do
+      expect {
+        capture_stdout do
+          described_class.start(%W[spa #{qea_fixture} -c /tmp/does-not-exist-#{Time.now.to_i}.yml])
+        end
+      }.to raise_error(Ea::Cli::FileNotFound)
+    end
+  end
 end
