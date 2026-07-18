@@ -12,6 +12,11 @@ module Ea
       # search, and every output-bearing command honours the same flag.
       OUTPUT_OPTION = { type: :string, aliases: :o }.freeze
 
+      # Shared kwargs for any command that accepts a YAML config file.
+      # Matches the OUTPUT_OPTION pattern so adding config-file support
+      # to another command is a one-line addition.
+      CONFIG_OPTION = { type: :string, aliases: :c }.freeze
+
       class << self
         def exit_on_failure?
           true
@@ -72,6 +77,9 @@ module Ea
       desc "spa FILE", "Generate single-page app (SPA) from QEA/XMI/LUR"
       option :output, **OUTPUT_OPTION,
              desc: "Output path (default: <basename>.html)"
+      option :config, **CONFIG_OPTION,
+             desc: "Path to lutaml-uml static-site YAML config " \
+                   "(sets title, description, logos, etc.)"
       option :mode, type: :string, default: "single_file",
                     desc: "Output mode: single_file | multi_file"
       def spa(file)
