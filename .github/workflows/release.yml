@@ -16,15 +16,9 @@ on:
         required: true
         default: "skip"
       acknowledge_breaking_in_patch:
-        description: |
-          Acknowledge that this patch may contain breaking changes (skip
-          the release-breaking-check guard). The guard mis-handles exit
-          code 2 from metanorma/ci's release-breaking-check.rb (script
-          error → "release proceeds with warning" intent, but the
-          workflow treats any non-zero as failure). Setting this true
-          bypasses the guard entirely.
+        description: Set to true if this release intentionally includes breaking changes.
         required: false
-        default: "true"
+        default: "false"
   repository_dispatch:
     types: [do-release]
 

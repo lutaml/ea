@@ -5,41 +5,41 @@ module Ea
     module Command
       # `ea spa FILE [--output=PATH] [--mode=MODE]`
       #
-      # Generates a static single-page application (SPA) from a QEA,
-      # XMI, or LUR file. The SPA shows the package hierarchy, class
-      # details, diagram list, and member navigation in a browser.
+      # Generates a static single-page application (SPA) from a QEA
+      # or XMI file using the Ea::Model native pipeline:
       #
-      # Pipeline:
-      #   1. Ea::Transformations.to_uml(file) → Lutaml::Uml::Document
-      #   2. Lutaml::UmlRepository::Repository.from_document(document)
-      #   3. Lutaml::UmlRepository::StaticSite::Generator.new(repo, ...).generate
-      #
-      # Output format defaults to single-file Vue IIFE HTML.
+      #   1. Source parse (Ea::Qea::Database / Xmi::Sparx::Root)
+      #   2. Source adapter → Ea::Model::Document
+      #   3. Ea::Spa::Projector → skeleton + shards + search index
+      #   4. Ea::Spa::Output::Strategy → HTML/JSON on disk
       class Spa < Base
         DEFAULT_MODE = :single_file
 
         def call
-          repository = RepositoryBuilder.build_repository(file_path)
-
-          require_lutaml_uml_static_site!
-          strategy = resolve_output_strategy
-
+          document = build_model_document
           output_path = resolve_output_path
-          options = {
+          Ea::Spa::Generator.new(
+            document,
             output: output_path,
-            mode: mode,
-            output_strategy: strategy,
-            config_path: resolve_config_path,
-          }.compact
-
-          Lutaml::UmlRepository::StaticSite::Generator
-            .new(repository, options)
-            .generate
+            mode: mode
+          ).generate
 
           formatter.render([[output_path]], columns: [:written_to])
         end
 
         private
+
+        def build_model_document
+          case File.extname(file_path).downcase
+          when ".qea"
+            Ea::Sources::Qea::Adapter.from_path(file_path)
+          when ".xmi"
+            Ea::Sources::Xmi::Adapter.from_path(file_path)
+          else
+            raise Ea::Cli::UnsupportedFormat,
+                  "Unknown file format: #{File.extname(file_path)}"
+          end
+        end
 
         def mode
           (options[:mode] || DEFAULT_MODE).to_sym
@@ -49,43 +49,14 @@ module Ea
           options[:output] || default_output_path
         end
 
-        def resolve_config_path
-          path = options[:config]
-          return nil unless path
-
-          expanded = File.expand_path(path)
-          unless File.exist?(expanded)
-            raise Ea::Cli::FileNotFound,
-                  "Config file not found: #{path}"
-          end
-
-          expanded
-        end
-
         def default_output_path
           base = File.basename(file_path, ".*")
           dir = File.dirname(file_path)
-          File.join(dir, "#{base}.html")
-        end
-
-        def resolve_output_strategy
-          case mode
-          when :single_file, "single_file"
-            Lutaml::UmlRepository::StaticSite::Output::VueInlinedStrategy
-          when :multi_file, "multi_file"
-            Lutaml::UmlRepository::StaticSite::Output::MultiFileStrategy
+          if mode == :sharded
+            File.join(dir, "#{base}.spa")
           else
-            raise Ea::Cli::UnsupportedFormat,
-                  "Unknown spa mode '#{mode}': use single_file or multi_file"
+            File.join(dir, "#{base}.html")
           end
-        end
-
-        def require_lutaml_uml_static_site!
-          require "lutaml/uml_repository/static_site"
-        rescue LoadError => e
-          raise Ea::Cli::MissingUmlDependency,
-                "spa command requires the `lutaml-uml` gem. " \
-                "Install it via `gem install lutaml-uml`. (#{e.message})"
         end
       end
     end
