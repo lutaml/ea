@@ -13,13 +13,15 @@ module Ea
         def render(projector)
           FileUtils.mkdir_p(File.dirname(output_path))
 
+          skeleton = projector.skeleton
           payload = {
-            metadata: projector.skeleton.metadata,
-            packageTree: projector.skeleton.package_tree,
-            skeletonEntries: projector.skeleton.entries,
+            metadata: skeleton.metadata,
+            packageTree: skeleton.package_tree,
+            skeletonEntries: skeleton.entries,
             searchIndex: projector.search_index,
             shards: projector.each_shard.to_a
           }
+          payload[:viewExtras] = skeleton.view_extras unless skeleton.view_extras.nil? || skeleton.view_extras.empty?
 
           File.write(output_path, build_html(payload))
           output_path
@@ -28,13 +30,16 @@ module Ea
         private
 
         def build_html(payload)
+          title = payload.dig(:viewExtras, "ui", "title") ||
+                  payload[:metadata]&.fetch("title", nil) ||
+                  "Ea::Spa"
           <<~HTML
             <!DOCTYPE html>
             <html lang="en">
             <head>
               <meta charset="UTF-8">
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>#{payload[:metadata]&.fetch("title", nil) || "Ea::Spa"}</title>
+              <title>#{title}</title>
             </head>
             <body>
               <div id="app"></div>

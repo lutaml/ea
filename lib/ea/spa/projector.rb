@@ -13,18 +13,20 @@ module Ea
     # proc — by default it produces "data/<kind>s/<id>.json" paths
     # matching the sharded output strategy.
     class Projector
-      attr_reader :document, :shard_url_for
+      attr_reader :document, :shard_url_for, :configuration
 
-      def initialize(document, shard_url_for: nil)
+      def initialize(document, shard_url_for: nil, configuration: nil)
         @document = document
         @shard_url_for = shard_url_for || default_shard_url
+        @configuration = configuration
       end
 
       def skeleton
         Skeleton.new(
           metadata: metadata_hash,
           package_tree: build_package_tree,
-          entries: build_entries
+          entries: build_entries,
+          view_extras: view_extras
         )
       end
 
@@ -67,7 +69,13 @@ module Ea
       end
 
       def metadata_hash
-        JSON.parse(document.metadata.to_json)
+        base = document.metadata
+        merged = configuration ? configuration.apply_to_metadata(base) : base
+        JSON.parse(merged.to_json)
+      end
+
+      def view_extras
+        configuration&.view_extras || {}
       end
 
       def build_package_tree

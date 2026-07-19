@@ -12,6 +12,11 @@ module Ea
       # search, and every output-bearing command honours the same flag.
       OUTPUT_OPTION = { type: :string, aliases: :o }.freeze
 
+      # Shared kwargs for any command that accepts a YAML config file.
+      # Matches OUTPUT_OPTION; adding config support to a command is a
+      # one-line addition.
+      CONFIG_OPTION = { type: :string, aliases: :c }.freeze
+
       class << self
         def exit_on_failure?
           true
@@ -72,6 +77,8 @@ module Ea
       desc "spa FILE", "Generate single-page app (SPA) from QEA/XMI"
       option :output, **OUTPUT_OPTION,
              desc: "Output path (default: <basename>.html or <basename>.spa/)"
+      option :config, **CONFIG_OPTION,
+             desc: "Path to SPA YAML config (overrides model metadata: title, description, etc.)"
       option :mode, type: :string, default: "single_file",
                     desc: "Output mode: single_file | sharded"
       def spa(file)

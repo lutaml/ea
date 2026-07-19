@@ -21,7 +21,8 @@ module Ea
           Ea::Spa::Generator.new(
             document,
             output: output_path,
-            mode: mode
+            mode: mode,
+            configuration: spa_configuration
           ).generate
 
           formatter.render([[output_path]], columns: [:written_to])
@@ -43,6 +44,19 @@ module Ea
 
         def mode
           (options[:mode] || DEFAULT_MODE).to_sym
+        end
+
+        def spa_configuration
+          path = options[:config]
+          return nil unless path
+
+          expanded = File.expand_path(path)
+          unless File.exist?(expanded)
+            raise Ea::Cli::FileNotFound,
+                  "SPA config not found: #{path}"
+          end
+
+          Ea::Spa::Configuration.load(expanded)
         end
 
         def resolve_output_path

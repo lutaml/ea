@@ -72,3 +72,41 @@ RSpec.describe "ea spa CLI command" do
     end
   end
 end
+
+RSpec.describe "ea spa CLI --config flag" do
+  let(:app) { Ea::Cli::App.new }
+  let(:qea_fixture) { fixtures_path("basic.qea") }
+
+  after { FileUtils.rm_f([@out, @config].compact) }
+
+  it "applies metadata.title from YAML config" do
+    @out = "/tmp/ea_spa_config_metadata_spec.html"
+    @config = "/tmp/ea_spa_config_test.yml"
+    File.write(@config, "metadata:\n  title: Unique Config Title\n")
+    capture_stdout do
+      app.invoke(:spa, [qea_fixture], output: @out, config: @config)
+    end
+    content = File.read(@out)
+    expect(content).to include("Unique Config Title")
+  end
+
+  it "applies ui.title as the <title> tag" do
+    @out = "/tmp/ea_spa_config_uititle_spec.html"
+    @config = "/tmp/ea_spa_config_ui.yml"
+    File.write(@config, "ui:\n  title: Browser Tab Title\n")
+    capture_stdout do
+      app.invoke(:spa, [qea_fixture], output: @out, config: @config)
+    end
+    content = File.read(@out)
+    expect(content).to match(%r{<title>Browser Tab Title</title>})
+  end
+
+  it "raises FileNotFound when config path does not exist" do
+    expect {
+      capture_stdout do
+        app.invoke(:spa, [qea_fixture], output: "/tmp/x.html",
+                    config: "/tmp/ea-does-not-exist-#{Time.now.to_i}.yml")
+      end
+    }.to raise_error(Ea::Cli::FileNotFound, /SPA config not found/)
+  end
+end

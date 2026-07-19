@@ -14,13 +14,15 @@ module Ea
 
       DEFAULT_MODE = :single_file
 
-      attr_reader :document, :mode, :output_path, :shard_url_for
+      attr_reader :document, :mode, :output_path, :shard_url_for, :configuration
 
-      def initialize(document, output:, mode: nil, shard_url_for: nil)
+      def initialize(document, output:, mode: nil, shard_url_for: nil,
+                     configuration: nil)
         @document = document
         @output_path = output
         @mode = (mode || DEFAULT_MODE).to_sym
         @shard_url_for = shard_url_for
+        @configuration = configuration
       end
 
       def generate
@@ -28,7 +30,9 @@ module Ea
       end
 
       def projector
-        @projector ||= Projector.new(document, shard_url_for: shard_url_for)
+        @projector ||= Projector.new(document,
+                                      shard_url_for: shard_url_for,
+                                      configuration: configuration)
       end
 
       def strategy_class
