@@ -12,6 +12,7 @@ module Ea
   autoload :Model, "ea/model"
   autoload :Sources, "ea/sources"
   autoload :Spa, "ea/spa"
+  autoload :Svg, "ea/svg"
   autoload :Diagram, "ea/diagram"
   autoload :Transformations, "ea/transformations"
   autoload :Xmi, "ea/xmi"

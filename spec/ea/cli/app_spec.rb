@@ -77,9 +77,9 @@ RSpec.describe Ea::Cli::App do
       expect(output).to match(/--mode=/)
     end
 
-    it "does not expose a --config flag (legacy pipeline removed)" do
+    it "exposes -c as alias for --config on the spa command" do
       output = capture_stdout { described_class.start(%w[help spa]) }
-      expect(output).not_to match(/--config=/)
+      expect(output).to match(/-c,\s+\[--config=CONFIG\]/)
     end
 
     it "does not expose a --legacy flag" do
