@@ -11,6 +11,7 @@ module Ea
       autoload :Parse, "ea/cli/command/parse"
       autoload :Convert, "ea/cli/command/convert"
       autoload :Spa, "ea/cli/command/spa"
+      autoload :Svg, "ea/cli/command/svg"
       autoload :RepositoryBuilder, "ea/cli/command/repository_builder"
     end
   end

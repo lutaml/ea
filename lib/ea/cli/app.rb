@@ -85,6 +85,13 @@ module Ea
         Command::Spa.new(file: file, **symbolize(options)).call
       end
 
+      desc "svg NAME FILE", "Render a diagram from QEA/XMI to standalone SVG"
+      option :output, **OUTPUT_OPTION,
+             desc: "Output path (default: <basename>.<diagram>.svg)"
+      def svg(name, file)
+        Command::Svg.new(name: name, file: file, **symbolize(options)).call
+      end
+
       private
 
       def symbolize(opts)
