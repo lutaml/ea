@@ -14,12 +14,12 @@ module Ea
           FileUtils.mkdir_p(output_path)
           FileUtils.mkdir_p(File.join(output_path, "data"))
 
-          write_json(File.join(output_path, "skeleton.json"),
-                     projector.skeleton)
+          skeleton = projector.skeleton
+          write_json(File.join(output_path, "skeleton.json"), skeleton)
           write_json(File.join(output_path, "search.json"),
                      projector.search_index)
           write_shards(projector)
-          write_index_html
+          write_index_html(skeleton)
 
           output_path
         end
@@ -42,14 +42,17 @@ module Ea
           end
         end
 
-        def write_index_html
+        def write_index_html(skeleton)
+          title = skeleton.view_extras&.dig("ui", "title") ||
+                  skeleton.metadata&.fetch("title", nil) ||
+                  "Ea::Spa"
           File.write(File.join(output_path, "index.html"), <<~HTML)
             <!DOCTYPE html>
             <html lang="en">
             <head>
               <meta charset="UTF-8">
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>Ea::Spa</title>
+              <title>#{title}</title>
             </head>
             <body>
               <div id="app"></div>

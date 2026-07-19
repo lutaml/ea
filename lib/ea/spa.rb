@@ -26,5 +26,6 @@ module Ea
     autoload :Projector, "ea/spa/projector"
     autoload :Output, "ea/spa/output"
     autoload :Generator, "ea/spa/generator"
+    autoload :Configuration, "ea/spa/configuration"
   end
 end
