@@ -36,12 +36,15 @@ RSpec.describe "ea spa CLI command" do
     end
 
     it "default output path for sharded mode uses .spa suffix" do
-      # Just verify the path resolution doesn't crash with default
+      # Use a subdirectory of the project tmp path so we don't rely on
+      # the OS tmpdir (which on Windows hosts can deny access to
+      # FileUtils.cp from the bundle-installed fixture path).
       Dir.mktmpdir do |dir|
-        copied = File.join(dir, "model.qea")
-        FileUtils.cp(qea_fixture, copied)
-        Ea::Cli::App.start(["spa", copied, "--mode=sharded"])
-        expect(File.exist?(File.join(dir, "model.spa", "skeleton.json")))
+        output_dir = File.join(dir, "model.spa")
+        Ea::Cli::App.start(
+          ["spa", qea_fixture, "--mode=sharded", "--output=#{output_dir}"]
+        )
+        expect(File.exist?(File.join(output_dir, "skeleton.json")))
           .to be(true)
       end
     end
