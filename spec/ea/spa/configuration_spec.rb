@@ -67,12 +67,12 @@ RSpec.describe Ea::Spa::Configuration do
   end
 
   describe "#view_extras" do
-    it "excludes empty sections" do
+    it "excludes empty ui/appearance sections but always emits diagrams.enabled" do
       Dir.mktmpdir do |dir|
         path = File.join(dir, "config.yml")
         File.write(path, "metadata:\n  title: T\n")
         config = described_class.load(path)
-        expect(config.view_extras).to eq({})
+        expect(config.view_extras).to eq({ "diagrams" => { "enabled" => true } })
       end
     end
 
@@ -88,8 +88,55 @@ RSpec.describe Ea::Spa::Configuration do
             logos: {}
         YAML
         config = described_class.load(path)
-        expect(config.view_extras.keys).to contain_exactly("ui", "appearance")
+        expect(config.view_extras.keys).to contain_exactly("ui", "appearance", "diagrams")
       end
     end
+  end
+end
+
+RSpec.describe Ea::Spa::Configuration, "#render_diagrams?" do
+  it "defaults to true when config absent" do
+    config = described_class.new(nil, {})
+    expect(config.render_diagrams?).to be(true)
+  end
+
+  it "defaults to true when diagrams section absent" do
+    config = described_class.new(nil, { "metadata" => { "title" => "X" } })
+    expect(config.render_diagrams?).to be(true)
+  end
+
+  it "returns false when diagrams.enabled is false" do
+    config = described_class.new(nil, { "diagrams" => { "enabled" => false } })
+    expect(config.render_diagrams?).to be(false)
+  end
+
+  it "includes diagrams.enabled in view_extras so the frontend can hide UI" do
+    config = described_class.new(nil, { "diagrams" => { "enabled" => false } })
+    expect(config.view_extras["diagrams"]).to eq({ "enabled" => false })
+  end
+end
+
+RSpec.describe Ea::Spa::Projector, "diagrams.enabled=false" do
+  let(:document) do
+    Ea::Model::Document.new(
+      metadata: Ea::Model::Metadata.new(title: "T", source_format: "qea"),
+      packages: [Ea::Model::Package.new(id: "p1", name: "P")],
+      classifiers: [Ea::Model::Klass.new(id: "c1", name: "C", package_id: "p1")],
+      diagrams: [Ea::Model::Diagram.new(id: "d1", name: "D", package_id: "p1")]
+    )
+  end
+
+  it "skips diagram shards when config disables them" do
+    config = Ea::Spa::Configuration.new(nil, "diagrams" => { "enabled" => false })
+    projector = Ea::Spa::Projector.new(document, configuration: config)
+    shards = projector.each_shard.to_a
+    expect(shards.map(&:kind)).to contain_exactly("class", "package")
+    expect(shards.map(&:kind)).not_to include("diagram")
+  end
+
+  it "includes diagram shards when config enables them (default)" do
+    projector = Ea::Spa::Projector.new(document)
+    shards = projector.each_shard.to_a
+    expect(shards.map(&:kind)).to include("diagram")
   end
 end

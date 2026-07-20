@@ -43,12 +43,17 @@ module Ea
       end
 
       # Enumerate every (id, kind, shard) triple the SPA can address.
+      # Diagrams are skipped when the configuration disables them.
       def each_shard
         return enum_for(:each_shard) unless block_given?
 
         document.classifiers.each { |c| yield shard_for(c) }
         document.packages.each { |p| yield shard_for(p) }
-        document.diagrams.each { |d| yield shard_for(d) }
+        document.diagrams.each { |d| yield shard_for(d) } if render_diagrams?
+      end
+
+      def render_diagrams?
+        configuration ? configuration.render_diagrams? : true
       end
 
       private

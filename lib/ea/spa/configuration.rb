@@ -51,6 +51,17 @@ module Ea
         @data["appearance"] || {}
       end
 
+      # Diagram rendering control. Default: true (preserve historical
+      # behavior). Set `diagrams.enabled: false` in the YAML to skip
+      # diagram shards entirely — useful when the renderer output is
+      # not yet production-quality and you'd rather hide diagrams
+      # than ship broken visuals.
+      def render_diagrams?
+        diagrams_cfg = @data["diagrams"].is_a?(Hash) ? @data["diagrams"] : {}
+        enabled = diagrams_cfg.key?("enabled") ? diagrams_cfg["enabled"] : true
+        enabled != false
+      end
+
       # Apply overrides to a model Metadata instance, returning a new
       # one. The original is left untouched.
       def apply_to_metadata(model_metadata)
@@ -61,10 +72,13 @@ module Ea
         hash_to_metadata(merged)
       end
 
-      # Surface the relevant config (ui, appearance) into a hash the
-      # SPA skeleton embeds in its metadata payload.
+      # Surface the relevant config (ui, appearance, diagrams) into
+      # a hash the SPA skeleton embeds in its metadata payload so
+      # the frontend can hide its diagram UI when disabled.
       def view_extras
-        { "ui" => ui, "appearance" => appearance }.reject { |_, v| v.nil? || v.empty? }
+        extras = { "ui" => ui, "appearance" => appearance }
+        extras["diagrams"] = { "enabled" => render_diagrams? }
+        extras.reject { |_, v| v.nil? || v.empty? }
       end
 
       private
