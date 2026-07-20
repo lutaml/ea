@@ -63,9 +63,111 @@ module Ea
                                        link_row.instance_id),
             diagram_id: IdNormalizer.from_guid(diagram_row.ea_guid),
             relationship_ref: ref_for_connector(link_row),
-            waypoints: parse_waypoints(link_row.geometry),
+            waypoints: waypoints_for_link(link_row, diagram_row),
             style: DiagramStyleParser.parse(link_row.style)
           )
+        end
+
+        # EA's t_diagramlinks.Geometry field stores connector routing
+        # in a packed format. The leading "X1,Y1,X2,Y2" pair (when
+        # present) is in a coordinate frame that does NOT match the
+        # element rect frame (elements use RectTop < RectBottom with
+        # negative y; geometry uses positive y). Rather than trust
+        # the stored absolute coords, we compute the polyline from
+        # the actual placed-element bounds + the SX/SY/EX/EY delta
+        # fields, which describe the bend routing relative to the
+        # element edges.
+        #
+        # If we can't resolve the source or target element placement
+        # for this diagram, we emit no waypoints (the connector will
+        # be invisible) — better than drawing garbage lines.
+        def waypoints_for_link(link_row, diagram_row)
+          connector = database.find_connector(link_row.connectorid)
+          return [] unless connector
+
+          source_placement = diagram_object_placement(diagram_row.diagram_id,
+                                                       connector.start_object_id)
+          target_placement = diagram_object_placement(diagram_row.diagram_id,
+                                                       connector.end_object_id)
+          return [] unless source_placement && target_placement
+
+          geom = parse_geometry_fields(link_row.geometry)
+          edge_out = geom[:edge] || 0
+
+          source_point = element_edge_point(source_placement, :source, edge_out)
+          target_point = element_edge_point(target_placement, :target, edge_out)
+          points = [source_point]
+          # SX/SY: delta from source point to first bend.
+          if geom[:sx] && geom[:sy] && (geom[:sx].nonzero? || geom[:sy].nonzero?)
+            points << [source_point[0] + geom[:sx], source_point[1] + geom[:sy]]
+          end
+          # EX/EY: delta from second bend to target point. Reverse
+          # to get from target back to the bend.
+          if geom[:ex] && geom[:ey] && (geom[:ex].nonzero? || geom[:ey].nonzero?)
+            points << [target_point[0] - geom[:ex], target_point[1] - geom[:ey]]
+          end
+          points << target_point
+
+          points.map do |x, y|
+            Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y))
+          end
+        end
+
+        # Parse the SX, SY, EX, EY, EDGE key=value pairs out of the
+        # geometry string. Each is `KEY=<int>;`. We deliberately do
+        # NOT extract the leading X1,Y1,X2,Y2 numbers because those
+        # are in a different coordinate frame (see note above).
+        def parse_geometry_fields(geometry)
+          return {} if geometry.nil? || geometry.empty?
+
+          s = geometry.to_s
+          {
+            sx: pick_int(s, /SX=(-?\d+)/),
+            sy: pick_int(s, /SY=(-?\d+)/),
+            ex: pick_int(s, /EX=(-?\d+)/),
+            ey: pick_int(s, /EY=(-?\d+)/),
+            edge: pick_int(s, /EDGE=(-?\d+)/)
+          }
+        end
+
+        def pick_int(str, pattern)
+          match = str.match(pattern)
+          return nil unless match
+
+          Integer(match[1])
+        rescue ArgumentError
+          nil
+        end
+
+        # Find where a given EA object is placed on this diagram.
+        def diagram_object_placement(diagram_id, ea_object_id)
+          objects = database.diagram_objects_for(diagram_id) || []
+          objects.find { |o| o.ea_object_id == ea_object_id }
+        end
+
+        # Compute the connection point on an element's edge for the
+        # given side. EA's `EDGE` field on t_diagramlinks tells us
+        # which edge the connector attaches to:
+        #   1 = top (source), 2 = right, 3 = bottom, 4 = left,
+        #   plus 5/6/7/8 for diagonals (treated as the cardinal here).
+        # We use the center of the chosen edge as the connection point.
+        def element_edge_point(placement, end_kind, edge_code)
+          b = bounds_from_rect(placement)
+          case effective_edge(edge_code, end_kind)
+          when :top    then [b.x + b.width / 2, b.y]
+          when :right  then [b.x + b.width, b.y + b.height / 2]
+          when :bottom then [b.x + b.width / 2, b.y + b.height]
+          when :left   then [b.x, b.y + b.height / 2]
+          else              [b.x + b.width / 2, b.y + b.height / 2]
+          end
+        end
+
+        def effective_edge(edge_code, end_kind)
+          mapping = {
+            1 => :top, 2 => :right, 3 => :bottom, 4 => :left,
+            5 => :top, 6 => :right, 7 => :bottom, 8 => :left
+          }
+          mapping[edge_code.to_i] || :center
         end
 
         def package_id_for(diagram_row)
@@ -105,24 +207,6 @@ module Ea
           return nil unless conn
 
           IdNormalizer.from_guid(conn.ea_guid)
-        end
-
-        # EA stores connector geometry as a packed string of x,y
-        # pairs separated by semicolons and pipes. Conservative
-        # parse: extract digit pairs, take first/last as endpoints.
-        def parse_waypoints(geometry)
-          return [] if geometry.nil? || geometry.empty?
-
-          numbers = geometry.to_s.scan(/-?\d+/).map(&:to_i)
-          return [] if numbers.size < 4
-
-          numbers.each_slice(2).filter_map do |xy|
-            next nil if xy.size < 2
-
-            Ea::Model::Waypoint.new(
-              position: Ea::Model::Point.new(x: xy[0], y: xy[1])
-            )
-          end
         end
       end
     end

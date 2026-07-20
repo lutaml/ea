@@ -52,8 +52,15 @@ module Ea
 
       def render_connectors
         diagram.connectors.map do |conn|
-          ConnectorPath.new(conn).render
+          ConnectorPath.new(conn,
+                             relationship: relationship_for(conn)).render
         end.join("\n            ")
+      end
+
+      def relationship_for(connector)
+        return nil unless connector.relationship_ref
+
+        model_index[connector.relationship_ref]
       end
 
       def pad(bounds)
