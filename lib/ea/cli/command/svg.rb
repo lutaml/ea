@@ -5,15 +5,29 @@ require "fileutils"
 module Ea
   module Cli
     module Command
-      # `ea svg NAME FILE [--output=PATH]`
+      # `ea svg NAME FILE [--output=PATH] [--mode=ea|thin]`
+      # `ea svg --all FILE [--output-dir=PATH] [--mode=ea|thin]`
       #
-      # Renders a single diagram from a QEA or XMI file into a
-      # standalone SVG using the umldi content (placed element
-      # bounds + connector waypoints) captured in Ea::Model::Diagram.
+      # Renders one (NAME) or every (--all) diagram from a QEA or
+      # XMI file into standalone SVG using the umldi content
+      # (placed element bounds + connector waypoints) captured in
+      # Ea::Model::Diagram.
+      #
+      # Default emitter is EaEmitter::Document which mirrors EA's SVG
+      # structure (DOCTYPE, layered groups, EA-style markers). Pass
+      # --mode=thin for the simpler Renderer output.
       class Svg < Base
         def call
+          return render_all if options[:all]
+
+          render_one
+        end
+
+        private
+
+        def render_one
           diagram = find_diagram
-          svg = Ea::Svg::Renderer.new(diagram,
+          svg = emitter_for_mode.new(diagram,
                                        model_index: document.index_by_id).render
 
           output_path = resolve_output_path(diagram)
@@ -23,7 +37,37 @@ module Ea
           formatter.render([[output_path]], columns: [:written_to])
         end
 
-        private
+        def render_all
+          out_dir = options[:output_dir] || default_output_dir
+          FileUtils.mkdir_p(out_dir)
+          paths = document.diagrams.map do |diagram|
+            svg = emitter_for_mode.new(diagram,
+                                         model_index: document.index_by_id).render
+            path = File.join(out_dir, "#{diagram.id}.svg")
+            File.write(path, svg)
+            path
+          end
+
+          formatter.render(paths.map { |p| [p] }, columns: [:written_to])
+        end
+
+        def default_output_dir
+          base = File.basename(file_path, ".*")
+          dir = File.dirname(file_path)
+          File.join(dir, "#{base}.svgs")
+        end
+
+        def emitter_for_mode
+          case (options[:mode] || :ea).to_sym
+          when :ea
+            Ea::Svg::EaEmitter::Document
+          when :thin
+            Ea::Svg::Renderer
+          else
+            raise Ea::Cli::UnsupportedFormat,
+                  "Unknown svg mode: #{options[:mode]}"
+          end
+        end
 
         def document
           @document ||= build_model_document

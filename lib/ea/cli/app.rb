@@ -88,7 +88,13 @@ module Ea
       desc "svg NAME FILE", "Render a diagram from QEA/XMI to standalone SVG"
       option :output, **OUTPUT_OPTION,
              desc: "Output path (default: <basename>.<diagram>.svg)"
-      def svg(name, file)
+      option :mode, type: :string, default: "ea",
+                    desc: "Output mode: ea (default, matches EA SVG structure) | thin (compact)"
+      option :all, type: :boolean, default: false,
+                   desc: "Render every diagram in the source file (NAME ignored)"
+      option :output_dir, type: :string,
+                          desc: "Directory for --all output (default: <basename>.svgs/)"
+      def svg(name = nil, file = nil)
         Command::Svg.new(name: name, file: file, **symbolize(options)).call
       end
 

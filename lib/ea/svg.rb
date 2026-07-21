@@ -17,5 +17,6 @@ module Ea
     autoload :ElementBox, "ea/svg/element_box"
     autoload :ConnectorPath, "ea/svg/connector_path"
     autoload :Renderer, "ea/svg/renderer"
+    autoload :EaEmitter, "ea/svg/ea_emitter"
   end
 end

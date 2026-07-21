@@ -23,7 +23,7 @@ module Ea
         end
 
         def self.from_comments(comments, owner_id, kind: "documentation")
-          Array(comments).map { |c| new(owner_id).build(kind, c.body) }
+          Array(comments).map { |c| new(owner_id).build(kind, c.body_element || c.body_attribute) }
         end
 
         def self.comments_on(element)
