@@ -125,7 +125,11 @@ module Ea
           stereotype = primary_stereotype(classifier)
           return DEFAULT_FILL unless stereotype
 
-          STEREOTYPE_COLORS[stereotype.downcase] || DEFAULT_FILL
+          stereotype_color_resolver.fill_for(stereotype)
+        end
+
+        def stereotype_color_resolver
+          @stereotype_color_resolver ||= Ea::Svg::StereotypeColorResolver.new
         end
 
         def primary_stereotype(classifier)
@@ -159,18 +163,6 @@ module Ea
 
           text.to_s.gsub("&", "&amp;").gsub("<", "&lt;").gsub(">", "&gt;").gsub("\"", "&quot;")
         end
-
-        STEREOTYPE_COLORS = {
-          "featuretype" => "#FFFFCC",
-          "feature"     => "#FFFFCC",
-          "type"        => "#CCFFCC",
-          "datatype"    => "#FFCCFF",
-          "basictype"   => "#FFCCFF",
-          "codelist"    => "#FFCCFF",
-          "enumeration" => "#FFCCFF",
-          "union"       => "#F0E68C",
-          "adeelement"  => "#F5F5DC"
-        }.freeze
       end
     end
   end
