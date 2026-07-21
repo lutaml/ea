@@ -15,6 +15,7 @@ module Ea
     autoload :BoundsCalculator, "ea/svg/bounds_calculator"
     autoload :StyleResolver, "ea/svg/style_resolver"
     autoload :StereotypeColorResolver, "ea/svg/stereotype_color_resolver"
+    autoload :ConnectorRouter, "ea/svg/connector_router"
     autoload :ElementBox, "ea/svg/element_box"
     autoload :ConnectorPath, "ea/svg/connector_path"
     autoload :Renderer, "ea/svg/renderer"
