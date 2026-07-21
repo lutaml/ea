@@ -1,6 +1,6 @@
 # 08 - Visual Regression Harness
 
-## Status: TODO (follow-up after 01-07 land)
+## Status: DONE (2026-07-21)
 
 ## Problem
 
