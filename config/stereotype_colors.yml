@@ -1,0 +1,15 @@
+# Stereotype → fill color map. Used by Ea::Svg when an element's
+# BCol is missing (e.g. QEA sources without style data, or XMI
+# elements whose BCol defaulted).
+#
+# Format: <stereotype_lowercase>: "#RRGGBB"
+# Hex colors must be CSS-compatible (uppercase).
+featuretype: "#FFFFCC"  # yellow
+feature: "#FFFFCC"
+type: "#CCFFCC"         # green
+datatype: "#FFCCFF"     # pink
+basictype: "#FFCCFF"
+codelist: "#FFCCFF"
+enumeration: "#FFCCFF"
+union: "#F0E68C"        # khaki
+adeelement: "#F5F5DC"   # beige
