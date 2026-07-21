@@ -22,7 +22,7 @@ RSpec.describe Ea::Svg::EaEmitter::Connectors do
   it "emits a single <g> wrapping all connector paths" do
     out = described_class.new(diagram).render
     expect(out.scan(/<g\b/).size).to eq(1)
-    expect(out).to include("<path d=\"M 0 0 L 100 100\"")
+    expect(out).to include("<path d=\"M 0.00 0.00 L 100.00 100.00\"")
   end
 
   it "skips hidden connectors" do

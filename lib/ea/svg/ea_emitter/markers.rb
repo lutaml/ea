@@ -14,11 +14,12 @@ module Ea
       class Markers
         ARROW_SIZE = 10
 
-        attr_reader :diagram, :model_index
+        attr_reader :diagram, :model_index, :canvas
 
-        def initialize(diagram, model_index:)
+        def initialize(diagram, model_index:, canvas: nil)
           @diagram = diagram
           @model_index = model_index
+          @canvas = canvas
         end
 
         def render
@@ -85,8 +86,8 @@ module Ea
         end
 
         def polygon_points(tip, base, fill:)
-          bx, by = base
-          tx, ty = tip
+          tx, ty = translate_point(tip)
+          bx, by = translate_point(base)
           dx = tx - bx
           dy = ty - by
           len = Math.sqrt(dx * dx + dy * dy)
@@ -102,8 +103,14 @@ module Ea
           w1_y = back_y + perp_y
           w2_x = back_x - perp_x
           w2_y = back_y - perp_y
-          pts = "#{tx} #{ty} #{format('%.1f', w1_x)} #{format('%.1f', w1_y)} #{format('%.1f', w2_x)} #{format('%.1f', w2_y)}"
+          pts = "#{format('%.1f', tx)} #{format('%.1f', ty)} #{format('%.1f', w1_x)} #{format('%.1f', w1_y)} #{format('%.1f', w2_x)} #{format('%.1f', w2_y)}"
           %(<polygon points="#{pts}" shape-rendering="auto"   style="fill-rule:evenodd;"/>)
+        end
+
+        def translate_point(p)
+          return p unless canvas
+
+          [canvas.translate_x(p[0]), canvas.translate_y(p[1])]
         end
 
         def relationship_for(connector)

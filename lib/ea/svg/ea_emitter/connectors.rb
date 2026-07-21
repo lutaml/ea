@@ -8,10 +8,11 @@ module Ea
       # its waypoints. Markers (arrowheads, diamonds) are emitted
       # separately by the Markers emitter.
       class Connectors
-        attr_reader :diagram
+        attr_reader :diagram, :canvas
 
-        def initialize(diagram)
+        def initialize(diagram, canvas: nil)
           @diagram = diagram
+          @canvas = canvas
         end
 
         def render
@@ -32,7 +33,8 @@ module Ea
           return nil if pts.size < 2
 
           d = pts.each_with_index.map do |p, idx|
-            "#{idx.zero? ? 'M' : 'L'} #{p[0]} #{p[1]}"
+            x, y = translate_point(p)
+            "#{idx.zero? ? 'M' : 'L'} #{format('%.2f', x)} #{format('%.2f', y)}"
           end.join(" ")
           %(  <path d="#{d}" shape-rendering="auto"/>)
         end
@@ -43,6 +45,12 @@ module Ea
 
             [wp.position.x, wp.position.y]
           end
+        end
+
+        def translate_point(p)
+          return p unless canvas
+
+          [canvas.translate_x(p[0]), canvas.translate_y(p[1])]
         end
       end
     end

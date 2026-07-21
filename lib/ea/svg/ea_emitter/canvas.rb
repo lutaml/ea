@@ -3,13 +3,18 @@
 module Ea
   module Svg
     module EaEmitter
-      # Computes the canvas dimensions for the root <svg> element.
-      # Union of all element image_bounds (the padded bounds EA
-      # uses for the visual box), with a 10 px outer margin.
-      # Emits cm dimensions (px / 28.346 at 72 DPI).
+      # Computes the canvas dimensions for the root <svg> element
+      # and the translation offset to apply to every coordinate so
+      # the top-left of the union lands at (0, 0) — matching EA's
+      # output convention.
       Canvas = Struct.new(:min_x, :min_y, :width, :height, keyword_init: true) do
         PX_PER_CM = 28.3464567
+        PADDING = 10
 
+        # Compute the canvas by unioning all element image bounds and
+        # connector waypoints. The translation is set to the
+        # negative of the union's top-left so all coordinates
+        # become non-negative in the rendered output.
         def self.from(diagram)
           points = []
           (diagram.elements || []).each do |e|
@@ -30,17 +35,20 @@ module Ea
 
           xs = points.map(&:first)
           ys = points.map(&:last)
-          margin = 10
+          min_x = (xs.min || 0)
+          min_y = (ys.min || 0)
+          max_x = (xs.max || 0)
+          max_y = (ys.max || 0)
           new(
-            min_x: (xs.min || 0) - margin,
-            min_y: (ys.min || 0) - margin,
-            width: (xs.max - xs.min) + (2 * margin),
-            height: (ys.max - ys.min) + (2 * margin)
+            min_x: min_x,
+            min_y: min_y,
+            width: (max_x - min_x) + (2 * PADDING),
+            height: (max_y - min_y) + (2 * PADDING)
           )
         end
 
         def view_box
-          "#{min_x} #{min_y} #{width} #{height}"
+          "0 0 #{width} #{height}"
         end
 
         def width_cm
@@ -49,6 +57,14 @@ module Ea
 
         def height_cm
           format_cm(height)
+        end
+
+        def translate_x(x)
+          x - min_x + PADDING
+        end
+
+        def translate_y(y)
+          y - min_y + PADDING
         end
 
         private

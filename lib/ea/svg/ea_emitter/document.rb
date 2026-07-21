@@ -20,10 +20,10 @@ module Ea
           canvas = Canvas.from(diagram)
           layers = [
             Background.render(canvas),
-            Elements.new(diagram, model_index: model_index).render,
-            Connectors.new(diagram).render,
-            Markers.new(diagram, model_index: model_index).render,
-            Labels.new(diagram).render
+            Elements.new(diagram, model_index: model_index, canvas: canvas).render,
+            Connectors.new(diagram, canvas: canvas).render,
+            Markers.new(diagram, model_index: model_index, canvas: canvas).render,
+            Labels.new(diagram, canvas: canvas).render
           ].reject { |s| s.nil? || s.empty? }
 
           <<~SVG

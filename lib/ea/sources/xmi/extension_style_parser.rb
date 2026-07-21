@@ -39,7 +39,8 @@ module Ea
             next nil unless pair.include?("=")
 
             key, value = pair.split("=", 2)
-            [key, value] if key && value && !value.empty?
+            key = key.to_s.strip
+            [key, value] if key && !key.empty? && value && !value.empty?
           end.to_h
         end
 
