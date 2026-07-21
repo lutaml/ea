@@ -1,30 +1,25 @@
 # frozen_string_literal: true
 
+require "ostruct"
+
 module Ea
   module Svg
     module EaEmitter
-      # Emits the elements layer: for each DiagramElement on the
-      # diagram, emits the EA-shape group (filled rect) plus the
-      # EA-text group (stereotype + name + attributes + operations).
-      #
-      # Each element is rendered in z_order (ascending). Output
-      # follows EA's pattern of layered groups per element:
-      #
-      #   <g style="fill:COLOR;..."><rect x y w h/></g>
-      #   <g style="fill:#000000;..."><text>...</text></g>
-      #   <g style="..."><path d="M x y L x2 y2"/></g>   (divider)
-      #   <g style="..."><text>attr1</text>...</g>
+      # Emits the elements layer with canvas translation applied:
+      # every coordinate from the source model is offset so the
+      # top-left of the union lands at (0, 0) plus a 10px padding.
       class Elements
         DEFAULT_FILL = "#FFFFFF"
         DEFAULT_STROKE = "#000000"
         DEFAULT_FONT_FAMILY = "Calibri"
         DEFAULT_FONT_SIZE = 13
 
-        attr_reader :diagram, :model_index
+        attr_reader :diagram, :model_index, :canvas
 
-        def initialize(diagram, model_index:)
+        def initialize(diagram, model_index:, canvas:)
           @diagram = diagram
           @model_index = model_index
+          @canvas = canvas
         end
 
         def render
@@ -45,17 +40,18 @@ module Ea
           fill = color_from_ea(element.background_color) || fill_for_classifier(classifier)
           stroke = color_from_ea(element.line_color) || DEFAULT_STROKE
           stroke_width = element.line_width || 2
+          translated_bounds = translate(bounds)
 
           parts = []
-          parts << render_shape_group(bounds, fill, stroke, stroke_width)
-          parts << render_header_text(element, bounds, classifier)
-          parts << render_divider(bounds, stroke, stroke_width) if classifier
-          parts << render_attribute_text(element, bounds, classifier) if classifier
+          parts << render_shape_group(translated_bounds, fill, stroke, stroke_width)
+          parts << render_header_text(element, translated_bounds, classifier)
+          parts << render_divider(translated_bounds, stroke, stroke_width) if classifier
+          parts << render_attribute_text(element, translated_bounds, classifier) if classifier
           parts.compact.join("\n")
         end
 
         def render_shape_group(bounds, fill, stroke, stroke_width)
-          %(<g style="stroke-width:#{stroke_width};stroke-linecap:round;stroke-linejoin:bevel; fill:#{fill};fill-opacity:1.00; stroke:#{stroke}; stroke-opacity:1.00">\n  <rect x="#{bounds.x}" y="#{bounds.y}" width="#{bounds.width}" height="#{bounds.height}" rx="0.00" shape-rendering="auto"  />\n</g>)
+          %(<g style="stroke-width:#{stroke_width};stroke-linecap:round;stroke-linejoin:bevel; fill:#{fill};fill-opacity:1.00; stroke:#{stroke}; stroke-opacity:1.00">\n  <rect x="#{format('%.2f', bounds.x)}" y="#{format('%.2f', bounds.y)}" width="#{format('%.2f', bounds.width)}" height="#{format('%.2f', bounds.height)}" rx="0.00" shape-rendering="auto"  />\n</g>)
         end
 
         def render_header_text(element, bounds, classifier)
@@ -70,14 +66,14 @@ module Ea
             weight = style == :bold ? 700 : 400
             font_style = style == :italic ? "italic" : "normal"
             y = bounds.y + 17 + (idx * 17)
-            %(  <text x="#{bounds.x + (bounds.width / 2.0)}" y="#{y}" textLength="#{text.length * 7}" style="font-family:#{family}; font-weight:#{weight}; font-style:#{font_style}; font-size:#{size}px; fill:#000000;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00 stroke-width:0; white-space: pre;" xml:space="preserve">#{escape(text)}</text>)
+            %(  <text x="#{format('%.2f', bounds.x + (bounds.width / 2.0))}" y="#{format('%.2f', y)}" textLength="#{text.length * 7}" style="font-family:#{family}; font-weight:#{weight}; font-style:#{font_style}; font-size:#{size}px; fill:#000000;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00 stroke-width:0; white-space: pre;" xml:space="preserve">#{escape(text)}</text>)
           end
           %(<g style="stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#000000;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00">\n#{text_blocks.join("\n")}\n</g>)
         end
 
         def render_divider(bounds, stroke, stroke_width)
           y = bounds.y + 50
-          %(<g style="stroke-width:#{stroke_width};stroke-linecap:round;stroke-linejoin:bevel; fill:#000000;fill-opacity:0.00; stroke:#{stroke}; stroke-opacity:1.00">\n  <path d="M #{bounds.x} #{y} L #{bounds.x + bounds.width} #{y}" shape-rendering="auto"/>\n</g>)
+          %(<g style="stroke-width:#{stroke_width};stroke-linecap:round;stroke-linejoin:bevel; fill:#000000;fill-opacity:0.00; stroke:#{stroke}; stroke-opacity:1.00">\n  <path d="M #{format('%.2f', bounds.x)} #{format('%.2f', y)} L #{format('%.2f', bounds.x + bounds.width)} #{format('%.2f', y)}" shape-rendering="auto"/>\n</g>)
         end
 
         def render_attribute_text(element, bounds, classifier)
@@ -92,7 +88,7 @@ module Ea
           size = element.font_size || DEFAULT_FONT_SIZE
           text_blocks = attr_lines.each_with_index.map do |line, idx|
             y = bounds.y + 68 + (idx * 17)
-            %(  <text x="#{bounds.x + 5}" y="#{y}" textLength="#{line.length * 7}" style="font-family:#{family}; font-weight:400; font-style:normal; font-size:#{size}px; fill:#000000;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00 stroke-width:0; white-space: pre;" xml:space="preserve">#{escape(line.strip)}</text>)
+            %(  <text x="#{format('%.2f', bounds.x + 5)}" y="#{format('%.2f', y)}" textLength="#{line.length * 7}" style="font-family:#{family}; font-weight:400; font-style:normal; font-size:#{size}px; fill:#000000;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00 stroke-width:0; white-space: pre;" xml:space="preserve">#{escape(line.strip)}</text>)
           end
           %(<g style="stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#000000;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00">\n#{text_blocks.join("\n")}\n</g>)
         end
@@ -156,6 +152,17 @@ module Ea
           g = (bgr_int >> 8) & 0xff
           b = (bgr_int >> 16) & 0xff
           format("#%02X%02X%02X", r, g, b)
+        end
+
+        def translate(bounds)
+          return bounds unless canvas
+
+          OpenStruct.new(
+            x: canvas.translate_x(bounds.x),
+            y: canvas.translate_y(bounds.y),
+            width: bounds.width,
+            height: bounds.height
+          )
         end
 
         def escape(text)

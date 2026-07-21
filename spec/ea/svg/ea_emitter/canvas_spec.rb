@@ -22,12 +22,15 @@ RSpec.describe Ea::Svg::EaEmitter::Canvas do
       )
     end
 
-    it "unions element image bounds with margin" do
+    it "unions element image bounds; min carries source origin, translate applies padding" do
       canvas = described_class.from(diagram)
-      expect(canvas.min_x).to eq(90)   # 100 - 10 margin
-      expect(canvas.min_y).to eq(90)
+      expect(canvas.min_x).to eq(100)
+      expect(canvas.min_y).to eq(100)
       expect(canvas.width).to eq(520)  # (600 - 100) + 2*10
       expect(canvas.height).to eq(200) # (280 - 100) + 2*10
+      # Translation subtracts min and adds padding
+      expect(canvas.translate_x(100)).to eq(10)
+      expect(canvas.translate_y(280)).to eq(190)
     end
 
     it "formats width as cm" do
