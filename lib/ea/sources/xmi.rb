@@ -23,6 +23,9 @@ module Ea
       autoload :RelationshipBuilder, "ea/sources/xmi/relationship_builder"
       autoload :AnnotationBuilder, "ea/sources/xmi/annotation_builder"
       autoload :DiagramBuilder, "ea/sources/xmi/diagram_builder"
+      autoload :ExtensionElements, "ea/sources/xmi/extension_elements"
+      autoload :ExtensionGeometryParser, "ea/sources/xmi/extension_geometry_parser"
+      autoload :ExtensionStyleParser, "ea/sources/xmi/extension_style_parser"
       autoload :Adapter, "ea/sources/xmi/adapter"
     end
   end

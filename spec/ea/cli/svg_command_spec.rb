@@ -29,3 +29,23 @@ RSpec.describe "ea svg CLI command" do
     }.to raise_error(Ea::Cli::Error, /not found/)
   end
 end
+
+RSpec.describe "ea svg --all CLI mode" do
+  let(:app) { Ea::Cli::App.new }
+  let(:xmi_fixture) { fixtures_path("basic.xmi") }
+
+  after { FileUtils.rm_rf([@dir].compact) }
+
+  it "renders every diagram in the source to its own SVG file" do
+    @dir = "/tmp/ea_svg_all_spec"
+    FileUtils.rm_rf(@dir)
+    capture_stdout do
+      app.invoke(:svg, [nil, xmi_fixture], all: true, output_dir: @dir)
+    end
+    files = Dir.glob(File.join(@dir, "*.svg"))
+    expect(files.size).to be > 1
+    sample = File.read(files.first)
+    expect(sample).to start_with("<?xml")
+    expect(sample).to include("<svg")
+  end
+end
