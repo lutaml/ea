@@ -5,7 +5,7 @@ module Ea
     module EaEmitter
       Canvas = Struct.new(:min_x, :min_y, :width, :height, keyword_init: true) do
         PX_PER_CM = 28.3464567
-        PADDING = 5
+        PADDING = 10
 
         def self.from(diagram)
           points = []
@@ -15,13 +15,6 @@ module Ea
 
             points << [b.x, b.y]
             points << [b.x + b.width, b.y + b.height]
-          end
-          (diagram.connectors || []).each do |c|
-            (c.waypoints || []).each do |wp|
-              next unless wp.position
-
-              points << [wp.position.x, wp.position.y]
-            end
           end
           return new(min_x: 0, min_y: 0, width: 1, height: 1) if points.empty?
 
