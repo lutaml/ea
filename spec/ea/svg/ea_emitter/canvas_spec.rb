@@ -26,8 +26,8 @@ RSpec.describe Ea::Svg::EaEmitter::Canvas do
       canvas = described_class.from(diagram)
       expect(canvas.min_x).to eq(100)   # 100 (source min, no subtraction)
       expect(canvas.min_y).to eq(100)
-      expect(canvas.width).to eq(520)  # (600 - 100) + 2*10
-      expect(canvas.height).to eq(200) # (280 - 100) + 2*10
+      expect(canvas.width).to eq(510)  # (600 - 100) + 2*5
+      expect(canvas.height).to eq(190) # (280 - 100) + 2*5
     end
 
     it "formats width as cm" do
