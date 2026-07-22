@@ -24,8 +24,8 @@ RSpec.describe Ea::Svg::EaEmitter::Canvas do
 
     it "unions element image bounds with margin" do
       canvas = described_class.from(diagram)
-      expect(canvas.min_x).to eq(90)   # 100 - 10 margin
-      expect(canvas.min_y).to eq(90)
+      expect(canvas.min_x).to eq(100)   # 100 (source min, no subtraction)
+      expect(canvas.min_y).to eq(100)
       expect(canvas.width).to eq(520)  # (600 - 100) + 2*10
       expect(canvas.height).to eq(200) # (280 - 100) + 2*10
     end

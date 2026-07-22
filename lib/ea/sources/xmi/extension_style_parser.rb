@@ -59,7 +59,7 @@ module Ea
           return 13 if value.nil? || value.empty?
 
           pct = int(value)
-          return 13 if pct.nil?
+          return 13 if pct.nil? || pct.zero?
 
           (pct * 13 / 100).round
         end
