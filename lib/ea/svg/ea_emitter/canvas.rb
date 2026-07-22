@@ -5,12 +5,12 @@ module Ea
     module EaEmitter
       Canvas = Struct.new(:min_x, :min_y, :width, :height, keyword_init: true) do
         PX_PER_CM = 28.3464567
-        PADDING = 10
+        PADDING = 5
 
         def self.from(diagram)
           points = []
           (diagram.elements || []).each do |e|
-            b = e.image_bounds || e.bounds
+            b = e.bounds || e.image_bounds
             next unless b
 
             points << [b.x, b.y]

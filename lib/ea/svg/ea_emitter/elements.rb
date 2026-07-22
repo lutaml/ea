@@ -41,7 +41,7 @@ module Ea
         end
 
         def render_one(element)
-          raw_bounds = element.image_bounds || element.bounds
+          raw_bounds = element.bounds || element.image_bounds
           return "" unless raw_bounds
 
           bounds = translate_bounds(raw_bounds)
