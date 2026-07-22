@@ -25,7 +25,7 @@ module Ea
         end
 
         def to_document
-          Ea::Model::Document.new(
+          doc = Ea::Model::Document.new(
             metadata: metadata,
             packages: packages,
             classifiers: classifiers,
@@ -33,9 +33,39 @@ module Ea
             stereotypes: [],
             diagrams: diagrams
           )
+          resolve_type_names(doc)
+          doc
         end
 
         private
+
+        def resolve_type_names(doc)
+          id_index = doc.index_by_id
+          name_index = doc.classifiers.each_with_object({}) do |c, acc|
+            acc[c.id] = c.name if c.id && c.name
+          end
+          # Also index by EAID format from the raw XMI (some refs
+          # use the full EAID_... guid)
+          doc.classifiers.each do |c|
+            next unless c.id
+
+            name_index[c.id] = c.name
+          end
+
+          doc.classifiers.each do |classifier|
+            (classifier.properties || []).each do |prop|
+              next if prop.type_name.nil? || prop.type_name.empty?
+              next unless prop.type_name.start_with?("EAID_")
+
+              resolved = name_index[prop.type_name]
+              if resolved
+                prop.type_name = resolved
+              else
+                prop.type_name = nil
+              end
+            end
+          end
+        end
 
         def metadata
           @metadata ||= MetadataBuilder.new(root, xmi_path).build
