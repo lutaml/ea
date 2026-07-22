@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "ostruct"
+
 module Ea
   module Svg
     module EaEmitter
@@ -20,11 +22,12 @@ module Ea
         DEFAULT_FONT_FAMILY = "Calibri"
         DEFAULT_FONT_SIZE = 13
 
-        attr_reader :diagram, :model_index
+        attr_reader :diagram, :model_index, :canvas
 
-        def initialize(diagram, model_index:)
+        def initialize(diagram, model_index:, canvas: nil)
           @diagram = diagram
           @model_index = model_index
+          @canvas = canvas
         end
 
         def render
@@ -38,9 +41,10 @@ module Ea
         end
 
         def render_one(element)
-          bounds = element.image_bounds || element.bounds
-          return "" unless bounds
+          raw_bounds = element.image_bounds || element.bounds
+          return "" unless raw_bounds
 
+          bounds = translate_bounds(raw_bounds)
           classifier = model_element_for(element)
           fill = color_from_ea(element.background_color) || fill_for_classifier(classifier)
           stroke = color_from_ea(element.line_color) || DEFAULT_STROKE
@@ -166,6 +170,17 @@ module Ea
           return "" if text.nil?
 
           text.to_s.gsub("&", "&amp;").gsub("<", "&lt;").gsub(">", "&gt;").gsub("\"", "&quot;")
+        end
+
+        def translate_bounds(b)
+          return b unless canvas
+
+          OpenStruct.new(
+            x: canvas.translate_x(b.x),
+            y: canvas.translate_y(b.y),
+            width: b.width,
+            height: b.height
+          )
         end
       end
     end

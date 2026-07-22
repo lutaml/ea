@@ -3,12 +3,9 @@
 module Ea
   module Svg
     module EaEmitter
-      # Computes the canvas dimensions for the root <svg> element.
-      # Union of all element image_bounds (the padded bounds EA
-      # uses for the visual box), with a 10 px outer margin.
-      # Emits cm dimensions (px / 28.346 at 72 DPI).
       Canvas = Struct.new(:min_x, :min_y, :width, :height, keyword_init: true) do
         PX_PER_CM = 28.3464567
+        PADDING = 10
 
         def self.from(diagram)
           points = []
@@ -30,17 +27,16 @@ module Ea
 
           xs = points.map(&:first)
           ys = points.map(&:last)
-          margin = 10
           new(
-            min_x: (xs.min || 0) - margin,
-            min_y: (ys.min || 0) - margin,
-            width: (xs.max - xs.min) + (2 * margin),
-            height: (ys.max - ys.min) + (2 * margin)
+            min_x: (xs.min || 0),
+            min_y: (ys.min || 0),
+            width: (xs.max - xs.min) + (2 * PADDING),
+            height: (ys.max - ys.min) + (2 * PADDING)
           )
         end
 
         def view_box
-          "#{min_x} #{min_y} #{width} #{height}"
+          "0 0 #{width} #{height}"
         end
 
         def width_cm
@@ -49,6 +45,14 @@ module Ea
 
         def height_cm
           format_cm(height)
+        end
+
+        def translate_x(x)
+          x - min_x + PADDING
+        end
+
+        def translate_y(y)
+          y - min_y + PADDING
         end
 
         private

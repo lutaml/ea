@@ -146,21 +146,29 @@ module Ea
         end
 
         def compute_waypoints(geom, source, target)
-          src_pt = edge_point(source, geom.edge, :source)
-          tgt_pt = edge_point(target, geom.edge, :target)
-          return [] unless src_pt && tgt_pt
+          src_bounds = bounds_from_placed(source)
+          tgt_bounds = bounds_from_placed(target)
+          return [] unless src_bounds && tgt_bounds
 
-          pts = [src_pt]
-          if geom.sx && geom.sy && (geom.sx.nonzero? || geom.sy.nonzero?)
-            pts << [src_pt[0] + geom.sx, src_pt[1] + geom.sy]
-          end
-          if geom.ex && geom.ey && (geom.ex.nonzero? || geom.ey.nonzero?)
-            pts << [tgt_pt[0] - geom.ex, tgt_pt[1] - geom.ey]
-          end
-          pts << tgt_pt
-          pts.map do |x, y|
+          router = Ea::Svg::ConnectorRouter.new(
+            source_bounds: src_bounds,
+            target_bounds: tgt_bounds,
+            edge_code: geom.edge
+          )
+          router.waypoints.map do |x, y|
             Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y))
           end
+        end
+
+        def bounds_from_placed(placed)
+          return nil unless placed
+
+          g = placed.geometry
+          return nil unless g.left && g.top && g.right && g.bottom
+
+          Ea::Model::Bounds.new(x: g.left, y: g.top,
+                                 width: g.right - g.left,
+                                 height: g.bottom - g.top)
         end
 
         def edge_point(placed, edge_code, _end_kind)

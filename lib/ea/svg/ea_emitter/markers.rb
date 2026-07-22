@@ -14,11 +14,12 @@ module Ea
       class Markers
         ARROW_SIZE = 10
 
-        attr_reader :diagram, :model_index
+        attr_reader :diagram, :model_index, :canvas
 
-        def initialize(diagram, model_index:)
+        def initialize(diagram, model_index:, canvas: nil)
           @diagram = diagram
           @model_index = model_index
+          @canvas = canvas
         end
 
         def render
@@ -104,6 +105,12 @@ module Ea
           w2_y = back_y - perp_y
           pts = "#{tx} #{ty} #{format('%.1f', w1_x)} #{format('%.1f', w1_y)} #{format('%.1f', w2_x)} #{format('%.1f', w2_y)}"
           %(<polygon points="#{pts}" shape-rendering="auto"   style="fill-rule:evenodd;"/>)
+        end
+
+        def translate_point(p)
+          return p unless @canvas
+
+          [@canvas.translate_x(p[0]), @canvas.translate_y(p[1])]
         end
 
         def relationship_for(connector)
