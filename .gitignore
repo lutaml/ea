@@ -15,3 +15,7 @@
 
 # Test artifacts from CLI invocations without --output
 *.svg
+
+# Frontend (Vue) — node_modules is local only; dist/ is committed so
+# the gem ships with a pre-built bundle and never needs npm at install.
+/frontend/node_modules/

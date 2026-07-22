@@ -1,16 +1,18 @@
 # frozen_string_literal: true
 
 require "fileutils"
+require "json"
 
 module Ea
   module Spa
     module Output
-      # Embeds skeleton + search + every shard in one HTML file
-      # (data inlined as a JSON blob). Suitable for small models
+      # Embeds skeleton + search + every shard AND the pre-built SPA
+      # bundle (JS + CSS) in one HTML file. Suitable for small models
       # only; not appropriate when shard count or total payload is
       # large.
       class SingleFileStrategy < Strategy
         def render(projector)
+          assert_frontend_bundle!
           FileUtils.mkdir_p(File.dirname(output_path))
 
           skeleton = projector.skeleton
@@ -33,6 +35,8 @@ module Ea
           title = payload.dig(:viewExtras, "ui", "title") ||
                   payload[:metadata]&.fetch("title", nil) ||
                   "Ea::Spa"
+          css = frontend_style_css || ""
+          js  = frontend_app_js || ""
           <<~HTML
             <!DOCTYPE html>
             <html lang="en">
@@ -40,12 +44,14 @@ module Ea
               <meta charset="UTF-8">
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
               <title>#{title}</title>
+              <style>#{css}</style>
             </head>
             <body>
               <div id="app"></div>
               <script>
               window.__SPA_DATA__ = #{payload.to_json};
               </script>
+              <script>#{js}</script>
             </body>
             </html>
           HTML

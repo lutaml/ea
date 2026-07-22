@@ -1,0 +1,47 @@
+name: Frontend build check
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/frontend.yml'
+  pull_request:
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/frontend.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build
+        working-directory: frontend
+        run: npm run build
+
+      - name: Dist matches committed
+        run: |
+          # `npm run build` rewrites dist/. If anything differs from
+          # what's committed, ask the contributor to rebuild and
+          # commit dist/ as part of the same PR.
+          if ! git diff --exit-code --stat frontend/dist; then
+            echo "::error::frontend/dist/ is out of date. Run 'cd frontend && npm install && npm run build' and commit the result."
+            git diff --stat frontend/dist
+            exit 1
+          fi
