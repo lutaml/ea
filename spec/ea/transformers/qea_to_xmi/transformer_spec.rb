@@ -7,7 +7,7 @@ require "ea/transformers/qea_to_xmi"
 RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
   let(:qea_path) { fixtures_path("basic.qea") }
   let(:database) { Ea::Qea.load(qea_path) }
-  let(:xml) { described_class.new(database).serialize }
+  let(:xml) { described_class.new(database).serialize(with_extensions: false) }
   let(:parsed) { Nokogiri::XML(xml) }
 
   after { database.close_connection }

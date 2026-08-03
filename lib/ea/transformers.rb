@@ -25,9 +25,10 @@ module Ea
       # Sparx-specific concepts (stereotypes, tagged values, multiplicities,
       # diagrams, xrefs).
       # @param database [Ea::Qea::Database]
+      # @param with_extensions [Boolean] emit EA-specific connectors+diagrams
       # @return [String] XMI XML
-      def qea_to_xmi(database)
-        QeaToXmi::Transformer.new(database).serialize
+      def qea_to_xmi(database, with_extensions: true)
+        QeaToXmi::Transformer.new(database).serialize(with_extensions: with_extensions)
       end
     end
   end

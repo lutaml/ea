@@ -17,6 +17,9 @@ module Ea
         when Nodes::StringMatches then eval_string_matches(ast, context)
         when Nodes::CollectionExists then eval_exists(ast, context)
         when Nodes::CollectionForAll then eval_for_all(ast, context)
+        when Nodes::CollectionSize then eval_size(ast, context)
+        when Nodes::CollectionIsEmpty then eval_is_empty(ast, context)
+        when Nodes::Comparison then eval_comparison(ast, context)
         when Nodes::BinaryOp then eval_binary(ast, context)
         when Nodes::UnaryOp then eval_unary(ast, context)
         else
@@ -55,6 +58,40 @@ module Ea
         predicate = ast.predicate
         collection.all? do |element|
           evaluate(predicate, var_binding(context, var_name, element))
+        end
+      end
+
+      def eval_size(ast, context)
+        collection = evaluate(ast.collection, context)
+        return 0 unless collection.respond_to?(:size)
+
+        collection.size
+      end
+
+      def eval_is_empty(ast, context)
+        collection = evaluate(ast.collection, context)
+        return true unless collection.respond_to?(:empty?)
+
+        collection.empty?
+      end
+
+      def eval_comparison(ast, context)
+        left = evaluate(ast.left, context)
+        right = evaluate(ast.right, context)
+        unless left.is_a?(Numeric) && right.is_a?(Numeric)
+          raise UnsupportedError,
+                "Comparison requires numeric operands: #{ast.op} on #{left.inspect}, #{right.inspect}"
+        end
+
+        case ast.op
+        when ">"  then left > right
+        when "<"  then left < right
+        when ">=" then left >= right
+        when "<=" then left <= right
+        when "="  then left == right
+        when "==" then left == right
+        when "!=" then left != right
+        else raise UnsupportedError, "Unknown comparison op: #{ast.op}"
         end
       end
 

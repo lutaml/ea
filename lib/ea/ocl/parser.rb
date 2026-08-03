@@ -45,7 +45,14 @@ module Ea
                                     operand: parse_expression(s[4..]))
         end
 
-        # 'and' / 'or' at top level (find the operator not inside parens)
+        # 'and' / 'or' / comparison ops — comparison has higher
+        # precedence than logical, so check it first.
+        if (split = split_on_comparison_op(s))
+          op, left, right = split
+          return Nodes::Comparison.new(op: op,
+                                      left: parse_expression(left),
+                                      right: parse_expression(right))
+        end
         if (split = split_on_logical_op(s))
           op, left, right = split
           return Nodes::BinaryOp.new(op: op,
@@ -56,6 +63,16 @@ module Ea
         # Collection ->exists(...) or ->forAll(...)
         if (m = s.match(/^(.+?)->(exists|forAll)\s*\(\s*(\w+)\s*\|\s*(.+?)\s*\)\z/))
           return collection_node(m[2].to_sym, m[1], m[3], m[4])
+        end
+
+        # Collection ->size() — integer cardinality
+        if (m = s.match(/^(.+?)->size\(\)\z/))
+          return Nodes::CollectionSize.new(collection: parse_expression(m[1]))
+        end
+
+        # Collection ->isEmpty() — boolean
+        if (m = s.match(/^(.+?)->isEmpty\(\)\z/))
+          return Nodes::CollectionIsEmpty.new(collection: parse_expression(m[1]))
         end
 
         # String.matches('regex')
@@ -109,6 +126,46 @@ module Ea
           next unless idx
 
           return [op, source[0...idx], source[(idx + keyword.length)..]]
+        end
+        nil
+      end
+
+      # Split on top-level comparison operator (>, <, >=, <=, =, ==, !=).
+      # Comparison has higher precedence than and/or, so we split here
+      # BEFORE calling split_on_logical_op.
+      def split_on_comparison_op(source)
+        depth = 0
+        %w[>= <= == != = > <].each do |op|
+          # Need to be careful with `>=` vs `>`: scan in order so
+          # multi-char operators are detected first.
+          idx = find_top_level_op(source, op)
+          next unless idx
+
+          return [op, source[0...idx], source[(idx + op.length)..]]
+        end
+        nil
+      end
+
+      def find_top_level_op(source, op)
+        depth = 0
+        i = 0
+        while i < source.length
+          c = source[i]
+          depth += 1 if c == "("
+          depth -= 1 if c == ")"
+          if depth.zero? && source[i, op.length] == op
+            # Each `next` clause below MUST fall through to `i += 1`
+            # at the loop's tail — using `next` here would skip the
+            # increment and infinite-loop on the same matching char.
+            should_skip =
+              (op == ">" && source[i + 1, 1] == "=") || # >= matches as >
+              (op == "<" && source[i + 1, 1] == "=") || # <= matches as <
+              (op == "=" && source[i + 1, 1] == "=") || # == matches as =
+              (op == ">" && source[i - 1, 1] == "-") || # -> arrow
+              (op == "<" && source[i - 1, 1] == "-")   # <- arrow
+            return i unless should_skip
+          end
+          i += 1
         end
         nil
       end
