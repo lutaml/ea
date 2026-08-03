@@ -88,14 +88,69 @@ module Ea
       desc "svg NAME FILE", "Render a diagram from QEA/XMI to standalone SVG"
       option :output, **OUTPUT_OPTION,
              desc: "Output path (default: <basename>.<diagram>.svg)"
-      option :mode, type: :string, default: "ea",
-                    desc: "Output mode: ea (default, matches EA SVG structure) | thin (compact)"
       option :all, type: :boolean, default: false,
                    desc: "Render every diagram in the source file (NAME ignored)"
       option :output_dir, type: :string,
                           desc: "Directory for --all output (default: <basename>.svgs/)"
       def svg(name = nil, file = nil)
         Command::Svg.new(name: name, file: file, **symbolize(options)).call
+      end
+
+      desc "diff OLD NEW", "Compare two QEA files structurally"
+      option :format, type: :string, default: "table",
+                      desc: "Output format: table | json | html"
+      option :output, **OUTPUT_OPTION, desc: "Output path (html format)"
+      def diff(old, new)
+        Command::Diff.new(old: old, new: new, **symbolize(options)).call
+      end
+
+      desc "render NAME FILE", "Render diagram(s) to SVG/PNG/PDF"
+      option :output, **OUTPUT_OPTION,
+             desc: "Output path (default: <basename>.<diagram>.<ext>)"
+      option :all, type: :boolean, default: false,
+                   desc: "Render every diagram in the source file (NAME ignored)"
+      option :format, type: :string, default: "svg",
+                      desc: "Output format: svg | png | pdf"
+      option :output_dir, type: :string,
+                          desc: "Directory for --all output (default: <basename>.renders/)"
+      def render(name = nil, file = nil)
+        Command::Render.new(name: name, file: file, **symbolize(options)).call
+      end
+
+      desc "export SUB FILE", "Export model (SUB: xmi|json|plantuml|xsd)"
+      option :output, **OUTPUT_OPTION, desc: "Output path"
+      option :package, type: :string, desc: "Restrict to a package name"
+      def export(sub, file)
+        Command::Export.new(sub: sub, file: file, **symbolize(options)).call
+      end
+
+      desc "mdg ACTION [ARG]", "MDG technologies: list | show NAME"
+      option :format, type: :string, default: "table"
+      def mdg(action, arg = nil)
+        Command::Mdg.new(action: action, arg: arg, **symbolize(options)).call
+      end
+
+      desc "lint FILE", "Run model quality lint rules"
+      option :rule, type: :string, desc: "Filter by rule name substring"
+      option :severity, type: :string, desc: "Filter: error | warning | info"
+      option :format, type: :string, default: "table"
+      def lint(file)
+        Command::Lint.new(file: file, **symbolize(options)).call
+      end
+
+      desc "query FILE", "Filter model elements by criteria"
+      option :type, type: :string, desc: "Filter by object_type (Class, etc.)"
+      option :package, type: :string, desc: "Restrict to a package name"
+      option :stereotype, type: :string, desc: "Filter by stereotype name"
+      option :format, type: :string, default: "table"
+      def query(file)
+        Command::Query.new(file: file, **symbolize(options)).call
+      end
+
+      desc "info NAME FILE", "Show details of a single element"
+      option :format, type: :string, default: "table"
+      def info(name, file)
+        Command::Info.new(name: name, file: file, **symbolize(options)).call
       end
 
       private

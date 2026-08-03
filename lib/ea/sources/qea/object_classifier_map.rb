@@ -18,7 +18,12 @@ module Ea
           "Enumeration" => "Ea::Model::Enumeration",
           "Interface" => "Ea::Model::Interface",
           "PrimitiveType" => "Ea::Model::PrimitiveType",
-          "Primitive" => "Ea::Model::PrimitiveType"
+          "Primitive" => "Ea::Model::PrimitiveType",
+          "Signal" => "Ea::Model::Signal",
+          # EA "Object" rows are UML InstanceSpecifications. We
+          # don't yet model InstanceSpecification as a distinct
+          # class — they render like a simple named Klass.
+          "Object" => "Ea::Model::Klass"
         }.freeze
 
         def class_for(object_type)

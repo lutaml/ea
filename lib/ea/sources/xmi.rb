@@ -22,10 +22,14 @@ module Ea
       autoload :OperationBuilder, "ea/sources/xmi/operation_builder"
       autoload :RelationshipBuilder, "ea/sources/xmi/relationship_builder"
       autoload :AnnotationBuilder, "ea/sources/xmi/annotation_builder"
+      autoload :TagBuilder, "ea/sources/xmi/tag_builder"
+      autoload :NoteBuilder, "ea/sources/xmi/note_builder"
+      autoload :StereotypeBuilder, "ea/sources/xmi/stereotype_builder"
       autoload :DiagramBuilder, "ea/sources/xmi/diagram_builder"
       autoload :ExtensionElements, "ea/sources/xmi/extension_elements"
       autoload :ExtensionGeometryParser, "ea/sources/xmi/extension_geometry_parser"
       autoload :ExtensionStyleParser, "ea/sources/xmi/extension_style_parser"
+      autoload :UmldiKeywordExtractor, "ea/sources/xmi/umldi_keyword_extractor"
       autoload :Adapter, "ea/sources/xmi/adapter"
     end
   end

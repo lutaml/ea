@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<MDG.Technology version="1.0">
+	<Documentation id="UBL21" name="Universal Business Language" version="1.0" notes="Provides the UBL library of XML business documents as provided by OASIS, using UPCC 2." supportURI="support@sparxsystems.com"/>
+  <DiagramProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="EEC91ED8-3" name="Universal Business Language" version="1.0" notes="Diagrams for modeling Universal Business Language messages"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="UBL Model Management" notes="UBL Model Management">
+            <AppliesTo>
+              <Apply type="Diagram_Package">
+                <Property name="alias" value="UBL Model Management"/>
+                <Property name="toolbox" value="UBL21::UBL Model Management"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="UBL BIELibrary" notes="">
+            <AppliesTo>
+              <Apply type="Diagram_Logical">
+                <Property name="alias" value="UBL BIELibrary"/>
+                <Property name="toolbox" value="UPCC2::UPCC2 - BIELibrary Abstract Syntax"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="UBL QDTLibrary" notes="">
+            <AppliesTo>
+              <Apply type="Diagram_Logical">
+                <Property name="alias" value="UBL QDTLibrary"/>
+                <Property name="toolbox" value="UPCC2::UPCC2 - QDTLibrary Abstract Syntax"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="UBL UDTLibrary" notes="">
+            <AppliesTo>
+              <Apply type="Diagram_Logical">
+                <Property name="alias" value="UBL UDTLibrary"/>
+                <Property name="toolbox" value="UPCC2::UPCC2 - UDTLibrary Abstract Syntax"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="UBL CDTLibrary" notes="">
+            <AppliesTo>
+              <Apply type="Diagram_Logical">
+                <Property name="alias" value="UBL CDTLibrary"/>
+                <Property name="toolbox" value="UPCC2::UPCC2 - CDTLibrary Abstract Syntax"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="UBL ENUMLibrary" notes="">
+            <AppliesTo>
+              <Apply type="Diagram_Logical">
+                <Property name="alias" value="UBL ENUMLibrary"/>
+                <Property name="toolbox" value="UPCC2::UPCC2 - ENUMLibrary Abstract Syntax"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="UBL PRIMLibrary" notes="">
+            <AppliesTo>
+              <Apply type="Diagram_Logical">
+                <Property name="alias" value="UBL PRIMLibrary"/>
+                <Property name="toolbox" value="UPCC2::UPCC2 - PRIMLibrary Abstract Syntax"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </DiagramProfile>
+  <UIToolboxes>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="71495E0E-D" name="UBL Model Management" version="1.0" notes="UBL Model Management"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="UBL Packages" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="UPCC2 - Model Management Abstract Syntax::BIELibrary" type="int" description="" unit="" values="" default="BIELibrary"/>
+              <Tag name="UPCC2 - Model Management Abstract Syntax::QDTLibrary" type="int" description="" unit="" values="" default="QDTLibrary"/>
+              <Tag name="UPCC2 - Model Management Abstract Syntax::UDTLibrary" type="int" description="" unit="" values="" default="UDTLibrary"/>
+              <Tag name="UPCC2 - Model Management Abstract Syntax::CCLibrary" type="int" description="" unit="" values="" default="CCLibrary"/>
+              <Tag name="UPCC2 - Model Management Abstract Syntax::CDTLibrary" type="int" description="" unit="" values="" default="CDTLibrary"/>
+              <Tag name="UPCC2 - Model Management Abstract Syntax::ENUMLibrary" type="int" description="" unit="" values="" default="ENUMLibrary"/>
+              <Tag name="UPCC2 - Model Management Abstract Syntax::PRIMLibrary" type="int" description="" unit="" values="" default="PRIMLibrary"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="UBL Types" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="UPCC2 - Model Management Abstract Syntax::UsageRule" type="int" description="" unit="" values="" default="UsageRule"/>
+              <Tag name="UPCC2 - Model Management Abstract Syntax::basedOn" type="int" description="" unit="" values="" default="basedOn"/>
+              <Tag name="UPCC2 - Model Management Abstract Syntax::equivalentTo" type="int" description="" unit="" values="" default="equivalentTo"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UIToolboxes>
+  <ModelTemplates>
+    <Model name="UBL 2.1 Message Library (Downloaded)" description="Download the UML reference model for the OASIS Universal Business Language (UBL) v2.1 (ISO/IEC 19845) library of XML business documents." location="http://sparxcloud.com/modelpatterns/ras/xmi/UBL/{ACB66D95-3F2A-4d31-AEA7-B85CBDF41EE7}/2.1/" default="yes" icon="34" filter=""/>
+  </ModelTemplates>
+</MDG.Technology>

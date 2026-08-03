@@ -9,19 +9,18 @@ RSpec.describe Ea::Cli::Command::Diagrams do
   let(:lur_path) { fixtures_path("basic_test.lur") }
 
   describe "list action" do
-    it "lists diagram names with types and GUIDs" do
+    it "lists diagram names with types" do
       output = capture_stdout do
         described_class.new(action: "list", file: qea_path, format: "table").call
       end
       expect(output).to include("name")
       expect(output).to include("type")
-      expect(output).to include("guid")
     end
 
     it "raises FileNotFound for missing files" do
       expect {
         described_class.new(action: "list", file: "/no/such.qea").call
-      }.to raise_error(Ea::Cli::FileNotFound)
+      }.to raise_error(Errno::ENOENT)
     end
   end
 

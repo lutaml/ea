@@ -43,6 +43,25 @@ module Ea
           "t_attributetag" => Models::EaAttributeTag,
           "t_xref" => Models::EaXref,
           "t_document" => Models::EaDocument,
+          "t_image" => Models::EaImage,
+          "t_glossary" => Models::EaGlossary,
+          "t_lists" => Models::EaList,
+          "t_versions" => Models::EaVersion,
+          "t_phase" => Models::EaPhase,
+          "t_authors" => Models::EaAuthor,
+          "t_secrypt" => Models::EaSecrypt,
+          "t_palette" => Models::EaPalette,
+          "t_paletteitem" => Models::EaPaletteItem,
+          "t_implement" => Models::EaImplement,
+          "t_roleconstraint" => Models::EaRoleConstraint,
+          "t_objectproblems" => Models::EaObjectProblem,
+          "t_objectrisks" => Models::EaObjectRisk,
+          "t_objecttests" => Models::EaObjectTest,
+          "t_objecteffort" => Models::EaObjectEffort,
+          "t_objectresource" => Models::EaObjectResource,
+          "t_objectscenarios" => Models::EaObjectScenario,
+          "t_objectrequires" => Models::EaObjectRequire,
+          "t_objecttrx" => Models::EaObjectTrx,
           "t_script" => Models::EaScript,
           "t_stereotypes" => Models::EaStereotype,
           "t_datatypes" => Models::EaDatatype,
@@ -130,7 +149,7 @@ module Ea
           @connection.with_connection do |db|
             @config.enabled_tables.each do |table_def|
               reader = Infrastructure::TableReader.new(db, table_def.table_name)
-              stats[table_def.collection_name] = reader.count
+              stats[table_def.collection_name] = reader.table_exists? ? reader.count : 0
             end
           end
 
@@ -151,6 +170,8 @@ module Ea
           end
 
           reader = Infrastructure::TableReader.new(db, table_name)
+          return [] unless reader.table_exists?
+
           total = reader.count
           records = []
 

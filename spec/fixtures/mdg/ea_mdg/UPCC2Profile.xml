@@ -1,0 +1,850 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<MDG.Technology version="1.0">
+  <Documentation id="UPCC2" name="UPCC 2.0" version="1.0" notes="MDG Technology for Modeling Core Components"  supportURI="support@sparxsystems.com"/>
+  <UMLProfiles>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="5F2DC99A-A" name="UPCC2 - Model Management Abstract Syntax" version="1.0" notes="UPCC2 - Model Management Abstract Syntax"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="UPCCLibrary" notes="" cx="170" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="bLibrary" baseStereotypes="bLibrary">
+            <TaggedValues>
+              <Tag name="baseURN" type="String" description="" unit="" values="" default=""/>
+              <Tag name="namespacePrefix" type="String" description="" unit="" values="" default=""/>
+              <Tag name="minorVersion" type="String" description="" unit="" values="" default=""/>
+              <Tag name="revision" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="DOCLibrary" notes="" cx="170" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="UPCCLibrary" baseStereotypes="UPCCLibrary"/>
+          <Stereotype name="bLibrary" notes="" cx="741" cy="132" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" isAbstract="true">
+            <AppliesTo>
+              <Apply type="Package"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="businessTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="copyright" type="String" description="" unit="" values="" default=""/>
+              <Tag name="owner" type="String" description="" unit="" values="" default=""/>
+              <Tag name="reference" type="String" description="" unit="" values="" default=""/>
+              <Tag name="status" type="String" description="" unit="" values="" default=""/>
+              <Tag name="uniqueID" type="String" description="" unit="" values="" default=""/>
+              <Tag name="version" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="BIELibrary" notes="" cx="170" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="UPCCLibrary" baseStereotypes="UPCCLibrary"/>
+          <Stereotype name="QDTLibrary" notes="" cx="170" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="UPCCLibrary" baseStereotypes="UPCCLibrary"/>
+          <Stereotype name="UDTLibrary" notes="" cx="170" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="UPCCLibrary" baseStereotypes="UPCCLibrary"/>
+          <Stereotype name="CCLibrary" notes="" cx="170" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="UPCCLibrary" baseStereotypes="UPCCLibrary"/>
+          <Stereotype name="CDTLibrary" notes="" cx="170" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="UPCCLibrary" baseStereotypes="UPCCLibrary"/>
+          <Stereotype name="ENUMLibrary" notes="" cx="170" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="UPCCLibrary" baseStereotypes="UPCCLibrary"/>
+          <Stereotype name="PRIMLibrary" notes="" cx="170" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="UPCCLibrary" baseStereotypes="UPCCLibrary"/>
+          <Stereotype name="UsageRule" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="conditionType" type="String" description="" unit="" values="" default=""/>
+              <Tag name="constraint" type="String" description="" unit="" values="" default=""/>
+              <Tag name="constraintType" type="String" description="" unit="" values="" default=""/>
+              <Tag name="uniqueID" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="basedOn" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Dependency">
+                <Property name="direction" value="Source -&gt; Destination"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="equivalentTo" notes="" cx="102" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Dependency">
+                <Property name="direction" value="Source -&gt; Destination"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="6CE745DC-E" name="UPCC2 - DOCLibrary Abstract Syntax" version="1.0" notes="UPCC2 - DOCLibrary Abstract Syntax"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="MA" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="uniqueID" type="String" description="" unit="" values="" default=""/>
+              <Tag name="version" type="String" description="" unit="" values="" default=""/>
+              <Tag name="definition" type="String" description="" unit="" values="" default=""/>
+              <Tag name="businessProcessContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="geopoliticalOrRegionContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="officialConstraintContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="productContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="industryContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="businessProcessRoleContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="supportingRoleContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="systemCapabilitiesContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="ASMA"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="ASMA" notes="" cx="110" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Aggregation">
+                <Property name="direction" value="Source -&gt; Destination"/>
+                <Property name="SourceRole.Aggregation" value="shared"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes>
+          <TaggedValueType property="ASMA" description="" notes="Type=Classifier;Stereotypes=MA;"/>
+        </TaggedValueTypes>
+      </Content>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="85553DD5-5" name="UPCC2 - BIELibrary Abstract Syntax" version="1.0" notes="UPCC2 - BIELibrary Abstract Syntax"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="BIE" notes="" cx="545" cy="132" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" isAbstract="true">
+            <TaggedValues>
+              <Tag name="uniqueID" type="String" description="" unit="" values="" default=""/>
+              <Tag name="dictionaryEntryName" type="String" description="" unit="" values="" default=""/>
+              <Tag name="version" type="String" description="" unit="" values="" default=""/>
+              <Tag name="definition" type="String" description="" unit="" values="" default=""/>
+              <Tag name="objectClassTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="objectClassQualifierTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="businessProcessContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="geopoliticalOrRegionContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="officialConstraintContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="productContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="industryContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="businessProcessRoleContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="supportingRoleContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="systemCapabilitiesContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="usageRule" type="Type=RefGUID;Values=Class;Stereotypes=UsageRule;" description="" unit="" values="" default=""/>
+              <Tag name="businessTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="example" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="ABIE" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="BIE" baseStereotypes="BIE">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="BBIE" notes="" cx="166" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="BIE" baseStereotypes="BIE">
+            <AppliesTo>
+              <Apply type="Attribute"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="cardinality" type="String" description="" unit="" values="" default=""/>
+              <Tag name="propertyTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="propertyQualifierTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="primaryRepresentationTerm" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="ASBIE" notes="" cx="165" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="BIE" baseStereotypes="BIE">
+            <AppliesTo>
+              <Apply type="Composition">
+                <Property name="direction" value="Source -&gt; Destination"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="cardinality" type="String" description="" unit="" values="" default=""/>
+              <Tag name="propertyTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="propertyQualifierTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="associatedObjectClassTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="associatedObjectClassQualifierTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="associationType" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="B385116F-E" name="UPCC2 - QDTLibrary Abstract Syntax" version="1.0" notes="UPCC2 - QDTLibrary Abstract Syntax"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="QDT" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="uniqueID" type="String" description="" unit="" values="" default=""/>
+              <Tag name="dictionaryEntryName" type="String" description="" unit="" values="" default=""/>
+              <Tag name="version" type="String" description="" unit="" values="" default=""/>
+              <Tag name="definition" type="String" description="" unit="" values="" default=""/>
+              <Tag name="primaryRepresentationTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="dataTypeQualifierTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="primitiveType" type="String" description="" unit="" values="" default=""/>
+              <Tag name="businessProcessContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="geopoliticalOrRegionContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="officialConstraintContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="productContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="industryContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="businessProcessRoleContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="supportingRoleContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="systemCapabilitiesContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="usageRule" type="Type=RefGUID;Values=Class;Stereotypes=UsageRule;" description="" unit="" values="" default=""/>
+              <Tag name="businessTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="example" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="CON" notes="" cx="123" cy="75" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Attribute"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="XSDFacets" notes="" cx="243" cy="300" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" isAbstract="true">
+            <AppliesTo>
+              <Apply type="Attribute"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="length" type="String" description="" unit="" values="" default=""/>
+              <Tag name="minLength" type="String" description="" unit="" values="" default=""/>
+              <Tag name="maxLength" type="String" description="" unit="" values="" default=""/>
+              <Tag name="fractionalDigits" type="String" description="" unit="" values="" default=""/>
+              <Tag name="totalDigits" type="String" description="" unit="" values="" default=""/>
+              <Tag name="pattern" type="String" description="" unit="" values="" default=""/>
+              <Tag name="whiteSpace" type="String" description="" unit="" values="" default=""/>
+              <Tag name="maxInclusive" type="String" description="" unit="" values="" default=""/>
+              <Tag name="minInclusive" type="String" description="" unit="" values="" default=""/>
+              <Tag name="maxExclusive" type="String" description="" unit="" values="" default=""/>
+              <Tag name="minExclusive" type="String" description="" unit="" values="" default=""/>
+              <Tag name="enumeration" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="SUP" notes="" cx="123" cy="75" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="XSDFactes" baseStereotypes="XSDFacets">
+            <TaggedValues>
+              <Tag name="uniqueID" type="String" description="" unit="" values="" default=""/>
+              <Tag name="definition" type="String" description="" unit="" values="" default=""/>
+              <Tag name="dictionaryEntryName" type="String" description="" unit="" values="" default=""/>
+              <Tag name="cardinality" type="String" description="" unit="" values="" default=""/>
+              <Tag name="objectClassTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="propertyTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="primaryRepresentationTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="primitiveType" type="String" description="" unit="" values="" default=""/>
+              <Tag name="usageRule" type="Type=RefGUID;Values=Class;Stereotypes=UsageRule;" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="3E6186EE-F" name="UPCC2 - UDTLibrary Abstract Syntax" version="1.0" notes="UPCC2 - UDTLibrary Abstract Syntax"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="UDT" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="uniqueID" type="String" description="" unit="" values="" default=""/>
+              <Tag name="dictionaryEntryName" type="String" description="" unit="" values="" default=""/>
+              <Tag name="version" type="String" description="" unit="" values="" default=""/>
+              <Tag name="definition" type="String" description="" unit="" values="" default=""/>
+              <Tag name="primaryRepresentationTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="primitiveType" type="String" description="" unit="" values="" default=""/>
+              <Tag name="usageRule" type="Type=RefGUID;Values=Class;Stereotypes=UsageRule;" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="CON" notes="" cx="123" cy="75" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Attribute"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="XSDFacets" notes="" cx="243" cy="300" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" isAbstract="true">
+            <AppliesTo>
+              <Apply type="Attribute"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="length" type="String" description="" unit="" values="" default=""/>
+              <Tag name="minLength" type="String" description="" unit="" values="" default=""/>
+              <Tag name="maxLength" type="String" description="" unit="" values="" default=""/>
+              <Tag name="fractionalDigits" type="String" description="" unit="" values="" default=""/>
+              <Tag name="totalDigits" type="String" description="" unit="" values="" default=""/>
+              <Tag name="pattern" type="String" description="" unit="" values="" default=""/>
+              <Tag name="whiteSpace" type="String" description="" unit="" values="" default=""/>
+              <Tag name="maxInclusive" type="String" description="" unit="" values="" default=""/>
+              <Tag name="minInclusive" type="String" description="" unit="" values="" default=""/>
+              <Tag name="maxExclusive" type="String" description="" unit="" values="" default=""/>
+              <Tag name="minExclusive" type="String" description="" unit="" values="" default=""/>
+              <Tag name="enumeration" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="SUP" notes="" cx="123" cy="75" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="XSDFacets" baseStereotypes="XSDFacets">
+            <TaggedValues>
+              <Tag name="uniqueID" type="String" description="" unit="" values="" default=""/>
+              <Tag name="definition" type="String" description="" unit="" values="" default=""/>
+              <Tag name="dictionaryEntryName" type="String" description="" unit="" values="" default=""/>
+              <Tag name="cardinality" type="String" description="" unit="" values="" default=""/>
+              <Tag name="objectClassTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="propertyTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="primaryRepresentationTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="primitiveType" type="String" description="" unit="" values="" default=""/>
+              <Tag name="usageRule" type="Type=RefGUID;Values=Class;Stereotypes=UsageRule;" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="B6E95B88-9" name="UPCC2 - CCLibrary Abstract Syntax" version="1.0" notes="UPCC2 - CCLibrary Abstract Syntax"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="CC" notes="" cx="653" cy="132" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" isAbstract="true">
+            <TaggedValues>
+              <Tag name="uniqueID" type="String" description="" unit="" values="" default=""/>
+              <Tag name="dictionaryEntryName" type="String" description="" unit="" values="" default=""/>
+              <Tag name="version" type="String" description="" unit="" values="" default=""/>
+              <Tag name="definition" type="String" description="" unit="" values="" default=""/>
+              <Tag name="objectClassTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="objectClassQualifierTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="businessProcessContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="geopoliticalOrRegionContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="officialConstraintContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="productContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="industryContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="businessProcessRoleContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="supportingRoleContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="systemCapabilitiesContextValue" type="String" description="" unit="" values="" default=""/>
+              <Tag name="usageRule" type="Type=RefGUID;Values=Class;Stereotypes=UsageRule;" description="" unit="" values="" default=""/>
+              <Tag name="businessTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="example" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="ACC" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="CC" baseStereotypes="CC">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="BCC" notes="" cx="169" cy="68" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="CC" baseStereotypes="CC">
+            <AppliesTo>
+              <Apply type="Attribute"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="cardinality" type="String" description="" unit="" values="" default=""/>
+              <Tag name="propertyTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="propertyQualifierTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="primaryRepresentationTerm" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="ASCC" notes="" cx="175" cy="68" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="CC" baseStereotypes="CC">
+            <AppliesTo>
+              <Apply type="Composition">
+                <Property name="direction" value="Source -&gt; Destination"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="cardinality" type="String" description="" unit="" values="" default=""/>
+              <Tag name="propertyTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="propertyQualifierTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="associatedObjectClassTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="associatedObjectClassQualifierTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="associationType" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="CFDA4027-C" name="UPCC2 - CDTLibrary Abstract Syntax" version="1.0" notes="UPCC2 - CDTLibrary Abstract Syntax"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="CDT" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="uniqueID" type="String" description="" unit="" values="" default=""/>
+              <Tag name="dictionaryEntryName" type="String" description="" unit="" values="" default=""/>
+              <Tag name="version" type="String" description="" unit="" values="" default=""/>
+              <Tag name="definition" type="String" description="" unit="" values="" default=""/>
+              <Tag name="primaryRepresentationTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="primitiveType" type="String" description="" unit="" values="" default=""/>
+              <Tag name="usageRule" type="Type=RefGUID;Values=Class;Stereotypes=UsageRule;" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="CON" notes="" cx="134" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Attribute"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="SUP" notes="" cx="134" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Attribute"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="uniqueID" type="String" description="" unit="" values="" default=""/>
+              <Tag name="dictionaryEntryName" type="String" description="" unit="" values="" default=""/>
+              <Tag name="definition" type="String" description="" unit="" values="" default=""/>
+              <Tag name="cardinality" type="String" description="" unit="" values="" default=""/>
+              <Tag name="objectClassTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="propertyTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="primaryRepresentationTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="primitiveType" type="String" description="" unit="" values="" default=""/>
+              <Tag name="usageRule" type="Type=RefGUID;Values=Class;Stereotypes=UsageRule;" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="36A518C7-2" name="UPCC2 - ENUMLibrary Abstract Syntax" version="1.0" notes="UPCC2 - ENUMLibrary Abstract Syntax"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="IDSCHEME" notes="This stereotype is for profile generation purposes" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="ValueDomain" baseStereotypes="ValueDomain">
+            <AppliesTo>
+              <Apply type="DataType"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="businessTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="identifierSchemeAgencyIdentifier" type="String" description="" unit="" values="" default=""/>
+              <Tag name="identifierSchemeAgencyName" type="String" description="" unit="" values="" default=""/>
+              <Tag name="pattern" type="String" description="" unit="" values="" default=""/>
+              <Tag name="restrictedPrimitive" type="enumeration" description="" unit="" values="Integer,String,Binary,Boolean,Decimal,Double,Float,NormalizedString,TimeDuration,TimePoint,Token" default=""/>
+              <Tag name="modificationAllowedIndicator" type="boolean" description="" unit="" values="true,false" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="ValueDomain" notes="" cx="664" cy="132" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" isAbstract="true">
+            <TaggedValues>
+              <Tag name="definition" type="String" description="" unit="" values="" default=""/>
+              <Tag name="dictionaryEntryName" type="String" description="" unit="" values="" default=""/>
+              <Tag name="uniqueID" type="String" description="" unit="" values="" default=""/>
+              <Tag name="version" type="String" description="" unit="" values="" default=""/>
+              <Tag name="minorVersion" type="String" description="" unit="" values="" default=""/>
+              <Tag name="revision" type="String" description="" unit="" values="" default=""/>
+              <Tag name="usageRule" type="Type=RefGUID;Values=Class;Stereotypes=UsageRule;" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="ENUM" notes="This stereotype is used for profile generation" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="ValueDomain" baseStereotypes="ValueDomain">
+            <AppliesTo>
+              <Apply type="Enumeration"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="businessTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="codeListAgencyIdentifier" type="String" description="" unit="" values="" default=""/>
+              <Tag name="codeListAgencyName" type="String" description="" unit="" values="" default=""/>
+              <Tag name="codeListIdentifier" type="String" description="" unit="" values="" default=""/>
+              <Tag name="codeListName" type="String" description="" unit="" values="" default=""/>
+              <Tag name="enumerationURI" type="String" description="" unit="" values="" default=""/>
+              <Tag name="restrictedPrimitive" type="enumeration" description="" unit="" values="Integer,String,Binary,Boolean,Decimal,Double,Float,NormalizedString,TimeDuration,TimePoint,Token" default=""/>
+              <Tag name="languageCode" type="String" description="" unit="" values="" default=""/>
+              <Tag name="modificationAllowedIndicator" type="boolean" description="" unit="" values="true,false" default=""/>
+              <Tag name="status" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="CodelistEntry" notes="" cx="145" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Attribute"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="codeName" type="String" description="" unit="" values="" default=""/>
+              <Tag name="status" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="311ABF1D-B" name="UPCC2 - PRIMLibrary Abstract Syntax" version="1.0" notes="UPCC2 - PRIMLibrary Abstract Syntax"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="PRIM" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="ValueDomain" baseStereotypes="ValueDomain">
+            <AppliesTo>
+              <Apply type="Class"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="businessTerm" type="String" description="" unit="" values="" default=""/>
+              <Tag name="length" type="String" description="" unit="" values="" default=""/>
+              <Tag name="minLength" type="String" description="" unit="" values="" default=""/>
+              <Tag name="maxLength" type="String" description="" unit="" values="" default=""/>
+              <Tag name="fractionalDigits" type="String" description="" unit="" values="" default=""/>
+              <Tag name="totalDigits" type="String" description="" unit="" values="" default=""/>
+              <Tag name="pattern" type="String" description="" unit="" values="" default=""/>
+              <Tag name="whiteSpace" type="String" description="" unit="" values="" default=""/>
+              <Tag name="maxInclusive" type="String" description="" unit="" values="" default=""/>
+              <Tag name="minInclusive" type="String" description="" unit="" values="" default=""/>
+              <Tag name="maxExclusive" type="String" description="" unit="" values="" default=""/>
+              <Tag name="minExclusive" type="String" description="" unit="" values="" default=""/>
+              <Tag name="enumeration" type="String" description="" unit="" values="" default=""/>
+              <Tag name="languageCode" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="ValueDomain" notes="" cx="192" cy="132" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" isAbstract="true">
+            <TaggedValues>
+              <Tag name="definition" type="String" description="" unit="" values="" default=""/>
+              <Tag name="dictionaryEntryName" type="String" description="" unit="" values="" default=""/>
+              <Tag name="uniqueID" type="String" description="" unit="" values="" default=""/>
+              <Tag name="version" type="String" description="" unit="" values="" default=""/>
+              <Tag name="minorVersion" type="String" description="" unit="" values="" default=""/>
+              <Tag name="revision" type="String" description="" unit="" values="" default=""/>
+              <Tag name="usageRule" type="Type=RefGUID;Values=Class;Stereotypes=UsageRule;" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="D557F509-3" name="UPCC2 - BusinessContext Abstract Syntax" version="1.0" notes="UPCC2 - BusinessContext Abstract Syntax"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="BusinessContext" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="uniqueID" type="String" description="" unit="" values="" default=""/>
+              <Tag name="version" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="BusinessProcessContextValue" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="ContextValue" baseStereotypes="ContextValue"/>
+          <Stereotype name="BusinessProcessRoleContextValue" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="ContextValue" baseStereotypes="ContextValue"/>
+          <Stereotype name="ClassificationScheme" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="contextCategory" type="String" description="" unit="" values="" default=""/>
+              <Tag name="definition" type="String" description="" unit="" values="" default=""/>
+              <Tag name="hierarchy" type="boolean" description="" unit="" values="true,false" default=""/>
+              <Tag name="owner" type="String" description="" unit="" values="" default=""/>
+              <Tag name="primitiveType" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="GeopoliticalContextValue" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="ContextValue" baseStereotypes="ContextValue"/>
+          <Stereotype name="IndustryClassificationContextValue" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="ContextValue" baseStereotypes="ContextValue"/>
+          <Stereotype name="OfficialConstraintsContextValue" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="ContextValue" baseStereotypes="ContextValue"/>
+          <Stereotype name="ProductClassificationContextValue" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="ContextValue" baseStereotypes="ContextValue"/>
+          <Stereotype name="SupportingRoleContextValue" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="ContextValue" baseStereotypes="ContextValue"/>
+          <Stereotype name="SystemCapabilitiesContextValue" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="ContextValue" baseStereotypes="ContextValue"/>
+          <Stereotype name="ContextValue" notes="" cx="869" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" isAbstract="true">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="meaning" type="String" description="" unit="" values="" default=""/>
+              <Tag name="value" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UMLProfiles>
+  <DiagramProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="B1E71104-6" name="UPCC2 Diagrams" version="1.0" notes="UPCC2 Diagrams"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="UPCC2 - Model Management" notes="UPCC2 - Model Management Abstract Syntax">
+            <AppliesTo>
+              <Apply type="Diagram_Logical">
+                <Property name="alias" value="UPCC2 - Model Management"/>
+                <Property name="toolbox" value="UPCC2::UPCC2 - Model Management Abstract Syntax"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="UPCC2 - DOCLibrary" notes="">
+            <AppliesTo>
+              <Apply type="Diagram_Logical">
+                <Property name="alias" value="UPCC2 - DOCLibrary"/>
+                <Property name="toolbox" value="UPCC2::UPCC2 - DOCLibrary Abstract Syntax"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="UPCC2 - BIELibrary" notes="">
+            <AppliesTo>
+              <Apply type="Diagram_Logical">
+                <Property name="alias" value="UPCC2 - BIELibrary"/>
+                <Property name="toolbox" value="UPCC2::UPCC2 - BIELibrary Abstract Syntax"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="UPCC2 - QDTLibrary" notes="">
+            <AppliesTo>
+              <Apply type="Diagram_Logical">
+                <Property name="alias" value="UPCC2 - QDTLibrary"/>
+                <Property name="toolbox" value="UPCC2::UPCC2 - QDTLibrary Abstract Syntax"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="UPCC2 - UDTLibrary" notes="">
+            <AppliesTo>
+              <Apply type="Diagram_Logical">
+                <Property name="alias" value="UPCC2 - UDTLibrary"/>
+                <Property name="toolbox" value="UPCC2::UPCC2 - UDTLibrary Abstract Syntax"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="UPCC2 - CCLibrary" notes="">
+            <AppliesTo>
+              <Apply type="Diagram_Logical">
+                <Property name="alias" value="UPCC2 - CCLibrary"/>
+                <Property name="toolbox" value="UPCC2::UPCC2 - CCLibrary Abstract Syntax"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="UPCC2 - CDTLibrary" notes="">
+            <AppliesTo>
+              <Apply type="Diagram_Logical">
+                <Property name="alias" value="UPCC2 - CDTLibrary"/>
+                <Property name="toolbox" value="UPCC2::UPCC2 - CDTLibrary Abstract Syntax"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="UPCC2 - ENUMLibrary" notes="">
+            <AppliesTo>
+              <Apply type="Diagram_Logical">
+                <Property name="alias" value="UPCC2 - ENUMLibrary"/>
+                <Property name="toolbox" value="UPCC2::UPCC2 - ENUMLibrary Abstract Syntax"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="UPCC2 - PRIMLibrary" notes="">
+            <AppliesTo>
+              <Apply type="Diagram_Logical">
+                <Property name="alias" value="UPCC2 - PRIMLibrary"/>
+                <Property name="toolbox" value="UPCC2::UPCC2 - PRIMLibrary Abstract Syntax"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="UPCC2 - BusinessContext" notes="">
+            <AppliesTo>
+              <Apply type="Diagram_Logical">
+                <Property name="alias" value="UPCC2 - BusinessContext"/>
+                <Property name="toolbox" value="UPCC2::UPCC2 - BusinessContext Abstract Syntax"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </DiagramProfile>
+  <UIToolboxes>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="FCDC007A-9" name="UPCC2 - Model Management Abstract Syntax" version="1.0" notes="UPCC2 - Model Management Abstract Syntax"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="UPCC2 - Model Management Abstract Syntax" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="UPCC2 - Model Management Abstract Syntax::UPCCLibrary" type="int" description="" unit="" values="" default="UPCCLibrary"/>
+              <Tag name="UPCC2 - Model Management Abstract Syntax::DOCLibrary" type="int" description="" unit="" values="" default="DOCLibrary"/>
+              <Tag name="UPCC2 - Model Management Abstract Syntax::BIELibrary" type="int" description="" unit="" values="" default="BIELibrary"/>
+              <Tag name="UPCC2 - Model Management Abstract Syntax::QDTLibrary" type="int" description="" unit="" values="" default="QDTLibrary"/>
+              <Tag name="UPCC2 - Model Management Abstract Syntax::UDTLibrary" type="int" description="" unit="" values="" default="UDTLibrary"/>
+              <Tag name="UPCC2 - Model Management Abstract Syntax::CCLibrary" type="int" description="" unit="" values="" default="CCLibrary"/>
+              <Tag name="UPCC2 - Model Management Abstract Syntax::CDTLibrary" type="int" description="" unit="" values="" default="CDTLibrary"/>
+              <Tag name="UPCC2 - Model Management Abstract Syntax::ENUMLibrary" type="int" description="" unit="" values="" default="ENUMLibrary"/>
+              <Tag name="UPCC2 - Model Management Abstract Syntax::PRIMLibrary" type="int" description="" unit="" values="" default="PRIMLibrary"/>
+              <Tag name="UPCC2 - Model Management Abstract Syntax::UsageRule" type="int" description="" unit="" values="" default="UsageRule"/>
+              <Tag name="UPCC2 - Model Management Abstract Syntax::basedOn" type="int" description="" unit="" values="" default="basedOn"/>
+              <Tag name="UPCC2 - Model Management Abstract Syntax::equivalentTo" type="int" description="" unit="" values="" default="equivalentTo"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="44097F2C-8" name="UPCC2 - DOCLibrary Abstract Syntax" version="1.0" notes="UPCC2 - DOCLibrary Abstract Syntax"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="UPCC2 - DOCLibrary Abstract Syntax" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="UPCC2 - DOCLibrary Abstract Syntax::MA" type="int" description="" unit="" values="" default="MA"/>
+              <Tag name="UPCC2 - DOCLibrary Abstract Syntax::ASMA" type="int" description="" unit="" values="" default="ASMA"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="4A9DF979-C" name="UPCC2 - BIELibrary Abstract Syntax" version="1.0" notes="UPCC2 - BIELibrary Abstract Syntax"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="UPCC2 - BIELibrary Abstract Syntax" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="UPCC2 - BIELibrary Abstract Syntax::ABIE" type="int" description="" unit="" values="" default="ABIE"/>
+              <Tag name="UPCC2 - BIELibrary Abstract Syntax::BBIE" type="int" description="" unit="" values="" default="BBIE"/>
+              <Tag name="UPCC2 - BIELibrary Abstract Syntax::ASBIE" type="int" description="" unit="" values="" default="ASBIE"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="00C43F18-E" name="UPCC2 - QDTLibrary Abstract Syntax" version="1.0" notes="UPCC2 - QDTLibrary Abstract Syntax"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="UPCC2 - QDTLibrary Abstract Syntax" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="UPCC2 - QDTLibrary Abstract Syntax::QDT" type="int" description="" unit="" values="" default="QDT"/>
+              <Tag name="UPCC2 - QDTLibrary Abstract Syntax::CON" type="int" description="" unit="" values="" default="CON"/>
+              <Tag name="UPCC2 - QDTLibrary Abstract Syntax::SUP" type="int" description="" unit="" values="" default="SUP"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="7837430B-0" name="UPCC2 - UDTLibrary Abstract Syntax" version="1.0" notes="UPCC2 - UDTLibrary Abstract Syntax"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="UPCC2 - UDTLibrary Abstract Syntax" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="UPCC2 - UDTLibrary Abstract Syntax::UDT" type="int" description="" unit="" values="" default="UDT"/>
+              <Tag name="UPCC2 - UDTLibrary Abstract Syntax::CON" type="int" description="" unit="" values="" default="CON"/>
+              <Tag name="UPCC2 - UDTLibrary Abstract Syntax::SUP" type="int" description="" unit="" values="" default="SUP"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="E60641FB-F" name="UPCC2 - CCLibrary Abstract Syntax" version="1.0" notes="UPCC2 - CCLibrary Abstract Syntax"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="UPCC2 - CCLibrary Abstract Syntax" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="UPCC2 - CCLibrary Abstract Syntax::ACC" type="int" description="" unit="" values="" default="ACC"/>
+              <Tag name="UPCC2 - CCLibrary Abstract Syntax::BCC" type="int" description="" unit="" values="" default="BCC"/>
+              <Tag name="UPCC2 - CCLibrary Abstract Syntax::ASCC" type="int" description="" unit="" values="" default="ASCC"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="30A388C1-8" name="UPCC2 - CDTLibrary Abstract Syntax" version="1.0" notes="UPCC2 - CDTLibrary Abstract Syntax"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="UPCC2 - CDTLibrary Abstract Syntax" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="UPCC2 - CDTLibrary Abstract Syntax::CDT" type="int" description="" unit="" values="" default="CDT"/>
+              <Tag name="UPCC2 - CDTLibrary Abstract Syntax::CON" type="int" description="" unit="" values="" default="CON"/>
+              <Tag name="UPCC2 - CDTLibrary Abstract Syntax::SUP" type="int" description="" unit="" values="" default="SUP"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="3C4F9284-7" name="UPCC2 - ENUMLibrary Abstract Syntax" version="1.0" notes="UPCC2 - ENUMLibrary Abstract Syntax"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="UPCC2 - ENUMLibrary Abstract Syntax" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="UPCC2 - ENUMLibrary Abstract Syntax::IDSCHEME" type="int" description="" unit="" values="" default="IDSCHEME"/>
+              <Tag name="UPCC2 - ENUMLibrary Abstract Syntax::ENUM" type="int" description="" unit="" values="" default="ENUM"/>
+              <Tag name="UPCC2 - ENUMLibrary Abstract Syntax::CodelistEntry" type="int" description="" unit="" values="" default="CodelistEntry"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="C75A2B09-B" name="UPCC2 - PRIMLibrary Abstract Syntax" version="1.0" notes="UPCC2 - PRIMLibrary Abstract Syntax"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="UPCC2 - PRIMLibrary Abstract Syntax" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="UPCC2 - PRIMLibrary Abstract Syntax::PRIM" type="int" description="" unit="" values="" default="PRIM"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="ED498604-A" name="UPCC2 - BusinessContext Abstract Syntax" version="1.0" notes="UPCC2 - BusinessContext Abstract Syntax"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="UPCC2 - BusinessContext Abstract Syntax" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="UPCC2 - BusinessContext Abstract Syntax::BusinessContext" type="int" description="" unit="" values="" default="BusinessContext"/>
+              <Tag name="UPCC2 - BusinessContext Abstract Syntax::BusinessProcessContextValue" type="int" description="" unit="" values="" default="BusinessProcessContextValue"/>
+              <Tag name="UPCC2 - BusinessContext Abstract Syntax::BusinessProcessRoleContextValue" type="int" description="" unit="" values="" default="BusinessProcessRoleContextValue"/>
+              <Tag name="UPCC2 - BusinessContext Abstract Syntax::ClassificationScheme" type="int" description="" unit="" values="" default="ClassificationScheme"/>
+              <Tag name="UPCC2 - BusinessContext Abstract Syntax::GeopoliticalContextValue" type="int" description="" unit="" values="" default="GeopoliticalContextValue"/>
+              <Tag name="UPCC2 - BusinessContext Abstract Syntax::IndustryClassificationContextValue" type="int" description="" unit="" values="" default="IndustryClassificationContextValue"/>
+              <Tag name="UPCC2 - BusinessContext Abstract Syntax::OfficialConstraintsContextValue" type="int" description="" unit="" values="" default="OfficialConstraintsContextValue"/>
+              <Tag name="UPCC2 - BusinessContext Abstract Syntax::ProductClassificationContextValue" type="int" description="" unit="" values="" default="ProductClassificationContextValue"/>
+              <Tag name="UPCC2 - BusinessContext Abstract Syntax::SupportingRoleContextValue" type="int" description="" unit="" values="" default="SupportingRoleContextValue"/>
+              <Tag name="UPCC2 - BusinessContext Abstract Syntax::SystemCapabilitiesContextValue" type="int" description="" unit="" values="" default="SystemCapabilitiesContextValue"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UIToolboxes>
+  <ModelTemplates>
+    <Model name="UPCC2 Model Structure (Downloaded)" description="Downloads a UML Profile for Core Components 2.0 Model Structure containing the core components from UN/CEFACT" location="http://sparxcloud.com/modelpatterns/ras/xmi/UPCC2/{695D85BD-AABA-407e-B38C-CDA36E132DD7}/1.0/" default="yes" icon="34" filter=""/>
+  </ModelTemplates>
+</MDG.Technology>

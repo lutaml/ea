@@ -25,6 +25,12 @@ model_classes:
   t_attributetag: Lutaml::Qea::Models::EaAttributeTag
   t_xref: Lutaml::Qea::Models::EaXref
   t_document: Lutaml::Qea::Models::EaDocument
+  t_image: Lutaml::Qea::Models::EaImage
+  t_glossary: Lutaml::Qea::Models::EaGlossary
+  t_lists: Lutaml::Qea::Models::EaList
+  t_versions: Lutaml::Qea::Models::EaVersion
+  t_phase: Lutaml::Qea::Models::EaPhase
+  t_authors: Lutaml::Qea::Models::EaAuthor
   t_script: Lutaml::Qea::Models::EaScript
   t_stereotypes: Lutaml::Qea::Models::EaStereotype
   t_datatypes: Lutaml::Qea::Models::EaDatatype
@@ -944,6 +950,26 @@ tables:
         nullable: true
 
   # Script table (Priority 4)
+  - table_name: t_image
+    enabled: true
+    primary_key: ImageID
+    collection_name: images
+    description: "Embedded images (EMF/WMF bitmaps) for diagrams"
+    columns:
+      - name: ImageID
+        type: INTEGER
+        primary: true
+        nullable: false
+      - name: Name
+        type: TEXT
+        nullable: true
+      - name: Type
+        type: TEXT
+        nullable: true
+      - name: Image
+        type: BLOB
+        nullable: true
+
   - table_name: t_script
     enabled: true
     primary_key: ScriptID
@@ -967,6 +993,336 @@ tables:
         type: TEXT
         nullable: true
       - name: Script
+        type: TEXT
+        nullable: true
+
+  - table_name: t_glossary
+    enabled: true
+    primary_key: GlossaryID
+    collection_name: glossaries
+    description: "Glossary term definitions"
+    columns:
+      - name: GlossaryID
+        type: INTEGER
+        primary: true
+        nullable: false
+      - name: Term
+        type: TEXT
+        nullable: true
+      - name: Type
+        type: TEXT
+        nullable: true
+      - name: Meaning
+        type: TEXT
+        nullable: true
+
+  - table_name: t_lists
+    enabled: true
+    primary_key: ListID
+    collection_name: lists
+    description: "Enumeration lists"
+    columns:
+      - name: ListID
+        type: TEXT
+        primary: true
+        nullable: false
+      - name: Category
+        type: TEXT
+        nullable: true
+      - name: Name
+        type: TEXT
+        nullable: true
+      - name: NVal
+        type: INTEGER
+        nullable: true
+      - name: Notes
+        type: TEXT
+        nullable: true
+
+  - table_name: t_versions
+    enabled: true
+    primary_key: VersionID
+    collection_name: versions
+    description: "Version control history"
+    columns:
+      - name: VersionID
+        type: TEXT
+        primary: true
+        nullable: false
+      - name: ElementID
+        type: TEXT
+        nullable: true
+      - name: Branch
+        type: TEXT
+        nullable: true
+      - name: VersionDate
+        type: TEXT
+        nullable: true
+      - name: Author
+        type: TEXT
+        nullable: true
+      - name: Notes
+        type: TEXT
+        nullable: true
+
+  - table_name: t_phase
+    enabled: true
+    primary_key: PhaseID
+    collection_name: phases
+    description: "Project phases and milestones"
+    columns:
+      - name: PhaseID
+        type: INTEGER
+        primary: true
+        nullable: false
+      - name: PhaseName
+        type: TEXT
+        nullable: true
+      - name: PhaseNotes
+        type: TEXT
+        nullable: true
+      - name: PhaseStart
+        type: TEXT
+        nullable: true
+      - name: PhaseEnd
+        type: TEXT
+        nullable: true
+
+  - table_name: t_authors
+    enabled: true
+    primary_key: AuthorID
+    collection_name: authors
+    description: "Author and contributor records"
+    columns:
+      - name: AuthorID
+        type: INTEGER
+        primary: true
+        nullable: false
+      - name: Name
+        type: TEXT
+        nullable: true
+      - name: Email
+        type: TEXT
+        nullable: true
+      - name: Notes
+        type: TEXT
+        nullable: true
+
+  - table_name: t_secrypt
+    enabled: true
+    primary_key: SecryptID
+    collection_name: secrypts
+    description: "Encryption metadata"
+    columns:
+      - name: SecryptID
+        type: INTEGER
+        primary: true
+        nullable: false
+      - name: Object_ID
+        type: INTEGER
+        nullable: true
+      - name: Encrypt
+        type: TEXT
+        nullable: true
+
+  - table_name: t_palette
+    enabled: true
+    primary_key: PaletteID
+    collection_name: palettes
+    description: "Toolbox palettes"
+    columns:
+      - name: PaletteID
+        type: TEXT
+        primary: true
+        nullable: false
+      - name: Name
+        type: TEXT
+        nullable: true
+
+  - table_name: t_paletteitem
+    enabled: true
+    primary_key: PaletteID
+    collection_name: palette_items
+    description: "Toolbox items"
+    columns:
+      - name: PaletteID
+        type: TEXT
+        primary: true
+        nullable: false
+      - name: Object_ID
+        type: INTEGER
+        nullable: true
+      - name: Name
+        type: TEXT
+        nullable: true
+
+  - table_name: t_implement
+    enabled: true
+    primary_key: ImplementID
+    collection_name: implements
+    description: "UML-to-code mapping hints"
+    columns:
+      - name: ImplementID
+        type: INTEGER
+        primary: true
+        nullable: false
+      - name: Object_ID
+        type: INTEGER
+        nullable: true
+      - name: Language
+        type: TEXT
+        nullable: true
+
+  - table_name: t_roleconstraint
+    enabled: true
+    primary_key: RoleConstraintID
+    collection_name: role_constraints
+    description: "Role-based constraints"
+    columns:
+      - name: RoleConstraintID
+        type: INTEGER
+        primary: true
+        nullable: false
+      - name: Object_ID
+        type: INTEGER
+        nullable: true
+      - name: Role
+        type: TEXT
+        nullable: true
+
+  - table_name: t_objectproblems
+    enabled: true
+    primary_key: ObjectProblemID
+    collection_name: object_problems
+    description: "Issue tracking"
+    columns:
+      - name: ObjectProblemID
+        type: INTEGER
+        primary: true
+        nullable: false
+      - name: Object_ID
+        type: INTEGER
+        nullable: true
+      - name: Problem
+        type: TEXT
+        nullable: true
+
+  - table_name: t_objectrisks
+    enabled: true
+    primary_key: ObjectRiskID
+    collection_name: object_risks
+    description: "Risk register"
+    columns:
+      - name: ObjectRiskID
+        type: INTEGER
+        primary: true
+        nullable: false
+      - name: Object_ID
+        type: INTEGER
+        nullable: true
+      - name: Risk
+        type: TEXT
+        nullable: true
+
+  - table_name: t_objecttests
+    enabled: true
+    primary_key: ObjectTestID
+    collection_name: object_tests
+    description: "Test cases"
+    columns:
+      - name: ObjectTestID
+        type: INTEGER
+        primary: true
+        nullable: false
+      - name: Object_ID
+        type: INTEGER
+        nullable: true
+      - name: Test
+        type: TEXT
+        nullable: true
+
+  - table_name: t_objecteffort
+    enabled: true
+    primary_key: ObjectEffortID
+    collection_name: object_efforts
+    description: "Effort estimates"
+    columns:
+      - name: ObjectEffortID
+        type: INTEGER
+        primary: true
+        nullable: false
+      - name: Object_ID
+        type: INTEGER
+        nullable: true
+      - name: Effort
+        type: TEXT
+        nullable: true
+
+  - table_name: t_objectresource
+    enabled: true
+    primary_key: ObjectResourceID
+    collection_name: object_resources
+    description: "Resource allocation"
+    columns:
+      - name: ObjectResourceID
+        type: INTEGER
+        primary: true
+        nullable: false
+      - name: Object_ID
+        type: INTEGER
+        nullable: true
+      - name: Resource
+        type: TEXT
+        nullable: true
+
+  - table_name: t_objectscenarios
+    enabled: true
+    primary_key: ObjectScenarioID
+    collection_name: object_scenarios
+    description: "Use case scenarios"
+    columns:
+      - name: ObjectScenarioID
+        type: INTEGER
+        primary: true
+        nullable: false
+      - name: Object_ID
+        type: INTEGER
+        nullable: true
+      - name: Scenario
+        type: TEXT
+        nullable: true
+
+  - table_name: t_objectrequires
+    enabled: true
+    primary_key: ObjectReqID
+    collection_name: object_requires
+    description: "Requirements trace"
+    columns:
+      - name: ObjectReqID
+        type: INTEGER
+        primary: true
+        nullable: false
+      - name: Object_ID
+        type: INTEGER
+        nullable: true
+      - name: Requirement
+        type: TEXT
+        nullable: true
+
+  - table_name: t_objecttrx
+    enabled: true
+    primary_key: ObjectTrxID
+    collection_name: object_trxs
+    description: "Transactions"
+    columns:
+      - name: ObjectTrxID
+        type: INTEGER
+        primary: true
+        nullable: false
+      - name: Object_ID
+        type: INTEGER
+        nullable: true
+      - name: Trx
         type: TEXT
         nullable: true
 

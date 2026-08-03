@@ -53,20 +53,18 @@ module Ea
         end
 
         def to_general_attribute(attr)
-          base = base_attr_hash(attr)
-          Lutaml::Uml::GeneralAttribute.new.tap do |gen_attr|
-            base.each { |k, v| gen_attr.public_send(:"#{k}=", v) }
-            gen_attr.is_derived = !!attr.is_derived
-            gen_attr.has_association = !!attr.association
-          end
+          Lutaml::Uml::GeneralAttribute.new(
+            **base_attr_hash(attr),
+            is_derived: !!attr.is_derived,
+            has_association: !!attr.association
+          )
         end
 
         def to_top_element_attribute(attr)
-          base = base_attr_hash(attr)
-          Lutaml::Uml::TopElementAttribute.new.tap do |top_attr|
-            base.each { |k, v| top_attr.public_send(:"#{k}=", v) }
-            top_attr.is_derived = !!attr.is_derived
-          end
+          Lutaml::Uml::TopElementAttribute.new(
+            **base_attr_hash(attr),
+            is_derived: !!attr.is_derived
+          )
         end
 
         def base_attr_hash(attr)

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Stereotypes>
+	<Stereotype name="ApplicationSchema">
+		<Alias>Application Schema</Alias>
+		<Alias>applicationSchema</Alias>
+		<Alias>applicationschema</Alias>
+		<Alias>schema</Alias>
+	</Stereotype>
+	<Stereotype name="Leaf">
+		<Alias>leaf</Alias>
+	</Stereotype>
+	<Stereotype name="FeatureType">
+		<Alias>Feature Type</Alias>
+		<Alias>featureType</Alias>
+		<Alias>featuretype</Alias>
+	</Stereotype>
+	<Stereotype name="Type">
+		<Alias>type</Alias>
+	</Stereotype>
+	<Stereotype name="DataType">
+		<Alias>Data Type</Alias>
+		<Alias>dataType</Alias>
+		<Alias>datatype</Alias>
+	</Stereotype>
+	<Stereotype name="CodeList">
+		<Alias>Code List</Alias>
+		<Alias>codeList</Alias>
+		<Alias>codelist</Alias>
+	</Stereotype>
+	<Stereotype name="Union">
+		<Alias>union</Alias>
+	</Stereotype>
+	<Stereotype name="Enumeration">
+		<Alias>enumeration</Alias>
+	</Stereotype>
+</Stereotypes>

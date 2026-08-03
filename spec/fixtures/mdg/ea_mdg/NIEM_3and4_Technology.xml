@@ -1,0 +1,842 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<MDG.Technology version="1.0">
+  <Documentation id="NIEM 3.0" name="NIEM 3, 4 and 5" version="1.0.1" notes="National Information Exchange Model  v3.0" categoryList="NIEM" categoryMappings="NIEM Common=NIEM;NIEM 3=NIEM;NIEM 4=NIEM;NIEM 5=NIEM;"/>
+  <UMLProfiles>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="7F4DB8F5-4" name="NIEM_3-0_Common_Profile" version="1.0" notes="NIEM_3-0_Common_Profile"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="AdapterType" metatype="AdapterType" notes="" cx="90" cy="70" generalizes="NIEMType" baseStereotypes="NIEMType"/>
+          <Stereotype name="AssociationType" metatype="AssociationType" notes="" cx="90" cy="70" generalizes="NIEMType" baseStereotypes="NIEMType">
+            <AppliesTo>
+              <Apply type="AssociationClass">
+                <Property name="direction" value="Unspecified"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="AugmentationType" metatype="AugmentationType" notes="" cx="90" cy="70" generalizes="NIEMType" baseStereotypes="NIEMType"/>
+          <Stereotype name="Choice" metatype="Choice" notes="" cx="90" cy="70">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="Deprecated" metatype="Deprecated" notes="" cx="90" cy="70">
+            <AppliesTo>
+              <Apply type="Element"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="Documentation" metatype="Documentation" notes="" cx="90" cy="70">
+            <AppliesTo>
+              <Apply type="Note"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="List" metatype="List" notes="" cx="90" cy="70">
+            <AppliesTo>
+              <Apply type="DataType"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="LocalTerm" metatype="LocalTerm" notes="" cx="90" cy="70">
+            <AppliesTo>
+              <Apply type="Attribute"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="sourceURIs" type="String" description="" unit="" values="" default=""/>
+              <Tag name="literal" type="String" description="" unit="" values="" default=""/>
+              <Tag name="definition" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="LocalVocabulary" metatype="LocalVocabulary" notes="" cx="90" cy="70">
+            <AppliesTo>
+              <Apply type="Enumeration"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="MetadataApplication" metatype="MetadataApplication" notes="" cx="90" cy="70">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+            <AppliesTo>
+              <Apply type="Usage">
+                <Property name="direction" value="Source -&gt; Destination"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="MetadataType" metatype="MetadataType" notes="" cx="90" cy="70" generalizes="NIEMType" baseStereotypes="NIEMType"/>
+          <Stereotype name="Namespace" metatype="Namespace" notes="" cx="90" cy="70">
+            <AppliesTo>
+              <Apply type="Package">
+                <Property name="_Tag" value="1"/>
+                <Property name="URI" value=""/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="targetNamespace" type="String" description="" unit="" values="" default=""/>
+              <Tag name="isConformant" type="boolean" description="" unit="" values="true,false" default="true"/>
+              <Tag name="version" type="String" description="" unit="" values="" default="1"/>
+              <Tag name="defaultPrefix" type="String" description="" unit="" values="" default=""/>
+              <Tag name="conformanceTargets" type="String" description="The Conformance Targets Attribute Specification defines an attribute that, when it appears in an XML document, &#xA;claims the document conforms to one or more conformance targets.&#xA;&#xA;The only conformance targets explicitly defined in NIEM 3 are&#xA;http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ReferenceSchemaDocument&#xA;and&#xA;http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ExtensionSchemaDocument&#xA;&#xA;For NIEM-3 UML, the above formally defined conformance targets are implicitly associated with a NIEM target &#xA;schema based on the defaultPurpose of an «InformationModel».  Thus, the &quot;conformanceTargets&quot; tag need be &#xA;populated only with domain-specific conformance target values." unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="NIEMType" metatype="NIEMType" notes="" cx="90" cy="70" isAbstract="true">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="ObjectType" metatype="ObjectType" notes="" cx="90" cy="70" generalizes="NIEMType" baseStereotypes="NIEMType"/>
+          <Stereotype name="PropertyHolder" metatype="PropertyHolder" notes="" cx="90" cy="70">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="References" metatype="References" notes="" cx="90" cy="70">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+            <AppliesTo>
+              <Apply type="Realisation">
+                <Property name="direction" value="Source -&gt; Destination"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="Representation" metatype="Representation" notes="" cx="90" cy="70">
+            <AppliesTo>
+              <Apply type="Attribute">
+                <Property name="isReference" value="false"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="Restriction" metatype="Restriction" notes="" cx="90" cy="70">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+            <AppliesTo>
+              <Apply type="Realisation">
+                <Property name="direction" value="Source -&gt; Destination"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="Union" metatype="Union" notes="" cx="90" cy="70">
+            <AppliesTo>
+              <Apply type="DataType"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="UnionOf" metatype="UnionOf" notes="" cx="90" cy="70">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+            <AppliesTo>
+              <Apply type="Usage">
+                <Property name="direction" value="Source -&gt; Destination"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="ValueRestriction" metatype="ValueRestriction" notes="" cx="90" cy="70">
+            <AppliesTo>
+              <Apply type="DataType">
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="fractionDigits" type="Integer" description="" unit="" values="" default=""/>
+              <Tag name="length" type="Integer" description="" unit="" values="" default=""/>
+              <Tag name="maxExclusive" type="String" description="" unit="" values="" default=""/>
+              <Tag name="maxInclusive" type="String" description="" unit="" values="" default=""/>
+              <Tag name="maxLength" type="Integer" description="" unit="" values="" default=""/>
+              <Tag name="minExclusive" type="String" description="" unit="" values="" default=""/>
+              <Tag name="minInclusive" type="String" description="" unit="" values="" default=""/>
+              <Tag name="minLength" type="Integer" description="" unit="" values="" default=""/>
+              <Tag name="pattern" type="String" description="" unit="" values="" default=""/>
+              <Tag name="totalDigits" type="Integer" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+        <QuickLink data="//Source Element Type,Source ST filter,Target Element Type,Target ST Filter,Diagram Filter,New Element Type,New Element ST,New Link Type,New Link ST,New Link Direction,New Link Caption,New Link &amp; Element Caption,Create Link,Create Element,Disallow Self connector,Exclusive to ST Filter + No inherit from metatype,Menu Group,Complexity Level,Target Must Be Parent,Embed element,Preceeds Separator LEAF,Preceeds Separator GROUP,DUMMZ COLUMN&#xA;Object,,Artifact,,NIEM 3.0::MPD,Artifact,,Usage,FileType,to,NIEM 3.0 FileType,FileType,TRUE,TRUE,TRUE,,NIEM 3.0 Artifact,0,,,,,&#xA;Object,,Artifact,,NIEM 3.0::MPD,Artifact,,Usage,ApplicationInfo,to,NIEM 3.0 ApplicationInfo,ApplicationInfo,TRUE,TRUE,TRUE,,NIEM 3.0 Artifact,0,,,,,&#xA;Object,,Artifact,,NIEM 3.0::MPD,Artifact,,Usage,BusinessRulesArtifact,to,NIEM 3.0 BusinessRulesArtifact,BusinessRulesArtifact,TRUE,TRUE,TRUE,,NIEM 3.0 Artifact,0,,,,,&#xA;Object,,Artifact,,NIEM 3.0::MPD,Artifact,,Usage,ConformanceAssertion,to,NIEM 3.0 ConformanceAssertion,ConformanceAssertion,TRUE,TRUE,TRUE,,NIEM 3.0 Artifact,0,,,,,&#xA;Object,,Artifact,,NIEM 3.0::MPD,Artifact,,Usage,ConformanceReport,to,NIEM 3.0 ConformanceReport,ConformanceReport,TRUE,TRUE,TRUE,,NIEM 3.0 Artifact,0,,,,,&#xA;Object,,Artifact,,NIEM 3.0::MPD,Artifact,,Usage,Documentation,to,NIEM 3.0 Documentation,Documentation,TRUE,TRUE,TRUE,,NIEM 3.0 Artifact,0,,,,,&#xA;Object,,Artifact,,NIEM 3.0::MPD,Artifact,,Usage,File,to,NIEM 3.0 File,File,TRUE,TRUE,TRUE,,NIEM 3.0 Artifact,0,,,,,&#xA;Object,,Artifact,,NIEM 3.0::MPD,Artifact,,Usage,IEPSampleXMLDocument,to,NIEM 3.0 IEPSampleXMLDocument,IEPSampleXMLDocument,TRUE,TRUE,TRUE,,NIEM 3.0 Artifact,0,,,,,&#xA;Object,,Artifact,,NIEM 3.0::MPD,Artifact,,Usage,MPDChangeLog,to,NIEM 3.0 MPDChangeLog,MPDChangeLog,TRUE,TRUE,TRUE,,NIEM 3.0 Artifact,0,,,,,&#xA;Object,,Artifact,,NIEM 3.0::MPD,Artifact,,Usage,ReadMe,to,NIEM 3.0 ReadMe,ReadMe,TRUE,TRUE,TRUE,,NIEM 3.0 Artifact,0,,,,,&#xA;Object,,Artifact,,NIEM 3.0::MPD,Artifact,,Usage,RelaxNGSchema,to,NIEM 3.0 RelaxNGSchema,RelaxNGSchema,TRUE,TRUE,TRUE,,NIEM 3.0 Artifact,0,,,,,&#xA;Object,,Artifact,,NIEM 3.0::MPD,Artifact,,Usage,RequiredFile,to,NIEM 3.0 RequiredFile,RequiredFile,TRUE,TRUE,TRUE,,NIEM 3.0 Artifact,0,,,,,&#xA;Object,,Artifact,,NIEM 3.0::MPD,Artifact,,Usage,SchematronSchema,to,NIEM 3.0 SchematronSchema,SchematronSchema,TRUE,TRUE,TRUE,,NIEM 3.0 Artifact,0,,,,,&#xA;Object,,Artifact,,NIEM 3.0::MPD,Artifact,,Usage,WantList,to,NIEM 3.0 WantList,WantList,TRUE,TRUE,TRUE,,NIEM 3.0 Artifact,0,,,,,&#xA;Object,,Artifact,,NIEM 3.0::MPD,Artifact,,Usage,XMLCatalog,to,NIEM 3.0 XMLCatalog,XMLCatalog,TRUE,TRUE,TRUE,,NIEM 3.0 Artifact,0,,,,,&#xA;Object,,Package,Namespace,NIEM 3.0::MPD,Package,Namespace,Usage,XMLSchemaDocument,to,NIEM 3.0 XMLSchemaDocument,XMLSchemaDocument,TRUE,TRUE,TRUE,,NIEM 3.0 Namespace,0,,,,,&#xA;Object,,Package,Namespace,NIEM 3.0::MPD,Package,Namespace,Usage,ExtensionSchemaDocument,to,NIEM 3.0 ExtensionSchemaDocument,ExtensionSchemaDocument,TRUE,TRUE,TRUE,,NIEM 3.0 Namespace,0,,,,,&#xA;Object,,Package,Namespace,NIEM 3.0::MPD,Package,Namespace,Usage,ExternalSchemaDocument,to,NIEM 3.0 ExternalSchemaDocument,ExternalSchemaDocument,TRUE,TRUE,TRUE,,NIEM 3.0 Namespace,0,,,,,&#xA;Object,,Package,Namespace,NIEM 3.0::MPD,Package,Namespace,Usage,ReferenceSchemaDocument,to,NIEM 3.0 ReferenceSchemaDocument,ReferenceSchemaDocument,TRUE,TRUE,TRUE,,NIEM 3.0 Namespace,0,,,,,&#xA;Object,,Package,Namespace,NIEM 3.0::MPD,Package,Namespace,Usage,SubsetSchemaDocument,to,NIEM 3.0 SubsetSchemaDocument,SubsetSchemaDocument,TRUE,TRUE,TRUE,,NIEM 3.0 Namespace,0,,,,,&#xA;Object,,Package,InformationModel,NIEM 3.0::MPD,Package,InformationModel,Usage,XMLSchemaDocument,to,NIEM 3.0 XMLSchemaDocument,XMLSchemaDocument,TRUE,TRUE,TRUE,,NIEM 3.0 InformationModel,0,,,,,&#xA;Object,,Package,InformationModel,NIEM 3.0::MPD,Package,InformationModel,Usage,ExtensionSchemaDocument,to,NIEM 3.0 ExtensionSchemaDocument,ExtensionSchemaDocument,TRUE,TRUE,TRUE,,NIEM 3.0 InformationModel,0,,,,,&#xA;Object,,Package,InformationModel,NIEM 3.0::MPD,Package,InformationModel,Usage,ExternalSchemaDocument,to,NIEM 3.0 ExternalSchemaDocument,ExternalSchemaDocument,TRUE,TRUE,TRUE,,NIEM 3.0 InformationModel,0,,,,,&#xA;Object,,Package,InformationModel,NIEM 3.0::MPD,Package,InformationModel,Usage,ReferenceSchemaDocument,to,NIEM 3.0 ReferenceSchemaDocument,ReferenceSchemaDocument,TRUE,TRUE,TRUE,,NIEM 3.0 InformationModel,0,,,,,&#xA;Object,,Package,InformationModel,NIEM 3.0::MPD,Package,InformationModel,Usage,SubsetSchemaDocument,to,NIEM 3.0 SubsetSchemaDocument,SubsetSchemaDocument,TRUE,TRUE,TRUE,,NIEM 3.0 InformationModel,0,,,,,&#xA;Package,,Package,Namespace,NIEM 3.0::MPD,Package,Namespace,Usage,XMLSchemaDocument,to,NIEM 3.0 XMLSchemaDocument,XMLSchemaDocument,TRUE,TRUE,TRUE,,NIEM 3.0 Namespace,0,,,,,&#xA;Package,,Package,Namespace,NIEM 3.0::MPD,Package,Namespace,Usage,ExtensionSchemaDocument,to,NIEM 3.0 ExtensionSchemaDocument,ExtensionSchemaDocument,TRUE,TRUE,TRUE,,NIEM 3.0 Namespace,0,,,,,&#xA;Package,,Package,Namespace,NIEM 3.0::MPD,Package,Namespace,Usage,ExternalSchemaDocument,to,NIEM 3.0 ExternalSchemaDocument,ExternalSchemaDocument,TRUE,TRUE,TRUE,,NIEM 3.0 Namespace,0,,,,,&#xA;Package,,Package,Namespace,NIEM 3.0::MPD,Package,Namespace,Usage,ReferenceSchemaDocument,to,NIEM 3.0 ReferenceSchemaDocument,ReferenceSchemaDocument,TRUE,TRUE,TRUE,,NIEM 3.0 Namespace,0,,,,,&#xA;Package,,Package,Namespace,NIEM 3.0::MPD,Package,Namespace,Usage,SubsetSchemaDocument,to,NIEM 3.0 SubsetSchemaDocument,SubsetSchemaDocument,TRUE,TRUE,TRUE,,NIEM 3.0 Namespace,0,,,,,&#xA;Package,,Package,InformationModel,NIEM 3.0::MPD,Package,InformationModel,Usage,XMLSchemaDocument,to,NIEM 3.0 XMLSchemaDocument,XMLSchemaDocument,TRUE,TRUE,TRUE,,NIEM 3.0 InformationModel,0,,,,,&#xA;Package,,Package,InformationModel,NIEM 3.0::MPD,Package,InformationModel,Usage,ExtensionSchemaDocument,to,NIEM 3.0 ExtensionSchemaDocument,ExtensionSchemaDocument,TRUE,TRUE,TRUE,,NIEM 3.0 InformationModel,0,,,,,&#xA;Package,,Package,InformationModel,NIEM 3.0::MPD,Package,InformationModel,Usage,ExternalSchemaDocument,to,NIEM 3.0 ExternalSchemaDocument,ExternalSchemaDocument,TRUE,TRUE,TRUE,,NIEM 3.0 InformationModel,0,,,,,&#xA;Package,,Package,InformationModel,NIEM 3.0::MPD,Package,InformationModel,Usage,ReferenceSchemaDocument,to,NIEM 3.0 ReferenceSchemaDocument,ReferenceSchemaDocument,TRUE,TRUE,TRUE,,NIEM 3.0 InformationModel,0,,,,,&#xA;Package,,Package,InformationModel,NIEM 3.0::MPD,Package,InformationModel,Usage,SubsetSchemaDocument,to,NIEM 3.0 SubsetSchemaDocument,SubsetSchemaDocument,TRUE,TRUE,TRUE,,NIEM 3.0 InformationModel,0,,,,,&#xA;//,,,,,,,,,,,,,,,,,,,,,,&#xA;Class,ObjectType,Class,ObjectType,NIEM 3.0::PIM,,,Realization,Augments,to,NIEM 3.0 Augments,,TRUE,,TRUE,TRUE,NIEM 3.0 Augments,0,,,,,&#xA;Class,ObjectType,Class,,NIEM 3.0::PIM,,,Realization,Augments,to,NIEM 3.0 Augments,,TRUE,,TRUE,TRUE,NIEM 3.0 Augments,8,,,,,&#xA;Class,AugmentationType,Class,ObjectType,NIEM 3.0::PIM,,,Realization,Augments,to,NIEM 3.0 Augments,,TRUE,,TRUE,TRUE,NIEM 3.0 Augments,0,,,,,&#xA;Class,AugmentationType,Class,,NIEM 3.0::PIM,,,Realization,Augments,to,NIEM 3.0 Augments,,TRUE,,TRUE,TRUE,NIEM 3.0 Augments,8,,,,,&#xA;Class,,Class,ObjectType,NIEM 3.0::PIM,,,Realization,Augments,to,NIEM 3.0 Augments,,TRUE,,TRUE,,NIEM 3.0 Augments,4,,,,,&#xA;Class,,Class,,NIEM 3.0::PIM,,,Realization,Augments,to,NIEM 3.0 Augments,,TRUE,,TRUE,,NIEM 3.0 Augments,12,,,,,&#xA;Class,ObjectType,Class,ObjectType,NIEM 3.0::PIM,,,Realization,References,to,NIEM 3.0 References,,TRUE,,TRUE,TRUE,NIEM 3.0 References,0,,,,,&#xA;Class,ObjectType,Class,PropertyHolder,NIEM 3.0::PIM,,,Realization,References,to,NIEM 3.0 References,,TRUE,,TRUE,TRUE,NIEM 3.0 References,0,,,,,&#xA;Class,ObjectType,Class,,NIEM 3.0::PIM,,,Realization,References,to,NIEM 3.0 References,,TRUE,,TRUE,TRUE,NIEM 3.0 References,8,,,,,&#xA;Class,PropertyHolder,Class,ObjectType,NIEM 3.0::PIM,,,Realization,References,to,NIEM 3.0 References,,TRUE,,TRUE,TRUE,NIEM 3.0 References,0,,,,,&#xA;Class,PropertyHolder,Class,PropertyHolder,NIEM 3.0::PIM,,,Realization,References,to,NIEM 3.0 References,,TRUE,,TRUE,TRUE,NIEM 3.0 References,0,,,,,&#xA;Class,PropertyHolder,Class,,NIEM 3.0::PIM,,,Realization,References,to,NIEM 3.0 References,,TRUE,,TRUE,TRUE,NIEM 3.0 References,8,,,,,&#xA;Class,,Class,ObjectType,NIEM 3.0::PIM,,,Realization,References,to,NIEM 3.0 References,,TRUE,,TRUE,,NIEM 3.0 References,4,,,,,&#xA;Class,,Class,PropertyHolder,NIEM 3.0::PIM,,,Realization,References,to,NIEM 3.0 References,,TRUE,,TRUE,,NIEM 3.0 References,4,,,,,&#xA;Class,,Class,,NIEM 3.0::PIM,,,Realization,References,to,NIEM 3.0 References,,TRUE,,TRUE,,NIEM 3.0 References,12,,,,,&#xA;Class,ObjectType,Class,ObjectType,NIEM 3.0::PIM,,,Generalization,RolePlayedBy,to,NIEM 3.0 RolePlayedBy,,TRUE,,TRUE,TRUE,NIEM 3.0 RolePlayedBy,0,,,,,&#xA;Class,ObjectType,Class,,NIEM 3.0::PIM,,,Generalization,RolePlayedBy,to,NIEM 3.0 RolePlayedBy,,TRUE,,TRUE,TRUE,NIEM 3.0 RolePlayedBy,8,,,,,&#xA;Class,,Class,ObjectType,NIEM 3.0::PIM,,,Generalization,RolePlayedBy,to,NIEM 3.0 RolePlayedBy,,TRUE,,TRUE,,NIEM 3.0 RolePlayedBy,4,,,,,&#xA;Class,,Class,,NIEM 3.0::PIM,,,Generalization,RolePlayedBy,to,NIEM 3.0 RolePlayedBy,,TRUE,,TRUE,,NIEM 3.0 RolePlayedBy,12,,,,,&#xA;&#xA;"/>
+      </Content>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="9DC8791B-2" name="NIEM_3-0_MPD_Profile" version="1.0" notes="NIEM_3-0_MPD_Profile"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="ApplicationInfo" metatype="ApplicationInfo" notes="" cx="90" cy="70" generalizes="FileType" baseStereotypes="FileType">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+          </Stereotype>
+          <Stereotype name="BusinessRulesArtifact" metatype="BusinessRulesArtifact" notes="" cx="90" cy="70" generalizes="FileType" baseStereotypes="FileType">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+          </Stereotype>
+          <Stereotype name="ChangeInformationType" metatype="ChangeInformationType" notes="" cx="90" cy="70">
+            <AppliesTo>
+              <Apply type="Package"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="ChangeSummaryText" type="String" description="" unit="" values="" default=""/>
+              <Tag name="ChangeReasonText" type="String" description="" unit="" values="" default=""/>
+              <Tag name="ChangeFullDescriptionText" type="String" description="" unit="" values="" default=""/>
+              <Tag name="ChangeNCCTIssueNumber" type="int" description="" unit="" values="" default=""/>
+              <Tag name="ChangeCode" type="ChangeCodeSimpleType" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="ChangeLogType" metatype="ChangeLogType" notes="" cx="90" cy="70">
+            <AppliesTo>
+              <Apply type="Package"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="ChangeLogSummaryText" type="String" description="" unit="" values="" default=""/>
+              <Tag name="ChangeLogSubmitterName" type="String" description="" unit="" values="" default=""/>
+              <Tag name="ChangeLogApplicationInstructionsText" type="String" description="" unit="" values="" default=""/>
+              <Tag name="BaselineModelURL" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="ConformanceAssertion" metatype="ConformanceAssertion" notes="" cx="90" cy="70" generalizes="FileType" baseStereotypes="FileType">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+          </Stereotype>
+          <Stereotype name="ConformanceReport" metatype="ConformanceReport" notes="" cx="90" cy="70" generalizes="FileType" baseStereotypes="FileType">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+          </Stereotype>
+          <Stereotype name="Documentation" metatype="Documentation" notes="" cx="90" cy="70" generalizes="FileType" baseStereotypes="FileType">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+          </Stereotype>
+          <Stereotype name="ExtensionSchemaDocument" metatype="ExtensionSchemaDocument" notes="" cx="90" cy="70" generalizes="XMLSchemaDocument" baseStereotypes="XMLSchemaDocument">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+          </Stereotype>
+          <Stereotype name="ExternalSchemaDocument" metatype="ExternalSchemaDocument" notes="" cx="90" cy="70" generalizes="XMLSchemaDocument" baseStereotypes="XMLSchemaDocument">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+          </Stereotype>
+          <Stereotype name="File" metatype="File" notes="" cx="90" cy="70" generalizes="FileType" baseStereotypes="FileType">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+          </Stereotype>
+          <Stereotype name="FileType" metatype="FileType" notes="" cx="90" cy="70">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+            <AppliesTo>
+              <Apply type="Usage">
+                <Property name="direction" value="Source -&gt; Destination"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="descriptionText" type="String" description="" unit="" values="" default=""/>
+              <Tag name="externalURI" type="String" description="" unit="" values="" default=""/>
+              <Tag name="pathURI" type="String" description="" unit="" values="" default=""/>
+              <Tag name="mimeMediaTypeText" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="IEPSampleXMLDocument" metatype="IEPSampleXMLDocument" notes="" cx="90" cy="70" generalizes="FileType" baseStereotypes="FileType">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+          </Stereotype>
+          <Stereotype name="MPDChangeLog" metatype="MPDChangeLog" notes="" cx="90" cy="70" generalizes="FileType" baseStereotypes="FileType">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+          </Stereotype>
+          <Stereotype name="MPDRelationship" metatype="ModelPackageDescriptionRelationship" notes="" cx="90" cy="70">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+            <AppliesTo>
+              <Apply type="Dependency">
+                <Property name="direction" value="Source -&gt; Destination"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="descriptionText" type="String" description="" unit="" values="" default=""/>
+              <Tag name="relationshipCode" type="enumeration" description="" unit="" values="updates,conforms_to,version_of,specializes,generalizes,supersedes,deprecates,adapts,derives_from" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="ReadMe" metatype="ReadMe" notes="" cx="90" cy="70" generalizes="FileType" baseStereotypes="FileType">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+          </Stereotype>
+          <Stereotype name="ReferenceSchemaDocument" metatype="ReferenceSchemaDocument" notes="" cx="90" cy="70" generalizes="XMLSchemaDocument" baseStereotypes="XMLSchemaDocument">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+          </Stereotype>
+          <Stereotype name="RelaxNGSchema" metatype="RelaxNGSchema" notes="" cx="90" cy="70" generalizes="FileType" baseStereotypes="FileType">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+          </Stereotype>
+          <Stereotype name="RequiredFile" metatype="RequiredFile" notes="" cx="90" cy="70" generalizes="FileType" baseStereotypes="FileType">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+          </Stereotype>
+          <Stereotype name="SchematronSchema" metatype="SchematronSchema" notes="" cx="90" cy="70" generalizes="FileType" baseStereotypes="FileType">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+          </Stereotype>
+          <Stereotype name="SubsetSchemaDocument" metatype="SubsetSchemaDocument" notes="" cx="90" cy="70" generalizes="XMLSchemaDocument" baseStereotypes="XMLSchemaDocument">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+          </Stereotype>
+          <Stereotype name="Wantlist" metatype="Wantlist" notes="" cx="90" cy="70" generalizes="FileType" baseStereotypes="FileType">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+          </Stereotype>
+          <Stereotype name="XMLCatalog" metatype="XMLCatalog" notes="" cx="90" cy="70" generalizes="FileType" baseStereotypes="FileType">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+          </Stereotype>
+          <Stereotype name="XMLSchemaDocument" metatype="XMLSchemaDocument" notes="" cx="90" cy="70" generalizes="FileType" baseStereotypes="FileType">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+          </Stereotype>
+          <Stereotype name="qualifiedName" metatype="qualifiedName" notes="" cx="90" cy="70">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+            <AppliesTo>
+              <Apply type="Usage">
+                <Property name="direction" value="Source -&gt; Destination"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="306D7C3A-6" name="NIEM_3-0_PIM_Profile" version="1.0" notes="NIEM_3-0_PIM_Profile"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="Augments" metatype="Augments" notes="" cx="90" cy="70">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+            <AppliesTo>
+              <Apply type="Realisation">
+                <Property name="direction" value="Source -&gt; Destination"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="InformationModel" metatype="InformationModel" notes="" cx="90" cy="70" generalizes="NIEM_3-0_Common_Profile::Namespace" baseStereotypes="NIEM_3-0_Common_Profile::Namespace">
+            <TaggedValues>
+              <Tag name="defaultPurpose" type="enumeration" description="" unit="" values="subset,constraint,extension,incremental,reference,replacement,external" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="ReferenceName" notes="" cx="90" cy="70">
+            <AppliesTo>
+              <Apply type="Element"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="NIEMName" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="RoleOf" metatype="RoleOf" notes="" cx="90" cy="70">
+            <AppliesTo>
+              <Apply type="AssociationEnd"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="RolePlayedBy" metatype="RolePlayedBy" notes="" cx="90" cy="70">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+            <AppliesTo>
+              <Apply type="Generalization">
+                <Property name="direction" value="Source -&gt; Destination"/>
+                <Property name="isSubstitutable" value=""/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="Subsets" metatype="Subsets" notes="" cx="90" cy="70" generalizes="NIEM_3-0_Common_Profile::References" baseStereotypes="NIEM_3-0_Common_Profile::References">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="FC6AE821-E" name="NIEM_3-0_PSM_Profile" version="1.0" notes="NIEM_3-0_PSM_Profile"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="XSDAnyProperty" metatype="XSDAnyProperty" notes="" cx="90" cy="70">
+            <AppliesTo>
+              <Apply type="Part">
+                <Property name="isReference" value="false"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="processContents" type="enumeration" description="" unit="" values="strict,lax,skip" default="&quot;strict&quot;"/>
+              <Tag name="valueNamespace" type="String" description="" unit="" values="" default="&quot;##any&quot;"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="XSDDeclaration" metatype="XSDDeclaration" notes="" cx="90" cy="70" generalizes="NIEM_3-0_Common_Profile::References" baseStereotypes="NIEM_3-0_Common_Profile::References">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+          </Stereotype>
+          <Stereotype name="XSDProperty" metatype="XSDProperty" notes="" cx="90" cy="70">
+            <AppliesTo>
+              <Apply type="Part">
+                <Property name="isReference" value="false"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="kind" type="enumeration" description="" unit="" values="element,attribute" default="element"/>
+              <Tag name="nillable" type="boolean" description="" unit="" values="true,false" default="false"/>
+              <Tag name="fixed" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="XSDRepresentationRestriction" metatype="XSDRepresentationRestriction" notes="" cx="90" cy="70">
+            <AppliesTo>
+              <Apply type="DataType">
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="whiteSpace" type="enumeration" description="" unit="" values="replace,collapse,preserve" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="XSDSimpleContent" metatype="XSDSimpleContent" notes="" cx="90" cy="70">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+              PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+              XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+              nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+              AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+              AAAA
+            </Image>
+            <AppliesTo>
+              <Apply type="Realisation">
+                <Property name="direction" value="Source -&gt; Destination"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UMLProfiles>
+  <TaggedValueTypes>
+    <RefData version="1.0" exporter="EA.25">
+      <DataSet name="Property Types" table="t_propertytypes" filter="Property='#Property#'">
+        <DataRow>
+          <Column name="Property" value="pattern"/>
+          <Column name="Description" value="Pattern"/>
+          <Column name="Notes" value="Type=Memo;BaseStereotype=ValueRestriction;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="NIEMName"/>
+          <Column name="Description" value="NIEM name"/>
+          <Column name="Notes" value="Type=String;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="KeywordText"/>
+          <Column name="Description" value="Keyword text"/>
+          <Column name="Notes" value="Type=Memo;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="DomainText"/>
+          <Column name="Description" value="Domain text"/>
+          <Column name="Notes" value="Type=Memo;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="PurposeText"/>
+          <Column name="Description" value="Purpose text"/>
+          <Column name="Notes" value="Type=Memo;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="ExchangePatternText"/>
+          <Column name="Description" value="Exchange pattern text"/>
+          <Column name="Notes" value="Type=Memo;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="ExchangePartnerName"/>
+          <Column name="Description" value="Exchange partner name"/>
+          <Column name="Notes" value="Type=Memo;"/>
+        </DataRow>
+      </DataSet>
+    </RefData>
+  </TaggedValueTypes>
+  <DiagramProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="963E1A67-3" name="NIEM 3.0" version="1.0" notes="Diagrams for NIEM 3.x and 4.x  (The same NIEM-UML profile is used for both NIEM 3.x and NIEM 4.x)"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="MPD" alias="NIEM MPD Diagram" notes="Model Package Description diagram for NIEM 3 or NIEM 4." cx="90" cy="70">
+            <AppliesTo>
+              <Apply type="Diagram_Logical">
+                <Property name="alias" value="NIEM MPD"/>
+                <Property name="toolbox" value="NIEM 3.0 MPD"/>
+                <Property name="diagramID" value="MPD"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="PIM" alias="NIEM PIM Diagram" notes="PIM Diagram for NIEM 3 or NIEM 4." cx="90" cy="70">
+            <AppliesTo>
+              <Apply type="Diagram_Logical">
+                <Property name="alias" value="NIEM PIM"/>
+                <Property name="toolbox" value="NIEM 3.0 PIM"/>
+                <Property name="diagramID" value="PIM"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="PSM" alias="NIEM PSM Diagram" notes="PSM Diagram for NIEM 3 or NIEM 4." cx="90" cy="70">
+            <AppliesTo>
+              <Apply type="Diagram_Logical">
+                <Property name="alias" value="NIEM PSM"/>
+                <Property name="toolbox" value="NIEM 3.0 PSM"/>
+                <Property name="diagramID" value="PSM"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </DiagramProfile>
+  <UIToolboxes>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="4BF48FF5-2" name="NIEM 3.0 MPD" version="1.0" notes="NIEM 3.0 MPD"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="NIEM 3.0 MPD Relationships" notes="" cx="418" cy="88">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="UML::Dependency" type="" description="" unit="" values="" default="Dependency"/>
+              <Tag name="NIEM_3-0_MPD_Profile::MPDRelationship(UML::Dependency)" type="" description="" unit="" values="" default="MPDRelationship"/>
+              <Tag name="UML::Usage" type="" description="" unit="" values="" default="Usage"/>
+              <Tag name="NIEM_3-0_MPD_Profile::qualifiedName(UML::Usage)" type="" description="" unit="" values="" default="QualifiedName"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="NIEM 3.0 MPD File Type Usage" notes="" cx="472" cy="231">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="NIEM_3-0_MPD_Profile::FileType(UML::Usage))" type="" description="" unit="" values="" default="FileType"/>
+              <Tag name="NIEM_3-0_MPD_Profile::ApplicationInfo(UML::Usage)" type="" description="" unit="" values="" default="ApplicationInfo"/>
+              <Tag name="NIEM_3-0_MPD_Profile::BusinessRulesArtifact(UML::Usage)" type="" description="" unit="" values="" default="BusinessRulesArtifact"/>
+              <Tag name="NIEM_3-0_MPD_Profile::ConformanceAssertion(UML::Usage)" type="" description="" unit="" values="" default="ConformanceAssertion"/>
+              <Tag name="NIEM_3-0_MPD_Profile::ConformanceReport(UML::Usage)" type="" description="" unit="" values="" default="ConformanceReport"/>
+              <Tag name="NIEM_3-0_MPD_Profile::Documentation(UML::Usage)" type="" description="" unit="" values="" default="Documentation"/>
+              <Tag name="NIEM_3-0_MPD_Profile::File(UML::Usage)" type="" description="" unit="" values="" default="File"/>
+              <Tag name="NIEM_3-0_MPD_Profile::IEPSampleXMLDocument(UML::Usage))" type="" description="" unit="" values="" default="IEPSampleXMLDocument"/>
+              <Tag name="NIEM_3-0_MPD_Profile::MPDChangeLog(UML::Usage)" type="" description="" unit="" values="" default="MPDChangeLog"/>
+              <Tag name="NIEM_3-0_MPD_Profile::ReadMe(UML::Usage)" type="" description="" unit="" values="" default="ReadMe"/>
+              <Tag name="NIEM_3-0_MPD_Profile::RelaxNGSchema(UML::Usage)" type="" description="" unit="" values="" default="RelaxNGSchema"/>
+              <Tag name="NIEM_3-0_MPD_Profile::RequiredFile(UML::Usage)" type="" description="" unit="" values="" default="RequiredFile"/>
+              <Tag name="NIEM_3-0_MPD_Profile::SchematronSchema(UML::Usage)" type="" description="" unit="" values="" default="SchematronSchema"/>
+              <Tag name="NIEM_3-0_MPD_Profile::Wantlist(UML::Usage)" type="" description="" unit="" values="" default="WantList"/>
+              <Tag name="NIEM_3-0_MPD_Profile::XMLCatalog(UML::Usage)" type="" description="" unit="" values="" default="XMLCatalog"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="NIEM 3.0 MPD Schema Document Usage" notes="" cx="459" cy="101">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="NIEM_3-0_MPD_Profile::XMLSchemaDocument(UML::Usage)" type="" description="" unit="" values="" default="XMLSchemaDocument"/>
+              <Tag name="NIEM_3-0_MPD_Profile::ExtensionSchemaDocument(UML::Usage)" type="" description="" unit="" values="" default="ExtensionSchemaDocument"/>
+              <Tag name="NIEM_3-0_MPD_Profile::ExternalSchemaDocument(UML::Usage)" type="" description="" unit="" values="" default="ExternalSchemaDocument"/>
+              <Tag name="NIEM_3-0_MPD_Profile::ReferenceSchemaDocument(UML::Usage)" type="" description="" unit="" values="" default="ReferenceSchemaDocument"/>
+              <Tag name="NIEM_3-0_MPD_Profile::SubsetSchemaDocument(UML::Usage)" type="" description="" unit="" values="" default="SubsetSchemaDocument"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="C41CD6EE-F" name="NIEM 3.0 PIM" version="1.0" notes="NIEM 3.0 PIM"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="NIEM 3.0 PIM Profile" notes="" cx="399" cy="127">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="UML::Association" type="" description="" unit="" values="" default="Association"/>
+              <Tag name="UML::AssociationClass" type="" description="" unit="" values="" default="AssociationClass"/>
+              <Tag name="NIEM_3-0_PIM_Profile::Augments(UML::Realization)" type="" description="" unit="" values="" default="Augments"/>
+              <Tag name="NIEM_3-0_PIM_Profile::InformationModel(UML::Package)" type="" description="" unit="" values="" default="InformationModel"/>
+              <Tag name="NIEM_3-0_PIM_Profile::RoleOf(UML::AssociationEnd)" type="" description="" unit="" values="" default="RoleOf"/>
+              <Tag name="NIEM_3-0_PIM_Profile::RolePlayedBy(UML::Generalization)" type="" description="" unit="" values="" default="RolePlayedBy"/>
+              <Tag name="NIEM_3-0_PIM_Profile::Subsets(UML::Realization)" type="" description="" unit="" values="" default="Subsets"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="NIEM 3.0 Common Profile" notes="" cx="446" cy="361">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="NIEM_3-0_Common_Profile::AdapterType(UML::Class)" type="" description="" unit="" values="" default="AdapterType"/>
+              <Tag name="NIEM_3-0_Common_Profile::AssociationType(UML::Class)" type="" description="" unit="" values="" default="AssociationType"/>
+              <Tag name="NIEM_3-0_Common_Profile::AssociationType(UML::AssociationClass)" type="" description="" unit="" values="" default="AssociationType"/>
+              <Tag name="NIEM_3-0_Common_Profile::AugmentationType(UML::Class)" type="" description="" unit="" values="" default="AugmentationType"/>
+              <Tag name="NIEM_3-0_Common_Profile::Choice(UML::Class)" type="" description="" unit="" values="" default="Choice"/>
+              <Tag name="NIEM_3-0_Common_Profile::Documentation(UML::Note)" type="" description="" unit="" values="" default="Documentation"/>
+              <Tag name="UML::Generalization" type="" description="" unit="" values="" default="Generalization"/>
+              <Tag name="NIEM_3-0_Common_Profile::List(UML::DataType)" type="" description="" unit="" values="" default="List"/>
+              <Tag name="NIEM_3-0_Common_Profile::LocalVocabulary(UML::Enumeration)" type="" description="" unit="" values="" default="LocalVocabulary"/>
+              <Tag name="NIEM_3-0_Common_Profile::LocalTerm(UML::Attribute)" type="" description="" unit="" values="" default="LocalTerm"/>
+              <Tag name="NIEM_3-0_Common_Profile::MetadataApplication(UML::Usage)" type="" description="" unit="" values="" default="MetadataApplication"/>
+              <Tag name="NIEM_3-0_Common_Profile::MetadataType(UML::Class)" type="" description="" unit="" values="" default="MetadataType"/>
+              <Tag name="NIEM_3-0_Common_Profile::Namespace(UML::Package)" type="" description="" unit="" values="" default="Namespace"/>
+              <Tag name="NIEM_3-0_Common_Profile::NIEMType(UML::Class)" type="" description="" unit="" values="" default="NIEMType"/>
+              <Tag name="NIEM_3-0_Common_Profile::ObjectType(UML::Class)" type="" description="" unit="" values="" default="ObjectType"/>
+              <Tag name="UML::PrimitiveType" type="" description="" unit="" values="" default="PrimitiveType"/>
+              <Tag name="UML::Part" type="" description="" unit="" values="" default="Property"/>
+              <Tag name="NIEM_3-0_Common_Profile::PropertyHolder(UML::Class)" type="" description="" unit="" values="" default="PropertyHolder"/>
+              <Tag name="NIEM_3-0_Common_Profile::References(UML::Realization)" type="" description="" unit="" values="" default="References"/>
+              <Tag name="NIEM_3-0_Common_Profile::Representation(UML::Attribute)" type="" description="" unit="" values="" default="Representation"/>
+              <Tag name="NIEM_3-0_Common_Profile::Restriction(UML::Realization)" type="" description="" unit="" values="" default="Restriction"/>
+              <Tag name="NIEM_3-0_Common_Profile::Union(UML::DataType)" type="" description="" unit="" values="" default="Union"/>
+              <Tag name="NIEM_3-0_Common_Profile::UnionOf(UML::Usage)" type="" description="" unit="" values="" default="UnionOf"/>
+              <Tag name="NIEM_3-0_Common_Profile::ValueRestriction(UML::DataType)" type="" description="" unit="" values="" default="ValueRestriction"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="0CE4AE2D-0" name="NIEM 3.0 PSM" version="1.0" notes="NIEM 3.0 PSM"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="NIEM 3.0 PSM Profile" notes="" cx="468" cy="101">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="NIEM_3-0_PSM_Profile::XSDAnyProperty(UML::Part)" type="" description="" unit="" values="" default="XSDAnyProperty"/>
+              <Tag name="NIEM_3-0_PSM_Profile::XSDDeclaration(UML::Realization)" type="" description="" unit="" values="" default="XSDDeclaration"/>
+              <Tag name="NIEM_3-0_PSM_Profile::XSDProperty(UML::Part)" type="" description="" unit="" values="" default="XSDProperty"/>
+              <Tag name="NIEM_3-0_PSM_Profile::XSDRepresentationRestriction(UML::DataType)" type="" description="" unit="" values="" default="XSDRepresentationRestriction"/>
+              <Tag name="NIEM_3-0_PSM_Profile::XSDSimpleContent(UML::Realization)" type="" description="" unit="" values="" default="XSDSimpleContent"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="NIEM 3.0 Common Profile" notes="" cx="456" cy="348">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="NIEM_3-0_Common_Profile::AdapterType(UML::Class)" type="" description="" unit="" values="" default="AdapterType"/>
+              <Tag name="NIEM_3-0_Common_Profile::AssociationType(UML::Class)" type="" description="" unit="" values="" default="AssociationType"/>
+              <Tag name="NIEM_3-0_Common_Profile::AssociationType(UML::AssociationClass)" type="" description="" unit="" values="" default="AssociationType"/>
+              <Tag name="NIEM_3-0_Common_Profile::AugmentationType(UML::Class)" type="" description="" unit="" values="" default="AugmentationType"/>
+              <Tag name="NIEM_3-0_Common_Profile::Choice(UML::Class)" type="" description="" unit="" values="" default="Choice"/>
+              <Tag name="NIEM_3-0_Common_Profile::Documentation(UML::Note)" type="" description="" unit="" values="" default="Documentation"/>
+              <Tag name="UML::Generalization" type="" description="" unit="" values="" default="Generalization"/>
+              <Tag name="NIEM_3-0_Common_Profile::List(UML::DataType)" type="" description="" unit="" values="" default="List"/>
+              <Tag name="NIEM_3-0_Common_Profile::LocalVocabulary(UML::Enumeration)" type="" description="" unit="" values="" default="LocalVocabulary"/>
+              <Tag name="NIEM_3-0_Common_Profile::LocalTerm(UML::Attribute)" type="" description="" unit="" values="" default="LocalTerm"/>
+              <Tag name="NIEM_3-0_Common_Profile::MetadataApplication(UML::Usage)" type="" description="" unit="" values="" default="MetadataApplication"/>
+              <Tag name="NIEM_3-0_Common_Profile::MetadataType(UML::Class)" type="" description="" unit="" values="" default="MetadataType"/>
+              <Tag name="NIEM_3-0_Common_Profile::Namespace(UML::Package)" type="" description="" unit="" values="" default="Namespace"/>
+              <Tag name="NIEM_3-0_Common_Profile::NIEMType(UML::Class)" type="" description="" unit="" values="" default="NIEMType"/>
+              <Tag name="NIEM_3-0_Common_Profile::ObjectType(UML::Class)" type="" description="" unit="" values="" default="ObjectType"/>
+              <Tag name="UML::PrimitiveType" type="" description="" unit="" values="" default="PrimitiveType"/>
+              <Tag name="UML::Part" type="" description="" unit="" values="" default="Property"/>
+              <Tag name="NIEM_3-0_Common_Profile::PropertyHolder(UML::Class)" type="" description="" unit="" values="" default="PropertyHolder"/>
+              <Tag name="NIEM_3-0_Common_Profile::References(UML::Realization)" type="" description="" unit="" values="" default="References"/>
+              <Tag name="NIEM_3-0_Common_Profile::Representation(UML::Attribute)" type="" description="" unit="" values="" default="Representation"/>
+              <Tag name="NIEM_3-0_Common_Profile::Restriction(UML::Realization)" type="" description="" unit="" values="" default="Restriction"/>
+              <Tag name="NIEM_3-0_Common_Profile::Union(UML::DataType)" type="" description="" unit="" values="" default="Union"/>
+              <Tag name="NIEM_3-0_Common_Profile::UnionOf(UML::Usage)" type="" description="" unit="" values="" default="UnionOf"/>
+              <Tag name="NIEM_3-0_Common_Profile::ValueRestriction(UML::DataType)" type="" description="" unit="" values="" default="ValueRestriction"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UIToolboxes>
+  <ModelTemplates>
+    <Model name="NIEM MPD Types" groupName="NIEM Common" description="Import the set of NIEM MPD Types for creating Instance Specifications in your NIEM 3 and NIEM 4 MDP models." location="NIEM MPD Types.xml" isFramework="true" default="no" icon="29" filter=""/>
+    <Model name="NIEM 3.0 Reference Model (Downloaded)" groupName="NIEM 3" description="Download the complete NIEM 3.0 reference model with all standard Domains, ready for creating an IEPD." location="http://sparxcloud.com/modelpatterns/ras/xmi/NIEM 3/{AD1EBD3B-F68F-4d16-AB46-E35AB1D56F42}/1.0/" isFramework="true" default="no" icon="29" filter=""/>
+    <Model name="NIEM 3.1 Reference Model (Downloaded)" groupName="NIEM 3" description="Download the complete NIEM 3.1 reference model with all standard Domains, ready for creating an IEPD." location="http://sparxcloud.com/modelpatterns/ras/xmi/NIEM 3/{691C09EA-03F9-43f4-975C-CE58A52D4EC7}/1.0/" isFramework="true" default="no" icon="29" filter=""/>
+    <Model name="NIEM 3.2 Reference Model (Downloaded)" groupName="NIEM 3" description="Download the complete NIEM 3.2 reference model with all standard Domains, ready for creating an IEPD." location="http://sparxcloud.com/modelpatterns/ras/xmi/NIEM 3/{AB839BAA-56A8-41ec-B7DA-2E78D3829D4C}/1.0/" isFramework="true" default="no" icon="29" filter=""/>
+    <Model name="NIEM 3 IEPD Starter Model (Downloaded)" groupName="NIEM 3" description="Download the NIEM 3 Starter Model, to use as a starting point for creating your own NIEM 3 IEPD." location="http://sparxcloud.com/modelpatterns/ras/xmi/NIEM 3/{715C795D-82E0-4879-978C-7576FFE94503}/2.0/" default="no" icon="29" filter=""/>
+    <Model name="NIEM 4.0 Reference Model (Downloaded)" groupName="NIEM 4" description="Download the complete NIEM 4.0 reference model with all standard Domains and Codes. Create your NIEM subsets from this Reference Model." location="http://sparxcloud.com/modelpatterns/ras/xmi/NIEM 3/{704D45AC-472E-4726-8B26-AEF9B3B58AD0}/1.0/" isFramework="true" default="no" icon="29" filter=""/>
+    <Model name="NIEM 4.1 Reference Model (Downloaded)" groupName="NIEM 4" description="Download the complete NIEM 4.1 reference model with all standard Domains and Codes. Create your NIEM subsets from this Reference Model." location="http://sparxcloud.com/modelpatterns/ras/xmi/NIEM 3/{587470FE-0BE0-4d56-95E6-6AFC30336E9D}/1.0/" isFramework="true" default="no" icon="29" filter=""/>
+    <Model name="NIEM 4 IEPD Starter Model" groupName="NIEM 4" description="Import the NIEM 4 Starter Model, to use as a starting point for creating your own NIEM 4 IEPD." location="NIEM 4 Starter Model.xml" default="no" icon="29" filter=""/>
+    <Model name="NIEM 5.0 Reference Model (Zipped)" groupName="NIEM 5" description="Import the complete NIEM 5.0 reference model with all standard Domains and Codes. Create your NIEM subsets from this Reference Model." location="NIEM 5.0 Reference Model.zip" isFramework="true" default="no" icon="29" filter=""/>
+    <Model name="NIEM 5 IEPD Types" groupName="NIEM 5" description="Import the set of NIEM IEPD Data Types for creating Instance Specifications in your NIEM 5 IEDP models." location="NIEM 5 IEPD Types.xml" isFramework="true" default="no" icon="29" filter=""/>
+    <Model name="NIEM 5 IEPD Starter Model" groupName="NIEM 5" description="Import the NIEM 5 Starter Model, to use as a starting point for creating your own NIEM 5 IEPD." location="NIEM 5 Starter Model.xml" default="no" icon="29" filter=""/>
+  </ModelTemplates>
+</MDG.Technology>

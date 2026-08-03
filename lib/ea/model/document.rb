@@ -13,7 +13,8 @@ module Ea
         "data_type" => "Ea::Model::DataType",
         "primitive_type" => "Ea::Model::PrimitiveType",
         "enumeration" => "Ea::Model::Enumeration",
-        "interface" => "Ea::Model::Interface"
+        "interface" => "Ea::Model::Interface",
+        "signal" => "Ea::Model::Signal"
       }
     }.freeze
 
@@ -43,24 +44,64 @@ module Ea
       attribute :relationships, Relationship, collection: true, initialize_empty: true,
                                               polymorphic: RELATIONSHIP_POLYMORPHIC_MAP
       attribute :stereotypes, Stereotype, collection: true, initialize_empty: true
+      attribute :notes, Note, collection: true, initialize_empty: true
+      attribute :instance_specifications, InstanceSpecification, collection: true,
+                                          initialize_empty: true
       attribute :diagrams, Diagram, collection: true, initialize_empty: true
 
       # Flat lookup indexes, built lazily by consumers. Not
       # serialized — they're derived from the element collections.
+      #
+      # EA XMI stores packages with `EAPK_<guid>` ids inside the
+      # uml:Model hierarchy, but diagram element `subject=` refs use
+      # `EAID_<guid>`. We alias packages under both prefixes so
+      # `model_element_ref` lookups from diagram elements resolve.
       def index_by_id
         @index_by_id ||= begin
           idx = {}
-          packages.each { |p| idx[p.id] = p }
+          packages.each do |p|
+            idx[p.id] = p
+            alias_eaid_for_package(idx, p)
+          end
           classifiers.each { |c| idx[c.id] = c }
           relationships.each { |r| idx[r.id] = r }
           stereotypes.each { |s| idx[s.id] = s }
+          instance_specifications.each { |i| idx[i.id] = i }
           diagrams.each { |d| idx[d.id] = d }
+          notes.each { |n| idx[n.id] = n }
           diagrams.each do |d|
             d.elements.each { |e| idx[e.id] = e }
             d.connectors.each { |c| idx[c.id] = c }
           end
           idx
         end
+      end
+
+      # Flat lookup of Properties by id across all classifiers. Built
+      # lazily; not serialized. Used by connector label rendering to
+      # resolve association-end properties in O(1) rather than
+      # walking every classifier's property list per lookup.
+      def property_index
+        @property_index ||= begin
+          idx = {}
+          classifiers.each do |cls|
+            (cls.properties || []).each { |p| idx[p.id] = p }
+          end
+          idx
+        end
+      end
+
+      # O(1) Property lookup by id. Returns nil when not found.
+      def property_by_id(id)
+        return nil unless id
+
+        property_index[id]
+      end
+
+      def alias_eaid_for_package(idx, package)
+        return unless package.id&.start_with?("EAPK_")
+
+        idx["EAID_#{package.id[5..]}"] = package
       end
 
       def root_packages
@@ -90,6 +131,7 @@ module Ea
 
       def reset_indexes
         @index_by_id = nil
+        @property_index = nil
       end
 
       json do
@@ -100,6 +142,9 @@ module Ea
         map "relationships", to: :relationships, render_empty: true,
                              polymorphic: RELATIONSHIP_POLYMORPHIC_MAP
         map "stereotypes", to: :stereotypes, render_empty: true
+        map "notes", to: :notes, render_empty: true
+        map "instanceSpecifications", to: :instance_specifications,
+            render_empty: true
         map "diagrams", to: :diagrams, render_empty: true
       end
     end

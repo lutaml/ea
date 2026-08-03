@@ -1,0 +1,556 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<MDG.Technology version="1.0">
+	<Documentation id="NIEM" name="NIEM 2.1" version="1.0" notes="National Information Exchange Model" supportURI="support@SparxSystems.com"/>
+	<UMLProfiles>
+		<UMLProfile profiletype="uml2">
+			<Documentation id="7DE4F46B-2" name="NIEM_Common_Profile" version="1.0" notes="NIEM_Common_Profile"/>
+			<Content>
+				<Stereotypes>
+					<Stereotype name="AdapterType" metatype="AdapterType" notes="" generalizes="NIEMType" baseStereotypes="NIEMType"/>
+					<Stereotype name="Application" notes="" isAbstract="true">
+						<AppliesTo>
+							<Apply type="Usage">
+								<Property name="direction" value="Source -&gt; Destination"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="AssociationType" metatype="AssociationType" notes="" generalizes="NIEMType" baseStereotypes="NIEMType">
+						<AppliesTo>
+							<Apply type="AssociationClass">
+								<Property name="direction" value="Unspecified"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="AugmentationApplication" metatype="AugmentationApplication" notes="" generalizes="Application" baseStereotypes="Application">
+						<Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+AAAA</Image>
+					</Stereotype>
+					<Stereotype name="AugmentationType" metatype="AugmentationType" notes="" generalizes="NIEMType" baseStereotypes="NIEMType"/>
+					<Stereotype name="Choice" metatype="Choice" notes="">
+						<AppliesTo>
+							<Apply type="Class">
+								<Property name="isActive" value=""/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="Documentation" metatype="Documentation" notes="">
+						<AppliesTo>
+							<Apply type="Note"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="List" metatype="List" notes="">
+						<AppliesTo>
+							<Apply type="DataType"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="MetadataApplication" metatype="MetadataApplication" notes="" generalizes="Application" baseStereotypes="Application">
+						<Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+AAAA</Image>
+					</Stereotype>
+					<Stereotype name="MetadataType" metatype="MetadataType" notes="" generalizes="NIEMType" baseStereotypes="NIEMType"/>
+					<Stereotype name="NIEMType" notes="" isAbstract="true">
+						<AppliesTo>
+							<Apply type="Class">
+								<Property name="isActive" value=""/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="Namespace" metatype="Namespace" notes="">
+						<AppliesTo>
+							<Apply type="Package">
+								<Property name="_Tag" value="1"/>
+								<Property name="URI" value=""/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="targetNamespace" type="String" description="" unit="" values="" default=""/>
+							<Tag name="isConformant" type="boolean" description="" unit="" values="true,false" default="true"/>
+							<Tag name="version" type="String" description="" unit="" values="" default="1"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="ObjectType" metatype="ObjectType" notes="" generalizes="NIEMType" baseStereotypes="NIEMType"/>
+					<Stereotype name="PropertyHolder" metatype="PropertyHolder" notes="">
+						<AppliesTo>
+							<Apply type="Class">
+								<Property name="isActive" value=""/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="References" metatype="References" notes="">
+						<AppliesTo>
+							<Apply type="Realisation">
+								<Property name="direction" value="Source -&gt; Destination"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="Restriction" metatype="Restriction" notes="">
+						<AppliesTo>
+							<Apply type="Realisation">
+								<Property name="direction" value="Source -&gt; Destination"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="Union" metatype="Union" notes="">
+						<AppliesTo>
+							<Apply type="DataType"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="UnionOf" metatype="UnionOf" notes="">
+						<Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+AAAA</Image>
+						<AppliesTo>
+							<Apply type="Usage">
+								<Property name="direction" value="Source -&gt; Destination"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="ValueRestriction" metatype="ValueRestriction" notes="">
+						<AppliesTo>
+							<Apply type="DataType">
+								<Property name="_Tag" value="1"/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="fractionDigits" type="Integer" description="" unit="" values="" default=""/>
+							<Tag name="length" type="Integer" description="" unit="" values="" default=""/>
+							<Tag name="maxExclusive" type="String" description="" unit="" values="" default=""/>
+							<Tag name="maxInclusive" type="String" description="" unit="" values="" default=""/>
+							<Tag name="maxLength" type="Integer" description="" unit="" values="" default=""/>
+							<Tag name="minExclusive" type="String" description="" unit="" values="" default=""/>
+							<Tag name="minInclusive" type="String" description="" unit="" values="" default=""/>
+							<Tag name="minLength" type="Integer" description="" unit="" values="" default=""/>
+							<Tag name="pattern" type="pattern" description="" unit="" values="" default=""/>
+							<Tag name="totalDigits" type="Integer" description="" unit="" values="" default=""/>
+						</TaggedValues>
+					</Stereotype>
+				</Stereotypes>
+				<TaggedValueTypes/>
+				<QuickLink data="//Source Element Type,Source ST filter,Target Element Type,Target ST Filter,Diagram Filter,New Element Type,New Element ST,New Link Type,New Link ST,New Link Direction,New Link Caption,New Link &amp; Element Caption,Create Link,Create Element,Disallow Self connector,Exclusive to ST Filter + No inherit from metatype,Menu Group,Complexity Level,Target Must Be Parent,Embed element,Preceeds Separator LEAF,Preceeds Separator GROUP,DUMMZ COLUMN&#xA;Class,,Class,,NIEM::PIM;NIEM::PSM;NIEM::MPD;,Class,,Realization,References,to,References,References -&gt; Class,TRUE,TRUE,,,NIEM,0,,,,,&#xA;Part,,Part,,NIEM::PIM;NIEM::PSM;NIEM::MPD;,Part,,Realization,References,to,References,References -&gt; Property,TRUE,TRUE,,,NIEM,0,,,,,&#xA;Package,,Package,,NIEM::PIM;NIEM::PSM;NIEM::MPD;,Package,,Realization,References,to,References,References -&gt; Package,TRUE,TRUE,,,NIEM,0,,,,,&#xA;Class,,Class,,NIEM::PIM;NIEM::PSM;NIEM::MPD;,Class,,Realization,Restriction,to,Restriction,Restriction -&gt; Class,TRUE,TRUE,,,NIEM,0,,,,,&#xA;DataType,,DataType,,NIEM::PIM;NIEM::PSM;NIEM::MPD;,DataType,,Realization,Restriction,to,Restriction,Restriction -&gt; DataType,TRUE,TRUE,,,NIEM,0,,,,,&#xA;DataType,Union,DataType,,NIEM::PIM;NIEM::PSM;NIEM::MPD;,DataType,,Usage,UnionOf,to,UnionOf,UnionOf -&gt; DataType,TRUE,TRUE,,,NIEM,0,,,,,&#xA;Part,,Class,,NIEM::PIM;NIEM::PSM;NIEM::MPD;,Class,,Usage,AugmentationApplication,to,AugmentationApplication,AugmentationApplication -&gt; Class,TRUE,TRUE,,,NIEM,0,,,,,&#xA;Class,MetadataType,Class,,NIEM::PIM;NIEM::PSM;NIEM::MPD;,Class,,Usage,MetadataApplication,to,MetadataApplication,MetadataApplication -&gt; Class,TRUE,TRUE,,,NIEM,0,,,,,&#xA;Class,,Class,,NIEM::PIM;,Class,,Generalization,RolePlayedBy,to,RolePlayedBy,RolePlayedBy -&gt; Class,TRUE,TRUE,,,NIEM,0,,,,,&#xA;Class,,Class,,NIEM::PIM;,Class,,Generalization,Augments,to,Augments,Augments -&gt; Class,TRUE,TRUE,,,NIEM,0,,,,,&#xA;Part,XSDProperty,Part,XSDProperty,NIEM::PSM;,Part,XSDProperty,Realization,XSDDeclaration,to,XSDDeclaration,XSDDeclaration -&gt; XSDProperty,TRUE,TRUE,,,NIEM,0,,,,,&#xA;Part,XSDProperty,Package,Namespace,NIEM::PSM;,Package,Namespace,Realization,XSDDeclaration,to,XSDDeclaration,XSDDeclaration -&gt; Namespace,TRUE,TRUE,,,NIEM,0,,,,,&#xA;Class,,DataType,,NIEM::PSM;,DataType,,Realization,XSDSimpleContent,to,XSDSimpleContent,XSDSimpleContent -&gt; DataType,TRUE,TRUE,,,NIEM,0,,,,,&#xA;Component,ModelPackageDescription,Package,Namespace,NIEM::MPD;,Package,Namespace,Usage,ModelPackageDescriptionFile,to,ModelPackageDescriptionFile,ModelPackageDescriptionFile -&gt; Namespace,TRUE,TRUE,,,NIEM,0,,,,,&#xA;Component,ModelPackageDescriptionFileSet,Package,Namespace,NIEM::MPD;,Package,Namespace,Usage,ModelPackageDescriptionFile,to,ModelPackageDescriptionFile,ModelPackageDescriptionFile -&gt; Namespace,TRUE,TRUE,,,NIEM,0,,,,,&#xA;&#xA;"/>
+			</Content>
+		</UMLProfile>
+		<UMLProfile profiletype="uml2">
+			<Documentation id="DF7CC03B-B" name="Model_Package_Description_Profile" version="1.0" notes="Model_Package_Description_Profile"/>
+			<Content>
+				<Stereotypes>
+					<Stereotype name="ModelPackageDescription" metatype="ModelPackageDescription" notes="">
+						<AppliesTo>
+							<Apply type="Component">
+								<Property name="_Tag" value="1"/>
+								<Property name="isIndirectlyInstantiated" value="true"/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="mpdVersionID" type="String" description="" unit="" values="" default=""/>
+							<Tag name="mpdBaseURI" type="String" description="" unit="" values="" default=""/>
+							<Tag name="mpdClassCode" type="enumeration" description="" unit="" values="eiem,iepd,core_update,release,domain_update" default=""/>
+							<Tag name="descriptionText" type="String" description="" unit="" values="" default=""/>
+							<Tag name="SecurityMarkingText" type="String" description="" unit="" values="" default=""/>
+							<Tag name="CreationDate" type="String" description="" unit="" values="" default=""/>
+							<Tag name="LastRevisionDate" type="String" description="" unit="" values="" default=""/>
+							<Tag name="NextRevisionDate" type="String" description="" unit="" values="" default=""/>
+							<Tag name="StatusText" type="String" description="" unit="" values="" default=""/>
+							<Tag name="KeywordText" type="KeywordText" description="" unit="" values="" default=""/>
+							<Tag name="DomainText" type="DomainText" description="" unit="" values="" default=""/>
+							<Tag name="PurposeText" type="PurposeText" description="" unit="" values="" default=""/>
+							<Tag name="ExchangePatternText" type="ExchangePatternText" description="" unit="" values="" default=""/>
+							<Tag name="ExchangePartnerName" type="ExchangePartnerName" description="" unit="" values="" default=""/>
+							<Tag name="ASName" type="String" description="" unit="" values="" default=""/>
+							<Tag name="ASAddressText" type="String" description="" unit="" values="" default=""/>
+							<Tag name="ASWebSiteURL" type="String" description="" unit="" values="" default=""/>
+							<Tag name="POC" type="structured" description="" unit="" values="" default="">
+								<Property name="POCTelephone" type="String" description="" unit="" values="" default=""/>
+								<Property name="POCName" type="String" description="" unit="" values="" default=""/>
+								<Property name="POCEmail" type="String" description="" unit="" values="" default=""/>
+							</Tag>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="ModelPackageDescriptionFile" metatype="ModelPackageDescriptionFile" notes="">
+						<Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAC5VQ0M6r9UzhwAAANoAAAAHABEAc3RyLmRhdFVUDQAH40lNUuNJTVLjSU1S
+PY5RDoJADETnVxPvsNEP8MsDeBoQEogLa3CNIcQTeQQu52s1pmk7O51pN6pSrVZRQYN6NUTk
+XSspEwk2/jU7bbV43ehEBOcvzB+6g4KeXht8owr8xlRgQ7YtuM40WZ3398+7gq/0GUfSxI7v
+nRu49w2l9qgPqDO6ibQ/ziha2JXpUWd3vcgPUEsBAhcLFAAAAAgALlVDQzqv1TOHAAAA2gAA
+AAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+NJTVJQSwUGAAAAAAEAAQA+AAAAvQAA
+AAAA</Image>
+						<AppliesTo>
+							<Apply type="Usage">
+								<Property name="direction" value="Source -&gt; Destination"/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="externalURI" type="String" description="" unit="" values="" default=""/>
+							<Tag name="relativePathName" type="String" description="" unit="" values="" default=""/>
+							<Tag name="natureCode" type="enumeration" description="" unit="" values="mpd,domain_update,iepd,release,binary,doc,image,gif,jpg,png,mdb,pdf,ppt,svg,vsd,xls,zip,character,csv,html,text,xml,catalog,changelog,owl,rdf,schematron,wantlist,wsdl,xhtml,xmi,xsd,xslt,file_set" default=""/>
+							<Tag name="purposeCode" type="enumeration" description="" unit="" values="extension_schema_set,reference_schema_set,subset_schema_set,file,business_rules,catalog,documentation,administrative,endorsement,memorandum,report,conformance_report,quality_assurance_report,test_report,technical_reference,non-normative_reference,normative_reference,metadata_extended,sample_instance,schema,constraint_schema,exchange_schema,extension_schema,incremental_schema,reference_schema,replacement_schema,subset_schema,tool_specific_file,wantlist,file_set,schema_set,constraint_schema_set,exchange_schema_set" default=""/>
+							<Tag name="descriptionText" type="String" description="" unit="" values="" default=""/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="ModelPackageDescriptionFileSet" metatype="ModelPackageDescriptionFileSet" notes="">
+						<AppliesTo>
+							<Apply type="Component">
+								<Property name="_Tag" value="1"/>
+								<Property name="isIndirectlyInstantiated" value="true"/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="externalURI" type="String" description="" unit="" values="" default=""/>
+							<Tag name="natureCode" type="enumeration" description="" unit="" values="mpd,domain_update,iepd,release,binary,doc,image,gif,jpg,png,mdb,pdf,ppt,svg,vsd,xls,zip,character,csv,html,text,xml,catalog,changelog,owl,rdf,schematron,wantlist,wsdl,xhtml,xmi,xsd,xslt,file_set" default=""/>
+							<Tag name="purposeCode" type="enumeration" description="" unit="" values="extension_schema_set,reference_schema_set,subset_schema_set,file,business_rules,catalog,documentation,administrative,endorsement,memorandum,report,conformance_report,quality_assurance_report,test_report,technical_reference,non-normative_reference,normative_reference,metadata_extended,sample_instance,schema,constraint_schema,exchange_schema,extension_schema,incremental_schema,reference_schema,replacement_schema,subset_schema,tool_specific_file,wantlist,file_set,schema_set,constraint_schema_set,exchange_schema_set" default=""/>
+							<Tag name="descriptionText" type="String" description="" unit="" values="" default=""/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="ModelPackageDescriptionRelationship" metatype="ModelPackageDescriptionRelationship" notes="">
+						<AppliesTo>
+							<Apply type="Dependency">
+								<Property name="direction" value="Source -&gt; Destination"/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="descriptionText" type="String" description="" unit="" values="" default=""/>
+							<Tag name="relationshipCode" type="enumeration" description="" unit="" values="updates,conforms_to,version_of,specializes,generalizes,supersedes,deprecates,adapts" default=""/>
+						</TaggedValues>
+					</Stereotype>
+				</Stereotypes>
+				<TaggedValueTypes/>
+			</Content>
+		</UMLProfile>
+		<UMLProfile profiletype="uml2">
+			<Documentation id="25D8C38B-F" name="NIEM_PIM_Profile" version="1.0" notes="NIEM_PIM_Profile"/>
+			<Content>
+				<Stereotypes>
+					<Stereotype name="Augments" metatype="Augments" notes="">
+						<AppliesTo>
+							<Apply type="Generalization">
+								<Property name="direction" value="Source -&gt; Destination"/>
+								<Property name="isSubstitutable" value=""/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="InformationModel" metatype="InformationModel" notes="" generalizes="NIEM_Common_Profile::Namespace" baseStereotypes="NIEM_Common_Profile::Namespace">
+						<AppliesTo>
+							<Apply type="Package">
+								<Property name="_Tag" value="1"/>
+								<Property name="URI" value=""/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="defaultPurpose" type="enumeration" description="" unit="" values="subset,constraint,exchange,extension,incremental,reference,replacement" default=""/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="RoleOf" metatype="RoleOf" notes="">
+						<AppliesTo>
+							<Apply type="Property">
+								<Property name="aggregation" value="none"/>
+								<Property name="default" value=""/>
+								<Property name="isComposite" value=""/>
+								<Property name="isDerived" value="false"/>
+								<Property name="isDerivedUnion" value="false"/>
+								<Property name="isID" value="false"/>
+								<Property name="isReadOnly" value="false"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="RolePlayedBy" metatype="RolePlayedBy" notes="">
+						<AppliesTo>
+							<Apply type="Generalization">
+								<Property name="direction" value="Source -&gt; Destination"/>
+								<Property name="isSubstitutable" value=""/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+				</Stereotypes>
+				<TaggedValueTypes/>
+			</Content>
+		</UMLProfile>
+		<UMLProfile profiletype="uml2">
+			<Documentation id="23825139-9" name="NIEM_PSM_Profile" version="1.0" notes="NIEM_PSM_Profile"/>
+			<Content>
+				<Stereotypes>
+					<Stereotype name="SequenceID" metatype="SequenceID" notes="">
+						<AppliesTo>
+							<Apply type="Property">
+								<Property name="aggregation" value="none"/>
+								<Property name="default" value=""/>
+								<Property name="isComposite" value=""/>
+								<Property name="isDerived" value="false"/>
+								<Property name="isDerivedUnion" value="false"/>
+								<Property name="isID" value="false"/>
+								<Property name="isReadOnly" value="false"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="XSDAnyProperty" metatype="XSDAnyProperty" notes="">
+						<AppliesTo>
+							<Apply type="Property">
+								<Property name="_Tag" value="1"/>
+								<Property name="aggregation" value="none"/>
+								<Property name="default" value=""/>
+								<Property name="isComposite" value=""/>
+								<Property name="isDerived" value="false"/>
+								<Property name="isDerivedUnion" value="false"/>
+								<Property name="isID" value="false"/>
+								<Property name="isReadOnly" value="false"/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="processContents" type="enumeration" description="" unit="" values="strict,lax,skip" default="strict"/>
+							<Tag name="valueNamespace" type="String" description="" unit="" values="" default="##any"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="XSDDeclaration" metatype="XSDDeclaration" notes="" generalizes="NIEM_Common_Profile::References" baseStereotypes="NIEM_Common_Profile::References">
+						<AppliesTo>
+							<Apply type="Realisation">
+								<Property name="direction" value="Source -&gt; Destination"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="XSDProperty" metatype="XSDProperty" notes="">
+						<AppliesTo>
+							<Apply type="Property">
+								<Property name="_Tag" value="1"/>
+								<Property name="aggregation" value="none"/>
+								<Property name="default" value=""/>
+								<Property name="isComposite" value=""/>
+								<Property name="isDerived" value="false"/>
+								<Property name="isDerivedUnion" value="false"/>
+								<Property name="isID" value="false"/>
+								<Property name="isReadOnly" value="false"/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="kind" type="enumeration" description="" unit="" values="element,attribute" default="element"/>
+							<Tag name="nillable" type="boolean" description="" unit="" values="true,false" default="false"/>
+							<Tag name="fixed" type="String" description="" unit="" values="" default=""/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="XSDRepresentationRestriction" metatype="XSDRepresentationRestriction" notes="">
+						<AppliesTo>
+							<Apply type="DataType">
+								<Property name="_Tag" value="1"/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="whiteSpace" type="enumeration" description="" unit="" values="replace,collapse,preserve" default=""/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="XSDSimpleContent" metatype="XSDSimpleContent" notes="">
+						<AppliesTo>
+							<Apply type="Realisation">
+								<Property name="direction" value="Source -&gt; Destination"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+				</Stereotypes>
+				<TaggedValueTypes/>
+			</Content>
+		</UMLProfile>
+	</UMLProfiles><TaggedValueTypes><RefData version="1.0" exporter="EA.25">
+			<DataSet name="Property Types" table="t_propertytypes" filter="Property='#Property#'"><DataRow><Column name="Property" value="pattern"/><Column name="Description" value="Pattern"/><Column name="Notes" value="Type=Memo;BaseStereotype=ValueRestriction;"/></DataRow><DataRow><Column name="Property" value="NIEMName"/><Column name="Description" value="NIEM name"/><Column name="Notes" value="Type=String;"/></DataRow><DataRow><Column name="Property" value="KeywordText"/><Column name="Description" value="Keyword text"/><Column name="Notes" value="Type=Memo;"/></DataRow><DataRow><Column name="Property" value="DomainText"/><Column name="Description" value="Domain text"/><Column name="Notes" value="Type=Memo;"/></DataRow><DataRow><Column name="Property" value="PurposeText"/><Column name="Description" value="Purpose text"/><Column name="Notes" value="Type=Memo;"/></DataRow><DataRow><Column name="Property" value="ExchangePatternText"/><Column name="Description" value="Exchange pattern text"/><Column name="Notes" value="Type=Memo;"/></DataRow><DataRow><Column name="Property" value="ExchangePartnerName"/><Column name="Description" value="Exchange partner name"/><Column name="Notes" value="Type=Memo;"/></DataRow></DataSet></RefData></TaggedValueTypes>
+<DiagramProfile>
+	<UMLProfile profiletype="uml2">
+			<Documentation id="1F4ADD7C-2" name="NIEM 2.1" version="1.0" notes="NIEM 2.1"/>
+			<Content>
+				<Stereotypes>
+					<Stereotype name="PIM" alias="NIEM PIM Diagram" notes="NIEM PIM Diagram">
+						<AppliesTo>
+							<Apply type="Diagram_Logical">
+								<Property name="alias" value="NIEM PIM"/>
+								<Property name="toolbox" value="NIEM PIM Profile"/>
+								<Property name="diagramID" value="PIM"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="PSM" alias="NIEM PSM Diagram" notes="NIEM PSM Diagram">
+						<AppliesTo>
+							<Apply type="Diagram_Logical">
+								<Property name="alias" value="NIEM PSM"/>
+								<Property name="toolbox" value="NIEM PSM Profile"/>
+								<Property name="diagramID" value="PSM"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="MPD" alias="NIEM MPD Diagram" notes="NIEM Model Package Description diagram">
+						<AppliesTo>
+							<Apply type="Diagram_Logical">
+								<Property name="alias" value="NIEM MPD"/>
+								<Property name="toolbox" value="NIEM MPD Profile"/>
+								<Property name="diagramID" value="MPD"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+				</Stereotypes>
+				<TaggedValueTypes/>
+			</Content>
+		</UMLProfile>
+	</DiagramProfile>
+	<UIToolboxes>
+		<UMLProfile profiletype="uml2">
+			<Documentation id="74CB3BC0-A" name="NIEM MPD Profile" version="1.0" notes="NIEM MPD Profile"/>
+			<Content>
+				<Stereotypes>
+					<Stereotype name="NIEM MPD Profile" notes="" cx="615" cy="140">
+						<AppliesTo>
+							<Apply type="ToolboxPage"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Model_Package_Description_Profile::ChangeInformationType(UML::Package)" type="" description="" unit="" values="" default="Change Information Type"/>
+							<Tag name="Model_Package_Description_Profile::ChangeLogType(UML::Package)" type="" description="" unit="" values="" default="Change Log Type"/>
+							<Tag name="Model_Package_Description_Profile::ModelPackageDescription(UML::Component)" type="" description="" unit="" values="" default="Model Package Description"/>
+							<Tag name="Model_Package_Description_Profile::ModelPackageDescriptionFileSet(UML::Component)" type="" description="" unit="" values="" default="Model Package Description File Set"/>
+							<Tag name="UML::Usage" type="" description="" unit="" values="" default="Use"/>
+							<Tag name="UML::PackageImport" type="" description="" unit="" values="" default="Package Import"/>
+							<Tag name="Model_Package_Description_Profile::ModelPackageDescriptionFile(UML::Usage)" type="" description="" unit="" values="" default="Model Package Description File"/>
+							<Tag name="Model_Package_Description_Profile::ModelPackageDescriptionRelationship(UML::Dependency)" type="" description="" unit="" values="" default="Model Package Description Relationship"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="NIEM Common Profile" notes="" cx="433" cy="322">
+						<AppliesTo>
+							<Apply type="ToolboxPage"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="NIEM_Common_Profile::AdapterType(UML::Class)" type="" description="" unit="" values="" default="Adapter Type"/>
+							<Tag name="NIEM_Common_Profile::AssociationType(UML::Class)" type="" description="" unit="" values="" default="Association Type"/>
+							<Tag name="NIEM_Common_Profile::AssociationType(UML::AssociationClass)" type="" description="" unit="" values="" default="Association Type"/>
+							<Tag name="NIEM_Common_Profile::AugmentationApplication(UML::Usage)" type="" description="" unit="" values="" default="Augmentation Application"/>
+							<Tag name="NIEM_Common_Profile::AugmentationType(UML::Class)" type="" description="" unit="" values="" default="Augmentation Type"/>
+							<Tag name="NIEM_Common_Profile::Choice(UML::Class)" type="" description="" unit="" values="" default="Choice"/>
+							<Tag name="NIEM_Common_Profile::Documentation(UML::Note)" type="" description="" unit="" values="" default="Documentation"/>
+							<Tag name="UML::Enumeration" type="" description="" unit="" values="" default="Enumeration"/>
+							<Tag name="UML::Generalization" type="" description="" unit="" values="" default="Generalization"/>
+							<Tag name="NIEM_Common_Profile::List(UML::DataType)" type="" description="" unit="" values="" default="List"/>
+							<Tag name="NIEM_Common_Profile::MetadataApplication(UML::Usage)" type="" description="" unit="" values="" default="Metadata Application"/>
+							<Tag name="NIEM_Common_Profile::MetadataType(UML::Class)" type="" description="" unit="" values="" default="Metadata Type"/>
+							<Tag name="NIEM_Common_Profile::Namespace(UML::Package)" type="" description="" unit="" values="" default="Namespace"/>
+							<Tag name="NIEM_Common_Profile::ObjectType(UML::Class)" type="" description="" unit="" values="" default="Object Type"/>
+							<Tag name="UML::PrimitiveType" type="" description="" unit="" values="" default="Primitive Type"/>
+							<Tag name="UML::Part" type="" description="" unit="" values="" default="Property"/>
+							<Tag name="NIEM_Common_Profile::PropertyHolder(UML::Class)" type="" description="" unit="" values="" default="Property Holder"/>
+							<Tag name="NIEM_Common_Profile::References(UML::Realization)" type="" description="" unit="" values="" default="References"/>
+							<Tag name="NIEM_Common_Profile::Restriction(UML::Realization)" type="" description="" unit="" values="" default="Restriction"/>
+							<Tag name="NIEM_Common_Profile::Union(UML::DataType)" type="" description="" unit="" values="" default="Union"/>
+							<Tag name="NIEM_Common_Profile::UnionOf(UML::Usage)" type="" description="" unit="" values="" default="Union Of"/>
+							<Tag name="NIEM_Common_Profile::ValueRestriction(UML::DataType)" type="" description="" unit="" values="" default="Value Restriction"/>
+						</TaggedValues>
+					</Stereotype>
+				</Stereotypes>
+				<TaggedValueTypes/>
+			</Content>
+		</UMLProfile>
+		<UMLProfile profiletype="uml2">
+			<Documentation id="B3ED31C9-5" name="NIEM PIM Profile" version="1.0" notes="NIEM PIM Profile"/>
+			<Content>
+				<Stereotypes>
+					<Stereotype name="NIEM PIM Profile" notes="" cx="377" cy="114">
+						<AppliesTo>
+							<Apply type="ToolboxPage"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="UML::Association" type="" description="" unit="" values="" default="Association"/>
+							<Tag name="UML::AssociationClass" type="" description="" unit="" values="" default="Association Class"/>
+							<Tag name="NIEM_PIM_Profile::Augments(UML::Generalization)" type="" description="" unit="" values="" default="Augments"/>
+							<Tag name="NIEM_PIM_Profile::InformationModel(UML::Package)" type="" description="" unit="" values="" default="Information Model"/>
+							<Tag name="NIEM_PIM_Profile::RoleOf(UML::Part)" type="" description="" unit="" values="" default="Role Of"/>
+							<Tag name="NIEM_PIM_Profile::RolePlayedBy(UML::Generalization)" type="" description="" unit="" values="" default="Role Played By"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="NIEM Common Profile" notes="" cx="433" cy="322">
+						<AppliesTo>
+							<Apply type="ToolboxPage"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="NIEM_Common_Profile::AdapterType(UML::Class)" type="" description="" unit="" values="" default="Adapter Type"/>
+							<Tag name="NIEM_Common_Profile::AssociationType(UML::Class)" type="" description="" unit="" values="" default="Association Type"/>
+							<Tag name="NIEM_Common_Profile::AssociationType(UML::AssociationClass)" type="" description="" unit="" values="" default="Association Type"/>
+							<Tag name="NIEM_Common_Profile::AugmentationApplication(UML::Usage)" type="" description="" unit="" values="" default="Augmentation Application"/>
+							<Tag name="NIEM_Common_Profile::AugmentationType(UML::Class)" type="" description="" unit="" values="" default="Augmentation Type"/>
+							<Tag name="NIEM_Common_Profile::Choice(UML::Class)" type="" description="" unit="" values="" default="Choice"/>
+							<Tag name="NIEM_Common_Profile::Documentation(UML::Note)" type="" description="" unit="" values="" default="Documentation"/>
+							<Tag name="UML::Enumeration" type="" description="" unit="" values="" default="Enumeration"/>
+							<Tag name="UML::Generalization" type="" description="" unit="" values="" default="Generalization"/>
+							<Tag name="NIEM_Common_Profile::List(UML::DataType)" type="" description="" unit="" values="" default="List"/>
+							<Tag name="NIEM_Common_Profile::MetadataApplication(UML::Usage)" type="" description="" unit="" values="" default="Metadata Application"/>
+							<Tag name="NIEM_Common_Profile::MetadataType(UML::Class)" type="" description="" unit="" values="" default="Metadata Type"/>
+							<Tag name="NIEM_Common_Profile::Namespace(UML::Package)" type="" description="" unit="" values="" default="Namespace"/>
+							<Tag name="NIEM_Common_Profile::ObjectType(UML::Class)" type="" description="" unit="" values="" default="Object Type"/>
+							<Tag name="UML::PrimitiveType" type="" description="" unit="" values="" default="Primitive Type"/>
+							<Tag name="UML::Part" type="" description="" unit="" values="" default="Property"/>
+							<Tag name="NIEM_Common_Profile::PropertyHolder(UML::Class)" type="" description="" unit="" values="" default="Property Holder"/>
+							<Tag name="NIEM_Common_Profile::References(UML::Realization)" type="" description="" unit="" values="" default="References"/>
+							<Tag name="NIEM_Common_Profile::Restriction(UML::Realization)" type="" description="" unit="" values="" default="Restriction"/>
+							<Tag name="NIEM_Common_Profile::Union(UML::DataType)" type="" description="" unit="" values="" default="Union"/>
+							<Tag name="NIEM_Common_Profile::UnionOf(UML::Usage)" type="" description="" unit="" values="" default="Union Of"/>
+							<Tag name="NIEM_Common_Profile::ValueRestriction(UML::DataType)" type="" description="" unit="" values="" default="Value Restriction"/>
+						</TaggedValues>
+					</Stereotype>
+				</Stereotypes>
+				<TaggedValueTypes/>
+			</Content>
+		</UMLProfile>
+		<UMLProfile profiletype="uml2">
+			<Documentation id="0994FDCF-E" name="NIEM PSM Profile" version="1.0" notes="NIEM PSM Profile"/>
+			<Content>
+				<Stereotypes>
+					<Stereotype name="NIEM PSM Profile" notes="" cx="447" cy="114">
+						<AppliesTo>
+							<Apply type="ToolboxPage"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="NIEM_PSM_Profile::SequenceID(UML::Part)" type="" description="" unit="" values="" default="Sequence ID"/>
+							<Tag name="NIEM_PSM_Profile::XSDAnyProperty(UML::Part)" type="" description="" unit="" values="" default="XSD Any Property"/>
+							<Tag name="NIEM_PSM_Profile::XSDDeclaration(UML::Realization)" type="" description="" unit="" values="" default="XSD Declaration"/>
+							<Tag name="NIEM_PSM_Profile::XSDProperty(UML::Part)" type="" description="" unit="" values="" default="XSD Property"/>
+							<Tag name="NIEM_PSM_Profile::XSDRepresentationRestriction(UML::DataType)" type="" description="" unit="" values="" default="XSD Representation Restriction"/>
+							<Tag name="NIEM_PSM_Profile::XSDSimpleContent(UML::Realization)" type="" description="" unit="" values="" default="XSD Simple Content"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="NIEM Common Profile" notes="" cx="433" cy="322">
+						<AppliesTo>
+							<Apply type="ToolboxPage"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="NIEM_Common_Profile::AdapterType(UML::Class)" type="" description="" unit="" values="" default="Adapter Type"/>
+							<Tag name="NIEM_Common_Profile::AssociationType(UML::Class)" type="" description="" unit="" values="" default="Association Type"/>
+							<Tag name="NIEM_Common_Profile::AssociationType(UML::AssociationClass)" type="" description="" unit="" values="" default="Association Type"/>
+							<Tag name="NIEM_Common_Profile::AugmentationApplication(UML::Usage)" type="" description="" unit="" values="" default="Augmentation Application"/>
+							<Tag name="NIEM_Common_Profile::AugmentationType(UML::Class)" type="" description="" unit="" values="" default="Augmentation Type"/>
+							<Tag name="NIEM_Common_Profile::Choice(UML::Class)" type="" description="" unit="" values="" default="Choice"/>
+							<Tag name="NIEM_Common_Profile::Documentation(UML::Note)" type="" description="" unit="" values="" default="Documentation"/>
+							<Tag name="UML::Enumeration" type="" description="" unit="" values="" default="Enumeration"/>
+							<Tag name="UML::Generalization" type="" description="" unit="" values="" default="Generalization"/>
+							<Tag name="NIEM_Common_Profile::List(UML::DataType)" type="" description="" unit="" values="" default="List"/>
+							<Tag name="NIEM_Common_Profile::MetadataApplication(UML::Usage)" type="" description="" unit="" values="" default="Metadata Application"/>
+							<Tag name="NIEM_Common_Profile::MetadataType(UML::Class)" type="" description="" unit="" values="" default="Metadata Type"/>
+							<Tag name="NIEM_Common_Profile::Namespace(UML::Package)" type="" description="" unit="" values="" default="Namespace"/>
+							<Tag name="NIEM_Common_Profile::ObjectType(UML::Class)" type="" description="" unit="" values="" default="Object Type"/>
+							<Tag name="UML::PrimitiveType" type="" description="" unit="" values="" default="Primitive Type"/>
+							<Tag name="UML::Part" type="" description="" unit="" values="" default="Property"/>
+							<Tag name="NIEM_Common_Profile::PropertyHolder(UML::Class)" type="" description="" unit="" values="" default="Property Holder"/>
+							<Tag name="NIEM_Common_Profile::References(UML::Realization)" type="" description="" unit="" values="" default="References"/>
+							<Tag name="NIEM_Common_Profile::Restriction(UML::Realization)" type="" description="" unit="" values="" default="Restriction"/>
+							<Tag name="NIEM_Common_Profile::Union(UML::DataType)" type="" description="" unit="" values="" default="Union"/>
+							<Tag name="NIEM_Common_Profile::UnionOf(UML::Usage)" type="" description="" unit="" values="" default="Union Of"/>
+							<Tag name="NIEM_Common_Profile::ValueRestriction(UML::DataType)" type="" description="" unit="" values="" default="Value Restriction"/>
+						</TaggedValues>
+					</Stereotype>
+				</Stereotypes>
+				<TaggedValueTypes/>
+			</Content>
+		</UMLProfile>
+	</UIToolboxes>
+	<ModelTemplates>
+		<Model name="NIEM 2.1 IEPD Starter Model(Downloaded)" description="Download the NIEM 2.1 Starter Model, to use as a starting point for creating your own NIEM 2.1 IEPD." location="http://sparxcloud.com/modelpatterns/ras/xmi/NIEM 2/{7FFF8814-B5DA-485c-8DA6-0B1C3CE95DA5}/1.0/" default="no" icon="29" filter=""/>   
+		<Model name="NIEM 2.1 Reference Model (Downloaded)" description="Download the complete NIEM 2.1 reference model with all standard Domains, ready for creating an IEPD." location="http://sparxcloud.com/modelpatterns/ras/xmi/NIEM 2/{702B264D-A0B5-4c13-BB57-C7BFAFC9F5AF}/1.0/" isFramework="true" default="no" icon="29" filter=""/>   
+		<Model name="NIEM Reference Model (Downloaded)" description="Retained for backward compatibility with earlier modeling efforts." location="http://sparxcloud.com/modelpatterns/ras/xmi/NIEM/{F663B763-47DB-48af-A041-C1D6763E916D}/3.0/" isFramework="true" default="no" icon="29" filter=""/>   
+	</ModelTemplates>
+</MDG.Technology>

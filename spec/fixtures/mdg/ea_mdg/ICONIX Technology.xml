@@ -1,0 +1,603 @@
+<MDG.Technology version="1.0">
+  <Documentation id="ICONIX" name="ICONIX" version="1.3.1" notes="MDG Technology for ICONIX" infoURI="http://www.iconixsw.com/"/>
+  <Logo>
+    <Image type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+      Qk02MAAAAAAAADYAAAAoAAAAQAAAAEAAAAABABgAAAAAAAAwAAASCwAAEgsAAAAAAAAAAAAA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDA5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl
+      5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl
+      5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl
+      5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl////////////////
+      ////////////////////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////////////////////
+      ////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+      AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+      AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////////////////
+      ////////////////////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAA
+      AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+      AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+      AAAAAAAAAAAAAAAAAAAAAAAA////////////////////////////////////////////////
+      ////////////////////////////////////////////8vLy5OTk/v7+////////////////
+      ////////////9/f34ODg8PDw////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////////////////////
+      ////CADOCADOCADOCADOCADOCADOCADOCADOCADOCADOCADO////6urqGRkZxMTE////////
+      ////0NDQREREGhoaGxsbJycnkJCQ/Pz8////////////9vb2dXV1ICAgGhoaGhoaTk5O1NTU
+      ////////3t7eGRkZ2dnZ////////////+/v7Ly8vV1dX////////Ozs7jIyM9vb2S0tLNzc3
+      6enp/////////////Pz8Pj4+c3Nz////////////////CADOCADOCADOCADOCADOCADOCADO
+      CADOCADOCADOCADO////////MzMzlZWV////////6urqJSUlZWVl5OTk/Pz8wsLCNjY2b29v
+      ////////////V1dXLCwsuLi49vb229vbdnZ2ICAgu7u7////////KCgoqamp////////////
+      sLCwJCQkKSkp////////a2trXV1d////7+/vQEBAQkJC8PDw////////pKSkIyMj6enp////
+      ////////////CADOCADOCADOCADOCADOCADOCADOCADOCADOCADOCADO////////Y2NjZmZm
+      ////////hYWFNDQ0+Pj4////////////3NzcHh4evLy8////w8PDGRkZ0NDQ////////////
+      ////hYWFLCws7Ozs////VlZWenp6////////////Tk5OhoaGGRkZ39/f////m5ubLS0t////
+      ////6OjoNzc3TU1N9vb29vb2MDAwjo6O////////////////////CADOCADOCADOCADOCADO
+      CADOCADOCADOCADOCADOCADO////////kpKSNjY2////////Xl5ebW1t////////////////
+      ////oKCgt7e3////hoaGNjY2////////////////////9vb2Li4uhISE////hoaGSkpK////
+      ////09PTHR0d6urqJSUlsLCw////ysrKGRkZ5OTk////////4ODgLy8vYGBgkpKSMjIy9vb2
+      ////////////////////CADOCADOCADOCADOCADOCADOCADOCADOCADOCADOCADO////////
+      wsLCGRkZ7Ozs////UlJSeXl5////////////////////////////////e3t7T09P////////
+      ////////////////dnZ2QEBA////tbW1ICAg+/v7////cXFxZmZm////UFBQgYGB////9vb2
+      HBwctbW1////////////2NjYKSkpGxsbqamp////////////////////////CADOCADOCADO
+      CADOCADOCADOCADOCADOCADOCADOCADO////////8PDwGhoavb29////dXV1W1tb////////
+      ////////////////////////nZ2dMDAw////////////////////////nZ2dJCQk////5eXl
+      GRkZ0tLS7u7uISEhxsbG////f39/UVFR////////QkJChoaG////////////////ZWVlGRkZ
+      cHBw////////////////////////CADOCADOCADOCADOCADOCADOCADOCADOCADOCADOCADO
+      ////////////Ojo6jo6O////np6eJiYm8vLy////////////////////////////xMTEGhoa
+      3Nzc////////////////////mZmZNDQ0////////LS0tpqamm5ubQUFB////////rq6uIyMj
+      /f39////cnJyVlZW////////////zs7OGhoanZ2dIyMjg4OD////////////////////CADO
+      CADOCADOCADOCADOCADOCADOCADOCADOCADOCADO////////////ampqX19f////8/PzMDAw
+      iYmJ////////////////2NjYNzc37Ozs/v7+SUlJXl5e////////////////////Xl5eXV1d
+      ////////XV1dgICARUVFpqam////////3d3dGRkZ2dnZ////oqKiKCgo////////////Tk5O
+      XV1d////uLi4GxsblJSU////////////////CADOCADOCADOCADOCADOCADOCADOCADOCADO
+      CADOCADO////////////mZmZLy8v////////sbGxGhoalJSU/Pz8////+fn5YWFhR0dH////
+      ////0NDQISEha2tr9vb2////////nZ2dGhoazc3N////////jY2NNjY2LS0t+Pj4////////
+      ////Jycnqamp////0dHRGRkZ3t7e////srKyHBwc2dnZ////////pKSkGhoapaWl////////
+      ////CADOCADOCADOCADOCADOCADOCADOCADOCADOCADOCADO////////////ycnJGRkZ5+fn
+      ////////ubm5KioqJSUlUlJSLy8vPDw83d3d////////////1tbWPj4+Hx8fSUlJNjY2JSUl
+      q6ur////////////vLy8GRkZjIyM////////////////VVVVenp6////+vr6Hx8fr6+v+Pj4
+      NjY2eXl5////////////////lZWVGxsbtra2////////CADOCADOCADOCADOCADOCADOCADO
+      CADOCADOCADOCADO////////////+fn5xsbG8vLy////////////9vb2y8vLqKiowsLC+/v7
+      /////////////////////f392dnZra2tvr6+7u7u////////////////9vb2xsbG8vLy////
+      ////////////3Nzc19fX////////zs7O5OTk8fHxxsbG8vLy////////////////////zc3N
+      zc3N////////////////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////5eXl5eXl5eXl5eXl5eXl5eXl
+      5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl
+      5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl
+      5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl
+      5eXl5eXl5eXl5eXlwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+    </Image>
+  </Logo>
+  <Icon>
+    <Image type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+      Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAASCwAAEgsAAAAAAAAAAAAA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA5eXl5eXl5eXl5eXl
+      5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl////////////////////////
+      ////////////////////////////////////////////////////////////TExMTExMTExM
+      TExMTExMTExMTExMTExMTExMTExMTExM////////////////////////////////////////
+      ////////////////////////CADOCADOCADOCADO////ZmZm9vb2ZmZmZmZm////ZmZm9vb2
+      ZmZm9vb2ZmZm////CADOCADOCADOCADO////lpaWx8fHlpaWx8fH////lpaWx8fH////eHh4
+      hISE////CADOCADOCADOCADO////x8fHlpaWx8fHlpaW////x8fHlpaW////lpaWhISE9vb2
+      CADOCADOCADOCADO////9vb2ZmZm9vb2ZmZmZmZm////ZmZm////ZmZm9vb2ZmZm////////
+      ////////////////////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////5eXl5eXl5eXl5eXl5eXl5eXl
+      5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXlwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+      zc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+      zc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+      zc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+      zQ==
+    </Image>
+  </Icon>
+  <UIToolboxes>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="7F307389-5" name="ICONIX_Analysis" version="1.0" alias="ICONIX Analysis" notes="Elements and Relationships used on ICONIX Analysis diagrams"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="AnalysisElements" alias="Analysis" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="isCommon" type="boolean" description="" unit="" values="true,false" default="true"/>
+              <Tag name="UML::Actor" type="" description="" unit="" values="" default="Actor"/>
+              <Tag name="UML::Decision" type="" description="" unit="" values="" default="Decision"/>
+              <Tag name="UML::MergeNode" type="" description="" unit="" values="" default="Merge"/>
+              <Tag name="EAUML::boundary(UML::Object)" type="" description="" unit="" values="" default="Boundary"/>
+              <Tag name="EAUML::control(UML::Object)" type="" description="" unit="" values="" default="Control"/>
+              <Tag name="EAUML::entity(UML::Object)" type="" description="" unit="" values="" default="Entity"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="AnalysisRelationships" alias="Analysis Relationships" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <!-- <Tag name="ImagesOnly" type="" description="" unit="" values="" default="true"/> -->
+              <Tag name="UML::Association" type="" description="" unit="" values="" default="Associate"/>
+              <Tag name="UML::Invokes" type="" description="" unit="" values="" default="Invokes"/>
+              <Tag name="UML::Precedes" type="" description="" unit="" values="" default="Precedes"/>
+            </TaggedValues>
+          </Stereotype>
+			<Stereotype name="EAUML::boundary(UML::Object)" notes="">
+				<Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+					Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAASCwAAEgsAAAABAAAAAAAA
+					AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+					oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+					AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+					AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+					AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+					YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+					QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+					wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+					QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+					IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+					gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+					gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+					gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+					4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+					gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+					QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+					wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+					oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+					wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+					BwcHBwcHBwcHBwcHBwfkSUkHBwcHBwcHBwcHBwcH5ORJBwcHBwdJSUlJSQcHB+TkSQcHBwdJ
+					5OTk5ORJBwfk5EkHBwdJ5Ozs7OTk5EkH5ORJBwdJ5Ozs7Ozs5OTkSeQJSQcHSewJCQkJ7Ozk
+					5EnkCUlJSUkJCQkJCQns7ORJ5AlJBwdJCQn//wkJ7OzkSeQJSQcHSQkJ//8JCezs5Enk/0kH
+					BwdJCQkJCQns5EkH5P9JBwcHB0kJCQns5EkHB+T/SQcHBwcHSUlJSUkHBwfk5EkHBwcHBwcH
+					BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+				</Icon>
+				<AppliesTo>
+					<Apply type="ToolboxItemImage"/>
+				</AppliesTo>
+			</Stereotype>
+			<Stereotype name="EAUML::control(UML::Object)" notes="">
+				<Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+					Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAASCwAAEgsAAAABAAAAAAAA
+					AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+					oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+					AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+					AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+					AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+					YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+					QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+					wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+					QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+					IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+					gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+					gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+					gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+					4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+					gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+					QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+					wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+					oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+					wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+					BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwdJSUlJSQcHBwcHBwcHBwdJ5OTk
+					5ORJBwcHBwcHBwdJ5Ozs7OTk5EkHBwcHBwdJ5Ozs7Ozs5OTkSQcHBwcHSewJCQkJ7Ozk5EkH
+					BwcHB0kJCQkJCQns7ORJBwcHBwdJCQn//wkJ7OzkSQcHBwcHSQkJ//8JCUns5EkHBwcHBwdJ
+					CQkJCUns5EkHBwcHBwcHB0kJCUns5EkHBwcHBwcHBwcHm0mbm0kHBwcHBwcHBwcHBwcHSQcH
+					BwcHBwcHBwcHBwcHBwdJBwcHBwcHBwcHBwcHBwcHB0kHBwcHBwc=
+				</Icon>
+				<AppliesTo>
+					<Apply type="ToolboxItemImage"/>
+				</AppliesTo>
+			</Stereotype>
+			<Stereotype name="EAUML::entity(UML::Object)" notes="">
+				<Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+					Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAASCwAAEgsAAAABAAAAAAAA
+					AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+					oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+					AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+					AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+					AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+					YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+					QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+					wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+					QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+					IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+					gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+					gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+					gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+					4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+					gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+					QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+					wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+					oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+					wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AElJ
+					SUlJSUlJSUlJSUlJSQfk/////wkJCQkJ5OTk5EkH5OTk5OTk5OTk5OTk5OTkBwcHBwcHSUlJ
+					SUkHBwcHBwcHBwcHSeTk5OTkSQcHBwcHBwcHSeTs7Ozk5ORJBwcHBwcHSeTs7Ozs7OTk5EkH
+					BwcHB0nsCQkJCezs5ORJBwcHBwdJCQkJCQkJ7OzkSQcHBwcHSQkJ//8JCezs5EkHBwcHB0kJ
+					Cf//CQns7ORJBwcHBwcHSQkJCQkJ7ORJBwcHBwcHBwdJCQkJ7ORJBwcHBwcHBwcHB0lJSUlJ
+					BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+				</Icon>
+				<AppliesTo>
+					<Apply type="ToolboxItemImage"/>
+				</AppliesTo>
+			</Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+      <Options>
+        <Option name="RedefinedToolbox" value="Extended::Analysis"/>
+      </Options>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="E157038F-8" name="ICONIX_UseCase" version="1.0" alias="ICONIX Use Case" notes="Elements and Relationships used on ICONIX Use Case diagrams"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="UseCaseElements" alias="Use Case" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="isCommon" type="boolean" description="" unit="" values="true,false" default="true"/>
+              <Tag name="UML::Actor" type="" description="" unit="" values="" default="Actor"/>
+              <Tag name="UML::UseCase" type="" description="" unit="" values="" default="Use Case"/>
+              <Tag name="UML::Package" type="" description="" unit="" values="" default="Package"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="UseCaseRelationships" alias="Use Case Relationships" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <!-- <Tag name="ImagesOnly" type="" description="" unit="" values="" default="true"/> -->
+              <Tag name="UML::UseCaseLink" type="" description="" unit="" values="" default="Use"/>
+              <Tag name="UML::Association" type="" description="" unit="" values="" default="Associate"/>
+              <Tag name="UML::Realization" type="" description="" unit="" values="" default="Realize"/>
+              <Tag name="UML::Invokes" type="" description="" unit="" values="" default="Invokes"/>
+              <Tag name="UML::Precedes" type="" description="" unit="" values="" default="Precedes"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+      <Options>
+        <Option name="RedefinedToolbox" value="UML::UseCase"/>
+      </Options>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="4C42F695-E" name="ICONIX_Class" version="1.0" alias="ICONIX Class" notes="Elements and Relationships used on ICONIX Class diagrams"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="ClassElements" alias="Class" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="isCommon" type="boolean" description="" unit="" values="true,false" default="true"/>
+              <Tag name="UML::Package" type="" description="" unit="" values="" default="Package"/>
+              <Tag name="UML::Class" type="" description="" unit="" values="" default="Class"/>
+              <Tag name="UML::Interface" type="" description="" unit="" values="" default="Interface"/>
+              <Tag name="UML::Enumeration" type="" description="" unit="" values="" default="Enumeration"/>
+              <Tag name="EAUML::Table(UML::Class)" type="" description="" unit="" values="" default="Table"/>
+              <Tag name="UML::Signal" type="" description="" unit="" values="" default="Signal"/>
+              <Tag name="UML::AssociationElement" type="" description="" unit="" values="" default="Association"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="ClassRelationships" alias="Class Relationships" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <!-- <Tag name="ImagesOnly" type="" description="" unit="" values="" default="true"/> -->
+              <Tag name="UML::Association" type="" description="" unit="" values="" default="Associate"/>
+              <Tag name="UML::Generalization" type="" description="" unit="" values="" default="Generalize"/>
+              <Tag name="UML::Composition" type="" description="" unit="" values="" default="Compose"/>
+              <Tag name="UML::Aggregation" type="" description="" unit="" values="" default="Aggregate"/>
+              <Tag name="UML::AssociationClass" type="" description="" unit="" values="" default="Association Class"/>
+              <Tag name="UML::Assembly" type="" description="" unit="" values="" default="Assembly"/>
+              <Tag name="UML::Realization" type="" description="" unit="" values="" default="Realize"/>
+              <Tag name="UML::Nesting" type="" description="" unit="" values="" default="Nesting"/>
+              <Tag name="UML::PackageMerge" type="" description="" unit="" values="" default="Package Merge"/>
+              <Tag name="UML::PackageImport" type="" description="" unit="" values="" default="Package Import"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+      <Options>
+        <Option name="RedefinedToolbox" value="UML::Class"/>
+      </Options>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="184CA7D8-6" name="ICONIX_Interaction" version="1.0" alias="ICONIX Interaction" notes="Elements and Relationships used on ICONIX Interaction diagrams"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="InteractionElements" alias="Interaction" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="isCommon" type="boolean" description="" unit="" values="true,false" default="true"/>
+              <Tag name="UML::Actor" type="" description="" unit="" values="" default="Actor"/>
+              <Tag name="UML::Lifeline" type="" description="" unit="" values="" default="Lifeline"/>
+              <Tag name="UML::SequenceBoundary" type="" description="" unit="" values="" default="Boundary"/>
+              <Tag name="UML::SequenceControl" type="" description="" unit="" values="" default="Control"/>
+              <Tag name="UML::SequenceEntity" type="" description="" unit="" values="" default="Entity"/>
+              <Tag name="UML::InteractionFragment" type="" description="" unit="" values="" default="Fragment"/>
+              <Tag name="UML::MessageEndPoint" type="" description="" unit="" values="" default="Endpoint"/>
+              <Tag name="UML::Gate" type="" description="" unit="" values="" default="Diagram Gate"/>
+              <Tag name="UML::InteractionState" type="" description="" unit="" values="" default="State/Continuation"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="InteractionRelationships" alias="Interaction Relationships" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="UML::Actor" type="" description="" unit="" values="" default="Actor"/>
+              <!-- <Tag name="ImagesOnly" type="" description="" unit="" values="" default="true"/> -->
+              <Tag name="UML::Message" type="" description="" unit="" values="" default="Message"/>
+              <Tag name="UML::SelfMessage" type="" description="" unit="" values="" default="Self-Message"/>
+              <Tag name="UML::CallFromRecursion" type="" description="" unit="" values="" default="Call"/>
+              <Tag name="UML::Recursion" type="" description="" unit="" values="" default="Recursion"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+      <Options>
+        <Option name="RedefinedToolbox" value="UML::Interaction"/>
+      </Options>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="5D84F3BE-8" name="ICONIX_Activity" version="1.0" alias="ICONIX Activity" notes="Elements and Relationships used on ICONIX Activity diagrams"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="ActivityElements" alias="Activity" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="isCommon" type="boolean" description="" unit="" values="true,false" default="true"/>
+              <Tag name="UML::Activity" type="" description="" unit="" values="" default="Activity"/>
+              <Tag name="UML::StructuredActivity" type="" description="" unit="" values="" default="Structured Activity"/>
+              <Tag name="UML::Action" type="" description="" unit="" values="" default="Action"/>
+              <Tag name="UML::ActivityPartition" type="" description="" unit="" values="" default="Partition"/>
+              <Tag name="UML::Object" type="" description="" unit="" values="" default="Object"/>
+              <Tag name="UML::CentralBufferNode" type="" description="" unit="" values="" default="Central Buffer Node"/>
+              <Tag name="UML::Datastore" type="" description="" unit="" values="" default="Datastore"/>
+              <Tag name="UML::Decision" type="" description="" unit="" values="" default="Decision"/>
+              <Tag name="UML::MergeNode" type="" description="" unit="" values="" default="Merge"/>
+              <Tag name="UML::SendEvent" type="" description="" unit="" values="" default="Send"/>
+              <Tag name="UML::ReceiveEvent" type="" description="" unit="" values="" default="Receive"/>
+              <Tag name="UML::SynchState" type="" description="" unit="" values="" default="Synch"/>
+              <Tag name="UML::ActivityInitial" type="" description="" unit="" values="" default="Initial"/>
+              <Tag name="UML::ActivityFinal" type="" description="" unit="" values="" default="Final"/>
+              <Tag name="UML::FlowFinalNode" type="" description="" unit="" values="" default="Flow Final"/>
+              <Tag name="UML::ExpansionRegion" type="" description="" unit="" values="" default="Expansion Region"/>
+              <Tag name="UML::InterruptibleActivityRegion" type="" description="" unit="" values="" default="Interruptible Region"/>
+              <Tag name="UML::ExceptionHandler" type="" description="" unit="" values="" default="Exception"/>
+              <Tag name="UML::ForkJoinH" type="" description="" unit="" values="" default="Fork/Join"/>
+              <Tag name="UML::ForkJoinV" type="" description="" unit="" values="" default="Fork/Join"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="ActivityRelationships" alias="Activity Relationships" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <!-- <Tag name="ImagesOnly" type="" description="" unit="" values="" default="true"/> -->
+              <Tag name="UML::ControlFlow" type="" description="" unit="" values="" default="Control Flow"/>
+              <Tag name="UML::InterruptFlow" type="" description="" unit="" values="" default="Interrupt Flow"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+      <Options>
+        <Option name="RedefinedToolbox" value="UML::Activity"/>
+      </Options>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="CDE27AD3-1" name="ICONIX_Custom" version="1.0" alias="ICONIX Custom" notes="Elements and Relationships used on ICONIX Custom diagrams"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="CustomElements" alias="Custom" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="isCommon" type="boolean" description="" unit="" values="true,false" default="true"/>
+              <Tag name="UML::Package" type="" description="" unit="" values="" default="Package"/>
+              <Tag name="UML::Requirement" type="" description="" unit="" values="" default="Requirement"/>
+              <Tag name="UML::Issue" type="" description="" unit="" values="" default="Issue"/>
+              <Tag name="UML::Change" type="" description="" unit="" values="" default="Change"/>
+              <Tag name="UML::Screen" type="" description="" unit="" values="" default="Screen"/>
+              <Tag name="UML::GUIElement" type="" description="" unit="" values="" default="UI Control"/>
+              <Tag name="UML::TestCase" type="" description="" unit="" values="" default="Test Case"/>
+              <Tag name="UML::EntityObject" type="" description="" unit="" values="" default="Entity"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="CustomRelationships" alias="Custom Relationships" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <!-- <Tag name="ImagesOnly" type="" description="" unit="" values="" default="true"/> -->
+              <Tag name="UML::Association" type="" description="" unit="" values="" default="Associate"/>
+              <Tag name="UML::Aggregation" type="" description="" unit="" values="" default="Aggregate"/>
+              <Tag name="UML::Generalization" type="" description="" unit="" values="" default="Generalize"/>
+              <Tag name="UML::Realization" type="" description="" unit="" values="" default="Realize"/>
+              <Tag name="UML::Nesting" type="" description="" unit="" values="" default="Nesting"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+      <Options>
+        <Option name="RedefinedToolbox" value="Extended::Custom"/>
+      </Options>
+    </UMLProfile>
+  </UIToolboxes>
+</MDG.Technology>

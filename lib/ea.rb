@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
-# Load VERSION constant (defined in ea/version.rb per gemspec/gem-release
-# convention). Use require_relative to avoid load-path dependencies during
-# gemspec evaluation.
-require_relative "ea/version"
-
 module Ea
+  # Gem release version. Inlined here so lib/ea.rb has zero load-time
+  # `require_relative` calls — the canonical "no require_relative for
+  # internal library code" rule. The gemspec reads this constant
+  # directly when bundler loads the gemspec via `require_relative`.
+  VERSION = "0.5.0"
+
   class Error < StandardError; end
 
   autoload :Qea, "ea/qea"
@@ -13,12 +14,22 @@ module Ea
   autoload :Sources, "ea/sources"
   autoload :Spa, "ea/spa"
   autoload :Svg, "ea/svg"
+  autoload :Theme, "ea/theme"
   autoload :Diagram, "ea/diagram"
   autoload :Transformations, "ea/transformations"
   autoload :Xmi, "ea/xmi"
   autoload :Transformers, "ea/transformers"
   autoload :Bridge, "ea/bridge"
   autoload :Cli, "ea/cli"
+  autoload :Mdg, "ea/mdg"
+  autoload :Diff, "ea/diff"
+  autoload :Image, "ea/image"
+  autoload :Export, "ea/export"
+  autoload :Render, "ea/render"
+  autoload :Shapescript, "ea/shapescript"
+  autoload :Lint, "ea/lint"
+  autoload :Query, "ea/query"
+  autoload :Ocl, "ea/ocl"
 
   class << self
     # Parse an EA file into its native representation.

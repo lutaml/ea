@@ -1,0 +1,1100 @@
+<MDG.Technology version="1.0">
+  <Documentation id="EP" name="Eriksson-Penker Models" version="3" notes="A set of stereotypes and tagged values for modeling business processes." infoURI="http://www.sparxsystems.com" supportURI="support@sparxsystems.com"/>
+  <Logo>
+    <Image type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+      Qk1mdQAAAAAAADYAAAAoAAAAZAAAAGQAAAABABgAAAAAADB1AAATCwAAEwsAAAAAAAAAAAAA
+      wMDAwMDAwMDAwMDAwMDAwMDAubezmIVwf2A+bkccZDgIZDkIZTkIZDgIZTkHZDkIZDgHZTkI
+      ZDkIZTkIZDkIZTkHZTkIZDgIZTkIZDkIZTkIZTkIZDkIZTgIZTkIZTgIZDkHZTkIZTkIZTgI
+      ZDkIZDkIZTkIZTkIZDkIZTgIZTkIZDkIZTkIZTkIZTgIZTkIZTgIZTgIZTkIZDkIZTkIZTkI
+      ZDkHZTkIZTkHZTkIZDgHZTgIZTkIZDkIZTkIZDkIZTkIZTkIZDkHZTkHZTkIZTkHZDgIZTkI
+      ZTkIZTgIZTkIZTkIZDgIZTkIZDkIZTkHZTkIZTkHZDkIZTgHZTkIZDkIZTkIZTgIZTkIZTgI
+      b0gcgGE+mIVwubezwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAkXpgZz0NZToJ
+      ZToJZToJZjkJZToKZjoJZjoJZTkJZTkJZTkJZjkJZjoKZToKZToKZjoKZToJZToJZjkJZjkJ
+      ZTkKZToJZjoJZTkJZjoKZjoJZjoJZToJZToJZToKZjkJZTkJZTkJZjkJZTkJZjkJZjoJZjoJ
+      ZjoJZjoJZjoJZToKZToJZToJZjoJZjoJZjkJZToJZToKZjoJZTkJZToJZjoJZjoJZTkJZjoJ
+      ZToJZjoJZjoJZToJZTkJZToKZjoKZjkKZjkJZToJZjoJZTkJZToKZjoJZjoJZjkJZToKZjkK
+      ZjkJZjkJZjkJZTkJZToKZjkKZjoJZToKZToJZTkJZjkJZTkJZjoJZz0OkXlgwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAsaujeFUwZzoKZjsLZjoKZjoKZzsKZzsLZjsLZjsKZjsKZjsKZjsL
+      ZzsLZjsLZjoLZjsLZjsLZjsKZjsLZjsKZzoKZjoKZzsLZzoLZzoKZzsLZzoKZzsKZjsKZjsL
+      ZzsLZzsLZjsKZjsKZzsLZjoKZjsKZjsKZjoLZzsKZjsLZjsKZzsKZjsLZzsKZjsKZjsKZzsK
+      ZjsKZzsLZzoLZjsKZjsLZzsKZjsKZjsKZzoKZjsKZzsLZjoLZjsLZzsKZjsLZjoKZzoLZzoK
+      ZjoLZzsKZjsKZjsKZjsLZzsKZjoKZjsKZzsLZjsLZjsLZzsKZzsKZjsKZjsKZzsLZzsLZjsL
+      ZjsKZzsLZzsLZzsLZjsKZzsLZjsLeFYwsaujwMDAwMDAwMDAwMDAwMDAsqujcUogZzwMZzsM
+      ZzwLZzwMbUQYjXVappmKtrKtwcLBwsLCwcLCwcHCwcLCwcHBwcHCwcHCwcLBwcHBwcHBwcHB
+      wcHCwsLCwcHBwsHBwsLBwsLBwsHBwcHCwcHBwsHBwcHBwsHBwsHCwsLCwsLBwsHBwsHCwsHC
+      wcLCwsHBwsLBwcLCwcLBwcHCwcHBwcHBwcLBwcHCwcLCwcHBwsHBwcHBwcLBwsHBwcHCwsHB
+      wsHBwcHBwcLCwsLCwcHCwcHCwcLCwsHBwsHCwsLCwsLBwsLBwcLBwcHCwcLBwcLCwsLBwcLC
+      wcHCwsHCwsLCwsLBwcHBwsLBwcLCwsLBwsLCwsHCtrGsppmLjXVabUQYZzwLZzwMaDsLaDsM
+      cUsgsqujwMDAwMDAwMDAwMDAelgyaDwNaD0NaD0NaD0NloJrv769wsLCwsPCw8LCw8LCwsLC
+      wsLCwsLCwsLCwsLCwsLCw8LCwsPCw8LCwsLCwsLCwsLCwsLCwsLCw8PCwsLCwsLCwsLCwsPC
+      w8LCw8LDwsLCwsLCw8LCw8LCwsLCwsLCwsLDwsLCwsLCwsLCwsLCwsPCwsLCwsPCwsLCwsLD
+      wsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsPCwsLCwsLCwsLCwsLDwsLCwsLCwsLC
+      wsLCwsLCwsPCwsLDwsPCwsLCwsLCwsLCwsPCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsPC
+      wsPDwsLCwsLCwsLCwsLCv7+9loJraD0NaDwOaDwOaD0Ne1gywMDAwMDAwMDAk3xjaT4PaT4O
+      aT4PdlIqr6ecw8LDw8LDw8PCw8PDw8LDw8PCw8PCw8LDw8PDw8PDw8PDw8PDwsLDw8PDw8PD
+      w8PDwsPDw8PCw8LCwsPDw8PDw8PDwsLDwsPDwsLDw8PDw8PDw8LDw8LDw8PDwsPDw8PCw8LD
+      w8PDw8LDw8PDw8PDwsPCwsPCw8PCw8PDw8PDw8PDw8PDw8PDw8PDw8PDw8LCw8LDw8PDw8PD
+      w8PDw8PDw8PCw8PDw8PDw8LDw8LDw8PDw8LDw8PDw8PCw8PCw8PCw8PCw8LDwsPDw8PDw8PC
+      wsPCwsPDw8LDw8PDw8LDw8PDw8PDw8PDw8LDw8PDw8PDw8LDwsPCw8PDw8PCwsLDw8PDr6ed
+      d1IqaT4Oaj4OaT4PknxjwMDAure0a0IUaj8Paj8Paj4Qsaedw8TExMTDxMTDxMPDw8PDw8PD
+      xMTDxMPDxMTEw8PDxMTDxMTDw8TDw8PDw8PEw8TDxMTDw8TDxMPDw8PExMPExMTDw8PExMPD
+      xMPDw8PExMPDxMPDw8TEw8TEw8TExMPDw8PDxMTEw8TExMPDw8PExMTDw8TDw8TDxMTDxMTE
+      w8TDw8PDw8PDw8TDw8TDw8PDxMPEw8TExMTDw8PDxMTDw8TEw8TDxMTEw8PEw8PDw8PDxMPE
+      xMTEw8TDxMTDw8PExMTDw8PDxMPExMTExMTExMPDw8TDxMTExMTDxMTExMTDw8PDxMTDw8PE
+      w8PDw8TEw8PExMTExMPDxMPEw8PDxMTExMTExMPDsaieaj4Qaj8Paj8QbEIUure0moh0a0AR
+      a0ARa0ARmIRuxMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMXExMTExMTE
+      xMTExMXExMTExMTExMTExcTExMTFxMTExMXExMTExMTExMTExMTExMTExMTExMTExMTExMTE
+      xMTExMTExMXExMTExMTExMTExMTExMTExMTExMTFxMTExMTFxMXExMTExMTExMTExMTExMTE
+      xMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTF
+      xMTExMTExMTExMTExcTExMTExMTExMTExcTExMTExMTExMTExMTExMTExMTExMTExMTExMTE
+      xMTExMTExMTEmYRua0ASa0ARa0ARm4h0hWZFbEETbEETcUkewsHAxcXFxcXExcXFxcXExcTE
+      xcXFxcXExMTFxcTFxcXFxcTFxcXFxcXFxcXFxcXExMXFxcTFxMXExcXFxcXFxcXFxcXFxMTF
+      xcXExcXExcXExcXExcXExcXFxcXFxMXFxMXExcXFxcTFxMXExcXFxMTExcTFxcXFxcXFxcXF
+      xcXExcTFxcXFxMXFxcXFxMXExcTExcXFxcTExcTFxMTFxcXExcXFxMXFxcXExcXExcTExcXF
+      xMTFxcXFxcXFxcXExMXExcTFxcXFxMXFxcXFxcXFxMXExcTFxcXExcXExcTFxcXFxcXFxcXF
+      xcXFxcXExcXFxMXFxMTExcXFxcXFxcXFxcXFxMXExcXFxcTExcXFwsHAcUkebEETbEEThWZF
+      dlAnbEIUbUIUknpgxcXGxsbFxsbGxsXGxsXFxsbFxsXFxsXFxsbGxcbGxcXGxcbGxsXGxcXF
+      xcXFxcbFxsbFxcbFxcXFxcbGxcXGxcXFxcXGxsbFxcXFxsbGxsbGxcXGxcXGxcXFxcbFxcbF
+      xcXGxcXFxsXFxcbGxcbFxsbFxsXFxsXFxsbGxcXFxsXFxsXGxsXFxcXGxcXGxcXFxcbGxcXG
+      xsXFxcbFxsbFxcbGxcbGxsXFxcbFxcbGxcXFxsbFxcXFxcXFxsbFxcXGxsbFxcXGxcXFxcXG
+      xsXGxcXGxcXFxcbGxsXFxcXGxcbFxcbGxcXFxsXFxcbFxsbFxcbFxcXGxcXFxcbFxsbGxsbF
+      xcXFxcbFxcXGxcbFxcXFxcbFknpgbUIUbEITdVAnbUMVbUMVbkMVq56RxsbGxsbGx8fGxsbG
+      xsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbHxsbGxsbGxsbGxsbGxsfGxsbG
+      xsbGxsbGxsbGxsbGxsbGxsbGxsbGx8bGxsbGxsbGxsbHxsbGxsbGxsbGxsfGxsbGxsfHxsbG
+      xsbGxsbGxsbGx8bGxsbGxsbGxsbGxsbGxsbHxsbGx8bGxsbGxsbGxsbGxsbGxsbGxsbGxsbG
+      x8fGxsbGxsbGxsbGxsbGx8bGxsbGxsbGxsfGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbG
+      xsfGxsbGxsbGxsbGxsbGxsbGxsfGxsbHxsbGx8bGxsbGx8bGxsbGxsbGxsbHx8bGq56RbUMV
+      bkMUb0UYbkQWbkQWb0QXvLeyx8fHxsfGx8bGxsbHx8fHx8bGx8fHxsfGxsfHx8fGx8fHx8bH
+      x8bGxsfGx8fHx8fHx8fGx8bGxsbHx8fHxsfHxsfHx8fHx8fHxsfGx8bHx8fGx8fHxsfGx8bH
+      x8fHx8fHxsfHx8fHx8fHx8fHx8fGx8bGx8fHx8fHxsbGx8fHxsfGx8fHx8fHx8bGx8bHx8bG
+      x8fHx8fHxsfHx8fHx8fHxsbGx8fGx8fGxsfHxsfGxsfHx8bHx8fHx8fHx8bGx8fHxsfHx8bH
+      x8bGx8fGxsfHx8bHx8fHx8fHx8bHx8fHx8bHxsfHx8fGx8fGx8fHxsbHx8fGx8bHx8fHx8bH
+      xsbHx8bGx8fGx8fGxsfGx8fGx8fGxsfGu7iyb0QWb0QWbkQWb0UXb0UYb0UYx8jHx8fHx8jH
+      yMfHyMjHx8jHyMfHyMfHyMfHx8jHyMfIyMfHyMjIx8fHx8jIx8fIx8fHx8fIx8fIx8jIyMjI
+      x8jHyMjHx8fHx8jHyMjHx8fHx8fHx8jIx8jHyMfIx8fHx8jHx8jIx8jHx8jHx8jHx8fHx8fH
+      x8fHx8jIx8jHyMfHx8jHyMfIx8jHyMjHyMfHyMjHx8jIx8fHx8jIx8fHx8jHx8jHx8jIyMfH
+      x8jHyMjHx8fIx8fHx8fIx8fIx8fHyMfIyMfIx8jHyMfIx8fHx8jHx8fHyMjIyMjHx8fHyMfI
+      yMfHx8jIx8fIx8fIx8fHyMfHyMfIx8jHx8jHx8jIx8jHx8fHx8fHx8fHyMjIx8fIx8fHyMfH
+      xcTEcEUYb0UXcEUYcEYZcEYYcEYZyMjIyMnJyMjIyMjIyMjIycjIyMjIyMjIyMjIyMjIyMjI
+      yMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjI
+      ycjIyMjIyMjIyMjIyMjIyMjIyMjJyMjJyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjI
+      yMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMnIyMjIyMjIyMjIyMjIyMjI
+      yMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIycjIyMjJyMjIyMnIyMjIyMjIyMjI
+      yMjIyMjIyMjIyMjIyMjIyMjIyMnIyMjIyMjIyMjIyMjIcEYZcEYZcEYZcUcacUcacUcaycjI
+      ycjJyMjIycjJycjJyMnIyMnIycnIycjJycnJyMnJycjJycnJycnJycnIycnJycnIyMnIycnJ
+      yMjIycnJyMjJyMnJyMnIycjIyMnIycjIycnIycnIyMnJycnJycnJyMnIycnJyMnIycnJycjJ
+      yMnJycnJycjIyMnIycjJycnJycjIycjJycnJyMnIyMnIyMjJycjJycnJycjIycnIyMjJycjJ
+      yMnJycjJyMjJyMjJyMnJyMjJycnIycnIycnIyMnJyMnJycnJyMjIycjJyMnIycjJycjIycnI
+      ycjJycnIyMnJycnJyMnIycnJycnJycnJycjJycnJycjJycnIycnJycnJycjJycnJycjJycnI
+      yMnJycnIycnJcUcbckcackgackgcckgbckkbycrJysnKysrJysrJycrJysrKysnJysrKycnJ
+      ycnKycrKysnKysrKysrJysrJysrKysrKycnJycnJycnJycnJycnJycnKycrJycnKysrJycnJ
+      ysnKysnJycrKycrJycrKycnKycnJycnJysrJysrJysnKycnJysnJysnKycrJysnJycnJysnJ
+      ysnKycnJycnJysnKysrKycnKysnJycnJycrKycnJysnJycnKycrJycnKysnKycnKysnJysnK
+      ysrJycnJycnJycnJycrJycrKycnKycrJycnJycnJysnJysnKysnKysrJycnKycnJysrKycrK
+      ycnJycnKysrJysrJysnJycrJycrJysrJysnJycnJycnJycrJysnKckgcckgcckgcc0kdc0kd
+      c0kcysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrK
+      ysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrK
+      ysrKysrKysrLysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrK
+      ysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrK
+      ysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysvKysrKysrKysrKysrKysrKysrK
+      ysrKy8rKysrKysrKysrKc0kcc0kdc0kddEoedEoedEoey8rKysvLy8vLy8rLy8rLy8vLy8rL
+      ysrKy8vLy8rLysvLy8rLysvLysvLysvKy8vKy8vLy8rLy8vKy8rLy8vKy8vKy8rKy8vLy8vL
+      ysvLysrKy8rLy8vLy8vLy8vLy8vKy8vLy8rKysvLy8vLy8vLy8rLy8vLy8vLy8vLy8rLy8vK
+      y8vLy8rLy8rLy8vLysvKy8vLy8rLy8rLy8vLysvKy8vLysvLy8vLy8vKy8rKy8vLy8vLy8vL
+      y8rLy8rKy8vLy8rLy8vLy8vLy8vLy8rLy8vKy8vLy8vKysrKy8vLysvLysvLy8vLysvKysvL
+      y8vLy8vLysvKy8vLy8vLy8vLy8vLy8vLy8vKysrLy8vLy8vKy8vKy8vLy8vLc0sedEofdEof
+      dEsfdUsgdEsgy8zMy8zMy8vLzMvLzMzLy8vLzMvMy8vMy8zMy8zMy8vMzMvMy8vMy8vMy8vL
+      y8vMzMzLzMvMy8vMzMvMy8vMy8vLy8vMy8vMy8vLy8zMy8vLy8vLy8vLzMvMy8vLzMzMy8vL
+      y8vLzMvLy8vLy8zMy8vMy8zMy8zLy8zLy8zMzMvLy8vMzMvLy8zLzMzLzMvLy8zLy8vMzMvM
+      zMvMy8vLy8vLy8vLy8vMy8vLy8vMy8vLy8vMy8vLy8vMy8vLy8zMy8vLy8vMy8vMy8zLzMvL
+      zMvLy8vMzMvLy8vLy8vLy8vMy8zMy8zMy8vMy8vLy8zLy8vLzMzLzMvLy8vMy8vLzMvLy8vL
+      zMvMzMvMy8vLzMzMy8vMy8vLy8zLdUsgdUsgdUsfdk0gdkwgdk0hzMzMzMzMzMzMzMzMzMzM
+      zMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMy8zMzMzMzMzMzMzMzMzM
+      zMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzM
+      zMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzM
+      zMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzM
+      zMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMdUwh
+      dUwhdk0hd00id00idk0izM3NzM3NzMzNzczNzMzMzM3MzczNzMzMzM3Nzc3Nzc3MzM3Mzc3M
+      zczMzc3MzM3MzM3Mzc3Nzc3MzM3Nzc3NzM3Mzc3NzMzNzM3Nzc3NzMzNzM3Nzc3NzM3NzMzN
+      zc3Nzc3Nzc3Mzc3Mzc3NzMzNzM3Mzc3Nzc3NzczNzc3NzczNzc3Mzc3Nzc3NzczMzczNzc3M
+      zc3MzMzMzczNzM3Mzc3NzMzNzczMzc3MzMzMzc3Nzc3NzM3Mzc3Nzc3NzczNzc3Nzc3NzczN
+      zc3Nzc3Mzc3MzczMzc3MzczNzMzNzMzMzM3NzM3NzM3Nzc3Mzc3NzczNzczNzc3MzM3Nzc3M
+      zc3NzM3Nzc3Nzc3Nzc3Nzc3Nzc3MzMzMzc3Nd00id04idk0ieE8jeE4kd04jzc3Ozs3Nzc3N
+      zs3Ozc3Ozc3Nzc3Nzc3Nzc3Nzc7Ozs3Nzs3Ozc3Ozc7Nzc3Nzc3Nzs3Ozc3Ozc3Nzc3Ozs3N
+      zs7Nzc3Ozs3Nzc3Nzc7Ozc3Nzc7Nzc7Ozc7Ozc3Nzc3Nzs3Nzc3Nzc3Ozc3Ozc7Nzc3Nzc3O
+      zc3Ozc7Ozs7Nzs3Ozc7Nzc3Ozs7Nzs3Nzc7Nzc7Nzs3Nzc7Nzc3Nzc3Nzc3Nzc3Ozc7Nzs7N
+      zc3Nzc3Nzc3Ozc3Ozc3Nzc3Ozs3Nzs3Nzs3Nzc7Nzc3Nzc7Ozs3Nzc3Nzc3Nzc3Nzc3Nzc3N
+      zc3Ozc7Nzs3Nzc7Ozc3Nzc3Ozs7Nzc3Nzc7Nzc3Nzs3Nzc3Ozs3Nzc7Nzc7Nzc7Nzc7Ozc3N
+      zc7Nd04jeE4jeE4jeU8keFAkeE8lzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O
+      zs7Ozs7Ozs7Ozs7Ozs3Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O
+      zs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Nzs7Ozs7Ozs7Nzs7Ozs7Ozs7Ozs7Ozs7N
+      zs3Ozs7Ozs7Ozs7Ozs7Ozs7Nzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozc7Ozs7Ozs7Ozs7O
+      zs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Nzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O
+      zs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Nzs7OeU8leE8leE8keVAmeVEmeVEmzs7P
+      z8/Pzs/Ozs7Pzs7Pz8/Pzs/Oz8/Ozs/Pz8/Pz87Pzs7Pz87Pz87Pzs/Pzs/Pz8/Oz8/Oz8/P
+      zs7Pz87Pzs/Pz8/Pz87Ozs7Pzs/Pz8/Oz8/Pz8/Oz8/Pz8/Pz87Pzs7Pzs7Oz8/Oz8/Pz8/P
+      z8/Pzs7Oz8/Oz8/Oz8/Ozs7Pz8/Oz8/Oz8/Ozs/Pz87Oz87Pz87Pz8/Oz87Pz8/Pz8/Pzs/P
+      zs/Pzs7Pz87Oz8/Pz8/Oz8/Oz87Pzs/Ozs/Ozs7Pz8/Pzs/Oz8/Pzs7Pzs/Pz8/Oz8/Pzs/P
+      z87Ozs/Pz87Oz87Pz8/Pz8/Pz87Pz8/Pzs/Pzs7Oz8/Oz8/Pzs/Pz8/Pzs7Ozs/Ozs7Ozs7O
+      zs/Pzs7Pz87OeVAmeVEmeVAmelInelEoelEn0M/Pz8/Pz8/P0M/Pz9DP0M/Qz8/Pz9DPz8/Q
+      z9DPz8/Pz8/Pz8/Pz9DPz8/P0NDQ0M/Pz8/P0M/Pz9DQz8/Pz8/Q0NDPz9DP0M/P0M/Pz9DP
+      z8/Qz9DQz8/Pz9DP0M/Pz8/P0M/Pz8/P0M/P0M/Pz8/Pz9DP0M/Pz9DPz9DPz9DPz8/Pz9DP
+      z8/Q0NDQz8/P0M/Pz8/Pz8/P0NDPz8/Pz9DQz8/Pz8/Qz8/Pz8/Qz8/Pz8/P0M/P0M/Qz8/P
+      0M/Pz8/P0M/P0NDP0NDP0M/Pz8/Pz8/P0M/Pz9DQz8/Q0NDQz8/P0M/Qz9DQz8/Pz9DPz9DP
+      z8/P0M/Qz9DP0M/Pz8/Pz8/Pz8/Pz8/Pz8/Q0M/Q0M/Pz8/Pz8/PelEnelEnelIne1Ipe1Mp
+      e1Io0NDQ0NDQz9DQ0NDQ0NDQ0NDP0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ
+      0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ
+      0NDQ0NDQz9DQ0NDQ0NDQ0NDQz9DQ0NDQ0M/Q0NDQ0NDQ0NDQ0NDP0NDQ0NDQ0NDQ0NDQ0NDQ
+      0NDQ0NDQ0NDQ0NDQ0NDQ0NDP0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDP0NDQ
+      0NDQ0NDP0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDP0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0M/Q
+      0NDQ0NDQz9DQ0NDQ0NDQe1Ipe1Moe1IpfFMqfFQpfFQq0dDR0dDR0NHR0NHQ0NDR0NHQ0dDQ
+      0dHR0NDR0dDR0dDQ0dDR0NHQ0NDR0dHR0NHR0NHQ0dHQ0NDQ0dDR0dDQ0dHQ0dDR0NDR0dHQ
+      0dHR0dHR0dDQ0dDR0NHQ0NHR0NHR0dDQ0dHQ0NDQ0dDQ0dHR0dDQ0dHR0NHQ0dDR0NHQ0NHQ
+      0NHR0dHQ0NDR0NDQ0NHQ0NHR0NDR0dDR0NHR0dHR0dHQ0dDQ0dHR0dHQ0dHR0dHQ0NHR0dDQ
+      0dHR0NHQ0NHR0NDR0dHQ0dDR0NDR0dDQ0NDR0NDR0NHR0dDQ0dHR0dHR0NDQ0NDQ0dHR0NDR
+      0dHQ0dDR0NDR0NDR0NHQ0NHR0dHR0NHR0NDR0dDR0dHR0dHQ0dHQ0NDQ0dDRfFMqfFMqfFQq
+      fVUrfVUsfVQr0tHS0dHS0dLR0tHR0tLR0dLR0dHR0dHR0dHS0dHS0dLR0dHR0dHR0dHR0dHS
+      0dHR0dHR0dLR0tHR0dHS0dHR0tHS0tHR0dHR0dLS0dLR0tHR0tLS0dHR0dHS0dHR0dHS0dLS
+      0dLR0dHR0dHR0dHS0tHR0dLR0dHR0dHS0tHR0dHS0tLR0dHR0dHS0dLR0dHR0dHR0tHR0dHS
+      0dHR0dHS0dHS0dHR0tHR0tLS0tHR0dHR0tHS0tLR0tHR0tHR0tHR0dHR0tHR0dHS0dHR0dHS
+      0dLR0dHR0dLR0dHR0dHR0tLR0dHR0dLR0dHS0dLS0dLS0dHR0dLR0dLS0tHS0dHS0dHR0tHS
+      0dHR0dHS0dHR0dLS0tLR0dLR0dHRfVUsfVQrfFQsflUtfVYsfVYt0tLS0tLS0tLS0tLR0tLS
+      0tLS0tLS0tLR0tHS0tLS0tLS0tLS0tLS0dLR0tLS0tLS0tLS0tLS0dLS0tLS0dLS0tLR0tLS
+      0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0dLS0tLS0tLS0tLS0tLS0tHS0tLS0tLS0tLS
+      0tLS0dLS0tLS0tLS0tLS0tLS0tLS0tLS0dHS0tLS0tLS0tLS0tLS0tLS0tLS0tLR0tLS0tLS
+      0tLS0tLS0tLS0tHS0tLS0tLS0tLS0tLS0dLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLR0tLS
+      0tLS0dLS0tLS0tHS0tLS0tLS0tLS0tHS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSfVYt
+      fVUsfVUtflYuflcuflYu09PS09PT09LS09PS09LT09PS0tLS09PT09LT09LT09LS09LS09LT
+      09LS09PS09LS09PT09PT09PT0tPT0tPT09PS09PT0tLT09LT09LT09LS0tPS09PS09LS0tPT
+      09LT09LT0tLS0tPT0tPT0tLT09LS0tPT09PS0tLT0tPS0tPT09LT09PT09LS0tLT09LS09PS
+      09LT0tPS09PT09PT0tPS09PS0tPT09PT0tLS09PS09PT09PT09LS09LS09LT09PT09PT09PT
+      0tLS09LS09PT09LT09LT0tLT09PS0tLT09PT09PS0tLS0tPS0tPT0tLT09LS0tLT0tLT09PT
+      09LS09LT0tPT09PT0tPT09LT09LS09LT0tLSflYuf1Yuf1ctf1gvgFcvf1cv1NTU09PT09PU
+      09PT09TT09TT09PT09PT09PT09PT09PU09PT09PT09TU09PT1NTT09PT09PT09PT09TT1NPT
+      09PT1NTU09PT09PT09PU09PT09PT09PT09TT09PU09TT09TU1NPU09PT1NPU09PT09PT09TT
+      09PT1NPT1NPT09PT09PU09PT09PT1NPU1NPT1NTU09TT09PT09PT09TU1NPT1NPT09PT09PT
+      1NTT09TT1NTT1NTT1NPT09PU09PT09PT1NPT09PU09PT1NPT09PT09PT09PU09PT09PT09PT
+      09TT09TT09PT09TU09PT09TT1NPT1NTT09PT09PT09PU09PT09PT09PT09PT09PU1NTT09PU
+      09PTgFcvgFcvgFgvgFkwgVkxgVkw1NPU1NTU1NTU1NTU1NTT1NTU1NTU1NTUZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAlnxdx72zk18lk18lk18lk18lvq+d1NTU1NTU
+      1NTU1NPU1NPT1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTUgVkwgFgxgVkwgloxgVkygVox1NXU
+      1dXV1dXU1dXU1NXU1dTV1dXU1NXVgV81ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAc0sa1dXUm207k18lk18lk18lq4tm1dTV1dTU1dXV1NXV1NXU1NXU1NXU1dXU1dTU1NTU
+      1dTV1dXU1NTVgVoxgVoygVkyglozglozgloz1tXV1tXV1dXV1dXV1dXV1dXV1dXV1dbVpJB3
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAwLesuKGHk18lk18lk18ll2Yw
+      1tXV1dXV1dbV1dbV1dXV1tXV1dXV1dbV1dXV1dXV1dbV1dXV1dXVglszglszglszg1w0g1w0
+      g1w11tbW1tXW1tbW1tbW1tbV1tbW1tbW1tbWwLitZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgApJB4zce/k18lk18lk18lk18lyL+01tXW1tbW1tbW1tbW1tXV1tXW1tXW
+      1tbV1tbW1tbW1tbW1dbWg1w0g1w1g1s0hF02hFw2hF0219fX1tbW19fW19fX1tfW19bX1tfX
+      1tbX1tbXdEsaZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAe1Uo19fXn3VGk18l
+      k18lk18lsJNz1tbW1tbW19fX1tbW1tbW19fW19bW1tbW19fW1tbX19fW1tbXhFw2hF02hF02
+      hF43hV43hF422NfX19fX19fY19fX19fX19jX2NfX2NfX2NfXkHNQZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAz83JuaKJk18lk18lk18lm24719fY19fX2NfX19jX2NjY
+      19fX19fX19fX19fX19fX19fX19fXhF03hV43hV03hl44hl84hV842NjY2NjY2NjY2NfY2NfX
+      2NjY2NjY2NjY19jYtKWUZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgArZuG
+      z8jBk18lk18lk18lk18ly8C22NjY2NjY2NjY2NjY2NjY2NjY19jY19jY2NjY2NjY2NjYhl84
+      hV84hl85hmA6h186h2A62NnY2NjZ2djZ2NjY2djZ2NjZ2NjY2djY2NnZ0c3KZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAiWpE2djZn3VGk18lk18lk18ltZt+2dnY2djY
+      2NjZ2dnZ2djY2djZ2dnZ2dnZ2djY2dnZ2NjZhl86h2A6hmA6h2E7iGE7h2E72drZ2dra2dna
+      2drZ2dna2dnZ2dnZ2tra2dnZ2dnZgmA2ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAbUIN2dnZuqOKk18lk18lk18loHVG2tnZ2dnZ2dnZ2dnZ2trZ2drZ2dnZ2dna2dna2dnZ
+      2dnZiGA7iGA7iGE7iGE8iGI8iGE82tra2trZ2tra2tra2trZ2tra2tra2trZ2tra2dran4hs
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAtaeV0MrDk18lk18lk18lk18l
+      0crD2trZ2tra2trZ2tra2tra2tra2tra2tra2tnZ2traiWE8iWE8iGI8imM+iWM+imM92trb
+      2tva29vb29va29va29rb2tra2tra2tra2tvbxLuxZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAknVS29rbpH1Sk18lk18lk18luqOL2tva29rb2tra29va29ra2trb2tra
+      29ra29ra29raiWI+imI9imM+imQ/i2M/imM/3Nvb29vb29vb29vb29vb29vb29vb29vb3Nvb
+      29zb29vbbUINZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAYD4PTVA9
+      TVA9TVA9TVA9TVA9TVA9TVA9TVA9U0ouZjgAZjgAYD4PTVA9TVA9WUQfZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAdEwb29vbv6yWk18l
+      k18lk18lpX5S29vb29zc29vb29vb3Nvb29vb29vb29zc29vc29vbimQ/imQ/imQ/i2VAi2VA
+      i2VA3Nzc3Nzc3Nzc29vc3Nvc3Nzc29zc3Nzc29zc3Nzc3NzcknVSZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgATVA9AJb0AJb0AJb0AJb0AJb0AJb0AJb0AJb0Gn+3
+      ZjgAZjgATVA9AJb0AJb0M2d6ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAxb2y19TQk18lk18lk18lk18l19TQ3Nzc3Nzc3Nzc3Nzc
+      29zc3Nzc3Nzc29zc3Nzbi2RAi2VAi2VBjGZCjGZBjGZC3Nzc3Nzc3Nzd3d3c3Nzd3dzc3dzc
+      3N3d3Nzd3dzd3d3dr56JZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      TVA9AJb0AJb0AJb0AJb0AJb0AJb0AJb0AJb0Gn+3ZjgAZjgATVA9AJb0AJb0M2d6ZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAoIpu
+      3N3dqYZek18lk18lk18lwKyX3Nzc3d3d3dzd3d3c3N3c3N3c3dzc3d3d3NzcjGZBjGZBjGZB
+      jWdDjWdDjWdC3d3d3d3e3d3e3d3d3d7d3d3d3d7d3d3d3d3d3d3d3t3d1dLPZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgATVA9AJb0AJb0OWFrTVA9TVA9TVA9TVA9
+      TVA9U0ouZjgAZjgATVA9AJb0AJb0M2d6ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAfFcp3d3dwa2Xk18lk18lk18lqoZe3d3d3d7d
+      3d3d3d3d3d3d3d3d3d3d3d3d3t3djWdDjWdDjWdCjmhEjmhEjmhE3t7e3t7d3t3e3d7e3d7e
+      3t7d3t3e3t3e3t7e3t7e3t7d3d7dfFcpZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgATVA9AJb0AJb0TVA9ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgATVA9AJb0AJb0M2d6
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAzsnC2dbSk18lk18lk18lk18l3t7d3t3e3t7d3t7e3t7e3t7e3t7e3t3d3t7ejmhE
+      jWhEjmhEj2lGjmlFjmlF397e397e397e397f3t7e3t/f3t/f397e3t7e39/f3t7f3t7footv
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgATVA9AJb0AJb0TVA9ZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgATVA9AJb0AJb0M2d6ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAsZ+L397fqodfk18lk18lk18l
+      xraj3t/e397e3t7e3t/f3t/e39/f39/f3t/fjmlFjmlFj2lFkGpHj2pHj2pG39/f39/f39/f
+      4N/f39/g39/f39/f39/f39/f39/f39/f39/gyb+1ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgATVA9AJb0AJb0TVA9ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgATVA9AJb0
+      AJb0M2d6ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAjGxF4ODfwq6Yk18lk18lk18lr49r39/f39/f39/f39/f39/f39/f39/f
+      3+Dfj2pGkGpGkGpGkWtIkWtIkGtI4ODg4ODf4ODg4ODg39/g4ODg4ODg3+Df4N/g4ODg4ODg
+      4ODg3+DgZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgATVA9AJb0AJb0TVA9
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgATVA9AJb0AJb0DYrWGn+3Gn+3M2d6WUQfZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA4ODg29fTk18l
+      k18lk18ll2cw4N/g39/g4ODg3+Dg4N/g3+Dg3+Df4ODfkWtIkGtIkWtIkmxJkWxJkmxJ4OHh
+      4ODg4ODh4ODh4OHh4eHh4eDh4eDh4ODh4OHh4OHh4OHgycC2ZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgATVA9AJb0AJb0E4TGGn+3Gn+3Gn+3Gn+3Gn+3QFtcZjgAZjgA
+      TVA9AJb0AJb0AJb0AJb0AJb0AJb0AJb0QFtcZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAdU0c4eDg4eHgl2cwk18lk18lk18l4eHg4eHh4ODg4ODh4ODh
+      4ODh4eDg4ODhkWxJkWxJkWxJk21Lkm1Kkm1L4eHh4eLh4eHh4eHh4eHh4eHh4eLh4eHh4eHh
+      4eHi4eHh4uHhqpZ+ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgATVA9AJb0
+      AJb0AJb0AJb0AJb0AJb0AJb0AJb0M2d6ZjgAZjgATVA9AJb0AJb0DYrWGn+3DYrWAJb0AJb0
+      AJb0TVA9ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAlHdU4eHh
+      yLimk18lk18lk18lpn9U4eHh4eLh4uHh4eHi4eHh4eHh4eHh4uHhkm1Lk21Kkm1Lk25Mk25M
+      k29M4uLi4uLh4uHi4uLi4uLh4uLi4eLh4uHi4uHi4uLh4uLh4uLhjG1GZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgATVA9AJb0AJb0E4TGGn+3Gn+3Gn+3Gn+3Gn+3QFtc
+      ZjgAZjgATVA9AJb0AJb0M2d6ZjgAZjgAQFtcAJb0AJb0IHmoZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAu6yb4eLisI9sk18lk18lk18lv6iO4uLi4uLi4uLi
+      4uLh4eLi4uLh4uLh4uLik25MlG5Mk25MlHBNlG9OlG9N4+Lj4uPj4uLi4+Pj4+Pi4uPj4+Pj
+      4+Pi4uLj4+Lj4+Lj4uLjZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      TVA9AJb0AJb0TVA9ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgATVA9AJb0AJb0M2d6ZjgAZjgA
+      ZjgAGn+3AJb0AJb0ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      29fU4+PimGcwk18lk18lk18l2NHL4uLj4uLi4uPi4uPi4uLj4uLj4uLi4uPjlG9NlG9NlW9N
+      lXBOlXBPlXBO4+Pj5OPk4+Pk5OPj4+Pj4+Tk4+Pj4+Tj4+Tj4+Pj4+Pjw7iqZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgATVA9AJb0AJb0TVA9ZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgATVA9AJb0AJb0M2d6ZjgAZjgAZjgAGn+3AJb0AJb0ZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAjW1H4+Pj08q/k18lk18lk18londI4+Pj4+Pj
+      4+Pj4+Pj4+Tk4+Tj4+Pj4+Pj4+PjlXBPlXBOlXBPlnFPlnFQlnFP5OTj4+Tk5OPk5OPk5OTk
+      4+Tk5OPk5OPk5OTj4+Tk5OTjpI1xZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgATVA9AJb0AJb0TVA9ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgATVA9AJb0AJb0M2d6
+      ZjgAZjgAU0ouAJb0AJb0Gn+3ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgArJh/5OTjtpl4k18lk18lk18lwKmQ5OPk5OPk5OTk5OPj5OTk5OTj5OPk5OPj4+PklnJQ
+      lnJQlXFQl3JSl3JRl3JR5OTk5OXl5OXk5eTl5OXl5OTk5OTk5OTk5OXk5OTk5eTlfVgrZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgATVA9AJb0AJb0JnOZM2d6M2d6
+      M2d6M2d6M2d6QFtcZjgAZjgATVA9AJb0AJb0Gn+3M2d6Gn+3AJb0AJb0AJb0QFtcZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA1M7I5OTlnW88k18lk18lk18l2dPM
+      5eXl5OTl5eXl5OTl5eTk5OTl5eTk5eTk5OXklnJRlnNRl3JRmHNSmHNSl3NS5eXl5eXl5ebl
+      5ebl5eXl5eXl5uXl5eXl5eXl5eXl3drWZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgATVA9AJb0AJb0AJb0AJb0AJb0AJb0AJb0AJb0Gn+3ZjgAZjgATVA9AJb0
+      AJb0AJb0AJb0AJb0AJb0AJb0JnOZZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAflgr5eXl1cvBk18lk18lk18lonhJ5ebl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl
+      5eXlmHNSl3NTl3NTmXRTmHVTmXRT5eXm5ubm5ubm5eXm5eXl5ubm5eXl5ubl5uXm5ubmva6d
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgATVA9AJb0AJb0AJb0
+      AJb0AJb0AJb0AJb0AJb0Gn+3ZjgAZjgATVA9AJb0AJb0AJb0AJb0Gn+3IHmoQFtcZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAnYRl5ebmvKKEk18lk18lk18l
+      t5p55ubm5ebl5ubm5ubm5ubm5ubl5ubm5ubm5ebm5uXmmXRUmXRTmXRUmnZVmnVVmnVV5ufn
+      5+bn5ubm5ubm5ufn5ubn5ubm5ufm5ubn5ufnlnlWZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAxrqt5+fmonhJk18lk18lk18l1s3B5ubm5+bn5ubn5+fn5ubn5ufm5+bn
+      5ubm5ubn5ufmmXZVmXVVmXVVmnZXmnZWmnZW5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn
+      5+fndk0cZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAbkIO5+fn3NXOk18lk18l
+      k18lnXA95+fn5+fn5+fn5+fn5+fn5+jn5+fn5+fn5+fn5+fn5+fnm3ZWmnZXm3ZXm3dYm3dY
+      m3hY6Ojo6Ojo6Ojn6Ojo6Ofo5+jn6Ojn6Ojo6Ofn1tHKZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAlnpX6OjnwquSk18lk18lk18luJt65+jo6Ofo6Ojo6Ojo6Ofn6Ofn
+      6Ojn6Ojo6Ojn5+jo6OjonHdXm3dYnHdYnXlZnXhZnHlZ6ejo6Ojo6Ojp6ejp6ejp6Ojo6Onp
+      6Ono6enpt6aQZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAt6aR6Ojoo3hJ
+      k18lk18lk18l2M7E6Ojo6Ojp6Onp6Ojo6Ojo6Ono6Ojp6Ojo6ejo6Ojo6OnpnHhZnHhZnHhZ
+      nXlanXpanXlb6enp6enp6enp6enp6enp6enp6enp6enp6enpj29JZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgA4N3a4+Dck18lk18lk18lnXA96enp6enp6enp6enp6enp
+      6enp6enp6enp6enp6enp6enp6enpnXpanXpanXlbnnpcnXpbnntc6urp6urq6enq6erq6enp
+      6urq6urp6urq6erpbkMOZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAhmQ66unp
+      ybWfk18lk18lk18luZx76unp6urp6urq6unq6unq6urp6unq6erq6erq6unq6urq6urpnntc
+      nntbnnpcnntdnnxdnntd6urq6uvr6uvq6+vq6uvq6+rr6uvq6+rr0cm+ZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAsJuD6urrropjk18lk18lk18lz7+s6+vq6urq6urr
+      6+rq6urr6urr6+vq6+rq6uvq6urq6+rq6+rrn3xdn3xdn3tdoHxfoH1foHxe6+vr6+vr6+vr
+      6+vr6+vr6+vr6+vr6+vrqJF1ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      0cm+5eLek18lk18lk18lmGcx6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr
+      6+vroH1eoHxen31eoH5foH1goX5g7Ovr7Ovr7Ozr7Ovs6+zr6+zs6+zr6+zsh2U6ZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAdk4d7Ozrybahk18lk18lk18ltJRv7Ozs7Ovr
+      7Ozs6+zr6+zs6+zr6+zs7Ozr7Ozr6+zr7Ozr7Ozs6+zsoX1foX5goX5foX9hon5hoX9h7ezs
+      7O3s7e3t7Ozt7O3t7Ozs7Ozt7ezsZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgA
+      ZjgAoIdo7Ozsrotjk18lk18lk18l0L+u7e3s7e3t7O3s7O3t7O3s7O3s7Ozs7Ozs7e3t7Ozs
+      7e3t7ezt7OztoX5goX5hon9hon9ion9io39j7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7ezt
+      7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t
+      7e3t7e3t7e3t7e3t7ezt7e3s7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t
+      7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t
+      7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t
+      7e3t7e3t7e3t7e3t7e3s7e3t7e3t7e3t7e3t7e3t7e3t7O3t7e3ton9io4Bion9jo4Bjo4Fj
+      pIFk7e7t7u7u7u3u7e3t7e3u7e7u7e3u7u3t7e7t7u3t7u7u7e7t7u7u7u7u7u7t7e7t7e7t
+      7e3u7u7u7e7t7e7u7u7u7u7u7e7u7u7t7u7u7u7t7e7t7u7t7u7t7u3u7u3t7u7u7u7u7u7u
+      7e3t7u3t7u7t7e3t7u3u7e3u7u7u7u3u7e7u7u3t7e7u7u3u7u7t7u3u7e7u7e7u7u7t7u3t
+      7e7t7u3u7e3t7u7u7u3u7u7t7e7t7e3t7e7t7u7u7u3u7u3t7u3u7e7u7u7t7u7t7u7t7u3t
+      7u3u7e7t7u3t7e7t7u7t7e7t7u3t7u7t7u7u7e3u7u7u7e7t7u7t7u3u7u3t7u7t7u7t7u7t
+      7e7t7e7u7u7t7u7u7e3uo4Bjo4Bjo4BjpIFlpYJlpIJl7u/u7u7v7+/v7u/u7u7v7+7u7+7v
+      7+7u7u/u7u/u7+7v7u7v7u7u7+7v7+7v7+7u7u7u7u7u7+7v7u7u7u7u7u7v7u/u7u/u7+/v
+      7+7v7+7v7u7v7+7v7u/u7+7u7u7v7u7u7+7u7u/v7u7u7u7u7u7u7+7u7u7v7u/u7u7u7+7v
+      7u/v7u7u7u7v7u7u7u7u7+7u7+7v7u7u7u7u7u7v7u7v7u7u7u7u7u7u7+/u7u/u7u/u7u7u
+      7u/v7+7v7u7u7u7v7u7v7u/u7+7u7u7u7u7v7+7u7+/u7u7v7u7u7u7v7+7u7u7u7u7u7u/u
+      7u/v7+7v7+/u7+/u7u7u7+7u7u/u7+7u7+7v7u7u7u7v7+/u7u/u7u7u7+7upIJlpIJlpIJl
+      pYJmpYNmpYNm7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/u
+      7+/v7+/v7u/v7+/u7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+7v7+/v7+/v7+/v7+/v7u/v7+/v
+      7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v
+      7+7v7+/v7u/v7+/u7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/u
+      7+/v7+7v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v
+      7+/v7+/v7+/v7+/v7+/v7+/v7+/vpYJmpYJmpYJmpoRnpoRnpoNo8PDw7/Dw7/Dw8PDw8PDw
+      8PDv8O/v8PDw8PDw8PDv7+/v8O/v8O/w8O/w8O/w8PDv8PDw8PDv8PDw8O/w7/Dw8O/v7/Dv
+      7/Dw8PDw8O/v7+/w8PDw7+/v8O/v8PDw8O/w8O/w8PDw7/Dv7+/v8PDv8PDw7/Dw8O/v8O/v
+      8O/w8O/v8O/v7/Dw8O/v7/Dw8PDv8O/w8O/w8PDv8PDw8PDw7+/v8PDw8O/v8O/w8O/w8PDw
+      8O/v7/Dw8O/w8PDw7+/w8O/w7+/v7+/w8PDv8PDv7/Dv8O/w7/Dw8O/v8PDw8PDw8O/w7+/w
+      8PDv8PDw8PDv8PDv8PDv7+/w7+/v8PDw7/Dw7+/w8PDw8PDv8PDw7/Dw8PDv8PDv8PDvpoRo
+      poRnpoRnp4VopoVpp4Vo8PHw8fHx8PDw8PDw8PDw8PDx8fDx8fDw8PDw8PDw8PDw8PHw8PDw
+      8PDw8PDw8PDw8fDw8fDx8PDw8fDx8fDw8PDw8PHw8PHx8PDw8PDx8fHw8PHx8PDx8PDw8PHw
+      8fDx8PDw8PDw8PHw8PDw8PHx8fHw8PHx8PDw8fDw8PDx8fDx8PDw8fHw8fDw8fDw8PDx8PHx
+      8PDw8PHw8fDw8PHx8PHw8PDw8fDx8fDw8PDw8PDw8PHw8fDw8PHw8PDw8PDx8PHx8PDw8fDx
+      8fDx8fDx8fDw8PDw8PDw8PDx8PHw8fDx8fHx8PDw8PDw8PDw8PDw8PDw8PDw8PDw8PDw8fDx
+      8fDw8PHw8PDw8fDw8PHw8PHw8PDw8PDw8PHwpoVop4Vop4VoqIVqqIZqqIZq8fHx8fHx8fHx
+      8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8PHx8fHx8fHx8fHx8fHx
+      8fHx8fHw8fHx8PHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8PHw8fHw8fHx8fHx8fHx8fHx
+      8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8PHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx
+      8fHx8fHx8fHw8fHx8fHx8fHx8fHx8fHx8fHx8PHx8fHw8fHx8fHx8fHx8fHw8fHx8fHx8fHx
+      8fDx8fHx8fHx8fHx8fHx8fHx8fHw8fHx8fHx8fHx8fHw8fHw8fDx8fHx8fHx8PDx8fHx8fHx
+      8fHxqIZqqIVqqIVqqYZrqIdsqYZr8vLy8fLy8vLx8vLx8fHx8vHx8vHx8vLy8fLx8fHx8vLx
+      8vHy8vLx8vHx8vHy8fLx8vLy8vHy8fLy8fHx8vLx8vHy8vLy8fHy8fHx8fHx8fHy8fLy8vLy
+      8vHy8fHy8fLx8fLx8vLy8vLy8vLy8vLy8vHx8vLy8fLx8fHx8fHx8fHx8fLx8vLx8fLx8vLy
+      8fLy8vHy8vLx8fHx8vLy8vHx8vLy8vLy8fLx8fLy8vLy8vHx8fHx8fHy8vLx8vLy8fLy8vHy
+      8vLx8vHy8vLy8vHy8fLx8fLy8vHx8vLy8fLx8vLx8vLy8fHx8vLy8vHx8fLx8fHx8fHx8fHy
+      8vLx8fLy8vLy8fLx8fLy8vHy8fLx8vHx8fLy8vLy8fHxqYZrqIZrqYdrqYhtqYhtqodt8/Ly
+      8/Py8vLz8vLz8vLz8vLy8vLy8/Py8vLy8vPy8vLy8vPz8vLy8vLz8/Py8/Ly8vLy8/Ly8vLy
+      8/Ly8vPy8vLy8/Py8vLy8vLz8vPy8/Ly8vLy8vPy8vLy8vLy8vLy8vPz8vLy8vLy8vLz8vLy
+      8/Ly8vLy8vLz8vLy8vPy8vLy8/Lz8/Ly8vPy8vLy8vLy8vLy8vLz8vLy8vLy8/Ly8vLz8/Ly
+      8vLz8/Py8vLy8vLy8vLy8vLy8vLz8/Ly8vLy8vPz8vLy8vPy8vLy8vLy8vPy8vLy8vLy8vLy
+      8vLy8vLy8vLz8vLy8vLy8vLy8vLz8vLy8vLy8vLy8vLy8vLz8vLy8vLy8vLz8/Ly8vLz8vLy
+      8vPz8vLy8vLzqohtqodsqYdsq4luq4luqohu8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz
+      8/Pz8/Pz8vPz8/Pz8/Pz8/Py8/Pz8/Pz8vPz8vPz8/Pz8/Pz8vPz8/Pz8/Pz8/Pz8/Pz8vLz
+      8/Py8vPz8/Pz8/Pz8/Pz8/Lz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz
+      8/Lz8/Pz8/Pz8/Pz8vPz8/Py8/Pz8/Pz8/Py8/Pz8/Pz8/Pz8/Pz8/Pz8vPz8/Pz8/Ly8/Pz
+      8/Pz8/Pz8/Lz8/Pz8/Py8/Py8/Pz8/Pz8/Pz8vPz8/Pz8/Pz8/Pz8/Py8/Py8/Lz8/Pz8/Pz
+      8vPz8/Pz8/Pz8/Py8vPz8/Pz8/Pz8/Pz8/Pz8vPz8/Pz8/Pz8/Pzq4luqohuq4luq4pvq4pv
+      rIlv9PP09PP08/Pz9PT09PT09PT09PPz9PP09PT09PTz8/T09PP08/T08/T09PPz9PTz8/Tz
+      8/T08/Pz8/T08/P08/P08/T08/Pz9PP08/P08/Tz8/T09PT08/Pz9PT09PT09PT08/P09PTz
+      8/Tz9PT09PPz8/T09PPz8/T08/Tz9PT09PPz8/Tz9PTz9PP08/Pz9PTz9PPz8/T09PTz9PTz
+      9PP08/T08/Pz8/T09PTz9PTz9PT08/P08/Pz9PTz9PPz8/T09PPz9PP08/P09PT08/Tz9PP0
+      8/Tz9PTz9PPz9PPz8/Tz9PTz9PTz8/P08/P09PT08/Pz9PPz9PTz9PT08/T09PT09PPz8/P0
+      9PP09PTz8/Tz8/P08/Pzq4lwq4pvrIlvrItxrItxrItw9PT09PT09PX09PT09PT09PT09PT0
+      9fX09PT09PX09PX19PT09PX09PT09PX09PT09fT09PT19PX09PT09PT19PT09fT09PX19PT1
+      9fT19PX19PT09PT09PX09PT09PX09PT09PX09PT09PT09fT09PT19PX09PT09PT09fT09PT0
+      9PT09PT09PX19fT19PX19PT09PX09PT09fT09PT09PX19PT09fT09PX09PX09fT09PT09PT0
+      9PT09PT09PX09PX19PT09PT09PT09PT19PT09PT19PT09fX19fX09fT09PT19PT09PT09fT0
+      9PT19PT09PT19PT09PX09PT09fT19fX09PT09PT09PT09PT19fT19PT09PT0rItwrYtxrYtx
+      rYxyrYxyrYxy9fX19fX19fX09PX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX09fX1
+      9fT19fX09fX19fX19fX19fX19fX19fX19fX19fX19fT19fX19fX19fX19fX19fX19fX19fX0
+      9PX09fX19fX19fX19fT19fX19fX19fX19PX19fX19fT19fX19fX19fX19fX19PT19fX19fX1
+      9PX19fX19fX19fX19fX19fX19fX19fX09fT19PX09fX19fX19fX09fX19fX19fX09fX19fT1
+      9PX19fX19fT19fX19PX19fX19fX19fX09fX19fX19fX19fX19fX19fX19fX19fX09PX19fX1
+      9PX19fX19fX09fX19fX19PX19fX1rYxyrYxyrYxyr410ro1zro1z9vb19fb19vb29fX29fX1
+      9fX19vX29vX29vb19fX19vb29vX29vb19fb29vb19vb29vX19vb29vX19fX19fX29fb19vb1
+      9vb29fX19fX19fb19vb19vX29fX29fb29fX29vb19vb29fb19vX19fb29fX29vb19vX29vX2
+      9vb29vX19fb29fX29vX19fX19vb29vb29fX19fb19vb29vX19fb29fb19vX29vb29vX29vX2
+      9vb29vX19vX19vX19vb29vb29vX29fX29fb19vb19fX29fX29vX29vb19fb19vX19fb19vb2
+      9vX19vb29vX29vX29fb19vX29vb29fX19fX29vb29fb19vb19fb29fX29vX29vb19fb2ro10
+      ro1zro1zr451r451r4509vb29/b29vb29vf29vb29vb29vb29vb29vb29vb39vb29vb29vf2
+      9vb29vb29vb29/f29vb29/f29vb29vb29vb29vb39vb29vb29/b39vb29vb29vb29vb39vf2
+      9vb29vb29vf39vf29vb29vb29vf29vb29vf39vb29vb39vb29vb29vf29vb29vb29vf39vb3
+      9vb29/b29/f39vf29vb29vb39vf29vb29vf29vb29/f29vb29vb29vb39vb29/b29vf29vb3
+      9/f29vf29vb29vb29vb29vb29vf29vf29vb39vb29vb29vb29vb29vb39vb29vb29vb39vb3
+      9vb29/b29vb29vb39/b29/b39vb29vb29vf2r450r451r450sI91sI92sI929vf39/f39vf3
+      9vf39/b29/f39/f39/f39/f39vf39vb39/f39/f39/b39/f29/f39/f39/f39/b39/f29/f3
+      9/f39/f39/b29/f39/f39vf39vf39/f39/b39/f39/f39/f39vf39/f39/f39/f39vf39vf3
+      9/f39/b39/f39/f39/b39/f39/f39/f39/f39/f39/f39vf39/b29/f39/f39/f39/f39/f3
+      9/f39vf39/f39/f39/f39/b39/f29/f39/b29vf39/b29/f39vf39/f39/f39/f39/f39/f2
+      9/f39/f39/f39/f39/b39/f39/f39vf39/f39/f29/f39vf39/f39vf29/f39/f39/f39/f3
+      9/f3sI91sI92sI92sJB3sJB4sY939/j39/j49/f4+Pf49/f4+Pf3+Pj49/f39/j3+Pj4+Pf4
+      +Pj4+Pj3+Pj39/j49/j4+Pj4+Pf3+Pj39/f49/f49/j39/j49/j39/j39/j3+Pf4+Pf49/f4
+      9/j3+Pj4+Pf3+Pj39/f4+Pf39/f4+Pj49/j3+Pf49/j49/f3+Pj49/j39/f4+Pf4+Pf49/f4
+      9/j3+Pf49/j4+Pj39/j39/f3+Pj3+Pf4+Pj49/j3+Pf4+Pj3+Pf4+Pj4+Pj3+Pj49/f39/j3
+      +Pj3+Pf49/f4+Pf4+Pf3+Pf3+Pj3+Pf4+Pf4+Pj39/f3+Pj39/f39/j4+Pf4+Pf3+Pj49/j3
+      9/j3+Pf4+Pf3+Pf4+Pj3+Pj3+Pf4+Pf4+Pj4+Pj4+Pf3sJB3sJB3sZB3spF4spF4sZF4+fj4
+      +Pn4+fj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+fj4+fj4+Pj4+Pj4+Pj5+Pj4+Pj4+Pj4+Pj5+Pj4
+      +Pj4+Pn5+Pj4+Pj5+Pj5+Pn4+Pn4+Pn4+Pj4+Pj4+Pj4+Pj5+Pn4+Pj4+fj4+Pj5+Pj5+fj4
+      +Pn4+Pj4+Pj4+fn4+Pj4+Pj5+fj5+Pj4+Pj4+Pj5+Pj4+fj4+Pj4+Pn5+Pj4+Pj4+Pj4+Pj4
+      +Pj4+Pj5+Pn4+Pn5+fn4+Pj4+Pj4+Pj4+Pj4+Pn4+Pj4+Pn4+Pn4+Pj5+Pj4+Pj4+Pj5+fj4
+      +Pj5+Pj5+Pj4+Pj4+Pj4+Pj4+Pn4+fj4+Pn4+fn4+Pj4+Pn4+Pj5+fn4+Pn4+Pj4+Pn4+fj5
+      +Pj4+Pj4+Pj4spF4spF4spF5s5J5spJ5s5N6+Pj5+fn5+fn5+fn5+Pn5+fn5+Pn5+fj4+fj5
+      +fn4+fn5+fn5+fj5+fn5+fn5+fj5+fj5+fn4+fj5+fn5+fn5+fj4+fn5+Pn5+fn5+fn5+fn5
+      +fn5+fj5+fn5+fn4+Pn5+fn5+fn5+fn5+Pn5+fn5+fn5+fn4+fn5+fn5+fn5+fn5+fj5+Pn5
+      +Pn4+fn5+Pn5+Pn4+Pn5+fn5+Pn5+fn5+fn4+fn5+fn5+fn5+fn5+fj5+Pn5+fj4+fn5+fj4
+      +Pn5+fn5+fn5+fj5+fn5+fj5+fn5+Pn4+Pn5+fn5+fn5+fj5+fn5+Pn4+fn5+fn5+Pn5+fj5
+      +fn4+Pj5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+Pn5+fn5+fj59/b2s5J6s5J6s5J6s5N7s5N7
+      s5N78e3q+fr6+fr6+fn5+fn6+fr5+vn5+fr5+fn5+vr6+fr5+fr6+fn6+vn5+fn6+vn6+vr5
+      +fr5+fn6+vr6+fn6+fn5+fr6+vn5+vr5+vr5+vr6+fn5+fn5+fn5+vn5+fr5+fr5+vr6+fr5
+      +vn5+fn6+fn5+fr6+vn6+vn5+fr6+vr5+fr5+vn5+vr5+fn6+fn6+fr6+fr5+vn6+vr5+vn6
+      +vn6+vn5+vn6+fr6+fn5+vr6+fn5+fn5+vr6+fr6+vn6+fn6+fr5+fn5+vr5+fr5+fn5+vn6
+      +fn5+fn6+vr6+fr5+vr5+vr6+vr5+fr5+vn5+vr6+fr6+vn5+vn6+fn6+fr5+fr6+fn6+vn5
+      +fr6+fr6+fn6+vr58e7rs5N7s5N7s5N7tJR8tJR9tJR85dvU+vr7+vr6+vr6+vr7+/r6+/v6
+      +vr6+/v6+vr7+vr6+vr7+vr6+vr6+vr7+vr6+vr6+vr6+vv6+vv7+vr6+vr6+vr6+vr6+vr6
+      +/r6+vr6+vv7+vr6+/r7+/v7+/v6+vr6+vv7+/r6+vr6+/r6+vr6+/r6+vr6+vr6+vr6+vr6
+      +/v6+/r6+vr6+vr7+vr6+vr6+vv6+vv6+vr6+vr6+vr6+vr7+vr6+vr6+/v6+vr6+vr6+vr6
+      +/r6+vr6+vr6+vr6+vr7+vv6+vr6+/r6+/v6+vr7+vr6+vr6+vv6+vv7+vr6+vr6+vr6+vr6
+      +vr6+vv6+vr6+vv6+vr7+vr6+vv6+vr6+vr6+vr6+vv6+vr7+/r6+/r65dvVtJR8tJR9tJR9
+      tpmEtZV+tZV+08Gz+/v6+/v7+/v7+/v7+vv7+/v7+/v6+/v7+/v6+/v7+/v6+/v7+/v7+/v7
+      +vv7+/r7+/v6+/v7+vv7+vv6+vv7+/v7+/v6+vr7+/v6+/v7+/v6+/r6+/r7+/v7+/r7+/r7
+      +vv7+/v7+/v7+/v6+/v7+/v7+/v6+vr6+vv7+/r6+/v7+/v7+/v7+/v6+/v7+/v7+/r7+/r6
+      +/v7+/v6+vv7+vv7+vr7+/v7+vv7+/v7+vv7+/v7+vr7+/r7+/v7+/v7+/r7+vv6+/v6+/v7
+      +/v7+/v7+/v6+/v7+/v7+/r7+vv7+/v7+/v7+/v7+/v7+/v7+/v6+/v7+/v7+vv6+vv7+/v7
+      +/r6+/v7+/r7+/v7+/v7+/v708GztZV9tpV+tpmFuKOStpZ/tpZ/upyH+vj5/Pv7+/v8+/v7
+      /Pz7/Pz7+/v8/Pv7+/v8/Pz7/Pz8/Pz7/Pv8/Pz8/Pv7+/z7+/z7/Pv7+/z8/Pv8/Pz8/Pv7
+      +/v7+/v7+/z7+/v8/Pv8/Pv7+/v7/Pv8/Pv8/Pv7/Pv8+/z8+/v7+/v7+/z7/Pz8+/z8/Pv8
+      /Pz8+/z7+/v8/Pv8+/v7+/v8+/v7+/v7/Pz8+/v7/Pv8/Pz7+/v7+/z8/Pv8+/v8/Pz7+/v8
+      +/z8+/z7/Pv8/Pz8/Pv7+/v7/Pv7+/v8/Pz8+/z7+/v7+/z8/Pv7+/v7+/z8+/v7/Pv7+/z8
+      /Pz7+/v8+/z8/Pv8/Pz7/Pv8+/v7/Pz8+/z8+/z8+/z7+/v7+/z8+/z8+/z8+fj4upyHtpd+
+      tpZ/uKKSvK6kt5iAt5eAuJeA2svA/fz8/Pz8/Pz8/Pz8/P39/fz8/fz8/fz8/Pz8/Pz8/Pz8
+      /Pz8/fz8/Pz8/f38/Pz8/Pz8/Pz9/P39/P38/Pz8/Pz8/Pz8/Pz8/Pz8/P38/Pz8/Pz8/Pz8
+      /Pz9/Pz8/Pz8/Pz8/Pz8/Pz8/fz8/Pz8/Pz8/Pz8/Pz8/fz8/P38/Pz8/Pz8/Pz8/fz8/fz8
+      /Pz8/Pz8/P38/P39/Pz8/Pz8/Pz8/Pz8/fz9/fz8/Pz8/Pz8/P39/fz8/Pz8/P38/Pz8/P38
+      /Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/P38/Pz8/Pz8/Pz9/P39/Pz8/Pz8/fz8/fz8/Pz8/P38/Pz8
+      /Pz9/Pz8/Pz8/fz8/Pz8/Pz8/P382svAt5eAuJeAt5eAvK6kv727uJiCuJiCuJiCuJiC7uji
+      /f38/f39/Pz8/f39/fz8/f39/f39/f39/fz9/f39/P39/f39/P38/f39/P39/f39/P39/f39
+      /f39/P39/f39/P38/P39/fz9/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/P39
+      /f39/P38/f39/f39/f38/f39/f39/P39/f39/P39/Pz8/f39/fz9/f39/fz9/f39/fz8/P39
+      /fz9/f39/f39/fz9/f39/f39/P39/P38/f39/f39/fz9/f39/P39/f39/f38/f39/fz9/f39
+      /Pz9/fz8/f39/f39/f39/f38/f39/Pz9/Pz9/f38/f39/fz8/f39/f38/P39/P397ujjuJiB
+      uJiCuJiBuJiCv727wMDAvKuguZmDuZmDuZmDw6iW7+nj/v79/f39/v3+/f3+/v39/v39/f7+
+      /f39/f79/v7+/v79/v7+/f39/v39/f7+/f7+/f39/v3+/f39/v39/v79/f3+/v3+/v39/f79
+      /v39/f39/v7+/f79/v3+/f3+/v3+/v79/f79/v39/f3+/f7+/f79/f39/f39/v7+/f79/f7+
+      /f7+/v7+/v3+/f39/v39/v3+/f79/f7+/f39/f79/f79/f39/f39/f39/v3+/v79/v79/f7+
+      /f39/v79/f3+/v7+/f7+/v79/v39/f39/f39/f79/v3+/v39/f3+/f39/f7+/v79/f3+/f3+
+      /f7+/v7+/f39/f7+/f39/f39/f3+7unkw6iWuZmDuZmDuZmDvKugwMDAwMDAwMDAuqGQupuE
+      upqEupqEupqE3M7E/Pv7/v7+/v7+/v7+/v7+/v7+/v7+//7+/v7+/v7+/v7+/v7+/v7+/v7+
+      /v7+/v7//v7+/v7+/v7+//7+/v7+//7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7//v7+
+      /v7+/v7+/v7+/v7+/v7+/v7+/v7//v7+/v/+/v7+/v7+/v/+/v7+/v7+/////v7+/v7+/v7/
+      /v7+/v7////+/v7+/v7+/v7+/v/+/v7+/v7+/v7+/v7//v7+/v7+/v7+/v/+/v7+/v7+//7+
+      /v/+/v7+/v7//v7+/v7+/v7+/v7+/v7//v7+/v7+//7+/v7+/v/+/v7///7+/Pv73c7DupqE
+      upqEupqEuZuEu6GQwMDAwMDAwMDAwMDAv7q2u5+Mu5uFupyFu5uFupyFv6GO18a56uDa9vPx
+      /v////////////7////////////////+/v///////v/////+/v7+/////v/+//7//v//////
+      //7//v////////7//////v///v///v///v7////+/v/+///+//////7///////7///7///7/
+      ///////////////////////+///+//////7///7///7+///+//////////////7///7+//7/
+      ///////+//7//v7//////////v///v7///////7+//////////7///////////////7/////
+      /////v////7//v//9vPx6uHa18a5vqGNupuFu5yGu5uGu5uFup+Lv7q2wMDAwMDAwMDAwMDA
+      wMDAv7q3vKOSvJ2HvJyHvJyHu5yGu5yHvJyGvJ2Hu5yHvJyHvJyHvJ2HvJyGvJyHvJ2GvJ2G
+      u52HvJyHvJ2HvJyHvJyGu5yHu52HvJyHvJyHu5yGvJyHvJyHu5yHu5yGu5yHu5yHu5yHvJ2H
+      u52GvJyHu52HvJyHu5yHu5yHu5yHu52Hu5yHu52Hu5yHvJ2GvJ2Hu5yGvJ2Gu5yHvJ2Gu5yG
+      vJyHu5yGvJyHvJyHvJyGvJyHvJyHvJyGu5yHvJyHu5yGvJyHu5yGvJyGu52GvJyHvJyHu5yH
+      u5yHu5yHu5yHu5yGu5yHu52Hu5yHu5yHu5yHu5yGu52HvJyHu5yHu5yHu5yHvJyHu5yHvJ2H
+      vJyGu5yHvJyHvKOSv7q2wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAva2ivJ6KvJ2IvZ2IvJ2I
+      vJ6IvJ2IvJ2JvJ2IvJ2IvZ2IvZ2IvJ2IvJ6IvJ2IvJ2JvJ6IvJ2IvJ2JvZ2IvJ2IvZ2IvZ2I
+      vJ2IvZ6IvZ2IvZ6IvZ2JvJ6IvJ2IvZ2JvJ6IvJ2IvZ2IvJ2IvZ6IvJ2IvZ2IvZ2IvJ2IvZ2I
+      vZ2IvZ2IvJ6JvJ6IvJ6IvJ2JvZ6IvZ2IvJ2JvZ6IvZ2IvJ2IvJ2JvJ6IvJ2IvZ2IvJ2IvJ2J
+      vZ2IvJ2IvZ2IvJ6IvJ6IvZ2IvZ6JvZ2IvJ6IvZ2IvZ6IvJ6IvZ2IvJ2IvJ2IvZ6IvJ2IvZ2I
+      vJ2JvJ6JvZ2IvJ6IvZ2IvJ2IvJ2IvJ2IvJ6IvZ2IvJ2IvJ2Jva2iwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAv728vrGovaiZvaGPvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6J
+      vZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6J
+      vZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6J
+      vZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6J
+      vZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6J
+      vaGPvaiZvrGov728wMDAwMDAwMDAwMDAwMDAwMDA
+    </Image>
+  </Logo>
+  <Icon>
+    <Image type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+      Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+      gIAAknldkXJQlHdVk3dUlHZVlHZVlHZUlHdVlHdVlHZVlHZVlHdVkXNQknldgIAAlHtf39bM
+      +/r5/Pv6/Pv6/Pv6/Pv6/Pv6/Pv6/Pv6/Pv6/Pv6/Pv6+/r539bMlHtflnhW+/r5dEoYZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZTcAw7Gb/v7++/r5lnhXnH5d/Pv6qZBxZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAfVYo/////Pv6nH5dn4Fh/Pv62My/ZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgBbEAL8Ozm/Pv6noJhoYRk/Pv67ejibD8KAJb0AJb0AJb0AJb0ZjgAAJb0
+      ZjgAZjgAZjgB3dPI/Pv6oYRkpIdn/Pv6////c0kWAJb0ZjgAZjgAZjgAZjgAAJb0ZjgAZjgA
+      ZjgAr5d6/Pv6pIdnp4lq/Pv6////qY5wAJb0AJb0AJb0AJb0ZjgAAJb0ZjgAZjgAZTcAe1Ij
+      /Pv6p4lqqoxt/Pv6////m3xZAJb0ZjgAZjgAZjgAZjgAAJb0AJb0BZHnMGl/flco/Pv6qoxt
+      rI5w/Pv6/f39b0MPAJb0ZjgAZjgAZjgAZjgAAJb0ZjgAUEw0ApPts52C/Pv6rI5wr5Fz/Pv7
+      6+Xeaj4IAJb0AJb0AJb0AJb0ZjgAAJb0AJb0BZDmMmh939XK/Pv7r5FysZN1/Pv71ci5ZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAZjgAZjgBbEAM8/Ds/Pv7sZN2tZd5/Pz7pYprZjgAZjgAZjgA
+      ZjgAZjgAZjgAZjgAZjgAZjgAf1kr/////Pz7tZd5tZZ4/Pv6c0kWZjgAZjgAZjgAZjgAZjgA
+      ZjgAZjgAZjgAZTgAx7aj/v7+/Pv6tZV3speA6uHY/Pv6/fz7/fz7/fz7/fz7/fz7/fz7/fz7
+      /fz7/fz7/fz7/Pv66uHYsZiAgIAAtJqCu5t9vZ6CvZ6CvZ6CvZ6CvZ6CvZ6CvZ6CvZ6CvZ6C
+      vZ6Cu5t+tJqCgIAAdABWAGkAcwBpAGIAbABlACAAIgBTAGMAcgBpAHAAdAAiAAoACgAJAFMA
+      ZQBzAHMAaQBvAG4ALgBPAHUAdABwAHUAdAAoACAAIgBWAEIAUwBjAHIAaQBwAHQAIABQAHIA
+      bwBqAGUAYwB0ACAAQgByAG8AdwBzAGUAcgAgAE0AdQBsAHQAaQAgAFMAZQBsAGUAYwB0AGkA
+      bwBuACAARQB4AGEAbQBwAGwAZQAiACAAKQAKAAAAYwAuACwAWgBpAGMAbwBtAAAAAAAA
+      AA==
+    </Image>
+  </Icon>
+  <UMLProfiles>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="C2B66F2D-0" name="EPProfile" version="1.0" notes="EPProfile"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="process" metatype="Process" notes="A process is a description of a set of related activities that, when correctly performed, will satisfy a specific goal.&#xA;">
+            <AppliesTo>
+              <Apply type="Activity"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Goal" type="" description="Describes the goal if not explicitly attached to the process." unit="" values="" default=""/>
+              <Tag name="Purpose" type="" description="Informally describes the purpose of the process." unit="" values="" default=""/>
+              <Tag name="Owner" type="" description="Defines the person who has overall responsibility for the process." unit="" values="" default=""/>
+              <Tag name="Actors" type="" description="Defines the process actors and their skills if not explicitly attached to the process." unit="" values="" default=""/>
+              <Tag name="Priority" type="" description="Textual priority (core process/support process/admin process/...)." unit="" values="" default=""/>
+              <Tag name="Risks" type="" description="Describes the risks associated with the process." unit="" values="" default=""/>
+              <Tag name="Possibilities" type="" description="Describes the potential in terms of opportunities." unit="" values="" default=""/>
+              <Tag name="Time" type="" description="The approximate duration of the process." unit="" values="" default=""/>
+              <Tag name="Cost" type="" description="The approximate cost of executing the process." unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="information" metatype="Information" notes="Information resource.&#xA;">
+            <AppliesTo>
+              <Apply type="Class"/>
+              <Apply type="Object"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="resource" metatype="Resource" notes="Consumable resource used during process.&#xA;">
+            <AppliesTo>
+              <Apply type="Class"/>
+              <Apply type="Object"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="abstract" metatype="Abstract" notes="Abstract resource.&#xA;">
+            <AppliesTo>
+              <Apply type="Class"/>
+              <Apply type="Object"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="people" metatype="People" notes="Shows a process is supplied by an object.&#xA;">
+            <AppliesTo>
+              <Apply type="Class"/>
+              <Apply type="Object"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="physical" metatype="Physical" notes="Shows a process is supplied by an object.&#xA;">
+            <AppliesTo>
+              <Apply type="Class"/>
+              <Apply type="Object"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="business event" metatype="Business Event" notes="Business event as class or instance.&#xA;">
+            <AppliesTo>
+              <Apply type="Class"/>
+              <Apply type="Object"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="goal" metatype="Goal" notes="Shows a process is supplied by an object.&#xA;">
+            <AppliesTo>
+              <Apply type="Class"/>
+              <Apply type="Object"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="object read" metatype="Object Read" notes="An object from the assembly line to a process.&#xA;">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIACJ8YTzJDm+lTAAAAHAAAAAHABEAc3RyLmRhdFVUDQAHXd6LS13ei0td3otL
+              K2bIYEhkKGBIZVBgyAWyMhnyGHgZuBiqwSQnQwpQJo2hGCheBWRpMJgyGDDogElNBmu4miKg
+              znKgzkSGEqDKMqDKYri5GnCVtUAMAFBLAQIXCxQAAAAIACJ8YTzJDm+lTAAAAHAAAAAHAAkA
+              AAAAAAAAAAAAgAAAAABzdHIuZGF0VVQFAAdd3otLUEsFBgAAAAABAAEAPgAAAIIAAAAA
+              AA==
+            </Image>
+            <AppliesTo>
+              <Apply type="Object"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="object written" metatype="Object Written" notes="An object delivered from a Process to the assembly line.&#xA;">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAEB8YTzJDm+lTAAAAHAAAAAHABEAc3RyLmRhdFVUDQAHiN6LS4jei0uI3otL
+              K2bIYEhkKGBIZVBgyAWyMhnyGHgZuBiqwSQnQwpQJo2hGCheBWRpMJgyGDDogElNBmu4miKg
+              znKgzkSGEqDKMqDKYri5GnCVtUAMAFBLAQIXCxQAAAAIAEB8YTzJDm+lTAAAAHAAAAAHAAkA
+              AAAAAAAAAAAAgAAAAABzdHIuZGF0VVQFAAeI3otLUEsFBgAAAAABAAEAPgAAAIIAAAAA
+              AA==
+            </Image>
+            <AppliesTo>
+              <Apply type="Object"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="process decision" metatype="Process Decision" notes="Decision point between processes.&#xA;">
+            <AppliesTo>
+              <Apply type="Decision"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="business rule" metatype="BusinessRule" notes="Shows a process is supplied by an object.&#xA;">
+            <AppliesTo>
+              <Apply type="Note"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="problem" metatype="Problem" notes="Shows a process is supplied by an object.&#xA;">
+            <AppliesTo>
+              <Apply type="Note"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="cause" metatype="Cause" notes="Shows the cause of the problem.&#xA;">
+            <AppliesTo>
+              <Apply type="Note"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="prerequisite" metatype="Prerequisite" notes="Shows the prerequisites for the action.&#xA;">
+            <AppliesTo>
+              <Apply type="Note"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="process flow" metatype="Process Flow" notes="A process control.&#xA;">
+            <AppliesTo>
+              <Apply type="ControlFlow"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="decision flow" metatype="Decision Flow" notes="A process control after a decision point.&#xA;">
+            <AppliesTo>
+              <Apply type="ControlFlow"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="resource flow" metatype="Resource Flow" notes="Object flow that shows that an object is produced by one process and consumed by another.&#xA;">
+            <AppliesTo>
+              <Apply type="ObjectFlow"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="input" metatype="Input" notes="Object flow that shows that a resource is consumed by a process.&#xA;">
+            <AppliesTo>
+              <Apply type="ObjectFlow"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="output" metatype="Output" notes="Object flow that shows that a resource is produced by a process.&#xA;">
+            <AppliesTo>
+              <Apply type="ObjectFlow"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="non-causal" metatype="Non-Causal" notes="Shows an object may be produced by one process and consumed by another.&#xA;">
+            <AppliesTo>
+              <Apply type="ControlFlow"/>
+              <Apply type="ObjectFlow"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="process control" metatype="Process Control" notes="Shows a process is controlled by an object.&#xA;">
+            <AppliesTo>
+              <Apply type="ObjectFlow"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="achieve" metatype="Achieve" notes="A goal connection.&#xA;">
+            <AppliesTo>
+              <Apply type="Dependency"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="supply" metatype="Supply" notes="Shows a process is supplied by an object.&#xA;">
+            <AppliesTo>
+              <Apply type="ObjectFlow"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="contradictory" metatype="Contradictory" notes="Shows a process is supplied by an object.&#xA;">
+            <AppliesTo>
+              <Apply type="Association"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="assembly line" metatype="Assembly Line" notes="Synchronizes and supplies processes in terms of objects.&#xA;">
+            <AppliesTo>
+              <Apply type="Package"/>
+            </AppliesTo>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UMLProfiles>
+  <DiagramProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="9E1ECE87-1" name="EPProfile_dg" version="1.0" alias="Eriksson-Penker Extensions" notes="A set of stereotypes and tagged values for modeling business processes."/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="Eriksson-Penker Diagram" notes="Eriksson-Penker business extensions.">
+            <AppliesTo>
+              <Apply type="Diagram_Analysis">
+                <Property name="toolbox" value="EPProfile_tb"/>
+                <Property name="alias" value="Eriksson-Penker"/>
+                <Property name="diagramID" value="e-p"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </DiagramProfile>
+  <UIToolboxes>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="15491A95-2" name="EPProfile_tb" version="1.0" alias="Eriksson-Penker Extensions" notes="Alias=Eriksson-Penker Extensions;&#xA;"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="Eriksson-Penker Extensions" notes="Eriksson-Penker Business Extensions.&#xA;">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="EPProfile::process(UML::Activity)" type="" description="" unit="" values="" default="Process"/>
+              <Tag name="UML::Activity" type="" description="" unit="" values="" default="Activity"/>
+              <Tag name="UML::Actor" type="" description="" unit="" values="" default="Actor"/>
+              <Tag name="UML::ActivityInitial" type="" description="" unit="" values="" default="Start"/>
+              <Tag name="UML::ActivityFinal" type="" description="" unit="" values="" default="End"/>
+              <Tag name="EPProfile::information" type="" description="" unit="" values="" default="Information"/>
+              <Tag name="EPProfile::resource" type="" description="" unit="" values="" default="Resource"/>
+              <Tag name="EPProfile::abstract" type="" description="" unit="" values="" default="Abstract"/>
+              <Tag name="EPProfile::people" type="" description="" unit="" values="" default="People"/>
+              <Tag name="EPProfile::physical" type="" description="" unit="" values="" default="Physical"/>
+              <Tag name="EPProfile::business event" type="" description="" unit="" values="" default="Business Event"/>
+              <Tag name="EPProfile::goal" type="" description="" unit="" values="" default="Goal"/>
+              <Tag name="UML::Object" type="" description="" unit="" values="" default="Object"/>
+              <Tag name="UML::SendEvent" type="" description="" unit="" values="" default="Send"/>
+              <Tag name="UML::ReceiveEvent" type="" description="" unit="" values="" default="Receive"/>
+              <Tag name="EPProfile::object read" type="" description="" unit="" values="" default="Object Read"/>
+              <Tag name="EPProfile::object written" type="" description="" unit="" values="" default="Object Written"/>
+              <Tag name="EPProfile::process decision" type="" description="" unit="" values="" default="Process Decision"/>
+              <Tag name="EPProfile::business rule" type="" description="" unit="" values="" default="Business Rule"/>
+              <Tag name="EPProfile::problem" type="" description="" unit="" values="" default="Problem"/>
+              <Tag name="EPProfile::cause" type="" description="" unit="" values="" default="Cause"/>
+              <Tag name="EPProfile::prerequisite" type="" description="" unit="" values="" default="Prerequisite"/>
+              <Tag name="EPProfile::assembly line" type="" description="" unit="" values="" default="Assembly Line"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Eriksson-Penker Relationships" notes="Eriksson-Penker Business Extensions Relationships.&#xA;">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="EPProfile::process flow" type="" description="" unit="" values="" default="Process Flow"/>
+              <Tag name="EPProfile::decision flow" type="" description="" unit="" values="" default="Decision Flow"/>
+              <Tag name="EPProfile::resource flow" type="" description="" unit="" values="" default="Resource Flow"/>
+              <Tag name="EPProfile::input" type="" description="" unit="" values="" default="Input"/>
+              <Tag name="EPProfile::output" type="" description="" unit="" values="" default="Output"/>
+              <Tag name="EPProfile::non-causal(UML::ControlFlow)" type="" description="" unit="" values="" default="Non-Causal (Control Flow)"/>
+              <Tag name="EPProfile::non-causal(UML::ObjectFlow)" type="" description="" unit="" values="" default="Non-Causal (Object Flow)"/>
+              <Tag name="EPProfile::process control" type="" description="" unit="" values="" default="Process Control"/>
+              <Tag name="EPProfile::achieve" type="" description="" unit="" values="" default="Achieve"/>
+              <Tag name="EPProfile::supply" type="" description="" unit="" values="" default="Supply"/>
+              <Tag name="UML::Dependency" type="" description="" unit="" values="" default="Dependency"/>
+              <Tag name="EPProfile::contradictory" type="" description="" unit="" values="" default="Contradictory"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="EPProfile::process(UML::Activity)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAmWZmmWZmmWZmmWZmmWZmMzMzMzMz
+              MzMzMzMzMzMzMzMzwMDAwMDAwMDAwMDAwMDAwMDAmWZm////////////8Mqm8Mqm8Mqm8Mqm
+              8MqmzJmZMzMzwMDAwMDAwMDAwMDAwMDAwMDAmWZm////////8Mqm8Mqm8Mqm8Mqm8Mqm8Mqm
+              zJmZMzMzwMDAwMDAwMDAwMDAwMDAwMDAmWZm////////8Mqm8Mqm8Mqm8Mqm8Mqm8MqmzJmZ
+              MzMzwMDAwMDAwMDAwMDAwMDAwMDAmWZm////////8Mqm8Mqm8Mqm8Mqm8Mqm8MqmzJmZMzMz
+              wMDAwMDAwMDAwMDAmWZm////////////////8Mqm8Mqm8Mqm8Mqm8MqmMzMzwMDAwMDAwMDA
+              wMDAmWZm////////////////////////8Mqm8Mqm8MqmMzMzwMDAwMDAwMDAwMDAmWZm////
+              ////////////////////////8Mqm8MqmMzMzwMDAwMDAwMDAwMDAmWZmmWZmmWZmmWZmmWZm
+              mWZmmWZmmWZmmWZmMzMzMzMzwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAAAAAAAAAWrkB
+              AAAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA
+              AAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+              AAAAAAAAAAAAAAAAHwB8ALQBDAXM67YBAQAAAIQ+AAAAAAAAUJ8BCwAAAAABAAAAAAAA
+              AA==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="EPProfile::information" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAQCAgQCAgwMDAwMDAQCAgQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA
+              8MqmwMDAwMDA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA8MqmwEBAwMDA
+              wMDAwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAQCAg
+              wEBA8MqmwEBAQCAgwMDAwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAQCAgwEBA
+              8MqmwEBAQCAgwMDAwMDAQCAg8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA8Mqm
+              QCAgwMDAwMDAQCAg8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA8MqmQCAgwMDA
+              wMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDA
+              QCAgwEBA8MqmwEBAQCAgwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAQCAg
+              wEBA8MqmwEBAwMDAwMDAwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA
+              8MqmwMDAwMDA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgQCAgwMDA
+              wMDAQCAgQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAAAAAAAAAWrkB
+              AAAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA
+              AAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+              AAAAAAAAAAAAAAAAHwB8ALQBDAXM67YBAQAAAIQ+AAAAAAAAUJ8BCwAAAAABAAAAAAAA
+              AA==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="IsHidden" type="boolean" description="" unit="" values="true,false" default="true"/>
+              <Tag name="EPProfile::information(UML::Class)" type="" description="" unit="" values="" default="Class"/>
+              <Tag name="EPProfile::information(UML::Object)" type="" description="" unit="" values="" default="Object"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="EPProfile::resource" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAQCAgQCAgwMDAwMDAQCAgQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA
+              8MqmwMDAwMDA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA8MqmwEBAwMDA
+              wMDAwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAQCAg
+              wEBA8MqmwEBAQCAgwMDAwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAQCAgwEBA
+              8MqmwEBAQCAgwMDAwMDAQCAg8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA8Mqm
+              QCAgwMDAwMDAQCAg8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA8MqmQCAgwMDA
+              wMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDA
+              QCAgwEBA8MqmwEBAQCAgwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAQCAg
+              wEBA8MqmwEBAwMDAwMDAwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA
+              8MqmwMDAwMDA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgQCAgwMDA
+              wMDAQCAgQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAAAAAAAAAWrkB
+              AAAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA
+              AAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+              AAAAAAAAAAAAAAAAHwB8ALQBDAXM67YBAQAAAIQ+AAAAAAAAUJ8BCwAAAAABAAAAAAAA
+              AA==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="IsHidden" type="boolean" description="" unit="" values="true,false" default="true"/>
+              <Tag name="EPProfile::resource(UML::Class)" type="" description="" unit="" values="" default="Class"/>
+              <Tag name="EPProfile::resource(UML::Object)" type="" description="" unit="" values="" default="Object"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="EPProfile::abstract" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAQCAgQCAgwMDAwMDAQCAgQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA
+              8MqmwMDAwMDA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA8MqmwEBAwMDA
+              wMDAwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAQCAg
+              wEBA8MqmwEBAQCAgwMDAwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAQCAgwEBA
+              8MqmwEBAQCAgwMDAwMDAQCAg8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA8Mqm
+              QCAgwMDAwMDAQCAg8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA8MqmQCAgwMDA
+              wMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDA
+              QCAgwEBA8MqmwEBAQCAgwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAQCAg
+              wEBA8MqmwEBAwMDAwMDAwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA
+              8MqmwMDAwMDA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgQCAgwMDA
+              wMDAQCAgQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAcgBpAGIAdQB0AGUALgBPAGIAagBlAGMAdABfAEkARAAgAGEAbgBkACAA
+              dABfAGEAdAB0AHIAaQBiAHUAdABlAC4AZQBhAF8AZwB1AGkAZAA9AHQAXwB4AHIAZQBmAC4A
+              QwBsAGkAZQBuAHQAIAB1AG4AaQBvAG4AIABhAGwAbAAgAHMAZQBsAGUAYwB0ACAAdABfAHgA
+              cgBlAGYALgAqACAAZgByAG8AbQAgAHQAXwB4AHIAZQBmACwAdABfAG8AcABlAHIAYQB0
+              AA==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="IsHidden" type="boolean" description="" unit="" values="true,false" default="true"/>
+              <Tag name="EPProfile::abstract(UML::Class)" type="" description="" unit="" values="" default="Class"/>
+              <Tag name="EPProfile::abstract(UML::Object)" type="" description="" unit="" values="" default="Object"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="EPProfile::people" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAQCAgQCAgwMDAwMDAQCAgQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA
+              8MqmwMDAwMDA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA8MqmwEBAwMDA
+              wMDAwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAQCAg
+              wEBA8MqmwEBAQCAgwMDAwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAQCAgwEBA
+              8MqmwEBAQCAgwMDAwMDAQCAg8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA8Mqm
+              QCAgwMDAwMDAQCAg8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA8MqmQCAgwMDA
+              wMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDA
+              QCAgwEBA8MqmwEBAQCAgwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAQCAg
+              wEBA8MqmwEBAwMDAwMDAwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA
+              8MqmwMDAwMDA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgQCAgwMDA
+              wMDAQCAgQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAYwBvAGwAbwByAD0ALQAxACwARwBlAG4AVAB5AHAAZQA9ACcASgBhAHYA
+              YQAnACwARwBlAG4ARgBpAGwAZQA9AE4AVQBMAEwALABHAGUAbgBMAGkAbgBrAHMAPQBOAFUA
+              TABMACwASABlAGEAZABlAHIAMQA9AE4AVQBMAEwALABIAGUAYQBkAGUAcgAyAD0ATgBVAEwA
+              TAAsAFAAaABhAHMAZQA9ACcAMQAuADAAJwAsAFIAdQBuAFMAdABhAHQAZQA9AE4AVQBM
+              AA==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="IsHidden" type="boolean" description="" unit="" values="true,false" default="true"/>
+              <Tag name="EPProfile::people(UML::Class)" type="" description="" unit="" values="" default="Class"/>
+              <Tag name="EPProfile::people(UML::Object)" type="" description="" unit="" values="" default="Object"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="EPProfile::physical" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAQCAgQCAgwMDAwMDAQCAgQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA
+              8MqmwMDAwMDA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA8MqmwEBAwMDA
+              wMDAwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAQCAg
+              wEBA8MqmwEBAQCAgwMDAwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAQCAgwEBA
+              8MqmwEBAQCAgwMDAwMDAQCAg8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA8Mqm
+              QCAgwMDAwMDAQCAg8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA8MqmQCAgwMDA
+              wMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDA
+              QCAgwEBA8MqmwEBAQCAgwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAQCAg
+              wEBA8MqmwEBAwMDAwMDAwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA
+              8MqmwMDAwMDA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgQCAgwMDA
+              wMDAQCAgQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAYwBvAGwAbwByAD0ALQAxACwARwBlAG4AVAB5AHAAZQA9ACcASgBhAHYA
+              YQAnACwARwBlAG4ARgBpAGwAZQA9AE4AVQBMAEwALABHAGUAbgBMAGkAbgBrAHMAPQBOAFUA
+              TABMACwASABlAGEAZABlAHIAMQA9AE4AVQBMAEwALABIAGUAYQBkAGUAcgAyAD0ATgBVAEwA
+              TAAsAFAAaABhAHMAZQA9ACcAMQAuADAAJwAsAFIAdQBuAFMAdABhAHQAZQA9AE4AVQBM
+              AA==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="IsHidden" type="boolean" description="" unit="" values="true,false" default="true"/>
+              <Tag name="EPProfile::physical(UML::Class)" type="" description="" unit="" values="" default="Class"/>
+              <Tag name="EPProfile::physical(UML::Object)" type="" description="" unit="" values="" default="Object"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="EPProfile::business event" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAQCAgQCAgwMDAwMDAQCAgQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA
+              8MqmwMDAwMDA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA8MqmwEBAwMDA
+              wMDAwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAQCAg
+              wEBA8MqmwEBAQCAgwMDAwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAQCAgwEBA
+              8MqmwEBAQCAgwMDAwMDAQCAg8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA8Mqm
+              QCAgwMDAwMDAQCAg8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA8MqmQCAgwMDA
+              wMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDA
+              QCAgwEBA8MqmwEBAQCAgwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAQCAg
+              wEBA8MqmwEBAwMDAwMDAwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA
+              8MqmwMDAwMDA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgQCAgwMDA
+              wMDAQCAgQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDATwBwAGUAcgBhAHQAaQBvAG4ASQBEACAAYQBuAGQAIAB0AF8AbwBwAGUA
+              cgBhAHQAaQBvAG4ALgBPAGIAagBlAGMAdABfAEkARAAgAD0ANwAwADsAIAAAAAAAIQC0AAAA
+              AAWAAn0DgAJ9AwAAAAAAAAAAAAAAAAAAAAADAAAAaM21AQAAAABozbUBAAAAAAAAAAAAAAAA
+              AAAAAAAAAAAAAAAAAAAAAAAAAADUO7kBAQAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA
+              AA==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="IsHidden" type="boolean" description="" unit="" values="true,false" default="true"/>
+              <Tag name="EPProfile::business event(UML::Class)" type="" description="" unit="" values="" default="Class"/>
+              <Tag name="EPProfile::business event(UML::Object)" type="" description="" unit="" values="" default="Object"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="EPProfile::goal" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAQCAgQCAgwMDAwMDAQCAgQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA
+              8MqmwMDAwMDA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA8MqmwEBAwMDA
+              wMDAwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAQCAg
+              wEBA8MqmwEBAQCAgwMDAwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAQCAgwEBA
+              8MqmwEBAQCAgwMDAwMDAQCAg8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA8Mqm
+              QCAgwMDAwMDAQCAg8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA8MqmQCAgwMDA
+              wMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDA
+              QCAgwEBA8MqmwEBAQCAgwMDAwMDAQCAgwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAQCAg
+              wEBA8MqmwEBAwMDAwMDAwEBA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgwEBA
+              8MqmwMDAwMDA8MqmwEBAQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgQCAgwMDA
+              wMDAQCAgQCAgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAcgBpAGIAdQB0AGUALgBPAGIAagBlAGMAdABfAEkARAAgAGEAbgBkACAA
+              dABfAGEAdAB0AHIAaQBiAHUAdABlAC4AZQBhAF8AZwB1AGkAZAA9AHQAXwB4AHIAZQBmAC4A
+              QwBsAGkAZQBuAHQAIAB1AG4AaQBvAG4AIABhAGwAbAAgAHMAZQBsAGUAYwB0ACAAdABfAHgA
+              cgBlAGYALgAqACAAZgByAG8AbQAgAHQAXwB4AHIAZQBmACwAdABfAG8AcABlAHIAYQB0
+              AA==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="IsHidden" type="boolean" description="" unit="" values="true,false" default="true"/>
+              <Tag name="EPProfile::goal(UML::Class)" type="" description="" unit="" values="" default="Class"/>
+              <Tag name="EPProfile::goal(UML::Object)" type="" description="" unit="" values="" default="Object"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UIToolboxes>
+  <ModelTemplates>
+    <Model name="Basic Business Process" description="" location="ep1.0-basic-business-process.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+  </ModelTemplates>
+</MDG.Technology>

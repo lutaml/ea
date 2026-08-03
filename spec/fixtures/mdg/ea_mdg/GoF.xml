@@ -1,0 +1,1313 @@
+<MDG.Technology version="1.0">
+  <Documentation id="GoF" name="Gang of Four Patterns" version="2" notes="Use patterns from the book Design Patterns by Gamma, Helm, Johnson and Vlissides." infoURI="http://www.sparxsystems.com" supportURI="support@sparxsystems.com" categoryList="Gang of Four" categoryMappings="GoF Creational Patterns=Gang of Four;GoF Behavioral Patterns=Gang of Four;GoF Structural Patterns=Gang of Four;"/>
+  <Logo>
+    <Image type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+      Qk1mdQAAAAAAADYAAAAoAAAAZAAAAGQAAAABABgAAAAAADB1AAATCwAAEwsAAAAAAAAAAAAA
+      wMDAwMDAwMDAwMDAwMDAwMDAubezmIVwf2A+bkccZDgIZDkIZTkIZDgIZTkHZDkIZDgHZTkI
+      ZDkIZTkIZDkIZTkHZTkIZDgIZTkIZDkIZTkIZTkIZDkIZTgIZTkIZTgIZDkHZTkIZTkIZTgI
+      ZDkIZDkIZTkIZTkIZDkIZTgIZTkIZDkIZTkIZTkIZTgIZTkIZTgIZTgIZTkIZDkIZTkIZTkI
+      ZDkHZTkIZTkHZTkIZDgHZTgIZTkIZDkIZTkIZDkIZTkIZTkIZDkHZTkHZTkIZTkHZDgIZTkI
+      ZTkIZTgIZTkIZTkIZDgIZTkIZDkIZTkHZTkIZTkHZDkIZTgHZTkIZDkIZTkIZTgIZTkIZTgI
+      b0gcgGE+mIVwubezwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAkXpgZz0NZToJ
+      ZToJZToJZjkJZToKZjoJZjoJZTkJZTkJZTkJZjkJZjoKZToKZToKZjoKZToJZToJZjkJZjkJ
+      ZTkKZToJZjoJZTkJZjoKZjoJZjoJZToJZToJZToKZjkJZTkJZTkJZjkJZTkJZjkJZjoJZjoJ
+      ZjoJZjoJZjoJZToKZToJZToJZjoJZjoJZjkJZToJZToKZjoJZTkJZToJZjoJZjoJZTkJZjoJ
+      ZToJZjoJZjoJZToJZTkJZToKZjoKZjkKZjkJZToJZjoJZTkJZToKZjoJZjoJZjkJZToKZjkK
+      ZjkJZjkJZjkJZTkJZToKZjkKZjoJZToKZToJZTkJZjkJZTkJZjoJZz0OkXlgwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAsaujeFUwZzoKZjsLZjoKZjoKZzsKZzsLZjsLZjsKZjsKZjsKZjsL
+      ZzsLZjsLZjoLZjsLZjsLZjsKZjsLZjsKZzoKZjoKZzsLZzoLZzoKZzsLZzoKZzsKZjsKZjsL
+      ZzsLZzsLZjsKZjsKZzsLZjoKZjsKZjsKZjoLZzsKZjsLZjsKZzsKZjsLZzsKZjsKZjsKZzsK
+      ZjsKZzsLZzoLZjsKZjsLZzsKZjsKZjsKZzoKZjsKZzsLZjoLZjsLZzsKZjsLZjoKZzoLZzoK
+      ZjoLZzsKZjsKZjsKZjsLZzsKZjoKZjsKZzsLZjsLZjsLZzsKZzsKZjsKZjsKZzsLZzsLZjsL
+      ZjsKZzsLZzsLZzsLZjsKZzsLZjsLeFYwsaujwMDAwMDAwMDAwMDAwMDAsqujcUogZzwMZzsM
+      ZzwLZzwMbUQYjXVappmKtrKtwcLBwsLCwcLCwcHCwcLCwcHBwcHCwcHCwcLBwcHBwcHBwcHB
+      wcHCwsLCwcHBwsHBwsLBwsLBwsHBwcHCwcHBwsHBwcHBwsHBwsHCwsLCwsLBwsHBwsHCwsHC
+      wcLCwsHBwsLBwcLCwcLBwcHCwcHBwcHBwcLBwcHCwcLCwcHBwsHBwcHBwcLBwsHBwcHCwsHB
+      wsHBwcHBwcLCwsLCwcHCwcHCwcLCwsHBwsHCwsLCwsLBwsLBwcLBwcHCwcLBwcLCwsLBwcLC
+      wcHCwsHCwsLCwsLBwcHBwsLBwcLCwsLBwsLCwsHCtrGsppmLjXVabUQYZzwLZzwMaDsLaDsM
+      cUsgsqujwMDAwMDAwMDAwMDAelgyaDwNaD0NaD0NaD0NloJrv769wsLCwsPCw8LCw8LCwsLC
+      wsLCwsLCwsLCwsLCwsLCw8LCwsPCw8LCwsLCwsLCwsLCwsLCwsLCw8PCwsLCwsLCwsLCwsPC
+      w8LCw8LDwsLCwsLCw8LCw8LCwsLCwsLCwsLDwsLCwsLCwsLCwsLCwsPCwsLCwsPCwsLCwsLD
+      wsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsPCwsLCwsLCwsLCwsLDwsLCwsLCwsLC
+      wsLCwsLCwsPCwsLDwsPCwsLCwsLCwsLCwsPCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsPC
+      wsPDwsLCwsLCwsLCwsLCv7+9loJraD0NaDwOaDwOaD0Ne1gywMDAwMDAwMDAk3xjaT4PaT4O
+      aT4PdlIqr6ecw8LDw8LDw8PCw8PDw8LDw8PCw8PCw8LDw8PDw8PDw8PDw8PDwsLDw8PDw8PD
+      w8PDwsPDw8PCw8LCwsPDw8PDw8PDwsLDwsPDwsLDw8PDw8PDw8LDw8LDw8PDwsPDw8PCw8LD
+      w8PDw8LDw8PDw8PDwsPCwsPCw8PCw8PDw8PDw8PDw8PDw8PDw8PDw8PDw8LCw8LDw8PDw8PD
+      w8PDw8PDw8PCw8PDw8PDw8LDw8LDw8PDw8LDw8PDw8PCw8PCw8PCw8PCw8LDwsPDw8PDw8PC
+      wsPCwsPDw8LDw8PDw8LDw8PDw8PDw8PDw8LDw8PDw8PDw8LDwsPCw8PDw8PCwsLDw8PDr6ed
+      d1IqaT4Oaj4OaT4PknxjwMDAure0a0IUaj8Paj8Paj4Qsaedw8TExMTDxMTDxMPDw8PDw8PD
+      xMTDxMPDxMTEw8PDxMTDxMTDw8TDw8PDw8PEw8TDxMTDw8TDxMPDw8PExMPExMTDw8PExMPD
+      xMPDw8PExMPDxMPDw8TEw8TEw8TExMPDw8PDxMTEw8TExMPDw8PExMTDw8TDw8TDxMTDxMTE
+      w8TDw8PDw8PDw8TDw8TDw8PDxMPEw8TExMTDw8PDxMTDw8TEw8TDxMTEw8PEw8PDw8PDxMPE
+      xMTEw8TDxMTDw8PExMTDw8PDxMPExMTExMTExMPDw8TDxMTExMTDxMTExMTDw8PDxMTDw8PE
+      w8PDw8TEw8PExMTExMPDxMPEw8PDxMTExMTExMPDsaieaj4Qaj8Paj8QbEIUure0moh0a0AR
+      a0ARa0ARmIRuxMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMXExMTExMTE
+      xMTExMXExMTExMTExMTExcTExMTFxMTExMXExMTExMTExMTExMTExMTExMTExMTExMTExMTE
+      xMTExMTExMXExMTExMTExMTExMTExMTExMTExMTFxMTExMTFxMXExMTExMTExMTExMTExMTE
+      xMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTF
+      xMTExMTExMTExMTExcTExMTExMTExMTExcTExMTExMTExMTExMTExMTExMTExMTExMTExMTE
+      xMTExMTExMTEmYRua0ASa0ARa0ARm4h0hWZFbEETbEETcUkewsHAxcXFxcXExcXFxcXExcTE
+      xcXFxcXExMTFxcTFxcXFxcTFxcXFxcXFxcXFxcXExMXFxcTFxMXExcXFxcXFxcXFxcXFxMTF
+      xcXExcXExcXExcXExcXExcXFxcXFxMXFxMXExcXFxcTFxMXExcXFxMTExcTFxcXFxcXFxcXF
+      xcXExcTFxcXFxMXFxcXFxMXExcTExcXFxcTExcTFxMTFxcXExcXFxMXFxcXExcXExcTExcXF
+      xMTFxcXFxcXFxcXExMXExcTFxcXFxMXFxcXFxcXFxMXExcTFxcXExcXExcTFxcXFxcXFxcXF
+      xcXFxcXExcXFxMXFxMTExcXFxcXFxcXFxcXFxMXExcXFxcTExcXFwsHAcUkebEETbEEThWZF
+      dlAnbEIUbUIUknpgxcXGxsbFxsbGxsXGxsXFxsbFxsXFxsXFxsbGxcbGxcXGxcbGxsXGxcXF
+      xcXFxcbFxsbFxcbFxcXFxcbGxcXGxcXFxcXGxsbFxcXFxsbGxsbGxcXGxcXGxcXFxcbFxcbF
+      xcXGxcXFxsXFxcbGxcbFxsbFxsXFxsXFxsbGxcXFxsXFxsXGxsXFxcXGxcXGxcXFxcbGxcXG
+      xsXFxcbFxsbFxcbGxcbGxsXFxcbFxcbGxcXFxsbFxcXFxcXFxsbFxcXGxsbFxcXGxcXFxcXG
+      xsXGxcXGxcXFxcbGxsXFxcXGxcbFxcbGxcXFxsXFxcbFxsbFxcbFxcXGxcXFxcbFxsbGxsbF
+      xcXFxcbFxcXGxcbFxcXFxcbFknpgbUIUbEITdVAnbUMVbUMVbkMVq56RxsbGxsbGx8fGxsbG
+      xsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbHxsbGxsbGxsbGxsbGxsfGxsbG
+      xsbGxsbGxsbGxsbGxsbGxsbGxsbGx8bGxsbGxsbGxsbHxsbGxsbGxsbGxsfGxsbGxsfHxsbG
+      xsbGxsbGxsbGx8bGxsbGxsbGxsbGxsbGxsbHxsbGx8bGxsbGxsbGxsbGxsbGxsbGxsbGxsbG
+      x8fGxsbGxsbGxsbGxsbGx8bGxsbGxsbGxsfGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbG
+      xsfGxsbGxsbGxsbGxsbGxsbGxsfGxsbHxsbGx8bGxsbGx8bGxsbGxsbGxsbHx8bGq56RbUMV
+      bkMUb0UYbkQWbkQWb0QXvLeyx8fHxsfGx8bGxsbHx8fHx8bGx8fHxsfGxsfHx8fGx8fHx8bH
+      x8bGxsfGx8fHx8fHx8fGx8bGxsbHx8fHxsfHxsfHx8fHx8fHxsfGx8bHx8fGx8fHxsfGx8bH
+      x8fHx8fHxsfHx8fHx8fHx8fHx8fGx8bGx8fHx8fHxsbGx8fHxsfGx8fHx8fHx8bGx8bHx8bG
+      x8fHx8fHxsfHx8fHx8fHxsbGx8fGx8fGxsfHxsfGxsfHx8bHx8fHx8fHx8bGx8fHxsfHx8bH
+      x8bGx8fGxsfHx8bHx8fHx8fHx8bHx8fHx8bHxsfHx8fGx8fGx8fHxsbHx8fGx8bHx8fHx8bH
+      xsbHx8bGx8fGx8fGxsfGx8fGx8fGxsfGu7iyb0QWb0QWbkQWb0UXb0UYb0UYx8jHx8fHx8jH
+      yMfHyMjHx8jHyMfHyMfHyMfHx8jHyMfIyMfHyMjIx8fHx8jIx8fIx8fHx8fIx8fIx8jIyMjI
+      x8jHyMjHx8fHx8jHyMjHx8fHx8fHx8jIx8jHyMfIx8fHx8jHx8jIx8jHx8jHx8jHx8fHx8fH
+      x8fHx8jIx8jHyMfHx8jHyMfIx8jHyMjHyMfHyMjHx8jIx8fHx8jIx8fHx8jHx8jHx8jIyMfH
+      x8jHyMjHx8fIx8fHx8fIx8fIx8fHyMfIyMfIx8jHyMfIx8fHx8jHx8fHyMjIyMjHx8fHyMfI
+      yMfHx8jIx8fIx8fIx8fHyMfHyMfIx8jHx8jHx8jIx8jHx8fHx8fHx8fHyMjIx8fIx8fHyMfH
+      xcTEcEUYb0UXcEUYcEYZcEYYcEYZyMjIyMnJyMjIyMjIyMjIycjIyMjIyMjIyMjIyMjIyMjI
+      yMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjI
+      ycjIyMjIyMjIyMjIyMjIyMjIyMjJyMjJyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjI
+      yMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMnIyMjIyMjIyMjIyMjIyMjI
+      yMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIycjIyMjJyMjIyMnIyMjIyMjIyMjI
+      yMjIyMjIyMjIyMjIyMjIyMjIyMnIyMjIyMjIyMjIyMjIcEYZcEYZcEYZcUcacUcacUcaycjI
+      ycjJyMjIycjJycjJyMnIyMnIycnIycjJycnJyMnJycjJycnJycnJycnIycnJycnIyMnIycnJ
+      eFMljGpAjGpAjGpAjGpAjGpAjGpAjGpAjGpAjGpAjGpAjGpAjGpAg10wsKSWyMnIycnJycjJ
+      yMnJycnJycjIyMnIycjJycnJycjIycjJycnJyMnIyMnIyMjJycjJvLavl39jo5J8yMjJycjJ
+      yMnJycjJyMjJyMjJyMnJyMjJycnIycnIycnIyMnJyMnJycnJyMjIycjJyMnIycjJycjIycnI
+      ycjJycnIyMnJycnJyMnIycnJycnJycnJycjJycnJycjJycnIycnJycnJycjJycnJycjJycnI
+      yMnJycnIycnJcUcbckcackgackgcckgbckkbycrJysnKysrJysrJycrJysrKysnJysrKycnJ
+      ycnKycrKysnKysrKysrJysrJysrKysrKycnJtq2jn4Ng////////////4trP4trP////////
+      4trP7Obf////s5yA////9fPvhWI4ycnJysrJysrJysnKycnJysnJysnKycrJysnJycnJysnJ
+      ysnKycnJycnJysnKt66jbEEMlnZQckoZycrKycnJysnJycnKycrJycnKysnKycnKysnJysnK
+      ysrJycnJycnJycnJycrJycrKycnKycrJycnJycnJysnJysnKysnKysrJycnKycnJysrKycrK
+      ycnJycnKysrJysrJysnJycrJycrJysrJysnJycnJycnJycrJysnKckgcckgcckgcc0kdc0kd
+      c0kcysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrK
+      ysrKt66jn4Ng////////////////lnZQ2c2/////7Obfn4Ng////vKiPz8Gv////xrSfpJN9
+      ysrKysrKysrLysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKpJN9bEEMqY9w////lnZQ
+      sKWXysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrK
+      ysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysvKysrKysrKysrKysrKysrKysrK
+      ysrKy8rKysrKysrKysrKc0kcc0kdc0kddEoedEoedEoey8rKysvLy8vLy8rLy8rLy8vLy8rL
+      ysrKy8vLy8rLysvLy8rLysvLysvLysvKy8vKy8vLy8rLy8vKf1wys5yA////////////9fPv
+      n4Ng4trP////n4NgxrSf////jGpA9fPv////jGxFy8vLy8vLy8rLy8vLy8vLy8vLy8rLy8vK
+      y8vLy8rLy8rLxMG+hWY/eVEgz8Gv////////4trPhWI4ysvLy8vLy8vKy8rKy8vLy8vLy8vL
+      y8rLy8rKy8vLy8rLy8vLy8vLy8vLy8rLy8vKy8vLy8vKysrKy8vLysvLysvLy8vLysvKysvL
+      y8vLy8vLysvKy8vLy8vLy8vLy8vLy8vLy8vKysrLy8vLy8vKy8vKy8vLy8vLc0sedEofdEof
+      dEsfdUsgdEsgy8zMy8zMy8vLzMvLzMzLy8vLzMvMy8vMy8zMy8zMy8vMzMvMy8vMy8vMy8vL
+      y8vMzMzLzMvMy8vMxcG/jG9MlnZQ9fPv////////////jGpA4trP2c2/jGpAlnZQg10wqY9w
+      ////s5yAsaaYy8zMy8vMy8zMy8zLy8zLy8zMzMvLy8vMzMvLpJR+dU0cs5yA9fPvz8Gvz8Gv
+      ////////qY9wlXtcy8vMy8vLy8vMy8vLy8vMy8vLy8vMy8vLy8zMy8vLy8vMy8vMy8zLzMvL
+      zMvLy8vMzMvLy8vLy8vLy8vMy8zMy8zMy8vMy8vLy8zLy8vLzMzLzMvLy8vMy8vLzMvLy8vL
+      zMvMzMvMy8vLzMzMy8vMy8vLy8zLdUsgdUsgdUsfdk0gdkwgdk0hzMzMzMzMzMzMzMzMzMzM
+      zMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMy8zMzMzMzMzMpZR/f1os
+      4trP////////9fPveVEgn4NgxrSf////7Obfn4NgjGpAz8GvgmA2zMzMzMzMzMzMzMzMzMzM
+      zMzMzMzMpZR/fFYps5yA2c2/////////////vKiP7Obf////////n4NghmZAxcK/zMzMzMzM
+      zMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzM
+      zMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMdUwh
+      dUwhdk0hd00id00idk0izM3NzM3NzMzNzczNzMzMzM3MzczNzMzMzM3Nzc3Nzc3MzM3Mzc3M
+      zczMzc3MzM3MzM3Mzc3Nzc3MzM3Nzc3NzM3MwLqzeVMms5yA////////7Obfg10w2c2/////
+      ////////4trPn4Ngs5yAf10zxcO/zc3Nzc3NzczNs6eZf10zqY9w9fPv7Obfg10wz8Gv////
+      ////9fPvn4Ng////////////vKiPdU0cuLClzc3Nzc3NzM3Mzc3Nzc3NzczNzc3Nzc3NzczN
+      zc3Nzc3Mzc3MzczMzc3MzczNzMzNzMzMzM3NzM3NzM3Nzc3Mzc3NzczNzczNzc3MzM3Nzc3M
+      zc3NzM3Nzc3Nzc3Nzc3Nzc3Nzc3MzMzMzc3Nd00id04idk0ieE8jeE4kd04jzc3Ozs3Nzc3N
+      zs3Ozc3Ozc3Nzc3Nzc3Nzc3Nzc7Ozs3Nzs3Ozc3Ozc7Nzc3Nzc3Nzs3Ozc3Ozc3Nzc3Ozs3N
+      zs7Nzc3Ozs3Nk3lag10w7Obf////s5yA////////////////////////////z8GveVEgf10z
+      f10zfFcpn4NgxrSf7Obf////////9fPvlnZQ9fPv////////jGpA////////////////4trP
+      g10wk3laxsPBzc3Ozc3Nzc3Ozs3Nzs3Nzs3Nzc7Nzc3Nzc7Ozs3Nzc3Nzc3Nzc3Nzc3Nzc3N
+      zc3Ozc7Nzs3Nzc7Ozc3Nzc3Ozs7Nzc3Nzc7Nzc3Nzs3Nzc3Ozs3Nzc7Nzc7Nzc7Nzc7Ozc3N
+      zc7Nd04jeE4jeE4jeU8keFAkeE8lzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O
+      zs7Ozs7Ozs7Ozs7Ozs3Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OrZ6NfFcpvKiPvKiP
+      ////////////////////////////////////qY9wqY9w////////xrSfg10w9fPv////////
+      7ObfjGpA7Obfs5yAn4Ng////////////////////////s5yAbEEMs6iazc7Ozs7Ozs7Ozs7O
+      zs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Nzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O
+      zs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Nzs7OeU8leE8leE8keVAmeVEmeVEmzs7P
+      z8/Pzs/Ozs7Pzs7Pz8/Pzs/Oz8/Ozs/Pz8/Pz87Pzs7Pz87Pz87Pzs/Pzs/Pz8/Oz8/Oz8/P
+      zs7Pz87Pzs/Pz8/Pz87Ozs7Pzs/PyMXBlHpag10w9fPv////////////////////////////
+      ////9fPvs5yAlnZQ9fPv////4trPjGpA7Obf4trPz8GvjGpAjGpAz8Gv////////////////
+      ////////////////2c2/eVEgoIx0zs/Ozs/Ozs7Pz8/Pzs/Oz8/Pzs7Pzs/Pz8/Oz8/Pzs/P
+      z87Ozs/Pz87Oz87Pz8/Pz8/Pz87Pz8/Pzs/Pzs7Oz8/Oz8/Pzs/Pz8/Pzs7Ozs/Ozs7Ozs7O
+      zs/Pzs7Pz87OeVAmeVEmeVAmelInelEoelEn0M/Pz8/Pz8/P0M/Pz9DP0M/Qz8/Pz9DPz8/Q
+      z9DPz8/Pz8/Pz8/Pz9DPz8/P0NDQ0M/Pz8/P0M/Pz9DQz8/Pz8/Q0NDPz9DP0M/P0M/Pz9DP
+      z8/QrqCOs5yA////////////////////////////////////////2c2/cEQQz8GvxrSfn4Ng
+      g10ws5yA2c2/////////////////////////////////////////////////9fPvlnZQjXBN
+      0M/Pz8/P0M/P0NDP0NDP0M/Pz8/Pz8/P0M/Pz9DQz8/Q0NDQz8/P0M/Qz9DQz8/Pz9DPz9DP
+      z8/P0M/Qz9DP0M/Pz8/Pz8/Pz8/Pz8/Pz8/Q0M/Q0M/Pz8/Pz8/PelEnelEnelIne1Ipe1Mp
+      e1Io0NDQ0NDQz9DQ0NDQ0NDQ0NDP0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ
+      0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQoY10xrSf////////////////////
+      ////////////////////////4trPvKiPz8Gv4trP////////////////////////////////
+      ////////////////////////////////////n4NgmoNn0NDQ0NDQ0NDQ0NDQ0NDQ0NDP0NDQ
+      0NDQ0NDP0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDP0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0M/Q
+      0NDQ0NDQz9DQ0NDQ0NDQe1Ipe1Moe1IpfFMqfFQpfFQq0dDR0dDR0NHR0NHQ0NDR0NHQ0dDQ
+      0dHR0NDR0dDR0dDQ0dDR0NHQ0NDR0dHR0NHR0NHQ0dHQ0NDQ0dDR0dDQ0dHQ0dDR0NDR0dHQ
+      0dHR0dHR0dDQlHpbxrSfn4Ng////////////////////////////////////////////////
+      ////////////////////////////////9fPv2c2/2c2/2c2/2c2/2c2/2c2/2c2/2c2/2c2/
+      2c2/s5yAgF400NDR0dHQ0dDR0NDR0dDQ0NDR0NDR0NHR0dDQ0dHR0dHR0NDQ0NDQ0dHR0NDR
+      0dHQ0dDR0NDR0NDR0NHQ0NHR0dHR0NHR0NDR0dDR0dHR0dHQ0dHQ0NDQ0dDRfFMqfFMqfFQq
+      fVUrfVUsfVQr0tHS0dHS0dLR0tHR0tLR0dLR0dHR0dHR0dHS0dHS0dLR0dHR0dHR0dHR0dHS
+      0dHR0dHR0dLR0tHR0dHS0dHR0tHS0tHR0dHR0dLS0dLR0tHRvbWqf1os////xrSfn4Ng////
+      ////////////////////////////////////////2c2/s5yAvKiPs5yAn4NgjGpAeVEgc0sa
+      m4Rom4Rom4Rom4Rom4Rom4Rom4Rom4Rom4Rom4Rom4Rom4RoxL220dHR0tHR0dHS0dHR0dHS
+      0dLR0dHR0dLR0dHR0dHR0tLR0dHR0dLR0dHS0dLS0dLS0dHR0dLR0dLS0tHS0dHS0dHR0tHS
+      0dHR0dHS0dHR0dLS0tLR0dLR0dHRfVUsfVQrfFQsflUtfVYsfVYt0tLS0tLS0tLS0tLR0tLS
+      0tLS0tLS0tLR0tHS0tLS0tLS0tLS0tLS0dLR0tLS0tLS0tLS0tLS0dLS0tLS0dLS0tLR0tLS
+      0tLS0tLS0tLSy8jEelQn2c2/////////vKiPvKiP////////////////////////////////
+      z8GvqY9ws5yA2c2/2c2/2c2/2c2/2c2/vKiPeVEgjnFPvbWq0tLS0tLS0tLS0tLR0tLS0tLS
+      0tLS0tLS0tLS0tHS0tLS0tLS0tLS0tLS0dLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLR0tLS
+      0tLS0dLS0tLS0tHS0tLS0tLS0tLS0tHS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSfVYt
+      fVUsfVUtflYuflcuflYu09PS09PT09LS09PS09LT09PS0tLS09PT09LT09LT09LS09LS09LT
+      09LS09PS09LS09PT09PT09PT0tPT0tPT09PS09PT0tLT09LTt6uefVcqxrSfvKiPqY9w////
+      9fPvjGpAz8Gv////////////////////////////9fPv////////////////////////////
+      ////////xrSfeVEgjnJPzMnE0tPT09PT0tLS09PS09PT09PT09LS09LS09LT09PT09PT09PT
+      0tLS09LS09PT09LT09LT0tLT09PS0tLT09PT09PS0tLS0tPS0tPT0tLT09LS0tLT0tLT09PT
+      09LS09LT0tPT09PT0tPT09LT09LS09LT0tLSflYuf1Yuf1ctf1gvgFcvf1cv1NTU09PT09PU
+      09PT09TT09TT09PT09PT09PT09PT09PU09PT09PT09TU09PT1NTT09PT09PT09PT09TT1NPT
+      09PT1NTUxb+4j3JPg10w4trP////////vKiPs5yA////9fPvn4Ng////////////////////
+      ////////////////////////////////////////////////////////vKiPfVcqvrWr09PT
+      1NTT09TT1NTT1NTT1NPT09PU09PT09PT1NPT09PU09PT1NPT09PT09PT09PU09PT09PT09PT
+      09TT09TT09PT09TU09PT09TT1NPT1NTT09PT09PT09PU09PT09PT09PT09PT09PU1NTT09PU
+      09PTgFcvgFcvgFgvgFkwgVkxgVkw1NPU1NTU1NTU1NTU1NTT1NTU1NTU1NTU1NTU1NPU09TU
+      1NTU09TU1NTU1NPU1NTU1NTU1NTU1NTU1NTTzcrGqpiEgV81eVEgvKiP4trPn4Ng9fPv////
+      ////s5yAz8Gvg10w2c2/////////////////////////////////////////////////////
+      ////////////////////////////4trPdk0dzcrF1NTU1NTT1NTU1NTT1NTU1NTU1NTT1NTU
+      1NTU1NPU1NPU1NTU09TT1NPU1NTU1NTT1NTU1NTU1NTU1NTU1NTU1NTT1NTU09TU1NTU1NTU
+      1NTU1NPU1NPT1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTUgVkwgFgxgVkwgloxgVkygVox1NXU
+      1dXV1dXU1dXU1NXU1dTV1dXU1NXV1NXV1dTU1dTU1NXV1NTU1NXU1dXV1dXV1NXVsaORsqOS
+      elUocEQQn4Ngz8Gv////7Obf////2c2/g10w9fPv////4trPqY9wxrSf////////////////
+      lnZQqY9w4trP////////////////////////////////////////////////////////////
+      2c2/lnxd1NXU1dTV1NXV1NXV1NXV1dTU1dXU1dTV1NXU1NXV1dXU1dTU1NXV1dTU1dXU1NTV
+      1NTVzsvGua2eua2fuKyfua2ex8G51dXU1dTV1dTU1dXV1NXV1NXU1NXU1NXU1dXU1dTU1NTU
+      1dTV1dXU1NTVgVoxgVoygVkyglozglozgloz1tXV1tXV1dXV1dXV1dXV1dXV1dXV1dbV1tXV
+      1dXV1dbV1dXV1dXV1dXW1dXW1dbVx8G7aToCaToCeVEg////////////////s5yA4trP////
+      4trPeVEgxrSfs5yAvKiP////////////////9fPvcUIJf04Vbj8HZjgAjGpAlnZQs5yAvKiP
+      2c2/2c2/4trP////////////////////////////9fPvcEQQln1d1dXV1dXV1tbV1tXV1dXV
+      1dXV1dbV1dXW1dbV1dXV1dbV1dXV1dXV1dXW1dbW1dXVhGE3glAXfUwTfUwTfUwTfUwTfUwT
+      ekkQcUIJcUIJcUIJcUIJaToCelUopJB31dXV1dXV1dbV1dXV1dXVglszglszglszg1w0g1w0
+      g1w11tbW1tXW1tbW1tbW1tbV1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbV1dbW1tbW1tbWnYZq
+      f04VkF0jbj8Hg10w9fPv////////////qY9wz8Gv////7Obfg10wxrSf////////////////
+      ////xrSfglAXk18lwqWEpHtMjF0nrJJycUIJcUIJcUIJcEQQZjgAZjgAZjgAz8Gv////////
+      ////////n4NgjF0nbj8HkHNQzszI1tbW1tbW1tbW1tbW1tbW1tbW1tbW1dbW1tbW1tbW1dbW
+      1dbW1tbWq5qFf04Vk18lk18lwqWEoXNAmmkztZFpk18lk18lk18loXNAk18lk18lkF0jgl81
+      1tbV1tbW1tbW1tbW1dbWg1w0g1w1g1s0hF02hFw2hF0219fX1tbW19fW19fX1tfW19bX1tfX
+      1tbX1tbX19bX19bX1tbW19fW1tfX1tfXzs3IckYSk18lk18lkF0jd0cOcEQQ2c2/////////
+      ////vKiPn4NglnZQ4trP////////////////////////lnZQkF0jp31O0LmgoXNA5NfJrodc
+      k18lp31O5NfJrodck18liFUccEQQ9fPv////////////xrSfgFMek18lkF0jcUIJe1UowLmu
+      19fW1tfW1tbW1tfX1tbW1tbW19fW19bW1tfX19fX1tfX1tfXeVEfk18lk18lwqWEwqWEp31O
+      5NfJoXNAk18lp31O3c27rodck18lk18li1geiWlD1tbW19fW1tbX19fW1tbXhFw2hF02hF02
+      hF43hV43hF422NfX19fX19fY19fX19fX19jX2NfX2NfX2NfX2NfX19jX19fX19fX19fX19fX
+      kHNQglAXk18lk18lk18lk18lhVMZaToCqY9w9fPv////////////////////////////////
+      ////////7ObfdEQMvJt36+HW0Lmg8uvkrodck18lya+S0Lmgmmkzk18lf04VckcS4trP////
+      ////////xrSfeEwXmmkzk18lk18lk18lf04VaToCmH1ez83J19fX19fX19fX2NfX19fX19fX
+      19fX19fX19jXuq+hf04Vk18lwqWE5NfJwqWE6+HWoXNAk18lya+S3c27k18lk18lk18liFUc
+      b0QPwbmu19fX19fX19fX19fX19fXhF03hV43hV03hl44hl84hV842NjY2NjY2NjY2NfY2NfX
+      2NjY2NjY2NjY19jY2NjY2NfY2NjY19jY2NjYnodrcUIJk18lk18lk18lk18ltZFpmmkzkF0j
+      dEQMeVEgxrSf////////////////////////////////////lnZQsZZ38uvk18Otp31O3c27
+      oXNA3c27vJt3k18liFUccUIJlnZQ9fPv////////////xrSfbj8HkF0jk18lk18lk18ltZFp
+      k18lkF0jfUwTdk4dtKWU2NjY2NjY2NjY2NjY2NjY2NfY2NjY19jYgmA2l2cwwqWE+PXx18Ot
+      rodc5NfJoXNA5NfJvJt3k18lk18lk18lekkQgmA20M3K2NjY19jY19jY2NjY2NjY2NjYhl84
+      hV84hl85hmA6h186h2A62NnY2NjZ2djZ2NjY2djZ2NjZ2NjY2djY2NnZ2djY2dnZ2djY0M7K
+      gmA2ekkQkF0jk18lk18lk18lya+Sp31Ok18lk18loXNAlWk3cUIJjGpAz8Gv////////////
+      ////////////z8GvckcSvJt3rodck18lk18lwqWE8uvktZFpkF0jd0cOeVEgz8Gv////////
+      ////////qY9wjmc5mmkzk18lk18lmmkz0Lmgp31Ok18lk18lp31OkF0jdEQMgmA2wrqv2dnY
+      2NnY2dnZ2NjY2NjYrZyHlXFH5NfJya+SoXNAk18lk18l3c275NfJrodck18lk18li1gebj8H
+      nods2dnZ2djY2djZ2dnZ2dnZ2djY2dnZ2NjZhl86h2A6hmA6h2E7iGE7h2E72drZ2dra2dna
+      2drZ2dna2dnZ2dnZ2tra2dnZ2dnZ2dnavLCicEQPhVMZk18lk18lk18lk18lya+StZFpk18l
+      k18lp31O3c27rodck18liFUccUIJeVEgqY9w4trP////////xrSfcEQQhVMZk18lk18lk18l
+      k18lrodcya+ShVMZckcSvKiP////////////////7ObfjGpAqodgk18lk18lk18lk18l18Ot
+      p31Ok18lk18lp31O6+HWoXNAk18ljVogcUIJkXRStaaV2dnZysS9mH5fcUIJpHtMp31Ok18l
+      k18lk18lk18lya+SvJt3k18lkF0jekkQe1Yow7qw2dnZ2dnZ2trZ2drZ2dnZ2dna2dna2dnZ
+      2dnZiGA7iGA7iGE7iGE8iGI8iGE82tra2trZ2tra2tra2trZ2tra2tra2trZ2tra2dran4hs
+      bj8HjVogk18lk18lk18lk18lk18l3c27mmkzk18l0Lmg18OtoXNAk18lk18lk18lvJt3kF0j
+      f04Vd0cOcUIJcUIJekkQjVogk18lk18lk18lk18lk18lvJt3hFspg10w7Obf////////////
+      9fPvs5yAm3tUpHtMk18lk18lk18lk18lk18l5NfJk18lk18l0Lmg18OtoXNAk18lk18lk18l
+      tZFpiFUcekkQcUIJdEQMglAXk18lk18lk18lk18lk18lk18lk18lya+Sk18li1gebD0Fn4hs
+      2tra2trZ2tra2trZ2tra2tra2tra2tra2tra2tnZ2traiWE8iWE8iGI8imM+iWM+imM92trb
+      2tva29vb29va29va29rb2tra2tra0s/Mg2A2cUIJkF0jk18lk18lk18lk18lk18lk18lrodc
+      3c278uvkwqWEk18lk18lk18lp31O5NfJ18Otk18lk18lp31O3c27k18lk18lk18lk18lk18l
+      k18lk18lk18loHtQg10w9fPv////////////z8GvjGpArY9rkF0jk18lk18lk18lk18lk18l
+      k18lwqWE3c276+HWtZFpk18lk18lk18loXNA5NfJ0Lmgk18lk18lrodc18Otk18lk18lk18l
+      k18lk18lk18lk18lk18lvJt3glAXe1YpxLyw2trb2trb2tva29rb2tra29va29ra2trb2tra
+      29ra29ra29raiWI+imI9imM+imQ/i2M/imM/3Nvb29vb29vb29vb29vb29vb29vbvbKkcEUP
+      f04Vk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lp31O0Lmg18OtrodcwqWE0LmgoXNA
+      k18lk18lrodc6+HWmmkzk18lk18lk18lk18lk18lk18lk18lk18lbD0F7Obf////////////
+      s5yArJJylWk3k18lk18lk18lk18lk18lk18lk18lk18lk18lk18lvJt318Otya+SoXNA18Ot
+      0LmgoXNAk18lk18lrodc3c27mmkzk18lk18lk18lk18lk18lk18lk18lk18ld0cOmYBg09DO
+      29vb29vb29zb29vb29zc29vb29vb3Nvb29vb29vb29zc29vc29vbimQ/imQ/imQ/i2VAi2VA
+      i2VA3Nzc3Nzc3Nzc29vc3Nvc3NzctqiWbj8HjVogk18lk18lk18lk18lk18lk18lk18lk18l
+      k18lk18lk18lk18lk18lmmkzwqWE3c273c27vJt3mmkz5NfJ0Lmgmmkzk18lk18lk18lk18l
+      k18lk18lk18lk18li1gejGpA////////////xrSfu6OGmmkzk18lk18lk18lk18lk18lk18l
+      k18lk18lk18lk18lk18lk18lk18lp31O18Ot3c27ya+SoXNAp31O3c270Lmgmmkzk18lk18l
+      k18lk18lk18lk18lk18lk18lk18liWY73Nzc3Nzc29zc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc
+      29zc3Nzc3Nzc29zc3Nzbi2RAi2VAi2VBjGZCjGZBjGZC3Nzc3Nzc3Nzd3d3c3Nzd3dzcdEwb
+      jVogk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18l
+      oXNAya+S18Otp31Ok18lk18lk18lk18lk18lk18lk18lk18lk18lk18liFUcjGpA////////
+      ////vKiPvJt3k18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18l
+      k18lk18ltZFpya+S3c27p31Ok18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lc0cS
+      3N3d3N3d3Nzc3dzd3d3d3Nzc3Nzc3d3d3dzd3d3c3N3c3N3c3dzc3d3d3NzcjGZBjGZBjGZB
+      jWdDjWdDjWdC3d3d3d3e3d3e3d3d3d7d3d3dcEUPhVMZiFUciFUcf04VfUwTiFUciFUciFUc
+      iFUciFUciFUciFUci1gek18lp31Orodcp31Ok18lk18lk18lk18lk18lk18lk18lk18lk18l
+      k18lk18lk18lk18lk18lk18l0LmgeVEg////////////4trPn4Ngnn5XvqWJs5Rwya+SwaiL
+      tJl5tJl5vqWJvqWJq4xpoYBZvqWJup59mGw5p31Ommkzk18lk18lk18lk18lk18lk18lk18l
+      k18lk18lk18lk18lk18lk18lk18lk18l3c27dEQMzsjB3d3d3d3d3d3d3d3d3d3d3d3d3d7d
+      3d3d3d3d3d3d3d3d3d3d3d3d3t3djWdDjWdDjWdCjmhEjmhEjmhE3t7e3t7d3t3e3d7e3d7e
+      3t7dzsjCoYpuoYpuoYpuoYpuoYpuoYpuoYpuoYpuoYpuoYpuoYpuk3ZTbUINaToCup59ya+S
+      18Ot5NfJ0LmgtZFpk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lp31O5NfJekkQ
+      vKiP////////////////9fPv2c2/2c2/2c2/n4Ngs5yAvKiP2c2/z8GvxrSf2c2/z8GvcEQQ
+      rY9r3c275NfJ0LmgvJt3mmkzk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lrodc
+      ya+ShVMZi2xF3t7e3t7e3t7e3t7e3t7d3t7d3t3e3t7d3t7e3t7e3t7e3t7e3t3d3t7ejmhE
+      jWhEjmhEj2lGjmlFjmlF397e397e397e397f3t7e3t/f3t/f397e3t7e39/f3t7f3t7f39/f
+      39/e3t/f3t/ewLWnhGE3bj8HglAXkF0jk18lk18lk18lk18loXNAwqWE3c27k18lk18lk18l
+      k18lk18lk18lk18lk18lk18lp31O5NfJmmkzkF0jbj8HxrSf////////////////////////
+      4trPn4Ng////////////////////xrSfaToCf04Vk18lk18lk18lk18lvJt30LmgvJt3k18l
+      k18lk18lk18lk18lk18lk18lk18lk18ltZFp5NfJmmkzk18ld0cOk3ZT3t/e397f3t7e3t7f
+      3t/e3t/e397e3t7e3t/f3t/e39/f39/f3t/fjmlFjmlFj2lFkGpHj2pHj2pG39/f39/f39/f
+      4N/f39/g39/f39/f39/f39/f39/f39/f39/g4N/f39/f39/fm4Fhbj8HiFUck18lk18lk18l
+      k18lk18lk18lk18lk18lk18lp31Ommkzk18lk18lk18lk18lk18lk18lk18lmmkz5NfJp31O
+      k18ltZFp1MGrcUIJqY9w9fPv////////////rqyoy8jFn4Ngz8Gv////////vKiPckcSfUwT
+      k18lk18lk18lk18lk18lk18lk18lk18ltZFpk18lk18lk18lk18lk18lk18lk18lk18loXNA
+      6+HWoXNAk18lrodcwqWEd0cOhGE3z8rD39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f
+      3+Dfj2pGkGpGkGpGkWtIkWtIkGtI4ODg4ODf4ODg4ODg39/g4ODg4ODg3+Df4N/g4ODg4ODg
+      4ODg3+Dg4N/gk3dUfUwTk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18l
+      k18lk18lk18lk18lk18lk18lk18loXNA18OtoXNA18Ot0LmgoXNAk18lf04VckcSs5yA9fPv
+      ////uLi44+Pj////qY9wjGpAqY9wbj8HjVogk18lk18lk18lk18lk18lk18lk18lk18lk18l
+      k18lk18lk18lk18lk18lk18lk18lk18lk18lvJt3vJt3p31O3c270LmgoXNAk18lhVMZcEUP
+      ootv2NXR4ODg4N/g39/g4ODg3+Dg4N/g3+Dg3+Df4ODfkWtIkGtIkWtIkmxJkWxJkmxJ4OHh
+      4ODg4ODh4ODh4OHh4eHh4eDh4eDh4ODh4OHh4OHh4OHg4eDho4tvglAXk18lk18lk18lk18l
+      k18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18l
+      5NfJ3c27p31Ok18lk18lk18lwqWEv6OCfUwTcEQQn4Ngz8Gv9fPv////9fPvn4NgcUIJk18l
+      k18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lk18lkF0jglAXk18lk18l
+      k18lmmkz6+HW18Otmmkzk18lk18lk18l0LmgnnE+fUwTaToClHdUuquZ4eHh4ODg4ODh4ODh
+      4ODh4eDg4ODhkWxJkWxJkWxJk21Lkm1Kkm1L4eHh4eLh4eHh4eHh4eHh4eHh4eLh4eHh4eHh
+      4eHi4eHh4uHh4eHhflQjk18lk18lk18lk18li1gebD0Fbj8HcUIJmHRJmHRJmHRJmHRJmHRJ
+      mHRJmHRJmHRJmHRJmHRJe04Zk18lk18lk18lk18lmmkz5NfJoXNAk18lvJt35NfJ18Otmmkz
+      k18lk18lhVMZfUwTdEQMaToCaToCd0cOkF0jk18lk18lk18lk18lk18lk18lk18lk18lk18l
+      k18lk18li1geiFUcf04VdEQMdU0cdU0cjVogk18lk18lk18lp31O3c27k18lk18lrodc5NfJ
+      0Lmgk18lk18lkF0jf04Vbj8HbUIOlHdU2dbT4eHh4eHh4eHh4uHhkm1Lk21Kkm1Lk25Mk25M
+      k29M4uLi4uLh4uHi4uLi4uLh4uLi4eLh4uHi4uHi4uLh4uLh4uLh4eLieEsXk18lk18lk18l
+      k18lfUwTz8Gv////////////xrSf////////////z8Gv////////xrSf////z8Gvf04Vk18l
+      k18lk18lk18lmmkz3c270Lmgya+Sk18lk18lk18lrodctZFpk18lk18lhVMZZjgAckcSk18l
+      k18lk18lk18liFUccUIJcUIJcUIJcUIJcUIJbj8HZjgAZjgAZjgAfVgqlHhVs6KM2tfTva6d
+      ekkQk18lk18lk18lk18ltZFp0Lmg0Lmgya+SoXNAk18lk18lrodcrodck18lk18ld0cObUIO
+      0szE4eLi4uLh4uLh4uLik25MlG5Mk25MlHBNlG9OlG9N4+Lj4uPj4uLi4+Pj4+Pi4uPj4+Pj
+      4+Pi4uLj4+Lj4+Lj4uLj4+LilHhViFUck18lk18lk18lfUwTz8Gv////////////7Obfn4Ng
+      9fPv////qY9w4trP////jGpA9fPv////j2xCkF0jk18lk18lk18lk18lp31O5NfJmmkzk18l
+      vJt33c27rodck18lk18lekkQZjgAxrSfn4NglWk3k18lk18lk18liFUcZjgAs6KMwrepw7ep
+      wrepw7iqwrip0s3G4+Pj4uPj4+Pj4uLj4+Lj4+Ljc0cSk18lk18lk18lk18lk18lvJt3ya+S
+      k18lk18lvJt33c27rodck18ljVogcUIJdU0cysK34uPi4uLj4uLj4uLi4uPjlG9NlG9NlW9N
+      lXBOlXBPlXBO4+Pj5OPk4+Pk5OPj4+Pj4+Tk4+Pj4+Tj4+Tj4+Pj4+Pj4+Pj4+Pj29jUc0cS
+      kF0jk18lk18liFUcg10w7Obf////////////z8GvlnZQ////7Obfg10w////z8GvvKiP////
+      z8GvglAXk18lk18lk18lk18lk18lp31O3c273c27vJt3k18lk18li1gebj8Hg10w4trP////
+      7Obff1Ylk18lk18lk18lk18ldEQMrJd/4+Pj4+Pk4+Pj4+Pj4+Pj4+Pj5OPj4+Pj4+Pj4+Pj
+      4+Tj4+TjnX9cglAXk18lk18lk18lk18lk18lwqWE3c273c27tZFpk18lk18lf04VaToCnINj
+      29jU4+Pj4+Tk4+Tj4+Pj4+Pj4+PjlXBPlXBOlXBPlnFPlnFQlnFP5OTj4+Tk5OPk5OPk5OTk
+      4+Tk5OPk5OPk5OTj4+Tk5OTj5OPk5OTk5OTky8O5dkoUkF0jk18lk18liFUcckcS2c2/////
+      ////////z8Gvn4Ng////n4Ngn4NglnZQcEQQ7Obf////eEwXk18lk18lk18lk18lk18lk18l
+      k18lk18lk18lkF0jfUwTcEQQxrSf////s5yA////////qY9wf04Vk18lk18lk18lkF0jbD0F
+      vaqV5OTk4+Tk4+Tk4+Tk5OTk5OPj4+Tj4+Pk4+Pk5OTj5OTkz8a7bD0Fk18lk18lk18lk18l
+      k18lk18lk18lk18lk18liFUcbj8HhWI5xLiq5OPk5OTk5OPj5OTk5OTj5OPk5OPj4+PklnJQ
+      lnJQlXFQl3JSl3JRl3JR5OTk5OXl5OXk5eTl5OXl5OTk5OTk5OTk5OXk5OTk5eTl5eXl5OTl
+      5OTk5eTkzMO5dkoUkF0jk18lk18lkF0jcUIJqY9w////////////qY9ws5yAn4Ng////////
+      s5yAZjgAz8Gvs5yAglAXk18lk18lk18lk18lk18lk18lkF0jglAXckcSqY9w9fPv////////
+      9fPvs5yA////9fPvg10wfUwTk18lk18lk18li1gebj8HlXVO39vY5OTk5eTl5eTk5OTl5OTl
+      5OXl5OXl5eXl5OTk5eTliGU7f04Vk18lk18lk18lk18lk18lk18liFUccUIJdU0ctKOO5OTk
+      5eXl5OTl5eXl5OTl5eTk5OTl5eTk5eTk5OXklnJRlnNRl3JRmHNSmHNSl3NS5eXl5eXl5ebl
+      5ebl5eXl5eXl5uXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXlzcS5dkoUkF0jk18lk18l
+      k18lfUwTg10w4trP////////s5yAlnZQ////////////////vKiPlnZQhmAyglAXk18lk18l
+      k18lk18lglAXdUkVs5yA9fPvz8Gvg10w////////////s5yA4trP////9fPvqY9wcUIJjVog
+      k18lk18lkF0jekkQcEUQqpN25eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXlzcS5ZjgAjVog
+      k18lk18lk18lhVMZcUIJgFsttaOO5eXl5eXl5ebl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl
+      5eXlmHNSl3NTl3NTmXRTmHVTmXRT5eXm5ubm5ubm5eXm5eXl5ubm5eXl5ubl5uXm5ubm5eXl
+      5ubm5ubm5ubm5uXm5uXl5ebmzcS5hl8yi1gek18lk18lk18liFUcdUkVvKiP////////jGpA
+      ////////////////////////9fPvjGpAbj8HfUwTd0cOdUkVqY9w2c2/////////////z8Gv
+      lnZQ////////7Obfs5yA////////////2c2/fFMifUwTkF0jk18lk18ljVogcUIJe1MhyLyu
+      5ubm5ubm5ubm5eXm5uXm5ubl5ubm5ubmtaSPbj8HhVMZekkQc0cTlXlWyLyt5ebm5uXl5ubl
+      5ebl5ubm5ebl5ubm5ubm5ubm5ubl5ubm5ubm5ebm5uXmmXRUmXRTmXRUmnZVmnVVmnVV5ufn
+      5+bn5ubm5ubm5ufn5ubn5ubm5ufm5ubn5ufn5+bm5ufm5+fm5+fm5ubm5ubm5ubn5ufm3dzX
+      lnlWfUwTk18lk18lk18lkF0jd0cOjGpA7Obfs5yA////////////////////////////////
+      2c2/cEQQ2c2/////7ObflnZQxrSf////////////vKiPvKiP9fPvlnZQz8Gv////////////
+      ////9fPvqY9wbD0Fi1gek18lk18lk18liFUcbj8Hpots5ubn5+bn5ufm5ubm5ubm5ubm5ufm
+      5+bnzcW6pY5zxbqs5+bn5+fm5+bm5ubn5ufm5+bn5ufm5ubm5+bn5ubn5+fn5ubn5ufm5+bn
+      5ubm5ubn5ufmmXZVmXVVmXVVmnZXmnZWmnZW5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn
+      5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+jnxrutg10wiFUck18lk18lk18liFUc
+      dUkVqY9w////////////////////////////////////2c2/jGpAz8Gv////////n4NgxrSf
+      ////9fPvz8GvjGpAlnZQ2c2/////////////////////////////2c2/eVEgf04Vk18lk18l
+      k18lkF0jbD0FtqGI5+fn5+fn5+fn5+jn5+fn5+fo5+fn5+fn5+fo5+fn5+fn5+fn5+fn5+fn
+      5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+jn5+fn5+fn5+fn5+fn5+fnm3ZWmnZXm3ZXm3dYm3dY
+      m3hY6Ojo6Ojo6Ojn6Ojo6Ofo5+jn6Ojn6Ojo6Ofn5+fn5+jo6Ofn6Ojo6Ofo6Ofn6Ofo6Ojo
+      5+jo6Ojo6Ofo6Ojo5+fopo9zfUwTk18lk18lk18lkF0jbD0F////////////////////////
+      ////////////////9fPvlnZQqY9w7ObfxrSfeVEglnZQqY9w2c2/////////////////////
+      ////////////////////////9fPvn4Ngd0cOk18lk18lk18li1gec0cT4t/a6Ojo6Ofo6Ojo
+      6Ojo6Ojo5+fo6Ofn6Ojo5+jo6Ojn6Ofo6Ojo6Ojo6Ojo6Ojo5+jo6Ofo6Ojo6Ojo6Ofn6Ofn
+      6Ojn6Ojo6Ojn5+jo6OjonHdXm3dYnHdYnXlZnXhZnHlZ6ejo6Ojo6Ojp6ejp6ejp6Ojo6Onp
+      6Ono6enp6Ono6Ojo6ejp6Ojo6Ojo6enp6ejo6Ono6Ojo6Ojo6ejo6Onp6Onp6Ojox7utfUwT
+      k18lk18lk18lcUIJ////////////////////////////////////////////9fPvvKiPn4Ng
+      s5yA4trP////////////////////////////////////////////////////////////////
+      vKiPd0cOk18lk18lk18lcUIJ0sa36Ojp6ejo6Ojp6Ojp6Ojo6ejp6eno6enp6Onp6Ojo6eno
+      6eno6Ojo6Ojo6Ojp6Ojo6Ojp6Onp6Ojo6Ojo6Ono6Ojp6Ojo6ejo6Ojo6OnpnHhZnHhZnHhZ
+      nXlanXpanXlb6enp6enp6enp6enp6enp6enp6enp6enp6enp6enpyLyut6aRzMCyv7Ggp5B0
+      p5B0t6aRp5B0r5uCyLyur5uCp5B0p5B0kXJLh1gjk18lk18lk18lfFMi2c2/z8Gv////////
+      ////////////////////////////////////////////////////////////////////////
+      ////2c2/2c2/2c2/2c2/2c2/xrSfs5yAs5yAs5yAs5yAcUIJk18lk18lk18lbj8H08a36enp
+      6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp
+      6enp6enp6enp6enp6enp6enp6enpnXpanXpanXlbnnpcnXpbnntc6urp6urq6enq6erq6enp
+      6urq6urp6urq6erp6erqn4ZmkmY0rodc18Ot0Lmg3c27vJt3rodcp31Ok18lr4tjo3hJk18l
+      k18lk18lk18lk18lf04Vn4Ng9fPvjGpA2c2/////////////////////////////////////
+      ////////2c2/2c2/vKiPs5yAxrSflnZQfFMicUIJm3tUs5yAs5yAmHRJkWo7imAug1YgfUwT
+      glAXiFUciFUcjVogk18lk18li1gedkoV5ODd6unp6urp6urq6erq6erp6urp6unq6erq6unp
+      6unq6unp6urp6urq6urp6unp6urp6urq6unq6unq6urp6unq6erq6erq6unq6urq6urpnntc
+      nntbnnpcnntdnnxdnntd6urq6uvr6uvq6+vq6uvq6+rr6uvq6+rr6+vr6urruKaRdk4daToC
+      fUwTjVogk18lrodcwqWE18Ot5NfJvJt3k18lk18lk18lk18lk18li1geeVEg9fPv////9fPv
+      jGpA7Obf////////////////////////////////vKiPjGpAqY9w2c2/2c2/2c2/2c2/z8Gv
+      lnZQbD0FglAXk18lmmkzwqWE18Ot3c275NfJp31Ok18lk18lk18lk18lk18lkF0jbj8HtZ2A
+      6+vq6urr6uvq6urr6uvq6uvr6urq6urq6+rq6urr6urr6urq6uvq6uvr6+vq6+vq6urq6urr
+      6+rq6urr6urr6+vq6+rq6uvq6urq6+rq6+rrn3xdn3xdn3tdoHxfoH1foHxe6+vr6+vr6+vr
+      6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr5eLesJh8cUYQhVMZk18lk18lk18lvJt30Lmg
+      mmkzk18lk18lk18lglAXfFMi4trPlnZQ4trP////z8GvjGpA9fPv////////////////////
+      ////////7Obf////////////////////////////////7Obfn4NgbD0FiFUck18lk18lk18l
+      wqWErodck18lk18lk18lk18li1gebj8Ho4Vh6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr
+      6+vr6+vr6+vr6+vr6+vr6uvr6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr
+      6+vroH1eoHxen31eoH5foH1goX5g7Ovr7Ovr7Ozr7Ovs6+zr6+zs6+zr6+zs7Ozr6+vr6+vr
+      7Ozs7Ovr7Ozr0cq/eVEgekkQya+S5NfJwqWEtZFp3c27k18liFUccUIJlnZQ9fPv////4trP
+      lnZQ2c2/////s5yA2c2/////////////////////////////////////////////////////
+      ////////////////////4trPg10wekkQ0Lmg6+HWya+Srodc18Otk18lkF0jekkQcUYQwq+Z
+      6+zs7Ozr6+zs7Ozs7Ovs7Ovs7Ozs7Ozr6+vs7Ozs7Ozr6+zs7Ozr6+vs7Ozs7Ozr7Ozs7Ovr
+      7Ozs6+zr6+zs6+zr6+zs7Ozr7Ozr6+zr7Ozr7Ozs6+zsoX1foX5goX5foX9hon5hoX9h7ezs
+      7O3s7e3t7Ozt7O3t7Ozs7Ozt7ezs7Ozs7Ozs7O3t7O3t7Ozs7Ozs7O3s7O3sf1kst5t7mmkz
+      k18lkF0jglAXcUIJeVEgz8GvxrSfz8Gv////////9fPvg10w7ObfjGpA9fPv////////////
+      ////////////////////////////////////////////////////////////////////n4Ng
+      jmc5k18lk18lk18ljVogdEQMcUYQq5R44+Dd7Ozs7ezt7Ozs7O3s7ezs7ezs7ezs7Ozt7Ozs
+      7O3s7Ozt7Ozs7O3s7O3t7Ozs7e3t7Ozt7e3s7e3t7O3s7O3t7O3s7O3s7Ozs7Ozs7e3t7Ozs
+      7e3t7ezt7OztoX5goX5hon9hon9ion9io39j7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7ezt
+      7e3t7e3t7e3t7e3t7e3t7e3t7e3t5OHebkMOcUIJbj8HcEQQn4Ngz8Gv////////9fPvg10w
+      xrSf////////z8GvlnZQ4trP////////////7ObfqY9w2c2/////////////////////////
+      ////////////////////////////////////////lnZQekkQfUwTcUIJgVwvt6KJ5+Tg7e3t
+      7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t
+      7e3t7e3t7e3t7e3t7e3s7e3t7e3t7e3t7e3t7e3t7e3t7O3t7e3ton9io4Bion9jo4Bjo4Fj
+      pIFk7e7t7u7u7u3u7e3t7e3u7e7u7e3u7u3t7e7t7u3t7u7u7e7t7u7u7u7u7u7t7e7t7e7t
+      5OHfZjgAlnZQ////////////7Obfs5yA////////qY9wqY9w7Obfn4Ng2c2/////////////
+      ////xrSfmXxZkHBKZjgAjGpAn4Ngs5yAz8Gv2c2/2c2/////////////////////////////
+      ////////z8GvmXxZuqiU3NfP7e7t7e3t7e7t7u7u7u3u7u3t7u3u7e7u7u7t7u7t7u7t7u3t
+      7u3u7e7t7u3t7e7t7u7t7e7t7u3t7u7t7u7u7e3u7u7u7e7t7u7t7u3u7u3t7u7t7u7t7u7t
+      7e7t7e7u7u7t7u7u7e3uo4Bjo4Bjo4BjpIFlpYJlpIJl7u/u7u7v7+/v7u/u7u7v7+7u7+7v
+      7+7u7u/u7u/u7+7v7u7v7u7u7+7v7+7v7+7u7u7u7u7uu6mVbkMOs5yA////////////4trP
+      qY9w9fPv////z8GvjGpA7Obf////////////////////lnZQ5eLf7+7u7u7vy8GyqZJ2kHFK
+      d04dZjgAZjgAZjgAZjgAcEQQjGpA////////////////9fPvlHVO7+/v7+/u7u/u7u/u7u7u
+      7u/v7+7v7u7u7u7v7u7v7u/u7+7u7u7u7u7v7+7u7+/u7u7v7u7u7u7v7+7u7u7u7u7u7u/u
+      7u/v7+7v7+/u7+/u7u7u7+7u7u/u7+7u7+7v7u7u7u7v7+/u7u/u7u7u7+7upIJlpIJlpIJl
+      pYJmpYNmpYNm7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/u
+      7+/v7+/v7u/v7+/u1czCf1osg10w4trP////////4trPlnZQjGpAn4Ng9fPv////////////
+      ////////9fPviGU77+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v3djRoohojGpA////
+      ////////////lnZQzsK17+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/u
+      7+/v7+7v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v
+      7+/v7+/v7+/v7+/v7+/v7+/v7+/vpYJmpYJmpYJmpoRnpoRnpoNo8PDw7/Dw7/Dw8PDw8PDw
+      8PDv8O/v8PDw8PDw8PDv7+/v8O/v8O/w8O/w8O/w8PDv8PDw8PDv8PDw8O/w7/DwqpN3bkMO
+      s5yA9fPv////////////////////////////////////////s5yAvKqV8PDw7/Dw8O/v8O/v
+      8O/w8O/v8O/v7/Dw8O/v7/DwqpN3g10w9fPv////////////n4NgtqKK8O/v8O/w8O/w8PDw
+      8O/v7/Dw8O/w8PDw7+/w8O/w7+/v7+/w8PDv8PDv7/Dv8O/w7/Dw8O/v8PDw8PDw8O/w7+/w
+      8PDv8PDw8PDv8PDv8PDv7+/w7+/v8PDw7/Dw7+/w8PDw8PDv8PDw7/Dw8PDv8PDv8PDvpoRo
+      poRnpoRnp4VopoVpp4Vo8PHw8fHx8PDw8PDw8PDw8PDx8fDx8fDw8PDw8PDw8PDw8PHw8PDw
+      8PDw8PDw8PDw8fDw8fDx8PDw8fDx8fDw8PDw3tnRkXJLeVEgxrSf////////////////////
+      ////////////9fPvcEQQ5+Xh8fHw8PHx8PDw8fDw8PDx8fDx8PDw8fHwzsGzd08es5yA9fPv
+      ////////////n4NgmX1a8PDw8fDx8fDw8PDw8PDw8PHw8fDw8PHw8PDw8PDx8PHx8PDw8fDx
+      8fDx8fDx8fDw8PDw8PDw8PDx8PHw8fDx8fHx8PDw8PDw8PDw8PDw8PDw8PDw8PDw8PDw8fDx
+      8fDw8PHw8PDw8fDw8PHw8PHw8PDw8PDw8PHwpoVop4Vop4VoqIVqqIZqqIZq8fHx8fHx8fHx
+      8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8PHx8fHx8fHx8fHx8fHx
+      8fHx8fHw8fHxzcK0iGY8g10w2c2/////////////////////////n4Ngmn1a8fHx8fHx8fHx
+      8fHx8fHx8fHx8fHx1s7DiGY8jGpA4trP////////////9fPvjGpAv66Z8fHx8fHx8fHx8fHx
+      8fHx8fHx8fHw8fHx8fHx8fHx8fHx8fHx8fHx8PHx8fHw8fHx8fHx8fHx8fHw8fHx8fHx8fHx
+      8fDx8fHx8fHx8fHx8fHx8fHx8fHw8fHx8fHx8fHx8fHw8fHw8fDx8fHx8fHx8PDx8fHx8fHx
+      8fHxqIZqqIVqqIVqqYZrqIdsqYZr8vLy8fLy8vLx8vLx8fHx8vHx8vHx8vLy8fLx8fHx8vLx
+      8vHy8vLx8vHx8vHy8fLx8vLy8vHy8fLy8fHx8vLx8vHy8vLy8fHy8fHx8fHxzsK1iGY8eVEg
+      xrSf9fPv////////n4Ngd08e4NrT8vLy8vHx8vLy8fLx8fHx8fHxs5+HeVEgz8Gv////////
+      ////////2c2/lXVO2tHH8vHx8vLy8vLy8fLx8fLy8vLy8vHx8fHx8fHy8vLx8vLy8fLy8vHy
+      8vLx8vHy8vLy8vHy8fLx8fLy8vHx8vLy8fLx8vLx8vLy8fHx8vLy8vHx8fLx8fHx8fHx8fHy
+      8vLx8fLy8vLy8fLx8fLy8vHy8fLx8vHx8fLy8vLy8fHxqYZrqIZrqYdrqYhtqYhtqodt8/Ly
+      8/Py8vLz8vLz8vLz8vLy8vLy8/Py8vLy8vPy8vLy8vPz8vLy8vLz8/Py8/Ly8vLy8/Ly8vLy
+      8/Ly8vPy8vLy8/Py8vLy8vLz8vPy8/Ly8vLy4NvTtKCHiWY8g10wk3RNtKCH6ebi8vLz8vLy
+      8/Ly8vLy8vLz6ebigFstn4Ng9fPv////////////7ObfqY9wsJl99PT08vLy8/Ly8vLz8/Ly
+      8vLz8/Py8vLy8vLy8vLy8vLy8vLz8/Ly8vLy8vPz8vLy8vPy8vLy8vLy8vPy8vLy8vLy8vLy
+      8vLy8vLy8vLz8vLy8vLy8vLy8vLz8vLy8vLy8vLy8vLy8vLz8vLy8vLy8vLz8/Ly8vLz8vLy
+      8vPz8vLy8vLzqohtqodsqYdsq4luq4luqohu8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz
+      8/Pz8/Pz8vPz8/Pz8/Pz8/Py8/Pz8/Pz8vPz8vPz8/Pz8/Pz8vPz8/Pz8/Pz8/Pz8/Pz8vLz
+      8/Py8vPz8/Pz8/Pz8/Pz8/Lz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/PzknJMn4Ng////////////
+      ////s5yAqI5u5N7X8vPz8/Py8/Pz8/Pz8/Py8/Pz8/Pz8/Pz8/Pz8/Pz8vPz8/Pz8/Ly8/Pz
+      8/Pz8/Pz8/Lz8/Pz8/Py8/Py8/Pz8/Pz8/Pz8vPz8/Pz8/Pz8/Pz8/Py8/Py8/Lz8/Pz8/Pz
+      8vPz8/Pz8/Pz8/Py8vPz8/Pz8/Pz8/Pz8/Pz8vPz8/Pz8/Pz8/Pzq4luqohuq4luq4pvq4pv
+      rIlv9PP09PP08/Pz9PT09PT09PT09PPz9PP09PT09PTz8/T09PP08/T08/T09PPz9PTz8/Tz
+      8/T08/Pz8/T08/P08/P08/T08/Pz9PP08/P08/Tz8/T09PT08/Pz9PT09PT09PT08/P09PTz
+      8/Tz9PT09PPz8/T02c/FjGpA////////////9fPvlnZQ1Mi78/Pz9PTz9PPz8/T09PTz9PTz
+      9PP08/T08/Pz8/T09PTz9PTz9PT08/P08/Pz9PTz9PPz8/T09PPz9PP08/P09PT08/Tz9PP0
+      8/Tz9PTz9PPz9PPz8/Tz9PTz9PTz8/P08/P09PT08/Pz9PPz9PTz9PT08/T09PT09PPz8/P0
+      9PP09PTz8/Tz8/P08/Pzq4lwq4pvrIlvrItxrItxrItw9PT09PT09PX09PT09PT09PT09PT0
+      9fX09PT09PX09PX19PT09PX09PT09PX09PT09fT09PT19PX09PT09PT19PT09fT09PX19PT1
+      9fT19PX19PT09PT09PX09PT09PX09PT09PX09PT09PT09fT09PT19PX0rJV5xrSf////////
+      ////qY9w7+3p9fT19PX19PT09PX09PT09fT09PT09PX19PT09fT09PX09PX09fT09PT09PT0
+      9PT09PT09PX09PX19PT09PT09PT09PT19PT09PT19PT09fX19fX09fT09PT19PT09PT09fT0
+      9PT19PT09PT19PT09PX09PT09fT19fX09PT09PT09PT09PT19fT19PT09PT0rItwrYtxrYtx
+      rYxyrYxyrYxy9fX19fX19fX09PX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX09fX1
+      9fT19fX09fX19fX19fX19fX19fX19fX19fX19fX19fT19fX19fX19fX19fX19fX19fX19fX0
+      9PX09fX19fX19fX19fT19fX1rZZ62c2/////////////s5yA9fX19fX19fX19PT19fX19fX1
+      9PX19fX19fX19fX19fX19fX19fX19fX09fT19PX09fX19fX19fX09fX19fX19fX09fX19fT1
+      9PX19fX19fT19fX19PX19fX19fX19fX09fX19fX19fX19fX19fX19fX19fX19fX09PX19fX1
+      9PX19fX19fX09fX19fX19PX19fX1rYxyrYxyrYxyr410ro1zro1z9vb19fb19vb29fX29fX1
+      9fX19vX29vX29vb19fX19vb29vX29vb19fb29vb19vb29vX19vb29vX19fX19fX29fb19vb1
+      9vb29fX19fX19fb19vb19vX29fX29fb29fX29vb19vb29fb19vX19fb29fX29vb1tqGJvKiP
+      ////////////xrSfu6eO1cq85+Ha+vr6+vr63dTJ3tbM1su81su91su81su91su98e7r08e5
+      9vb29vX19vX19vX19vb29vb29vX29fX29fb19vb19fX29fX29vX29vb19fb19vX19fb19vb2
+      9vX19vb29vX29vX29fb19vX29vb29fX19fX29vb29fb19vb19fb29fX29vX29vb19fb2ro10
+      ro1zro1zr451r451r4509vb29/b29vb29vf29vb29vb29vb29vb29vb29vb39vb29vb29vf2
+      9vb29vb29vb29/f29vb29/f29vb29vb29vb29vb39vb29vb29/b39vb29vb29vb29vb39vf2
+      9vb29vb29vf39vf29vb29vb29vf29vb27OvngV0v9fPv////////////7Obf2c2/2c2/vKiP
+      lnZQqY9wn4Ngs5yAxrSfs5yAz8Gvz8GvqY9wb0MP9/f29vb29vb29vb39vb29/b29vf29vb3
+      9/f29vf29vb29vb29vb29vb29vf29vf29vb39vb29vb29vb29vb29vb39vb29vb29vb39vb3
+      9vb29/b29vb29vb39/b29/b39vb29vb29vf2r450r451r450sI91sI92sI929vf39/f39vf3
+      9vf39/b29/f39/f39/f39/f39vf39vb39/f39/f39/b39/f29/f39/f39/f39/b39/f29/f3
+      9/f39/f39/b29/f39/f39vf39vf39/f39/b39/f39/f39/f39vf39/f39/f39/f39vf39vf3
+      9/f3wK6ag10w9fPv////////////////////////qY9w2c2/////////////////9fPvqY9w
+      eE8e0ce59/f39/f39/f39/b39/f29/f39/b29vf39/b29/f39vf39/f39/f39/f39/f39/f2
+      9/f39/f39/f39/f39/b39/f39/f39vf39/f39/f29/f39vf39/f39vf29/f39/f39/f39/f3
+      9/f3sI91sI92sI92sJB3sJB4sY939/j39/j49/f4+Pf49/f4+Pf3+Pj49/f39/j3+Pj4+Pf4
+      +Pj4+Pj3+Pj39/j49/j4+Pj4+Pf3+Pj39/f49/f49/j39/j49/j39/j39/j3+Pf4+Pf49/f4
+      9/j3+Pj4+Pf3+Pj39/f4+Pf39/f4+Pj49/j3+Pf49/j49/f3wa+aeVEg2c2/////////////
+      ////t6aR4trPn4Ng9fPv////////qY9weFAfwK+a+Pf4+Pj3+Pf4+Pj4+Pj3+Pj49/f39/j3
+      +Pj3+Pf49/f4+Pf4+Pf3+Pf3+Pj3+Pf4+Pf4+Pj39/f3+Pj39/f39/j4+Pf4+Pf3+Pj49/j3
+      9/j3+Pf4+Pf3+Pf4+Pj3+Pj3+Pf4+Pf4+Pj4+Pj4+Pf3sJB3sJB3sZB3spF4spF4sZF4+fj4
+      +Pn4+fj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+fj4+fj4+Pj4+Pj4+Pj5+Pj4+Pj4+Pj4+Pj5+Pj4
+      +Pj4+Pn5+Pj4+Pj5+Pj5+Pn4+Pn4+Pn4+Pj4+Pj4+Pj4+Pj5+Pn4+Pj4+fj4+Pj5+Pj5+fj4
+      +Pn4+Pj4+Pj4+fn4+Pj43NPKimg+jGpA7Obf////9fPvxrSf////2c2/eVEgvKiPjGpAnIBd
+      7uvo+Pj5+Pn4+Pn5+fn4+Pj4+Pj4+Pj4+Pj4+Pn4+Pj4+Pn4+Pn4+Pj5+Pj4+Pj4+Pj5+fj4
+      +Pj5+Pj5+Pj4+Pj4+Pj4+Pj4+Pn4+fj4+Pn4+fn4+Pj4+Pn4+Pj5+fn4+Pn4+Pj4+Pn4+fj5
+      +Pj4+Pj4+Pj4spF4spF4spF5s5J5spJ5s5N6+Pj5+fn5+fn5+fn5+Pn5+fn5+Pn5+fj4+fj5
+      +fn4+fn5+fn5+fj5+fn5+fn5+fj5+fj5+fn4+fj5+fn5+fn5+fj4+fn5+Pn5+fn5+fn5+fn5
+      +fn5+fj5+fn5+fn4+Pn5+fn5+fn5+fn5+Pn5+fn5+fn5+fn4+fn5+fn5+fn5+fn5+fj5yryq
+      gVwulnZQxrSf7Obf////////4trPcEQQuKSL+fn5+fn5+fn5+fn5+fj5+Pn5+fj4+fn5+fj4
+      +Pn5+fn5+fn5+fj5+fn5+fj5+fn5+Pn4+Pn5+fn5+fn5+fj5+fn5+Pn4+fn5+fn5+Pn5+fj5
+      +fn4+Pj5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+Pn5+fn5+fj59/b2s5J6s5J6s5J6s5N7s5N7
+      s5N78e3q+fr6+fr6+fn5+fn6+fr5+vn5+fr5+fn5+vr6+fr5+fr6+fn6+vn5+fn6+vn6+vr5
+      +fr5+fn6+vr6+fn6+fn5+fr6+vn5+vr5+vr5+vr6+fn5+fn5+fn5+vn5+fr5+fr5+vr6+fr5
+      +vn5+fn6+fn5+fr6+vn6+vn5+fr6+vr5+fr5+vn5+vr51Mi7r5h8img+eFAfg10wb0QPr5h8
+      +vn6+vn5+vn6+fr6+fn5+vr6+fn5+fn5+vr6+fr6+vn6+fn6+fr5+fn5+vr5+fr5+fn5+vn6
+      +fn5+fn6+vr6+fr5+vr5+vr6+vr5+fr5+vn5+vr6+fr6+vn5+vn6+fn6+fr5+fr6+fn6+vn5
+      +fr6+fr6+fn6+vr58e7rs5N7s5N7s5N7tJR8tJR9tJR85dvU+vr7+vr6+vr6+vr7+/r6+/v6
+      +vr6+/v6+vr7+vr6+vr7+vr6+vr6+vr7+vr6+vr6+vr6+vv6+vv7+vr6+vr6+vr6+vr6+vr6
+      +/r6+vr6+vv7+vr6+/r7+/v7+/v6+vr6+vv7+/r6+vr6+/r6+vr6+/r6+vr6+vr6+vr6+vr6
+      +/v6+/r6+vr6+vr7+vr6+vr6+vv6+vv6+vr6+vr6+vr6+vr7+vr6+vr6+/v6+vr6+vr6+vr6
+      +/r6+vr6+vr6+vr6+vr7+vv6+vr6+/r6+/v6+vr7+vr6+vr6+vv6+vv7+vr6+vr6+vr6+vr6
+      +vr6+vv6+vr6+vv6+vr7+vr6+vv6+vr6+vr6+vr6+vv6+vr7+/r6+/r65dvVtJR8tJR9tJR9
+      tpmEtZV+tZV+08Gz+/v6+/v7+/v7+/v7+vv7+/v7+/v6+/v7+/v6+/v7+/v6+/v7+/v7+/v7
+      +vv7+/r7+/v6+/v7+vv7+vv6+vv7+/v7+/v6+vr7+/v6+/v7+/v6+/r6+/r7+/v7+/r7+/r7
+      +vv7+/v7+/v7+/v6+/v7+/v7+/v6+vr6+vv7+/r6+/v7+/v7+/v7+/v6+/v7+/v7+/r7+/r6
+      +/v7+/v6+vv7+vv7+vr7+/v7+vv7+/v7+vv7+/v7+vr7+/r7+/v7+/v7+/r7+vv6+/v6+/v7
+      +/v7+/v7+/v6+/v7+/v7+/r7+vv7+/v7+/v7+/v7+/v7+/v7+/v6+/v7+/v7+vv6+vv7+/v7
+      +/r6+/v7+/r7+/v7+/v7+/v708GztZV9tpV+tpmFuKOStpZ/tpZ/upyH+vj5/Pv7+/v8+/v7
+      /Pz7/Pz7+/v8/Pv7+/v8/Pz7/Pz8/Pz7/Pv8/Pz8/Pv7+/z7+/z7/Pv7+/z8/Pv8/Pz8/Pv7
+      +/v7+/v7+/z7+/v8/Pv8/Pv7+/v7/Pv8/Pv8/Pv7/Pv8+/z8+/v7+/v7+/z7/Pz8+/z8/Pv8
+      /Pz8+/z7+/v8/Pv8+/v7+/v8+/v7+/v7/Pz8+/v7/Pv8/Pz7+/v7+/z8/Pv8+/v8/Pz7+/v8
+      +/z8+/z7/Pv8/Pz8/Pv7+/v7/Pv7+/v8/Pz8+/z7+/v7+/z8/Pv7+/v7+/z8+/v7/Pv7+/z8
+      /Pz7+/v8+/z8/Pv8/Pz7/Pv8+/v7/Pz8+/z8+/z8+/z7+/v7+/z8+/z8+/z8+fj4upyHtpd+
+      tpZ/uKKSvK6kt5iAt5eAuJeA2svA/fz8/Pz8/Pz8/Pz8/P39/fz8/fz8/fz8/Pz8/Pz8/Pz8
+      /Pz8/fz8/Pz8/f38/Pz8/Pz8/Pz9/P39/P38/Pz8/Pz8/Pz8/Pz8/Pz8/P38/Pz8/Pz8/Pz8
+      /Pz9/Pz8/Pz8/Pz8/Pz8/Pz8/fz8/Pz8/Pz8/Pz8/Pz8/fz8/P38/Pz8/Pz8/Pz8/fz8/fz8
+      /Pz8/Pz8/P38/P39/Pz8/Pz8/Pz8/Pz8/fz9/fz8/Pz8/Pz8/P39/fz8/Pz8/P38/Pz8/P38
+      /Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/P38/Pz8/Pz8/Pz9/P39/Pz8/Pz8/fz8/fz8/Pz8/P38/Pz8
+      /Pz9/Pz8/Pz8/fz8/Pz8/Pz8/P382svAt5eAuJeAt5eAvK6kv727uJiCuJiCuJiCuJiC7uji
+      /f38/f39/Pz8/f39/fz8/f39/f39/f39/fz9/f39/P39/f39/P38/f39/P39/f39/P39/f39
+      /f39/P39/f39/P38/P39/fz9/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/P39
+      /f39/P38/f39/f39/f38/f39/f39/P39/f39/P39/Pz8/f39/fz9/f39/fz9/f39/fz8/P39
+      /fz9/f39/f39/fz9/f39/f39/P39/P38/f39/f39/fz9/f39/P39/f39/f38/f39/fz9/f39
+      /Pz9/fz8/f39/f39/f39/f38/f39/Pz9/Pz9/f38/f39/fz8/f39/f38/P39/P397ujjuJiB
+      uJiCuJiBuJiCv727wMDAvKuguZmDuZmDuZmDw6iW7+nj/v79/f39/v3+/f3+/v39/v39/f7+
+      /f39/f79/v7+/v79/v7+/f39/v39/f7+/f7+/f39/v3+/f39/v39/v79/f3+/v3+/v39/f79
+      /v39/f39/v7+/f79/v3+/f3+/v3+/v79/f79/v39/f3+/f7+/f79/f39/f39/v7+/f79/f7+
+      /f7+/v7+/v3+/f39/v39/v3+/f79/f7+/f39/f79/f79/f39/f39/f39/v3+/v79/v79/f7+
+      /f39/v79/f3+/v7+/f7+/v79/v39/f39/f39/f79/v3+/v39/f3+/f39/f7+/v79/f3+/f3+
+      /f7+/v7+/f39/f7+/f39/f39/f3+7unkw6iWuZmDuZmDuZmDvKugwMDAwMDAwMDAuqGQupuE
+      upqEupqEupqE3M7E/Pv7/v7+/v7+/v7+/v7+/v7+/v7+//7+/v7+/v7+/v7+/v7+/v7+/v7+
+      /v7+/v7//v7+/v7+/v7+//7+/v7+//7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7//v7+
+      /v7+/v7+/v7+/v7+/v7+/v7+/v7//v7+/v/+/v7+/v7+/v/+/v7+/v7+/////v7+/v7+/v7/
+      /v7+/v7////+/v7+/v7+/v7+/v/+/v7+/v7+/v7+/v7//v7+/v7+/v7+/v/+/v7+/v7+//7+
+      /v/+/v7+/v7//v7+/v7+/v7+/v7+/v7//v7+/v7+//7+/v7+/v/+/v7///7+/Pv73c7DupqE
+      upqEupqEuZuEu6GQwMDAwMDAwMDAwMDAv7q2u5+Mu5uFupyFu5uFupyFv6GO18a56uDa9vPx
+      /v////////////7////////////////+/v///////v/////+/v7+/////v/+//7//v//////
+      //7//v////////7//////v///v///v///v7////+/v/+///+//////7///////7///7///7/
+      ///////////////////////+///+//////7///7///7+///+//////////////7///7+//7/
+      ///////+//7//v7//////////v///v7///////7+//////////7///////////////7/////
+      /////v////7//v//9vPx6uHa18a5vqGNupuFu5yGu5uGu5uFup+Lv7q2wMDAwMDAwMDAwMDA
+      wMDAv7q3vKOSvJ2HvJyHvJyHu5yGu5yHvJyGvJ2Hu5yHvJyHvJyHvJ2HvJyGvJyHvJ2GvJ2G
+      u52HvJyHvJ2HvJyHvJyGu5yHu52HvJyHvJyHu5yGvJyHvJyHu5yHu5yGu5yHu5yHu5yHvJ2H
+      u52GvJyHu52HvJyHu5yHu5yHu5yHu52Hu5yHu52Hu5yHvJ2GvJ2Hu5yGvJ2Gu5yHvJ2Gu5yG
+      vJyHu5yGvJyHvJyHvJyGvJyHvJyHvJyGu5yHvJyHu5yGvJyHu5yGvJyGu52GvJyHvJyHu5yH
+      u5yHu5yHu5yHu5yGu5yHu52Hu5yHu5yHu5yHu5yGu52HvJyHu5yHu5yHu5yHvJyHu5yHvJ2H
+      vJyGu5yHvJyHvKOSv7q2wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAva2ivJ6KvJ2IvZ2IvJ2I
+      vJ6IvJ2IvJ2JvJ2IvJ2IvZ2IvZ2IvJ2IvJ6IvJ2IvJ2JvJ6IvJ2IvJ2JvZ2IvJ2IvZ2IvZ2I
+      vJ2IvZ6IvZ2IvZ6IvZ2JvJ6IvJ2IvZ2JvJ6IvJ2IvZ2IvJ2IvZ6IvJ2IvZ2IvZ2IvJ2IvZ2I
+      vZ2IvZ2IvJ6JvJ6IvJ6IvJ2JvZ6IvZ2IvJ2JvZ6IvZ2IvJ2IvJ2JvJ6IvJ2IvZ2IvJ2IvJ2J
+      vZ2IvJ2IvZ2IvJ6IvJ6IvZ2IvZ6JvZ2IvJ6IvZ2IvZ6IvJ6IvZ2IvJ2IvJ2IvZ6IvJ2IvZ2I
+      vJ2JvJ6JvZ2IvJ6IvZ2IvJ2IvJ2IvJ2IvJ6IvZ2IvJ2IvJ2Jva2iwMDAwMDAwMDAwMDAwMDA
+      wMDAwMDAwMDAwMDAwMDAwMDAv728vrGovaiZvaGPvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6J
+      vZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6J
+      vZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6J
+      vZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6J
+      vZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6JvZ6J
+      vaGPvaiZvrGov728wMDAwMDAwMDAwMDAwMDAwMDA
+    </Image>
+  </Logo>
+  <Icon>
+    <Image type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+      Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+      u7i1j3VWjm9MlnlYlnpYlXlXlXlYlnpXlnlYlnpYlnpYlXlYlXpYj3BMj3VWuri0kXdZ////
+      ////////////////////////////////////////////////////kXdZlHVS////////////
+      /////Pv6/////////////v7+/Pv6////////////////lHVTnoJh////////////9PLvf1Qi
+      /////v7+////////u6GEkmw+lXRLqpFz7unjnoJhoYNk////////////lWs8n3E9jV0myLil
+      ////////rY5qwKKAmGo1wauR/f38oYNko4Zn////4dnOjF0nkVwhrodcvJt3pXtMpYBWlGg1
+      kFoem3FB6ePc/////v7+o4Znpolp8OzogU0RkWAplGMtjVogpXpJu5l0n3I+kl0jkl4jqoxp
+      /////v7+////polpqYts////////////y7unh1QbkFsgoXVDlGEnkl4kr4hemGo14tnO/Pv7
+      ////qYtsq45w////////////jlofmXFEwKmOxbCXxrGYl2o2n3A9upl0o3hHk2Muu6SKq45w
+      rpBy////////////n3tQkmMt6OHa////////0cOxjVYZnW04jV4oxrKb+/v6rpBysJN1////
+      /////v7+////spRwhE0Rw62V/v7+////wauRvaSH+/r5/////v7+sJN1s5Z4/////v798Ork
+      9PHs8u3nzr2okVwg9fLt////////////////////////s5Z5tZh7/////f39uaSKkWEqw6eG
+      kFsfjmEt/fz8////////////////////////tph7s5N0////////////+vj2imQ23dLE/f38
+      ////////////////////////////s5N0sZV8/////////////v7+////////////////////
+      ////////////////////sZZ8vru5s5d+uZl7vqCEvqCEvqCEvqCEvqCEvqCEvqCEvqCEvqCE
+      vqCEuZl7s5d+vru5rboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+      DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3w
+      rboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+      DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCt
+      ug==
+    </Image>
+  </Icon>
+  <UMLPatterns>
+    <UMLPattern name="Abstract Factory" location="GOF_AbstractFactory.xml"/>
+    <UMLPattern name="Adapter" location="GOF_Adapter.xml"/>
+    <UMLPattern name="Bridge" location="GOF_Bridge.xml"/>
+    <UMLPattern name="Builder" location="GOF_Builder.xml"/>
+    <UMLPattern name="Chain of Responsibility" location="GOF_ChainofResponsibility.xml"/>
+    <UMLPattern name="Command" location="GOF_Command.xml"/>
+    <UMLPattern name="Composite" location="GOF_Composite.xml"/>
+    <UMLPattern name="Decorator" location="GOF_Decorator.xml"/>
+    <UMLPattern name="Facade" location="GOF_Facade.xml"/>
+    <UMLPattern name="Factory Method" location="GOF_FactoryMethod.xml"/>
+    <UMLPattern name="Flyweight" location="GOF_Flyweight.xml"/>
+    <UMLPattern name="Interpreter" location="GOF_Interpreter.xml"/>
+    <UMLPattern name="Iterator" location="GOF_Iterator.xml"/>
+    <UMLPattern name="Mediator" location="GOF_Mediator.xml"/>
+    <UMLPattern name="Memento" location="GOF_Memento.xml"/>
+    <UMLPattern name="Observer" location="GOF_Observer.xml"/>
+    <UMLPattern name="Prototype" location="GOF_Prototype.xml"/>
+    <UMLPattern name="Proxy" location="GOF_Proxy.xml"/>
+    <UMLPattern name="Singleton" location="GOF_Singleton.xml"/>
+    <UMLPattern name="State" location="GOF_State.xml"/>
+    <UMLPattern name="Strategy" location="GOF_Strategy.xml"/>
+    <UMLPattern name="Template Method" location="GOF_TemplateMethod.xml"/>
+    <UMLPattern name="Visitor" location="GOF_Visitor.xml"/>
+  </UMLPatterns>
+  <UIToolboxes>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="C09C524D-7" name="GoF Patterns" version="1.0" notes="GoF Patterns"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="GoF Behavioral Patterns" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="GoF::Chain of Responsibility(UMLPattern)" type="" description="" unit="" values="" default="Chain of Responsibility"/>
+              <Tag name="GoF::Command(UMLPattern)" type="" description="" unit="" values="" default="Command"/>
+              <Tag name="GoF::Interpreter(UMLPattern)" type="" description="" unit="" values="" default="Interpreter"/>
+              <Tag name="GoF::Iterator(UMLPattern)" type="" description="" unit="" values="" default="Iterator"/>
+              <Tag name="GoF::Mediator(UMLPattern)" type="" description="" unit="" values="" default="Mediator"/>
+              <Tag name="GoF::Memento(UMLPattern)" type="" description="" unit="" values="" default="Memento"/>
+              <Tag name="GoF::Observer(UMLPattern)" type="" description="" unit="" values="" default="Observer"/>
+              <Tag name="GoF::State(UMLPattern)" type="" description="" unit="" values="" default="State"/>
+              <Tag name="GoF::Strategy(UMLPattern)" type="" description="" unit="" values="" default="Strategy"/>
+              <Tag name="GoF::Template Method(UMLPattern)" type="" description="" unit="" values="" default="Template Method"/>
+              <Tag name="GoF::Visitor(UMLPattern)" type="" description="" unit="" values="" default="Visitor"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="GoF Creational Patterns" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="GoF::Abstract Factory(UMLPattern)" type="" description="" unit="" values="" default="Abstract Factory"/>
+              <Tag name="GoF::Builder(UMLPattern)" type="" description="" unit="" values="" default="Builder"/>
+              <Tag name="GoF::Factory Method(UMLPattern)" type="" description="" unit="" values="" default="Factory Method"/>
+              <Tag name="GoF::Prototype(UMLPattern)" type="" description="" unit="" values="" default="Prototype"/>
+              <Tag name="GoF::Singleton(UMLPattern)" type="" description="" unit="" values="" default="Singleton"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="GoF Structural Patterns" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="GoF::Adapter(UMLPattern)" type="" description="" unit="" values="" default="Adapter"/>
+              <Tag name="GoF::Bridge(UMLPattern)" type="" description="" unit="" values="" default="Bridge"/>
+              <Tag name="GoF::Composite(UMLPattern)" type="" description="" unit="" values="" default="Composite"/>
+              <Tag name="GoF::Decorator(UMLPattern)" type="" description="" unit="" values="" default="Decorator"/>
+              <Tag name="GoF::Facade(UMLPattern)" type="" description="" unit="" values="" default="Facade"/>
+              <Tag name="GoF::Flyweight(UMLPattern)" type="" description="" unit="" values="" default="Flyweight"/>
+              <Tag name="GoF::Proxy(UMLPattern)" type="" description="" unit="" values="" default="Proxy"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="GoF::Interpreter(UMLPattern)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAzJmZzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ
+              8Mqm8Mqm8Mqm8Mqm8MqmAAD/8Mqm8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////
+              8Mqm8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              AJn/M///mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAAACAzJmZ////////8MqmM///M///
+              M///8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAAACAAACAgAAAzJmZ////////8MqmM///8MqmAAD/
+              8Mqm8MqmzGYzwMDAwMDAAACAAAD/AACA/wAAgAAAzJmZ////////8MqmAAD/AAD/mTMz8Mqm
+              zGYzwMDAwMDAAAD/AAD/AJn//wAAgAAAzJmZ////////8MqmAJn/M///mTMz8MqmzGYzwMDA
+              wMDAAAD/AJn/M///gICAgAAAzJmZ////////8MqmM///M///M///8MqmzGYzwMDAwMDAAJn/
+              M///M///M///ZmZmzJmZ////8MqmAAD/8MqmM///8Mqm8MqmzGYzwMDAwMDAwMDAM///M///
+              M///zJmZ////8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAM///zJmZ////
+              ////8MqmAJn/M///mTMzzJmZzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              M///M///M///zJmZ////zJmZwMDAwMDAwMDAwMDAwMDAzJmZ////////////////8MqmM///
+              8MqmzJmZzJmZwMDAwMDAwMDAwMDAwMDAwMDAzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZ
+              wMDAwMDAwMDAwMDArboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3w
+              rboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCt
+              ug==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="GoF::Chain of Responsibility(UMLPattern)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAzJmZzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ
+              8Mqm8Mqm8Mqm8Mqm8MqmAAD/8Mqm8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////
+              8Mqm8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              AJn/M///mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAAACAzJmZ////////8MqmM///M///
+              M///8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAAACAAACAgAAAzJmZ////////8MqmM///8MqmAAD/
+              8Mqm8MqmzGYzwMDAwMDAAACAAAD/AACA/wAAgAAAzJmZ////////8MqmAAD/AAD/mTMz8Mqm
+              zGYzwMDAwMDAAAD/AAD/AJn//wAAgAAAzJmZ////////8MqmAJn/M///mTMz8MqmzGYzwMDA
+              wMDAAAD/AJn/M///gICAgAAAzJmZ////////8MqmM///M///M///8MqmzGYzwMDAwMDAAJn/
+              M///M///M///ZmZmzJmZ////8MqmAAD/8MqmM///8Mqm8MqmzGYzwMDAwMDAwMDAM///M///
+              M///zJmZ////8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAM///zJmZ////
+              ////8MqmAJn/M///mTMzzJmZzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              M///M///M///zJmZ////zJmZwMDAwMDAwMDAwMDAwMDAzJmZ////////////////8MqmM///
+              8MqmzJmZzJmZwMDAwMDAwMDAwMDAwMDAwMDAzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZ
+              wMDAwMDAwMDAwMDArboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3w
+              rboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCt
+              ug==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="GoF::Command(UMLPattern)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAzJmZzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ
+              8Mqm8Mqm8Mqm8Mqm8MqmAAD/8Mqm8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////
+              8Mqm8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              AJn/M///mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAAACAzJmZ////////8MqmM///M///
+              M///8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAAACAAACAgAAAzJmZ////////8MqmM///8MqmAAD/
+              8Mqm8MqmzGYzwMDAwMDAAACAAAD/AACA/wAAgAAAzJmZ////////8MqmAAD/AAD/mTMz8Mqm
+              zGYzwMDAwMDAAAD/AAD/AJn//wAAgAAAzJmZ////////8MqmAJn/M///mTMz8MqmzGYzwMDA
+              wMDAAAD/AJn/M///gICAgAAAzJmZ////////8MqmM///M///M///8MqmzGYzwMDAwMDAAJn/
+              M///M///M///ZmZmzJmZ////8MqmAAD/8MqmM///8Mqm8MqmzGYzwMDAwMDAwMDAM///M///
+              M///zJmZ////8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAM///zJmZ////
+              ////8MqmAJn/M///mTMzzJmZzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              M///M///M///zJmZ////zJmZwMDAwMDAwMDAwMDAwMDAzJmZ////////////////8MqmM///
+              8MqmzJmZzJmZwMDAwMDAwMDAwMDAwMDAwMDAzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZ
+              wMDAwMDAwMDAwMDArboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3w
+              rboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCt
+              ug==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="GoF::Iterator(UMLPattern)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAzJmZzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ
+              8Mqm8Mqm8Mqm8Mqm8MqmAAD/8Mqm8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////
+              8Mqm8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              AJn/M///mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAAACAzJmZ////////8MqmM///M///
+              M///8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAAACAAACAgAAAzJmZ////////8MqmM///8MqmAAD/
+              8Mqm8MqmzGYzwMDAwMDAAACAAAD/AACA/wAAgAAAzJmZ////////8MqmAAD/AAD/mTMz8Mqm
+              zGYzwMDAwMDAAAD/AAD/AJn//wAAgAAAzJmZ////////8MqmAJn/M///mTMz8MqmzGYzwMDA
+              wMDAAAD/AJn/M///gICAgAAAzJmZ////////8MqmM///M///M///8MqmzGYzwMDAwMDAAJn/
+              M///M///M///ZmZmzJmZ////8MqmAAD/8MqmM///8Mqm8MqmzGYzwMDAwMDAwMDAM///M///
+              M///zJmZ////8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAM///zJmZ////
+              ////8MqmAJn/M///mTMzzJmZzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              M///M///M///zJmZ////zJmZwMDAwMDAwMDAwMDAwMDAzJmZ////////////////8MqmM///
+              8MqmzJmZzJmZwMDAwMDAwMDAwMDAwMDAwMDAzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZ
+              wMDAwMDAwMDAwMDArboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3w
+              rboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCt
+              ug==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="GoF::Mediator(UMLPattern)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAzJmZzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ
+              8Mqm8Mqm8Mqm8Mqm8MqmAAD/8Mqm8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////
+              8Mqm8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              AJn/M///mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAAACAzJmZ////////8MqmM///M///
+              M///8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAAACAAACAgAAAzJmZ////////8MqmM///8MqmAAD/
+              8Mqm8MqmzGYzwMDAwMDAAACAAAD/AACA/wAAgAAAzJmZ////////8MqmAAD/AAD/mTMz8Mqm
+              zGYzwMDAwMDAAAD/AAD/AJn//wAAgAAAzJmZ////////8MqmAJn/M///mTMz8MqmzGYzwMDA
+              wMDAAAD/AJn/M///gICAgAAAzJmZ////////8MqmM///M///M///8MqmzGYzwMDAwMDAAJn/
+              M///M///M///ZmZmzJmZ////8MqmAAD/8MqmM///8Mqm8MqmzGYzwMDAwMDAwMDAM///M///
+              M///zJmZ////8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAM///zJmZ////
+              ////8MqmAJn/M///mTMzzJmZzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              M///M///M///zJmZ////zJmZwMDAwMDAwMDAwMDAwMDAzJmZ////////////////8MqmM///
+              8MqmzJmZzJmZwMDAwMDAwMDAwMDAwMDAwMDAzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZ
+              wMDAwMDAwMDAwMDArboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3w
+              rboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCt
+              ug==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="GoF::Memento(UMLPattern)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAzJmZzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ
+              8Mqm8Mqm8Mqm8Mqm8MqmAAD/8Mqm8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////
+              8Mqm8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              AJn/M///mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAAACAzJmZ////////8MqmM///M///
+              M///8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAAACAAACAgAAAzJmZ////////8MqmM///8MqmAAD/
+              8Mqm8MqmzGYzwMDAwMDAAACAAAD/AACA/wAAgAAAzJmZ////////8MqmAAD/AAD/mTMz8Mqm
+              zGYzwMDAwMDAAAD/AAD/AJn//wAAgAAAzJmZ////////8MqmAJn/M///mTMz8MqmzGYzwMDA
+              wMDAAAD/AJn/M///gICAgAAAzJmZ////////8MqmM///M///M///8MqmzGYzwMDAwMDAAJn/
+              M///M///M///ZmZmzJmZ////8MqmAAD/8MqmM///8Mqm8MqmzGYzwMDAwMDAwMDAM///M///
+              M///zJmZ////8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAM///zJmZ////
+              ////8MqmAJn/M///mTMzzJmZzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              M///M///M///zJmZ////zJmZwMDAwMDAwMDAwMDAwMDAzJmZ////////////////8MqmM///
+              8MqmzJmZzJmZwMDAwMDAwMDAwMDAwMDAwMDAzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZ
+              wMDAwMDAwMDAwMDArboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3w
+              rboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCt
+              ug==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="GoF::Observer(UMLPattern)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAzJmZzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ
+              8Mqm8Mqm8Mqm8Mqm8MqmAAD/8Mqm8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////
+              8Mqm8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              AJn/M///mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAAACAzJmZ////////8MqmM///M///
+              M///8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAAACAAACAgAAAzJmZ////////8MqmM///8MqmAAD/
+              8Mqm8MqmzGYzwMDAwMDAAACAAAD/AACA/wAAgAAAzJmZ////////8MqmAAD/AAD/mTMz8Mqm
+              zGYzwMDAwMDAAAD/AAD/AJn//wAAgAAAzJmZ////////8MqmAJn/M///mTMz8MqmzGYzwMDA
+              wMDAAAD/AJn/M///gICAgAAAzJmZ////////8MqmM///M///M///8MqmzGYzwMDAwMDAAJn/
+              M///M///M///ZmZmzJmZ////8MqmAAD/8MqmM///8Mqm8MqmzGYzwMDAwMDAwMDAM///M///
+              M///zJmZ////8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAM///zJmZ////
+              ////8MqmAJn/M///mTMzzJmZzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              M///M///M///zJmZ////zJmZwMDAwMDAwMDAwMDAwMDAzJmZ////////////////8MqmM///
+              8MqmzJmZzJmZwMDAwMDAwMDAwMDAwMDAwMDAzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZ
+              wMDAwMDAwMDAwMDArboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3w
+              rboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCt
+              ug==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="GoF::State(UMLPattern)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAzJmZzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ
+              8Mqm8Mqm8Mqm8Mqm8MqmAAD/8Mqm8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////
+              8Mqm8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              AJn/M///mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAAACAzJmZ////////8MqmM///M///
+              M///8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAAACAAACAgAAAzJmZ////////8MqmM///8MqmAAD/
+              8Mqm8MqmzGYzwMDAwMDAAACAAAD/AACA/wAAgAAAzJmZ////////8MqmAAD/AAD/mTMz8Mqm
+              zGYzwMDAwMDAAAD/AAD/AJn//wAAgAAAzJmZ////////8MqmAJn/M///mTMz8MqmzGYzwMDA
+              wMDAAAD/AJn/M///gICAgAAAzJmZ////////8MqmM///M///M///8MqmzGYzwMDAwMDAAJn/
+              M///M///M///ZmZmzJmZ////8MqmAAD/8MqmM///8Mqm8MqmzGYzwMDAwMDAwMDAM///M///
+              M///zJmZ////8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAM///zJmZ////
+              ////8MqmAJn/M///mTMzzJmZzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              M///M///M///zJmZ////zJmZwMDAwMDAwMDAwMDAwMDAzJmZ////////////////8MqmM///
+              8MqmzJmZzJmZwMDAwMDAwMDAwMDAwMDAwMDAzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZ
+              wMDAwMDAwMDAwMDArboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3w
+              rboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCt
+              ug==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="GoF::Strategy(UMLPattern)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAzJmZzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ
+              8Mqm8Mqm8Mqm8Mqm8MqmAAD/8Mqm8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////
+              8Mqm8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              AJn/M///mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAAACAzJmZ////////8MqmM///M///
+              M///8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAAACAAACAgAAAzJmZ////////8MqmM///8MqmAAD/
+              8Mqm8MqmzGYzwMDAwMDAAACAAAD/AACA/wAAgAAAzJmZ////////8MqmAAD/AAD/mTMz8Mqm
+              zGYzwMDAwMDAAAD/AAD/AJn//wAAgAAAzJmZ////////8MqmAJn/M///mTMz8MqmzGYzwMDA
+              wMDAAAD/AJn/M///gICAgAAAzJmZ////////8MqmM///M///M///8MqmzGYzwMDAwMDAAJn/
+              M///M///M///ZmZmzJmZ////8MqmAAD/8MqmM///8Mqm8MqmzGYzwMDAwMDAwMDAM///M///
+              M///zJmZ////8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAM///zJmZ////
+              ////8MqmAJn/M///mTMzzJmZzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              M///M///M///zJmZ////zJmZwMDAwMDAwMDAwMDAwMDAzJmZ////////////////8MqmM///
+              8MqmzJmZzJmZwMDAwMDAwMDAwMDAwMDAwMDAzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZ
+              wMDAwMDAwMDAwMDArboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3w
+              rboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCt
+              ug==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="GoF::Template Method(UMLPattern)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAzJmZzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ
+              8Mqm8Mqm8Mqm8Mqm8MqmAAD/8Mqm8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////
+              8Mqm8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              AJn/M///mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAAACAzJmZ////////8MqmM///M///
+              M///8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAAACAAACAgAAAzJmZ////////8MqmM///8MqmAAD/
+              8Mqm8MqmzGYzwMDAwMDAAACAAAD/AACA/wAAgAAAzJmZ////////8MqmAAD/AAD/mTMz8Mqm
+              zGYzwMDAwMDAAAD/AAD/AJn//wAAgAAAzJmZ////////8MqmAJn/M///mTMz8MqmzGYzwMDA
+              wMDAAAD/AJn/M///gICAgAAAzJmZ////////8MqmM///M///M///8MqmzGYzwMDAwMDAAJn/
+              M///M///M///ZmZmzJmZ////8MqmAAD/8MqmM///8Mqm8MqmzGYzwMDAwMDAwMDAM///M///
+              M///zJmZ////8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAM///zJmZ////
+              ////8MqmAJn/M///mTMzzJmZzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              M///M///M///zJmZ////zJmZwMDAwMDAwMDAwMDAwMDAzJmZ////////////////8MqmM///
+              8MqmzJmZzJmZwMDAwMDAwMDAwMDAwMDAwMDAzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZ
+              wMDAwMDAwMDAwMDArboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3w
+              rboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCt
+              ug==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="GoF::Visitor(UMLPattern)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAzJmZzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ
+              8Mqm8Mqm8Mqm8Mqm8MqmAAD/8Mqm8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////
+              8Mqm8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              AJn/M///mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAAACAzJmZ////////8MqmM///M///
+              M///8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAAACAAACAgAAAzJmZ////////8MqmM///8MqmAAD/
+              8Mqm8MqmzGYzwMDAwMDAAACAAAD/AACA/wAAgAAAzJmZ////////8MqmAAD/AAD/mTMz8Mqm
+              zGYzwMDAwMDAAAD/AAD/AJn//wAAgAAAzJmZ////////8MqmAJn/M///mTMz8MqmzGYzwMDA
+              wMDAAAD/AJn/M///gICAgAAAzJmZ////////8MqmM///M///M///8MqmzGYzwMDAwMDAAJn/
+              M///M///M///ZmZmzJmZ////8MqmAAD/8MqmM///8Mqm8MqmzGYzwMDAwMDAwMDAM///M///
+              M///zJmZ////8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAM///zJmZ////
+              ////8MqmAJn/M///mTMzzJmZzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              M///M///M///zJmZ////zJmZwMDAwMDAwMDAwMDAwMDAzJmZ////////////////8MqmM///
+              8MqmzJmZzJmZwMDAwMDAwMDAwMDAwMDAwMDAzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZ
+              wMDAwMDAwMDAwMDArboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3w
+              rboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCt
+              ug==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="GoF::Abstract Factory(UMLPattern)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAzJmZzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ
+              8Mqm8Mqm8Mqm8Mqm8MqmAAD/8Mqm8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////
+              8Mqm8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              AJn/M///mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAAACAzJmZ////////8MqmM///M///
+              M///8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAAACAAACAgAAAzJmZ////////8MqmM///8MqmAAD/
+              8Mqm8MqmzGYzwMDAwMDAAACAAAD/AACA/wAAgAAAzJmZ////////8MqmAAD/AAD/mTMz8Mqm
+              zGYzwMDAwMDAAAD/AAD/AJn//wAAgAAAzJmZ////////8MqmAJn/M///mTMz8MqmzGYzwMDA
+              wMDAAAD/AJn/M///gICAgAAAzJmZ////////8MqmM///M///M///8MqmzGYzwMDAwMDAAJn/
+              M///M///M///ZmZmzJmZ////8MqmAAD/8MqmM///8Mqm8MqmzGYzwMDAwMDAwMDAM///M///
+              M///zJmZ////8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAM///zJmZ////
+              ////8MqmAJn/M///mTMzzJmZzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              M///M///M///zJmZ////zJmZwMDAwMDAwMDAwMDAwMDAzJmZ////////////////8MqmM///
+              8MqmzJmZzJmZwMDAwMDAwMDAwMDAwMDAwMDAzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZ
+              wMDAwMDAwMDAwMDArboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3w
+              rboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCt
+              ug==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="GoF::Builder(UMLPattern)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAzJmZzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ
+              8Mqm8Mqm8Mqm8Mqm8MqmAAD/8Mqm8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////
+              8Mqm8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              AJn/M///mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAAACAzJmZ////////8MqmM///M///
+              M///8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAAACAAACAgAAAzJmZ////////8MqmM///8MqmAAD/
+              8Mqm8MqmzGYzwMDAwMDAAACAAAD/AACA/wAAgAAAzJmZ////////8MqmAAD/AAD/mTMz8Mqm
+              zGYzwMDAwMDAAAD/AAD/AJn//wAAgAAAzJmZ////////8MqmAJn/M///mTMz8MqmzGYzwMDA
+              wMDAAAD/AJn/M///gICAgAAAzJmZ////////8MqmM///M///M///8MqmzGYzwMDAwMDAAJn/
+              M///M///M///ZmZmzJmZ////8MqmAAD/8MqmM///8Mqm8MqmzGYzwMDAwMDAwMDAM///M///
+              M///zJmZ////8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAM///zJmZ////
+              ////8MqmAJn/M///mTMzzJmZzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              M///M///M///zJmZ////zJmZwMDAwMDAwMDAwMDAwMDAzJmZ////////////////8MqmM///
+              8MqmzJmZzJmZwMDAwMDAwMDAwMDAwMDAwMDAzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZ
+              wMDAwMDAwMDAwMDArboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3w
+              rboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCt
+              ug==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="GoF::Factory Method(UMLPattern)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAzJmZzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ
+              8Mqm8Mqm8Mqm8Mqm8MqmAAD/8Mqm8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////
+              8Mqm8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              AJn/M///mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAAACAzJmZ////////8MqmM///M///
+              M///8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAAACAAACAgAAAzJmZ////////8MqmM///8MqmAAD/
+              8Mqm8MqmzGYzwMDAwMDAAACAAAD/AACA/wAAgAAAzJmZ////////8MqmAAD/AAD/mTMz8Mqm
+              zGYzwMDAwMDAAAD/AAD/AJn//wAAgAAAzJmZ////////8MqmAJn/M///mTMz8MqmzGYzwMDA
+              wMDAAAD/AJn/M///gICAgAAAzJmZ////////8MqmM///M///M///8MqmzGYzwMDAwMDAAJn/
+              M///M///M///ZmZmzJmZ////8MqmAAD/8MqmM///8Mqm8MqmzGYzwMDAwMDAwMDAM///M///
+              M///zJmZ////8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAM///zJmZ////
+              ////8MqmAJn/M///mTMzzJmZzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              M///M///M///zJmZ////zJmZwMDAwMDAwMDAwMDAwMDAzJmZ////////////////8MqmM///
+              8MqmzJmZzJmZwMDAwMDAwMDAwMDAwMDAwMDAzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZ
+              wMDAwMDAwMDAwMDArboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3w
+              rboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCt
+              ug==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="GoF::Prototype(UMLPattern)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAzJmZzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ
+              8Mqm8Mqm8Mqm8Mqm8MqmAAD/8Mqm8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////
+              8Mqm8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              AJn/M///mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAAACAzJmZ////////8MqmM///M///
+              M///8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAAACAAACAgAAAzJmZ////////8MqmM///8MqmAAD/
+              8Mqm8MqmzGYzwMDAwMDAAACAAAD/AACA/wAAgAAAzJmZ////////8MqmAAD/AAD/mTMz8Mqm
+              zGYzwMDAwMDAAAD/AAD/AJn//wAAgAAAzJmZ////////8MqmAJn/M///mTMz8MqmzGYzwMDA
+              wMDAAAD/AJn/M///gICAgAAAzJmZ////////8MqmM///M///M///8MqmzGYzwMDAwMDAAJn/
+              M///M///M///ZmZmzJmZ////8MqmAAD/8MqmM///8Mqm8MqmzGYzwMDAwMDAwMDAM///M///
+              M///zJmZ////8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAM///zJmZ////
+              ////8MqmAJn/M///mTMzzJmZzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              M///M///M///zJmZ////zJmZwMDAwMDAwMDAwMDAwMDAzJmZ////////////////8MqmM///
+              8MqmzJmZzJmZwMDAwMDAwMDAwMDAwMDAwMDAzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZ
+              wMDAwMDAwMDAwMDArboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3w
+              rboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCt
+              ug==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="GoF::Singleton(UMLPattern)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAzJmZzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ
+              8Mqm8Mqm8Mqm8Mqm8MqmAAD/8Mqm8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////
+              8Mqm8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              AJn/M///mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAAACAzJmZ////////8MqmM///M///
+              M///8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAAACAAACAgAAAzJmZ////////8MqmM///8MqmAAD/
+              8Mqm8MqmzGYzwMDAwMDAAACAAAD/AACA/wAAgAAAzJmZ////////8MqmAAD/AAD/mTMz8Mqm
+              zGYzwMDAwMDAAAD/AAD/AJn//wAAgAAAzJmZ////////8MqmAJn/M///mTMz8MqmzGYzwMDA
+              wMDAAAD/AJn/M///gICAgAAAzJmZ////////8MqmM///M///M///8MqmzGYzwMDAwMDAAJn/
+              M///M///M///ZmZmzJmZ////8MqmAAD/8MqmM///8Mqm8MqmzGYzwMDAwMDAwMDAM///M///
+              M///zJmZ////8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAM///zJmZ////
+              ////8MqmAJn/M///mTMzzJmZzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              M///M///M///zJmZ////zJmZwMDAwMDAwMDAwMDAwMDAzJmZ////////////////8MqmM///
+              8MqmzJmZzJmZwMDAwMDAwMDAwMDAwMDAwMDAzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZ
+              wMDAwMDAwMDAwMDArboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3w
+              rboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCt
+              ug==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="GoF::Adapter(UMLPattern)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAzJmZzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ
+              8Mqm8Mqm8Mqm8Mqm8MqmAAD/8Mqm8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////
+              8Mqm8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              AJn/M///mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAAACAzJmZ////////8MqmM///M///
+              M///8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAAACAAACAgAAAzJmZ////////8MqmM///8MqmAAD/
+              8Mqm8MqmzGYzwMDAwMDAAACAAAD/AACA/wAAgAAAzJmZ////////8MqmAAD/AAD/mTMz8Mqm
+              zGYzwMDAwMDAAAD/AAD/AJn//wAAgAAAzJmZ////////8MqmAJn/M///mTMz8MqmzGYzwMDA
+              wMDAAAD/AJn/M///gICAgAAAzJmZ////////8MqmM///M///M///8MqmzGYzwMDAwMDAAJn/
+              M///M///M///ZmZmzJmZ////8MqmAAD/8MqmM///8Mqm8MqmzGYzwMDAwMDAwMDAM///M///
+              M///zJmZ////8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAM///zJmZ////
+              ////8MqmAJn/M///mTMzzJmZzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              M///M///M///zJmZ////zJmZwMDAwMDAwMDAwMDAwMDAzJmZ////////////////8MqmM///
+              8MqmzJmZzJmZwMDAwMDAwMDAwMDAwMDAwMDAzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZ
+              wMDAwMDAwMDAwMDArboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3w
+              rboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCt
+              ug==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="GoF::Bridge(UMLPattern)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAzJmZzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ
+              8Mqm8Mqm8Mqm8Mqm8MqmAAD/8Mqm8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////
+              8Mqm8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              AJn/M///mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAAACAzJmZ////////8MqmM///M///
+              M///8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAAACAAACAgAAAzJmZ////////8MqmM///8MqmAAD/
+              8Mqm8MqmzGYzwMDAwMDAAACAAAD/AACA/wAAgAAAzJmZ////////8MqmAAD/AAD/mTMz8Mqm
+              zGYzwMDAwMDAAAD/AAD/AJn//wAAgAAAzJmZ////////8MqmAJn/M///mTMz8MqmzGYzwMDA
+              wMDAAAD/AJn/M///gICAgAAAzJmZ////////8MqmM///M///M///8MqmzGYzwMDAwMDAAJn/
+              M///M///M///ZmZmzJmZ////8MqmAAD/8MqmM///8Mqm8MqmzGYzwMDAwMDAwMDAM///M///
+              M///zJmZ////8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAM///zJmZ////
+              ////8MqmAJn/M///mTMzzJmZzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              M///M///M///zJmZ////zJmZwMDAwMDAwMDAwMDAwMDAzJmZ////////////////8MqmM///
+              8MqmzJmZzJmZwMDAwMDAwMDAwMDAwMDAwMDAzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZ
+              wMDAwMDAwMDAwMDArboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3w
+              rboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCt
+              ug==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="GoF::Composite(UMLPattern)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAzJmZzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ
+              8Mqm8Mqm8Mqm8Mqm8MqmAAD/8Mqm8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////
+              8Mqm8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              AJn/M///mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAAACAzJmZ////////8MqmM///M///
+              M///8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAAACAAACAgAAAzJmZ////////8MqmM///8MqmAAD/
+              8Mqm8MqmzGYzwMDAwMDAAACAAAD/AACA/wAAgAAAzJmZ////////8MqmAAD/AAD/mTMz8Mqm
+              zGYzwMDAwMDAAAD/AAD/AJn//wAAgAAAzJmZ////////8MqmAJn/M///mTMz8MqmzGYzwMDA
+              wMDAAAD/AJn/M///gICAgAAAzJmZ////////8MqmM///M///M///8MqmzGYzwMDAwMDAAJn/
+              M///M///M///ZmZmzJmZ////8MqmAAD/8MqmM///8Mqm8MqmzGYzwMDAwMDAwMDAM///M///
+              M///zJmZ////8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAM///zJmZ////
+              ////8MqmAJn/M///mTMzzJmZzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              M///M///M///zJmZ////zJmZwMDAwMDAwMDAwMDAwMDAzJmZ////////////////8MqmM///
+              8MqmzJmZzJmZwMDAwMDAwMDAwMDAwMDAwMDAzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZ
+              wMDAwMDAwMDAwMDArboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3w
+              rboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCt
+              ug==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="GoF::Decorator(UMLPattern)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAzJmZzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ
+              8Mqm8Mqm8Mqm8Mqm8MqmAAD/8Mqm8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////
+              8Mqm8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              AJn/M///mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAAACAzJmZ////////8MqmM///M///
+              M///8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAAACAAACAgAAAzJmZ////////8MqmM///8MqmAAD/
+              8Mqm8MqmzGYzwMDAwMDAAACAAAD/AACA/wAAgAAAzJmZ////////8MqmAAD/AAD/mTMz8Mqm
+              zGYzwMDAwMDAAAD/AAD/AJn//wAAgAAAzJmZ////////8MqmAJn/M///mTMz8MqmzGYzwMDA
+              wMDAAAD/AJn/M///gICAgAAAzJmZ////////8MqmM///M///M///8MqmzGYzwMDAwMDAAJn/
+              M///M///M///ZmZmzJmZ////8MqmAAD/8MqmM///8Mqm8MqmzGYzwMDAwMDAwMDAM///M///
+              M///zJmZ////8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAM///zJmZ////
+              ////8MqmAJn/M///mTMzzJmZzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              M///M///M///zJmZ////zJmZwMDAwMDAwMDAwMDAwMDAzJmZ////////////////8MqmM///
+              8MqmzJmZzJmZwMDAwMDAwMDAwMDAwMDAwMDAzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZ
+              wMDAwMDAwMDAwMDArboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3w
+              rboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCt
+              ug==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="GoF::Facade(UMLPattern)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAzJmZzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ
+              8Mqm8Mqm8Mqm8Mqm8MqmAAD/8Mqm8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////
+              8Mqm8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              AJn/M///mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAAACAzJmZ////////8MqmM///M///
+              M///8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAAACAAACAgAAAzJmZ////////8MqmM///8MqmAAD/
+              8Mqm8MqmzGYzwMDAwMDAAACAAAD/AACA/wAAgAAAzJmZ////////8MqmAAD/AAD/mTMz8Mqm
+              zGYzwMDAwMDAAAD/AAD/AJn//wAAgAAAzJmZ////////8MqmAJn/M///mTMz8MqmzGYzwMDA
+              wMDAAAD/AJn/M///gICAgAAAzJmZ////////8MqmM///M///M///8MqmzGYzwMDAwMDAAJn/
+              M///M///M///ZmZmzJmZ////8MqmAAD/8MqmM///8Mqm8MqmzGYzwMDAwMDAwMDAM///M///
+              M///zJmZ////8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAM///zJmZ////
+              ////8MqmAJn/M///mTMzzJmZzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              M///M///M///zJmZ////zJmZwMDAwMDAwMDAwMDAwMDAzJmZ////////////////8MqmM///
+              8MqmzJmZzJmZwMDAwMDAwMDAwMDAwMDAwMDAzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZ
+              wMDAwMDAwMDAwMDArboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3w
+              rboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCt
+              ug==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="GoF::Flyweight(UMLPattern)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAzJmZzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ
+              8Mqm8Mqm8Mqm8Mqm8MqmAAD/8Mqm8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////
+              8Mqm8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              AJn/M///mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAAACAzJmZ////////8MqmM///M///
+              M///8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAAACAAACAgAAAzJmZ////////8MqmM///8MqmAAD/
+              8Mqm8MqmzGYzwMDAwMDAAACAAAD/AACA/wAAgAAAzJmZ////////8MqmAAD/AAD/mTMz8Mqm
+              zGYzwMDAwMDAAAD/AAD/AJn//wAAgAAAzJmZ////////8MqmAJn/M///mTMz8MqmzGYzwMDA
+              wMDAAAD/AJn/M///gICAgAAAzJmZ////////8MqmM///M///M///8MqmzGYzwMDAwMDAAJn/
+              M///M///M///ZmZmzJmZ////8MqmAAD/8MqmM///8Mqm8MqmzGYzwMDAwMDAwMDAM///M///
+              M///zJmZ////8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAM///zJmZ////
+              ////8MqmAJn/M///mTMzzJmZzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              M///M///M///zJmZ////zJmZwMDAwMDAwMDAwMDAwMDAzJmZ////////////////8MqmM///
+              8MqmzJmZzJmZwMDAwMDAwMDAwMDAwMDAwMDAzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZ
+              wMDAwMDAwMDAwMDArboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3w
+              rboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCt
+              ug==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="GoF::Proxy(UMLPattern)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAzJmZzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ
+              8Mqm8Mqm8Mqm8Mqm8MqmAAD/8Mqm8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////
+              8Mqm8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              AJn/M///mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAAACAzJmZ////////8MqmM///M///
+              M///8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAAACAAACAgAAAzJmZ////////8MqmM///8MqmAAD/
+              8Mqm8MqmzGYzwMDAwMDAAACAAAD/AACA/wAAgAAAzJmZ////////8MqmAAD/AAD/mTMz8Mqm
+              zGYzwMDAwMDAAAD/AAD/AJn//wAAgAAAzJmZ////////8MqmAJn/M///mTMz8MqmzGYzwMDA
+              wMDAAAD/AJn/M///gICAgAAAzJmZ////////8MqmM///M///M///8MqmzGYzwMDAwMDAAJn/
+              M///M///M///ZmZmzJmZ////8MqmAAD/8MqmM///8Mqm8MqmzGYzwMDAwMDAwMDAM///M///
+              M///zJmZ////8MqmAAD/AAD/mTMz8Mqm8Mqm8MqmzGYzwMDAwMDAwMDAwMDAM///zJmZ////
+              ////8MqmAJn/M///mTMzzJmZzGYzzGYzzGYzwMDAwMDAwMDAwMDAzJmZ////////////8Mqm
+              M///M///M///zJmZ////zJmZwMDAwMDAwMDAwMDAwMDAzJmZ////////////////8MqmM///
+              8MqmzJmZzJmZwMDAwMDAwMDAwMDAwMDAwMDAzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZzJmZ
+              wMDAwMDAwMDAwMDArboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3w
+              rboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26
+              DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCtug3wrboN8K26DfCt
+              ug==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UIToolboxes>
+  <ModelTemplates>
+    <Model name="Abstract Factory" description="" groupName="GoF Creational Patterns" location="gf1.1-abstract-factory.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Builder" description="" groupName="GoF Creational Patterns" location="gf1.1-builder.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Factory Method" description="" groupName="GoF Creational Patterns" location="gf1.1-factory-method.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Prototype" description="" groupName="GoF Creational Patterns" location="gf1.1-prototype.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Singleton" description="" groupName="GoF Creational Patterns" location="gf1.1-singleton.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Adapter" description="" groupName="GoF Structural Patterns" location="gf1.1-adapter.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Bridge" description="" groupName="GoF Structural Patterns" location="gf1.1-bridge.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Composite" description="" groupName="GoF Structural Patterns" location="gf1.1-composite.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Decorator" description="" groupName="GoF Structural Patterns" location="gf1.1-decorator.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Facade" description="" groupName="GoF Structural Patterns" location="gf1.1-facade.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Flyweight" description="" groupName="GoF Structural Patterns" location="gf1.1-flyweight.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Proxy" description="" groupName="GoF Structural Patterns" location="gf1.1-proxy.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Chain of Responsibility" description="" groupName="GoF Behavioral Patterns" location="gf1.1-chain-of-responsibility.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Command" description="" groupName="GoF Behavioral Patterns" location="gf1.1-command.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Interpreter" description="" groupName="GoF Behavioral Patterns" location="gf1.1-interpreter.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Iterator" description="" groupName="GoF Behavioral Patterns" location="gf1.1-iterator.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Mediator" description="" groupName="GoF Behavioral Patterns" location="gf1.1-mediator.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Memento" description="" groupName="GoF Behavioral Patterns" location="gf1.1-memento.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Observer" description="" groupName="GoF Behavioral Patterns" location="gf1.1-observer.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="State" description="" groupName="GoF Behavioral Patterns" location="gf1.1-state.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Strategy" description="" groupName="GoF Behavioral Patterns" location="gf1.1-strategy.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Template Method" description="" groupName="GoF Behavioral Patterns" location="gf1.1-template-method.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Visitor" description="" groupName="GoF Behavioral Patterns" location="gf1.1-visitor.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+  </ModelTemplates>
+</MDG.Technology>

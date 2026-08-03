@@ -36,10 +36,10 @@ RSpec.describe Ea::Svg::EaEmitter::Markers do
   context "with a navigable Association" do
     let(:relationship) { Ea::Model::Association.new(id: "r1", source_id: "c1", target_id: "c2") }
 
-    it "emits a filled triangle at the target end" do
+    it "emits a filled arrow as a <path> at the target end" do
       out = renderer.render
-      expect(out).to include("fill:#000000")
-      expect(out).to include("<polygon")
+      expect(out).to include("<path")
+      expect(out).to include("stroke:#000000; stroke-opacity:1.00")
     end
   end
 

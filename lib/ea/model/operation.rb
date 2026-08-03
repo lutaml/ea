@@ -10,6 +10,7 @@ module Ea
       attribute :return_type_name, :string
       attribute :is_static, :boolean, default: false
       attribute :is_abstract, :boolean, default: false
+      attribute :is_reception, :boolean, default: false
       attribute :visibility, :string
       attribute :parameters, Parameter, collection: true, initialize_empty: true
       attribute :stereotype_refs, :string, collection: true, initialize_empty: true
@@ -23,6 +24,7 @@ module Ea
         map "returnTypeName", to: :return_type_name
         map "isStatic", to: :is_static, render_default: true
         map "isAbstract", to: :is_abstract, render_default: true
+        map "isReception", to: :is_reception, render_default: true
         map "visibility", to: :visibility
         map "parameters", to: :parameters, render_empty: true
         map "stereotypeRefs", to: :stereotype_refs, render_empty: true

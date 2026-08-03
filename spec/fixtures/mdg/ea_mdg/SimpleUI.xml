@@ -1,0 +1,687 @@
+<MDG.Technology version="1.0"><Documentation id="SimpleUI" name="Simple User Interface Modeling" version="1" notes="Diagrams, elements and scripts for modeling generic user interfaces." infoURI="http://www.sparxsystems.com" supportURI="support@sparxsystems.com"/><UMLProfiles><UMLProfile profiletype="uml2">
+			<Documentation id="13C22E6B-F" name="simpleUI" version="1.0" notes="simpleUI"/>
+			<Content>
+				<Stereotypes>
+					<Stereotype name="simpleButton" notes="" cx="76" cy="22">
+						<AppliesTo>
+							<Apply type="GUIElement"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Border" type="enumeration" description="Specifies the style of border that will be drawn around the edge of the control" unit="" values="Sunken,Raised,Static,None" default="None"/>
+							<Tag name="Default" type="Boolean" description="Whether the push button should be decorated as a dialog default button" unit="" values="True,False" default="False"/>
+							<Tag name="Enabled" type="Boolean" description="Whether the control should appear to be enabled or not" unit="" values="True,False" default="True"/>
+							<Tag name="Horizontal Text Align" type="enumeration" description="How text should be horizontally aligned within the control" unit="" values="Left,Center,Right,Default" default="Default"/>
+							<Tag name="Vertical Text Align" type="enumeration" description="How text should be vertically aligned within the control" unit="" values="Top,Center,Bottom,Default" default="Default"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="simpleCheckBox" notes="" cx="138" cy="16">
+						<AppliesTo>
+							<Apply type="GUIElement"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Border" type="enumeration" description="Specifies the style of border that will be drawn around the edge of the control" unit="" values="Sunken,Raised,Static,None" default="None"/>
+							<Tag name="Button On Left" type="Boolean" description="Which side of the caption text the check box should be displayed on" unit="" values="True,False" default="True"/>
+							<Tag name="Enabled" type="Boolean" description="Whether the control should appear to be enabled or not" unit="" values="True,False" default="True"/>
+							<Tag name="Horizontal Text Align" type="enumeration" description="How text should be horizontally aligned within the control" unit="" values="Left,Center,Right,Default" default="Default"/>
+							<Tag name="Value" type="enumeration" description="The value state the check box should be displayed in" unit="" values="Unchecked,Checked,Mixed" default="Unchecked"/>
+							<Tag name="Vertical Text Align" type="enumeration" description="How text should be vertically aligned within the control" unit="" values="Top,Center,Bottom,Default" default="Default"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="simpleComboBox" notes="" cx="138" cy="23">
+						<AppliesTo>
+							<Apply type="GUIElement"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Border" type="enumeration" description="Specifies the style of border that will be drawn around the edge of the control" unit="" values="Sunken,Raised,Static,None" default="None"/>
+							<Tag name="Enabled" type="Boolean" description="Whether the control should appear to be enabled or not" unit="" values="True,False" default="True"/>
+							<Tag name="Editable Text Field" type="Boolean" description="" unit="" values="True,False" default="False"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="simpleDateTime" notes="" cx="138" cy="23">
+						<AppliesTo>
+							<Apply type="GUIElement"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Border" type="enumeration" description="Specifies the style of border that will be drawn around the edge of the control" unit="" values="Sunken,Raised,Static,None" default="None"/>
+							<Tag name="Enabled" type="Boolean" description="Whether the control should appear to be enabled or not" unit="" values="True,False" default="True"/>
+							<Tag name="Format" type="enumeration" description="How the control's Date/Time string will be formatted" unit="" values="Short,Long,Time" default="Short"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="simpleDialog" notes="" cx="90" cy="70">
+						<AppliesTo>
+							<Apply type="Screen"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Border" type="enumeration" description="The style of border that will be drawn around the edge of the dialog." unit="" values="None,Thin,Sizeable,Fixed" default="Fixed"/>
+							<Tag name="System Menu" type="Boolean" description="Whether the system menu icon and close button should be drawn in the dialog's title bar." unit="" values="True,False" default="True"/>
+							<Tag name="Minimize Button" type="Boolean" description="Whether the minimize button should be drawn in the dialog's title bar." unit="" values="True,False" default="False"/>
+							<Tag name="Maximize Button" type="Boolean" description="Whether the maximize button should be drawn in the dialog's title bar." unit="" values="True,False" default="False"/>
+							<Tag name="Title Bar" type="Boolean" description="Whether the dialog's title bar should be drawn." unit="" values="True,False" default="True"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="simpleEdit" notes="" cx="151" cy="23">
+						<AppliesTo>
+							<Apply type="GUIElement"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Border" type="enumeration" description="Specifies the style of border that will be drawn around the edge of the control" unit="" values="Sunken,Raised,Static,None" default="None"/>
+							<Tag name="Enabled" type="Boolean" description="Whether the control should appear to be enabled or not" unit="" values="True,False" default="True"/>
+							<Tag name="Horizontal Text Align" type="enumeration" description="How text should be horizontally aligned within the control" unit="" values="Left,Center,Right,Default" default="Default"/>
+							<Tag name="Input Mode" type="enumeration" description="The text input mode that the control will be displayed with" unit="" values="Text,Number,Password" default="Text"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="simpleGroupBox" notes="" cx="151" cy="161">
+						<AppliesTo>
+							<Apply type="GUIElement"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Border" type="enumeration" description="Specifies the style of border that will be drawn around the edge of the control" unit="" values="Sunken,Raised,Static,None" default="None"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="simpleLabel" notes="" cx="151" cy="13">
+						<AppliesTo>
+							<Apply type="GUIElement"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Border" type="enumeration" description="Specifies the style of border that will be drawn around the edge of the control" unit="" values="Sunken,Raised,Static,None" default="None"/>
+							<Tag name="Enabled" type="Boolean" description="" unit="" values="True,False" default="True"/>
+							<Tag name="Horizontal Text Align" type="enumeration" description="How text should be horizontally aligned within the control" unit="" values="Left,Center,Right,Default" default="Default"/>
+							<Tag name="Vertical Text Align" type="enumeration" description="How text should be vertically aligned within the control" unit="" values="Top,Center,Bottom,Default" default="Default"/>
+							<Tag name="Wrap" type="Boolean" description="Whether the this control's caption text should be wrapped across multiple lines" unit="" values="True,False" default="False"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="simpleListBox" notes="" cx="151" cy="161">
+						<AppliesTo>
+							<Apply type="GUIElement"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Border" type="enumeration" description="Specifies the style of border that will be drawn around the edge of the control" unit="" values="Sunken,Raised,Static,None" default="None"/>
+							<Tag name="Enabled" type="Boolean" description="Whether the control should appear to be enabled or not" unit="" values="True,False" default="True"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="simpleListView" notes="" cx="151" cy="161">
+						<AppliesTo>
+							<Apply type="GUIElement"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Border" type="enumeration" description="Specifies the style of border that will be drawn around the edge of the control" unit="" values="Sunken,Raised,Static,None" default="None"/>
+							<Tag name="Enabled" type="Boolean" description="Whether the control should appear to be enabled or not" unit="" values="True,False" default="True"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="simplePanel" notes="" cx="90" cy="70">
+						<AppliesTo>
+							<Apply type="GUIElement"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Border" type="enumeration" description="" unit="" values="Sunken,Raised,Static,None" default="None"/>
+							<Tag name="Control Border" type="Boolean" description="" unit="" values="True,False" default="False"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="simpleProgressBar" notes="" cx="151" cy="23">
+						<AppliesTo>
+							<Apply type="GUIElement"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Border" type="enumeration" description="Specifies the style of border that will be drawn around the edge of the control" unit="" values="Sunken,Raised,Static,None" default="None"/>
+							<Tag name="Horizontal" type="Boolean" description="The progress bar's orientation. If true the progress bar will be drawn horizontally (left to right), if false it will be drawn vertically (bottom to top)" unit="" values="True,False" default="True"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="simpleRadioButton" notes="" cx="138" cy="16">
+						<AppliesTo>
+							<Apply type="GUIElement"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Border" type="enumeration" description="Specifies the style of border that will be drawn around the edge of the control" unit="" values="Sunken,Raised,Static,None" default="None"/>
+							<Tag name="Button On Left" type="Boolean" description="Which side of the caption text the radio button should be displayed on" unit="" values="True,False" default="True"/>
+							<Tag name="Enabled" type="Boolean" description="Whether the control should appear to be enabled or not" unit="" values="True,False" default="True"/>
+							<Tag name="Horizontal Text Align" type="enumeration" description="" unit="" values="Left,Center,Right,Default" default="Default"/>
+							<Tag name="Value" type="Boolean" description="Whether the radio button is checked or not" unit="" values="True,False" default="False"/>
+							<Tag name="Vertical Text Align" type="enumeration" description="How text should be vertically aligned within the control" unit="" values="Top,Center,Bottom,Default" default="Default"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="simpleScrollBarH" notes="" cx="151" cy="16">
+						<AppliesTo>
+							<Apply type="GUIElement"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Border" type="enumeration" description="Specifies the style of border that will be drawn around the edge of the control" unit="" values="Sunken,Raised,Static,None" default="None"/>
+							<Tag name="Enabled" type="Boolean" description="Whether the control should appear to be enabled or not" unit="" values="True,False" default="True"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="simpleScrollBarV" notes="" cx="15" cy="161">
+						<AppliesTo>
+							<Apply type="GUIElement"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Border" type="enumeration" description="Specifies the style of border that will be drawn around the edge of the control" unit="" values="Sunken,Raised,Static,None" default="None"/>
+							<Tag name="Enabled" type="Boolean" description="Whether the control should appear to be enabled or not" unit="" values="True,False" default="True"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="simpleSlider" notes="" cx="90" cy="70">
+						<AppliesTo>
+							<Apply type="GUIElement"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Border" type="enumeration" description="Specifies the style of border that will be drawn around the edge of the control" unit="" values="Sunken,Raised,Static,None" default="None"/>
+							<Tag name="Enabled" type="Boolean" description="Whether the control should appear to be enabled or not" unit="" values="True,False" default="True"/>
+							<Tag name="Horizontal" type="Boolean" description="The slider control's orientation. If true the slider will be drawn horizontally (left to right), if false it will be drawn vertically (top to bottom)" unit="" values="True,False" default="True"/>
+							<Tag name="Tick Marks" type="Boolean" description="Whether the slider control should be decorated with tick marks" unit="" values="True,False" default="False"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="simpleSpin" notes="" cx="15" cy="23">
+						<AppliesTo>
+							<Apply type="GUIElement"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Border" type="enumeration" description="Specifies the style of border that will be drawn around the edge of the control" unit="" values="Sunken,Raised,Static,None" default="None"/>
+							<Tag name="Enabled" type="Boolean" description="Whether the control should appear to be enabled or not" unit="" values="True,False" default="True"/>
+							<Tag name="Vertical" type="Boolean" description="The spin control's orientation. If true the spin control will be drawn vertically (up and down), if false it will be drawn horizontally (left and right)" unit="" values="True,False" default="True"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="simpleTabPane" notes="" cx="302" cy="322">
+						<AppliesTo>
+							<Apply type="GUIElement"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Border" type="enumeration" description="Specifies the style of border that will be drawn around the edge of the control" unit="" values="Sunken,Raised,Static,None" default="None"/>
+							<Tag name="Enabled" type="Boolean" description="Whether the control should appear to be enabled or not" unit="" values="True,False" default="True"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="simpleTree" notes="" cx="151" cy="161">
+						<AppliesTo>
+							<Apply type="GUIElement"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Border" type="enumeration" description="Specifies the style of border that will be drawn around the edge of the control" unit="" values="Sunken,Raised,Static,None" default="None"/>
+							<Tag name="Buttons" type="Boolean" description="Whether expand/contract buttons should be drawn for container nodes" unit="" values="True,False" default="False"/>
+							<Tag name="Enabled" type="Boolean" description="Whether the control should appear to be enabled or not" unit="" values="True,False" default="True"/>
+							<Tag name="Lines" type="Boolean" description="Whether hierarchy guide lines should be drawn for tree nodes" unit="" values="True,False" default="False"/>
+						</TaggedValues>
+					</Stereotype>
+				</Stereotypes>
+				<TaggedValueTypes/>
+			</Content>
+		</UMLProfile>
+	</UMLProfiles><UIToolboxes><UMLProfile profiletype="uml2">
+			<Documentation id="2784D0BA-5" name="User Interface - Simple" version="1.0" notes="User Interface - Simple"/>
+			<Content>
+				<Stereotypes>
+					<Stereotype name="Simple User Interface" notes="" cx="90" cy="70">
+						<AppliesTo>
+							<Apply type="ToolboxPage"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="simpleUI::simpleDialog(UML::Screen)" type="" description="" unit="" values="" default="Dialog"/>
+							<Tag name="simpleUI::simpleButton(UML::GUIElement)" type="" description="" unit="" values="" default="Button"/>
+							<Tag name="simpleUI::simpleCheckBox(UML::GUIElement)" type="" description="" unit="" values="" default="Check Box"/>
+							<Tag name="simpleUI::simpleEdit(UML::GUIElement)" type="" description="" unit="" values="" default="Edit Control"/>
+							<Tag name="simpleUI::simpleComboBox(UML::GUIElement)" type="" description="" unit="" values="" default="Combo Box"/>
+							<Tag name="simpleUI::simpleListBox(UML::GUIElement)" type="" description="" unit="" values="" default="List Box"/>
+							<Tag name="simpleUI::simpleGroupBox(UML::GUIElement)" type="" description="" unit="" values="" default="Group Box"/>
+							<Tag name="simpleUI::simpleRadioButton(UML::GUIElement)" type="" description="" unit="" values="" default="Radio Button"/>
+							<Tag name="simpleUI::simpleLabel(UML::GUIElement)" type="" description="" unit="" values="" default="Label"/>
+							<Tag name="simpleUI::simplePanel(UML::GUIElement)" type="" description="" unit="" values="" default="Panel"/>
+							<Tag name="simpleUI::simpleScrollBarH(UML::GUIElement)" type="" description="" unit="" values="" default="Horizontal Scroll Bar"/>
+							<Tag name="simpleUI::simpleScrollBarV(UML::GUIElement)" type="" description="" unit="" values="" default="Vertical Scroll Bar"/>
+							<Tag name="simpleUI::simpleSlider(UML::GUIElement)" type="" description="" unit="" values="" default="Slider Control"/>
+							<Tag name="simpleUI::simpleSpin(UML::GUIElement)" type="" description="" unit="" values="" default="Spin Control"/>
+							<Tag name="simpleUI::simpleProgressBar(UML::GUIElement)" type="" description="" unit="" values="" default="Progress Control"/>
+							<Tag name="simpleUI::simpleListView(UML::GUIElement)" type="" description="" unit="" values="" default="List Control"/>
+							<Tag name="simpleUI::simpleTree(UML::GUIElement)" type="" description="" unit="" values="" default="Tree Control"/>
+							<Tag name="simpleUI::simpleTabPane(UML::GUIElement)" type="" description="" unit="" values="" default="Tab Control"/>
+							<Tag name="simpleUI::simpleDateTime(UML::GUIElement)" type="" description="" unit="" values="" default="Date Time Picker"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="simpleUI::simpleButton(UML::GUIElement)" notes="" cx="90" cy="70">
+						<Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAAgLgAAIC4AAAAAAAAAAAAA
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAFxcXFxcXFxcX
+FxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXwMDAFxcXFxcXxKBjxKBkxKBjxKBj
+xKBjxKBjxKBjxKBkxKBkxKBkxKBkxKBjFxcXFxcXFxcXyql0yqp0yqp0yqp0yqp0yqp0yqp0
+yqp0yqp0yqp0yqp0yqp0yqp0yqp0FxcXFxcX07iN07iM07iM07iM07iN07iM07iM1LiN07iN
+07iM07iN07iM07iM07iMFxcXFxcX3cmn3sqn3cqn3smn3cmn3cmn3smn3cmn3cqn3smn3smn
+3cmn3smn3sqnFxcXFxcX59rD59rD59rD59rD59vD59vD59rD59rD59rD59rD59rD59rD59rD
+59vDFxcXFxcX8end8enc8end8end8Ond8end8end8end8end8end8Ond8end8Ond8encFxcX
+FxcX9/Tw9/Tw9/Tw9/Tw9/Tw9/Tw9/Tw9/Tw9/Tw9/Tw9/Tw9/Tw9/Tw9/TwFxcXFxcX+vn3
++vn2+vn3+vn3+vn3+vn3+vn3+vn2+vn2+vn2+vn2+vn3+vn3+vn3FxcXFxcXFxcX+/r5+/r5
++/r5+/r5+/r5+/r5+/r5+/r5+/r5+/r5+/r5+/r5FxcXFxcXwMDAFxcXFxcXFxcXFxcXFxcX
+FxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAAAAAAEAAdObaAgAAAAAAAAAAAOlwASiSDRGlTXEBAAAAAPBWJhhYrrQX
+MAAAAKEwAAAAAEAAwOvaAgAAAAAAAAAAAOlwAZCUDRGlTXEBAAAAAIi1chiocv8XMAAAAKEw
+AAAAAEAAnPPaAgAAAAAAAAAAAOlwAfiWDRGlTXEBAAAAAICN3xdIsrQXMAAAAKEwAAAAAEAA
+ZCDYAgAAAAAAAAAAAOlwATDschGlTXEBAAAAAAgR1RdQa4oRCQB9AA0ACgB9AA0ACgAA
+AA==</Icon>
+						<AppliesTo>
+							<Apply type="ToolboxItemImage"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="simpleUI::simpleCheckBox(UML::GUIElement)" notes="" cx="90" cy="70">
+						<Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAAgLgAAIC4AAAAAAAAAAAAA
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDABgYG
+Dg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4OwMDAwMDAwMDAwMDAwMDABQUFNDQ0hISGsbGz
+wMDCvb2+ubm7tbW3oaGkdXV4MTEyFhYWwMDAwMDAwMDAwMDACQkJ0NDR05RL3rmOx8TDwcHC
+vb2/ubi5x6V/5LJ3xKyQGRkawMDAwMDAwMDAwMDABwcH1NTVq5N4yHYW27aMycS/wsDAxquL
+0X0ZwoQ8tqaVEhITwMDAwMDAwMDAwMDABwcH19fZ0c7OqZR9vnMZ2rKC1LiY1ocqvYVDuK6j
+t7e4EhITwMDAwMDAwMDAwMDABwcH29vc2NjZ09LRt6ONx3ke2Yst05lVxLmuvr6/u7u8EhIT
+wMDAwMDAwMDAwMDABwcH3d3e29vc2NbVzbOWvHIZxXAL2KVrycXAw8PDv7/AEhITwMDAwMDA
+wMDAwMDABwcH4ODh3trX27qV1oUltINKp4xuwHIW27SHy8W/w8PFEhITwMDAwMDAwMDAwMDA
+BwcH4ODh06+GyXkaw45R0cnA09LRsJ6KvHIa27F/zMS6EhITwMDAwMDAwMDAwMDABwcH4ODh
+qYJXuotV3dzc3Nzd2dnb1dTVr5qCunYn0bKNExMTwMDAwMDAwMDAwMDACAgIHBwcy7qo1sWy
+4ODh3t7f3Nzd2trbzsfAuZ6AOjg2CAgIwMDAwMDAwMDAwMDAwMDAICAgFxcXFxcXFxcXFxcX
+FxcXFxcXFxcXFxcXFxcXwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAAAAAAEAAdObaAgAAAAAAAAAAAOlwASiSDRGlTXEBAAAAAPBWJhhYrrQX
+MAAAAKEwAAAAAEAAwOvaAgAAAAAAAAAAAOlwAZCUDRGlTXEBAAAAAIi1chiocv8XMAAAAKEw
+AAAAAEAAnPPaAgAAAAAAAAAAAOlwAfiWDRGlTXEBAAAAAICN3xdIsrQXMAAAAKEwAAAAAEAA
+ZCDYAgAAAAAAAAAAAOlwATDschGlTXEBAAAAAAgR1RdQa4oRCQB9AA0ACgB9AA0ACgAA
+AA==</Icon>
+						<AppliesTo>
+							<Apply type="ToolboxItemImage"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="simpleUI::simpleComboBox(UML::GUIElement)" notes="" cx="90" cy="70">
+						<Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAAgLgAAIC4AAAAAAAAAAAAA
+KSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqwMDAwMDAwMDAwMDAKSkq4eHi
+4eHi4eHi4eHi4eHi4eHi4eHi4eHi4eHi4eHiKSkqwMDAwMDAwMDAwMDAKSkq4eHi4eHi4eHi
+4eHi4eHi4eHi4eHi4eHi4eHi4eHiKSkqwMDAwMDAwMDAwMDAKSkq4eHiKSkqKSkqKSkqKSkq
+KSkqKSkqKSkqKSkq4eHiKSkqwMDAwMDAwMDAwMDAKSkq4eHi4eHi4eHi4eHi4eHi4eHi4eHi
+4eHi4eHi4eHiKSkqwMDAwMDAwMDAwMDAKSkq4eHi4eHi4eHi4eHi4eHi4eHi4eHi4eHi4eHi
+4eHiKSkqwMDAwMDAwMDAwMDAKSkq4eHiKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkq4eHiKSkq
+wMDAwMDAwMDAwMDAKSkq4eHi4eHi4eHi4eHi4eHi4eHi4eHi4eHi4eHi4eHiKSkqwMDAwMDA
+wMDAwMDAKSkq4eHi4eHi4eHi4eHi4eHi4eHi4eHi4eHi4eHi4eHiKSkqwMDAwMDAwMDAwMDA
+KSkq4eHiKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkq4eHiKSkqwMDAwMDAwMDAwMDAKSkq4eHi
+4eHi4eHi4eHi4eHi4eHi4eHi4eHi4eHi4eHiKSkqwMDAwMDAwMDAwMDAKSkqKSkqKSkqKSkq
+KSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqwptZwptZwptZwptZwptZ
+wptZwptZwptZwptZwptZKSkq9r1b9r1b9r1bKSkqKSkqwptZwptZwptZwptZwptZwptZwptZ
+wptZwptZwptZKSkq9r1bKSkq9r1bKSkqKSkqwptZwptZwptZwptZwptZwptZwptZwptZwptZ
+wptZKSkq9r1b9r1b9r1bKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkq
+KSkqKSkqKSkqKSkqAAAAAEAAdObaAgAAAAAAAAAAAOlwASiSDRGlTXEBAAAAAPBWJhhYrrQX
+MAAAAKEwAAAAAEAAwOvaAgAAAAAAAAAAAOlwAZCUDRGlTXEBAAAAAIi1chiocv8XMAAAAKEw
+AAAAAEAAnPPaAgAAAAAAAAAAAOlwAfiWDRGlTXEBAAAAAICN3xdIsrQXMAAAAKEwAAAAAEAA
+ZCDYAgAAAAAAAAAAAOlwATDschGlTXEBAAAAAAgR1RdQa4oRCQB9AA0ACgB9AA0ACgAA
+AA==</Icon>
+						<AppliesTo>
+							<Apply type="ToolboxItemImage"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="simpleUI::simpleDateTime(UML::GUIElement)" notes="" cx="90" cy="70">
+						<Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAAgLgAAIC4AAAAAAAAAAAAA
+FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUwcHB
+vb2+ubm6tra2srKzr6+wra2uq6usqamqqKipp6eopqanpaWmpaWmFBQUFBQUxMTES0tNS0tN
+uLi5S0tNS0tNr6+wS0tNS0tNqamqS0tNS0tNpqanpaWmFBQUFBQUx8fIS0tNS0tNu7u7S0tN
+S0tNsbGxS0tNS0tNqqqrS0tNS0tNpqanpqanFBQUFBQUysrKxsbGwsLCvr6+urq6tra3s7O0
+sLCxra2uq6usqamqqKipp6eopqanFBQUFBQUzc3NS0tNS0tNwcHBS0tNS0tNtbW2S0tNS0tN
+ra2tS0tNS0tNp6eopqanFBQUFBQU0NDQS0tNS0tNxMTES0tNS0tNuLi4S0tNS0tNrq6vS0tN
+S0tNqKipp6eoFBQUFBQU0tLSz8/Py8vLxsbHwsLDvr6/urq7t7e3s7O0sLCxrq6uq6usqamq
+qKipFBQUFBQU1dXVS0tNS0tNysrKS0tNS0tNvb2+S0tNS0tNsrKzS0tNS0tNq6usqamqFBQU
+FBQU19fXS0tNS0tNzMzNS0tNS0tNwMDAS0tNS0tNtbW1S0tNS0tNrKytqqqrFBQUFBQU2NjY
+1tbW09PTz8/Py8vLx8fHw8PDv7+/u7u7t7e4tLS0sbGxrq6vrKysFBQUFBQUFBQUFBQUFBQU
+FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUuJA8uJA8uJA8uJA8uJA8
+uJA8uJA8uJA8uJA8FBQUuJA8uJA8uJA8uJA8FBQUFBQU3MaZFBQU3MaZFBQU3MaZFBQU3MaZ
+FBQU3MaZFBQU3MaZFBQUFBQU3MaZFBQUFBQU1sWi1sWi1sWi1sWi1sWi1sSi1sWi1sWi1sWi
+FBQU1sWi1sWi1sWi1sWiFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU
+FBQUFBQUFBQUFBQUAAAAAEAAdObaAgAAAAAAAAAAAOlwASiSDRGlTXEBAAAAAPBWJhhYrrQX
+MAAAAKEwAAAAAEAAwOvaAgAAAAAAAAAAAOlwAZCUDRGlTXEBAAAAAIi1chiocv8XMAAAAKEw
+AAAAAEAAnPPaAgAAAAAAAAAAAOlwAfiWDRGlTXEBAAAAAICN3xdIsrQXMAAAAKEwAAAAAEAA
+ZCDYAgAAAAAAAAAAAOlwATDschGlTXEBAAAAAAgR1RdQa4oRCQB9AA0ACgB9AA0ACgAA
+AA==</Icon>
+						<AppliesTo>
+							<Apply type="ToolboxItemImage"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="simpleUI::simpleEdit(UML::GUIElement)" notes="" cx="90" cy="70">
+						<Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAAgLgAAIC4AAAAAAAAAAAAA
+wMDAFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXwMDAFxcXGBgZ
+xsbIxMTFwcHCvr7AvLy9ubm7uLi5tra3tLS2s7O1srK0sbGzFRUWFxcXFxcXzMzNycnKxsbI
+w8PFwcHCvr7Au7u9ubm7uLi5tra4tLS2s7O1s7K0srKzFxcXFxcXz8/QzMzNycnKxsbIw8PF
+wMDCvr6/u7u9ubm7uLi5tra3tLS204UrsrK0FxcXFxcX0rqe0pxezMzNycnKy66MzKBuxLam
+zpNQyplhzZJPwqSEtra304UrtLO1FxcXFxcX1cvB04Ur0MGxzMzN0o0+zaFvx7Oe04Ury5pi
+0Iw904UrubSw04UrtLS2FxcXFxcX19fZ05RL04Ur04Ur04Ury7ysybag04UrwMDCxqmH04Ur
+wKyX04UrtbW3FxcXFxcX2trb1rON049A0rCJ044/zMzNzLii04Urzphaz5BH04Urvbi004Ur
+t7e5FxcXFxcX3Nzd2tXQ04Ur04o10rCJz8/Qzrqk04Urzp1lz5RRx6qJvr6/04Urubm6FxcX
+FxcX3d3e3Nzd1Z9i04Ur1cvB0dHT0Lyn04UryMjKxcXHwsLEwMDB04Uru7u9FxcXFxcX39/g
+3d3e2tDH2MWv19fY1dXW0si+0al9y8vNyMjJxcXHwsLE04Urvb2/FxcXFxcX4ODh39/g3d3e
+3Nzd2trb19fY1NTV0dHTzs7Qy8vNyMjJxcXH04UrwMDBFxcXFxcX4ODh4ODh39/g3d3e29vd
+2trb19fY1NTV0dHTzs7Py8vNyMjJxcXGwsLEFxcXFxcX4ODh4ODh4ODh39/g3d3e3Nzd2trb
+19fY1NTV0dHSzs7Py8vMyMjJxcXGISEhISEhGxsb4ODh4ODh4ODh39/g3d3e3Nzd2trb19fY
+1NTV0dHSzs7Py8vMGBgYISEhwMDAISEhFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcX
+FxcXFxcXISEhwMDAAAAAAEAAdObaAgAAAAAAAAAAAOlwASiSDRGlTXEBAAAAAPBWJhhYrrQX
+MAAAAKEwAAAAAEAAwOvaAgAAAAAAAAAAAOlwAZCUDRGlTXEBAAAAAIi1chiocv8XMAAAAKEw
+AAAAAEAAnPPaAgAAAAAAAAAAAOlwAfiWDRGlTXEBAAAAAICN3xdIsrQXMAAAAKEwAAAAAEAA
+ZCDYAgAAAAAAAAAAAOlwATDschGlTXEBAAAAAAgR1RdQa4oRCQB9AA0ACgB9AA0ACgAA
+AA==</Icon>
+						<AppliesTo>
+							<Apply type="ToolboxItemImage"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="simpleUI::simpleGroupBox(UML::GUIElement)" notes="" cx="90" cy="70">
+						<Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAAgLgAAIC4AAAAAAAAAAAAA
+wMDAFxcXGxkUGxgTGxgSGxcQGhYPGRYOGRUMGBQLGBMKFxMJFxIIFhIHFxcXwMDAFxcXFxcX
+4M6n4M2j4Mmb3cSR2r6G1rh70bJwzatlyKVcxJ9Sv5lKvJRCFxcXFxcXGxkW38+v4M+r4M6n
+4c2k4Mmb3cSR2r6G1rl70bFwzatlyKVcxJ9Sv5lKvJRCFhIHGxkW3tC039Cw4M+s4M6o4c2k
+38mc3cSS2b6H1rl80bJxzatmyKRbxJ9Tv5lKFxIIGxoX3dG53tG139Cx38+s4M6o4c2l38qd
+3cSS2b6H1rl80bJwzatlyKVbxJ9SFxMJGxoY3dK93dK53tG139Cx38+t4M6p4c2m38qd3cSS
+2b6I1rl80bJwzatmyKVbGBMKGxoY3NPD3NO/3dK63tG239Cy38+u4M6q4c2m38qd3cSS2b6I
+1rl80bJxzKtmGBQLGxoZ29TH3NTD3NO/3dK73tG33tCy38+u4M6q4M6n38qd3cST2b+I1rl8
+0bJxGRUMGhoZ2tXM29XI29TE3NPA3dK73tG33tCz38+v4M+r4M6n38qe3cST2b+I1rl9GRYO
+Ghoa2dbQ2tbN29XJ29TF3NPA3dK83dG43tC038+v4M+r4M6o38qe3MSU2b+JGhYPGhoa2dfU
+2dbR2tbN2tXJ29TF3NPB3dK93dG43tG139Cw38+s4M6o38qe3MSUGhcRGhoa2NjX2dfU2dfR
+2tbO2tXK29TG3NPC3dK93dK53tG139Cx38+s4M6p38qfGxgSGhoa2NjY2NjX2dfV2dfR2tbO
+2tXK29TG3NPC3NO+3dK63tG239Cy38+t4M6qGxkTFxcXFxcXwMDAPDw8wMDAPDw8wMDAPDw8
+wMDA3NTD3NO/3dK63tG239CyGxkVGxkVwMDAFxcXwMDAPDw8wMDAPDw8wMDAPDw8wMDAGxoY
+AwMDGxoXGxoXGxkWGxkWwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAAAAAAEAAdObaAgAAAAAAAAAAAOlwASiSDRGlTXEBAAAAAPBWJhhYrrQX
+MAAAAKEwAAAAAEAAwOvaAgAAAAAAAAAAAOlwAZCUDRGlTXEBAAAAAIi1chiocv8XMAAAAKEw
+AAAAAEAAnPPaAgAAAAAAAAAAAOlwAfiWDRGlTXEBAAAAAICN3xdIsrQXMAAAAKEwAAAAAEAA
+ZCDYAgAAAAAAAAAAAOlwATDschGlTXEBAAAAAAgR1RdQa4oRCQB9AA0ACgB9AA0ACgAA
+AA==</Icon>
+						<AppliesTo>
+							<Apply type="ToolboxItemImage"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="simpleUI::simpleLabel(UML::GUIElement)" notes="" cx="90" cy="70">
+						<Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAAgLgAAIC4AAAAAAAAAAAAA
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwrepwrOgwLGgwMDAv7y4
+uq2et6udtKmcurSuqJaAq5uJwMDAq5uJvbq3wMDAwMDAw7ipy6NzyKFywMDAwLy4vrCfrnk6
+ro9pr5Z5oXtNrpqCmnJCmHFCnXtUwMDAwMDAwMDAwb25zqBnwrqxwMDAwMDAxYlBvaF/u6OG
+sX5CwMDAtZ+EpHY+vLauwMDAwMDAwMDAwMDAxLmr0aJlxbakxbaj0pVJyKiCwbqwxYpBwKqP
+wLy4snw7uamWwMDAwMDAwMDAwMDAwMDAzLCL1KdqzLCL1p1SxbajwMDAx7CTz5VNwreowpVg
+vJVmwMDAwMDAwMDAwMDAwMDAwMDA1Kx1xbut2qNZxrilwMDAwMDAxbajzKJvzJ1jxptpwMDA
+wMDAwMDAwMDAwMDAwMDAxL2026pn3Kdex7mnwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAybmj3alhx7mnwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDA0bSLxbuuwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAAAAAAEAAdObaAgAAAAAAAAAAAOlwASiSDRGlTXEBAAAAAPBWJhhYrrQX
+MAAAAKEwAAAAAEAAwOvaAgAAAAAAAAAAAOlwAZCUDRGlTXEBAAAAAIi1chiocv8XMAAAAKEw
+AAAAAEAAnPPaAgAAAAAAAAAAAOlwAfiWDRGlTXEBAAAAAICN3xdIsrQXMAAAAKEwAAAAAEAA
+ZCDYAgAAAAAAAAAAAOlwATDschGlTXEBAAAAAAgR1RdQa4oRCQB9AA0ACgB9AA0ACgAA
+AA==</Icon>
+						<AppliesTo>
+							<Apply type="ToolboxItemImage"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="simpleUI::simpleListBox(UML::GUIElement)" notes="" cx="90" cy="70">
+						<Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAAgLgAAIC4AAAAAAAAAAAAA
+KSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqhYWHhYWHhYWHPz9Ay8vM
+xsbIwcHDvb2+uLi6tLS1r6+xrKytqKiqpaWnoKCiKSkqhYWHKSkqhYWHQEBBz8/RKSkqKSkq
+KSkqKSkqKSkqKSkqKSkqKSkqKSkqoqKkKSkqhYWHhYWHhYWHQEBB1NTVz8/Ry8vMxsbIwcHD
+vb2+uLi6tLS1r6+xrKytpaWnKSkqKSkqKSkqKSkqQUFC19fZ1NTVz8/Ry8vMxsbIwcHDvb2+
+uLi6tLS1r6+xqamqKSkq+ubC+ubC+ubCQUFC29vcKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkq
+KSkqrKyuKSkq+ubC+ubC+ubCQUFC3t7f29vc19fZ1NTVz8/Ry8vMx8bIwcHDvb2+uLi6sbGy
+KSkq+ubC+ubC+ubCQUFC4ODh3t7f29vc19fZ1NTVz8/Ry8vMxsfIwcHDvb2+tbW3KSkq+ubC
++ubC+ubCQUFC4ODhKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqurq7KSkq+ubC+ubC+ubC
+QUFC4ODh4ODh4ODh3t7f29vc19fZ1NTVz8/Ry8vMxsbIvb2/KSkq+ubC+ubC+ubCQUFC4ODh
+4ODh4ODh4ODh3t7f29vc19fZ1NTVz8/Ry8vMwsLEKSkq+ubC+ubC+ubCQUFC4ODhKSkqKSkq
+KSkqKSkqKSkqKSkqKSkqKSkqKSkqx8fIKSkq+ubC+ubC+ubCQUFC4ODh4ODh4ODh4ODh4ODh
+4ODh3t7f29vc19fZ1NTVzMvNKSkqKSkqKSkqKSkqQUFC4ODh4ODh4ODh4ODh4ODh4ODh4ODh
+3t7f29vc19fZ0NDRKSkqhYWHhYWHhYWHQUFC4ODh4ODh4ODh4ODh4ODh4ODh4ODh4ODh3t7f
+29vc09PVKSkqhYWHKSkqhYWHKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkqKSkq
+KSkqhYWHhYWHhYWHAAAAAEAAdObaAgAAAAAAAAAAAOlwASiSDRGlTXEBAAAAAPBWJhhYrrQX
+MAAAAKEwAAAAAEAAwOvaAgAAAAAAAAAAAOlwAZCUDRGlTXEBAAAAAIi1chiocv8XMAAAAKEw
+AAAAAEAAnPPaAgAAAAAAAAAAAOlwAfiWDRGlTXEBAAAAAICN3xdIsrQXMAAAAKEwAAAAAEAA
+ZCDYAgAAAAAAAAAAAOlwATDschGlTXEBAAAAAAgR1RdQa4oRCQB9AA0ACgB9AA0ACgAA
+AA==</Icon>
+						<AppliesTo>
+							<Apply type="ToolboxItemImage"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="simpleUI::simpleListView(UML::GUIElement)" notes="" cx="90" cy="70">
+						<Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAAgLgAAIC4AAAAAAAAAAAAA
+FxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcX1dXX
+09PU0NDRzc3PysrMx8fJxcXGwsLDv7/BvLy+urq8uLi5tra4tLS2FxcXFxcX2NjZFxcXFxcX
+0NDRzc3OysrLx8fJxMTGwcHDv7/AvLy+ubm7t7e5tbW3FxcXFxcX2dnbFxcXFxcX0tLTuJtf
+uJtfuJtfuJtfuJtfuJtfuJtfuJtfubm7t7e5FxcXFxcX29vc2dna19fY1NTV0dHTz8/QzMzN
+ycnKxsbIw8PFwMDCvr6/u7u9ubm7FxcXFxcX3d3eFxcXFxcX1tbX1NTV0dHSzs7Qy8vNyMjK
+xsbHw8PEwMDCvb2/u7u9FxcXFxcX3t7fFxcXFxcX2NjZuJtfuJtfuJtfuJtfuJtfuJtfuJtf
+uJtfwMDBvb2/FxcXFxcX39/g3t7f3Nzd2trb2NjZ1dXX09PU0NDRzc3PysrMx8fJxcXGwsLD
+v7/BFxcXFxcX4ODhFxcXFxcX3Nzd2trb2NjZ1dXW0tLU0NDRzc3OysrLx8fJxMTGwcHDFxcX
+FxcX4ODhFxcXFxcX3d3euJtfuJtfuJtfuJtfuJtfuJtfuJtfuJtfx8fIxMTFFxcXFxcX4ODh
+4ODh4ODh39/g3d3e29vc2dna19fY1NTV0dHTz8/QzMzNycnKxsbIFxcXFxcXuJtfuJtfuJtf
+uJtfuJtfuJtfuJtfuJtfuJtfuJtfuJtfuJtfuJtfuJtfFxcXFxcXwqRmwqRmwqRmwqRmwqRm
+wqRmwqRmwqRmwqRmwqRmwqRmwqRmwqRmwqRmFxcXFxcXz69u0bV41LiB1buH1buH1buH1buI
+1byH1buH1buH1buH2sWc1LiBz69vFxcXFxcX3Lt35tW059i559e359e259e25ta15ta05ta0
+59i559i76NvA5M+l3Lt3FxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcX
+FxcXFxcXFxcXFxcXAAAAAEAAdObaAgAAAAAAAAAAAOlwASiSDRGlTXEBAAAAAPBWJhhYrrQX
+MAAAAKEwAAAAAEAAwOvaAgAAAAAAAAAAAOlwAZCUDRGlTXEBAAAAAIi1chiocv8XMAAAAKEw
+AAAAAEAAnPPaAgAAAAAAAAAAAOlwAfiWDRGlTXEBAAAAAICN3xdIsrQXMAAAAKEwAAAAAEAA
+ZCDYAgAAAAAAAAAAAOlwATDschGlTXEBAAAAAAgR1RdQa4oRCQB9AA0ACgB9AA0ACgAA
+AA==</Icon>
+						<AppliesTo>
+							<Apply type="ToolboxItemImage"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="simpleUI::simpleProgressBar(UML::GUIElement)" notes="" cx="90" cy="70">
+						<Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAAgLgAAIC4AAAAAAAAAAAAA
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAFxcXFxcXFxcXFxcXFxcXFxcX
+FxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXjm9EknNHl3hKnn5QpYRVrYxctZNi
+uphmv5xqxKFupKSlpKSlpKSlpKSlFxcXFxcXjm9EknNHl3hKnn5QpYRVrYxctZNiuphmv5xq
+xKFuqKipqKipqKipqKipFxcXFxcXjm9EknNHl3hKnn5QpYRVrYxctZNiuphmv5xqxKFura2t
+ra2tra2tra2tFxcXFxcXjm9EknNHl3hKnn5QpYRVrYxctZNiuphmv5xqxKFusrKysrKysrKy
+srKyFxcXFxcXjm9EnoRgqpR1r5h5tJ19uaKBv6eFwquJw6Z9xKFutra2tra2tra2tra2FxcX
+FxcXjm9EnoRg28+/28+/28+/28+/28+/28+/w6Z9xKFuurq6urq6urq6urq6FxcXFxcXqJBv
+6+HS6+HS6+HS6+HS6+HS6+HS6+HS6+HSxKFuvr6+vr6+vr6+vr6+FxcXFxcXoYdkqpJvpIlh
+oYJVpYRVrYxctZNiuphmxaV3xKFuwMDAwMDAwMDAwMDAFxcXFxcXFxcXFxcXFxcXFxcXFxcX
+FxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAAAAAAEAAdObaAgAAAAAAAAAAAOlwASiSDRGlTXEBAAAAAPBWJhhYrrQX
+MAAAAKEwAAAAAEAAwOvaAgAAAAAAAAAAAOlwAZCUDRGlTXEBAAAAAIi1chiocv8XMAAAAKEw
+AAAAAEAAnPPaAgAAAAAAAAAAAOlwAfiWDRGlTXEBAAAAAICN3xdIsrQXMAAAAKEwAAAAAEAA
+ZCDYAgAAAAAAAAAAAOlwATDschGlTXEBAAAAAAgR1RdQa4oRCQB9AA0ACgB9AA0ACgAA
+AA==</Icon>
+						<AppliesTo>
+							<Apply type="ToolboxItemImage"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="simpleUI::simpleRadioButton(UML::GUIElement)" notes="" cx="90" cy="70">
+						<Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAAgLgAAIC4AAAAAAAAAAAAA
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAv7+/t7e3FxcXFxcXFxcXFxcXFxcXFxcXurq6v7+/wMDAwMDAwMDAwMDAwMDAvr6+np6e
+FxcXWVlZeHh4kJCQkJCQdnZ2W1tbFxcXqKiov7+/wMDAwMDAwMDAvr6+oKCgFxcXgYGBv76+
+y8nIy8nJzMrJzMvKvr27eXh4FxcXsbGxwMDAwMDAwMDAqampFxcXg4ODvLu7x8bGxMK+lYt7
+mZB+wr61zMvKzMrKdXRzFxcXvb29wMDAwMDAFxcXaGhnraysw8PDxcTEppd5loFXp49hqZl5
+zMvKzMvKv769REREFxcXwMDAwMDAFxcXcnJyv7+/wsHBlIJhmoBNx6dpy6tru5xhva6RzMrJ
+zMrKaWlpFxcXwMDAwMDAFxcXgoKCwMDAwMDAmoFRvJ5hz65tz65t0rR5yq53y8nJzMvKgYGB
+FxcXwMDAwMDAFxcXhISEwMDAwMDApYxdup1h0LBw17yF6Na10ruLysnJy8nJgoKCFxcXwMDA
+wMDAFxcXc3Nzvr6+wMDAtamTpYpVyaps3Maa38ym0savycfHycjHY2NjFxcXwMDAwMDAFxcX
+aWlpqqqqwMDAv7+9ubSquKJ6zbmR1c29xsXDx8bGs7KySEhIFxcXwMDAwMDAq6urFxcXfn5+
+s7OzwMDAwMDAwMDAwMDAwcHBw8LCtra2e3t6FxcXvr6+wMDAwMDAvb29nJycFxcXfX19qKio
+vb29wMDAwMDAwMDAoaGhcnJyFxcXqKiowMDAwMDAwMDAwMDAu7u7nZ2dFxcXaGhob29vcnJy
+d3d3cHBwZWVlFxcXqKinv7+/wMDAwMDAwMDAwMDAwMDAvr6+ra2tFxcXFxcXFxcXFxcXFxcX
+FxcXs7Ozv7+/wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAAAAAAEAAdObaAgAAAAAAAAAAAOlwASiSDRGlTXEBAAAAAPBWJhhYrrQX
+MAAAAKEwAAAAAEAAwOvaAgAAAAAAAAAAAOlwAZCUDRGlTXEBAAAAAIi1chiocv8XMAAAAKEw
+AAAAAEAAnPPaAgAAAAAAAAAAAOlwAfiWDRGlTXEBAAAAAICN3xdIsrQXMAAAAKEwAAAAAEAA
+ZCDYAgAAAAAAAAAAAOlwATDschGlTXEBAAAAAAgR1RdQa4oRCQB9AA0ACgB9AA0ACgAA
+AA==</Icon>
+						<AppliesTo>
+							<Apply type="ToolboxItemImage"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="simpleUI::simpleScrollBarH(UML::GUIElement)" notes="" cx="90" cy="70">
+						<Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAAgLgAAIC4AAAAAAAAAAAAA
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDANTU2NTU2NTU2NTU2
+NTU2NTU2NTU2wMDAwMDANTU2NTU2NTU2NTU2NTU2NTU2NTU2NTU22NjYs7O0rq6wqamrpKSn
+NTU2wMDAwMDANTU2pKSnqamrrq6ws7O02NjYNTU2NTU22NjYs7O0rq6wto04pKSnNTU2wMDA
+wMDANTU2pKSnto04rq6ws7O02NjYNTU2NTU22NjYs7O0tZFHto04pKSnNTU2wMDAwMDANTU2
+pKSnto04tZFHs7O02NjYNTU2NTU22NjYtZhdtZFHto04pKSnNTU2wMDAwMDANTU2pKSnto04
+tZFHtZhd2NjYNTU2NTU2x7KItZhdtZFHto04pKSnNTU2wMDAwMDANTU2pKSnto04tZFHtZhd
+x7KINTU2NTU2x7KItZhdtZFHto04pKSnNTU2wMDAwMDANTU2pKSnto04tZFHtZhdx7KINTU2
+NTU22NjYtZhdtZFHto04pKSnNTU2wMDAwMDANTU2pKSnto04tZFHtZhd2NjYNTU2NTU22NjY
+s7O0tZFHto04pKSnNTU2wMDAwMDANTU2pKSnto04tZFHs7O02NjYNTU2NTU22NjYs7O0rq6w
+to04pKSnNTU2wMDAwMDANTU2pKSnto04rq6ws7O02NjYNTU2NTU22NjYs7O0rq6wqamrpKSn
+NTU2wMDAwMDANTU2pKSnqamrrq6ws7O02NjYNTU2NTU2NTU2NTU2NTU2NTU2NTU2NTU2wMDA
+wMDANTU2NTU2NTU2NTU2NTU2NTU2NTU2wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAAAAAAEAAdObaAgAAAAAAAAAAAOlwASiSDRGlTXEBAAAAAPBWJhhYrrQX
+MAAAAKEwAAAAAEAAwOvaAgAAAAAAAAAAAOlwAZCUDRGlTXEBAAAAAIi1chiocv8XMAAAAKEw
+AAAAAEAAnPPaAgAAAAAAAAAAAOlwAfiWDRGlTXEBAAAAAICN3xdIsrQXMAAAAKEwAAAAAEAA
+ZCDYAgAAAAAAAAAAAOlwATDschGlTXEBAAAAAAgR1RdQa4oRCQB9AA0ACgB9AA0ACgAA
+AA==</Icon>
+						<AppliesTo>
+							<Apply type="ToolboxItemImage"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="simpleUI::simpleScrollBarV(UML::GUIElement)" notes="" cx="90" cy="70">
+						<Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAAgLgAAIC4AAAAAAAAAAAAA
+wMDAwMDALCwtLCwtLCwtLCwtLCwtLCwtLCwtLCwtLCwtLCwtLCwtLCwtwMDAwMDAwMDAwMDA
+LCwt2NjY2NjY2NjY2NjYx7KIx7KI2NjY2NjY2NjY2NjYLCwtwMDAwMDAwMDAwMDALCwts7O0
+s7O0s7O0tZhdtZhdtZhdtZhds7O0s7O0s7O0LCwtwMDAwMDAwMDAwMDALCwtrq6wrq6wtZFH
+tZFHtZFHtZFHtZFHtZFHrq6wrq6wLCwtwMDAwMDAwMDAwMDALCwtqamrto04to04to04to04
+to04to04to04to04qamrLCwtwMDAwMDAwMDAwMDALCwtpKSnpKSnpKSnpKSnpKSnpKSnpKSn
+pKSnpKSnpKSnLCwtwMDAwMDAwMDAwMDALCwtLCwtLCwtLCwtLCwtLCwtLCwtLCwtLCwtLCwt
+LCwtLCwtwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDALCwtLCwtLCwtLCwtLCwtLCwtLCwtLCwtLCwtLCwtLCwtLCwtwMDAwMDAwMDAwMDA
+LCwtpKSnpKSnpKSnpKSnpKSnpKSnpKSnpKSnpKSnpKSnLCwtwMDAwMDAwMDAwMDALCwtqamr
+to04to04to04to04to04to04to04to04qamrLCwtwMDAwMDAwMDAwMDALCwtrq6wrq6wtZFH
+tZFHtZFHtZFHtZFHtZFHrq6wrq6wLCwtwMDAwMDAwMDAwMDALCwts7O0s7O0s7O0tZhdtZhd
+tZhdtZhds7O0s7O0s7O0LCwtwMDAwMDAwMDAwMDALCwt2NjY2NjY2NjY2NjYx7KIx7KI2NjY
+2NjY2NjY2NjYLCwtwMDAwMDAwMDAwMDALCwtLCwtLCwtLCwtLCwtLCwtLCwtLCwtLCwtLCwt
+LCwtLCwtwMDAwMDAAAAAAEAAdObaAgAAAAAAAAAAAOlwASiSDRGlTXEBAAAAAPBWJhhYrrQX
+MAAAAKEwAAAAAEAAwOvaAgAAAAAAAAAAAOlwAZCUDRGlTXEBAAAAAIi1chiocv8XMAAAAKEw
+AAAAAEAAnPPaAgAAAAAAAAAAAOlwAfiWDRGlTXEBAAAAAICN3xdIsrQXMAAAAKEwAAAAAEAA
+ZCDYAgAAAAAAAAAAAOlwATDschGlTXEBAAAAAAgR1RdQa4oRCQB9AA0ACgB9AA0ACgAA
+AA==</Icon>
+						<AppliesTo>
+							<Apply type="ToolboxItemImage"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="simpleUI::simpleSlider(UML::GUIElement)" notes="" cx="90" cy="70">
+						<Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAAgLgAAIC4AAAAAAAAAAAAA
+FxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcX19fY
+1NTV0tLTz8/QzMzOysrLx8fIxcXGwsLEwMDCvr7AvLy+urq8ubm7FxcXFxcX2dna19fY1NTV
+0dHSz8/QzMzNycnLx8fIxMTGwsLEwMDBvr6/vLy+urq8FxcXFxcX3Nzd2dna19fX1NTV0dHS
+zs7QzMzNycnLx8fIxMTGwsLEwMDBvr6/vLy+FxcXFxcX3t7f3Nzd2dna1tbX1NTV0dHSzs7P
+zMzNgmtLgmtLgmtLgmtLwMDBvb2/FxcXFxcX4eHh3t7f3Nzc2dna1tbX09PU0dHSzs7PiXJU
+iXJUiXJUiXJUwcHDv7/BFxcXFxcX4+Pk4eHh3t7f29vc2dna1tbX09PU0dHSoYxxlH5ilH5i
+lH5ixMTFwcHDFxcXERERERERERERERERERERERERERERERERERERsJyCpZB1pZF1q5d7ERER
+ERERERERFBQUQUFDQUFDQUFDQUFDQUFDQUFDQUFDQUFDvaqSuqiQuqiQvKqRQUFDQUFDFBQU
+FxcXbm5wbm5wbm5wbm5wbm5wbm5wbm5wbm5ww7Ka0cGr0cGrw7Kabm5wbm5wFxcXFxcX7Ozs
+6enq5+fo5eXl4uLj4ODg3d3e29vcybih5trL6+HUybihzc3Oy8vMFxcXFxcX7e3t6+vs6enq
+5+fn5eXl4uLj4ODg3d3ezLul8/Pz8urfzLul0NDRzc3OFxcXFxcX7+/v7e3t6+vs6enq5+fn
+5eXl4uLj4ODgzLulzLulzLulzLul0tLT0NDRFxcXFxcX8PDw7+/v7e3t6+vr6enp5+fn5OTl
+4uLj39/g3d3d2trb19fY1dXW0tLTFxcXFxcX8vLy8PDw7+/v7e3t6+vr6enp5+fn5OTl4uLi
+39/g3d3d2trb19fY1dXWFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcX
+FxcXFxcXFxcXFxcXAAAAAEAAdObaAgAAAAAAAAAAAOlwASiSDRGlTXEBAAAAAPBWJhhYrrQX
+MAAAAKEwAAAAAEAAwOvaAgAAAAAAAAAAAOlwAZCUDRGlTXEBAAAAAIi1chiocv8XMAAAAKEw
+AAAAAEAAnPPaAgAAAAAAAAAAAOlwAfiWDRGlTXEBAAAAAICN3xdIsrQXMAAAAKEwAAAAAEAA
+ZCDYAgAAAAAAAAAAAOlwATDschGlTXEBAAAAAAgR1RdQa4oRCQB9AA0ACgB9AA0ACgAA
+AA==</Icon>
+						<AppliesTo>
+							<Apply type="ToolboxItemImage"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="simpleUI::simpleSpin(UML::GUIElement)" notes="" cx="90" cy="70">
+						<Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAAgLgAAIC4AAAAAAAAAAAAA
+FxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcX19fZ
+1tbX1NTW09PV0tLTuqiP5uThuqiPuqiPzMzOy8vNysrLycnLyMjKFxcXFxcX2dna19fZ1tbX
+1NTWuqiP5uThuqiPuqiPuqiPuqiPzMzOy8vNysrLycnLFxcXFxcX2trc2dna19fZuqiP5uTh
+uqiPuqiPuqiPuqiPuqiPuqiPzMzOy8vNysrLFxcXFxcX3Nzd2trckHlZkHlZkHlZkHlZkHlZ
+kHlZkHlZkHlZkHlZkHlZzMzOy8vNFxcXFxcX3d3efWZGfWZGfWZGfWZGfWZGfWZGfWZGfWZG
+fWZGfWZGfWZGfWZGzMzOFxcXFxcX39/f3d3e3Nzd2trc2dna19fZ1tbX1NTW09PV0tLT0dHS
+0NDRzs7Qzc3OFxcXFxcX4ODhFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcX
+zs7QFxcXFxcX4eHiV1dYV1dYV1dYV1dYV1dYV1dYV1dYV1dYV1dYV1dYV1dYV1dY0NDRFxcX
+FxcX4uLj4eHi4ODh39/f3d3e3Nzd2trc2dna19fZ1tbX1NTW09PV0tLT0dHSFxcXFxcX4+Pl
+fWZGfWZGfWZGfWZGfWZGfWZGfWZGfWZGfWZGfWZGfWZGfWZG0tLTFxcXFxcX5eXm4+PlkHlZ
+kHlZkHlZkHlZkHlZkHlZkHlZkHlZkHlZkHlZ1NTW09PVFxcXFxcX5ubm5eXm4+PluqiP5uTh
+uqiPuqiPuqiPuqiPuqiPuqiP19fZ1tbX1NTWFxcXFxcX5+fo5ubm5eXm4+PluqiP5uThuqiP
+uqiPuqiPuqiP2trc2dna19fZ1tbXFxcXFxcX6Ojp5+fo5ubm5eXm4+PluqiP5uThuqiPuqiP
+3d3e3Nzd2trc2dna19fZFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcX
+FxcXFxcXFxcXFxcXAAAAAEAAdObaAgAAAAAAAAAAAOlwASiSDRGlTXEBAAAAAPBWJhhYrrQX
+MAAAAKEwAAAAAEAAwOvaAgAAAAAAAAAAAOlwAZCUDRGlTXEBAAAAAIi1chiocv8XMAAAAKEw
+AAAAAEAAnPPaAgAAAAAAAAAAAOlwAfiWDRGlTXEBAAAAAICN3xdIsrQXMAAAAKEwAAAAAEAA
+ZCDYAgAAAAAAAAAAAOlwATDschGlTXEBAAAAAAgR1RdQa4oRCQB9AA0ACgB9AA0ACgAA
+AA==</Icon>
+						<AppliesTo>
+							<Apply type="ToolboxItemImage"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="simpleUI::simpleTabPane(UML::GUIElement)" notes="" cx="90" cy="70">
+						<Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAAgLgAAIC4AAAAAAAAAAAAA
+FxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcX4M6r
+4M6n4M2j4Mmb3cSR2r6G1rh70bJwzatlyKVcxJ9Sv5lKvJRCuJA8FxcXFxcX38+v4M+r4M6n
+4c2k4Mmb3cSR2r6G1rl70bFwzatlyKVcxJ9Sv5lKvJRCFxcXFxcX3tC039Cw4M+s4M6o4c2k
+38mc3cSS2b6H1rl80bJxzatmyKRbxJ9Tv5lKFxcXFxcX3dG53tG139Cx38+s4M6o4c2l38qd
+3cSS2b6H1rl80bJwzatlyKVbxJ9SFxcXFxcX3dK93dK53tG139Cx38+t4M6p4c2m38qd3cSS
+2b6I1rl80bJwzatmyKVbFxcXFxcX3NPD3NO/3dK63tG239Cy38+u4M6q4c2m38qd3cSS2b6I
+1rl80bJxzKtmFxcXFxcX29TH3NTD3NO/3dK73tG33tCy38+u4M6q4M6n38qd3cST2b+I1rl8
+0bJxFxcXFxcX2tXM29XI29TE3NPA3dK73tG33tCz38+v4M+r4M6n38qe3cST2b+I1rl9FxcX
+FxcX2dbQ2tbN29XJ29TF3NPA3dK83dG43tC038+v4M+r4M6o38qe3MSU2b+JFxcXFxcX2dfU
+2dbR2tbN2tXJ29TF3NPB3dK93dG43tG139Cw38+s4M6o38qe3MSUFxcXFxcXFxcXFxcXFxcX
+FxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXUVFRUVFRUVFRUVFRUVFR
+UVFRUVFRUVFRFxcXX19iX19iX19iX19iX19iFxcXFxcXj4+Qj4+Qj4+Qj4+Qj4+Qj4+Qj4+Q
+j4+QFxcXz8/Tz8/Tz8/Tz8/Tz8/TFxcXFxcXz8/Tz8/Tz8/Tz8/Tz8/Tz8/Tz8/Tz8/TFxcX
+FxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXwMDAwMDA
+wMDAwMDAwMDAwMDAAAAAAEAAdObaAgAAAAAAAAAAAOlwASiSDRGlTXEBAAAAAPBWJhhYrrQX
+MAAAAKEwAAAAAEAAwOvaAgAAAAAAAAAAAOlwAZCUDRGlTXEBAAAAAIi1chiocv8XMAAAAKEw
+AAAAAEAAnPPaAgAAAAAAAAAAAOlwAfiWDRGlTXEBAAAAAICN3xdIsrQXMAAAAKEwAAAAAEAA
+ZCDYAgAAAAAAAAAAAOlwATDschGlTXEBAAAAAAgR1RdQa4oRCQB9AA0ACgB9AA0ACgAA
+AA==</Icon>
+						<AppliesTo>
+							<Apply type="ToolboxItemImage"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="simpleUI::simpleTree(UML::GUIElement)" notes="" cx="90" cy="70">
+						<Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAAgLgAAIC4AAAAAAAAAAAAA
+wMDAwMDAFxcXFxcXwMDAwMDAwMDAwMDAwMDAwMDAwMDAhW5PhW5PhW5PhW5PhW5PwMDAwMDA
+FxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXtZl0tZl0tZl0tZl0tZl0wMDAwMDAFxcXFxcX
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAzrugzrugzrugzrugzrugwMDAwMDAFxcXFxcXwMDAwMDA
+wMDAwMDAwMDAwMDAwMDA4c614c614c614c614c61wMDAwMDAFxcXFxcXwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAFxcXFxcXwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAFxcXFxcXwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAwMDAwMDAFxcXFxcXwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAFxcXFxcXwMDAwMDAwMDAwMDAwMDAwMDAwMDAhW5PhW5PhW5PhW5PhW5P
+wMDAwMDAFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXtZl0tZl0tZl0tZl0tZl0wMDAwMDA
+FxcXFxcXwMDAwMDAwMDAwMDAwMDAwMDAwMDAzrugzrugzrugzrugzrugwMDAwMDAFxcXFxcX
+wMDAwMDAwMDAwMDAwMDAwMDAwMDA4c614c614c614c614c61hW5PhW5PhW5PhW5PhW5PhW5P
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAtZl0tZl0tZl0tZl0tZl0tZl0wMDAwMDA
+wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAzrugzrugzrugzrugzrugzrugwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAwMDAwMDA4c614c614c614c614c614c61wMDAwMDAwMDAwMDAwMDAwMDA
+wMDAwMDAwMDAwMDAAAAAAEAAdObaAgAAAAAAAAAAAOlwASiSDRGlTXEBAAAAAPBWJhhYrrQX
+MAAAAKEwAAAAAEAAwOvaAgAAAAAAAAAAAOlwAZCUDRGlTXEBAAAAAIi1chiocv8XMAAAAKEw
+AAAAAEAAnPPaAgAAAAAAAAAAAOlwAfiWDRGlTXEBAAAAAICN3xdIsrQXMAAAAKEwAAAAAEAA
+ZCDYAgAAAAAAAAAAAOlwATDschGlTXEBAAAAAAgR1RdQa4oRCQB9AA0ACgB9AA0ACgAA
+AA==</Icon>
+						<AppliesTo>
+							<Apply type="ToolboxItemImage"/>
+						</AppliesTo>
+					</Stereotype>
+				</Stereotypes>
+				<TaggedValueTypes/>
+			</Content>
+		</UMLProfile>
+	</UIToolboxes>
+	<DiagramProfile>
+		<UMLProfile profiletype="uml2">
+			<Documentation id="3836430C-3" name="User Interface - Simple" version="1.0" notes="Simple User Interface Modeling."/>
+			<Content>
+				<Stereotypes>
+					<Stereotype name="UserInterfaceSimple" alias="User Interface - Simple" notes="Simple User Interface Diagrams are used to visually mock-up interfaces with elements that represent dialogs and controls." cx="90" cy="70">
+						<AppliesTo>
+							<Apply type="Diagram_Custom">
+								<Property name="alias" value="Simple User Interface"/>
+								<Property name="diagramID" value="ui"/>
+								<Property name="toolbox" value="User Interface - Simple"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+				</Stereotypes>
+				<TaggedValueTypes/>
+			</Content>
+		</UMLProfile>
+	</DiagramProfile>
+	<ModelTemplates>
+		<Model name="Simple User Interface" description="" groupName="" location="simple-ui.xml" default="yes" icon="31" filter="Simple" />
+	</ModelTemplates>
+</MDG.Technology>

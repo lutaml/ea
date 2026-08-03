@@ -1,0 +1,28 @@
+<?xml  version='1.0' encoding='windows-1252' ?>
+<MDG.Technology version="1.0">
+  <Documentation id="Simulation" name="Simulation" notes="Provides Model Wizard patterns for Solver simulation" version="1" categoryList="Simulation" categoryMappings="Octave Solver Starters=Simulation;Octave Solver Examples=Simulation;Matlab Solver Starters=Simulation;Matlab Solver Examples=Simulation;"/>
+  <ModelTemplates>
+    <Model name="Octave Solver Activity Plot Simple" groupName="Octave Solver Starters" description="" location="solver-activity-plot-simple.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Octave Solver Activity Win32" groupName="Octave Solver Starters" description="" location="solver-activity-win32.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Octave Solver Activity Conditional Branch" groupName="Octave Solver Starters" description="" location="solver-activity-conditional-branch.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Octave Solver StateMachine Call in Transition" groupName="Octave Solver Starters" description="" location="solver-statemachine-call-in-transition.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Octave Solver StateMachine Plot EntryExit" groupName="Octave Solver Starters" description="" location="solver-statemachine-plot-entryexit.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Octave Solver StateMachine Win32" groupName="Octave Solver Starters" description="" location="solver-statemachine-win32.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Octave Solver StateMachine Simple Conditional" groupName="Octave Solver Starters" description="" location="solver-statemachine-simple-conditional.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Octave Solver 3D Surface Plot" groupName="Octave Solver Examples" description="" location="solver-3d-surface-plot.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Octave Solver Virus Scenario Model" groupName="Octave Solver Examples" description="" location="solver-virus-scenario-model.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Octave Solver Fast Fourier Transform" groupName="Octave Solver Examples" description="" location="solver-fast-fourier-transform.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Matlab Solver Activity Plot Simple" groupName="Matlab Solver Starters" description="" location="matlab-activity-plot-simple.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Matlab Solver Activity Win32" groupName="Matlab Solver Starters" description="" location="matlab-activity-win32.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Matlab Solver Activity Conditional Branch" groupName="Matlab Solver Starters" description="" location="matlab-activity-conditional-branch.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Matlab Solver StateMachine Call in Transition" groupName="Matlab Solver Starters" description="" location="matlab-statemachine-call-in-transition.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Matlab Solver StateMachine Plot EntryExit" groupName="Matlab Solver Starters" description="" location="matlab-statemachine-plot-entryexit.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Matlab Solver StateMachine Win32" groupName="Matlab Solver Starters" description="" location="matlab-statemachine-win32.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Matlab Solver StateMachine Simple Conditional" groupName="Matlab Solver Starters" description="" location="matlab-statemachine-simple-conditional.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Matlab Solver 3D Surface Plot" groupName="Matlab Solver Examples" description="" location="matlab-3d-surface-plot.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Matlab Solver Vaccine Trial" groupName="Matlab Solver Examples" description="" location="matlab-vaccine-trial.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Matlab Solver Lotto" groupName="Matlab Solver Examples" description="" location="matlab-lotto.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Matlab Solver Solar Panel Example" groupName="Matlab Solver Examples" description="" location="matlab-solar-panel-example.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Matlab Solver Fast Fourier Transform" groupName="Matlab Solver Examples" description="" location="matlab-fast-fourier-transform.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+  </ModelTemplates>
+</MDG.Technology>

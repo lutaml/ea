@@ -3,44 +3,47 @@
 module Ea
   module Svg
     module EaEmitter
-      # Computes the canvas dimensions for the root <svg> element.
-      # Union of all element image_bounds (the padded bounds EA
-      # uses for the visual box), with a 10 px outer margin.
-      # Emits cm dimensions (px / 28.346 at 72 DPI).
-      Canvas = Struct.new(:min_x, :min_y, :width, :height, keyword_init: true) do
-        PX_PER_CM = 28.3464567
+      # Canvas carries the diagram's computed pixel bounds plus the
+      # coordinate-translation helpers that align element (0,0) with
+      # EA's content origin (35, 40). Bound computation itself is
+      # delegated to BoundsCalculator (SRP).
+      #
+      # Promoted from a Struct.new + `do ... end` block to a proper
+      # class so the public API is explicit (attr_reader vs implicit
+      # struct fields) and behavior is named rather than implicit.
+      # Struct definitions with instance methods conflate "data" and
+      # "behavior" — a class keeps them separable while the values
+      # stay immutable.
+      class Canvas
+        # EA's diagram canvas places element (0,0) at SVG (35, 40) —
+        # the diagram's content origin inset from the canvas top-left
+        # corner. Reverse-engineered from reference SVG byte-diff
+        # against the maintenance diagram.
+        PX_PER_CM = 37.795275591
+        FRAME_INSET_LEFT = 35
+        FRAME_INSET_TOP = 40
 
-        def self.from(diagram)
-          points = []
-          (diagram.elements || []).each do |e|
-            b = e.image_bounds || e.bounds
-            next unless b
+        attr_reader :min_x, :min_y, :width, :height
 
-            points << [b.x, b.y]
-            points << [b.x + b.width, b.y + b.height]
-          end
-          (diagram.connectors || []).each do |c|
-            (c.waypoints || []).each do |wp|
-              next unless wp.position
+        def initialize(min_x:, min_y:, width:, height:)
+          @min_x = min_x
+          @min_y = min_y
+          @width = width
+          @height = height
+        end
 
-              points << [wp.position.x, wp.position.y]
-            end
-          end
-          return new(min_x: 0, min_y: 0, width: 1, height: 1) if points.empty?
-
-          xs = points.map(&:first)
-          ys = points.map(&:last)
-          margin = 10
-          new(
-            min_x: (xs.min || 0) - margin,
-            min_y: (ys.min || 0) - margin,
-            width: (xs.max - xs.min) + (2 * margin),
-            height: (ys.max - ys.min) + (2 * margin)
-          )
+        # Build a Canvas for a diagram by running the bound
+        # calculator. Defaults model_index to nil (no canvas-aware
+        # element bounds needed) for callers that only need a
+        # frame-size estimate.
+        def self.from(diagram, model_index: nil)
+          min_x, min_y, width, height =
+            BoundsCalculator.new(diagram, model_index: model_index).compute
+          new(min_x: min_x, min_y: min_y, width: width, height: height)
         end
 
         def view_box
-          "#{min_x} #{min_y} #{width} #{height}"
+          "0 0 #{width} #{height}"
         end
 
         def width_cm
@@ -49,6 +52,26 @@ module Ea
 
         def height_cm
           format_cm(height)
+        end
+
+        # Translate a content-space point into SVG-space. EA insets
+        # the content area from the canvas top-left by
+        # FRAME_INSET_LEFT/TOP.
+        def translate_x(x)
+          x - min_x + FRAME_INSET_LEFT
+        end
+
+        def translate_y(y)
+          y - min_y + FRAME_INSET_TOP
+        end
+
+        # Compact coordinate formatter. Integers lose the decimal
+        # point; floats keep up to two digits with trailing zeros
+        # stripped (matches EA's emitted numeric format).
+        def self.coord(value)
+          return value.to_i.to_s if value == value.to_i
+
+          format("%.2f", value).sub(/\.?0+$/, "")
         end
 
         private

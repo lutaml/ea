@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MDG.Technology version="1.0"><Documentation id="RT" name="RiskTaxonomy" version="1.0" alias="Risk Taxonomy" notes="MDG technology for Risk Taxonomy supports Open Group's Risk Taxonomy standard version 2.0" infoURI="https://www2.opengroup.org/ogsys/catalog/c13k"/><UMLProfiles><UMLProfile profiletype="uml2">
+			<Documentation id="2E6634B8-E" name="RiskTaxonomy" version="1.0" notes="Supports Open Group's Risk Taxonomy standard Version 2.0"/>
+			<Content>
+				<Stereotypes>
+					<Stereotype name="Affect" metatype="Affect" notes="" strictness="profile">
+						<AppliesTo>
+							<Apply type="Dependency">
+								<Property name="direction" value="Source -&gt; Destination"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="AssetLoss" metatype="AssetLoss" notes="" generalizes="Loss" baseStereotypes="Loss" strictness="profile">
+						<TaggedValues>
+							<Tag name="Liability/Value" type="string" description="" unit="" values="" default=""/>
+							<Tag name="Volume" type="string" description="" unit="" values="" default=""/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="Assumption" metatype="Assumption" notes="" strictness="profile">
+						<AppliesTo>
+							<Apply type="Artifact">
+								<Property name="_isVertical" value="False"/>
+								<Property name="_PType" value="0"/>
+								<Property name="fileName" value=""/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Rationale" type="" description="" unit="" values="" default=""/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="ContactFrequency" metatype="ContactFrequency" notes="" strictness="profile">
+						<AppliesTo>
+							<Apply type="Class">
+								<Property name="_isVertical" value="False"/>
+								<Property name="_PType" value="0"/>
+								<Property name="isActive" value=""/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="ConfidenceLevel" type="" description="" unit="" values="" default=""/>
+							<Tag name="MaximumLikelyValue" type="" description="" unit="" values="" default=""/>
+							<Tag name="MinimumLikelyValue" type="" description="" unit="" values="" default=""/>
+							<Tag name="MostLikelyValue" type="" description="" unit="" values="" default=""/>
+							<Tag name="Type" type="enumeration" description="" unit="" values="Random,Regular,Intentional" default=""/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="DenyAccess" metatype="DenyAccess" notes="" strictness="profile">
+						<AppliesTo>
+							<Apply type="Dependency">
+								<Property name="direction" value="Source -&gt; Destination"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="Destruction" metatype="Destruction" notes="Includes destruction, theft of a non-data asset, etc." strictness="profile">
+						<AppliesTo>
+							<Apply type="Dependency">
+								<Property name="direction" value="Source -&gt; Destination"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="Disclose" metatype="Disclose" notes="the threat agent illicitly discloses sensitive information." strictness="profile">
+						<AppliesTo>
+							<Apply type="Dependency">
+								<Property name="direction" value="Source -&gt; Destination"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="ExternalLoss" metatype="ExternalLoss" notes="" generalizes="Loss" baseStereotypes="Loss" strictness="profile">
+						<TaggedValues>
+							<Tag name="Factors" type="enumeration" description="" unit="" values="Event Detection,Legal and Regulatory,Competitors,Media,Other StakeHolders" default=""/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="Loss" metatype="Loss" notes="" strictness="profile">
+						<AppliesTo>
+							<Apply type="Event"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="LossForm" type="enumeration" description="" unit="" values="Productivity,Response,Replacement,Fines and Judgements,Competitive Advantage,Reputation" default=""/>
+							<Tag name="LossFactor" type="string" description="" unit="" values="" default=""/>
+							<Tag name="Sensitivity" type="enumeration" description="" unit="" values="Embarrasment/Reputation,Competitive Advantage,Legal/Regulatory,General" default=""/>
+							<Tag name="Cost" type="int" description="" unit="" values="" default=""/>
+							<Tag name="Criticality" type="enumeration" description="" unit="" values="Very High (VH),High (H),Moderate (M),Low (L),Very Low (VL)" default=""/>
+							<Tag name="LossType" type="enumeration" description="" unit="" values="Primary,Secondary" default=""/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="LossEventFrequency" metatype="LossEventFrequency" notes="A Loss Event Frequency (LEF) estimate would be based upon how frequently the loss event has or can be estimated to occur within a given timeframe." strictness="profile">
+						<AppliesTo>
+							<Apply type="Class">
+								<Property name="isActive" value=""/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="LossType" type="LossType" description="" unit="" values="" default=""/>
+							<Tag name="Rating" type="enumeration" description="" unit="" values="Very High (VH),High (H),Moderate (M),Low (L),Very Low (VL)" default=""/>
+							<Tag name="ProbableFrequency" type="int" description="" unit="" values="" default=""/>
+							<Tag name="TimePeriod" type="string" description="" unit="" values="" default=""/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="LossFlow" metatype="LossFlow" notes="" strictness="profile">
+						<AppliesTo>
+							<Apply type="Dependency">
+								<Property name="direction" value="Source -&gt; Destination"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="LossMagnitude" alias="LM" metatype="LossMagnitude" notes="" strictness="profile">
+						<AppliesTo>
+							<Apply type="Class">
+								<Property name="isActive" value=""/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="LossType" type="LossType" description="" unit="" values="" default=""/>
+							<Tag name="Rating" type="enumeration" description="" unit="" values="Severe (SV),High (H),Significant (Sg),Moderate (M),Low (L),Very Low (VL)" default=""/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="Misuse" metatype="Misuse" notes="unauthorized use of assets (e.g., identity theft, setting up an illegal distribution service on a compromised server, etc.)." strictness="profile">
+						<AppliesTo>
+							<Apply type="Dependency">
+								<Property name="direction" value="Source -&gt; Destination"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="Modify" metatype="Modify" notes="unauthorized changes to an asset." strictness="profile">
+						<AppliesTo>
+							<Apply type="Dependency">
+								<Property name="direction" value="Source -&gt; Destination"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="OrganizationalLoss" metatype="OrganizationalLoss" notes="" generalizes="Loss" baseStereotypes="Loss" strictness="profile">
+						<TaggedValues>
+							<Tag name="Factors" type="enumeration" description="" unit="" values="Timing,Due Deligence,Response,Detection" default=""/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="ProbabilityOfAction" metatype="ProbabilityOfAction" notes="" strictness="profile">
+						<AppliesTo>
+							<Apply type="Class">
+								<Property name="isActive" value=""/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="ConfidenceLevel" type="" description="" unit="" values="" default=""/>
+							<Tag name="MaximumLikelyValue" type="" description="" unit="" values="" default=""/>
+							<Tag name="MinimumLikelyValue" type="" description="" unit="" values="" default=""/>
+							<Tag name="MostLikelyValue" type="" description="" unit="" values="" default=""/>
+							<Tag name="LevelOfEffort" type="enumeration" description="" unit="" values="Very High (VH),High (H),Moderate (M),Low (L),Very Low (VL)" default=""/>
+							<Tag name="RiskOfdetection/Capture" type="enumeration" description="" unit="" values="Very High (VH),High (H),Moderate (M),Low (L),Very Low (VL)" default=""/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="ResistanceStrength" metatype="ResistanceStrength" notes="" strictness="profile">
+						<AppliesTo>
+							<Apply type="Class">
+								<Property name="_isVertical" value="False"/>
+								<Property name="_PType" value="0"/>
+								<Property name="isActive" value=""/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="ConfidenceLevel" type="" description="" unit="" values="" default=""/>
+							<Tag name="MaximumLikelyValue" type="" description="" unit="" values="" default=""/>
+							<Tag name="MinimumLikelyValue" type="" description="" unit="" values="" default=""/>
+							<Tag name="MostLikelyValue" type="" description="" unit="" values="" default=""/>
+							<Tag name="Rating" type="enumeration" description="" unit="" values="Very High (VH),High (H),Moderate (M),Low (L),Very Low (VL)" default=""/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="Risk" metatype="Risk" notes="" strictness="profile">
+						<AppliesTo>
+							<Apply type="Risk"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Rating" type="enumeration" description="" unit="" values="Very High (VH),High (H),Moderate (M),Low (L),Very Low (VL)" default=""/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="Risk Scenario" metatype="RiskScenario" notes="" strictness="profile">
+						<AppliesTo>
+							<Apply type="UseCase"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="RiskManagementDecision" metatype="RiskManagementDecision" notes="" strictness="profile">
+						<AppliesTo>
+							<Apply type="Artifact">
+								<Property name="fileName" value=""/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="Threat" metatype="Threat" notes="" strictness="profile">
+						<AppliesTo>
+							<Apply type="Class">
+								<Property name="isActive" value=""/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="ThreatScenario" type="enumeration" description="" unit="" values="Malicious,Error,Failure,Natural" default=""/>
+							<Tag name="ThreatType" type="enumeration" description="" unit="" values="External,Internal" default="External"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="ThreatAgent" metatype="ThreatAgent" notes="" strictness="profile">
+						<AppliesTo>
+							<Apply type="Actor">
+								<Property name="_isVertical" value="False"/>
+								<Property name="_PType" value="0"/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="AccessMethod" type="" description="" unit="" values="" default=""/>
+							<Tag name="DesiredVisibility" type="" description="" unit="" values="" default=""/>
+							<Tag name="Motive" type="" description="" unit="" values="" default=""/>
+							<Tag name="Objective" type="" description="" unit="" values="" default=""/>
+							<Tag name="PersonalRiskTolerance" type="" description="" unit="" values="" default=""/>
+							<Tag name="Resources" type="" description="" unit="" values="" default=""/>
+							<Tag name="SkillRating" type="" description="" unit="" values="" default=""/>
+							<Tag name="Sponsorship" type="" description="" unit="" values="" default=""/>
+							<Tag name="ThreatType" type="enumeration" description="" unit="" values="External,Internal" default=""/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="ThreatCapability" alias="TCap" metatype="ThreatCapability" notes="" strictness="profile">
+						<AppliesTo>
+							<Apply type="Class">
+								<Property name="_isVertical" value="False"/>
+								<Property name="_PType" value="0"/>
+								<Property name="isActive" value=""/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="ConfidenceLevel" type="" description="Commonly represented in Percentage" unit="" values="" default=""/>
+							<Tag name="MaximumLikelyValue" type="" description="the maximum level of skills an attacker might have" unit="" values="" default=""/>
+							<Tag name="MinimumLikelyValue" type="" description="The minimum level of skills that we expect an attacker to have" unit="" values="" default=""/>
+							<Tag name="MostLikelyValue" type="" description="the skill level of the most likely attacker" unit="" values="" default=""/>
+							<Tag name="Rating" type="enumeration" description="" unit="" values="Very High (VH),High (H),Moderate (M),Low (L),Very Low (VL)" default=""/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="ThreatCommunity" metatype="ThreatCommunity" notes="" strictness="profile">
+						<AppliesTo>
+							<Apply type="Package">
+								<Property name="_isVertical" value="False"/>
+								<Property name="_PType" value="0"/>
+								<Property name="URI" value=""/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="ThreatType" type="enumeration" description="" unit="" values="External,Internal" default=""/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="ThreatEventFrequency" metatype="ThreatEventFrequency" notes="" strictness="profile">
+						<AppliesTo>
+							<Apply type="Class">
+								<Property name="isActive" value=""/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Rating" type="enumeration" description="" unit="" values="Very High (VH),High (H),Moderate (M),Low (L),Very Low (VL)" default=""/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="ThreatResponse" metatype="ThreatResponse" notes="" strictness="profile">
+						<AppliesTo>
+							<Apply type="Activity">
+								<Property name="isReadOnly" value="false"/>
+								<Property name="isSingleExecution" value=""/>
+								<Property name="parameterName" value=""/>
+								<Property name="postcondition" value=""/>
+								<Property name="precondition" value=""/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="ResponsePercentage" type="int" description="" unit="" values="" default=""/>
+							<Tag name="ResponseType" type="enumeration" description="" unit="" values="Containment,Remediation,Recovery" default=""/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="UnauthorizedAccess" metatype="UnauthorizedAccess" notes="simple unauthorized access" strictness="profile">
+						<AppliesTo>
+							<Apply type="Dependency">
+								<Property name="direction" value="Source -&gt; Destination"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="Vulnerability" alias="Vuln" metatype="Vulnerability" notes="Vulnerability is the probability that an asset will be unable to resist the actions of a threat agent." strictness="profile">
+						<AppliesTo>
+							<Apply type="Class">
+								<Property name="isActive" value=""/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Rating" type="enumeration" description="" unit="" values="Very High (VH),High (H),Moderate (M),Low (L),Very Low (VL)" default=""/>
+						</TaggedValues>
+					</Stereotype>
+				</Stereotypes>
+				<TaggedValueTypes/>
+			</Content>
+		</UMLProfile>
+	</UMLProfiles><DiagramProfile><UMLProfile profiletype="uml2">
+			<Documentation id="F2605132-E" name="RiskTaxonomy" version="1.0" alias="RiskTaxonomy" notes="Supports visual modeling of Risk assesment."/>
+			<Content>
+				<Stereotypes>
+					<Stereotype name="RiskTaxonomy" alias="Risk Taxonomy" notes="Supports modeling Risk Assesment.">
+						<AppliesTo>
+							<Apply type="Diagram_Custom">
+								<Property name="alias" value="Risk Taxonomy"/>
+								<Property name="diagramID" value="RT"/>
+								<Property name="toolbox" value="RiskTaxonomy"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+				</Stereotypes>
+				<TaggedValueTypes/>
+			</Content>
+		</UMLProfile>
+	</DiagramProfile><UIToolboxes><UMLProfile profiletype="uml2">
+			<Documentation id="E539F1A7-3" name="RiskTaxonomy" version="1.0" notes="Elements and Relationships for modeling risk assesment."/>
+			<Content>
+				<Stereotypes>
+					<Stereotype name="RiskTaxonomyElements" alias="Risk Taxonomy Elements" notes="Elements for modeling risk assesment.">
+						<AppliesTo>
+							<Apply type="ToolboxPage"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="RiskTaxonomy::AssetLoss(UML::Event)" type="" description="" unit="" values="" default="Asset Loss"/>
+							<Tag name="RiskTaxonomy::Assumption(UML::Artifact)" type="" description="" unit="" values="" default="Assumption"/>
+							<Tag name="RiskTaxonomy::ContactFrequency(UML::Class)" type="" description="" unit="" values="" default="Contact Frequency"/>
+							<Tag name="RiskTaxonomy::ExternalLoss(UML::Event)" type="" description="" unit="" values="" default="External Loss"/>
+							<Tag name="RiskTaxonomy::Loss(UML::Event)" type="" description="" unit="" values="" default="Loss"/>
+							<Tag name="RiskTaxonomy::LossEventFrequency(UML::Class)" type="" description="" unit="" values="" default="Loss Event Frequency"/>
+							<Tag name="RiskTaxonomy::LossMagnitude(UML::Class)" type="" description="" unit="" values="" default="Loss Magnitude"/>
+							<Tag name="RiskTaxonomy::OrganizationalLoss(UML::Event)" type="" description="" unit="" values="" default="Organizational Loss"/>
+							<Tag name="RiskTaxonomy::ProbabilityOfAction(UML::Class)" type="" description="" unit="" values="" default="Probability Of Action"/>
+							<Tag name="RiskTaxonomy::ResistanceStrength(UML::Class)" type="" description="" unit="" values="" default="Resistance Strength"/>
+							<Tag name="RiskTaxonomy::Risk Scenario(UML::UseCase)" type="" description="" unit="" values="" default="Risk Scenario"/>
+							<Tag name="RiskTaxonomy::Risk(UML::Risk)" type="" description="" unit="" values="" default="Risk"/>
+							<Tag name="RiskTaxonomy::RiskManagementDecision(UML::Artifact)" type="" description="" unit="" values="" default="Risk Management Decision"/>
+							<Tag name="RiskTaxonomy::Threat(UML::Class)" type="" description="" unit="" values="" default="Threat"/>
+							<Tag name="RiskTaxonomy::ThreatAgent(UML::Actor)" type="" description="" unit="" values="" default="Threat Agent"/>
+							<Tag name="RiskTaxonomy::ThreatCapability(UML::Class)" type="" description="" unit="" values="" default="Threat Capability"/>
+							<Tag name="RiskTaxonomy::ThreatCommunity(UML::Package)" type="" description="" unit="" values="" default="Threat Community"/>
+							<Tag name="RiskTaxonomy::ThreatEventFrequency(UML::Class)" type="" description="" unit="" values="" default="Threat Event Frequency"/>
+							<Tag name="RiskTaxonomy::ThreatResponse(UML::Activity)" type="" description="" unit="" values="" default="Threat Response"/>
+							<Tag name="RiskTaxonomy::Vulnerability(UML::Class)" type="" description="" unit="" values="" default="Vulnerability"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="RiskTaxonomyRelationships" alias="Risk Taxonomy Relationships" notes="Relationships for modeling risk assesment.">
+						<AppliesTo>
+							<Apply type="ToolboxPage"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="RiskTaxonomy::Affect(UML::Dependency)" type="" description="" unit="" values="" default="Affect"/>
+							<Tag name="RiskTaxonomy::DenyAccess(UML::Dependency)" type="" description="" unit="" values="" default="Deny Access"/>
+							<Tag name="RiskTaxonomy::Destruction(UML::Dependency)" type="" description="" unit="" values="" default="Destruction"/>
+							<Tag name="RiskTaxonomy::Disclose(UML::Dependency)" type="" description="" unit="" values="" default="Disclose"/>
+							<Tag name="RiskTaxonomy::LossFlow(UML::Dependency)" type="" description="" unit="" values="" default="Loss Flow"/>
+							<Tag name="RiskTaxonomy::Misuse(UML::Dependency)" type="" description="" unit="" values="" default="Misuse"/>
+							<Tag name="RiskTaxonomy::Modify(UML::Dependency)" type="" description="" unit="" values="" default="Modify"/>
+							<Tag name="RiskTaxonomy::UnauthorizedAccess(UML::Dependency)" type="" description="" unit="" values="" default="UnauthorizedAccess"/>
+						</TaggedValues>
+					</Stereotype>
+				</Stereotypes>
+				<TaggedValueTypes/>
+			</Content>
+		</UMLProfile>
+	</UIToolboxes>
+  <ModelTemplates>
+    <Model name="Threat Community Pattern" description="" groupName="Patterns" location="rs1.0-threat-community-pattern.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+  </ModelTemplates>
+</MDG.Technology>

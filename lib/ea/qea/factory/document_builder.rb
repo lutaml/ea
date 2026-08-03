@@ -246,7 +246,7 @@ module Ea
         # @param valid_ids [Set<String>] Set of valid xmi_ids
         # @return [Boolean] True if valid or nil
         def check_association_end_valid?(assoc, attr, valid_ids)
-          value = assoc.public_send(attr)
+          value = association_end_xmi_id(assoc, attr)
           return true if value.nil?
 
           valid_ids.include?(value)
@@ -258,20 +258,34 @@ module Ea
         # @param valid_ids [Set<String>] Set of valid xmi_ids
         # @param warnings [Array<String>] Warning accumulator
         def add_invalid_end_warning(assoc, attr, valid_ids, warnings) # rubocop:disable Metrics/MethodLength
-          value = assoc.public_send(attr)
+          value = association_end_xmi_id(assoc, attr)
           return if value.nil?
 
           unless valid_ids.include?(value)
-            # Get the corresponding name attribute for better error messages
-            name_attr = attr.to_s.gsub("_xmi_id", "").to_sym
-            name_value = begin
-              assoc.public_send(name_attr)
-            rescue StandardError
-              nil
-            end
+            name_value = association_end_name(assoc, attr)
 
             warnings << "Association #{assoc.xmi_id} references " \
-                        "invalid #{name_attr}: #{name_value}"
+                        "invalid #{attr}: #{name_value}"
+          end
+        end
+
+        # Explicit dispatch for association end xmi_id attributes.
+        # Replaces dynamic `public_send(attr)` with a case statement
+        # so callers and types are statically known.
+        def association_end_xmi_id(assoc, attr)
+          case attr
+          when :member_end_xmi_id then assoc.member_end_xmi_id
+          when :owner_end_xmi_id then assoc.owner_end_xmi_id
+          else raise ArgumentError, "unknown association end: #{attr}"
+          end
+        end
+
+        # Explicit dispatch for association end display-name attributes.
+        def association_end_name(assoc, attr)
+          case attr
+          when :member_end_xmi_id then assoc.member_end
+          when :owner_end_xmi_id then assoc.owner_end
+          else raise ArgumentError, "unknown association end: #{attr}"
           end
         end
 

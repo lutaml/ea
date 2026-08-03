@@ -1,0 +1,14 @@
+id: default
+name: Default (element-stored values)
+font:
+  family:
+  size:
+  unit: px
+text:
+  color: "#000000"
+  weight_normal: 400
+  weight_bold: 700
+border:
+  color: "#000000"
+  stroke_width: 2
+fills: {}

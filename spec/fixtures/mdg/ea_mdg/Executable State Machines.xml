@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<MDG.Technology version="1.0">
+  <Documentation id="ESM" name="Executable State Machines" version="1" notes="Executable State Machines" categoryList="ESM" categoryMappings="Executable State Machine Patterns=ESM;Executable State Machine Case Studies=ESM;"/>
+  <ModelTemplates>
+    <Model name="Multiple Ways to Enter a State" groupName="Executable State Machine Patterns" location="es1.0-multiple-ways-to-enter-a-state.xml" icon="31" />
+    <Model name="Entry and Exit Points" groupName="Executable State Machine Patterns" location="es1.0-entry-and-exit-points.xml" icon="31" />
+    <Model name="History Pseudostate" groupName="Executable State Machine Patterns" location="es1.0-history-pseudostate.xml" icon="31" />
+    <Model name="Simulation Commands" groupName="Executable State Machine Patterns" location="es1.0-simulation-commands.xml" icon="31" />
+    <Model name="Deferred Event" groupName="Executable State Machine Patterns" location="es1.0-deferred-event.xml" icon="31" />
+    <Model name="Fork and Join" groupName="Executable State Machine Patterns" location="es1.0-fork-and-join.xml" icon="31" />
+	<Model name="Signal Attribute" groupName="Executable State Machine Patterns" location="es1.0-signal-attributes.xml" icon="31" />
+	<Model name="Event Macros" groupName="Executable State Machine Patterns" location="es1.0-event-macros.xml" icon="31" />
+    <Model name="CD Player" groupName="Executable State Machine Case Studies" location="es1.0-cd-player.xml" icon="31" />
+    <Model name="Regular Expression Parser" groupName="Executable State Machine Case Studies" location="es1.0-regular-expression-parser.xml" icon="31" />
+    <Model name="Auction Simple" groupName="Executable State Machine Case Studies" location="es1.0-auction-simple.xml" icon="31" />
+    <Model name="Auction Concurrent" groupName="Executable State Machine Case Studies" location="es1.0-auction-concurrent.xml" icon="31" />
+    <Model name="BnB Apartment Operation" groupName="Executable State Machine Case Studies" location="es1.0-bnb-apartment-operation.xml" icon="31" />
+    <Model name="Washing Machine" groupName="Executable State Machine Case Studies" location="es1.0-washing-machine.xml" icon="31" />
+  </ModelTemplates>
+</MDG.Technology>

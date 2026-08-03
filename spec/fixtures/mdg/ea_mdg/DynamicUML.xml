@@ -1,0 +1,13 @@
+<?xml  version='1.0' encoding='windows-1252' ?>
+<MDG.Technology version="1.0">
+  <Documentation id="Dynamic UML" name="Dynamic UML" notes="Provides Model Wizard patterns for Dynamic UML simulation" version="1" categoryList="Dynamic UML" categoryMappings="State Machine Simulation=Dynamic UML;Activity Diagram Simulation=Dynamic UML;Interaction Simulation=Dynamic UML;"/>
+  <ModelTemplates>
+    <Model name="Customer Login" groupName="State Machine Simulation" description="" location="dynamic-state-customer-login.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Music Player" groupName="State Machine Simulation" description="" location="dynamic-state-music-player.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Operating States" groupName="State Machine Simulation" description="" location="dynamic-state-operating-states.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Traffic Lights" groupName="State Machine Simulation" description="" location="dynamic-state-traffic-lights.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Order Processing" groupName="Activity Diagram Simulation" description="" location="dynamic-activity-order-processing.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Sending Signal" groupName="Activity Diagram Simulation" description="" location="dynamic-activity-sending-signal.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Close Account" groupName="Interaction Simulation" description="" location="dynamic-interaction-close-account.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+  </ModelTemplates>
+</MDG.Technology>

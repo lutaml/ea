@@ -1,0 +1,1449 @@
+<MDG.Technology version="1.0">
+  <Documentation id="BPMN1.1" name="BPMN 1.1" version="1.5.6" notes="Business process modeling using the BPMN 1.1 notation." trademark="BPMN is a trademark of Object Management Group, Inc. in the United States and/or other countries." alias="BPMN&#x2122; 1.1" infoURI="http://www.sparxsystems.com" supportURI="support@sparxsystems.com"/>
+  <UMLProfiles>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="0BE0C110-1" name="BPMN1.1" version="1.5" notes="MDG Technology for BPMN"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="Activity" metatype="Activity" notes="BPMN Activity object" cx="110" cy="60" strictness="profile">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAE5aeDwGDOQHxQQAAKobAAAHABEAc3RyLmRhdFVUDQAH7/SpS+/0qUvv9KlL
+              zVhtbxpHEJ6vrtT/gMgXIjl1jOPGVuQPbmSpkerIqi3lY4UBGxQwiBe3jpX/3ueZub3d5fbg
+              wARFpztub2eeed3ZWQ7kQGpyLm2ZSV8ecc/kSfbxrSnvMPdWjvA8xO8vuKbSk5aMpYv5Id76
+              8oCvz7j3ZIDxk4xkDgRikOpM6nKLbxPpYDTB6IPScnQHtL58w1sD+JSwL7/j+TqjmQKlBZ4Z
+              kFp49kDn5iYq5wE4E/BT94by8ybS4q89HXdXOYuod9BnoHZwnvIp5yvoF2lJ3Qd9Q/7EzFRu
+              8LzHqC6fMDrHeKIoUzzNsyOM6tCjrqhzYNaB9VqRzH9pq5rgOcJ9Kif5s2jR90ynFnip+Rxe
+              97GiXreqJ6VSh2uVbrzlPLSac4zyfcb5eWPOLxtzXlTifMD7MLfwI7g+Iw4X8nfOTf4ZKP7D
+              s5bThxHoyT/4OoD0e8zXkL81cLc1Y8jpM3hPrjCiljNYxmiPVZOO6vIKss/lEtJfBbozSnt6
+              h+sotjjUZqx5cKdy+dZBtnVVtx6knmG1OF2KlF9A19Gc9XRp+S4zQsnrrOWU9FjPJjLV0dpz
+              WRTnugaL2VadK8zuZVzOcv91miGkssdrH3rPSbYZ57/VPjnKMS0qKeyUfotyyiI1UOmsNU6m
+              jxeltIV53oIMUp6BlmNK81SP0WogauwXTxmvm2WU7rc8KlNdEVxzzDHve6u4tUTN/Qv2j8B1
+              k9nvsoD7B6spd5GOYlm9jT3odLlWXa4jXQYZcqzHZtq7OK9rx6VmGPeQT8IdxayihE0sGuZo
+              Y438bizjrvgRtg0VzfbFVbtidZvapci7sG2xd1rMQkp7o7vFSCVMhVVmMyutOxkL16ll9Mvt
+              +zV/72YVwH95Dt7jjsfsIT47tCeV0hfWFYvFSNjdcc9MxTdEjWVs4oEUfzUvhJyhJ6pEnRWd
+              EU3Zt15kOdPLsLYRUet0eIW7SciR0q+4Y4U9RLOCBFct10c/lOPI7iJ1vHsu0jMbeE5gBfg3
+              x2X3HPtzCP0elXaE2ffaR58GfbRd3C/aUn6i8HzszdMYB7hiaTzbOIwi7SqZIfc+TmZlWOYJ
+              d5KxFcOerQHfcWauFBMJO7mQitkb45WfwtwV2/lG+720duxX2Oc62nI70pTh+dCusrOcXc4P
+              6XnfD/MKM3lxl3Q0u87o7cXRajcttIhaFbuFXkN4kNGbCCu235EP5Tfcq+t1lQyhxdwl2bnc
+              q0d55ne53oTtZVmwPL7rnNlfrvE7PY1bHvJM/vNrfJL7+HQHPi7bTVOdRTGPWAVr8gc6i0uc
+              HGqaf28r5lpMlfKE1aRU7Yx5U76IKTbxxks0t8rP26K5W819JxSfU+N6WdaBO9o41sVauM3K
+              +SMrXbWanKKweryLFVJNx+X7RrmeZXnsKeJugBl7XKg58d7OeWb4appU/UrlvZ+tmvObW2ia
+              rbLRdW7VqH68neW9T/GU5aieA3nFVbnNNZyqg64KLvNRHBmiro5MWfxirJMtYrlcPt4aFrVb
+              HyvOAX8mrYk/ke4+9teq9ZUw3z1uAx1XbOFl5ocbtTBlH7HcWr5KrgL+i89sf0JV7co3SKOW
+              hmg+c7iLeZeSdqFrr0wSdXFrMk3jdlj7/S6MjZ21ef0PUEsBAhcLFAAAAAgATlp4PAYM5AfF
+              BAAAqhsAAAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+/0qUtQSwUGAAAAAAEAAQA+
+              AAAA+wQAAAAA
+            </Image>
+            <AppliesTo>
+              <Apply type="Activity">
+                <Property name="_defaultDiagramType" value="BPMN1.1::BPMN"/>
+                <Property name="isReadOnly" value="false"/>
+                <Property name="isSingleExecution" value="false"/>
+                <Property name="parameterName" value=""/>
+                <Property name="postcondition" value=""/>
+                <Property name="precondition" value=""/>
+                <Property name="_subtypeProperty" value="BPMN1.1::Activity::TaskType"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="ActivityType" type="enumeration" description="" unit="" values="Task,Sub-Process" default="Task"/>
+              <Tag name="AdHoc" type="boolean" description="" unit="" values="true,false" default="false"/>
+              <Tag name="AdHocCompletionCondition" type="string" description="" unit="" values="" default=""/>
+              <Tag name="AdHocOrdering" type="enumeration" description="" unit="" values="Sequential,Parallel" default="Parallel"/>
+              <Tag name="Assignments" type="Assignments" description="" unit="" values="" default=""/>
+              <Tag name="Categories" type="Categories" description="" unit="" values="" default=""/>
+              <Tag name="ComplexMI_FlowCondition" type="string" description="" unit="" values="" default=""/>
+              <Tag name="DiagramRef" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Implementation" type="enumeration" description="" unit="" values="Other,Web Service,Unspecified" default="Unspecified"/>
+              <Tag name="InputMaps" type="InputMaps" description="" unit="" values="" default=""/>
+              <Tag name="Instantiate" type="boolean" description="" unit="" values="true,false" default="false"/>
+              <Tag name="IORules" type="IORules" description="" unit="" values="" default=""/>
+              <Tag name="IsATransaction" type="boolean" description="" unit="" values="true,false" default="false"/>
+              <Tag name="IsCompensation" type="boolean" description="" unit="" values="true,false" default="false"/>
+              <Tag name="LoopCondition" type="string" description="" unit="" values="" default=""/>
+              <Tag name="LoopCounter" type="int" description="" unit="" values="" default=""/>
+              <Tag name="LoopMaximum" type="int" description="" unit="" values="" default=""/>
+              <Tag name="LoopTestTime" type="enumeration" description="" unit="" values="Before,After" default="After"/>
+              <Tag name="LoopType" type="enumeration" description="" unit="" values="None,Standard,MultiInstance" default="None"/>
+              <Tag name="MI_Condition" type="string" description="" unit="" values="" default=""/>
+              <Tag name="MI_FlowCondition" type="enumeration" description="" unit="" values="None,All,One,Complex" default="All"/>
+              <Tag name="MI_Ordering" type="enumeration" description="" unit="" values="Sequential,Parallel" default="Sequential"/>
+              <Tag name="OutputMaps" type="OutputMaps" description="" unit="" values="" default=""/>
+              <Tag name="Performers" type="Performers" description="" unit="" values="" default=""/>
+              <Tag name="Script" type="string" description="" unit="" values="" default=""/>
+              <Tag name="StartQuantity" type="StartQuantity" description="" unit="" values="" default="1"/>
+              <Tag name="Status" type="enumeration" description="" unit="" values="None,Active,Ready,Aborting,Cancelled,Aborted,Completing,Completed" default="None"/>
+              <Tag name="SubProcessType" type="enumeration" description="" unit="" values="Embedded,Reusable,Reference" default="Embedded"/>
+              <Tag name="TaskType" type="enumeration" description="" unit="" values="Service,Receive,Send,Script,User,Manual,Reference,None" default="None"/>
+              <Tag name="BPMNVersion" type="enumeration" description="" unit="" values="1.0,1.1" default="1.1"/>
+              <Tag name="CompletionQuantity" type="CompletionQuantity" description="" unit="" values="" default=""/>
+              <Tag name="InputSets" type="InputSets" description="" unit="" values="" default=""/>
+              <Tag name="OutputSets" type="OutputSets" description="" unit="" values="" default=""/>
+              <Tag name="WebServiceRef"/>
+              <Tag name="InMessageRef"/>
+              <Tag name="MessageRef"/>
+              <Tag name="OutMessageRef"/>
+              <Tag name="TaskRef"/>
+              <Tag name="ProcessRef"/>
+              <Tag name="SubProcessRef"/>
+              <Tag name="TransactionRef"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Assignment" metatype="Assignment" notes="" cx="90" cy="70" strictness="profile">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="_Tag" value="0"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Categories" type="Categories" description="" unit="" values="" default=""/>
+              <Tag name="FromLiteral" type="string" description="" unit="" values="" default=""/>
+              <Tag name="AssignTime" type="enumeration" description="" unit="" values="Start,End" default="Start"/>
+              <Tag name="FromType" type="enumeration" description="" unit="" values="Expression,Literal,Message" default="Literal"/>
+              <Tag name="ToPartRef" type="ToPartRef" description="" unit="" values="" default=""/>
+              <Tag name="FromPartRef" type="FromPartRef" description="" unit="" values="" default=""/>
+              <Tag name="ToMessageRef"/>
+              <Tag name="FromMessageRef"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Association" metatype="Association" notes="BPMN Association connector" cx="90" cy="70" strictness="profile">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAEpVejk8mGAvrAAAAE4BAAAHABEAc3RyLmRhdFVUDQAH/SctSf0nLUn9Jy1J
+              hZC9CsIwFIXPap9COlUopDqIIA6Cg4ObT6C2YKE1xURExHf3S2xxEeRwk3vv+WmJkdFYazlg
+              dVKtgzyn1UU5zExzFFNgVGihBDidUXWq4Fu6Gm2iJzWisz1f0t1RrCivq27ol1ETaourZLND
+              eeRulCklLWxLpoqtxec5W+ZBlWrSpxjwPyX4ux/+kOAi38T/r5i8HtETMja8yZ787/cGXUjM
+              eI8C5NSHf8XMN1BLAQIXCxQAAAAIAEpVejk8mGAvrAAAAE4BAAAHAAkAAAAAAAAAAAAAgAAA
+              AABzdHIuZGF0VVQFAAf9Jy1JUEsFBgAAAAABAAEAPgAAAOIAAAAAAA==
+            </Image>
+            <AppliesTo>
+              <Apply type="Dependency">
+                <Property name="direction" value="Unspecified"/>
+                <Property name="_lineStyle" value="orthogonalR"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Categories" type="Categories" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="BPELProcess" metatype="BPELProcess" notes="BPMN BusinessProcess object" cx="135" cy="75" strictness="profile">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgQCAgQCAgQCAgQCAgQCAg
+              QCAgQCAgQCAgQCAgQCAgQCAgwMDAwMDAwMDAgGBgwICAwICAwICAwICAwICAwICAwICAwICA
+              wICAwICAwICAgGBgQCAgwMDAwMDAgGBg////8Mqm8Mqm8MqmwICAgGBgQCAggGBggGBgQCAg
+              gGBgwICAQCAgwMDAwMDAgGBg////////8Mqm8Mqm8MqmQCAg8MqmQCAgQCAg8MqmQCAgwICA
+              QCAgwMDAwMDAgGBg////////////8Mqm8MqmpKCgQCAggGBggGBgQCAggGBgwICAQCAgwMDA
+              wMDAgGBg////////////////8Mqm8Mqm8MqmwICAwICAwICAwICAwICAQCAgwMDAwMDAgGBg
+              ////////////////////8Mqm8Mqm8MqmwICAwICAwICAwICAQCAgwMDAwMDAgGBgpKCg////
+              ////////////////8Mqm8Mqm8Mqm8Mqm8MqmpKCgQCAgwMDAwMDAwMDAgGBggGBggGBggGBg
+              gGBggGBggGBggGBggGBggGBggGBggGBgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAWQGAPFkBgDxZAYA8WQGAPFkBgDxZAYA8WQGAPFkBuEiLCQEAAACogTkB
+              AAAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAAABiANiwJAEAAAAAAAAAAAAAAAAAAAAAAAAAAAoA
+              AAAAAAAAAAAAAAhzGQEAAAAAAAAAAAAAAAAAAAAAgDxZAYA8WQEAAAAAgDxZAYA8WQGAPFkB
+              GMWHCYA8WQEBAHgAAAAAAAAAAAAAAAAAAAAAAAAAbQB4ZhwBAAAAAAAAZQD4OosJAAAA
+              AA==
+            </Icon>
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAMxUejkq6NPOYAAAAIIAAAAHABEAc3RyLmRhdFVUDQAHLictSS4nLUkuJy1J
+              NYw5CoRAFERfqqfoUGGg1UAEM0/gFRoVNHDBdjQQ7245OBTF394vi8VQ8cUzMNGpempWZpp3
+              +ojIyEWmkiWhIJQ8PY5FlGFU9/yHnHJAqwTHoY1j02X/Zf35iJhS3CXfUEsBAhcLFAAAAAgA
+              zFR6OSro085gAAAAggAAAAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUABy4nLUlQSwUG
+              AAAAAAEAAQA+AAAAlgAAAAAA
+            </Image>
+            <AppliesTo>
+              <Apply type="Activity">
+                <Property name="_defaultDiagramType" value="BPMN1.1::BPEL"/>
+                <Property name="_makeComposite" value="true"/>
+                <Property name="isReadOnly" value="false"/>
+                <Property name="isSingleExecution" value=""/>
+                <Property name="parameterName" value=""/>
+                <Property name="postcondition" value=""/>
+                <Property name="precondition" value=""/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="AdHoc" type="boolean" description="" unit="" values="true,false" default="false"/>
+              <Tag name="AdHocCompletionCondition" type="string" description="" unit="" values="" default=""/>
+              <Tag name="AdHocOrdering" type="enumeration" description="" unit="" values="Sequential,Parallel" default="Parallel"/>
+              <Tag name="Assignments" type="Assignments" description="" unit="" values="" default=""/>
+              <Tag name="Categories" type="Categories" description="" unit="" values="" default=""/>
+              <Tag name="Language" type="string" description="" unit="" values="" default=""/>
+              <Tag name="ProcessType" type="enumeration" description="" unit="" values="None,Private,Abstract,Collaboration" default="Private"/>
+              <Tag name="QueryLanguage" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Status" type="enumeration" description="" unit="" values="None,Active,Ready,Aborting,Cancelled,Aborted,Completing,Completed" default="None"/>
+              <Tag name="PoolPackageRef" type="PoolPackageRef" description="" unit="" values="" default=""/>
+              <Tag name="Performers" type="Performers" description="" unit="" values="" default=""/>
+              <Tag name="InputSets" type="InputSets" description="" unit="" values="" default=""/>
+              <Tag name="OutputSets" type="OutputSets" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="BusinessProcess" metatype="BusinessProcess" notes="BPMN BusinessProcess object" cx="135" cy="75" strictness="profile">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgQCAgQCAgQCAgQCAgQCAg
+              QCAgQCAgQCAgQCAgQCAgQCAgwMDAwMDAwMDAgGBgwICAwICAwICAwICAwICAwICAwICAwICA
+              wICAwICAwICAgGBgQCAgwMDAwMDAgGBg////8Mqm8Mqm8MqmwICAgGBgQCAggGBggGBgQCAg
+              gGBgwICAQCAgwMDAwMDAgGBg////////8Mqm8Mqm8MqmQCAg8MqmQCAgQCAg8MqmQCAgwICA
+              QCAgwMDAwMDAgGBg////////////8Mqm8MqmpKCgQCAggGBggGBgQCAggGBgwICAQCAgwMDA
+              wMDAgGBg////////////////8Mqm8Mqm8MqmwICAwICAwICAwICAwICAQCAgwMDAwMDAgGBg
+              ////////////////////8Mqm8Mqm8MqmwICAwICAwICAwICAQCAgwMDAwMDAgGBgpKCg////
+              ////////////////8Mqm8Mqm8Mqm8Mqm8MqmpKCgQCAgwMDAwMDAwMDAgGBggGBggGBggGBg
+              gGBggGBggGBggGBggGBggGBggGBggGBgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAWQGALFkBgCxZAYAsWQGALFkBgCxZAYAsWQGALFkB2PA7FAEAAABobzkB
+              AAAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAChPLwEAAAAAAAAAAAAAAAAAAAAAAAAAAAoA
+              AAAAAAAAAAAAAMB5LgEAAAAAAAAAAAAAAAAAAAAAgCxZAYAsWQEAAAAAgCxZAYAsWQGALFkB
+              SMc7FIAsWQEBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwVRwBAAAAAAAAAAA4Y00KAAAA
+              AA==
+            </Icon>
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAMxUejkq6NPOYAAAAIIAAAAHABEAc3RyLmRhdFVUDQAHLictSS4nLUkuJy1J
+              NYw5CoRAFERfqqfoUGGg1UAEM0/gFRoVNHDBdjQQ7245OBTF394vi8VQ8cUzMNGpempWZpp3
+              +ojIyEWmkiWhIJQ8PY5FlGFU9/yHnHJAqwTHoY1j02X/Zf35iJhS3CXfUEsBAhcLFAAAAAgA
+              zFR6OSro085gAAAAggAAAAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUABy4nLUlQSwUG
+              AAAAAAEAAQA+AAAAlgAAAAAA
+            </Image>
+            <AppliesTo>
+              <Apply type="Activity">
+                <Property name="_defaultDiagramType" value="BPMN1.1::BPMN"/>
+                <Property name="_makeComposite" value="true"/>
+                <Property name="isReadOnly" value="false"/>
+                <Property name="isSingleExecution" value=""/>
+                <Property name="parameterName" value=""/>
+                <Property name="postcondition" value=""/>
+                <Property name="precondition" value=""/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="AdHoc" type="boolean" description="" unit="" values="true,false" default="false"/>
+              <Tag name="AdHocCompletionCondition" type="string" description="" unit="" values="" default=""/>
+              <Tag name="AdHocOrdering" type="enumeration" description="" unit="" values="Sequential,Parallel" default="Parallel"/>
+              <Tag name="Assignments" type="Assignments" description="" unit="" values="" default=""/>
+              <Tag name="Categories" type="Categories" description="" unit="" values="" default=""/>
+              <Tag name="Language" type="string" description="" unit="" values="" default=""/>
+              <Tag name="ProcessType" type="enumeration" description="" unit="" values="None,Private,Abstract,Collaboration" default="None"/>
+              <Tag name="QueryLanguage" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Status" type="enumeration" description="" unit="" values="None,Active,Ready,Aborting,Cancelled,Aborted,Completing,Completed" default="None"/>
+              <Tag name="PoolPackageRef" type="PoolPackageRef" description="" unit="" values="" default=""/>
+              <Tag name="Performers" type="Performers" description="" unit="" values="" default=""/>
+              <Tag name="InputSets" type="InputSets" description="" unit="" values="" default=""/>
+              <Tag name="OutputSets" type="OutputSets" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Condition" metatype="Condition" notes="BPMN Rule object" cx="90" cy="70" strictness="profile">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="ConditionExpression" type="String" description="" unit="" values="" default=""/>
+              <Tag name="Categories" type="Categories" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="DataObject" metatype="DataObject" notes="BPMN DataObject object" cx="50" cy="80" strictness="profile">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAApIGj1lQgQpbwEAAAIEAAAHABEAc3RyLmRhdFVUDQAHNS12TDUtdkw1LXZM
+              jZLdSwJBFMXPq/0Vi76sIGhCEkUPURZBJaTQQ0Sk5ketH+xugkX/e787q7noGssyszNzzz33
+              nLlTVVWeLvWqmNFSV+96U49dhfO6GsRrOmY+5H/AF2kEcg7K04TVWFNOvxkFBeyXmumT/JiV
+              oc5UhHWmUH12IbtThx3pBXRA/hAGD5xHrAdmSm4auciJNKzVGKBxrC9Wvo5QXUF/TeUVW+Sc
+              hsxz53oEah2boHNBXszfx3uD3E2mKZj+RY33v5jd1754EsuHqeMhG7Gtz+6jn+FqQFbgemNx
+              8x+S/wF+F5tVYb+CXY0/rg/pN2J1u6wCrV9J5PJbqLCOGp9PB9t6ZDY/aU9j1PuOLYLPdBur
+              dW/psnqOP3IdN5/Ja6gwinCUHUdSteDyrVpMTlKzpHud605NVoZPapoHu83AKc3P4OmE+UK3
+              nLT5bnTFaOohgz3ty97jcHUHtrY3ne0hjzLjeaJiBxXXKNpwlvS8pcPGL1BLAQIXCxQAAAAI
+              AApIGj1lQgQpbwEAAAIEAAAHAAkAAAAAAAAAAAAAgAAAAABzdHIuZGF0VVQFAAc1LXZMUEsF
+              BgAAAAABAAEAPgAAAKUBAAAAAA==
+            </Image>
+            <AppliesTo>
+              <Apply type="Artifact">
+                <Property name="fileName" value=""/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Categories" type="Categories" description="" unit="" values="" default=""/>
+              <Tag name="ProduceAtCompletion" type="boolean" description="" unit="" values="true,false" default="true"/>
+              <Tag name="RequiredForStart" type="boolean" description="" unit="" values="true,false" default="true"/>
+              <Tag name="State" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="EndEvent" metatype="EndEvent" notes="BPMN EndEvent object" cx="30" cy="30" strictness="profile">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHm5ubmwcHBwcHBwcHBwebSUlJ
+              SUlJmwcHBwcHBwebSUmbm5ubSUmbBwcHBwcHSUmbCQkJCZtJSQcHBwcHm0mbCQkJCQkJm0mb
+              BwcHB5tJ7f///wkJCZtJmwcHBwebSe3/////CQmbSZsHBwcHm0nt/////wkJm0mbBwcHBwdJ
+              Se3///8Jm0lJBwcHBwcHm0lJ7e3tm0lJmwcHBwcHBwebSUlJSUlJmwcHBwcHBwcHBwebm5ub
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAPRZeDwsw0ePRgMAAOgRAAAHABEAc3RyLmRhdFVUDQAHXvSpS170qUte9KlL
+              zVhNb9pAEJ0rkfofEL0QKWqAkhCp6qGNkHpoo6iJ1DMfCbViCDKkVVvlv/e9GVZrm10DggNC
+              Novn+c3nDmOfy7nUpS8zGeP8Sx6wWsoZrnWkC1lL3uPcxvcJPgv5KQOZA1WXKVYJ0CfyD0cN
+              q+eVfIzVb/kInkxegP0gbxQxxvoRmET+YtUEcwuaeD4FhogFri+VfwaGBHcswUikRyyhIVPU
+              YCV1sgdJ8UkgIU9T2XnQev/t0fR5neURDOQZqJz6MvjzBPw6NmZvu4RwnCMwpTgyYCYqeVFE
+              JkO9yghlBdSpMjF+ZEvAVMfVL7BkIfc4T/CrId9x3wJcKRgb8LQhN7h/hqsNZeC9lqUaWE1v
+              BrnZ+Loj97XGZqTxXuePZchqoIa6edY6W+K7qVXGGugWMMwirTcMpWeKjGMuNMNdoOKYS3w2
+              8fQUU23PhVwBQ41xjPFQYxxj9hAZx5hf1BjHWHyqeSzO1fYwepv8CucrtJecbNv95PD71+cd
+              sBPcPdipPk1arE6LfifXNcLxuFzFI4RwlZBHhOK1W7QOFatrsE9XHWyhGhJh59gvbh10QF9J
+              oah0ERe/F+MIV9WHjdsuvpgdVb70sB+qfTFE70hroI97qSHbO+vmZS8ah+5qP+VzWu53jLbr
+              4yEE+cnhZ4IywjiK0Q7Z4bpqCBHy5Xgy9lVtfdo7X+xdjEU8Ctbd4gjrkJsRxX1czig7ZNUO
+              c304nlH3/5/nOJ58fdMr7K+c+vJZc/965GoKp2fLoDENYc8UWpmzTDg5W28mZ1ve4TAux+Kq
+              oDiZxqfO0FxqE6fxvOb+4VO9x2tyqxqeD/gM8Vlu4ecNVrSslZNvOwOHEH7+LdrDnIw0UjOw
+              pMJ536rVzlZT5ZkoVP/V86Cbv6pmItNV5jlE1dgvPtHQw/Xdfqiq8bmaa+z/gIn35P3nmV5y
+              9nUT0Xpe9quTcO/yiKrpzKPCPayYnTKqOKV5VKiHeOm2fWRfH6+28rE8lZdR4WebQ/toVX6I
+              +r/X+p2qD9QU2gGxeJq0/EYg3iEcfj0SJtk2ClW+8yi+QyHfUK10b1GsV7L38RmGnjM2d/JD
+              Y8JayFfCXHF8Y5OukG+xsz5hf/WxYrSonXr/A1BLAQIXCxQAAAAIAPRZeDwsw0ePRgMAAOgR
+              AAAHAAkAAAAAAAAAAAAAgAAAAABzdHIuZGF0VVQFAAde9KlLUEsFBgAAAAABAAEAPgAAAHwD
+              AAAAAA==
+            </Image>
+            <AppliesTo>
+              <Apply type="ObjectNode">
+                <Property name="isControlType" value="false"/>
+                <Property name="isException" value="false"/>
+                <Property name="isStream" value="false"/>
+                <Property name="objectState" value=""/>
+                <Property name="ordering" value="FIFO"/>
+                <Property name="_subtypeProperty" value="BPMN1.1::EndEvent::Result"/>
+              </Apply>
+              <Apply type="Event">
+                <Property name="_subtypeProperty" value="BPMN1.1::EndEvent::Result"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Assignments" type="Assignments" description="" unit="" values="" default=""/>
+              <Tag name="Categories" type="Categories" description="" unit="" values="" default=""/>
+              <Tag name="ErrorCode" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Implementation" type="enumeration" description="" unit="" values="Other,Web Service,Unspecified" default="Unspecified"/>
+              <Tag name="Result" type="enumeration" description="" unit="" values="None,Message,Error,Cancel,Compensation,Multiple,Terminate,Signal,Link" default="None"/>
+              <Tag name="Results" type="Results" description="" unit="" values="" default=""/>
+              <Tag name="BPMNVersion" type="enumeration" description="" unit="" values="1.0,1.1" default="1.1"/>
+              <Tag name="ActivityRef"/>
+              <Tag name="SignalRef"/>
+              <Tag name="WebServiceRef"/>
+              <Tag name="MessageRef"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Gateway" metatype="Gateway" notes="BPMN Gateway object" cx="42" cy="42" strictness="profile">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAF5aeDwvzun+twIAAPwPAAAHABEAc3RyLmRhdFVUDQAHF/WpSxf1qUsX9alL
+              7Vdbb1JBEJ5Xm/gfCL7QpJG2FDHxqVqiPrQ2StRXsBdP5JYDaKvpf/ebGbaH2c7CqW0TmhjC
+              nj0733w7tx2WOtWpQm+pS1M6pV94XtIWVnZpD5JtamDcwXMDnwl9h3wMXIUGmGU0xOofeorx
+              CZ1g/QyYjH5jVoP+Lph43KRXc8wEkqkwDLFXBp0pOGt0LuszkedzecG0KQyqP8W+uXCwxawb
+              ZAMa0U/hGWF1G3s3MQZpX6wNUpZsJaXsbxl9xfmIWJ89OnGsPoNWH5+uyNm/HPo/gI+xGsG6
+              5Os1HdMhHWG2Q8+xi8oysFWAfwfNCXUwnuOtGmW3gy9HuAoLq/SVPtBHPDnGyhLymeZTHctz
+              IHt0DdMiV5rtUDLKHuf0GSjOew8RCcwdrM/kbZHZcqcrqynRW0TaOmlIpniMcTafLcHxGOMs
+              n+JW8+m+Hl8umBmeQyO5up4Xs1RMvQy1xcohuNM5OpVazKDF8azh7Dahq2PrerQWxzpFRNU/
+              z0vNVqj9b4hIH9+c4k7Qk1XuLLlBaUdY5PP7QoGwWdLz24BlFhXnqCWneDnqBXAeyjvxhbTs
+              ub+rj2zdMuvVx70VKPXxJuq+ffRrP9R7eOqYqv1l3a5NF6ijvtRXJrG6Xee7qf+/C3p869EF
+              V2VrnTrimLi7XcLyESwKpzeMfNd4KfvGen6c7u/EvIE9A7xzJV4kTku5qitTcWWqrUyllaky
+              y6MZDTc2n0fzHWO8rstsaR7FxHXjZVLz9+/ZS9/tUjmzHT6u5NXV/xBevAdXma79mHzax+39
+              4JZ+LDtP61y/d+k/x8S/i13JGWdOI6bxKhMtz0cbK89DGymPw8bJ47BR8mKkEdqYR8n+v+Zb
+              U0885n/YjFQ/+f6bIW68E8fuE32RSPFehbVjQfEvG2Oeodb2ccNoY8bxYwzv+xdQSwECFwsU
+              AAAACABeWng8L87p/rcCAAD8DwAABwAJAAAAAAAAAAAAAIAAAAAAc3RyLmRhdFVUBQAHF/Wp
+              S1BLBQYAAAAAAQABAD4AAADtAgAAAAA=
+            </Image>
+            <AppliesTo>
+              <Apply type="Decision">
+                <Property name="isAssured" value="false"/>
+                <Property name="isDeterminate" value="false"/>
+                <Property name="_subtypeProperty" value="BPMN1.1::Gateway::GatewayType"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Assignments" type="Assignments" description="" unit="" values="" default=""/>
+              <Tag name="Categories" type="Categories" description="" unit="" values="" default=""/>
+              <Tag name="GatewayType" type="enumeration" description="" unit="" values="Exclusive,Complex,Inclusive,Parallel" default="Exclusive"/>
+              <Tag name="IncomingCondition" type="string" description="" unit="" values="" default=""/>
+              <Tag name="MarkerVisible" type="boolean" description="" unit="" values="true,false" default="false"/>
+              <Tag name="OutgoingCondition" type="string" description="" unit="" values="" default=""/>
+              <Tag name="ExclusiveType" type="enumeration" description="" unit="" values="Data,Event" default="Data"/>
+              <Tag name="Instantiate" type="boolean" description="" unit="" values="true,false" default="false"/>
+              <Tag name="BPMNVersion" type="enumeration" description="" unit="" values="1.0,1.1" default="1.1"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Group" metatype="Group" notes="BPMN Group object" cx="90" cy="70" strictness="profile">
+            <AppliesTo>
+              <Apply type="SysBoundary"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Category" type="string" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="IntermediateEvent" metatype="IntermediateEvent" notes="BPMN IntermediateEvent object" cx="30" cy="30" strictness="profile">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHSUlJSQcHBwcHBwcHBwebSQkJ
+              CQlJmwcHBwcHBwebmwkJCQkJCZubBwcHBwcHSQkJm0lJmwkJSQcHBwcHSQn/m5sJCZubCQlJ
+              BwcHB0n//5v//wkJSQkJSQcHBwdJ///t////CUkJCUkHBwcHSf//7e3//5ubCQlJBwcHBwdJ
+              ///t7ZubCQlJBwcHBwcHm5v//////wmbmwcHBwcHBwebSf///wlJmwcHBwcHBwcHBwdJSUlJ
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIANJZeDyydbCq7gMAAIYcAAAHABEAc3RyLmRhdFVUDQAHMfSpSzH0qUsx9KlL
+              7VlRT9swEL5XJu0/VN0LSGhQKCvTtIcNIW3S2CZA2nOhQCtKqNIytE38932fr17i1Hab4kpM
+              QlUcJ/783Z19d7bTLdmShnyWTCZyIbncoOzJQLrm+VB+omTbJlA70gZ6W3ZRtnB/gd9Y+sCO
+              gGqgbxc9M7z9g2sNtdtpew+1e3kPnlzugH0nLw2ih/olMAP5jdo6mLchieUGMESM0aeLXhPI
+              oE59oGzbhQzxG6BlbHqzLy/qVtwLdAZ5syyXYCBP17RTXg5tr4GfxVYlUoLK2ZS3/0pFEz8A
+              ewO4T2AayynKKzw1UcvRdoUfx7yJfk35CqkZnpvov2F66yiuAXEBPe5wz6Z6PNRmPzD2nRsL
+              yhJ0HpRr3cyVjrgyncHSG/SjF+RmnqijMrbkNS7lsiwFH2eOWtvRPUfPIa4cvNSL9hCRexHk
+              tD5Ca22N2rOXT96W8eSP8l2OMJYNo9/2Evqcmbf0zDyqk95j/rmGsbs1YzfBfd3ED727XULQ
+              mzjrimDbpsGFEHvGy9rAhBBv8ItzdAwipsee7ANBWSGEclBWCKF6EBdCqC2UFULoeMQ4dExj
+              enCs4rb45iWULerli1SxewtPYo7NgKUMG4fVTJE+ipWxqiWzyQTR0Zdvcoz3fTMG91PO8nOZ
+              12VOHZHlPDGbKZaV7UOE5T7NTGVr9XJVa07UtBGX8TyjCDd6U8VVHVtUj5gtHUR/3BZFdJ5s
+              jjhEjTL4vPqssKiH+hAh7/z/I0Y9pBP0obZZ73Yia9We8dTY6k5+cuwGEcrheqpPj9i667Nl
+              1d7Oq47HH6E+Fq6HfBvy+ipTvZVLmSxjKj9z2XRdD3P5pJV57E6U43ou9NcMDEPh+UR3Nlrq
+              js3NxlUPXmz3Gc+ks7vP0IzXm+07SOLOZ2RsW+UZxs5POg8qs6b2ovKuZ2RQv8BDG8vzxZLz
+              wn39znT+ZvPd08nB4dxbIFzvVSurtlX9054X1D9DKHu6qaJ8ObBoXTQPPtbG/YVstOeZEMo9
+              Ba7KxnJ2emwOODY5wJfrU+W+2JnYd2r2cczPji7Cx2E9L8zhIlKM7oEwZ/Dbnz1fdsX9VvQ8
+              1qnG+hRv+KXVt1uvfmOsN7Y2C4ZtWnQNdxEprP5ipFx7bE61chd5KsXaXbCVmdOvdM/fLXz6
+              lU9h7K375Huw90TXmVbJP0Mrqbb64p6noFAE2MwQRmgUzUe4sTo/znwc86PZtcW3gmvLoqu3
+              olPE/Il5E1pLQkz14lS5LGcqP1S2Zb7zuztR36wtt/Ksdl55uf/nke9MmBHsP3o6shwlzir1
+              5WydyA8zM7S6vDMdGRz/PRxOka+QNz4gexyixrmjdMr9C1BLAQIXCxQAAAAIANJZeDyydbCq
+              7gMAAIYcAAAHAAkAAAAAAAAAAAAAgAAAAABzdHIuZGF0VVQFAAcx9KlLUEsFBgAAAAABAAEA
+              PgAAACQEAAAAAA==
+            </Image>
+            <AppliesTo>
+              <Apply type="ObjectNode">
+                <Property name="isControlType" value="false"/>
+                <Property name="isException" value="false"/>
+                <Property name="isStream" value="false"/>
+                <Property name="objectState" value=""/>
+                <Property name="ordering" value="FIFO"/>
+                <Property name="_subtypeProperty" value="BPMN1.1::IntermediateEvent::Trigger"/>
+              </Apply>
+              <Apply type="Event">
+                <Property name="_subtypeProperty" value="BPMN1.1::IntermediateEvent::Trigger"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Assignments" type="Assignments" description="" unit="" values="" default=""/>
+              <Tag name="Categories" type="Categories" description="" unit="" values="" default=""/>
+              <Tag name="ErrorCode" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Implementation" type="enumeration" description="" unit="" values="Other,Web Service,Unspecified" default="Unspecified"/>
+              <Tag name="LinkId" type="LinkId" description="" unit="" values="" default=""/>
+              <Tag name="TimeCycle" type="string" description="" unit="" values="" default=""/>
+              <Tag name="TimeDate" type="TimeDate" description="" unit="" values="" default=""/>
+              <Tag name="Trigger" type="enumeration" description="" unit="" values="None,Message,Timer,Error,Cancel,Compensation,Link,Conditional,Multiple,Signal" default="Message"/>
+              <Tag name="BPMNVersion" type="enumeration" description="" unit="" values="1.0,1.1" default="1.1"/>
+              <Tag name="Triggers" type="Triggers" description="" unit="" values="" default=""/>
+              <Tag name="CatchOrThrow" type="enumeration" description="" unit="" values="Catch,Throw" default="Catch"/>
+              <Tag name="ActivityRef"/>
+              <Tag name="ConditionRef"/>
+              <Tag name="WebServiceRef"/>
+              <Tag name="SignalRef"/>
+			  <Tag name="TargetRef"/>
+              <Tag name="MessageRef"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Lane" metatype="Lane" notes="BPMN Lane object" cx="370" cy="175" strictness="profile">
+            <AppliesTo>
+              <Apply type="ActivityPartition">
+                <Property name="isDimension" value="false"/>
+                <Property name="isExternal" value="false"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Categories" type="Categories" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Message" metatype="Message" notes="BPMN Message object" cx="90" cy="70" strictness="profile">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Categories" type="Categories" description="" unit="" values="" default=""/>
+              <Tag name="ToRef"/>
+              <Tag name="FromRef"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="MessageFlow" metatype="MessageFlow" notes="BPMN MessageFlow connector" cx="90" cy="70" strictness="profile">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAgEBAgEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwGBg8Mqm
+              8MqmgEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwGBg8Pv/8MqmgEBA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwGBgwGBgwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAgEBAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAgEBAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwGBgwGBgwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwGBgwGBgwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwKCgwKCgwMDAwMDAwMDAgEBAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwKCgwKCgwMDAwMDAgEBAgEBAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAwKCggEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAgEBA8Pv/wKCggEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAgEBAwKCgwKCg8Pv/gEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAgEBA
+              gEBAgEBAgEBAgEBAdABpAG8AbgBJAEQAIAA9ACAAdABfAG8AcABlAHIAYQB0AGkAbwBuAC4A
+              TwBwAGUAcgBhAHQAaQBvAG4ASQBEACAAYQBuAGQAIAB0AF8AbwBwAGUAcgBhAHQAaQBvAG4A
+              cABhAHIAYQBtAHMALgBlAGEAXwBnAHUAaQBkAD0AdABfAHgAcgBlAGYALgBDAGwAaQBlAG4A
+              dAAAAKsAqwB+AQgGbCxZAZ8CAACfAgAAAAAAAHMAZQBsAGUAYwB0ACAAdABfAHgAcgBl
+              AA==
+            </Icon>
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIACBVejk4/VO/yAEAAKIIAAAHABEAc3RyLmRhdFVUDQAH7CctSewnLUnsJy1J
+              7VZNT8JAEJ2r/opGLpBAqBwao8HEhKgXExP8A0BBGqGQtqiE+N99b4bC2gpy4GTIZsuw83Y+
+              3sykbUpTPHmSoaRYPXmFdC8TmcmH1KFpSQDEJVZTfLmSc6xUxkDOgfRkCimSGKcr7DOcJjgf
+              YScqhbAT4ZnhThtWfKybHcgxnhEiGANtWEPGiMZ8hhpXG/pEFkBTT0QKOUPUjISZZLLEv6FU
+              5UI6ciddeYRUW9ubwsq73pgB4SNPf6PLbZjO4t3qv0r5Z5ASZS07iAMP0Xuw2zqIhRwd7GDC
+              9C4b5GIA/QS7rxwYZqRn5MlQCe4zdm4X99PWEB5DxDhTVjL5LEVURCzXCKsdERF8V8F/D96f
+              1S+ZSxRr9Yk08wFOImhjnNWxu5AX0Aw0tobc4tkRqy59MfYcX8OirxU2f/OOoKfYYZ8VzStN
+              jFWPOFqjfqvd1yXlPgmgD/7QN/YgivZzXstxjXBvovUlgjmQ0zfcKKPZr7RllTeGjsUPrTKH
+              udqyDJgle7uY6/GyKU9g6vTJaQKPOYG/T1s+i+58niZwX8/+xwm07mYE/AZg9KH2cF+7moxO
+              HYw7l9al7LuKvODd/CDXhe+PyuZdTV/fUEsBAhcLFAAAAAgAIFV6OTj9U7/IAQAAoggAAAcA
+              CQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB+wnLUlQSwUGAAAAAAEAAQA+AAAA/gEAAAAA
+            </Image>
+            <AppliesTo>
+              <Apply type="ControlFlow">
+                <Property name="_lineStyle" value="orthogonalR"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Categories" type="Categories" description="" unit="" values="" default=""/>
+              <Tag name="MessageRef"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Participant" metatype="Participant" notes="BPMN Participant object" cx="90" cy="70" strictness="profile">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Entity" type="String" description="" unit="" values="" default=""/>
+              <Tag name="Categories" type="Categories" description="" unit="" values="" default=""/>
+              <Tag name="ParticipantType" type="enumeration" description="" unit="" values="Role,Entity" default="Role"/>
+              <Tag name="Role" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Pool" metatype="Pool" notes="BPMN Pool object" cx="370" cy="175" strictness="profile">
+            <AppliesTo>
+              <Apply type="ActivityPartition">
+                <Property name="isDimension" value="false"/>
+                <Property name="isExternal" value="false"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Categories" type="Categories" description="" unit="" values="" default=""/>
+              <Tag name="PoolPackageRef" type="PoolPackageRef" description="" unit="" values="" default=""/>
+              <Tag name="MainPool" type="boolean" description="" unit="" values="true,false" default="false"/>
+              <Tag name="ProcessRef"/>
+              <Tag name="ParticipantRef"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Property" metatype="Property" notes="BPMN Property object" cx="70" cy="32" strictness="profile">
+            <AppliesTo>
+              <Apply type="Attribute"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Correlation" type="boolean" description="" unit="" values="true,false" default="false"/>
+              <Tag name="Categories" type="Categories" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="SequenceFlow" metatype="SequenceFlow" notes="BPMN SequenceFlow connector" cx="90" cy="70" strictness="profile">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBA
+              gEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAgEBAgEBA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAgEBAgEBAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAgEBAwGBgwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwGBggEBAwGBgwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwGBgwGBgwGBgwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwGBgwGBgwGBgwMDAwMDAwMDAgEBAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwGBgwKCgwGBgwMDAgEBAgEBAwMDAwMDAgGBg
+              gGBgwMDAwMDAgGBgwMDAwMDAwMDAwMDAwGBgwNzAgEBAwKCggEBAwMDAwMDAwMDAwMDAgGBg
+              wMDAgGBgwMDAwMDAwMDAwMDAwMDAgEBA8Pv/wKCggEBAwMDAwMDAgGBggGBggGBgwMDAgGBg
+              gGBgwMDAwMDAwMDAgEBAwKCgwKCg8Pv/gEBAwMDAwMDAgGBgwMDAwMDAwMDAgGBgwMDAwMDA
+              wMDAgEBAgEBAgEBAgEBAgEBAgEBAwMDAwMDAwMDAgGBggGBgwMDAgGBggGBggGBgwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+              AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+              AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+              AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+              AA==
+            </Icon>
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIADxVejkK8bRCHgIAAMoHAAAHABEAc3RyLmRhdFVUDQAH2ictSdonLUnaJy1J
+              zVTbTupAFF2vnq8g+AIJihhjjMYH9Xh58CQm8AOVizQCetriJcZ/d609rZ2WgvhgYiYzDN1r
+              39bes9too4YuhviPOc8Z+jwvMMEDntGibBf7xHS42tjBAf5wxRgjwCORNSS8RbjjPaHkjXuD
+              koj/R9yR3Qa0FfJMqFfDMXeHdo+WYMc8Q1ocE5+h91P0jHE57wOL0MkTaip6h4mZQ8AMAtzy
+              VIzCjOxb/ImKqK/YtX1c0ZYYGTDGB0Y0o+xlIaIy4jVF7JhciCvLfYhr8zSkrwbqmNrXgXlO
+              qP2YRix5Hc3Uepe5Ks/lureWhyxMKyw4PuRB1Zp5dWgwh8yLQ4wom3D1aUv1j4hxdZ0bIjJf
+              keUSFVBNz5LrB/kTt/KTyaZEP6XZNshPizuTTYy9TCZ2W9yrpFuePKtB2WOWUWByxaaq3xNf
+              xr4bV35fx0TOLc8hfqqvd9Mu+T19nUdURiz2dUjfDXZ3QO89nnfWm2fUkGZIndDuPeqK0zqr
+              Vsc5fTluYi6HULc2zabjuWj7xnKSBfXVq3npetXZxj+oN5Sz7+kvb31aWvSS+1Hd9as3Iw6L
+              0tX9rLWqp7XKnSuE37mLGFVgHStFG8tegNb6r0Box4g7fVaqKrN+1VULdeqcFpPKSqwzp7S+
+              x3gVm0ULHex9WZPiNPI5cnMjn7s19mI+m0+Rz+Z8gvvTxL0tMbhJxk5wicMKLqvezObnjHcx
+              fABQSwECFwsUAAAACAA8VXo5CvG0Qh4CAADKBwAABwAJAAAAAAAAAAAAAIAAAAAAc3RyLmRh
+              dFVUBQAH2ictSVBLBQYAAAAAAQABAD4AAABUAgAAAAA=
+            </Image>
+            <AppliesTo>
+              <Apply type="ControlFlow">
+                <Property name="_lineStyle" value="orthogonalR"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Assignments" type="Assignments" description="" unit="" values="" default=""/>
+              <Tag name="Categories" type="Categories" description="" unit="" values="" default=""/>
+              <Tag name="ConditionExpression" type="String" description="" unit="" values="" default=""/>
+              <Tag name="ConditionType" type="enumeration" description="" unit="" values="Expression,None,Default" default="None"/>
+              <Tag name="GatewayOrdering" type="Integer" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Signal" metatype="Signal" notes="" cx="90" cy="70" strictness="profile">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Categories" type="Categories" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="StartEvent" metatype="StartEvent" notes="BPMN StartEvent object" cx="30" cy="30" strictness="profile">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHSUlJSQcHBwcHBwcHBwebSQkJ
+              CQlJmwcHBwcHBwebmwkJ5OTkCZubBwcHBwcHSQkJCQkJ5OQJSQcHBwcHSQn///8JCQnk5AlJ
+              BwcHB0n//////wkJCeQJSQcHBwdJ////////CQnkCUkHBwcHSf////////8JCQlJBwcHBwdJ
+              ////////CQlJBwcHBwcHm5v//////wmbmwcHBwcHBwebSf///wlJmwcHBwcHBwcHBwdJSUlJ
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAMpZeDwqlUa8mwIAAGANAAAHABEAc3RyLmRhdFVUDQAHDfSpSw30qUsN9KlL
+              7VfBTttAEJ2rkfoPUXoJEioJUIpU9dBWSD0UhBqknoEEauE4kR1atRX/3vdm7Kw38Tqx8LGy
+              vJ54377ZeTs7WR/KofRkLEu5kQztufyUqaSwDvD+SE7QP5RjtCM893Dl8gPYBVA9mcGKgd6T
+              v7gjWPOifwLrl3wATyZPwL6XV4qYwL4HJpY/sAZgHsIT231giMhXc1nguQTbYNU3lQRXjJ5c
+              R3Msb87NPR06hb9NlnswkOdG++kvw2wfgV/HEh0D38ObL+jL5RrtA371YWXoe8A1hdWH975c
+              gifF7z7G7+to0yUCYgrmJzzTYhbP2rb1cAE7x0VMyM+dKpgCkahKXMWDon0np0VbqhFhFee6
+              6ks8q2iHoOaMyxBvVWu2IYR58TlCCrSJfqxvUmCSmtibMmc9SovhqCEG0+G0QQeL0keEcq5N
+              1nWl1gXGJ2DhfmEmbCpGtoHuV9POuG6Bn8Ev1cp0rzKrjXMkb3Abk+1oxxZh3ByefoOHI6qZ
+              wpZ6n1VUL8c/ryzub+5sx1xaESoQK9UnuUJcl7A4k2Gln+OWK5XvdCZzzH+gmlBLIjJEx7es
+              Q5mHYkRuTuFscoimjHKopqwKofzMcqi67HK9u2bYS2M82ynG443Z18W4ieo2Rts13eynz5rV
+              E7znnqJdX4e6qsGlNoZoUi/Msb1K+4g6jrY1sAutv2ntqqtZ/9V9ubrXeDMrfq/ru37Gaqdt
+              WQXDMe16evARXUT9Vb08ejGXdaLbfw9j4xk5xSk4Bt4q06gSUaj21qlq6p80aFbmUhhhum9H
+              +Ku7fWXqOLavvx9LXc23nl3rfVOW8Pa/W8h3K8z08svFVoxryazhfJlFY/muuWPfGW6FF4rj
+              V1JSIF/jTPIRJ5NzWMwveqfff1BLAQIXCxQAAAAIAMpZeDwqlUa8mwIAAGANAAAHAAkAAAAA
+              AAAAAAAAgAAAAABzdHIuZGF0VVQFAAcN9KlLUEsFBgAAAAABAAEAPgAAANECAAAAAA==
+            </Image>
+            <AppliesTo>
+              <Apply type="ObjectNode">
+                <Property name="isControlType" value="false"/>
+                <Property name="isException" value="false"/>
+                <Property name="isStream" value="false"/>
+                <Property name="objectState" value=""/>
+                <Property name="ordering" value="FIFO"/>
+                <Property name="_subtypeProperty" value="BPMN1.1::StartEvent::Trigger"/>
+              </Apply>
+              <Apply type="Event">
+                <Property name="_subtypeProperty" value="BPMN1.1::StartEvent::Trigger"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Assignments" type="Assignments" description="" unit="" values="" default=""/>
+              <Tag name="Categories" type="Categories" description="" unit="" values="" default=""/>
+              <Tag name="Implementation" type="enumeration" description="" unit="" values="Other,Web Service,Unspecified" default="Unspecified"/>
+              <Tag name="TimeCycle" type="string" description="" unit="" values="" default=""/>
+              <Tag name="TimeDate" type="TimeDate" description="" unit="" values="" default=""/>
+              <Tag name="Trigger" type="enumeration" description="" unit="" values="None,Message,Timer,Multiple,Signal,Conditional,Link" default="None"/>
+              <Tag name="Triggers" type="Triggers" description="" unit="" values="" default=""/>
+              <Tag name="BPMNVersion" type="enumeration" description="" unit="" values="1.0,1.1" default="1.1"/>
+              <Tag name="SignalRef"/>
+              <Tag name="WebServiceRef"/>
+              <Tag name="ConditionRef"/>
+              <Tag name="MessageRef"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="TextAnnotation" metatype="TextAnnotation" notes="BPMN TextAnnotation object" cx="100" cy="35" strictness="profile">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAgEBAgEBAgEBA
+              gEBAgEBAgEBAgEBAgEBAgEBAgEBAwMDAwMDAwMDAwMDAwMDAgEBAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAgEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAgEBAwMDAgGBgwMDAgGBgwMDAgGBggGBgwMDAgGBggGBgwMDAwMDAwMDA
+              wMDAwMDAgEBAwMDAwMDAgGBggGBgwMDAgGBggGBgwMDAgGBgwMDAwMDAwMDAwMDAwMDAwMDA
+              gEBAwMDAwMDAwMDAgGBgwMDAgGBggGBgwMDAgGBggGBgwMDAwMDAwMDAwMDAwMDAgEBAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAgEBAgEBAgEBA
+              gEBAgEBAgEBAgEBAgEBAgEBAgEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAWQEAAAAAAAAAAB8BAAAPAAAAAAAAAAAAAACALFkBAAAAAQD/CQkAAAAA
+              /////wAAAAAA/wkJwggAAPjAYQqALFkBgCxZASjhvwmALFkBgCxZAQAAAAAAAPA/AAAAAAAA
+              SUkAAAAAAAAAADIAAAAFAAAAAAAAAAEAAAABAAAAAAAAAAAAAAAAAAAANwMAAKn///+eAwAA
+              Xf///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaG85AQAAAAAAAAAAAAAA
+              AA==
+            </Icon>
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIABZVejkBqFnGcAEAAFwEAAAHABEAc3RyLmRhdFVUDQAHuyctSbsnLUm7Jy1J
+              nZNdSwJBFIbfW/0Vy3ajIJhBEYQXEUZXFm3QtbqbLpSKjn0Q/veeM7vTKhLVMszs2Tnve86Z
+              89FVV5EelOldTpeasxZII3aONFcH/YnOwPVYXR3rXE3WWjNQS5iRXpBysE19shveRqFPkd5A
+              9NlOK23AX3jMM9oPtBvuHZJZ6ivWmLsVvIwzLrG2cz2ppRtYa+IdacpfrHvup3hyuuZu4qOY
+              ct9hB3+x2qyojK1BtAu9cu/4tnTKizrsdunLIjMrQd9D9zdE8f0JVfjZx2yJKgO39lmsF9/v
+              2jpxhaxbBVPi21CXquKW+WWp2834o891YeN/zGFtZlKbOThgJp6Z7DFDtgrOFawh/Teg8wLb
+              +LvTsO/LtKGySzoyo4+tt01KmY2c08Hu+xqEGh0iZ5yh14t5qvBVvZyKSY6+4971b3Zy2XSP
+              0Zv9XNZ/aWkx9pNrNsLkNXSHf7PkqO7Kv9FemfrcHJGLW5+NBLnKpsWz1RdQSwECFwsUAAAA
+              CAAWVXo5AahZxnABAABcBAAABwAJAAAAAAAAAAAAAIAAAAAAc3RyLmRhdFVUBQAHuyctSVBL
+              BQYAAAAAAQABAD4AAACmAQAAAAA=
+            </Image>
+            <AppliesTo>
+              <Apply type="Artifact">
+                <Property name="fileName" value=""/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Categories" type="Categories" description="" unit="" values="" default=""/>
+              <Tag name="RightFacing" type="boolean" description="" unit="" values="true,false" default="false"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Transaction" metatype="Transaction" notes="BPMN Transaction object" cx="90" cy="70" strictness="profile">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="TransactionMethod" type="enumeration" description="" unit="" values="Compensate,Store,Image" default="Compensate"/>
+              <Tag name="Categories" type="Categories" description="" unit="" values="" default=""/>
+              <Tag name="TransactionProtocol" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="WebService" alias="Web Service" metatype="WebService" notes="BPMN WebService object" cx="90" cy="70" strictness="profile">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Categories" type="Categories" description="" unit="" values="" default=""/>
+              <Tag name="Interface" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Operation" type="string" description="" unit="" values="" default=""/>
+              <Tag name="ParticipantRef"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes>
+          <TaggedValueType property="WebServiceRef" description="" notes="Type=RefGUID;Stereotypes=WebService;BaseStereotype=Activity,EndEvent,IntermediateEvent,StartEvent;"/>
+          <TaggedValueType property="InMessageRef" description="" notes="Type=RefGUID;Stereotypes=Message;BaseStereotype=Activity;"/>
+          <TaggedValueType property="MessageRef" description="" notes="Type=RefGUID;Stereotypes=Message;BaseStereotype=Activity,EndEvent,IntermediateEvent,MessageFlow,StartEvent;"/>
+          <TaggedValueType property="OutMessageRef" description="" notes="Type=RefGUID;Stereotypes=Message;BaseStereotype=Activity;"/>
+          <TaggedValueType property="TaskRef" description="" notes="Type=RefGUID;Stereotypes=Activity;BaseStereotype=Activity;"/>
+          <TaggedValueType property="ProcessRef" description="" notes="Type=RefGUID;Stereotypes=BusinessProcess;BaseStereotype=Activity,Pool;"/>
+          <TaggedValueType property="SubProcessRef" description="" notes="Type=RefGUID;Stereotypes=Activity;BaseStereotype=Activity;"/>
+          <TaggedValueType property="TransactionRef" description="" notes="Type=RefGUID;Stereotypes=Transaction;BaseStereotype=Activity;"/>
+          <TaggedValueType property="ToMessageRef" description="" notes="Type=RefGUID;Stereotypes=Message;BaseStereotype=Assignment;"/>
+          <TaggedValueType property="FromMessageRef" description="" notes="Type=RefGUID;Stereotypes=Message;BaseStereotype=Assignment;"/>
+          <TaggedValueType property="ActivityRef" description="" notes="Type=RefGUID;Stereotypes=Activity;BaseStereotype=EndEvent,IntermediateEvent;"/>
+          <TaggedValueType property="SignalRef" description="" notes="Type=RefGUID;Stereotypes=Signal;BaseStereotype=EndEvent,IntermediateEvent,StartEvent;"/>
+          <TaggedValueType property="ConditionRef" description="" notes="Type=RefGUID;Stereotypes=Condition;BaseStereotype=IntermediateEvent,StartEvent;"/>
+          <TaggedValueType property="ToRef" description="" notes="Type=RefGUID;Stereotypes=Participant;BaseStereotype=Message;"/>
+          <TaggedValueType property="FromRef" description="" notes="Type=RefGUID;Stereotypes=Participant;BaseStereotype=Message;"/>
+          <TaggedValueType property="ParticipantRef" description="" notes="Type=RefGUID;Stereotypes=Participant;BaseStereotype=Pool,WebService;"/>
+          <TaggedValueType property="TargetRef" description="" notes="Type=RefGUID;Stereotypes=Activity;BaseStereotype=IntermediateEvent;"/>
+        </TaggedValueTypes>
+        <QuickLink data="//Source Element Type,Source ST filter,Target Element Type,Target ST Filter,Diagram Filter,New Element Type,New Element ST,New Link Type,New Link ST,New Link Direction,New Link Caption,New Link &amp; Element Caption,Create Link,Create Element,Disallow Self connector,Exclusive to ST Filter + No inherit from metatype,Menu Group,Complexity Level,Target Must Be Parent,Embed element,Preceeds Separator LEAF,Preceeds Separator GROUP,DUMMZ COLUMN&#xA;Activity,Activity,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,MessageFlow,to,Message Flow to,,TRUE,,TRUE,TRUE,,0,,,,,&#xA;Activity,Activity,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,MessageFlow,from,Message Flow from,,TRUE,,TRUE,TRUE,,0,,,TRUE,,&#xA;ActivityPartition,Pool,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,MessageFlow,to,Message Flow to,,TRUE,,TRUE,TRUE,,0,,,,,&#xA;ActivityPartition,Pool,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,MessageFlow,from,Message Flow from,,TRUE,,TRUE,TRUE,,0,,,TRUE,,&#xA;Event,StartEvent,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,MessageFlow,from,Message Flow from,,TRUE,,TRUE,TRUE,,0,,,TRUE,,&#xA;Event,IntermediateEvent,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,MessageFlow,to,Message Flow to,,TRUE,,TRUE,TRUE,,0,,,,,&#xA;Event,IntermediateEvent,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,MessageFlow,from,Message Flow from,,TRUE,,TRUE,TRUE,,0,,,TRUE,,&#xA;Event,EndEvent,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,MessageFlow,to,Message Flow to,,TRUE,,TRUE,TRUE,,0,,,TRUE,,&#xA;ObjectNode,StartEvent,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,MessageFlow,from,Message Flow from,,TRUE,,TRUE,TRUE,,0,,,TRUE,,&#xA;ObjectNode,IntermediateEvent,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,MessageFlow,to,Message Flow to,,TRUE,,TRUE,TRUE,,0,,,,,&#xA;ObjectNode,IntermediateEvent,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,MessageFlow,from,Message Flow from,,TRUE,,TRUE,TRUE,,0,,,TRUE,,&#xA;ObjectNode,EndEvent,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,MessageFlow,to,Message Flow to,,TRUE,,TRUE,TRUE,,0,,,TRUE,,&#xA;Artifact,DataObject,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,Dependency,Association,undirected,Association,,TRUE,,TRUE,TRUE,,0,,,,,&#xA;Artifact,DataObject,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,Dependency,Association,directed,Association to,,TRUE,,TRUE,TRUE,,0,,,TRUE,,&#xA;Artifact,TextAnnotation,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,Dependency,Association,undirected,Association,,TRUE,,TRUE,TRUE,,0,,,,,&#xA;Artifact,TextAnnotation,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,Dependency,Association,directed,Association to,,TRUE,,TRUE,TRUE,,0,,,TRUE,,&#xA;Event,StartEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,SequenceFlow,to,Sequence Flow to,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,Activity,0,,,,,&#xA;Event,StartEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,MessageFlow,from,Message Flow from,Message Flow from,TRUE,TRUE,TRUE,TRUE,Activity,0,,,,,&#xA;Event,StartEvent,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,Decision,Gateway,ControlFlow,SequenceFlow,to,Sequence Flow to,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,Gateway,0,,,,,&#xA;Event,StartEvent,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,ControlFlow,SequenceFlow,to,Sequence Flow to,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,,,,&#xA;Event,StartEvent,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,EndEvent,ControlFlow,SequenceFlow,to,Sequence Flow to,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,EndEvent,0,,,,,&#xA;Event,StartEvent,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,ActivityPartition,Pool,ControlFlow,MessageFlow,from,Message Flow from,Message Flow from,TRUE,TRUE,TRUE,TRUE,Pool,0,,,,,&#xA;Event,StartEvent,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,EndEvent,ControlFlow,MessageFlow,from,Message Flow from,Message Flow from,TRUE,TRUE,TRUE,TRUE,EndEvent,0,,,,,&#xA;Event,StartEvent,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,DataObject,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,DataObject,0,,,,,&#xA;Event,StartEvent,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,TextAnnotation,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,TextAnnotation,0,,,,,&#xA;Event,StartEvent,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,SequenceFlow,to,Sequence Flow to,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;Event,StartEvent,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,SequenceFlow,to,Sequence Flow to,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;Event,StartEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,StartEvent,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,StartEvent (edge),0,,TRUE,,,&#xA;Event,StartEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,IntermediateEvent,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,IntermediateEvent (edge),0,,TRUE,,,&#xA;Event,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,SequenceFlow,to,Sequence Flow to,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,Activity,0,,,,,&#xA;Event,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,SequenceFlow,from,Sequence Flow from,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,Activity,0,,,,,&#xA;Event,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,MessageFlow,from,Message Flow from,Message Flow from,TRUE,TRUE,TRUE,TRUE,Activity,0,,,,,&#xA;Event,IntermediateEvent,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,Decision,Gateway,ControlFlow,SequenceFlow,to,Sequence Flow to,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,Gateway,0,,,,,&#xA;Event,IntermediateEvent,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,Decision,Gateway,ControlFlow,SequenceFlow,from,Sequence Flow from,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,Gateway,0,,,,,&#xA;Event,IntermediateEvent,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,StartEvent,ControlFlow,SequenceFlow,from,Sequence Flow from,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,StartEvent,0,,,,,&#xA;Event,IntermediateEvent,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,ControlFlow,SequenceFlow,to,Sequence Flow to,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,,,,&#xA;Event,IntermediateEvent,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,ControlFlow,SequenceFlow,from,Sequence Flow from,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,,,,&#xA;Event,IntermediateEvent,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,EndEvent,ControlFlow,SequenceFlow,to,Sequence Flow to,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,EndEvent,0,,,,,&#xA;Event,IntermediateEvent,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,EndEvent,ControlFlow,MessageFlow,from,Message Flow from,Message Flow from,TRUE,TRUE,TRUE,TRUE,EndEvent,0,,,,,&#xA;Event,IntermediateEvent,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,ActivityPartition,Pool,ControlFlow,MessageFlow,from,Message Flow from,Message Flow from,TRUE,TRUE,TRUE,TRUE,Pool,0,,,,,&#xA;Event,IntermediateEvent,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,DataObject,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,DataObject,0,,,,,&#xA;Event,IntermediateEvent,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,TextAnnotation,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,TextAnnotation,0,,,TRUE,,&#xA;Event,IntermediateEvent,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,SequenceFlow,to,Sequence Flow to,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;Event,IntermediateEvent,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,SequenceFlow,to,Sequence Flow to,,TRUE,,TRUE,TRUE,,0,,TRUE,,,&#xA;Event,IntermediateEvent,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,SequenceFlow,from,Sequence Flow from,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;Event,IntermediateEvent,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,SequenceFlow,from,Sequence Flow from,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;Event,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,StartEvent,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,StartEvent (edge),0,,TRUE,,,&#xA;Event,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,IntermediateEvent,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,IntermediateEvent (edge),0,,TRUE,,,&#xA;Event,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,IntermediateEvent,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,IntermediateEvent (edge),0,,TRUE,,,&#xA;Event,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,EndEvent,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,EndEvent (edge),0,,TRUE,TRUE,,&#xA;Event,EndEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,SequenceFlow,from,Sequence Flow from,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,Activity,0,,,,,&#xA;Event,EndEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,MessageFlow,to,Message Flow to,Message Flow to,TRUE,TRUE,TRUE,TRUE,Activity,0,,,,,&#xA;Event,EndEvent,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,Decision,Gateway,ControlFlow,SequenceFlow,from,Sequence Flow from,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,Gateway,0,,,,,&#xA;Event,EndEvent,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,StartEvent,ControlFlow,MessageFlow,to,Message Flow to,Message Flow to,TRUE,TRUE,TRUE,TRUE,StartEvent,0,,,,,&#xA;Event,EndEvent,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,StartEvent,ControlFlow,SequenceFlow,from,Sequence Flow from,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,StartEvent,0,,,,,&#xA;Event,EndEvent,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,ControlFlow,SequenceFlow,from,Sequence Flow from,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,,,,&#xA;Event,EndEvent,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,ControlFlow,MessageFlow,to,Message Flow to,Message Flow to,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,,,,&#xA;Event,EndEvent,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,ActivityPartition,Pool,ControlFlow,MessageFlow,to,Message Flow to,Message Flow to,TRUE,TRUE,TRUE,TRUE,Pool,0,,,,,&#xA;Event,EndEvent,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,DataObject,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,DataObject,0,,,,,&#xA;Event,EndEvent,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,TextAnnotation,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,TextAnnotation,0,,,TRUE,,&#xA;Event,EndEvent,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,SequenceFlow,from,Sequence Flow from,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;Event,EndEvent,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,SequenceFlow,from,Sequence Flow from,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;Event,EndEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,IntermediateEvent,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,IntermediateEvent (edge),0,,TRUE,,,&#xA;Event,EndEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,EndEvent,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,EndEvent (edge),0,,TRUE,TRUE,,&#xA;Activity,Activity,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,SequenceFlow,to,Sequence Flow to,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,Activity,0,,,,,&#xA;Activity,Activity,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,SequenceFlow,from,Sequence Flow from,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,Activity,0,,,,,&#xA;Activity,Activity,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,MessageFlow,to,Message Flow to,Message Flow to,TRUE,TRUE,TRUE,TRUE,Activity,0,,,,,&#xA;Activity,Activity,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,MessageFlow,from,Message Flow from,Message Flow from,TRUE,TRUE,TRUE,TRUE,Activity,0,,,TRUE,TRUE,&#xA;Activity,Activity,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,Decision,Gateway,ControlFlow,SequenceFlow,to,Sequence Flow to,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,Gateway,0,,,,,&#xA;Activity,Activity,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,Decision,Gateway,ControlFlow,SequenceFlow,from,Sequence Flow from,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,Gateway,0,,,,,&#xA;Activity,Activity,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,StartEvent,ControlFlow,SequenceFlow,from,Sequence Flow from,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,StartEvent,0,,,,,&#xA;Activity,Activity,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,StartEvent,ControlFlow,MessageFlow,to,Message Flow to,Message Flow to,TRUE,TRUE,TRUE,TRUE,StartEvent,0,,,,,&#xA;Activity,Activity,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,ControlFlow,SequenceFlow,to,Sequence Flow to,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,,,,&#xA;Activity,Activity,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,ControlFlow,SequenceFlow,from,Sequence Flow from,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,,,,&#xA;Activity,Activity,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,ControlFlow,MessageFlow,to,Message Flow to,Message Flow to,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,,,,&#xA;Activity,Activity,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,EndEvent,ControlFlow,SequenceFlow,to,Sequence Flow to,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,EndEvent,0,,,,,&#xA;Activity,Activity,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,EndEvent,ControlFlow,MessageFlow,from,Message Flow from,Message Flow from,TRUE,TRUE,TRUE,TRUE,EndEvent,0,,,,,&#xA;Activity,Activity,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,ActivityPartition,Pool,ControlFlow,MessageFlow,to,Message Flow to,Message Flow to,TRUE,TRUE,TRUE,TRUE,Pool,0,,,,,&#xA;Activity,Activity,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,ActivityPartition,Pool,ControlFlow,MessageFlow,from,Message Flow from,Message Flow from,TRUE,TRUE,TRUE,TRUE,Pool,0,,,,,&#xA;Activity,Activity,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,DataObject,Dependency,Association,directed,Association to,Association to,TRUE,TRUE,TRUE,TRUE,DataObject,0,,,,,&#xA;Activity,Activity,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,DataObject,Dependency,Association,from,Association from,Association from,TRUE,TRUE,TRUE,TRUE,DataObject,0,,,,,&#xA;Activity,Activity,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,TextAnnotation,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,TextAnnotation,0,,,TRUE,,&#xA;Activity,Activity,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,SequenceFlow,to,Sequence Flow to,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;Activity,Activity,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,SequenceFlow,to,Sequence Flow to,,TRUE,,TRUE,TRUE,,0,,TRUE,,,&#xA;Activity,Activity,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,SequenceFlow,from,Sequence Flow from,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;Activity,Activity,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,SequenceFlow,from,Sequence Flow from,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;Activity,Activity,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,StartEvent,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,StartEvent (edge),0,,TRUE,,,&#xA;Activity,Activity,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,IntermediateEvent,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,IntermediateEvent (edge),0,,TRUE,,,&#xA;Activity,Activity,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,IntermediateEvent,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,IntermediateEvent (edge),0,,TRUE,,,&#xA;Activity,Activity,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,EndEvent,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,EndEvent (edge),0,,TRUE,TRUE,,&#xA;Decision,Gateway,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,SequenceFlow,to,Sequence Flow to,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,Activity,0,,,,,&#xA;Decision,Gateway,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,SequenceFlow,from,Sequence Flow from,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,Activity,0,,,,,&#xA;Decision,Gateway,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,Decision,Gateway,ControlFlow,SequenceFlow,to,Sequence Flow to,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,Gateway,0,,,,,&#xA;Decision,Gateway,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,Decision,Gateway,ControlFlow,SequenceFlow,from,Sequence Flow from,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,Gateway,0,,,,,&#xA;Decision,Gateway,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,StartEvent,ControlFlow,SequenceFlow,from,Sequence Flow from,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,StartEvent,0,,,,,&#xA;Decision,Gateway,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,ControlFlow,SequenceFlow,to,Sequence Flow to,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,,,,&#xA;Decision,Gateway,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,ControlFlow,SequenceFlow,from,Sequence Flow from,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,,,,&#xA;Decision,Gateway,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,EndEvent,ControlFlow,SequenceFlow,to,Sequence Flow to,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,EndEvent,0,,,,,&#xA;Decision,Gateway,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,DataObject,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,DataObject,0,,,,,&#xA;Decision,Gateway,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,TextAnnotation,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,TextAnnotation,0,,,TRUE,,&#xA;Decision,Gateway,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,SequenceFlow,to,Sequence Flow to,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;Decision,Gateway,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,SequenceFlow,to,Sequence Flow to,,TRUE,,TRUE,TRUE,,0,,TRUE,,,&#xA;Decision,Gateway,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,SequenceFlow,from,Sequence Flow from,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;Decision,Gateway,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,SequenceFlow,from,Sequence Flow from,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;Decision,Gateway,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,StartEvent,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,StartEvent (edge),0,,TRUE,,,&#xA;Decision,Gateway,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,IntermediateEvent,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,IntermediateEvent (edge),0,,TRUE,,,&#xA;Decision,Gateway,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,IntermediateEvent,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,IntermediateEvent (edge),0,,TRUE,,,&#xA;Decision,Gateway,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,EndEvent,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,EndEvent (edge),0,,TRUE,TRUE,,&#xA;ObjectNode,StartEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,SequenceFlow,to,Sequence Flow to,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,Activity,0,,,,,&#xA;ObjectNode,StartEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,SequenceFlow,from,Sequence Flow from,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,Activity,0,,,,,&#xA;ObjectNode,StartEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,MessageFlow,to,Message Flow to,Message Flow to,TRUE,TRUE,TRUE,TRUE,Activity,0,,,,,&#xA;ObjectNode,StartEvent,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,Decision,Gateway,ControlFlow,SequenceFlow,from,Sequence Flow from,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,Gateway,0,,,,,&#xA;ObjectNode,StartEvent,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,StartEvent,ControlFlow,MessageFlow,to,Message Flow to,Message Flow to,TRUE,TRUE,TRUE,TRUE,StartEvent,0,,,,,&#xA;ObjectNode,StartEvent,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,StartEvent,ControlFlow,SequenceFlow,from,Sequence Flow from,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,StartEvent,0,,,,,&#xA;ObjectNode,StartEvent,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,ControlFlow,SequenceFlow,from,Sequence Flow from,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,,,,&#xA;ObjectNode,StartEvent,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,ControlFlow,MessageFlow,to,Message Flow to,Message Flow to,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,,,,&#xA;ObjectNode,StartEvent,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,ActivityPartition,Pool,ControlFlow,MessageFlow,to,Message Flow to,Message Flow to,TRUE,TRUE,TRUE,TRUE,Pool,0,,,,,&#xA;ObjectNode,StartEvent,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,DataObject,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,DataObject,0,,,,,&#xA;ObjectNode,StartEvent,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,TextAnnotation,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,TextAnnotation,0,,,TRUE,,&#xA;ObjectNode,StartEvent,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,SequenceFlow,from,Sequence Flow from,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;ObjectNode,StartEvent,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,SequenceFlow,from,Sequence Flow from,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;ObjectNode,StartEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,IntermediateEvent,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,IntermediateEvent (edge),0,,TRUE,,,&#xA;ObjectNode,StartEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,EndEvent,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,EndEvent (edge),0,,TRUE,TRUE,,&#xA;ObjectNode,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,SequenceFlow,to,Sequence Flow to,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,Activity,0,,,,,&#xA;ObjectNode,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,SequenceFlow,from,Sequence Flow from,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,Activity,0,,,,,&#xA;ObjectNode,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,MessageFlow,from,Message Flow from,Message Flow from,TRUE,TRUE,TRUE,TRUE,Activity,0,,,,,&#xA;ObjectNode,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,Dependency,Association,directed,Association,Association,TRUE,TRUE,TRUE,TRUE,Activity,0,,,,,&#xA;ObjectNode,IntermediateEvent,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,Decision,Gateway,ControlFlow,SequenceFlow,to,Sequence Flow to,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,Gateway,0,,,,,&#xA;ObjectNode,IntermediateEvent,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,Decision,Gateway,ControlFlow,SequenceFlow,from,Sequence Flow from,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,Gateway,0,,,,,&#xA;ObjectNode,IntermediateEvent,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,StartEvent,ControlFlow,SequenceFlow,from,Sequence Flow from,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,StartEvent,0,,,,,&#xA;ObjectNode,IntermediateEvent,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,ControlFlow,SequenceFlow,to,Sequence Flow to,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,,,,&#xA;ObjectNode,IntermediateEvent,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,ControlFlow,SequenceFlow,from,Sequence Flow from,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,,,,&#xA;ObjectNode,IntermediateEvent,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,EndEvent,ControlFlow,SequenceFlow,to,Sequence Flow to,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,EndEvent,0,,,,,&#xA;ObjectNode,IntermediateEvent,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,EndEvent,ControlFlow,MessageFlow,from,Message Flow from,Message Flow from,TRUE,TRUE,TRUE,TRUE,EndEvent,0,,,,,&#xA;ObjectNode,IntermediateEvent,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,ActivityPartition,Pool,ControlFlow,MessageFlow,from,Message Flow from,Message Flow from,TRUE,TRUE,TRUE,TRUE,Pool,0,,,,,&#xA;ObjectNode,IntermediateEvent,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,DataObject,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,DataObject,0,,,,,&#xA;ObjectNode,IntermediateEvent,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,TextAnnotation,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,TextAnnotation,0,,,TRUE,,&#xA;ObjectNode,IntermediateEvent,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,SequenceFlow,to,Sequence Flow to,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;ObjectNode,IntermediateEvent,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,SequenceFlow,to,Sequence Flow to,,TRUE,,TRUE,TRUE,,0,,TRUE,,,&#xA;ObjectNode,IntermediateEvent,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,SequenceFlow,from,Sequence Flow from,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;ObjectNode,IntermediateEvent,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,SequenceFlow,from,Sequence Flow from,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;ObjectNode,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,StartEvent,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,StartEvent (edge),0,,TRUE,,,&#xA;ObjectNode,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,IntermediateEvent,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,IntermediateEvent (edge),0,,TRUE,,,&#xA;ObjectNode,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,IntermediateEvent,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,IntermediateEvent (edge),0,,TRUE,,,&#xA;ObjectNode,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,EndEvent,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,EndEvent (edge),0,,TRUE,TRUE,,&#xA;ObjectNode,EndEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,SequenceFlow,to,Sequence Flow to,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,Activity,0,,,,,&#xA;ObjectNode,EndEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,MessageFlow,from,Message Flow from,Message Flow from,TRUE,TRUE,TRUE,TRUE,Activity,0,,,,,&#xA;ObjectNode,EndEvent,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,Decision,Gateway,ControlFlow,SequenceFlow,to,Sequence Flow to,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,Gateway,0,,,,,&#xA;ObjectNode,EndEvent,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,ControlFlow,SequenceFlow,to,Sequence Flow to,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,,,,&#xA;ObjectNode,EndEvent,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,EndEvent,ControlFlow,SequenceFlow,to,Sequence Flow to,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,EndEvent,0,,,,,&#xA;ObjectNode,EndEvent,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,ActivityPartition,Pool,ControlFlow,MessageFlow,from,Message Flow from,Message Flow from,TRUE,TRUE,TRUE,TRUE,Pool,0,,,,,&#xA;ObjectNode,EndEvent,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,EndEvent,ControlFlow,MessageFlow,from,Message Flow from,Message Flow from,TRUE,TRUE,TRUE,TRUE,EndEvent,0,,,,,&#xA;ObjectNode,EndEvent,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,DataObject,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,DataObject,0,,,,,&#xA;ObjectNode,EndEvent,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,TextAnnotation,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,TextAnnotation,0,,,,,&#xA;ObjectNode,EndEvent,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,SequenceFlow,to,Sequence Flow to,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;ObjectNode,EndEvent,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,SequenceFlow,to,Sequence Flow to,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;ObjectNode,EndEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,StartEvent,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,StartEvent (edge),0,,TRUE,,,&#xA;ObjectNode,EndEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,IntermediateEvent,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,IntermediateEvent (edge),0,,TRUE,,,&#xA;Artifact,DataObject,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,StartEvent,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,StartEvent,0,,,,,&#xA;Artifact,DataObject,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,,,,&#xA;Artifact,DataObject,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,EndEvent,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,EndEvent,0,,,,,&#xA;Artifact,DataObject,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,Dependency,Association,directed,Association to,Association to,TRUE,TRUE,TRUE,TRUE,Activity,0,,,,,&#xA;Artifact,DataObject,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,Dependency,Association,from,Association from,Association from,TRUE,TRUE,TRUE,TRUE,Activity,0,,,,,&#xA;Artifact,DataObject,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,Decision,Gateway,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,Gateway,0,,,,,&#xA;Artifact,DataObject,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,TextAnnotation,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,TextAnnotation,0,,,TRUE,,&#xA;Artifact,DataObject,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,Dependency,Association,undirected,Association,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;Artifact,DataObject,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,Dependency,Association,undirected,Association,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;Artifact,DataObject,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,Dependency,Association,undirected,Association,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;Artifact,TextAnnotation,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,StartEvent,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,StartEvent,0,,,,,&#xA;Artifact,TextAnnotation,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,,,,&#xA;Artifact,TextAnnotation,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,EndEvent,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,EndEvent,0,,,,,&#xA;Artifact,TextAnnotation,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,Activity,0,,,,,&#xA;Artifact,TextAnnotation,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,Decision,Gateway,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,Gateway,0,,,,,&#xA;Artifact,TextAnnotation,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,ActivityPartition,Pool,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,Pool,0,,,,,&#xA;Artifact,TextAnnotation,ActivityPartition,Lane,BPMN1.1::BPMN;BPMN1.1::BPEL;,ActivityPartition,Lane,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,Lane,0,,,,,&#xA;Artifact,TextAnnotation,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,DataObject,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,DataObject,0,,,TRUE,,&#xA;Artifact,TextAnnotation,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,Dependency,Association,undirected,Association,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;Artifact,TextAnnotation,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,Dependency,Association,undirected,Association,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;Artifact,TextAnnotation,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,Dependency,Association,undirected,Association,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;ActivityPartition,Lane,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,TextAnnotation,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,TextAnnotation,0,,,TRUE,,&#xA;ActivityPartition,Pool,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,MessageFlow,to,Message Flow to,Message Flow to,TRUE,TRUE,TRUE,TRUE,Activity,0,,,,,&#xA;ActivityPartition,Pool,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,MessageFlow,from,Message Flow from,Message Flow from,TRUE,TRUE,TRUE,TRUE,Activity,0,,,,,&#xA;ActivityPartition,Pool,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,StartEvent,ControlFlow,MessageFlow,to,Message Flow to,Message Flow to,TRUE,TRUE,TRUE,TRUE,StartEvent,0,,,,,&#xA;ActivityPartition,Pool,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,ControlFlow,MessageFlow,to,Message Flow to,Message Flow to,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,,,,&#xA;ActivityPartition,Pool,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,EndEvent,ControlFlow,MessageFlow,from,Message Flow from,Message Flow from,TRUE,TRUE,TRUE,TRUE,EndEvent,0,,,,,&#xA;ActivityPartition,Pool,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,ActivityPartition,Pool,ControlFlow,MessageFlow,to,Message Flow to,Message Flow to,TRUE,TRUE,TRUE,TRUE,Pool,0,,,,,&#xA;ActivityPartition,Pool,ActivityPartition,Pool,BPMN1.1::BPMN;BPMN1.1::BPEL;,ActivityPartition,Pool,ControlFlow,MessageFlow,from,Message Flow from,Message Flow from,TRUE,TRUE,TRUE,TRUE,Pool,0,,,,,&#xA;ActivityPartition,Pool,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,TextAnnotation,Dependency,Association,undirected,Association,Association,TRUE,TRUE,TRUE,TRUE,TextAnnotation,0,,,TRUE,,&#xA;ActivityPartition,Pool,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,MessageFlow,to,Message Flow to,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;ActivityPartition,Pool,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,MessageFlow,to,Message Flow to,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;ActivityPartition,Pool,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,ControlFlow,MessageFlow,from,Message Flow from,,TRUE,,TRUE,TRUE,,0,,TRUE,TRUE,,&#xA;ActivityPartition,Pool,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,MessageFlow,to,,Message Flow to,TRUE,TRUE,TRUE,TRUE,Activity,0,,TRUE,,,&#xA;ActivityPartition,Pool,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,MessageFlow,from,,Message Flow from,TRUE,TRUE,TRUE,TRUE,Activity,0,,TRUE,,,&#xA;ActivityPartition,Pool,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,StartEvent,ControlFlow,MessageFlow,to,,Message Flow to,TRUE,TRUE,TRUE,TRUE,StartEvent (edge),0,,TRUE,,,&#xA;ActivityPartition,Pool,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,IntermediateEvent,ControlFlow,MessageFlow,to,,Message Flow to,TRUE,TRUE,TRUE,TRUE,IntermediateEvent (edge),0,,TRUE,,,&#xA;ActivityPartition,Pool,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ObjectNode,EndEvent,ControlFlow,MessageFlow,from,,Message Flow from,TRUE,TRUE,TRUE,TRUE,EndEvent (edge),0,,TRUE,TRUE,,&#xA;Event,StartEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,Activity,0,,TRUE,,,&#xA;Event,StartEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,MessageFlow,from,,Message Flow from,TRUE,TRUE,TRUE,TRUE,Activity,0,,TRUE,,,&#xA;Event,StartEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Decision,Gateway,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,Gateway,0,,TRUE,,,&#xA;Event,StartEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,TRUE,,,&#xA;Event,StartEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,EndEvent,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,EndEvent,0,,TRUE,,,&#xA;Event,StartEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ActivityPartition,Pool,ControlFlow,MessageFlow,from,,Message Flow from,TRUE,TRUE,TRUE,TRUE,Pool,0,,TRUE,,,&#xA;Event,StartEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,EndEvent,ControlFlow,MessageFlow,from,,Message Flow from,TRUE,TRUE,TRUE,TRUE,EndEvent,0,,TRUE,,,&#xA;Event,StartEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,DataObject,Dependency,Association,undirected,,Association,TRUE,TRUE,TRUE,TRUE,DataObject,0,,TRUE,,,&#xA;Event,StartEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,TextAnnotation,Dependency,Association,undirected,,Association,TRUE,TRUE,TRUE,TRUE,TextAnnotation,0,,TRUE,,,&#xA;Event,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,Activity,0,,TRUE,,,&#xA;Event,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,Activity,0,,TRUE,,,&#xA;Event,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,MessageFlow,from,,Message Flow from,TRUE,TRUE,TRUE,TRUE,Activity,0,,TRUE,,,&#xA;Event,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Decision,Gateway,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,Gateway,0,,TRUE,,,&#xA;Event,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Decision,Gateway,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,Gateway,0,,TRUE,,,&#xA;Event,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,StartEvent,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,StartEvent,0,,TRUE,,,&#xA;Event,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,TRUE,,,&#xA;Event,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,TRUE,,,&#xA;Event,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,EndEvent,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,EndEvent,0,,TRUE,,,&#xA;Event,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,EndEvent,ControlFlow,MessageFlow,from,,Message Flow from,TRUE,TRUE,TRUE,TRUE,EndEvent,0,,TRUE,,,&#xA;Event,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ActivityPartition,Pool,ControlFlow,MessageFlow,from,,Message Flow from,TRUE,TRUE,TRUE,TRUE,Pool,0,,TRUE,,,&#xA;Event,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,DataObject,Dependency,Association,undirected,,Association,TRUE,TRUE,TRUE,TRUE,DataObject,0,,TRUE,,,&#xA;Event,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,TextAnnotation,Dependency,Association,undirected,,Association,TRUE,TRUE,TRUE,TRUE,TextAnnotation,0,,TRUE,TRUE,,&#xA;Event,EndEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,Activity,0,,TRUE,,,&#xA;Event,EndEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,MessageFlow,to,,Message Flow to,TRUE,TRUE,TRUE,TRUE,Activity,0,,TRUE,,,&#xA;Event,EndEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Decision,Gateway,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,Gateway,0,,TRUE,,,&#xA;Event,EndEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,StartEvent,ControlFlow,MessageFlow,to,,Message Flow to,TRUE,TRUE,TRUE,TRUE,StartEvent,0,,TRUE,,,&#xA;Event,EndEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,StartEvent,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,StartEvent,0,,TRUE,,,&#xA;Event,EndEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,TRUE,,,&#xA;Event,EndEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,ControlFlow,MessageFlow,to,,Message Flow to,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,TRUE,,,&#xA;Event,EndEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ActivityPartition,Pool,ControlFlow,MessageFlow,to,,Message Flow to,TRUE,TRUE,TRUE,TRUE,Pool,0,,TRUE,,,&#xA;Event,EndEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,DataObject,Dependency,Association,undirected,,Association,TRUE,TRUE,TRUE,TRUE,DataObject,0,,TRUE,,,&#xA;Event,EndEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,TextAnnotation,Dependency,Association,undirected,,Association,TRUE,TRUE,TRUE,TRUE,TextAnnotation,0,,TRUE,TRUE,,&#xA;Activity,Activity,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,Activity,0,,TRUE,,,&#xA;Activity,Activity,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,Activity,0,,TRUE,,,&#xA;Activity,Activity,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,MessageFlow,to,,Message Flow to,TRUE,TRUE,TRUE,TRUE,Activity,0,,TRUE,,,&#xA;Activity,Activity,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,MessageFlow,from,,Message Flow from,TRUE,TRUE,TRUE,TRUE,Activity,0,,TRUE,,,&#xA;Activity,Activity,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Decision,Gateway,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,Gateway,0,,TRUE,,,&#xA;Activity,Activity,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Decision,Gateway,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,Gateway,0,,TRUE,,,&#xA;Activity,Activity,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,StartEvent,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,StartEvent,0,,TRUE,,,&#xA;Activity,Activity,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,StartEvent,ControlFlow,MessageFlow,to,,Message Flow to,TRUE,TRUE,TRUE,TRUE,StartEvent,0,,TRUE,,,&#xA;Activity,Activity,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,TRUE,,,&#xA;Activity,Activity,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,TRUE,,,&#xA;Activity,Activity,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,ControlFlow,MessageFlow,to,,Message Flow to,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,TRUE,,,&#xA;Activity,Activity,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,EndEvent,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,EndEvent,0,,TRUE,,,&#xA;Activity,Activity,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,EndEvent,ControlFlow,MessageFlow,from,,Message Flow from,TRUE,TRUE,TRUE,TRUE,EndEvent,0,,TRUE,,,&#xA;Activity,Activity,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ActivityPartition,Pool,ControlFlow,MessageFlow,to,,Message Flow to,TRUE,TRUE,TRUE,TRUE,Pool,0,,TRUE,,,&#xA;Activity,Activity,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ActivityPartition,Pool,ControlFlow,MessageFlow,from,,Message Flow from,TRUE,TRUE,TRUE,TRUE,Pool,0,,TRUE,,,&#xA;Activity,Activity,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,DataObject,Dependency,Association,undirected,,Association,TRUE,TRUE,TRUE,TRUE,DataObject,0,,TRUE,,,&#xA;Activity,Activity,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,TextAnnotation,Dependency,Association,undirected,,Association,TRUE,TRUE,TRUE,TRUE,TextAnnotation,0,,TRUE,TRUE,,&#xA;Decision,Gateway,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,Activity,0,,TRUE,,,&#xA;Decision,Gateway,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,Activity,0,,TRUE,,,&#xA;Decision,Gateway,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Decision,Gateway,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,Gateway,0,,TRUE,,,&#xA;Decision,Gateway,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Decision,Gateway,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,Gateway,0,,TRUE,,,&#xA;Decision,Gateway,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,StartEvent,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,StartEvent,0,,TRUE,,,&#xA;Decision,Gateway,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,TRUE,,,&#xA;Decision,Gateway,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,IntermediateEvent,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,IntermediateEvent,0,,TRUE,,,&#xA;Decision,Gateway,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Event,EndEvent,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,EndEvent,0,,TRUE,,,&#xA;Decision,Gateway,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,DataObject,Dependency,Association,undirected,,Association,TRUE,TRUE,TRUE,TRUE,DataObject,0,,TRUE,,,&#xA;Decision,Gateway,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,TextAnnotation,Dependency,Association,undirected,,Association,TRUE,TRUE,TRUE,TRUE,TextAnnotation,0,,TRUE,TRUE,,&#xA;ObjectNode,StartEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,Activity,0,,TRUE,,,&#xA;ObjectNode,StartEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,MessageFlow,to,,Message Flow to,TRUE,TRUE,TRUE,TRUE,Activity,0,,TRUE,,,&#xA;ObjectNode,StartEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Decision,Gateway,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,Gateway,0,,TRUE,,,&#xA;ObjectNode,StartEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ActivityPartition,Pool,ControlFlow,MessageFlow,to,,Message Flow to,TRUE,TRUE,TRUE,TRUE,Pool,0,,TRUE,,,&#xA;ObjectNode,StartEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,DataObject,Dependency,Association,undirected,,Association,TRUE,TRUE,TRUE,TRUE,DataObject,0,,TRUE,,,&#xA;ObjectNode,StartEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,TextAnnotation,Dependency,Association,undirected,,Association,TRUE,TRUE,TRUE,TRUE,TextAnnotation,0,,TRUE,TRUE,,&#xA;ObjectNode,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,Activity,0,,TRUE,,,&#xA;ObjectNode,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,Activity,0,,TRUE,,,&#xA;ObjectNode,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,MessageFlow,from,,Message Flow from,TRUE,TRUE,TRUE,TRUE,Activity,0,,TRUE,,,&#xA;ObjectNode,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Decision,Gateway,ControlFlow,SequenceFlow,to,,Sequence Flow to,TRUE,TRUE,TRUE,TRUE,Gateway,0,,TRUE,,,&#xA;ObjectNode,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Decision,Gateway,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,Gateway,0,,TRUE,,,&#xA;ObjectNode,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ActivityPartition,Pool,ControlFlow,MessageFlow,from,,Message Flow from,TRUE,TRUE,TRUE,TRUE,Pool,0,,TRUE,,,&#xA;ObjectNode,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,DataObject,Dependency,Association,undirected,,Association,TRUE,TRUE,TRUE,TRUE,DataObject,0,,TRUE,,,&#xA;ObjectNode,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,TextAnnotation,Dependency,Association,undirected,,Association,TRUE,TRUE,TRUE,TRUE,TextAnnotation,0,,TRUE,TRUE,,&#xA;ObjectNode,EndEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,Activity,0,,TRUE,,,&#xA;ObjectNode,EndEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Activity,Activity,ControlFlow,MessageFlow,from,,Message Flow from,TRUE,TRUE,TRUE,TRUE,Activity,0,,TRUE,,,&#xA;ObjectNode,EndEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Decision,Gateway,ControlFlow,SequenceFlow,from,,Sequence Flow from,TRUE,TRUE,TRUE,TRUE,Gateway,0,,TRUE,,,&#xA;ObjectNode,EndEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,ActivityPartition,Pool,ControlFlow,MessageFlow,from,,Message Flow from,TRUE,TRUE,TRUE,TRUE,Pool,0,,TRUE,,,&#xA;ObjectNode,EndEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,DataObject,Dependency,Association,undirected,,Association,TRUE,TRUE,TRUE,TRUE,DataObject,0,,TRUE,,,&#xA;ObjectNode,EndEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,Artifact,TextAnnotation,Dependency,Association,undirected,,Association,TRUE,TRUE,TRUE,TRUE,TextAnnotation,0,,TRUE,,,&#xA;Activity,BusinessProcess,Activity,BusinessProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BusinessProcess,Activity,BPELProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BusinessProcess,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BusinessProcess,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BusinessProcess,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BusinessProcess,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BusinessProcess,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BusinessProcess,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BusinessProcess,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BusinessProcess,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BusinessProcess,Class,WebService,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BusinessProcess,Class,Message,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BusinessProcess,Class,Participant,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BusinessProcess,Class,Condition,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BusinessProcess,Class,Transaction,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BusinessProcess,Class,Assignment,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BusinessProcess,Class,Signal,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BusinessProcess,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BusinessProcess,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BPELProcess,Activity,BusinessProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BPELProcess,Activity,BPELProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BPELProcess,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BPELProcess,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BPELProcess,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BPELProcess,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BPELProcess,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BPELProcess,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BPELProcess,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BPELProcess,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BPELProcess,Class,WebService,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BPELProcess,Class,Message,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BPELProcess,Class,Participant,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BPELProcess,Class,Condition,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BPELProcess,Class,Transaction,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BPELProcess,Class,Assignment,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BPELProcess,Class,Signal,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BPELProcess,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,BPELProcess,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,Activity,Activity,BusinessProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,Activity,Activity,BPELProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,Activity,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,Activity,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,Activity,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,Activity,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,Activity,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,Activity,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,Activity,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,Activity,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,Activity,Class,WebService,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,Activity,Class,Message,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,Activity,Class,Participant,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,Activity,Class,Condition,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,Activity,Class,Transaction,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,Activity,Class,Assignment,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,Activity,Class,Signal,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,Activity,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Activity,Activity,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,StartEvent,Activity,BusinessProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,StartEvent,Activity,BPELProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,StartEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,StartEvent,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,StartEvent,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,StartEvent,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,StartEvent,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,StartEvent,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,StartEvent,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,StartEvent,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,StartEvent,Class,WebService,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,StartEvent,Class,Message,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,StartEvent,Class,Participant,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,StartEvent,Class,Condition,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,StartEvent,Class,Transaction,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,StartEvent,Class,Assignment,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,StartEvent,Class,Signal,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,StartEvent,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,StartEvent,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,IntermediateEvent,Activity,BusinessProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,IntermediateEvent,Activity,BPELProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,IntermediateEvent,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,IntermediateEvent,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,IntermediateEvent,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,IntermediateEvent,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,IntermediateEvent,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,IntermediateEvent,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,IntermediateEvent,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,IntermediateEvent,Class,WebService,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,IntermediateEvent,Class,Message,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,IntermediateEvent,Class,Participant,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,IntermediateEvent,Class,Condition,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,IntermediateEvent,Class,Transaction,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,IntermediateEvent,Class,Assignment,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,IntermediateEvent,Class,Signal,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,IntermediateEvent,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,IntermediateEvent,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,EndEvent,Activity,BusinessProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,EndEvent,Activity,BPELProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,EndEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,EndEvent,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,EndEvent,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,EndEvent,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,EndEvent,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,EndEvent,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,EndEvent,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,EndEvent,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,EndEvent,Class,WebService,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,EndEvent,Class,Message,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,EndEvent,Class,Participant,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,EndEvent,Class,Condition,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,EndEvent,Class,Transaction,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,EndEvent,Class,Assignment,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,EndEvent,Class,Signal,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,EndEvent,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Event,EndEvent,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,StartEvent,Activity,BusinessProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,StartEvent,Activity,BPELProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,StartEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,StartEvent,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,StartEvent,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,StartEvent,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,StartEvent,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,StartEvent,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,StartEvent,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,StartEvent,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,StartEvent,Class,WebService,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,StartEvent,Class,Message,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,StartEvent,Class,Participant,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,StartEvent,Class,Condition,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,StartEvent,Class,Transaction,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,StartEvent,Class,Assignment,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,StartEvent,Class,Signal,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,StartEvent,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,StartEvent,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,IntermediateEvent,Activity,BusinessProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,IntermediateEvent,Activity,BPELProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,IntermediateEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,IntermediateEvent,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,IntermediateEvent,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,IntermediateEvent,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,IntermediateEvent,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,IntermediateEvent,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,IntermediateEvent,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,IntermediateEvent,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,IntermediateEvent,Class,WebService,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,IntermediateEvent,Class,Message,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,IntermediateEvent,Class,Participant,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,IntermediateEvent,Class,Condition,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,IntermediateEvent,Class,Transaction,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,IntermediateEvent,Class,Assignment,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,IntermediateEvent,Class,Signal,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,IntermediateEvent,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,IntermediateEvent,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,EndEvent,Activity,BusinessProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,EndEvent,Activity,BPELProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,EndEvent,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,EndEvent,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,EndEvent,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,EndEvent,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,EndEvent,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,EndEvent,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,EndEvent,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,EndEvent,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,EndEvent,Class,WebService,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,EndEvent,Class,Message,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,EndEvent,Class,Participant,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,EndEvent,Class,Condition,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,EndEvent,Class,Transaction,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,EndEvent,Class,Assignment,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,EndEvent,Class,Signal,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,EndEvent,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ObjectNode,EndEvent,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Decision,Gateway,Activity,BusinessProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Decision,Gateway,Activity,BPELProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Decision,Gateway,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Decision,Gateway,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Decision,Gateway,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Decision,Gateway,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Decision,Gateway,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Decision,Gateway,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Decision,Gateway,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Decision,Gateway,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Decision,Gateway,Class,WebService,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Decision,Gateway,Class,Message,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Decision,Gateway,Class,Participant,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Decision,Gateway,Class,Condition,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Decision,Gateway,Class,Transaction,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Decision,Gateway,Class,Assignment,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Decision,Gateway,Class,Signal,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Decision,Gateway,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Decision,Gateway,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,WebService,Activity,BusinessProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,WebService,Activity,BPELProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,WebService,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,WebService,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,WebService,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,WebService,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,WebService,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,WebService,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,WebService,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,WebService,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,WebService,Class,WebService,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,WebService,Class,Message,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,WebService,Class,Participant,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,WebService,Class,Condition,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,WebService,Class,Transaction,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,WebService,Class,Assignment,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,WebService,Class,Signal,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,WebService,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,WebService,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Message,Activity,BusinessProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Message,Activity,BPELProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Message,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Message,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Message,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Message,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Message,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Message,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Message,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Message,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Message,Class,WebService,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Message,Class,Message,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Message,Class,Participant,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Message,Class,Condition,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Message,Class,Transaction,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Message,Class,Assignment,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Message,Class,Signal,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Message,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Message,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Participant,Activity,BusinessProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Participant,Activity,BPELProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Participant,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Participant,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Participant,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Participant,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Participant,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Participant,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Participant,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Participant,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Participant,Class,WebService,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Participant,Class,Message,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Participant,Class,Participant,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Participant,Class,Condition,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Participant,Class,Transaction,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Participant,Class,Assignment,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Participant,Class,Signal,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Participant,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Participant,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Condition,Activity,BusinessProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Condition,Activity,BPELProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Condition,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Condition,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Condition,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Condition,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Condition,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Condition,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Condition,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Condition,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Condition,Class,WebService,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Condition,Class,Message,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Condition,Class,Participant,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Condition,Class,Condition,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Condition,Class,Transaction,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Condition,Class,Assignment,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Condition,Class,Signal,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Condition,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Condition,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Transaction,Activity,BusinessProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Transaction,Activity,BPELProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Transaction,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Transaction,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Transaction,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Transaction,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Transaction,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Transaction,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Transaction,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Transaction,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Transaction,Class,WebService,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Transaction,Class,Message,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Transaction,Class,Participant,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Transaction,Class,Condition,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Transaction,Class,Transaction,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Transaction,Class,Assignment,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Transaction,Class,Signal,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Transaction,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Transaction,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,DataObject,Activity,BusinessProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,DataObject,Activity,BPELProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,DataObject,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,DataObject,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,DataObject,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,DataObject,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,DataObject,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,DataObject,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,DataObject,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,DataObject,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,DataObject,Class,WebService,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,DataObject,Class,Message,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,DataObject,Class,Participant,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,DataObject,Class,Condition,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,DataObject,Class,Transaction,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,DataObject,Class,Assignment,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,DataObject,Class,Signal,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,DataObject,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,DataObject,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,TextAnnotation,Activity,BusinessProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,TextAnnotation,Activity,BPELProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,TextAnnotation,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,TextAnnotation,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,TextAnnotation,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,TextAnnotation,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,TextAnnotation,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,TextAnnotation,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,TextAnnotation,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,TextAnnotation,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,TextAnnotation,Class,WebService,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,TextAnnotation,Class,Message,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,TextAnnotation,Class,Participant,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,TextAnnotation,Class,Condition,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,TextAnnotation,Class,Transaction,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,TextAnnotation,Class,Assignment,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,TextAnnotation,Class,Signal,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,TextAnnotation,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Artifact,TextAnnotation,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Pool,Activity,BusinessProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Pool,Activity,BPELProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Pool,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Pool,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Pool,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Pool,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Pool,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Pool,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Pool,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Pool,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Pool,Class,WebService,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Pool,Class,Message,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Pool,Class,Participant,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Pool,Class,Condition,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Pool,Class,Transaction,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Pool,Class,Assignment,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Pool,Class,Signal,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Pool,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Pool,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Lane,Activity,BusinessProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Lane,Activity,BPELProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Lane,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Lane,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Lane,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Lane,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Lane,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Lane,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Lane,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Lane,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Lane,Class,WebService,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Lane,Class,Message,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Lane,Class,Participant,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Lane,Class,Condition,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Lane,Class,Transaction,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Lane,Class,Assignment,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Lane,Class,Signal,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Lane,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;ActivityPartition,Lane,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Signal,Activity,BusinessProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Signal,Activity,BPELProcess,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Signal,Activity,Activity,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Signal,Event,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Signal,Event,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Signal,Event,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Signal,ObjectNode,StartEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Signal,ObjectNode,IntermediateEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Signal,ObjectNode,EndEvent,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Signal,Decision,Gateway,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Signal,Class,WebService,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Signal,Class,Message,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Signal,Class,Participant,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Signal,Class,Condition,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Signal,Class,Transaction,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Signal,Class,Assignment,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Signal,Class,Signal,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Signal,Artifact,DataObject,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;Class,Signal,Artifact,TextAnnotation,BPMN1.1::BPMN;BPMN1.1::BPEL;,,,&lt;none&gt;,,,,,,,,TRUE,,,,,,,&#xA;&#xA;"/>
+      </Content>
+    </UMLProfile>
+  </UMLProfiles>
+  <TaggedValueTypes>
+    <RefData version="1.0" exporter="EA.25">
+      <DataSet name="Property Types" table="t_propertytypes" filter="Property='#Property#'">
+        <DataRow>
+          <Column name="Property" value="Assignments"/>
+          <Column name="Description" value="Assignments"/>
+          <Column name="Notes" value="Type=RefGUIDList;Stereotypes=Assignment;BaseStereotype=Activity,BPELProcess,BusinessProcess,EndEvent,Gateway,IntermediateEvent,SequenceFlow,StartEvent;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="Categories"/>
+          <Column name="Description" value="Categories"/>
+          <Column name="Notes" value="Type=Memo;BaseStereotype=Activity,Assignment,Association,BPELProcess,BusinessProcess,Condition,DataObject,EndEvent,Gateway,IntermediateEvent,Lane,Message,MessageFlow,Participant,Pool,Property,SequenceFlow,Signal,StartEvent,TextAnnotation,Transaction,WebService;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="InputMaps"/>
+          <Column name="Description" value="InputMaps"/>
+          <Column name="Notes" value="Type=Memo;BaseStereotype=Activity;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="IORules"/>
+          <Column name="Description" value="IORules"/>
+          <Column name="Notes" value="Type=Memo;BaseStereotype=Activity;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="OutputMaps"/>
+          <Column name="Description" value="OutputMaps"/>
+          <Column name="Notes" value="Type=Memo;BaseStereotype=Activity;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="Performers"/>
+          <Column name="Description" value="Performers"/>
+          <Column name="Notes" value="Type=Memo;BaseStereotype=Activity,BPELProcess,BusinessProcess;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="Results"/>
+          <Column name="Description" value="Results"/>
+          <Column name="Notes" value="Type=RefGUIDList;Stereotypes=EndEvent;BaseStereotype=EndEvent;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="TimeDate"/>
+          <Column name="Description" value="TimeDate"/>
+          <Column name="Notes" value="Type=DateTime;BaseStereotype=IntermediateEvent,StartEvent;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="Triggers"/>
+          <Column name="Description" value="Triggers"/>
+          <Column name="Notes" value="Type=RefGUIDList;Values=Event;BaseStereotype=IntermediateEvent,StartEvent;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="PoolPackageRef"/>
+          <Column name="Description" value="Package"/>
+          <Column name="Notes" value="Type=RefGUID;Values=Package;BaseStereotype=BPELProcess,BusinessProcess,Pool;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="LinkId"/>
+          <Column name="Description" value="LinkId"/>
+          <Column name="Notes" value="Type=RefGUIDList;Stereotypes=IntermediateEvent;BaseStereotype=IntermediateEvent;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="StartQuantity"/>
+          <Column name="Description" value="StartQuantity"/>
+          <Column name="Notes" value="Type=Integer;BaseStereotype=Activity;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="CompletionQuantity"/>
+          <Column name="Description" value="CompletionQuantity"/>
+          <Column name="Notes" value="Type=Integer;BaseStereotype=Activity;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="InputSets"/>
+          <Column name="Description" value="InputSets"/>
+          <Column name="Notes" value="Type=Memo;BaseStereotype=Activity,BPELProcess,BusinessProcess;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="OutputSets"/>
+          <Column name="Description" value="OutputSets"/>
+          <Column name="Notes" value="Type=Memo;BaseStereotype=Activity,BPELProcess,BusinessProcess;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="FromPartRef"/>
+          <Column name="Description" value="FromPartRef"/>
+          <Column name="Notes" value="Type=RefGUID;Values=Attribute;Stereotypes=Property;BaseStereotype=Assignment;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="ToPartRef"/>
+          <Column name="Description" value="ToPartRef"/>
+          <Column name="Notes" value="Type=RefGUID;Values=Attribute;Stereotypes=Property;BaseStereotype=Assignment;"/>
+        </DataRow>
+      </DataSet>
+    </RefData>
+  </TaggedValueTypes>
+  <DiagramProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="B2515169-5" name="BPMN1.1" version="1.5" alias="BPMN 1.1" notes="MDG Technology for BPMN 1.1"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="BPMN" notes="A BPMN diagram is used for creating business process models using the BPMN notation.">
+            <AppliesTo>
+              <Apply type="Diagram_Analysis">
+                <Property name="alias" value="BPMN 1.1"/>
+                <Property name="diagramID" value="BPMN"/>
+                <Property name="toolbox" value="BPMN1.1Toolbox"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="BPEL" notes="A BPEL diagram is used for creating BPMN models from which BPEL can be generated.">
+            <AppliesTo>
+              <Apply type="Diagram_Analysis">
+                <Property name="alias" value="BPEL"/>
+                <Property name="diagramID" value="BPEL"/>
+                <Property name="toolbox" value="BPMN1.1Toolbox"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </DiagramProfile>
+  <UIToolboxes>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="3BA0E951-0" name="BPMN1.1Toolbox" version="1.5" alias="BPMN 1.1" notes="MDG Technology for BPMN"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="BPMN1.1Core" alias="BPMN 1.1 Core" notes="Graphical Flow Elements used on BPMN diagrams">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="BPMN1.1::BusinessProcess(UML::Activity)" type="" description="A container for a single business process, including diagram." unit="" values="" default="Business Process"/>
+              <Tag name="BPMN1.1::BPELProcess(UML::Activity)" type="" description="A container for a single BPEL process, including diagram." unit="" values="" default="BPEL Process"/>
+              <Tag name="BPMN1.1::Activity(UML::Activity)" type="" description="Work that is performed within a business process." unit="" values="" default="Activity"/>
+              <Tag name="BPMN1.1::StartEvent" type="" description="Indicates where a process will start." unit="" values="" default="Start Event"/>
+              <Tag name="BPMN1.1::IntermediateEvent" type="" description="An event that affects the flow of a process, but will not start &#xA;or directly terminate it." unit="" values="" default="Intermediate Event"/>
+              <Tag name="BPMN1.1::EndEvent" type="" description="Indicates where a process will end." unit="" values="" default="End Event"/>
+              <Tag name="BPMN1.1::Gateway(UML::Decision)" type="" description="Controls the divergence and convergence of Sequence Flows." unit="" values="" default="Gateway"/>
+              <Tag name="BPMN1.1::Pool(UML::ActivityPartition)" type="" description="Represents a participant in a process." unit="" values="" default="Pool"/>
+              <Tag name="BPMN1.1::Lane(UML::ActivityPartition)" type="" description="A sub-partition within a pool." unit="" values="" default="Lane"/>
+              <Tag name="BPMN1.1::DataObject(UML::Artifact)" type="" description="Provides information about what activities require to be performed and/or what they produce." unit="" values="" default="Data Object"/>
+              <Tag name="BPMN1.1::Group(UML::Boundary)" type="" description="A grouping of activities that does not affect the sequence flow." unit="" values="" default="Group"/>
+              <Tag name="BPMN1.1::TextAnnotation(UML::Artifact)" type="" description="A mechanism for providing additional information for the reader of a BPMN diagram." unit="" values="" default="Text Annotation"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="BPMN1.1Relationships" alias="BPMN 1.1 Relationships" notes="Relationships used on BPMN diagrams">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="BPMN1.1::SequenceFlow(UML::ControlFlow)" type="" description="Shows the order that activities will be performed in a process." unit="" values="" default="Sequence Flow"/>
+              <Tag name="BPMN1.1::MessageFlow(UML::ControlFlow)" type="" description="Shows the flow of messages between two participants." unit="" values="" default="Message Flow"/>
+              <Tag name="BPMN1.1::Association(UML::Dependency)" type="" description="Used to associate information with flow objects." unit="" values="" default="Association"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="BPMN1.1Types" alias="BPMN 1.1 Types" notes="Supporting types used on BPMN diagrams">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="BPMN1.1::Assignment(UML::Class)" type="" description="" unit="" values="" default="Assignment"/>
+              <Tag name="BPMN1.1::Condition(UML::Class)" type="" description="" unit="" values="" default="Condition"/>
+              <Tag name="BPMN1.1::Message(UML::Class)" type="" description="" unit="" values="" default="Message"/>
+              <Tag name="BPMN1.1::Participant(UML::Class)" type="" description="" unit="" values="" default="Participant"/>
+              <Tag name="BPMN1.1::Signal(UML::Class)" type="" description="" unit="" values="" default="Signal"/>
+              <Tag name="BPMN1.1::Transaction(UML::Class)" type="" description="" unit="" values="" default="Transaction"/>
+              <Tag name="BPMN1.1::WebService(UML::Class)" type="" description="" unit="" values="" default="Web Service"/>
+              <Tag name="BPMN1.1::Property(UML::Attribute)" type="" description="" unit="" values="" default="Property"/>
+              <Tag name="isCollapsed" type="" description="" unit="" values="" default="true"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="BPMN1.1::StartEvent(UML::Event)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHSUlJSQcHBwcHBwcHBwebSQkJ
+              CQlJmwcHBwcHBwebmwkJ5OTkCZubBwcHBwcHSQkJCQkJ5OQJSQcHBwcHSQn///8JCQnk5AlJ
+              BwcHB0n//////wkJCeQJSQcHBwdJ////////CQnkCUkHBwcHSf////////8JCQlJBwcHBwdJ
+              ////////CQlJBwcHBwcHm5v//////wmbmwcHBwcHBwebSf///wlJmwcHBwcHBwcHBwdJSUlJ
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="BPMN1.1::IntermediateEvent(UML::Event)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHSUlJSQcHBwcHBwcHBwebSQkJ
+              CQlJmwcHBwcHBwebmwkJCQkJCZubBwcHBwcHSQkJm0lJmwkJSQcHBwcHSQn/m5sJCZubCQlJ
+              BwcHB0n//5v//wkJSQkJSQcHBwdJ///t////CUkJCUkHBwcHSf//7e3//5ubCQlJBwcHBwdJ
+              ///t7ZubCQlJBwcHBwcHm5v//////wmbmwcHBwcHBwebSf///wlJmwcHBwcHBwcHBwdJSUlJ
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="BPMN1.1::EndEvent(UML::Event)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHm5ubmwcHBwcHBwcHBwebSUlJ
+              SUlJmwcHBwcHBwebSUmbm5ubSUmbBwcHBwcHSUmbCQkJCZtJSQcHBwcHm0mbCQkJCQkJm0mb
+              BwcHB5tJ7f///wkJCZtJmwcHBwebSe3/////CQmbSZsHBwcHm0nt/////wkJm0mbBwcHBwdJ
+              Se3///8Jm0lJBwcHBwcHm0lJ7e3tm0lJmwcHBwcHBwebSUlJSUlJmwcHBwcHBwcHBwebm5ub
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="BPMN1.1::TextAnnotation(UML::Artifact)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAgEBAgEBAgEBA
+              gEBAgEBAgEBAgEBAgEBAgEBAgEBAwMDAwMDAwMDAwMDAwMDAgEBAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAgEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAgEBAwMDAgGBgwMDAgGBgwMDAgGBggGBgwMDAgGBggGBgwMDAwMDAwMDA
+              wMDAwMDAgEBAwMDAwMDAgGBggGBgwMDAgGBggGBgwMDAgGBgwMDAwMDAwMDAwMDAwMDAwMDA
+              gEBAwMDAwMDAwMDAgGBgwMDAgGBggGBgwMDAgGBggGBgwMDAwMDAwMDAwMDAwMDAgEBAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAgEBAgEBAgEBA
+              gEBAgEBAgEBAgEBAgEBAgEBAgEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zQ==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="BPMN1.1::MessageFlow(UML::ControlFlow)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAgEBAgEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwGBg8Mqm
+              8MqmgEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwGBg8Pv/8MqmgEBA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwGBgwGBgwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAgEBAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAgEBAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwGBgwGBgwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwGBgwGBgwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwKCgwKCgwMDAwMDAwMDAgEBAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwKCgwKCgwMDAwMDAgEBAgEBAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAwKCggEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAgEBA8Pv/wKCggEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAgEBAwKCgwKCg8Pv/gEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAgEBA
+              gEBAgEBAgEBAgEBAzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zQ==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="BPMN1.1::SequenceFlow(UML::ControlFlow)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBA
+              gEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAgEBAgEBA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAgEBAgEBAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAgEBAwGBgwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwGBggEBAwGBgwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwGBgwGBgwGBgwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwGBgwGBgwGBgwMDAwMDAwMDAgEBAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwGBgwKCgwGBgwMDAgEBAgEBAwMDAwMDAgGBg
+              gGBgwMDAwMDAgGBgwMDAwMDAwMDAwMDAwGBgwNzAgEBAwKCggEBAwMDAwMDAwMDAwMDAgGBg
+              wMDAgGBgwMDAwMDAwMDAwMDAwMDAgEBA8Pv/wKCggEBAwMDAwMDAgGBggGBggGBgwMDAgGBg
+              gGBgwMDAwMDAwMDAgEBAwKCgwKCg8Pv/gEBAwMDAwMDAgGBgwMDAwMDAwMDAgGBgwMDAwMDA
+              wMDAgEBAgEBAgEBAgEBAgEBAgEBAwMDAwMDAwMDAgGBggGBgwMDAgGBggGBggGBgwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zQ==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="BPMN1.1::StartEvent" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHSUlJSQcHBwcHBwcHBwebSQkJ
+              CQlJmwcHBwcHBwebmwkJ5OTkCZubBwcHBwcHSQkJCQkJ5OQJSQcHBwcHSQn///8JCQnk5AlJ
+              BwcHB0n//////wkJCeQJSQcHBwdJ////////CQnkCUkHBwcHSf////////8JCQlJBwcHBwdJ
+              ////////CQlJBwcHBwcHm5v//////wmbmwcHBwcHBwebSf///wlJmwcHBwcHBwcHBwdJSUlJ
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="isHidden" type="" description="" unit="" values="" default="true"/>
+              <Tag name="BPMN1.1::StartEvent(UML::Event)" type="" description="" unit="" values="" default="Stand-alone"/>
+              <Tag name="BPMN1.1::StartEvent(UML::ObjectNode)" type="" description="" unit="" values="" default="Edge-mounted"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="BPMN1.1::IntermediateEvent" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHSUlJSQcHBwcHBwcHBwebSQkJ
+              CQlJmwcHBwcHBwebmwkJCQkJCZubBwcHBwcHSQkJm0lJmwkJSQcHBwcHSQn/m5sJCZubCQlJ
+              BwcHB0n//5v//wkJSQkJSQcHBwdJ///t////CUkJCUkHBwcHSf//7e3//5ubCQlJBwcHBwdJ
+              ///t7ZubCQlJBwcHBwcHm5v//////wmbmwcHBwcHBwebSf///wlJmwcHBwcHBwcHBwdJSUlJ
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="isHidden" type="" description="" unit="" values="" default="true"/>
+              <Tag name="BPMN1.1::IntermediateEvent(UML::Event)" type="" description="" unit="" values="" default="Stand-alone"/>
+              <Tag name="BPMN1.1::IntermediateEvent(UML::ObjectNode)" type="" description="" unit="" values="" default="Edge-mounted"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="BPMN1.1::EndEvent" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHm5ubmwcHBwcHBwcHBwebSUlJ
+              SUlJmwcHBwcHBwebSUmbm5ubSUmbBwcHBwcHSUmbCQkJCZtJSQcHBwcHm0mbCQkJCQkJm0mb
+              BwcHB5tJ7f///wkJCZtJmwcHBwebSe3/////CQmbSZsHBwcHm0nt/////wkJm0mbBwcHBwdJ
+              Se3///8Jm0lJBwcHBwcHm0lJ7e3tm0lJmwcHBwcHBwebSUlJSUlJmwcHBwcHBwcHBwebm5ub
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="isHidden" type="" description="" unit="" values="" default="true"/>
+              <Tag name="BPMN1.1::EndEvent(UML::Event)" type="" description="" unit="" values="" default="Stand-alone"/>
+              <Tag name="BPMN1.1::EndEvent(UML::ObjectNode)" type="" description="" unit="" values="" default="Edge-mounted"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="BPMN1.1::StartEvent(UML::ObjectNode)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAgEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAgEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAgEBAgEBAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwGBgwICAwICAwICAgEBAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwGBgwICA8Mqm8MqmwICAwICAgEBAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwGBg8Mqm8Pv/8Pv/8MqmwICAgEBAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwGBg8Mqm8Pv/8Pv/8MqmwICAgEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwGBg8Mqm8MqmwICAwGBgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwGBgwGBgwGBgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAgEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zQ==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="BPMN1.1::IntermediateEvent(UML::ObjectNode)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAgEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAgEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAgEBAgEBAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwGBgwICAwICAwICAgEBAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwGBgwICA8Mqm8MqmwICAwICAgEBAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwGBg8Mqm8Pv/8Pv/8MqmwICAgEBAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwGBg8Mqm8Pv/8Pv/8MqmwICAgEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwGBg8Mqm8MqmwICAwGBgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwGBgwGBgwGBgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAgEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zQ==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="BPMN1.1::EndEvent(UML::ObjectNode)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAgEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAgEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAgEBAgEBAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwGBgwICAwICAwICAgEBAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwGBgwICA8Mqm8MqmwICAwICAgEBAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwGBg8Mqm8Pv/8Pv/8MqmwICAgEBAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwGBg8Mqm8Pv/8Pv/8MqmwICAgEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwGBg8Mqm8MqmwICAwGBgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwGBgwGBgwGBgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAgEBAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgEBAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zQ==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="BPMN1.1::Property(UML::Attribute)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAQEAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              QEAAwKAAQEAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAQEAAwKAAwKAA
+              gGAAQEAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAQEAAwKAAwKAAwKAAgGAAgGAA
+              QEAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAQEAAwKAAwKAA//8AgGAAgGAAgGAAQEAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAQEAAwKAA//8A//8A//8AgGAAgGAAQEAAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAQEAA//8A//8A//8A//8A//8AgGAAQEAAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAQEAA//8A//8A//8A//8A//8AQEAAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAQEAA//8A//8A//8AQEAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAQEAA//8AQEAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAQEAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N
+              zQ==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="BPMN1.1::BusinessProcess(UML::Activity)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgQCAgQCAgQCAgQCAgQCAg
+              QCAgQCAgQCAgQCAgQCAgQCAgwMDAwMDAwMDAgGBgwICAwICAwICAwICAwICAwICAwICAwICA
+              wICAwICAwICAgGBgQCAgwMDAwMDAgGBg////8Mqm8Mqm8MqmwICAgGBgQCAggGBggGBgQCAg
+              gGBgwICAQCAgwMDAwMDAgGBg////////8Mqm8Mqm8MqmQCAg8MqmQCAgQCAg8MqmQCAgwICA
+              QCAgwMDAwMDAgGBg////////////8Mqm8MqmpKCgQCAggGBggGBgQCAggGBgwICAQCAgwMDA
+              wMDAgGBg////////////////8Mqm8Mqm8MqmwICAwICAwICAwICAwICAQCAgwMDAwMDAgGBg
+              ////////////////////8Mqm8Mqm8MqmwICAwICAwICAwICAQCAgwMDAwMDAgGBgpKCg////
+              ////////////////8Mqm8Mqm8Mqm8Mqm8MqmpKCgQCAgwMDAwMDAwMDAgGBggGBggGBggGBg
+              gGBggGBggGBggGBggGBggGBggGBggGBgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAVwkgQtAJ2ELQCei3rwkAAEQAFwAEAJgACAUwAqcCGHd1FgcAAAAAAAAA
+              QgBvAG8AbABlAGEAbgAAAAUABQCFAAwFoAGnAti6rwkFAAAAAAAAAGYAYQBsAHMAZQAAAG4A
+              AAAEAAoAjgEOBWw8WQEAAAAAAAAAAAAAAAAAAK8JAAAAAAkADgCKAAwFOLvSCQitiwkEAAAA
+              AAAAAAAAAABUAAAABAAAAHAAAAAgAAAAgNe+CbjUvgkFAAAAAQAAAAAAAACIwzwJAAAA
+              AA==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="BPMN1.1::BPELProcess(UML::Activity)" notes="">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAATCwAAEwsAAAAAAAAAAAAA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAQCAgQCAgQCAgQCAgQCAgQCAg
+              QCAgQCAgQCAgQCAgQCAgQCAgwMDAwMDAwMDAgGBgwICAwICAwICAwICAwICAwICAwICAwICA
+              wICAwICAwICAgGBgQCAgwMDAwMDAgGBg////8Mqm8Mqm8MqmwICAgGBgQCAggGBggGBgQCAg
+              gGBgwICAQCAgwMDAwMDAgGBg////////8Mqm8Mqm8MqmQCAg8MqmQCAgQCAg8MqmQCAgwICA
+              QCAgwMDAwMDAgGBg////////////8Mqm8MqmpKCgQCAggGBggGBgQCAggGBgwICAQCAgwMDA
+              wMDAgGBg////////////////8Mqm8Mqm8MqmwICAwICAwICAwICAwICAQCAgwMDAwMDAgGBg
+              ////////////////////8Mqm8Mqm8MqmwICAwICAwICAwICAQCAgwMDAwMDAgGBgpKCg////
+              ////////////////8Mqm8Mqm8Mqm8Mqm8MqmpKCgQCAgwMDAwMDAwMDAgGBggGBggGBggGBg
+              gGBggGBggGBggGBggGBggGBggGBggGBgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
+              wMDAwMDAwMDAwMDAVwkgQtAJ2ELQCei3rwkAAEQAFwAEAJgACAUwAqcCGHd1FgcAAAAAAAAA
+              QgBvAG8AbABlAGEAbgAAAAUABQCFAAwFoAGnAti6rwkFAAAAAAAAAGYAYQBsAHMAZQAAAG4A
+              AAAEAAoAjgEOBWw8WQEAAAAAAAAAAAAAAAAAAK8JAAAAAAkADgCKAAwFOLvSCQitiwkEAAAA
+              AAAAAAAAAABUAAAABAAAAHAAAAAgAAAAgNe+CbjUvgkFAAAAAQAAAAAAAACIwzwJAAAA
+              AA==
+            </Icon>
+            <AppliesTo>
+              <Apply type="ToolboxItemImage"/>
+            </AppliesTo>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UIToolboxes>
+  <ModelTemplates>
+    <Model name="BPEL 1.1 Model" description="" groupName="BPMN 1.1" location="bpel_mt.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+  </ModelTemplates>
+</MDG.Technology>

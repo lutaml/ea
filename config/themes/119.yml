@@ -1,0 +1,98 @@
+id: "119"
+name: EA White Theme
+
+# Font settings — theme provides the diagram-level font; element
+# compartment text uses element_font which is EA's per-element default.
+font:
+  family: Carlito
+  size: 7
+  unit: pt
+  weight_normal: 400
+  weight_bold: 700
+
+# Element-level font (distinct from diagram-level frame font).
+# EA renders classifier compartments at this size regardless of
+# the diagram-level font.size.
+element_font:
+  size: 9
+  unit: pt
+
+# Colors (decoded from EA's BGR integer encoding).
+# AttrColor=4145510→#66413F, ElemLineColor=8684698→#9A8484.
+colors:
+  text: "#000000"
+  attribute_text: "#66413F"
+  method_text: "#335C5D"
+  border: "#9A8484"
+  fill: "#FFFFFF"
+  background: "#FFFFFF"
+  stroke_in_text: "#000000"
+
+# Stroke widths.
+strokes:
+  element_border: 2
+  connector_line: 2
+  divider: 2
+  marker: 2
+
+# Text geometry — EA uses GDI text metrics for exact widths. We
+# approximate with character_count * size * factor.
+text_metrics:
+  width_factor: 0.65
+
+# Canvas frame insets (EA places element (0,0) at SVG (left, top)).
+canvas:
+  inset_left: 35
+  inset_right: 50
+  inset_top: 40
+  inset_bottom: 57
+
+# Diagram frame tab geometry.
+frame:
+  inset: 6
+  tab_height: 20
+  tab_slant: 13
+  tab_label_x: 11
+  tab_label_y: 19
+  tab_padding: 7
+
+# Compartment vertical spacing (reverse-engineered from maintenance
+# diagram byte-diff: element at y=40 size=9, stereotype y=58 →
+# offset = 18 = size * 2; name y=73 → line_h = size + 6).
+compartments:
+  header_top_padding: 9
+  header_line_offset: 6
+  divider_offset: 8
+  attr_line_offset: 4
+  attr_first_offset: 7
+  op_line_offset: 4
+  op_line_offset: 4
+
+# Attribute text x-offsets within element bounds.
+attribute:
+  visibility_x_offset: 5
+  content_x_offset: 26
+
+# Marker geometry constants.
+markers:
+  diamond_half_width: 5
+  diamond_half_height: 10
+  triangle_half_base: 6
+  triangle_height: 11
+  arrow_half_base: 6
+  arrow_height: 11
+
+# Package shape geometry.
+package:
+  tab_height: 20
+  tab_label_padding: 10
+  default_tab_width: 105
+
+# Note shape geometry.
+note:
+  fold_size: 12
+  text_x_offset: 5
+  text_y_offset: 12
+  line_height: 12
+
+fills: {}

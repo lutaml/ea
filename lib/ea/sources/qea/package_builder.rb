@@ -24,6 +24,7 @@ module Ea
             name: pkg.name,
             parent_id: parent_id_for(pkg),
             qualified_name: pkg.xmlpath,
+            stereotype_refs: stereotype_refs_for(pkg),
             annotations: AnnotationBuilder.from_note(pkg.notes, pkg.ea_guid)
           )
         end
@@ -37,6 +38,21 @@ module Ea
           return nil unless parent
 
           IdNormalizer.from_guid(parent.ea_guid)
+        end
+
+        # EA stores the package's applied stereotype on the t_object
+        # row that mirrors the t_package entry (matched by ea_guid).
+        # t_package itself has no Stereotype column — only t_object
+        # does. Returns [] when no t_object row exists or no
+        # stereotype is set.
+        def stereotype_refs_for(pkg)
+          obj = database.find_object_by_guid(pkg.ea_guid)
+          return [] unless obj
+
+          stereotype = obj.stereotype
+          return [] if stereotype.nil? || stereotype.to_s.empty?
+
+          [stereotype.to_s]
         end
       end
     end

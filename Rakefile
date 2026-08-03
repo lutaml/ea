@@ -2,6 +2,9 @@
 
 require "bundler/gem_tasks"
 require "rspec/core/rake_task"
+require "fileutils"
+
+Dir[File.expand_path("lib/tasks/*.rake", __dir__)].sort.each { |f| load f }
 
 RSpec::Core::RakeTask.new(:spec)
 

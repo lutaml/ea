@@ -19,6 +19,7 @@ module Ea
             id: id,
             name: attr.name,
             owner_id: owner.id,
+            type_ref: type_ref_for(attr),
             type_name: type_name_for(attr),
             qualified_name: "#{owner.name}::#{attr.name}",
             multiplicity_lower: parse_lower(attr),
@@ -29,6 +30,7 @@ module Ea
             is_ordered: boolean(attr.is_ordered),
             is_unique: boolean(attr.is_unique),
             aggregation: attr.aggregation || "none",
+            association_id: IdNormalizer.from_xmi_id(attr.association),
             visibility: attr.visibility,
             annotations: AnnotationBuilder.from_element(attr, id)
           )
@@ -41,6 +43,13 @@ module Ea
           # (e.g. "uml:Property"); the actual data type reference is
           # on the child <type xmi:idref=...> element, exposed via
           # uml_type.idref.
+          attr.uml_type&.idref
+        end
+
+        def type_ref_for(attr)
+          # XMI <type xmi:idref=...> is the type classifier's GUID.
+          # The adapter's resolve_type_names walks this against the
+          # model to attach the in-model qualified name.
           attr.uml_type&.idref
         end
 

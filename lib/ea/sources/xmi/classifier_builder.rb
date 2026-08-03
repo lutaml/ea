@@ -73,8 +73,17 @@ module Ea
         end
 
         def qualified_name(element, containing_package)
+          # The XMI's `name` attribute may already be in
+          # "ns:Class" form (e.g. "xs:string" lives in the `xs`
+          # package). Forcing the package name in front would
+          # produce "xs::xs:string". Strip the existing namespace
+          # prefix from the simple name before composing the
+          # qualified name.
+          raw = element.name.to_s
+          simple = raw.split(":").last
+          simple = raw if simple.nil? || simple.empty?
           pkg_name = containing_package&.name
-          pkg_name ? "#{pkg_name}::#{element.name}" : element.name
+          pkg_name ? "#{pkg_name}::#{simple}" : simple
         end
 
         def boolean(value)

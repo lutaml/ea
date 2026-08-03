@@ -9,10 +9,11 @@ module Ea
       # SOID/EOID, EDGE, label boxes) when present. Falls back to
       # the UML-DI owned_element bounds otherwise.
       class DiagramBuilder
-        attr_reader :root
+        attr_reader :root, :xmi_path
 
-        def initialize(root)
+        def initialize(root, xmi_path = nil)
           @root = root
+          @xmi_path = xmi_path
         end
 
         def build_all
@@ -42,6 +43,7 @@ module Ea
           placed_elements = ext_elements.placed_elements
           placed_connectors = ext_elements.placed_connectors
           props = ext_diagram.properties
+          umldi_keywords = keywords_for(id)
 
           Ea::Model::Diagram.new(
             id: id,
@@ -49,11 +51,37 @@ module Ea
             package_id: ext_diagram.model&.package,
             diagram_type: props&.type&.split(":")&.last&.downcase,
             bounds: canvas_bounds(placed_elements),
-            elements: build_elements(placed_elements, id),
+            style: style_for(ext_diagram),
+            style_ex: style_ex_for(ext_diagram),
+            elements: build_elements(placed_elements, id, umldi_keywords),
             connectors: build_connectors(placed_connectors,
                                           placed_elements, id),
             annotations: []
           )
+        end
+
+        # EA's XMI stores Style (a.k.a. Style1) in `style1.value` —
+        # the per-diagram feature visibility flags (HideAtts, HideOps,
+        # HideStereo, etc.). Parsed by DisplayConfig alongside
+        # StyleEx.
+        def style_for(ext_diagram)
+          style1 = ext_diagram.style1
+          return nil unless style1
+
+          style1.value
+        end
+
+        # EA's XMI stores StyleEx in the diagram's `style2.value`
+        # attribute (alongside Style1 in `style1.value`). The value
+        # is a semicolon-separated key=value string carrying the
+        # Theme=:NNN identifier and behavioral flags (SuppressFOC,
+        # AttPkg, ShowNotes, etc.) — the same shape our Diagram
+        # model expects in `style_ex`.
+        def style_ex_for(ext_diagram)
+          style2 = ext_diagram.style2
+          return nil unless style2
+
+          style2.value
         end
 
         private
@@ -72,11 +100,11 @@ module Ea
                                  height: bottom - top)
         end
 
-        def build_elements(placed, owner_id)
-          placed.map { |p| build_element(p, owner_id) }
+        def build_elements(placed, owner_id, umldi_keywords = {})
+          placed.map { |p| build_element(p, owner_id, umldi_keywords) }
         end
 
-        def build_element(placed, owner_id)
+        def build_element(placed, owner_id, umldi_keywords = {})
           geom = placed.geometry
           style = placed.style
           Ea::Model::DiagramElement.new(
@@ -93,8 +121,11 @@ module Ea
             font_bold: style.bold,
             font_italic: style.italic,
             font_underline: style.underline,
+            show_tagged_values: style.show_tagged_values,
+            icon_visibility: style.hide_icon&.to_s,
             z_order: placed.seqno,
             duid: style.duid,
+            umldi_keyword: umldi_keywords[placed.subject],
             style: {}
           )
         end
@@ -122,6 +153,7 @@ module Ea
           source = by_duid[style.soid]
           target = by_duid[style.eoid]
           waypoints = compute_waypoints(geom, source, target)
+          ext_meta = connector_meta(placed.subject)
           Ea::Model::DiagramConnector.new(
             id: IdNormalizer.synthetic_id(owner_id, "conn", placed.subject),
             diagram_id: owner_id,
@@ -132,6 +164,8 @@ module Ea
             target_element_ref: target && synthetic_element_id(owner_id, target),
             source_edge: geom.edge,
             target_edge: geom.edge,
+            connector_type: ext_meta[:ea_type],
+            direction: ext_meta[:direction],
             waypoints: waypoints,
             style: {},
             line_color: style.color,
@@ -141,26 +175,69 @@ module Ea
           )
         end
 
+        def connector_meta(subject_id)
+          connector = connector_index[subject_id]
+          return { ea_type: nil, direction: nil } unless connector
+
+          props = connector.properties
+          {
+            ea_type: props&.ea_type,
+            direction: props&.direction
+          }
+        end
+
+        def connector_index
+          @connector_index ||= begin
+            conns = root.extension&.connectors&.connector || []
+            conns.each_with_object({}) do |c, acc|
+              acc[c.idref] = c if c.idref
+            end
+          end
+        end
+
+        def umldi_extractor
+          return nil unless xmi_path
+
+          @umldi_extractor ||= UmldiKeywordExtractor.new(xmi_path)
+        end
+
+        def keywords_for(diagram_id)
+          return {} unless umldi_extractor
+
+          umldi_extractor.keywords_for_diagram(diagram_id)
+        end
+
         def synthetic_element_id(owner_id, placed)
           IdNormalizer.synthetic_id(owner_id, "elem", placed.subject)
         end
 
         def compute_waypoints(geom, source, target)
-          src_pt = edge_point(source, geom.edge, :source)
-          tgt_pt = edge_point(target, geom.edge, :target)
-          return [] unless src_pt && tgt_pt
+          src_bounds = bounds_from_placed(source)
+          tgt_bounds = bounds_from_placed(target)
+          return [] unless src_bounds && tgt_bounds
 
-          pts = [src_pt]
-          if geom.sx && geom.sy && (geom.sx.nonzero? || geom.sy.nonzero?)
-            pts << [src_pt[0] + geom.sx, src_pt[1] + geom.sy]
-          end
-          if geom.ex && geom.ey && (geom.ex.nonzero? || geom.ey.nonzero?)
-            pts << [tgt_pt[0] - geom.ex, tgt_pt[1] - geom.ey]
-          end
-          pts << tgt_pt
-          pts.map do |x, y|
+          router = Ea::Svg::ConnectorRouter.new(
+            source_bounds: src_bounds,
+            target_bounds: tgt_bounds,
+            edge_code: geom.edge,
+            source_delta: [geom.sx, geom.sy],
+            target_delta: [geom.ex, geom.ey],
+            bend_path: geom.bend_points || []
+          )
+          router.waypoints.map do |x, y|
             Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y))
           end
+        end
+
+        def bounds_from_placed(placed)
+          return nil unless placed
+
+          g = placed.geometry
+          return nil unless g.left && g.top && g.right && g.bottom
+
+          Ea::Model::Bounds.new(x: g.left, y: g.top,
+                                 width: g.right - g.left,
+                                 height: g.bottom - g.top)
         end
 
         def edge_point(placed, edge_code, _end_kind)

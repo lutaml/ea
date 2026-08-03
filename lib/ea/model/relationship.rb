@@ -8,12 +8,14 @@ module Ea
     # consumers dispatch without `is_a?` ladders.
     class Relationship < Base
       attribute :qualified_name, :string
+      attribute :stereotype, :string
       attribute :relationship_kind, :string, default: -> { "relationship" }
 
       json do
         map "id", to: :id
         map "name", to: :name
         map "qualifiedName", to: :qualified_name
+        map "stereotype", to: :stereotype
         map "relationshipKind", to: :relationship_kind, render_default: true
       end
     end

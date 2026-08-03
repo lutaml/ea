@@ -27,6 +27,7 @@ module Ea
             visibility: visibility_from_scope(row.scope),
             is_static: boolean(row.isstatic),
             is_abstract: boolean(row.abstract),
+            is_reception: row.reception?,
             parameters: build_parameters(row),
             annotations: AnnotationBuilder.from_note(row.notes, row.ea_guid,
                                                      kind: "documentation")

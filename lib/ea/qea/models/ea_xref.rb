@@ -36,13 +36,23 @@ module Ea
         alias_method :id, :xref_id
         alias_method :type, :xref_type
 
-        # Parse the Description field into structured data
+        # Parse the Description field into structured data (legacy hash form).
+        # Kept for backward compatibility. New code should use
+        # +#parsed_record+ which returns a typed Xref::Record.
         #
         # @return [Hash] Parsed description data
         def parsed_description
           return @parsed_description if defined?(@parsed_description)
 
           @parsed_description = parse_description_field(description)
+        end
+
+        # Parse Description into a typed Record with named accessors.
+        # @return [Ea::Sources::Qea::Xref::Record]
+        def parsed_record
+          return @parsed_record if defined?(@parsed_record)
+
+          @parsed_record = Sources::Qea::Xref::Parser.parse(description)
         end
 
         # Check if this xref is for stereotypes

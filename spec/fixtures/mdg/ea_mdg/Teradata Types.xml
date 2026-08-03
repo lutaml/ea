@@ -1,0 +1,29 @@
+<MDG.Technology version="1.0">
+    <Documentation id="TeradataTypes" name="Teradata Types" version="1.0" notes="DB Type mapping for Teradata"/>
+    <CodeModules>
+        <CodeModule language="Teradata" notes="">
+            <CodeOptions>
+        		<CodeOption name="DBTypeMapping-bigint">BIGINT</CodeOption>
+				<CodeOption name="DBTypeMapping-blob">BLOB</CodeOption>
+				<CodeOption name="DBTypeMapping-Binary">BYTE</CodeOption>
+				<CodeOption name="DBTypeMapping-boolean">BYTEINT</CodeOption>
+				<CodeOption name="DBTypeMapping-char">CHAR</CodeOption>
+				<CodeOption name="DBTypeMapping-date">DATE</CodeOption>
+				<CodeOption name="DBTypeMapping-datetime">TIMESTAMP</CodeOption>
+				<CodeOption name="DBTypeMapping-decimal">DECIMAL</CodeOption>
+				<CodeOption name="DBTypeMapping-double">FLOAT</CodeOption>
+				<CodeOption name="DBTypeMapping-float">FLOAT</CodeOption>
+				<CodeOption name="DBTypeMapping-guid">LONG VARCHAR</CodeOption>
+				<CodeOption name="DBTypeMapping-integer">INTEGER</CodeOption>
+				<CodeOption name="DBTypeMapping-long">BIGINT</CodeOption>
+				<CodeOption name="DBTypeMapping-smallint">SMALLINT</CodeOption>
+				<CodeOption name="DBTypeMapping-text">CLOB</CodeOption>
+				<CodeOption name="DBTypeMapping-time">TIME</CodeOption>
+				<CodeOption name="DBTypeMapping-timestamp">TIMESTAMP</CodeOption>
+				<CodeOption name="DBTypeMapping-tinyint">TINYINT</CodeOption>
+        		<CodeOption name="DBTypeMapping-varbinary">VARBYTE</CodeOption>
+				<CodeOption name="DBTypeMapping-varchar">VARCHAR</CodeOption>
+            </CodeOptions>
+        </CodeModule>
+     </CodeModules>
+</MDG.Technology>

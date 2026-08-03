@@ -35,6 +35,15 @@ module Ea
           @table_name = table_name
         end
 
+        # @return [Boolean] true when the table exists in the database
+        def table_exists?
+          row = @database.get_first_row(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name=?",
+            [@table_name]
+          )
+          !row.nil?
+        end
+
         # Read all records from the table
         #
         # @param limit [Integer, nil] Maximum number of records to return

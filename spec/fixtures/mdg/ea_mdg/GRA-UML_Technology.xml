@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<MDG.Technology version="1.0"><Documentation id="GRA-UML" name="GRA-UML" version="0.1" notes="Global Reference Architecture profile, for modelling and generation of GRA conformant Service Specification Packages."/><UMLProfiles><UMLProfile profiletype="uml2">
+			<Documentation id="E1FBE4C4-5" name="GRA-UML" version="1.0" notes="GRA-UML"/>
+			<Content>
+				<Stereotypes>
+					<Stereotype name="Consumer" metatype="Consumer" notes="" cx="90" cy="70" bgcolor="12445643" fontcolor="0" bordercolor="0" borderwidth="1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Association">
+								<Property name="compositionKind" value="none"/>
+								<Property name="direction" value="Unspecified"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="Provider" metatype="Provider" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Association">
+								<Property name="compositionKind" value="none"/>
+								<Property name="direction" value="Unspecified"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="signal" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Operation">
+								<Property name="isOrdered" value=""/>
+								<Property name="isQuery" value="false"/>
+								<Property name="isUnique" value=""/>
+								<Property name="lower" value=""/>
+								<Property name="upper" value=""/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+				</Stereotypes>
+				<TaggedValueTypes/>
+				<QuickLink data="// Source Element Type,Source ST Filter,Target Element Type,Target Stereotype Filter,Diagram Filter,New Element Type,New Element Stereotype,New Link Type,New Link Stereotype,New Link Direction,New Link Caption,New Link and Element Caption,Create Link,Create Element,Disallow Self Connector,Exclusive to ST Filter +No Inherit from Metatype,Menu Group,Complexity Level,Target Must Be Parent,Embed Element,Precedes Separator Leaf,Precedes Separator Group,Dummy Column&#xA;Actor,,,,,UseCase,,Association,Provider,undirected,Provider,Provider,TRUE,TRUE,TRUE,,UseCase,0,,,,,&#xA;Actor,,UseCase,,,,,Association,Provider,undirected,Provider,Provider,TRUE,,TRUE,,,0,,,,,&#xA;Actor,,,,,UseCase,,Association,Consumer,undirected,Consumer,Consumer,TRUE,TRUE,TRUE,,UseCase,0,,,,,&#xA;Actor,,UseCase,,,,,Association,Consumer,undirected,Consumer,Consumer,TRUE,,TRUE,,,0,,,,TRUE,&#xA;UseCase,,,,,Actor,,Association,Provider,undirected,Provider,Provider,TRUE,TRUE,TRUE,,Actor,0,,,,,&#xA;UseCase,,Actor,,,,,Association,Provider,undirected,Provider,Provider,TRUE,,TRUE,,,0,,,,,&#xA;UseCase,,,,,Actor,,Association,Consumer,undirected,Consumer,Consumer,TRUE,TRUE,TRUE,,Actor,0,,,,,&#xA;UseCase,,Actor,,,,,Association,Consumer,undirected,Consumer,Consumer,TRUE,,TRUE,,,0,,,,TRUE,&#xA;&#xA;"/>
+			</Content>
+		</UMLProfile>
+	</UMLProfiles><DiagramProfile><UMLProfile profiletype="uml2">
+			<Documentation id="9008B09D-E" name="GRA-UML" version="1.0" notes="GRA-UML"/>
+			<Content>
+				<Stereotypes>
+					<Stereotype name="GRA Use Case" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Diagram_Use Case">
+								<Property name="alias" value="GRA Use Case"/>
+								<Property name="diagramID" value="uc"/>
+								<Property name="toolbox" value="GRA-UML Use Case"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="GRA Component" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Diagram_Component">
+								<Property name="alias" value="GRA Component"/>
+								<Property name="diagramID" value="component"/>
+								<Property name="toolbox" value="GRA-UML Component"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="GRA Composite Structure" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Diagram_CompositeStructure">
+								<Property name="alias" value="GRA Composite Structure"/>
+								<Property name="diagramID" value="compositestructure"/>
+								<Property name="toolbox" value="GRA-UML Composite Structure"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="GRA Interaction" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Diagram_Sequence">
+								<Property name="alias" value="GRA Interaction"/>
+								<Property name="diagramID" value="sd"/>
+								<Property name="toolbox" value="GRA-UML Interaction"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="GRA Object" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Diagram_Object">
+								<Property name="alias" value="GRA Object"/>
+								<Property name="diagramID" value="object"/>
+								<Property name="toolbox" value="GRA-UML Object"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+				</Stereotypes>
+				<TaggedValueTypes/>
+			</Content>
+		</UMLProfile>
+	</DiagramProfile><UIToolboxes><UMLProfile profiletype="uml2">
+			<Documentation id="547BD09A-C" name="GRA-UML Component" version="1.0" notes="GRA-UML Component"/>
+			<Content>
+				<Stereotypes>
+					<Stereotype name="GRA-UML Component" notes="" cx="266" cy="118" bgcolor="13434828" fontcolor="0" bordercolor="0" borderwidth="1" hideicon="0">
+						<AppliesTo>
+							<Apply type="ToolboxPage"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="UML::Realization" type="" description="" unit="" values="" default="Realization"/>
+							<Tag name="UML::Actor" type="" description="" unit="" values="" default="Actor"/>
+							<Tag name="UML::Component" type="" description="" unit="" values="" default="Component"/>
+							<Tag name="UML::Port" type="" description="" unit="" values="" default="Port"/>
+							<Tag name="UML::ProvidedInterface" type="" description="" unit="" values="" default="Expose Interface"/>
+						</TaggedValues>
+					</Stereotype>
+				</Stereotypes>
+				<TaggedValueTypes/>
+			</Content>
+		</UMLProfile>
+		<UMLProfile profiletype="uml2">
+			<Documentation id="A738978F-2" name="GRA-UML Composite Structure" version="1.0" notes="GRA-UML Composite Structure"/>
+			<Content>
+				<Stereotypes>
+					<Stereotype name="GRA-UML Composite Structure" notes="Elements and Relationships for GRA-UML Use Cases" cx="257" cy="101" bgcolor="13434828" fontcolor="0" bordercolor="0" borderwidth="1" hideicon="0">
+						<AppliesTo>
+							<Apply type="ToolboxPage"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="UML::Component" type="" description="" unit="" values="" default="Component"/>
+							<Tag name="UML::Collaboration" type="" description="" unit="" values="" default="Collaboration"/>
+							<Tag name="UML::Actor" type="" description="" unit="" values="" default="Actor"/>
+						</TaggedValues>
+					</Stereotype>
+				</Stereotypes>
+				<TaggedValueTypes/>
+			</Content>
+		</UMLProfile>
+		<UMLProfile profiletype="uml2">
+			<Documentation id="8A888984-2" name="GRA-UML Interaction" version="1.0" notes="GRA-UML Interaction"/>
+			<Content>
+				<Stereotypes>
+					<Stereotype name="GRA-UML Interaction" notes="" cx="195" cy="90" bgcolor="13434828" fontcolor="0" bordercolor="0" borderwidth="1" hideicon="0">
+						<AppliesTo>
+							<Apply type="ToolboxPage"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="UML::Message" type="" description="" unit="" values="" default="Message"/>
+							<Tag name="UML::Actor" type="" description="" unit="" values="" default="Actor"/>
+							<Tag name="UML::Component" type="" description="" unit="" values="" default=""/>
+						</TaggedValues>
+					</Stereotype>
+				</Stereotypes>
+				<TaggedValueTypes/>
+			</Content>
+		</UMLProfile>
+		<UMLProfile profiletype="uml2">
+			<Documentation id="FF00B73B-6" name="GRA-UML Object" version="1.0" notes="GRA-UML Object"/>
+			<Content>
+				<Stereotypes>
+					<Stereotype name="GRA-UML Object" notes="" cx="278" cy="205" bgcolor="13434828" fontcolor="0" bordercolor="0" borderwidth="1" hideicon="0">
+						<AppliesTo>
+							<Apply type="ToolboxPage"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="UML::Association" type="" description="" unit="" values="" default="Associate"/>
+							<Tag name="UML::Realization" type="" description="" unit="" values="" default="Realize"/>
+							<Tag name="UML::UseCaseLink" type="" description="" unit="" values="" default="Use"/>
+							<Tag name="UML::Object" type="" description="" unit="" values="" default="Instance Specification"/>
+							<Tag name="UML::Interface" type="" description="" unit="" values="" default="Interface"/>
+							<Tag name="UML::Component" type="" description="" unit="" values="" default="Component"/>
+							<Tag name="UML::Port" type="" description="" unit="" values="" default="Port"/>
+							<Tag name="UML::ProvidedInterface" type="" description="" unit="" values="" default="Expose Interface"/>
+							<Tag name="GRA-UML::signal(UML::Operation)" type="" description="" unit="" values="" default="Reception"/>
+							<Tag name="UML::Signal" type="" description="" unit="" values="" default="Signal"/>
+							<Tag name="UML::Collaboration" type="" description="" unit="" values="" default="Collaboration"/>
+							<Tag name="UML::Actor" type="" description="" unit="" values="" default="Actor"/>
+							<Tag name="UML::Package" type="" description="" unit="" values="" default="Package"/>
+						</TaggedValues>
+					</Stereotype>
+				</Stereotypes>
+				<TaggedValueTypes/>
+			</Content>
+		</UMLProfile>
+		<UMLProfile profiletype="uml2">
+			<Documentation id="E1827919-C" name="GRA-UML Use Case" version="1.0" notes="GRA-UML Use Case"/>
+			<Content>
+				<Stereotypes>
+					<Stereotype name="GRA-UML Use Case" notes="Elements and Relationships for GRA-UML Use Cases" cx="310" cy="185" bgcolor="13434828" fontcolor="0" bordercolor="0" borderwidth="1" hideicon="0">
+						<AppliesTo>
+							<Apply type="ToolboxPage"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="GRA-UML::Consumer(UML::Association)" type="" description="" unit="" values="" default="Consumer"/>
+							<Tag name="GRA-UML::Provider(UML::Association)" type="" description="" unit="" values="" default="Provider"/>
+							<Tag name="UML::Realization" type="" description="" unit="" values="" default="Realize"/>
+							<Tag name="UML::Generalization" type="" description="" unit="" values="" default="Generalize"/>
+							<Tag name="UML::UCInclude" type="" description="" unit="" values="" default="Include"/>
+							<Tag name="UML::UCExtend" type="" description="" unit="" values="" default="Extend"/>
+							<Tag name="UML::Actor" type="" description="" unit="" values="" default="Actor"/>
+							<Tag name="UML::UseCase" type="" description="" unit="" values="" default="Use Case"/>
+							<Tag name="UML::Component" type="" description="" unit="" values="" default="Component"/>
+						</TaggedValues>
+					</Stereotype>
+				</Stereotypes>
+				<TaggedValueTypes/>
+			</Content>
+		</UMLProfile>
+	</UIToolboxes>
+	<ModelTemplates>
+		<Model name="GRA Annotations Library" description="" groupName="Patterns" location="gr1.0-gra-annotations-library.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+		<Model name="GRA Starter Model" description="" groupName="Patterns" location="gr1.0-gra-starter-model.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+	</ModelTemplates>
+</MDG.Technology>
