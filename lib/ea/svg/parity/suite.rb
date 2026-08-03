@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "nokogiri"
-require "ea/svg/parity/checker"
 
 module Ea
   module Svg

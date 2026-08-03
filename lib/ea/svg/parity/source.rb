@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-require "ea"
 require "xmi"
-require "ea/sources/xmi/adapter"
 
 module Ea
   module Svg

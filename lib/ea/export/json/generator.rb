@@ -61,17 +61,16 @@ module Ea
         end
 
         def safe_id(record)
-          pk = record.class.respond_to?(:primary_key_column) ?
-               record.class.primary_key_column : nil
-          return nil unless pk
+          return nil unless record.is_a?(Ea::Qea::Models::BaseModel)
+
+          pk = record.class.primary_key_column
+          return nil if pk.nil?
 
           record.to_hash[pk.to_s] || record.to_hash[pk.to_sym]
         end
 
         def record_name(record)
-          return record.name if record.respond_to?(:name)
-
-          record.to_hash["name"]
+          record.to_hash["name"] || record.to_hash[:name]
         end
 
         # Per-class projections: each entry is a proc returning a Hash.

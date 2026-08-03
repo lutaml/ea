@@ -24,18 +24,30 @@ module Ea
           return unless ast
 
           if evaluate(ast, owner)
-            result.add(:info, "OCL constraint '#{constraint.constraint_type}' " \
-                              "passed for #{owner.name}",
-                       entity_name: owner.name)
+            result.add_info(
+              category: :ocl_constraint,
+              entity_type: :class,
+              entity_id: owner.ea_object_id.to_s,
+              entity_name: owner.name,
+              message: "OCL constraint '#{constraint.constraint_type}' passed",
+            )
           else
-            result.add(:warning, "OCL constraint '#{constraint.constraint_type}' " \
-                                 "failed for #{owner.name}: #{constraint.constraint}",
-                       entity_name: owner.name)
+            result.add_warning(
+              category: :ocl_constraint,
+              entity_type: :class,
+              entity_id: owner.ea_object_id.to_s,
+              entity_name: owner.name,
+              message: "OCL constraint '#{constraint.constraint_type}' failed: #{constraint.constraint}",
+            )
           end
         rescue Ea::Ocl::UnsupportedError => e
-          result.add(:info, "Skipping OCL constraint on #{owner&.name} " \
-                            "(unsupported syntax): #{e.message}",
-                     entity_name: owner&.name)
+          result.add_info(
+            category: :ocl_constraint,
+            entity_type: :class,
+            entity_id: owner&.ea_object_id.to_s,
+            entity_name: owner&.name,
+            message: "Skipping OCL constraint (unsupported syntax): #{e.message}",
+          )
         end
 
         # Parse the OCL body. Returns nil for empty / non-invariant
@@ -51,13 +63,11 @@ module Ea
         end
 
         def owner_for(constraint)
-          object_id = constraint.respond_to?(:ea_object_id) ?
-                       constraint.ea_object_id :
-                       constraint.object_id
+          object_id = constraint.ea_object_id
           return nil unless object_id
 
           (database.collections[:objects] || [])
-            .find { |o| o.object_id == object_id }
+            .find { |o| o.ea_object_id == object_id }
         end
       end
     end

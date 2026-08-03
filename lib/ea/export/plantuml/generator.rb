@@ -126,8 +126,10 @@ module Ea
         def enum_literals(enum)
           literals = model.collections[:enumeration_literals] ||
                      model.collections[:enum_literals] || []
-          # Enumeration literals are linked to the enum via object_id.
-          literals.select { |l| l.respond_to?(:ea_object_id) && l.ea_object_id == enum.ea_object_id }
+          literals.select do |literal|
+            literal.is_a?(Ea::Qea::Models::EaAttribute) &&
+              literal.ea_object_id == enum.ea_object_id
+          end
         end
 
         def find_object(object_id)

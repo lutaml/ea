@@ -32,6 +32,8 @@ module Ea
         return nil unless context
 
         context.public_send(name)
+      rescue NoMethodError
+        nil
       end
 
       def eval_string_matches(ast, context)
@@ -63,14 +65,14 @@ module Ea
 
       def eval_size(ast, context)
         collection = evaluate(ast.collection, context)
-        return 0 unless collection.respond_to?(:size)
+        return 0 unless collection.is_a?(Array)
 
         collection.size
       end
 
       def eval_is_empty(ast, context)
         collection = evaluate(ast.collection, context)
-        return true unless collection.respond_to?(:empty?)
+        return true unless collection.is_a?(Array)
 
         collection.empty?
       end

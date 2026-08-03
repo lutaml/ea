@@ -1,20 +1,20 @@
 # TODO.complete/67: OCL collection operations
 
-## Status: open
+## Status: done
 
-`Ea::Ocl` evaluates a subset of OCL: `exists`, `forAll`, `matches`,
-`and`/`or`/`not`, attribute access. Real EA constraints use
-`size()` and `isEmpty()` (parity: 0/0 because the OCL evaluator
-wasn't even invoked before this session).
+`Ea::Ocl` evaluates `->size()` and `->isEmpty()` collection
+operations. Specified in `spec/ea/ocl/ocl_spec.rb` (4 examples).
 
-## Plan
+## Implementation
 
-1. Add `CollectionSize` AST node: `<collection>->size()`.
-2. Add `CollectionIsEmpty` AST node: `<collection>->isEmpty()`.
-3. Parser recognizes `->size` and `->isEmpty` patterns.
-4. Evaluator returns integer / boolean.
+- `Nodes::CollectionSize` — `<collection>->size()` AST node.
+- `Nodes::CollectionIsEmpty` — `<collection>->isEmpty()` AST node.
+- `Parser` recognizes `->size` and `->isEmpty` patterns via regex.
+- `Evaluator#eval_size` returns integer; `#eval_is_empty` returns
+  boolean. Both check `is_a?(Array)` (not `respond_to?`) per the
+  typing rules.
 
 ## Acceptance
 
-- Spec: `inv: self.items->size() > 0` parses + evaluates.
-- Spec: `inv: self.items->isEmpty() or self.required` parses + evaluates.
+- `inv: self.items->size() > 0` parses + evaluates.
+- `inv: self.items->isEmpty() or self.required` parses + evaluates.
