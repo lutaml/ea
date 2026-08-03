@@ -6,7 +6,7 @@ module Ea
       # Risk register entry from t_objectrisks.
       class EaObjectRisk < BaseModel
         attribute :object_risk_id, :integer
-        attribute :object_id, :integer
+        attribute :ea_object_id, :integer
         attribute :risk, :string
         attribute :risk_type, :string
         attribute :notes, :string
@@ -21,7 +21,7 @@ module Ea
 
         COLUMN_MAP = {
           "ObjectRiskID" => :object_risk_id,
-          "Object_ID" => :object_id,
+          "Object_ID" => :ea_object_id,
           "RiskType" => :risk_type
         }.freeze
 

@@ -7,7 +7,7 @@ module Ea
       # the QEA are encrypted and what algorithm was used.
       class EaSecrypt < BaseModel
         attribute :secrypt_id, :integer
-        attribute :object_id, :integer
+        attribute :ea_object_id, :integer
         attribute :encrypt, :string
         attribute :password_hash, :string
 
@@ -21,7 +21,7 @@ module Ea
 
         COLUMN_MAP = {
           "SecryptID" => :secrypt_id,
-          "Object_ID" => :object_id,
+          "Object_ID" => :ea_object_id,
           "PasswordHash" => :password_hash
         }.freeze
 

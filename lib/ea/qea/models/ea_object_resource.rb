@@ -6,7 +6,7 @@ module Ea
       # Resource allocation from t_objectresource.
       class EaObjectResource < BaseModel
         attribute :object_resource_id, :integer
-        attribute :object_id, :integer
+        attribute :ea_object_id, :integer
         attribute :resource, :string
         attribute :role, :string
         attribute :time_allocated, :string
@@ -22,7 +22,7 @@ module Ea
 
         COLUMN_MAP = {
           "ObjectResourceID" => :object_resource_id,
-          "Object_ID" => :object_id
+          "Object_ID" => :ea_object_id
         }.freeze
 
         def self.column_map

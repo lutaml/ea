@@ -38,7 +38,7 @@ module Ea
 
       def eval_exists(ast, context)
         collection = evaluate(ast.collection, context)
-        return false unless collection.respond_to?(:each)
+        return false unless collection.is_a?(Array)
 
         var_name = ast.var
         predicate = ast.predicate
@@ -49,7 +49,7 @@ module Ea
 
       def eval_for_all(ast, context)
         collection = evaluate(ast.collection, context)
-        return true unless collection.respond_to?(:each)
+        return true unless collection.is_a?(Array)
 
         var_name = ast.var
         predicate = ast.predicate

@@ -12,17 +12,18 @@ RSpec.describe "Round-trip stability" do
     expect(json).not_to be_empty
 
     parsed = JSON.parse(json)
+    collections = parsed["collections"]
     db.collections.each do |name, records|
-      expect(parsed[name.to_s].size).to eq(records.size),
-        "collection #{name}: serialized #{records.size}, deserialized #{parsed[name.to_s].size}"
+      expect(collections[name.to_s].size).to eq(records.size),
+        "collection #{name}: serialized #{records.size}, deserialized #{collections[name.to_s].size}"
     end
   end
 
   it "QEA → XMI produces valid XML structure" do
-    xmi = Ea::Export::Xmi::Generator.call(db)
-    expect(xmi).to include("<xmi")
-    expect(xmi).to include("documentation")
-    expect(xmi).to include("</xmi>")
+    xmi = Ea::Transformers.qea_to_xmi(db)
+    expect(xmi).to include("<xmi:XMI")
+    expect(xmi).to include("<xmi:Documentation")
+    expect(xmi).to include("</xmi:XMI>")
   end
 
   it "lutaml-model to_hash round-trips for EaObject" do

@@ -7,7 +7,7 @@ module Ea
       # entry to its visual icon and default toolbox slot.
       class EaPaletteItem < BaseModel
         attribute :palette_id, :string
-        attribute :object_id, :integer
+        attribute :ea_object_id, :integer
         attribute :name, :string
         attribute :alias, :string
         attribute :image_id, :integer
@@ -23,7 +23,7 @@ module Ea
 
         COLUMN_MAP = {
           "PaletteID" => :palette_id,
-          "Object_ID" => :object_id,
+          "Object_ID" => :ea_object_id,
           "Image_ID" => :image_id
         }.freeze
 

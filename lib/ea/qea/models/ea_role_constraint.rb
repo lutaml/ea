@@ -6,7 +6,7 @@ module Ea
       # Role-based constraint from t_roleconstraint.
       class EaRoleConstraint < BaseModel
         attribute :roleconstraint_id, :integer
-        attribute :object_id, :integer
+        attribute :ea_object_id, :integer
         attribute :role, :string
         attribute :notes, :string
 
@@ -20,7 +20,7 @@ module Ea
 
         COLUMN_MAP = {
           "RoleConstraintID" => :roleconstraint_id,
-          "Object_ID" => :object_id
+          "Object_ID" => :ea_object_id
         }.freeze
 
         def self.column_map

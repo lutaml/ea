@@ -7,26 +7,21 @@ module Ea
     module Xsd
       # Generates an XSD schema string from a parsed QEA model.
       #
-      # Uses ClassMapping to translate UML class names to GML types
-      # and NamespaceRegistry to declare target namespaces. Walks the
-      # model's classifiers and emits `<xs:element>` + `<xs:complexType>`
-      # pairs.
-      #
-      # Both class_mapping and namespaces default to the EA-bundled
-      # GML fixtures when present, so callers can do
-      #   Ea::Export::Xsd::Generator.call(model, target_namespace: ...)
-      # without manually loading XML fixtures.
+      # Pure: takes already-loaded ClassMapping and NamespaceRegistry
+      # instances. No file IO, no fixture-path coupling. The CLI
+      # layer is responsible for loading GMLClassMapping.xml and
+      # GMLNamespaces.xml from disk.
       class Generator
         XSD_NS = "http://www.w3.org/2001/XMLSchema"
 
-        DEFAULT_MAPPING_PATH = "spec/fixtures/mdg/ea_config/gml/GMLClassMapping.xml".freeze
-        DEFAULT_NAMESPACES_PATH = "spec/fixtures/mdg/ea_config/gml/GMLNamespaces.xml".freeze
-
         attr_reader :class_mapping, :namespaces
 
-        def initialize(class_mapping: nil, namespaces: nil)
-          @class_mapping = class_mapping || ClassMapping.from_path(DEFAULT_MAPPING_PATH)
-          @namespaces = namespaces || NamespaceRegistry.from_path(DEFAULT_NAMESPACES_PATH)
+        # @param class_mapping [ClassMapping] type translation rules
+        # @param namespaces [NamespaceRegistry] namespace declarations
+        def initialize(class_mapping: ClassMapping.new,
+                       namespaces: NamespaceRegistry.new)
+          @class_mapping = class_mapping
+          @namespaces = namespaces
         end
 
         # Class-method shortcut. Accepts the same options as #initialize
