@@ -1,19 +1,24 @@
 # TODO.complete/68: OCL comparison operators
 
-## Status: open
+## Status: done
 
-`Ea::Ocl` supports `=`/`==` via equality, but not ordering: `>`,
-`<`, `>=`, `<=`. These appear in real OCL invariants.
+`Ea::Ocl` evaluates all comparison operators: `>`, `<`, `>=`, `<=`,
+`=`, `==`, `!=`. Non-numeric operands raise `UnsupportedError`.
 
-## Plan
+## Implementation
 
-1. Add `Comparison` AST node: `left op right` where op is one of
-   `>`, `<`, `>=`, `<=`.
-2. Parser recognizes the operators.
-3. Evaluator compares numeric operands; raises `UnsupportedError` on
-   non-numeric.
+- `Nodes::Comparison` — `left op right` AST node.
+- `Parser#split_on_comparison_op` handles all 7 operators with
+  correct precedence (multi-char ops like `>=` checked before `>`).
+- `Evaluator#eval_comparison` dispatches on `ast.op`, enforces
+  `Numeric` operands.
 
 ## Acceptance
 
-- Spec: `inv: self.age >= 18` parses + evaluates (true / false).
-- Spec: `inv: self.count < self.max` parses + evaluates.
+- `inv: self.age >= 18` parses + evaluates.
+- `inv: self.count < self.max` parses + evaluates.
+- `inv: self.x = self.y` evaluates as equality.
+- `inv: self.x != self.y` evaluates as inequality.
+- Non-numeric comparison raises `UnsupportedError`.
+
+All specified in `spec/ea/ocl/ocl_spec.rb` (3 examples, 6 assertions).

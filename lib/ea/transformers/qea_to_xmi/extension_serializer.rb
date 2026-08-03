@@ -72,7 +72,7 @@ module Ea
           lines = [
             %(\t\t<element xmi:idref="#{idref}" xmi:type="uml:Package" name="#{escape(name)}" scope="#{scope}">),
             model_for_package(pkg),
-            properties_for(record_documentation(pkg.notes), sType: "Package", scope: scope),
+            properties_for(record_documentation(pkg.notes), stype: "Package", scope: scope),
             style_for_package(pkg),
             tags_block_for(pkg.ea_guid),
             "\t\t</element>"
@@ -92,7 +92,7 @@ module Ea
           lines = [
             %(\t\t<element xmi:idref="#{idref}" xmi:type="#{uml_type}" name="#{escape(name)}" scope="#{scope}">),
             model_for_object(obj),
-            properties_for(record_documentation(obj.note), sType: obj.object_type, scope: scope,
+            properties_for(record_documentation(obj.note), stype: obj.object_type, scope: scope,
                                                            is_abstract: obj.abstract?),
             style_for_object(obj),
             tags_block_for(obj.ea_guid),
@@ -111,17 +111,21 @@ module Ea
           obj.object_type.nil? || SKIP_OBJECT_TYPES.include?(obj.object_type)
         end
 
+        # OCP registry: EA object type → UML XMI type.
+        # Adding a new mapping = adding one entry, not editing a
+        # case/when branch.
+        UML_TYPE_FOR = {
+          "Class"         => "uml:Class",
+          "Interface"     => "uml:Interface",
+          "Enumeration"   => "uml:Enumeration",
+          "DataType"      => "uml:DataType",
+          "PrimitiveType" => "uml:PrimitiveType",
+          "Object"        => "uml:Object",
+          "Package"       => "uml:Package",
+        }.freeze
+
         def uml_type_for(obj)
-          case obj.object_type
-          when "Class"       then "uml:Class"
-          when "Interface"   then "uml:Interface"
-          when "Enumeration" then "uml:Enumeration"
-          when "DataType"    then "uml:DataType"
-          when "PrimitiveType" then "uml:PrimitiveType"
-          when "Object"      then "uml:Object"
-          when "Package"     then "uml:Package"
-          else obj.object_type
-          end
+          UML_TYPE_FOR[obj.object_type] || obj.object_type.to_s
         end
 
         # ---- <model> / <properties> / <style> ---------------------------
@@ -150,11 +154,11 @@ module Ea
           "\t\t\t<model #{attrs.join(" ")}/>"
         end
 
-        def properties_for(documentation, sType:, scope:, is_abstract: nil)
+        def properties_for(documentation, stype:, scope:, is_abstract: nil)
           attrs = []
           attrs << %(documentation="#{escape(documentation)}") unless documentation.nil? || documentation.empty?
           attrs << %(isSpecification="false")
-          attrs << %(sType="#{sType}")
+          attrs << %(sType="#{stype}")
           attrs << %(nType="0")
           attrs << %(scope="#{scope}")
           attrs << %(isAbstract="#{is_abstract ? "true" : "false"}")

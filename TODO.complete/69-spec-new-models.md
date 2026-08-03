@@ -1,25 +1,20 @@
 # TODO.complete/69: Specs for newly-added QEA models
 
-## Status: open
+## Status: done
 
-The following models were added in TODO 44 / TODO 7 sessions but
-have no spec coverage: `EaSecrypt`, `EaPalette`, `EaPaletteItem`,
-`EaImplement`, `EaRoleConstraint`, `EaObjectProblem`, `EaObjectRisk`,
-`EaObjectTest`, `EaObjectEffort`, `EaObjectResource`,
-`EaObjectScenario`, `EaObjectRequire`, `EaObjectTrx`.
+All 13 models listed below have primary_key, table_name, column_map,
+and from_db_row coverage in
+`spec/ea/qea/models/auxiliary_models_spec.rb` (66 examples, 0
+failures).
 
-Without specs, regressions in column mapping or primary key logic
-go undetected.
+## Models covered
 
-## Plan
+`EaSecrypt`, `EaPalette`, `EaPaletteItem`, `EaImplement`,
+`EaRoleConstraint`, `EaObjectProblem`, `EaObjectRisk`, `EaObjectTest`,
+`EaObjectEffort`, `EaObjectResource`, `EaObjectScenario`,
+`EaObjectRequire`, `EaObjectTrx`.
 
-1. Single consolidated spec file: `spec/ea/qea/models/
-   auxiliary_models_spec.rb`.
-2. Per-model `it "loads primary key and columns"` block.
-3. Verifies `primary_key_column` is correct.
-4. Verifies `column_map` translates known column names to symbols.
+## Follow-up
 
-## Acceptance
-
-- File exists, all 13 models have at least 1 example.
-- `bundle exec rspec` passes with 0 failures.
+See [[70-specs-for-all-models]] for expanding spec coverage to the
+remaining 18 models that currently rely on integration tests only.

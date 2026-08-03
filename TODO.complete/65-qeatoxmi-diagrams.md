@@ -1,29 +1,15 @@
 # TODO.complete/65: QeaToXmi emits diagram elements
 
-## Status: open
+## Status: done (via TODO 66 — ExtensionSerializer)
 
-`Ea::Transformers::QeaToXmi` does not emit EA's `<diagram>` elements
-at all. The parity spec confirms 0/23 in basic.qea, 0/2 in test.qea.
+`Ea::Transformers::QeaToXmi` now emits `<diagram>` elements as part
+of the `<diagrams>` extension section. Each diagram has a `<model>`
+block, `<properties>` block, and `<elements>` containing placed
+`<element subject="EAID_..." geometry="..."/>` children.
 
-## Plan
+Parity: 22/22 diagrams matched for basic.qea.
 
-1. Walk `t_diagram` for every diagram.
-2. For each diagram, walk `t_diagramlinks` to find placed
-   elements + connectors; emit them as `<element>` children of
-   `<diagram>`.
-3. Each element child references its `xmi:idref` to the model
-   class.
-4. Connector children emit as `<connector>` with geometry (see
-   TODO 64).
+## Implementation
 
-## Acceptance
-
-- `ea export xmi` output for basic.qea now contains
-  `<diagram>` elements (was 0/23).
-- Parity threshold raised from 25% to 50%.
-
-## OCP
-
-Diagrams emit via a new private method `emit_diagrams(model)`
-called after the model class tree. Adding new diagram metadata
-(swimlane info, etc.) = new private method, no other changes.
+Extracted to `Ea::Transformers::QeaToXmi::ExtensionSerializer` (OCP).
+See [[66-qeatoxmi-style-tags-docs]] for the full restructuring.
