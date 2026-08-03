@@ -260,10 +260,12 @@ RSpec.describe Ea::Qea::Services::DatabaseLoader do
       end
 
       it "raises error for disabled table" do
-        # Mock a disabled table in config
+        disabled_table = Ea::Qea::Services::Configuration::TableDefinition.new(
+          table_name: "t_object", enabled: false,
+        )
         allow(test_loader.config)
           .to receive(:table_config_for).with("t_object")
-          .and_return(double(enabled: false))
+          .and_return(disabled_table)
 
         expect do
           test_loader.load_table("t_object")

@@ -425,6 +425,7 @@ module Ea
           end
           boxes
         end
+        public :parse_label_boxes
 
         # Parse one label box's colon-separated key=value body into
         # a Hash with string keys. Returns nil if OX/OY are absent.

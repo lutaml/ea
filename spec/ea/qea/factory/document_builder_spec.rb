@@ -5,26 +5,31 @@ require "spec_helper"
 RSpec.describe Ea::Qea::Factory::DocumentBuilder do
   let(:builder) { described_class.new(name: "Test Model") }
 
-  # Mock UML elements
-  let(:mock_package) do
-    double("Package", xmi_id: "PKG-001", name: "TestPackage",
-                      classes: [], enums: [], data_types: [], packages: [], instances: [])
+  # Lightweight Struct-based fakes replacing doubles. These match
+  # the UML element interface that DocumentBuilder consumes.
+  FakePackage = Struct.new(:xmi_id, :name, :classes, :enums, :data_types,
+                           :packages, :instances, keyword_init: true)
+  FakeClass = Struct.new(:xmi_id, :name, keyword_init: true)
+  FakeEnum = Struct.new(:xmi_id, :name, keyword_init: true)
+  FakeAssociation = Struct.new(:xmi_id, :member_end, :member_end_xmi_id,
+                               :owner_end, :owner_end_xmi_id,
+                               keyword_init: true)
+
+  def make_package(attrs = {})
+    FakePackage.new(
+      { classes: [], enums: [], data_types: [], packages: [], instances: [] }.merge(attrs)
+    )
   end
 
-  let(:mock_class) do
-    double("Class", xmi_id: "CLASS-001", name: "Building")
-  end
-
-  let(:mock_enum) do
-    double("Enum", xmi_id: "ENUM-001", name: "Status")
-  end
-
+  let(:mock_package) { make_package(xmi_id: "PKG-001", name: "TestPackage") }
+  let(:mock_class) { FakeClass.new(xmi_id: "CLASS-001", name: "Building") }
+  let(:mock_enum) { FakeEnum.new(xmi_id: "ENUM-001", name: "Status") }
   let(:mock_association) do
-    double("Association", xmi_id: "ASSOC-001",
-                          member_end: "Building",
-                          member_end_xmi_id: "CLASS-001",
-                          owner_end: "Site",
-                          owner_end_xmi_id: "CLASS-002")
+    FakeAssociation.new(
+      xmi_id: "ASSOC-001",
+      member_end: "Building", member_end_xmi_id: "CLASS-001",
+      owner_end: "Site", owner_end_xmi_id: "CLASS-002",
+    )
   end
 
   describe "#initialize" do
@@ -69,8 +74,8 @@ RSpec.describe Ea::Qea::Factory::DocumentBuilder do
     end
 
     it "can be called multiple times" do
-      pkg1 = double("Package1", xmi_id: "PKG-001")
-      pkg2 = double("Package2", xmi_id: "PKG-002")
+      pkg1 = make_package(xmi_id: "PKG-001", name: "P1")
+      pkg2 = make_package(xmi_id: "PKG-002", name: "P2")
 
       builder.add_packages([pkg1])
       builder.add_packages([pkg2])
@@ -190,8 +195,8 @@ RSpec.describe Ea::Qea::Factory::DocumentBuilder do
       end
 
       it "raises error for duplicate xmi_ids" do
-        class1 = double("Class1", xmi_id: "SAME-ID")
-        class2 = double("Class2", xmi_id: "SAME-ID")
+        class1 = FakeClass.new(xmi_id: "SAME-ID", name: "C1")
+        class2 = FakeClass.new(xmi_id: "SAME-ID", name: "C2")
 
         builder.add_classes([class1, class2])
 
@@ -212,14 +217,8 @@ RSpec.describe Ea::Qea::Factory::DocumentBuilder do
 
     context "with duplicate xmi_ids" do
       it "raises validation error" do
-        pkg1 = double(
-          "Pkg1", xmi_id: "SAME-ID",
-                  classes: [], enums: [], data_types: [], packages: [], instances: []
-        )
-        pkg2 = double(
-          "Pkg2", xmi_id: "SAME-ID",
-                  classes: [], enums: [], data_types: [], packages: [], instances: []
-        )
+        pkg1 = make_package(xmi_id: "SAME-ID", name: "P1")
+        pkg2 = make_package(xmi_id: "SAME-ID", name: "P2")
 
         builder.add_packages([pkg1, pkg2])
 
@@ -230,61 +229,48 @@ RSpec.describe Ea::Qea::Factory::DocumentBuilder do
 
     context "with classes in packages" do
       it "collects xmi_ids from nested packages" do
-        # Create nested package structure
-        inner_class = double("InnerClass", xmi_id: "INNER-CLASS-001",
-                                           name: "InnerClass")
-        inner_package = double("InnerPackage", xmi_id: "INNER-PKG-001",
-                                               classes: [inner_class], enums: [],
-                                               data_types: [], packages: [], instances: [])
-        outer_package = double("OuterPackage", xmi_id: "OUTER-PKG-001",
-                                               classes: [], enums: [], data_types: [],
-                                               packages: [inner_package], instances: [])
+        inner_class = FakeClass.new(xmi_id: "INNER-CLASS-001", name: "InnerClass")
+        inner_package = make_package(xmi_id: "INNER-PKG-001", name: "Inner",
+                                      classes: [inner_class])
+        outer_package = make_package(xmi_id: "OUTER-PKG-001", name: "Outer",
+                                      packages: [inner_package])
 
-        # Create association referencing class in nested package
-        assoc = double("Assoc",
-                       xmi_id: "ASSOC-001",
-                       member_end: "InnerClass",
-                       member_end_xmi_id: "INNER-CLASS-001",
-                       owner_end: "OuterClass",
-                       owner_end_xmi_id: "OUTER-CLASS-001")
+        assoc = FakeAssociation.new(
+          xmi_id: "ASSOC-001",
+          member_end: "InnerClass", member_end_xmi_id: "INNER-CLASS-001",
+          owner_end: "OuterClass", owner_end_xmi_id: "OUTER-CLASS-001",
+        )
 
-        outer_class = double("OuterClass", xmi_id: "OUTER-CLASS-001")
+        outer_class = FakeClass.new(xmi_id: "OUTER-CLASS-001", name: "OuterClass")
 
         builder.add_packages([outer_package])
         builder.add_classes([outer_class])
         builder.add_associations([assoc])
 
-        # Should not raise error - inner class should be found
         expect { builder.validate! }.not_to raise_error
       end
 
       it "finds classes deeply nested in package hierarchy" do
-        # Create 3-level nesting
-        deep_class = double("DeepClass", xmi_id: "DEEP-CLASS-001")
-        level3_pkg = double("Level3", xmi_id: "PKG-L3",
-                                      classes: [deep_class], enums: [],
-                                      data_types: [], packages: [], instances: [])
-        level2_pkg = double("Level2", xmi_id: "PKG-L2",
-                                      classes: [], enums: [], data_types: [],
-                                      packages: [level3_pkg], instances: [])
-        level1_pkg = double("Level1", xmi_id: "PKG-L1",
-                                      classes: [], enums: [], data_types: [],
-                                      packages: [level2_pkg], instances: [])
+        deep_class = FakeClass.new(xmi_id: "DEEP-CLASS-001", name: "Deep")
+        level3_pkg = make_package(xmi_id: "PKG-L3", name: "L3",
+                                   classes: [deep_class])
+        level2_pkg = make_package(xmi_id: "PKG-L2", name: "L2",
+                                   packages: [level3_pkg])
+        level1_pkg = make_package(xmi_id: "PKG-L1", name: "L1",
+                                   packages: [level2_pkg])
 
-        assoc = double("Assoc",
-                       xmi_id: "ASSOC-DEEP",
-                       member_end: "DeepClass",
-                       member_end_xmi_id: "DEEP-CLASS-001",
-                       owner_end: "TopClass",
-                       owner_end_xmi_id: "TOP-CLASS-001")
+        assoc = FakeAssociation.new(
+          xmi_id: "ASSOC-DEEP",
+          member_end: "DeepClass", member_end_xmi_id: "DEEP-CLASS-001",
+          owner_end: "TopClass", owner_end_xmi_id: "TOP-CLASS-001",
+        )
 
-        top_class = double("TopClass", xmi_id: "TOP-CLASS-001")
+        top_class = FakeClass.new(xmi_id: "TOP-CLASS-001", name: "Top")
 
         builder.add_packages([level1_pkg])
         builder.add_classes([top_class])
         builder.add_associations([assoc])
 
-        # Should not raise error - deeply nested class should be found
         expect { builder.validate! }.not_to raise_error
       end
     end
@@ -292,39 +278,31 @@ RSpec.describe Ea::Qea::Factory::DocumentBuilder do
     context "with invalid association references" do
       it "removes associations with invalid member_end_xmi_id",
          :aggregate_failures do
-        assoc = double("Assoc",
-                       xmi_id: "ASSOC-001",
-                       member_end: "InvalidClass",
-                       member_end_xmi_id: "INVALID-ID",
-                       owner_end: "ValidClass",
-                       owner_end_xmi_id: nil)
+        assoc = FakeAssociation.new(
+          xmi_id: "ASSOC-001",
+          member_end: "InvalidClass", member_end_xmi_id: "INVALID-ID",
+          owner_end: "ValidClass", owner_end_xmi_id: nil,
+        )
 
         builder.add_associations([assoc])
 
-        # Should warn but not raise error (warnings only)
         expect { builder.validate! }.to output(/invalid member_end/).to_stderr
-
-        # Association should be removed
         expect(builder.document.associations).to be_empty
       end
 
       it "removes associations with invalid owner_end_xmi_id",
          :aggregate_failures do
-        class1 = double("Class", xmi_id: "CLASS-001")
-        assoc = double("Assoc",
-                       xmi_id: "ASSOC-001",
-                       member_end: "ValidClass",
-                       member_end_xmi_id: "CLASS-001",
-                       owner_end: "InvalidClass",
-                       owner_end_xmi_id: "INVALID-TYPE")
+        klass = FakeClass.new(xmi_id: "CLASS-001", name: "C")
+        assoc = FakeAssociation.new(
+          xmi_id: "ASSOC-001",
+          member_end: "ValidClass", member_end_xmi_id: "CLASS-001",
+          owner_end: "InvalidClass", owner_end_xmi_id: "INVALID-TYPE",
+        )
 
-        builder.add_classes([class1])
+        builder.add_classes([klass])
         builder.add_associations([assoc])
 
-        # Should warn but not raise error (warnings only)
         expect { builder.validate! }.to output(/invalid owner_end/).to_stderr
-
-        # Association should be removed
         expect(builder.document.associations).to be_empty
       end
     end

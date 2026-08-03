@@ -82,7 +82,7 @@ RSpec.describe "Attribute Tags Support" do
   end
 
   describe Ea::Qea::Factory::AttributeTagTransformer do
-    let(:database) { instance_double(Ea::Qea::Database) }
+    let(:database) { Ea::Qea::Database.new("test.qea") }
     let(:transformer) { described_class.new(database) }
 
     describe "#transform" do

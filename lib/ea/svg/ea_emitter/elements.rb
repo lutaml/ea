@@ -185,9 +185,6 @@ module Ea
         # alphabetical "+ Name" rows in the body compartment, but
         # only when the diagram's t_diagram.ShowPackageContents flag
         # is non-zero. Returns [] when the diagram suppresses
-        # package contents or the model element isn't a Package.
-        # Each entry is a Struct(name:, kind:) so the renderer can
-        # pick the correct per-type icon (Enumeration vs default).
         def package_content_lines_for(model_element)
           return [] unless model_element.is_a?(Ea::Model::Package)
           return [] unless diagram.show_package_contents
@@ -199,6 +196,7 @@ module Ea
             PackageContentRow.new(name: c.name.to_s, kind: row_icon_kind(c))
           end
         end
+        public :package_content_lines_for
 
         def package_children(package)
           return [] unless model_index

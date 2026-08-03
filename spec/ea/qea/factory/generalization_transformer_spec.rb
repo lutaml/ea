@@ -3,8 +3,7 @@
 require "spec_helper"
 
 RSpec.describe Ea::Qea::Factory::GeneralizationTransformer do
-  let(:connection) { double("Connection") }
-  let(:database) { double("Database", connection: connection) }
+  let(:database) { Ea::Qea::Database.new("test.qea") }
   let(:transformer) { described_class.new(database) }
 
   describe "#transform" do

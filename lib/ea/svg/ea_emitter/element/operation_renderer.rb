@@ -66,7 +66,7 @@ module Ea
 
             "#{text}: #{operation.return_type_name}"
           end
-          private_class_method :operation_text
+          public_class_method :operation_text
 
           def self.namespace_double_colon(type_name)
             return "" if type_name.nil? || type_name.empty?

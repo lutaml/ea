@@ -14,8 +14,7 @@ RSpec.describe Ea::Svg::EaEmitter::Compartment::PackageContents do
   let(:bounds) { Ea::Model::Bounds.new(x: 35, y: 60, width: 134, height: 174) }
   let(:theme) { Ea::Theme::Registry.default }
   let(:geometry) do
-    instance_double("Ea::Svg::EaEmitter::Element::CompartmentGeometry",
-                    attr_first_y: 92)
+    Struct.new(:attr_first_y, keyword_init: true).new(attr_first_y: 92)
   end
 
   let(:row) { Ea::Svg::EaEmitter::Elements::PackageContentRow.new(name: "Foo", kind: :default) }
