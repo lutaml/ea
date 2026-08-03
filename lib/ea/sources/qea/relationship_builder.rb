@@ -22,6 +22,7 @@ module Ea
           klass = ConnectorRelationshipMap.class_for(row.connector_type)
           args = common_args(row)
           args.merge!(association_args(row)) if klass == Ea::Model::Association
+          args.merge!(generalization_args(row)) if klass == Ea::Model::Generalization
           klass.new(**args)
         end
 
@@ -32,8 +33,20 @@ module Ea
             id: IdNormalizer.from_guid(row.ea_guid),
             name: row.name,
             qualified_name: row.name,
+            stereotype: row.stereotype,
             annotations: AnnotationBuilder.from_note(row.notes, row.ea_guid,
                                                      kind: "documentation")
+          }
+        end
+
+        # EA's Generalization connector points from the specific
+        # (child) to the general (parent): Start_Object_ID is the
+        # child, End_Object_ID is the parent. Direction is
+        # conventionally "Source -> Destination".
+        def generalization_args(row)
+          {
+            specific_id: id_for_object_id(row.start_object_id),
+            general_id: id_for_object_id(row.end_object_id)
           }
         end
 
@@ -63,19 +76,22 @@ module Ea
           IdNormalizer.from_guid(obj.ea_guid)
         end
 
+        # Returns nil when cardinality is absent so the renderer can
+        # distinguish "no multiplicity specified" from an explicit
+        # "1". EA only renders the "1" label when the modeller set it
+        # explicitly (SourceCard/DestCard = "1").
         def parse_lower(cardinality)
-          return 1 if cardinality.nil? || cardinality.empty?
+          return nil if cardinality.nil? || cardinality.empty?
 
-          # EA format: "1", "0..*", "1..1", etc. Take the first number.
           begin
             Integer(cardinality.split("..").first)
           rescue StandardError
-            1
+            nil
           end
         end
 
         def parse_upper(cardinality)
-          return 1 if cardinality.nil? || cardinality.empty?
+          return nil if cardinality.nil? || cardinality.empty?
 
           upper = cardinality.split("..").last
           return -1 if upper == "*"
@@ -83,7 +99,7 @@ module Ea
           begin
             Integer(upper)
           rescue StandardError
-            1
+            nil
           end
         end
 

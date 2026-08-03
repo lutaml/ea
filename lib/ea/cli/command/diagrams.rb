@@ -6,19 +6,13 @@ module Ea
       # `ea diagrams ACTION FILE [NAME]`
       #
       # Actions:
-      #   list FILE           — list diagrams in a QEA/XMI/LUR file (standalone)
+      #   list FILE           — list diagrams in a QEA/XMI file
       #   extract FILE NAME   — render the named diagram to SVG
       #
-      # `list` reads the EA database directly (no lutaml-uml required
-      # for QEA; XMI parsing via xmi gem only).
-      #
-      # `extract` accepts QEA, XMI, or LUR. The Repository is built
-      # from the input file via `RepositoryBuilder` (single source of
-      # truth — QEA/XMI are parsed via `Ea::Transformations`, LUR is
-      # loaded natively via `Repository.from_file`).
+      # Both actions use the modern Ea::Model pipeline (parsed via
+      # Ea::Sources::Qea/Xmi::Adapter, rendered via
+      # Ea::Svg::EaEmitter::Document). No lutaml-uml dependency.
       class Diagrams < Base
-        include RepositoryBuilder
-
         ACTIONS = %w[list extract].freeze
 
         def call
@@ -41,33 +35,48 @@ module Ea
         end
 
         def list
-          db = load_database
-          rows = db.diagrams.map { |d| [d.name, diagram_type_label(d), d.ea_guid] }
-          formatter.render(rows, columns: %i[name type guid])
+          rows = document.diagrams.map do |d|
+            [d.name, diagram_type_label(d)]
+          end
+          formatter.render(rows, columns: %i[name type])
         end
 
         def extract
-          repository = RepositoryBuilder.build_repository(file_path)
-          result = extractor.extract_one(repository, name, extract_options)
-          raise Ea::Cli::Error, result[:message] unless result[:success]
+          diagram = document.diagrams.find { |d| d.name == name }
+          unless diagram
+            raise Ea::Cli::Error,
+                  "Diagram #{name.inspect} not found in #{file_path}. " \
+                  "Use `ea diagrams list #{file_path}` to see names."
+          end
 
-          path = result[:path] || write_output(result.fetch(:svg_content),
-                                                default_name: "#{name}.svg")
+          svg = Ea::Svg::EaEmitter::Document.new(diagram,
+                                                   model_index: document.index_by_id,
+                                                   document: document).render
+          path = options[:output] || begin
+            base = File.basename(file_path, ".*")
+            dir = File.dirname(file_path)
+            safe_name = (diagram.name || "diagram").gsub(/[^\w.\-]+/, "_")
+            File.join(dir, "#{base}.#{safe_name}.svg")
+          end
+          FileUtils.mkdir_p(File.dirname(path))
+          File.write(path, svg)
           formatter.render([[path]], columns: [:written_to])
-        end
-
-        def extractor
-          Ea::Diagram::Extractor.new
-        end
-
-        def extract_options
-          opts = {}
-          opts[:output] = options[:output] if options[:output]
-          opts
         end
 
         def diagram_type_label(diagram)
           diagram.diagram_type || "Logical"
+        end
+
+        def document
+          @document ||= case File.extname(file_path).downcase
+                        when ".qea"
+                          Ea::Sources::Qea::Adapter.from_path(file_path)
+                        when ".xmi", ".xml"
+                          Ea::Sources::Xmi::Adapter.from_path(file_path)
+                        else
+                          raise Ea::Cli::UnsupportedFormat,
+                                "Unknown file format: #{File.extname(file_path)}"
+                        end
         end
       end
     end

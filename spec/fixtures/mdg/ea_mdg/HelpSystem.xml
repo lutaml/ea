@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<MDG.Technology version="1.0">
+  <Documentation id="HelpSystem" name="HelpSystem" version="1.01" notes="HelpSystem"/>
+  <UMLProfiles>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="6C42B9E0-E" name="HelpSystem" version="1.0" notes="HelpSystem"/>
+      <Content>
+        <Stereotypes>
+		
+          <Stereotype name="HelpPackage" notes="">
+            <AppliesTo>
+              <Apply type="Package">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+
+          <Stereotype name="HelpTopicProxy" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="refTopic"/>
+            </TaggedValues>
+          </Stereotype>
+
+		  <Stereotype name="HelpSectionProxy" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="refSection"/>
+            </TaggedValues>
+          </Stereotype>
+
+          <Stereotype name="HelpTableProxy" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="refTable"/>
+            </TaggedValues>
+          </Stereotype>
+
+          <Stereotype name="HelpTableRowProxy" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="refTableRow"/>
+            </TaggedValues>
+          </Stereotype>
+
+          <Stereotype name="HelpTopic" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="ImageRef" type="int" description="" unit="" values="" default=""/>
+              <Tag name="ImageLink"/>
+            </TaggedValues>
+          </Stereotype>
+
+          <Stereotype name="HelpSection" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+		  
+          <Stereotype name="HelpSectionDiagram" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+		  
+          <Stereotype name="HelpSectionLearnMore" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="SeeAlso"/>
+            </TaggedValues>
+          </Stereotype>
+		  
+          <Stereotype name="HelpTable2A" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Column1" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Column2" type="string" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+		  
+          <Stereotype name="HelpTable2AX" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Column1" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Column2" type="string" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+		  
+          <Stereotype name="HelpTable2B" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Column1" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Column2" type="string" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+		  
+          <Stereotype name="HelpTable2BX" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Column1" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Column2" type="string" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+		  
+          <Stereotype name="HelpTable2C" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Column1" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Column2" type="string" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+		  
+          <Stereotype name="HelpTable2CX" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Column1" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Column2" type="string" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+		  
+          <Stereotype name="HelpTable2D" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Column1" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Column2" type="string" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+		  
+          <Stereotype name="HelpTable2DX" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Column1" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Column2" type="string" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+		  
+          <Stereotype name="HelpTable2E" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Column1" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Column2" type="string" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+		  
+          <Stereotype name="HelpTable2EX" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Column1" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Column2" type="string" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+		  
+          <Stereotype name="HelpTable3A" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Column1" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Column2" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Column3" type="string" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+		  
+          <Stereotype name="HelpTable3AX" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Column1" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Column2" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Column3" type="string" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+		  
+          <Stereotype name="HelpTable3B" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Column1" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Column2" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Column3" type="string" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+		  
+          <Stereotype name="HelpTable3BX" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Column1" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Column2" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Column3" type="string" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+		  
+          <Stereotype name="HelpTable3C" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Column1" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Column2" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Column3" type="string" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+		  
+          <Stereotype name="HelpTable3CX" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Column1" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Column2" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Column3" type="string" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+		  
+          <Stereotype name="HelpTable3D" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Column1" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Column2" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Column3" type="string" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+		  
+          <Stereotype name="HelpTable3DX" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Column1" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Column2" type="string" description="" unit="" values="" default=""/>
+              <Tag name="Column3" type="string" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+		  
+          <Stereotype name="HelpTableRow" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="ImageRef" type="int" description="" unit="" values="" default=""/>
+              <Tag name="Lytebox" type="string" description="" unit="" values="" default=""/>
+              <Tag name="ImageArtifact" type="int" description="" unit="" values="" default=""/>
+              <Tag name="ImageLink"/>
+              <Tag name="SeeAlso"/>
+            </TaggedValues>
+          </Stereotype>
+		  
+          <Stereotype name="HelpSlideshow" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Icon" type="int" description="" unit="" values="" default=""/>
+              <Tag name="Image1" type="int" description="" unit="" values="" default=""/>
+              <Tag name="DiagramRef" type="int" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+		  
+          <Stereotype name="HelpSystemVideo" notes="">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="VideoTitle" type="int" description="" unit="" values="" default=""/>
+              <Tag name="VideoURL" type="int" description="" unit="" values="" default="https://sparxsystems.com/resources/videos/howto/help/********.mp4"/>
+              <Tag name="VideoType" type="int" description="" unit="" values="" default="video/mp4"/>
+              <Tag name="Duration" type="int" description="" unit="" values="" default=""/>
+              <Tag name="ThumbnailURL" type="int" description="" unit="" values="" default="https://sparxsystems.com/resources/videos/howto/help/thumb.png"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+		
+		
+        <TaggedValueTypes>
+          <TaggedValueType property="refTopic" description="" notes="Type=RefGUID;Stereotypes=HelpTopic,HelpProxy;"/>
+          <TaggedValueType property="refSection" description="" notes="Type=RefGUID;Stereotypes=HelpSection,SectionProxy;"/>
+          <TaggedValueType property="refTable" description="" notes="Type=RefGUID;
+								Stereotypes=HelpTable2A,HelpTable2B,HelpTable2C,HelpTable2D,HelpTable2E,
+											HelpTable3A,HelpTable3B,HelpTable3C,HelpTable3D,
+											HelpTable2AX,HelpTable2DX,HelpTable3AX,HelpTable3CX,TableProxy;"/>
+          <TaggedValueType property="refTableRow" description="" notes="Type=RefGUID;Stereotypes=HelpTableRow,TableRowProxy;"/>
+          <TaggedValueType property="SeeAlso" description="" notes="Type=RefGUID;Stereotypes=HelpTopic,HelpProxy;"/>
+          <TaggedValueType property="ImageLink" description="" notes="Type=RefGUID;Stereotypes=HelpTopic;"/>
+        </TaggedValueTypes>
+      </Content>
+    </UMLProfile>
+  </UMLProfiles>
+  
+  <TaggedValueTypes>
+    <RefData version="1.0" exporter="EA.25">
+      <DataSet name="Property Types" table="t_propertytypes" filter="Property='#Property#'">
+        <DataRow>
+          <Column name="Property" value="ImageRef"/>
+          <Column name="Description" value="Image Reference"/>
+          <Column name="Notes" value="Type=ImageRef;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="Image1"/>
+          <Column name="Description" value="Image Reference"/>
+          <Column name="Notes" value="Type=ImageRef;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="Image2"/>
+          <Column name="Description" value="Image Reference"/>
+          <Column name="Notes" value="Type=ImageRef;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="Image3"/>
+          <Column name="Description" value="Image Reference"/>
+          <Column name="Notes" value="Type=ImageRef;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="Image4"/>
+          <Column name="Description" value="Image Reference"/>
+          <Column name="Notes" value="Type=ImageRef;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="Image5"/>
+          <Column name="Description" value="Image Reference"/>
+          <Column name="Notes" value="Type=ImageRef;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="DiagramRef"/>
+          <Column name="Description" value="Diagram Reference"/>
+          <Column name="Notes" value="Type=DiagramRef;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="Icon"/>
+          <Column name="Description" value="Icon Reference"/>
+          <Column name="Notes" value="Type=ImageRef;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="VideoURL"/>
+          <Column name="Description" value="Video URL"/>
+          <Column name="Notes" value="Type=URL;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="ImageArtifact"/>
+          <Column name="Description" value="Image Artifact Reference"/>
+          <Column name="Notes" value="Type=RefGUID;&#xA;Stereotypes=Image;"/>
+        </DataRow>
+      </DataSet>
+    </RefData>
+  </TaggedValueTypes>
+  
+  <UIToolboxes>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="35C7552C-9" name="HelpSystemToolbox" version="1.0" notes="HelpSystemToolbox"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="HelpSystem" alias="Help System" notes="Help System">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="HelpSystem::HelpPackage(UML::Package)" type="" description="" unit="" values="" default="HelpPackage"/>
+              <Tag name="HelpSystem::HelpTopic(UML::Class)" type="" description="" unit="" values="" default="HelpTopic"/>
+              <Tag name="HelpSystem::HelpSection(UML::Class)" type="" description="" unit="" values="" default="HelpSection"/>
+              <Tag name="HelpSystem::HelpTable2A(UML::Class)" type="" description="" unit="" values="" default="HelpTable2A"/>
+              <Tag name="HelpSystem::HelpTable2B(UML::Class)" type="" description="" unit="" values="" default="HelpTable2B"/>
+              <Tag name="HelpSystem::HelpTable2C(UML::Class)" type="" description="" unit="" values="" default="HelpTable2C"/>
+              <Tag name="HelpSystem::HelpTable2D(UML::Class)" type="" description="" unit="" values="" default="HelpTable2D"/>
+              <Tag name="HelpSystem::HelpTable2E(UML::Class)" type="" description="" unit="" values="" default="HelpTable2E"/>
+              <Tag name="HelpSystem::HelpTable3A(UML::Class)" type="" description="" unit="" values="" default="HelpTable3A"/>
+              <Tag name="HelpSystem::HelpTable3B(UML::Class)" type="" description="" unit="" values="" default="HelpTable3B"/>
+              <Tag name="HelpSystem::HelpTable3C(UML::Class)" type="" description="" unit="" values="" default="HelpTable3C"/>
+              <Tag name="HelpSystem::HelpTable3D(UML::Class)" type="" description="" unit="" values="" default="HelpTable3D"/>
+              <Tag name="HelpSystem::HelpTable2AX(UML::Class)" type="" description="" unit="" values="" default="HelpTable2AX"/>
+              <Tag name="HelpSystem::HelpTable2DX(UML::Class)" type="" description="" unit="" values="" default="HelpTable2DX"/>
+              <Tag name="HelpSystem::HelpTable3AX(UML::Class)" type="" description="" unit="" values="" default="HelpTable3AX"/>
+              <Tag name="HelpSystem::HelpTable3CX(UML::Class)" type="" description="" unit="" values="" default="HelpTable3CX"/>
+              <Tag name="HelpSystem::HelpTableRow(UML::Class)" type="" description="" unit="" values="" default="HelpTableRow"/>
+              <Tag name="HelpSystem::HelpSectionLearnMore(UML::Class)" type="" description="" unit="" values="" default="HelpSectionLearnMore"/>
+              <Tag name="HelpSystem::HelpSlideshow(UML::Class)" type="" description="" unit="" values="" default="HelpSlideshow"/>
+              <Tag name="HelpSystem::HelpSystemVideo(UML::Class)" type="" description="" unit="" values="" default="HelpSystemVideo"/>
+              <Tag name="HelpSystem::HelpSectionDiagram(UML::Class)" type="" description="" unit="" values="" default="HelpSectionDiagram"/>
+              <Tag name="HelpSystem::HelpTopicProxy(UML::Class)" type="" description="" unit="" values="" default="HelpTopicProxy"/>
+              <Tag name="HelpSystem::HelpSectionProxy(UML::Class)" type="" description="" unit="" values="" default="HelpSectionProxy"/>
+              <Tag name="HelpSystem::HelpTableProxy(UML::Class)" type="" description="" unit="" values="" default="HelpTableProxy"/>
+              <Tag name="HelpSystem::HelpTableRowProxy(UML::Class)" type="" description="" unit="" values="" default="HelpTableRowProxy"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UIToolboxes>
+  
+  <ModelSearches>
+	<Search Name="Basic" GUID="{7DA03331-027E-439f-B016-1DA68B40BE32}" PkgGUID="-1" Type="0" LnksToObj="0" CustomSearch="1" AddinAndMethodName="">
+		<SrchOn>
+			<RootTable Filter="SELECT &#xA;ea_guid AS CLASSGUID, Object_Type AS CLASSTYPE, Name AS Object, Object_Type AS [Type],Stereotype, Author, Scope, Status, Phase, CreatedDate, ModifiedDate&#xA;&#xA;FROM &#xA;t_object&#xA;&#xA;WHERE&#xA;t_object.Stereotype LIKE 'Help#WC#' AND&#xA;(t_object.Name LIKE '#WC#&lt;Search Term&gt;#WC#')&#xA; /*AND t_object.ModifiedDate &gt;= #Now - 7#*/&#xA;&#xA;ORDER BY&#xA; ModifiedDate ASC&#xA;" Type="-1">
+				<TableName Display="Custom SQL Search" Name=""/>
+				<TableHierarchy Display="" Hierarchy=""/>
+			</RootTable>
+		</SrchOn>
+		<LnksTo/>
+	</Search>
+	
+	<Search Name="CSimple" GUID="{5FD2AAA1-6489-46aa-AD25-C4FD8931A65A}" PkgGUID="-1" Type="0" LnksToObj="0" CustomSearch="1" AddinAndMethodName="">
+		<SrchOn>
+			<RootTable Filter="SELECT &#xA;ea_guid AS CLASSGUID, Object_Type AS CLASSTYPE, Name AS Object, Object_Type AS [Type],Stereotype, Author, Scope, Status, Phase, CreatedDate, ModifiedDate&#xA;&#xA;FROM &#xA;t_object&#xA;&#xA;WHERE&#xA;t_object.Stereotype LIKE 'Help#WC#' AND&#xA;(t_object.Name LIKE '#WC#&lt;Search Term&gt;#WC#' OR&#xA;t_object.Alias LIKE '#WC#&lt;Search Term&gt;#WC#' OR&#xA;t_object.PDATA5 LIKE '#WC#&lt;Search Term&gt;#WC#')&#xA; /*AND t_object.ModifiedDate &gt;= #Now - 7#*/&#xA;&#xA;ORDER BY&#xA; ModifiedDate ASC" Type="-1">
+				<TableName Display="Custom SQL Search" Name=""/>
+				<TableHierarchy Display="" Hierarchy=""/>
+			</RootTable>
+		</SrchOn>
+		<LnksTo/>
+	</Search>
+	
+	<Search Name="Detailed" GUID="{F63A4F2B-1CD0-4874-8E26-66E1CB2E70D0}" PkgGUID="-1" Type="0" LnksToObj="0" CustomSearch="1" AddinAndMethodName="">
+		<SrchOn>
+			<RootTable Filter="SELECT &#xA;ea_guid AS CLASSGUID, Object_Type AS CLASSTYPE, Name AS Object, Object_Type AS [Type],Stereotype, Author, Scope, Status, Phase, CreatedDate, ModifiedDate&#xA;&#xA;FROM &#xA;t_object&#xA;&#xA;WHERE&#xA;t_object.Stereotype LIKE 'Help#WC#' AND&#xA;(t_object.Name LIKE '#WC#&lt;Search Term&gt;#WC#' OR&#xA;t_object.Alias LIKE '#WC#&lt;Search Term&gt;#WC#' OR&#xA;t_object.PDATA5 LIKE '#WC#&lt;Search Term&gt;#WC#' OR&#xA;t_object.Note LIKE '#WC#&lt;Search Term&gt;#WC#'&#xA;)&#xA; /*AND t_object.ModifiedDate &gt;= #Now - 7#*/&#xA;&#xA;ORDER BY&#xA; ModifiedDate ASC" Type="-1">
+				<TableName Display="Custom SQL Search" Name=""/>
+				<TableHierarchy Display="" Hierarchy=""/>
+			</RootTable>
+		</SrchOn>
+		<LnksTo/>
+	</Search>
+	
+	<Search Name="Recently Modified" GUID="{4DC9F359-6209-4c8c-9CD0-BCDE70B9EDEC}" PkgGUID="-1" Type="0" LnksToObj="0" CustomSearch="1" AddinAndMethodName="">
+		<SrchOn>
+			<RootTable Filter="SELECT &#xA;ea_guid AS CLASSGUID, Object_Type AS CLASSTYPE, Name AS Object, Object_Type AS [Type],Stereotype, Author, Scope, Status, Phase, CreatedDate, ModifiedDate&#xA;&#xA;FROM &#xA;t_object&#xA;&#xA;WHERE&#xA;t_object.Stereotype LIKE 'Help#WC#' AND&#xA;t_object.ModifiedDate &gt;= #Now - &lt;Search Term&gt;#&#xA;&#xA;ORDER BY&#xA; ModifiedDate ASC&#xA;" Type="-1">
+				<TableName Display="Custom SQL Search" Name=""/>
+				<TableHierarchy Display="" Hierarchy=""/>
+			</RootTable>
+		</SrchOn>
+		<LnksTo/>
+	</Search>
+	<Search Name="Topics" GUID="{EE84EC71-751E-4166-9537-FF2858B19E76}" PkgGUID="-1" Type="0" LnksToObj="0" CustomSearch="1" AddinAndMethodName="">
+		<SrchOn>
+			<RootTable Filter="SELECT &#xA;ea_guid AS CLASSGUID, Object_Type AS CLASSTYPE, Name AS Object, Object_Type AS [Type],Stereotype, Author, Scope, Status, Phase, CreatedDate, ModifiedDate&#xA;&#xA;FROM &#xA;t_object&#xA;&#xA;WHERE t_object.Stereotype in ('HelpTopic','HelpProxy') AND &#xA;(t_object.Name LIKE '#WC#&lt;Search Term&gt;#WC#' OR &#xA;t_object.Alias LIKE '#WC#&lt;Search Term&gt;#WC#' OR &#xA;t_object.ea_guid = '&lt;Search Term&gt;' &#xA;)" Type="-1">
+				<TableName Display="Custom SQL Search" Name=""/>
+				<TableHierarchy Display="" Hierarchy=""/>
+			</RootTable>
+		</SrchOn>
+		<LnksTo/>
+	</Search>
+	
+  </ModelSearches>
+  <ModelTemplates>
+    <Model name="Help Authoring Starter Pattern" description="" location="hlp-1.0-help-authoring-starter.xml" default="" icon="34" filter=""/>
+    <Model name="Help Authoring First Example" description="" location="hlp-1.0-help-authoring-first-example.xml" default="" icon="34" filter=""/>
+    <Model name="Help Authoring with Example Content" description="" location="hlp-1.0-help-authoring-with-example-content.xml" default="" icon="34" filter=""/>
+    <Model name="Help Authoring Car Owners Manual" description="" location="hlp-1.0-help-authoring-car-owners-manual.xml" default="" icon="34" filter="" isFramework="true"/>
+  </ModelTemplates>
+</MDG.Technology>

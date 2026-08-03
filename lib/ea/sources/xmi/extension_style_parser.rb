@@ -23,7 +23,8 @@ module Ea
             italic: truthy?(kv["italic"]),
             underline: truthy?(kv["ul"]),
             black: truthy?(kv["black"]),
-            hide_icon: truthy?(kv["HideIcon"]),
+            hide_icon: tri_state_icon(kv["HideIcon"]),
+            show_tagged_values: truthy?(kv["Tag"]),
             duid: kv["DUID"],
             soid: kv["SOID"],
             eoid: kv["EOID"],
@@ -32,6 +33,17 @@ module Ea
             hidden: truthy?(kv["Hidden"]),
             raw: style_string
           )
+        end
+
+        # HideIcon tri-state: "1" → :hidden, "0" → :shown,
+        # missing → nil (use the diagram default, which EA treats
+        # as hidden in practice).
+        def tri_state_icon(value)
+          return nil if value.nil? || value.empty?
+          return :hidden if value == "1" || value == "true" || value == "-1"
+          return :shown if value == "0"
+
+          nil
         end
 
         def split_pairs(str)
@@ -59,7 +71,7 @@ module Ea
           return 13 if value.nil? || value.empty?
 
           pct = int(value)
-          return 13 if pct.nil?
+          return 13 if pct.nil? || pct.zero?
 
           (pct * 13 / 100).round
         end
@@ -68,6 +80,7 @@ module Ea
           :background_color, :line_color, :line_width,
           :font_family, :font_size,
           :bold, :italic, :underline, :black, :hide_icon,
+          :show_tagged_values,
           :duid, :soid, :eoid, :mode, :color, :hidden,
           :raw,
           keyword_init: true

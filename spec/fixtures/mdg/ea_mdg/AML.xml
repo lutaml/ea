@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<MDG.Technology version="1.0">
+  <Documentation id="AML" name="Archetype Modeling Language" version="1" notes="Archetype Modeling Language, version 1.0"/>
+  <UMLProfiles>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="22612312-9" name="ConstraintProfile" version="1.0" notes="ConstraintProfile"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="Archetype" notes="" generalizes="AuthoredResource" baseStereotypes="AuthoredResource">
+            <AppliesTo>
+              <Apply type="Package">
+                <Property name="URI" value=""/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="archetypeType" type="enumeration" description="" unit="" values="archetype,template,template_overlay" default=""/>
+              <Tag name="amlVersion" type="String" description="" unit="" values="" default=""/>
+              <Tag name="is_controlled" type="Boolean" description="" unit="" values="True,False" default="false"/>
+              <Tag name="is_generated" type="Boolean" description="" unit="" values="True,False" default="false"/>
+              <Tag name="release_version" type="String" description="" unit="" values="" default=""/>
+              <Tag name="version_status" type="enumeration" description="" unit="" values="alpha,beta,build,released,release_candidate" default=""/>
+              <Tag name="build_count" type="Integer" description="" unit="" values="" default=""/>
+              <Tag name="other_metadata" type="String" description="" unit="" values="" default=""/>
+              <Tag name="other_metadate_id" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="ArchetypeDefinition" notes="">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIACxaTEdPUlRhVAAAAHQAAAAHABEAc3RyLmRhdFVUDQAH0pYbVtKWG1bSlhtW
+              PYvBDUBQEETflUQPwoUaVEPsQbJ8wUVERUrQnMkeZJLJzuwbp2fAcEpmJkbJlQcSh5TU+s8U
+              5FzhGSub+EVMQ8VDza7b1FpsTxGm9tW3pYvVHf4BUEsBAhcLFAAAAAgALFpMR09SVGFUAAAA
+              dAAAAAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB9KWG1ZQSwUGAAAAAAEAAQA+AAAA
+              igAAAAAA
+            </Image>
+            <AppliesTo>
+              <Apply type="Usage">
+                <Property name="direction" value="Source -&gt; Destination"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="ArchetypeLibrary" notes="">
+            <AppliesTo>
+              <Apply type="Package">
+                <Property name="URI" value=""/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="has_aom_ids" type="boolean" description="" unit="" values="true,false" default="true"/>
+              <Tag name="rm_package" type="string" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="ArchetypeRoot" notes="" generalizes="ComplexObjectConstraint" baseStereotypes="ComplexObjectConstraint"/>
+          <Stereotype name="ArchetypeSlot" notes="" generalizes="ObjectConstraint" baseStereotypes="ObjectConstraint">
+            <AppliesTo>
+              <Apply type="Classifier">
+                <Property name="isAbstract" value="false"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="AuthoredResource" notes="" isAbstract="true">
+            <AppliesTo>
+              <Apply type="Package">
+                <Property name="URI" value=""/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="copyright" type="String" description="" unit="" values="" default=""/>
+              <Tag name="current_revision" type="String" description="" unit="" values="" default=""/>
+              <Tag name="custodian_namespace" type="String" description="" unit="" values="" default=""/>
+              <Tag name="custodian_organisation" type="String" description="" unit="" values="" default=""/>
+              <Tag name="licence" type="String" description="" unit="" values="" default=""/>
+              <Tag name="lifecycle_state" type="enumeration" description="" unit="" values="deprecated,in_development,published,rejected,release_candidate,unmanaged" default=""/>
+              <Tag name="original_author_date" type="String" description="" unit="" values="" default=""/>
+              <Tag name="original_author_email" type="String" description="" unit="" values="" default=""/>
+              <Tag name="original_author_name" type="String" description="" unit="" values="" default=""/>
+              <Tag name="original_author_organization" type="String" description="" unit="" values="" default=""/>
+              <Tag name="original_namespace" type="String" description="" unit="" values="" default=""/>
+              <Tag name="original_publisher" type="String" description="" unit="" values="" default=""/>
+              <Tag name="other_contributors" type="String" description="" unit="" values="" default=""/>
+              <Tag name="otherDetails" type="String" description="" unit="" values="" default=""/>
+              <Tag name="otherDetails_id" type="String" description="" unit="" values="" default=""/>
+              <Tag name="references" type="String" description="" unit="" values="" default=""/>
+              <Tag name="references_id" type="String" description="" unit="" values="" default=""/>
+              <Tag name="resourceDocumentLanguage" type="String" description="" unit="" values="" default=""/>
+              <Tag name="resourceDocumentSyntax" type="String" description="" unit="" values="" default=""/>
+              <Tag name="resourceSource" type="String" description="" unit="" values="" default=""/>
+              <Tag name="resourceSourceURI" type="String" description="" unit="" values="" default=""/>
+              <Tag name="resource_package_uri" type="String" description="" unit="" values="" default=""/>
+              <Tag name="uid" type="String" description="" unit="" values="" default=""/>
+              <Tag name="ip_acknowledgements" type="String" description="" unit="" values="" default=""/>
+              <Tag name="ip_acknowledgements_id" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="ComplexObjectConstraint" notes="" generalizes="ObjectConstraint" baseStereotypes="ObjectConstraint">
+            <AppliesTo>
+              <Apply type="Classifier">
+                <Property name="isAbstract" value="false"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="Constrains" notes="">
+            <AppliesTo>
+              <Apply type="Generalization">
+                <Property name="direction" value="Source -&gt; Destination"/>
+                <Property name="isSubstitutable" value=""/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="ObjectConstraint" notes="" generalizes="TerminologyProfile::IdentifiedItem" baseStereotypes="TerminologyProfile::IdentifiedItem">
+            <AppliesTo>
+              <Apply type="Class"/>
+              <Apply type="Property"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="is_deprecated" type="Boolean" description="" unit="" values="True,False" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="ResourceAnnotationNodeItem" notes="">
+            <AppliesTo>
+              <Apply type="Note"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="ResourceTranslation" notes="">
+            <AppliesTo>
+              <Apply type="Enumeration"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="accreditation" type="String" description="" unit="" values="" default=""/>
+              <Tag name="other_translation_details" type="String" description="" unit="" values="" default=""/>
+              <Tag name="other_translation_details_id" type="String" description="" unit="" values="" default=""/>
+              <Tag name="purpose" type="String" description="" unit="" values="" default=""/>
+              <Tag name="keywords" type="String" description="" unit="" values="" default=""/>
+              <Tag name="use" type="String" description="" unit="" values="" default=""/>
+              <Tag name="misuse" type="String" description="" unit="" values="" default=""/>
+              <Tag name="copyright" type="String" description="" unit="" values="" default=""/>
+              <Tag name="original_resource_uri" type="String" description="" unit="" values="" default=""/>
+              <Tag name="original_resource_uriId" type="String" description="" unit="" values="" default=""/>
+              <Tag name="other_details" type="String" description="" unit="" values="" default=""/>
+              <Tag name="other_detailsId" type="String" description="" unit="" values="" default=""/>
+              <Tag name="author_name" type="String" description="" unit="" values="" default=""/>
+              <Tag name="author_organization" type="String" description="" unit="" values="" default=""/>
+              <Tag name="author_email" type="String" description="" unit="" values="" default=""/>
+              <Tag name="author_date" type="String" description="" unit="" values="" default=""/>
+              <Tag name="version_last_translated" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="E0EC3E60-C" name="ReferenceModelProfile" version="1.0" notes="ReferenceModelProfile"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="Infrastructure" notes="">
+            <AppliesTo>
+              <Apply type="Property">
+                <Property name="isReference" value="false"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="MappedDataType" notes="">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAMZcTEdPUlRhVAAAAHQAAAAHABEAc3RyLmRhdFVUDQAHq5sbVqubG1armxtW
+              PYvBDUBQEETflUQPwoUaVEPsQbJ8wUVERUrQnMkeZJLJzuwbp2fAcEpmJkbJlQcSh5TU+s8U
+              5FzhGSub+EVMQ8VDza7b1FpsTxGm9tW3pYvVHf4BUEsBAhcLFAAAAAgAxlxMR09SVGFUAAAA
+              dAAAAAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUAB6ubG1ZQSwUGAAAAAAEAAQA+AAAA
+              igAAAAAA
+            </Image>
+            <AppliesTo>
+              <Apply type="Abstraction">
+                <Property name="direction" value="Source -&gt; Destination"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="ReferenceModel" notes="">
+            <AppliesTo>
+              <Apply type="Package">
+                <Property name="URI" value=""/>
+                <Property name="_Tag" value="1"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="rmPublisher" type="String" description="" unit="" values="" default=""/>
+              <Tag name="rmNamespace" type="String" description="" unit="" values="" default=""/>
+              <Tag name="rmVersion" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Runtime" notes="">
+            <AppliesTo>
+              <Apply type="Property">
+                <Property name="isReference" value="false"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="5792762A-8" name="TerminologyProfile" version="1.0" notes="TerminologyProfile"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="ArchetypeTerm" notes="" generalizes="PermissibleValue" baseStereotypes="PermissibleValue">
+            <AppliesTo>
+              <Apply type="Attribute"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="value_set_members"/>
+              <Tag name="term_bindings"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="CodeSystemReference" notes="" generalizes="ResourceReference" baseStereotypes="ResourceReference"/>
+          <Stereotype name="CodeSystemVersionReference" notes="" generalizes="ResourceReference" baseStereotypes="ResourceReference">
+            <TaggedValues>
+              <Tag name="codeSystem"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="ConceptReference" notes="" generalizes="ResourceReference" baseStereotypes="ResourceReference">
+            <TaggedValues>
+              <Tag name="designation" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="DescribedIdentifier" notes="" generalizes="ScopedIdentifier" baseStereotypes="ScopedIdentifier" keyword="DescribedIdentifier">
+            <TaggedValues>
+              <Tag name="definingCodeSystem"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Entry" notes="">
+            <AppliesTo>
+              <Apply type="Attribute"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="text" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="EnumeratedValueDomain" notes="" generalizes="IdentifiedItem" baseStereotypes="IdentifiedItem">
+            <AppliesTo>
+              <Apply type="Enumeration"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="valueSetBinding"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="IdEntry" notes="" generalizes="Entry" baseStereotypes="Entry">
+            <TaggedValues>
+              <Tag name="ref"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="IdentifiedItem" notes="">
+            <AppliesTo>
+              <Apply type="Element"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="id"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="PermissibleValue" notes="" generalizes="IdentifiedItem" baseStereotypes="IdentifiedItem">
+            <AppliesTo>
+              <Apply type="Attribute"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="meaning"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="ResourceReference" notes="" isAbstract="true">
+            <AppliesTo>
+              <Apply type="Attribute"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="uri" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="ScopedIdentifier" notes="">
+            <AppliesTo>
+              <Apply type="Enumeration"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="uri" type="String" description="" unit="" values="" default=""/>
+              <Tag name="identifierURIPattern" type="String" description="" unit="" values="" default=""/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="TermResourceTranslation" notes="">
+            <AppliesTo>
+              <Apply type="Enumeration"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="language"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="ValueSetDefinitionReference" notes="" generalizes="ResourceReference" baseStereotypes="ResourceReference">
+            <TaggedValues>
+              <Tag name="valueSet"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="ValueSetReference" notes="" generalizes="ResourceReference" baseStereotypes="ResourceReference">
+            <TaggedValues>
+              <Tag name="valueSetDefinition"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="about" notes="">
+            <Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              UEsDBBQAAAAIAEJ4SUc0lzZmSgAAAGIAAAAHABEAc3RyLmRhdFVUDQAHCdcXVgnXF1YJ1xdW
+              y2FIZEhiSGXIYVBgyGXIZEgBwhwgP4khn6EECPOBojlwNbwMXAzVYJKToYChCKg+D6hGg0GJ
+              YTVYTT5DKZC/G8jXZLAGq6tlAABQSwECFwsUAAAACABCeElHNJc2ZkoAAABiAAAABwAJAAAA
+              AAAAAAAAAIAAAAAAc3RyLmRhdFVUBQAHCdcXVlBLBQYAAAAAAQABAD4AAACAAAAAAAA=
+            </Image>
+            <AppliesTo>
+              <Apply type="Abstraction">
+                <Property name="direction" value="Source -&gt; Destination"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes>
+          <TaggedValueType property="value_set_members" description="" notes="Type=RefGUIDList;Metatype=Attribute;"/>
+          <TaggedValueType property="term_bindings" description="" notes="Type=RefGUIDList;Metatype=Attribute;"/>
+          <TaggedValueType property="codeSystem" description="" notes="Type=RefGUID;Metatype=Attribute;"/>
+          <TaggedValueType property="definingCodeSystem" description="" notes="Type=RefGUID;Metatype=Attribute;"/>
+          <TaggedValueType property="valueSetBinding" description="" notes="Type=RefGUID;Metatype=Attribute;"/>
+          <TaggedValueType property="ref" description="" notes="Type=RefGUID;Metatype=Attribute;"/>
+          <TaggedValueType property="id" description="" notes="Type=RefGUID;Metatype=Attribute;"/>
+          <TaggedValueType property="meaning" description="" notes="Type=RefGUID;Stereotypes=ConceptReference;"/>
+          <TaggedValueType property="language" description="" notes="Type=RefGUID;Metatype=Attribute;"/>
+          <TaggedValueType property="valueSet" description="" notes="Type=RefGUID;Stereotypes=ValueSetReference;"/>
+          <TaggedValueType property="valueSetDefinition" description="" notes="Type=RefGUIDList;Stereotypes=ValueSetDefinitionReference;"/>
+        </TaggedValueTypes>
+      </Content>
+    </UMLProfile>
+  </UMLProfiles>
+  <DiagramProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="18093FF9-4" name="AML" version="1.0" notes="AML"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="AML" notes="Archetype Modeling Language diagram.">
+            <AppliesTo>
+              <Apply type="Diagram_Logical">
+                <Property name="alias" value="AML"/>
+                <Property name="diagramID" value="aml"/>
+                <Property name="pdata" value="ShowTags=1;"/>
+                <Property name="toolbox" value="AML::AML"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </DiagramProfile>
+  <UIToolboxes>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="48EDE83A-A" name="AML" version="1.0" alias="Archetype Modeling Language" notes="Alias=Archetype Modeling Language;"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="Reference Model Profile" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="ReferenceModelProfile::ReferenceModel(UML::Package)" type="" description="" unit="" values="" default="Reference Model"/>
+              <Tag name="ReferenceModelProfile::Infrastructure(UML::Attribute)" type="" description="" unit="" values="" default="Infrastructure"/>
+              <Tag name="ReferenceModelProfile::Runtime(UML::Attribute)" type="" description="" unit="" values="" default="Runtime"/>
+              <Tag name="ReferenceModelProfile::MappedDataType(UML::Abstraction)" type="" description="" unit="" values="" default="Mapped Data Type"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Terminology Profile" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="TerminologyProfile::DescribedIdentifier(UML::Enumeration)" type="" description="" unit="" values="" default="Described Identifier"/>
+              <Tag name="TerminologyProfile::EnumeratedValueDomain(UML::Enumeration)" type="" description="" unit="" values="" default="Enumerated Value Domain"/>
+              <Tag name="TerminologyProfile::ScopedIdentifier(UML::Enumeration)" type="" description="" unit="" values="" default="Scoped Identifier"/>
+              <Tag name="TerminologyProfile::TermResourceTranslation(UML::Enumeration)" type="" description="" unit="" values="" default="Term Resource Translation"/>
+              <Tag name="TerminologyProfile::ArchetypeTerm(UML::Attribute)" type="" description="" unit="" values="" default="Archetype Term"/>
+              <Tag name="TerminologyProfile::CodeSystemReference(UML::Attribute)" type="" description="" unit="" values="" default="Code System Reference"/>
+              <Tag name="TerminologyProfile::CodeSystemVersionReference(UML::Attribute)" type="" description="" unit="" values="" default="Code System Version Reference"/>
+              <Tag name="TerminologyProfile::ConceptReference(UML::Attribute)" type="" description="" unit="" values="" default="Concept Reference"/>
+              <Tag name="TerminologyProfile::Entry(UML::Attribute)" type="" description="" unit="" values="" default="Entry"/>
+              <Tag name="TerminologyProfile::IdEntry(UML::Attribute)" type="" description="" unit="" values="" default="ID Entry"/>
+              <Tag name="TerminologyProfile::PermissibleValue(UML::Attribute)" type="" description="" unit="" values="" default="Permissible Value"/>
+              <Tag name="TerminologyProfile::ResourceReference(UML::Attribute)" type="" description="" unit="" values="" default="Resource Reference"/>
+              <Tag name="TerminologyProfile::ValueSetDefinitionReference(UML::Attribute)" type="" description="" unit="" values="" default="Value Set Definition Reference"/>
+              <Tag name="TerminologyProfile::ValueSetReference(UML::Attribute)" type="" description="" unit="" values="" default="Value Set Reference"/>
+              <Tag name="TerminologyProfile::about(UML::Abstraction)" type="" description="" unit="" values="" default="About"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Constraint Profile" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="ConstraintProfile::Archetype(UML::Package)" type="" description="" unit="" values="" default="Archetype"/>
+              <Tag name="ConstraintProfile::ArchetypeLibrary(UML::Package)" type="" description="" unit="" values="" default="Archetype Library"/>
+              <Tag name="ConstraintProfile::ArchetypeRoot(UML::Class)" type="" description="" unit="" values="" default="Archetype Root"/>
+              <Tag name="ConstraintProfile::ArchetypeSlot(UML::Class)" type="" description="" unit="" values="" default="Archetype Slot"/>
+              <Tag name="ConstraintProfile::ComplexObjectConstraint(UML::Class)" type="" description="" unit="" values="" default="Complex Object Constraint"/>
+              <Tag name="ConstraintProfile::ObjectConstraint(UML::Class)" type="" description="" unit="" values="" default="Object Constraint (Class)"/>
+              <Tag name="ConstraintProfile::ObjectConstraint(UML::Attribute)" type="" description="" unit="" values="" default="Object Constraint (Attribute)"/>
+              <Tag name="ConstraintProfile::ResourceTranslation(UML::Enumeration)" type="" description="" unit="" values="" default="Resource Translation"/>
+              <Tag name="ConstraintProfile::ResourceAnnotationNodeItem(UML::Note)" type="" description="" unit="" values="" default="Resource Annotation Node Item"/>
+              <Tag name="ConstraintProfile::Constrains(UML::Generalization)" type="" description="" unit="" values="" default="Constrains"/>
+              <Tag name="ConstraintProfile::ArchetypeDefinition(UML::Usage)" type="" description="" unit="" values="" default="Archetype Definition"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UIToolboxes>
+</MDG.Technology>

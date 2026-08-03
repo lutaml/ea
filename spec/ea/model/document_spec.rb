@@ -165,4 +165,57 @@ RSpec.describe Ea::Model::Document do
       expect(document.relationships_for("c3").map(&:id)).to eq(%w[g1])
     end
   end
+
+  describe "#property_by_id" do
+    let(:property_a) do
+      Ea::Model::Property.new(id: "prop_a", name: "alpha", owner_id: "c1")
+    end
+    let(:property_b) do
+      Ea::Model::Property.new(id: "prop_b", name: "beta", owner_id: "c1")
+    end
+    let(:document) do
+      described_class.new(
+        classifiers: [
+          Ea::Model::Klass.new(id: "c1", name: "A",
+                               properties: [property_a, property_b])
+        ]
+      )
+    end
+
+    it "returns the property with the matching id in O(1)" do
+      expect(document.property_by_id("prop_b")).to be property_b
+    end
+
+    it "returns nil for an unknown id" do
+      expect(document.property_by_id("nope")).to be_nil
+    end
+
+    it "returns nil for a nil id" do
+      expect(document.property_by_id(nil)).to be_nil
+    end
+
+    it "memoizes the property index across calls" do
+      first_call = document.property_by_id("prop_a")
+      second_call = document.property_by_id("prop_a")
+      expect(first_call).to be(second_call)
+    end
+  end
+
+  describe "#reset_indexes" do
+    it "clears both the id index and the property index" do
+      cls = Ea::Model::Klass.new(id: "c1", name: "A",
+                                 properties: [
+                                   Ea::Model::Property.new(id: "p1", name: "x")
+                                 ])
+      document = described_class.new(classifiers: [cls])
+
+      document.index_by_id
+      document.property_by_id("p1")
+      document.reset_indexes
+
+      cls.properties << Ea::Model::Property.new(id: "p2", name: "y")
+
+      expect(document.property_by_id("p2").name).to eq("y")
+    end
+  end
 end

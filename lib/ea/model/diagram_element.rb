@@ -25,8 +25,21 @@ module Ea
       attribute :font_bold, :boolean
       attribute :font_italic, :boolean
       attribute :font_underline, :boolean
+      attribute :show_tagged_values, :boolean
+      # EA's per-element "HideIcon" flag — tri-state:
+      #   "shown"  → HideIcon=0, render the type icon
+      #   "hidden" → HideIcon=1, suppress the type icon
+      #   nil      → not set in source; renderer applies the
+      #              diagram default (typically hidden).
+      attribute :icon_visibility, :string
       attribute :z_order, :integer # seqno
       attribute :duid, :string # EA's per-placement DUID for connector resolution
+      # UMLDI keyword text EA emitted for this shape (e.g. "Type",
+      # "FeatureType"). When present, this is the authoritative
+      # label EA rendered in the SVG header — the source XMI is
+      # canonical. Falls back to the classifier's stereotype when
+      # absent (basic.qea has no UMLDI metadata).
+      attribute :umldi_keyword, :string
 
       json do
         map "id", to: :id
@@ -43,8 +56,11 @@ module Ea
         map "fontBold", to: :font_bold, render_default: true
         map "fontItalic", to: :font_italic, render_default: true
         map "fontUnderline", to: :font_underline, render_default: true
+        map "showTaggedValues", to: :show_tagged_values, render_default: true
+        map "iconVisibility", to: :icon_visibility
         map "zOrder", to: :z_order
         map "duid", to: :duid
+        map "umldiKeyword", to: :umldi_keyword
       end
     end
   end

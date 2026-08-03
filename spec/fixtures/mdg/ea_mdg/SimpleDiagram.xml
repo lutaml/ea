@@ -1,0 +1,31 @@
+<MDG.Technology version="1.0">
+  <Documentation id="SimpleDiagram" name="Custom Diagram Style" version="1" notes="" categoryList="Custom Diagram" categoryMappings="Custom Diagram Templates=Custom Diagram;Custom Diagram Examples=Custom Diagram;" infoURI="http://www.sparxsystems.com" supportURI="support@sparxsystems.com"/>
+  <DiagramProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="7D9098E4-1" name="Simple" alias="Custom" version="1" notes="Create diagrams in a simple, flat Custom Diagram Style."/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="SimpleDiagram" alias="Custom Diagram" notes="Create diagrams in a simple, flat Custom Diagram Style.">
+            <AppliesTo>
+              <Apply type="Diagram_Logical">
+                <Property name="alias" value="Custom Diagram Style"/>
+				<Property name="styleex" value="DSO=1;"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+        </Stereotypes>
+      </Content>
+    </UMLProfile>
+  </DiagramProfile>
+  <ModelTemplates>
+    <Model name="Custom Drawing Styles" description="" groupName="Custom Diagram Templates" location="simple_Simple-Drawing-Styles.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Full Framework" description="" groupName="Custom Diagram Templates" location="simple_Full-Framework.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Strategy Map" description="" groupName="Custom Diagram Templates" location="simple_Strategy-Map.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Application Taxonomy" description="" groupName="Custom Diagram Examples" location="simple_Application-Taxonomy.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Business Capability" description="" groupName="Custom Diagram Examples" location="simple_Business-Capability.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Management Enterprise Architecture" description="" groupName="Custom Diagram Examples" location="simple_Management-Enterprise-Architecture.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Operating Model Business Architecture" description="" groupName="Custom Diagram Examples" location="simple_Operating-Model-Business-Architecture.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Technical Reference Model" description="" groupName="Custom Diagram Examples" location="simple_Technical-Reference-Model.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Sub-Domains" description="" groupName="Custom Diagram Examples" location="simple_Sub-Domains.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+  </ModelTemplates>
+</MDG.Technology>

@@ -19,6 +19,7 @@ module Ea
       attribute :is_ordered, :boolean, default: false
       attribute :is_unique, :boolean, default: true
       attribute :aggregation, :string, default: -> { "none" } # none|shared|composite
+      attribute :association_id, :string        # non-nil when this property is a navigable end of an Association
       attribute :visibility, :string # public|protected|private|package
       attribute :stereotype_refs, :string, collection: true, initialize_empty: true
       attribute :tagged_values, TaggedValue, collection: true, initialize_empty: true
@@ -39,6 +40,7 @@ module Ea
         map "isOrdered", to: :is_ordered, render_default: true
         map "isUnique", to: :is_unique, render_default: true
         map "aggregation", to: :aggregation, render_default: true
+        map "associationId", to: :association_id
         map "visibility", to: :visibility
         map "stereotypeRefs", to: :stereotype_refs, render_empty: true
         map "taggedValues", to: :tagged_values, render_empty: true

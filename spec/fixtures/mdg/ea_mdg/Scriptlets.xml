@@ -1,0 +1,14 @@
+<MDG.Technology version="1.0">
+  <Documentation id="Scriptlet" name="Scriptlets" version="1" notes="" categoryList="Scriptlets" categoryMappings="Scriptlets=Scriptlets;" infoURI="http://www.sparxsystems.com" supportURI="support@sparxsystems.com"/>
+  <ModelTemplates>
+    <Model name="Simple Scriptlet" description="" groupName="Scriptlets" location="scr_simple.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Spreadsheet Scriptlet" description="" groupName="Scriptlets" location="scr_spreadsheet.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Geometry Scriptlet" description="" groupName="Scriptlets" location="scr_geometry.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Risk Scriptlet" description="" groupName="Scriptlets" location="scr_risk.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Summary Scriptlet" description="" groupName="Scriptlets" location="scr_summary.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Table Scriptlet" description="" groupName="Scriptlets" location="scr_table.xml" default="yes" customizable="false" icon="31" filter="Simple" />
+    <Model name="Background Color Test Scriptlet" description="" groupName="Scriptlets" location="scr_backgroundcolortest.xml" default="yes" customizable="false" icon="31" filter="Color" />
+    <Model name="Font Color Test Scriptlet" description="" groupName="Scriptlets" location="scr_fontcolortest.xml" default="yes" customizable="false" icon="31" filter="Color" />
+    <Model name="Border Color Test Scriptlet" description="" groupName="Scriptlets" location="scr_bordercolortest.xml" default="yes" customizable="false" icon="31" filter="Color" />  
+ </ModelTemplates>
+</MDG.Technology>

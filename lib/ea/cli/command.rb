@@ -12,7 +12,14 @@ module Ea
       autoload :Convert, "ea/cli/command/convert"
       autoload :Spa, "ea/cli/command/spa"
       autoload :Svg, "ea/cli/command/svg"
+      autoload :Render, "ea/cli/command/render"
+      autoload :Export, "ea/cli/command/export"
+      autoload :Mdg, "ea/cli/command/mdg"
       autoload :RepositoryBuilder, "ea/cli/command/repository_builder"
+      autoload :Diff, "ea/cli/command/diff"
+      autoload :Lint, "ea/cli/command/lint"
+      autoload :Query, "ea/cli/command/query"
+      autoload :Info, "ea/cli/command/info"
     end
   end
 end

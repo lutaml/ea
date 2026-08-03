@@ -22,9 +22,13 @@ module Ea
       autoload :RelationshipBuilder, "ea/sources/qea/relationship_builder"
       autoload :StereotypeBuilder, "ea/sources/qea/stereotype_builder"
       autoload :TaggedValueBuilder, "ea/sources/qea/tagged_value_builder"
+      autoload :NoteBuilder, "ea/sources/qea/note_builder"
       autoload :AnnotationBuilder, "ea/sources/qea/annotation_builder"
+      autoload :InstanceBuilder, "ea/sources/qea/instance_builder"
+      autoload :LegendBuilder, "ea/sources/qea/legend_builder"
       autoload :DiagramBuilder, "ea/sources/qea/diagram_builder"
       autoload :DiagramStyleParser, "ea/sources/qea/diagram_style_parser"
+      autoload :Xref, "ea/sources/qea/xref"
       autoload :Adapter, "ea/sources/qea/adapter"
     end
   end

@@ -99,6 +99,13 @@ module Ea
           const == 1
         end
 
+        # Check if operation is a reception (UML Reception).
+        # EA encodes this via the StyleEx field: "Reception=1;..."
+        # @return [Boolean]
+        def reception?
+          styleex&.include?("Reception=1")
+        end
+
         # Check if operation is public
         # @return [Boolean]
         def public?

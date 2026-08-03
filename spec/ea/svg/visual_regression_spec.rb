@@ -13,11 +13,13 @@ require_relative "../../support/svg_canonicalizer"
 #   - how many differ (and by how many elements)
 RSpec.describe "EA SVG visual regression", :visual_regression do
   XMI_PATH = "/Users/mulgogi/src/mn/mn-samples-plateau/sources/xmi/plateau_all_packages_export.xmi"
-  REF_DIR = "/Users/mulgogi/src/mn/mn-samples-plateau/sources/001-mds/xmi-images"
+  # Constants defined inside RSpec.describe leak to top-level, so
+  # use a unique name to avoid collision with qea_regression_spec.
+  VISUAL_REF_DIR = "/Users/mulgogi/src/mn/mn-samples-plateau/sources/001-mds/xmi-images"
 
   before(:all) do
     skip "Sample XMI not available at #{XMI_PATH}" unless File.exist?(XMI_PATH)
-    skip "Reference SVG dir not available at #{REF_DIR}" unless File.exist?(REF_DIR)
+    skip "Reference SVG dir not available at #{VISUAL_REF_DIR}" unless File.exist?(VISUAL_REF_DIR)
   end
 
   let(:document) do
@@ -27,11 +29,11 @@ RSpec.describe "EA SVG visual regression", :visual_regression do
 
   it "renders a representative diagram and matches EA structurally" do
     # Pick a diagram with substantial content and a known reference.
-    target = document.diagrams.find { |d| File.exist?(File.join(REF_DIR, "#{d.id}.svg")) }
+    target = document.diagrams.find { |d| File.exist?(File.join(VISUAL_REF_DIR, "#{d.id}.svg")) }
     skip "no overlapping diagram IDs between XMI and reference SVGs" unless target
 
     svg = Ea::Svg::EaEmitter::Document.new(target, model_index: document.index_by_id).render
-    reference = File.read(File.join(REF_DIR, "#{target.id}.svg"))
+    reference = File.read(File.join(VISUAL_REF_DIR, "#{target.id}.svg"))
 
     # At minimum, our SVG should parse as valid XML.
     expect { Nokogiri::XML(svg, &:strict) }.not_to raise_error

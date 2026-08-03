@@ -32,8 +32,25 @@ module Ea
             ey: int(kv["EY"]),
             edge: int(kv["EDGE"]),
             label_boxes: extract_label_boxes(geometry_string),
-            path: kv["Path"]
+            path: kv["Path"],
+            bend_points: parse_bend_path(kv["Path"])
           )
+        end
+
+        # EA's Path= field uses the format `x1:y1$x2:y2$...` where
+        # each pair is a bend point. Coordinates are absolute pixel
+        # positions on the diagram canvas.
+        def parse_bend_path(raw)
+          return [] if raw.nil? || raw.empty?
+
+          raw.split("$").filter_map do |pair|
+            next nil unless pair.include?(":")
+
+            x_str, y_str = pair.split(":", 2)
+            x = int(x_str)
+            y = int(y_str)
+            [x, y] if x && y
+          end
         end
 
         def split_pairs(str)
@@ -91,7 +108,7 @@ module Ea
           :left, :top, :right, :bottom,
           :img_left, :img_top, :img_right, :img_bottom,
           :sx, :sy, :ex, :ey, :edge,
-          :label_boxes, :path,
+          :label_boxes, :path, :bend_points,
           keyword_init: true
         )
 

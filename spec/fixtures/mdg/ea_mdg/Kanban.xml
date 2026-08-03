@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<MDG.Technology version="1.0">
+  <Documentation id="6581" name="Kanban" version="1.0" notes="This profile contains diagrams, elements and patterns related to the creation of Kanban diagrams." categoryList="Kanban" categoryMappings="Kanban Workflows=Kanban;" infoURI="http://www.sparxsystems.com" supportURI="support@sparxsystems.com"/>
+  <UMLProfiles>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="15C0C457-0" name="Kanban" version="1.0" notes="Kanban"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="UserStory" metatype="UserStory" notes="" bgcolor="8978056" fontcolor="0" bordercolor="0" borderwidth="1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Requirement"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="Feature" metatype="Feature" notes="" bgcolor="10092287" fontcolor="0" bordercolor="0" borderwidth="1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Feature">
+                <Property name="isStatic" value="false"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="Change" metatype="Change" notes="" bgcolor="16700812" fontcolor="0" bordercolor="0" borderwidth="1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Change"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="Defect" metatype="Defect" notes="" bgcolor="13353215" fontcolor="0" bordercolor="0" borderwidth="1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Defect"/>
+            </AppliesTo>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UMLProfiles>
+  <DiagramProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="A0F533A7-8" name="Kanban" version="1.0" notes="Kanban"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="Basic" notes="" cx="205" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Diagram_Custom">
+                <Property name="alias" value="Kanban"/>
+                <Property name="styleex" value="MatrixActive=0;SwimlanesActive=0;KanbanActive=1;KanbanType=Element.Priority;KB=1;"/>
+                <Property name="swimlanes" value="Lanes=4;Orientation=Vertical;Lane1=Low:Default=1;Lane2=Medium;Lane3=High;Lane4=Critical;"/>
+                <Property name="toolbox" value="Kanban"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="Backlog" notes="" cx="205" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Diagram_Custom">
+                <Property name="alias" value="Kanban"/>
+                <Property name="styleex" value="MatrixActive=0;SwimlanesActive=0;KanbanActive=1;KB=1;"/>
+                <Property name="swimlanes" value="Lanes=4;Orientation=Vertical;Lane1=Backlog:Default=1;Lane2=Queue;Lane3=In Progress;Lane4=Done;&#xA;"/>
+                <Property name="toolbox" value="Kanban"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="Iteration" notes="" cx="205" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Diagram_Custom">
+                <Property name="alias" value="Kanban"/>
+                <Property name="styleex" value="MatrixActive=0;SwimlanesActive=0;KanbanActive=1;KanbanType=Element.Phase;KB=1;"/>
+                <Property name="swimlanes" value="Lanes=4;Orientation=Vertical;Lane1=Queue:Default=1;Lane2=In Progress;Lane3=Test/Review;Lane4=Done;"/>
+                <Property name="toolbox" value="Kanban"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="Complete" notes="" cx="205" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Diagram_Custom">
+                <Property name="alias" value="Kanban"/>
+                <Property name="styleex" value="MatrixActive=0;SwimlanesActive=0;KanbanActive=1;KanbanType=Element.Phase;KB=1;"/>
+                <Property name="swimlanes" value="Lanes=4;Orientation=Vertical;Lane1=Ready for Release:Default=1;Lane2=Staging;Lane3=Production;Lane4=Done;&#xA;"/>
+                <Property name="toolbox" value="Kanban"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </DiagramProfile>
+  <UIToolboxes>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="561D59CF-F" name="Kanban" version="1.0" notes="Kanban"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="Elements" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Kanban::Change(UML::Change)" type="" description="" unit="" values="" default="Change"/>
+              <Tag name="Kanban::Defect(UML::Defect)" type="" description="" unit="" values="" default="Defect"/>
+              <Tag name="Kanban::Feature(UML::Feature)" type="" description="" unit="" values="" default="Feature"/>
+              <Tag name="Kanban::UserStory(UML::Requirement)" type="" description="" unit="" values="" default="User Story"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UIToolboxes>
+  <ModelTemplates>
+    <Model name="Kanban One Stage Workflow" description="A Kanban workflow using a single iteration diagram." groupName="Kanban Workflows" location="kb1.0-one-stage-workflow.xml" default="yes" icon="31" filter="Kanban" />
+    <Model name="Kanban Two Stage Workflow" description="A Kanban workflow including Backlog and Iteration diagrams." groupName="Kanban Workflows" location="kb1.0-two-stage-workflow.xml" default="yes" icon="31" filter="Kanban" />
+    <Model name="Kanban Three Stage Workflow" description="A Kanban workflow including Backlog, Iteration and Complete diagrams." groupName="Kanban Workflows" location="kb1.0-three-stage-workflow.xml" default="yes" icon="31" filter="Kanban" />
+  </ModelTemplates>
+</MDG.Technology>

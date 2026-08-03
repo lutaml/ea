@@ -5,8 +5,8 @@ require "fileutils"
 module Ea
   module Cli
     module Command
-      # `ea svg NAME FILE [--output=PATH] [--mode=ea|thin]`
-      # `ea svg --all FILE [--output-dir=PATH] [--mode=ea|thin]`
+      # `ea svg NAME FILE [--output=PATH]`
+      # `ea svg --all FILE [--output-dir=PATH]`
       #
       # Renders one (NAME) or every (--all) diagram from a QEA or
       # XMI file into standalone SVG using the umldi content
@@ -14,8 +14,7 @@ module Ea
       # Ea::Model::Diagram.
       #
       # Default emitter is EaEmitter::Document which mirrors EA's SVG
-      # structure (DOCTYPE, layered groups, EA-style markers). Pass
-      # --mode=thin for the simpler Renderer output.
+      # structure (DOCTYPE, layered groups, EA-style markers).
       class Svg < Base
         def call
           return render_all if options[:all]
@@ -28,7 +27,8 @@ module Ea
         def render_one
           diagram = find_diagram
           svg = emitter_for_mode.new(diagram,
-                                       model_index: document.index_by_id).render
+                                       model_index: document.index_by_id,
+                                       document: document).render
 
           output_path = resolve_output_path(diagram)
           FileUtils.mkdir_p(File.dirname(output_path))
@@ -42,7 +42,8 @@ module Ea
           FileUtils.mkdir_p(out_dir)
           paths = document.diagrams.map do |diagram|
             svg = emitter_for_mode.new(diagram,
-                                         model_index: document.index_by_id).render
+                                         model_index: document.index_by_id,
+                                         document: document).render
             path = File.join(out_dir, "#{diagram.id}.svg")
             File.write(path, svg)
             path
@@ -58,15 +59,7 @@ module Ea
         end
 
         def emitter_for_mode
-          case (options[:mode] || :ea).to_sym
-          when :ea
-            Ea::Svg::EaEmitter::Document
-          when :thin
-            Ea::Svg::Renderer
-          else
-            raise Ea::Cli::UnsupportedFormat,
-                  "Unknown svg mode: #{options[:mode]}"
-          end
+          Ea::Svg::EaEmitter::Document
         end
 
         def document

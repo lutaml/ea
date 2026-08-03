@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<MDG.Technology version="1.0">
+  <Documentation id="EBS" name="Executable Business States" version="1" notes="Executable Business States" categoryList="EBS" categoryMappings="Executable Business State Case Studies=EBS;"/>
+  <ModelTemplates>
+    <Model name="Auction Simple" groupName="Executable Business State Case Studies" location="ebs1.0-auction-simple.xml" icon="31" />
+    <Model name="Auction Concurrent" groupName="Executable Business State Case Studies" location="ebs1.0-auction-concurrent.xml" icon="31" />
+    <Model name="BnB Apartment Operation" groupName="Executable Business State Case Studies" location="ebs1.0-bnb-apartment-operation.xml" icon="31" />
+  </ModelTemplates>
+</MDG.Technology>

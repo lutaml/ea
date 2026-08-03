@@ -1,0 +1,1122 @@
+<MDG.Technology version="1.0">
+  <Documentation id="Project" name="Project Management" version="1" notes="Elements used in Project Management Modeling" categoryList="Project Management" categoryMappings="Project Management=Project Management;Roadmaps=Project Management;"/>
+  <UMLProfiles>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="2FDC5606-3" name="Project" version="1.0" notes="Alias=Project Management;"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="Change" notes="" cx="0" cy="0" generalizes="WorkItem" baseStereotypes="WorkItem">
+            <AppliesTo>
+              <Apply type="Change">
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="Defect" notes="" cx="0" cy="0" generalizes="WorkItem" baseStereotypes="WorkItem">
+            <AppliesTo>
+              <Apply type="Defect">
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="Feature" notes="" cx="0" cy="0" generalizes="WorkItem" baseStereotypes="WorkItem">
+            <AppliesTo>
+              <Apply type="Feature">
+                <Property name="isStatic" value="false"/>
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="Issue" notes="" cx="0" cy="0" generalizes="WorkItem" baseStereotypes="WorkItem">
+            <AppliesTo>
+              <Apply type="Issue">
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="ProjectPeriod" notes="" cx="0" cy="0" isAbstract="true">
+            <TaggedValues>
+              <Tag name="StartDate"/>
+              <Tag name="EndDate"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Requirement" notes="" cx="0" cy="0" generalizes="WorkItem" baseStereotypes="WorkItem">
+            <AppliesTo>
+              <Apply type="Requirement">
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="Task" notes="" cx="0" cy="0" generalizes="WorkItem" baseStereotypes="WorkItem">
+            <AppliesTo>
+              <Apply type="Task">
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="wiDocument" metatype="Document" notes="" cx="110" cy="44" generalizes="WorkItem" baseStereotypes="WorkItem">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwebSUlJSUlJ
+              SUlJSUlJSQcHm0lJSQkJCQkJCQkJCUkHB5ubSUn/CQkJCQkJCQlJBwebm5tJ//8JCQkJCQkJ
+              SQcHm+SbSf///wkJCQkJCUkHB5vk5En/////CQkJCQlJBweb5ORJ//////8JCQkJSQcHm+Tk
+              Sf///////wkJCUkHB5v/5En/////////CQlJBwebm5ubm5ubm5ubm5ubmwcHBwcHBwcHBwcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="Artifact">
+                <Property name="fileName" value=""/>
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+            <DiagramProperties>
+              <DiagramProperty name="Show As Requirement" option="DrawAsRequirement" default="1"/>
+            </DiagramProperties>
+          </Stereotype>
+          <Stereotype name="WorkItem" notes="" cx="0" cy="0" isAbstract="true">
+            <TaggedValues>
+              <Tag name="Priority" type="" description="" unit="" values="" default=""/>
+              <Tag name="Complexity" type="" description="" unit="" values="" default=""/>
+              <Tag name="TimeTaken" type="" description="" unit="" values="" default=""/>
+              <Tag name="TimeToComplete" type="" description="" unit="" values="" default=""/>
+              <Tag name="DefinitionOfDone" type="" description="" unit="" values="" default="&lt;memo&gt;"/>
+              <Tag name="Done" type="boolean" description="" unit="" values="true,false" default="false"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="VisionAndScope" metatype="VisionAndScope" notes="" cx="90" cy="50">
+            <AppliesTo>
+              <Apply type="Artifact">
+                <Property name="fileName" value=""/>
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="Backlog" metatype="Backlog" notes="" cx="130" cy="80">
+            <AppliesTo>
+              <Apply type="Package">
+                <Property name="_makeComposite" value="True"/>
+                <Property name="_defaultDiagramType" value="Project Management::Backlog"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="Decision" metatype="Decision" notes="" cx="110" cy="44">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwebSUlJSUlJ
+              SUlJSUlJSQcHm0lJSQkJCQkJCQkJCUkHB5ubSUn/CQkJCQkJCQlJBwebm5tJ//8JCQkJCQkJ
+              SQcHm+SbSf///wkJCQkJCUkHB5vk5En/////CQkJCQlJBweb5ORJ//////8JCQkJSQcHm+Tk
+              Sf///////wkJCUkHB5v/5En/////////CQlJBwebm5ubm5ubm5ubm5ubmwcHBwcHBwcHBwcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="Artifact">
+                <Property name="fileName" value=""/>
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Date" type="Date" description="" unit="" values="" default=""/>
+            </TaggedValues>
+            <DiagramProperties>
+              <DiagramProperty name="Show As Requirement" option="DrawAsRequirement" default="1"/>
+            </DiagramProperties>
+          </Stereotype>
+          <Stereotype name="Deliverable" metatype="Deliverable" notes="" cx="110" cy="44">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwebSUlJSUlJ
+              SUlJSUlJSQcHm0lJSQkJCQkJCQkJCUkHB5ubSUn/CQkJCQkJCQlJBwebm5tJ//8JCQkJCQkJ
+              SQcHm+SbSf///wkJCQkJCUkHB5vk5En/////CQkJCQlJBweb5ORJ//////8JCQkJSQcHm+Tk
+              Sf///////wkJCUkHB5v/5En/////////CQlJBwebm5ubm5ubm5ubm5ubmwcHBwcHBwcHBwcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="Artifact">
+                <Property name="fileName" value=""/>
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+            <DiagramProperties>
+              <DiagramProperty name="Show As Requirement" option="DrawAsRequirement" default="1"/>
+            </DiagramProperties>
+          </Stereotype>
+          <Stereotype name="ProductIncrement" metatype="ProductIncrement" notes="" cx="110" cy="44" generalizes="Deliverable" baseStereotypes="Deliverable">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwebSUlJSUlJ
+              SUlJSUlJSQcHm0lJSQkJCQkJCQkJCUkHB5ubSUn/CQkJCQkJCQlJBwebm5tJ//8JCQkJCQkJ
+              SQcHm+SbSf///wkJCQkJCUkHB5vk5En/////CQkJCQlJBweb5ORJ//////8JCQkJSQcHm+Tk
+              Sf///////wkJCUkHB5v/5En/////////CQlJBwebm5ubm5ubm5ubm5ubmwcHBwcHBwcHBwcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="Artifact">
+                <Property name="fileName" value=""/>
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Done" type="boolean" description="" unit="" values="true,false" default="false"/>
+            </TaggedValues>
+            <DiagramProperties>
+              <DiagramProperty name="Show As Requirement" option="DrawAsRequirement" default="1"/>
+            </DiagramProperties>
+          </Stereotype>
+          <Stereotype name="Event" metatype="Event" notes="" cx="110" cy="44">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwebSUlJSUlJ
+              SUlJSUlJSQcHm0lJSQkJCQkJCQkJCUkHB5ubSUn/CU9PT09PCQlJBwebm5tJ//9PCQkJCQkJ
+              SQcHm+SbSf//TwkJCQkJCUkHB5vk5En//09PT08JCQlJBweb5ORJ//9P//8JCQkJSQcHm+Tk
+              Sf//T09PT08JCUkHB5v/5En/////////CQlJBwebm5ubm5ubm5ubm5ubmwcHBwcHBwcHBwcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="Artifact">
+                <Property name="fileName" value=""/>
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="EventStart" type="EventStart" description="" unit="" values="" default=""/>
+              <Tag name="EventEnd" type="EventEnd" description="" unit="" values="" default=""/>
+            </TaggedValues>
+            <DiagramProperties>
+              <DiagramProperty name="Show As Requirement" option="DrawAsRequirement" default="1"/>
+            </DiagramProperties>
+          </Stereotype>
+          <Stereotype name="Meeting" metatype="Meeting" notes="" cx="110" cy="44">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwebSUlJSUlJ
+              SUlJSUlJSQcHm0lJSQkJCQkJCQkJCUkHB5ubSUn/CdIJCQnSCQlJBwebm5tJ///SCQkJ0gkJ
+              SQcHm+SbSf//0gnSCdIJCUkHB5vk5En//9L/0gnSCQlJBweb5ORJ///S0v/S0gkJSQcHm+Tk
+              Sf//0v///9IJCUkHB5v/5En/////////CQlJBwebm5ubm5ubm5ubm5ubmwcHBwcHBwcHBwcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="Artifact">
+                <Property name="fileName" value=""/>
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Date" type="Date" description="" unit="" values="" default=""/>
+              <Tag name="MeetingStart" type="MeetingStart" description="" unit="" values="" default=""/>
+              <Tag name="MeetingEnd" type="MeetingEnd" description="" unit="" values="" default=""/>
+            </TaggedValues>
+            <DiagramProperties>
+              <DiagramProperty name="Show As Requirement" option="DrawAsRequirement" default="1"/>
+            </DiagramProperties>
+          </Stereotype>
+          <Stereotype name="Milestone" metatype="Milestone" notes="" cx="110" cy="44">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwebSUlJSUlJ
+              SUlJSUlJSQcHm0lJSQkJCQkJCQkJCUkHB5ubSUn/CQkJmwkJCQlJBwebm5tJ//8JCQAJCQkJ
+              SQcHm+SbSf///5sAmwkJCUkHB5vk5En///8AAAAJCQlJBweb5ORJ//+bAAAAmwkJSQcHm+Tk
+              Sf//AAAAAAAJCUkHB5v/5En/////////CQlJBwebm5ubm5ubm5ubm5ubmwcHBwcHBwcHBwcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="Artifact">
+                <Property name="fileName" value=""/>
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Date" type="Date" description="" unit="" values="" default=""/>
+            </TaggedValues>
+            <DiagramProperties>
+              <DiagramProperty name="Show As Requirement" option="DrawAsRequirement" default="1"/>
+            </DiagramProperties>
+          </Stereotype>
+          <Stereotype name="Phase" metatype="Phase" notes="" cx="110" cy="44" generalizes="ProjectPeriod" baseStereotypes="ProjectPeriod">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwebSUlJSUlJ
+              SUlJSUlJSQcHm0lJSQkJCQkJCQkJCUkHB5ubSUn/CQkJCQkJCQlJBwebm5tJ//8JCQkJCQkJ
+              SQcHm+SbSf///wkJCQkJCUkHB5vk5En/////CQkJCQlJBweb5ORJ//////8JCQkJSQcHm+Tk
+              Sf///////wkJCUkHB5v/5En/////////CQlJBwebm5ubm5ubm5ubm5ubmwcHBwcHBwcHBwcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="Artifact">
+                <Property name="fileName" value=""/>
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Milestone"/>
+            </TaggedValues>
+            <DiagramProperties>
+              <DiagramProperty name="Show As Requirement" option="DrawAsRequirement" default="1"/>
+            </DiagramProperties>
+          </Stereotype>
+          <Stereotype name="Stage" metatype="Stage" notes="" cx="110" cy="44" generalizes="ProjectPeriod" baseStereotypes="ProjectPeriod">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwebSUlJSUlJ
+              SUlJSUlJSQcHm0lJSQkJCQkJCQkJCUkHB5ubSUn/CQkJCQkJCQlJBwebm5tJ//8JCQkJCQkJ
+              SQcHm+SbSf///wkJCQkJCUkHB5vk5En/////CQkJCQlJBweb5ORJ//////8JCQkJSQcHm+Tk
+              Sf///////wkJCUkHB5v/5En/////////CQlJBwebm5ubm5ubm5ubm5ubmwcHBwcHBwcHBwcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="Artifact">
+                <Property name="fileName" value=""/>
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+            <DiagramProperties>
+              <DiagramProperty name="Show As Requirement" option="DrawAsRequirement" default="1"/>
+            </DiagramProperties>
+          </Stereotype>
+          <Stereotype name="Iteration" metatype="Iteration" notes="" cx="110" cy="44" generalizes="ProjectPeriod" baseStereotypes="ProjectPeriod">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwebSUlJSUlJ
+              SUlJSUlJSQcHm0lJSQkJCQkJCQkJCUkHB5ubSUn/CQkJCQkJCQlJBwebm5tJ//8JCQkJCQkJ
+              SQcHm+SbSf///wkJCQkJCUkHB5vk5En/////CQkJCQlJBweb5ORJ//////8JCQkJSQcHm+Tk
+              Sf///////wkJCUkHB5v/5En/////////CQlJBwebm5ubm5ubm5ubm5ubmwcHBwcHBwcHBwcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="Artifact">
+                <Property name="fileName" value=""/>
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+            <DiagramProperties>
+              <DiagramProperty name="Show As Requirement" option="DrawAsRequirement" default="1"/>
+            </DiagramProperties>
+          </Stereotype>
+          <Stereotype name="Sprint" metatype="Sprint" notes="" cx="110" cy="44" generalizes="ProjectPeriod" baseStereotypes="ProjectPeriod">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwebSUlJSUlJ
+              SUlJSUlJSQcHm0lJSQkJCQkJCQkJCUkHB5ubSUn/CQkJCQkJCQlJBwebm5tJ//8JCQkJCQkJ
+              SQcHm+SbSf///wkJCQkJCUkHB5vk5En/////CQkJCQlJBweb5ORJ//////8JCQkJSQcHm+Tk
+              Sf///////wkJCUkHB5v/5En/////////CQlJBwebm5ubm5ubm5ubm5ubmwcHBwcHBwcHBwcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="Artifact">
+                <Property name="fileName" value=""/>
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Retrospective"/>
+              <Tag name="PlanningEvent"/>
+              <Tag name="Showcase"/>
+              <Tag name="Backlog"/>
+            </TaggedValues>
+            <DiagramProperties>
+              <DiagramProperty name="Show As Requirement" option="DrawAsRequirement" default="1"/>
+            </DiagramProperties>
+          </Stereotype>
+          <Stereotype name="Version" metatype="Version" notes="" cx="110" cy="44">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwebSUlJSUlJ
+              SUlJSUlJSQcHm0lJSQkJCQkJCQkJCUkHB5ubSUn/CQkJCQkJCQlJBwebm5tJ//8JCQkJCQkJ
+              SQcHm+SbSf///wkJCQkJCUkHB5vk5En/////CQkJCQlJBweb5ORJ//////8JCQkJSQcHm+Tk
+              Sf///////wkJCUkHB5v/5En/////////CQlJBwebm5ubm5ubm5ubm5ubmwcHBwcHBwcHBwcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="Artifact">
+                <Property name="fileName" value=""/>
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+            <DiagramProperties>
+              <DiagramProperty name="Show As Requirement" option="DrawAsRequirement" default="1"/>
+            </DiagramProperties>
+          </Stereotype>
+          <Stereotype name="Product" metatype="Product" notes="" cx="110" cy="44">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwebSUlJSUlJ
+              SUlJSUlJSQcHm0lJSQkJCQkJCQkJCUkHB5ubSUn/CQkJCQkJCQlJBwebm5tJ//8JCQkJCQkJ
+              SQcHm+SbSf///wkJCQkJCUkHB5vk5En/////CQkJCQlJBweb5ORJ//////8JCQkJSQcHm+Tk
+              Sf///////wkJCUkHB5v/5En/////////CQlJBwebm5ubm5ubm5ubm5ubmwcHBwcHBwcHBwcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="Artifact">
+                <Property name="fileName" value=""/>
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Backlog"/>
+            </TaggedValues>
+            <DiagramProperties>
+              <DiagramProperty name="Show As Requirement" option="DrawAsRequirement" default="1"/>
+            </DiagramProperties>
+          </Stereotype>
+          <Stereotype name="Capability" metatype="Capability" notes="" cx="110" cy="44">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwebSUlJSUlJ
+              SUlJSUlJSQcHm0lJSQkJCQkJCQkJCUkHB5ubSUn/CQkJCQkJCQlJBwebm5tJ//8JCQkJCQkJ
+              SQcHm+SbSf///wkJCQkJCUkHB5vk5En/////CQkJCQlJBweb5ORJ//////8JCQkJSQcHm+Tk
+              Sf///////wkJCUkHB5v/5En/////////CQlJBwebm5ubm5ubm5ubm5ubmwcHBwcHBwcHBwcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="Artifact">
+                <Property name="fileName" value=""/>
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+            <DiagramProperties>
+              <DiagramProperty name="Show As Requirement" option="DrawAsRequirement" default="1"/>
+            </DiagramProperties>
+          </Stereotype>
+          <Stereotype name="CapabilityIncrement" metatype="CapabilityIncrement" notes="" cx="110" cy="44">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwebSUlJSUlJ
+              SUlJSUlJSQcHm0lJSQkJCQkJCQkJCUkHB5ubSUn/CQkJCQkJCQlJBwebm5tJ//8JCQkJCQkJ
+              SQcHm+SbSf///wkJCQkJCUkHB5vk5En/////CQkJCQlJBweb5ORJ//////8JCQkJSQcHm+Tk
+              Sf///////wkJCUkHB5v/5En/////////CQlJBwebm5ubm5ubm5ubm5ubmwcHBwcHBwcHBwcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="Artifact">
+                <Property name="fileName" value=""/>
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+            <DiagramProperties>
+              <DiagramProperty name="Show As Requirement" option="DrawAsRequirement" default="1"/>
+            </DiagramProperties>
+          </Stereotype>
+          <Stereotype name="Strategy" metatype="Strategy" notes="" cx="110" cy="44">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwebSUlJSUlJ
+              SUlJSUlJSQcHm0lJSQkJCQkJCQkJCUkHB5ubSUn/CQkJCQkJCQlJBwebm5tJ//8JCQkJCQkJ
+              SQcHm+SbSf///wkJCQkJCUkHB5vk5En/////CQkJCQlJBweb5ORJ//////8JCQkJSQcHm+Tk
+              Sf///////wkJCUkHB5v/5En/////////CQlJBwebm5ubm5ubm5ubm5ubmwcHBwcHBwcHBwcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="Artifact">
+                <Property name="fileName" value=""/>
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+            <DiagramProperties>
+              <DiagramProperty name="Show As Requirement" option="DrawAsRequirement" default="1"/>
+            </DiagramProperties>
+          </Stereotype>
+          <Stereotype name="Goal" metatype="Goal" notes="" cx="110" cy="44">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwebSUlJSUlJ
+              SUlJSUlJSQcHm0lJSQkJCQkJCQkJCUkHB5ubSUn/CQkJCQkJCQlJBwebm5tJ//8JCQkJCQkJ
+              SQcHm+SbSf///wkJCQkJCUkHB5vk5En/////CQkJCQlJBweb5ORJ//////8JCQkJSQcHm+Tk
+              Sf///////wkJCUkHB5v/5En/////////CQlJBwebm5ubm5ubm5ubm5ubmwcHBwcHBwcHBwcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="Artifact">
+                <Property name="fileName" value=""/>
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+            <DiagramProperties>
+              <DiagramProperty name="Show As Requirement" option="DrawAsRequirement" default="1"/>
+            </DiagramProperties>
+          </Stereotype>
+          <Stereotype name="Objective" metatype="Objective" notes="" cx="110" cy="44">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwebSUlJSUlJ
+              SUlJSUlJSQcHm0lJSQkJCQkJCQkJCUkHB5ubSUn/CQkJCQkJCQlJBwebm5tJ//8JCQkJCQkJ
+              SQcHm+SbSf///wkJCQkJCUkHB5vk5En/////CQkJCQlJBweb5ORJ//////8JCQkJSQcHm+Tk
+              Sf///////wkJCUkHB5v/5En/////////CQlJBwebm5ubm5ubm5ubm5ubmwcHBwcHBwcHBwcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="Artifact">
+                <Property name="fileName" value=""/>
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+            <DiagramProperties>
+              <DiagramProperty name="Show As Requirement" option="DrawAsRequirement" default="1"/>
+            </DiagramProperties>
+          </Stereotype>
+          <Stereotype name="System" metatype="System" notes="" cx="110" cy="44">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwebSUlJSUlJ
+              SUlJSUlJSQcHm0lJSQkJCQkJCQkJCUkHB5ubSUn/CQkJCQkJCQlJBwebm5tJ//8JCQkJCQkJ
+              SQcHm+SbSf///wkJCQkJCUkHB5vk5En/////CQkJCQlJBweb5ORJ//////8JCQkJSQcHm+Tk
+              Sf///////wkJCUkHB5v/5En/////////CQlJBwebm5ubm5ubm5ubm5ubmwcHBwcHBwcHBwcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="Artifact">
+                <Property name="fileName" value=""/>
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+            <DiagramProperties>
+              <DiagramProperty name="Show As Requirement" option="DrawAsRequirement" default="1"/>
+            </DiagramProperties>
+          </Stereotype>
+          <Stereotype name="Release" metatype="Release" notes="" cx="110" cy="44">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwebSUlJSUlJ
+              SUlJSUlJSQcHm0lJSQkJCQkJCQkJCUkHB5ubSUn/CQkJCQkJCQlJBwebm5tJ//8JCQkJCQkJ
+              SQcHm+SbSf///wkJCQkJCUkHB5vk5En/////CQkJCQlJBweb5ORJ//////8JCQkJSQcHm+Tk
+              Sf///////wkJCUkHB5v/5En/////////CQlJBwebm5ubm5ubm5ubm5ubmwcHBwcHBwcHBwcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="Artifact">
+                <Property name="fileName" value=""/>
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="ReleaseDate"/>
+            </TaggedValues>
+            <DiagramProperties>
+              <DiagramProperty name="Show As Requirement" option="DrawAsRequirement" default="1"/>
+            </DiagramProperties>
+          </Stereotype>
+          <Stereotype name="Epic" metatype="Epic" notes="" cx="110" cy="44" generalizes="WorkItem" baseStereotypes="WorkItem">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwebSUlJSUlJ
+              SUlJSUlJSQcHm0lJSQkJCQkJCQkJCUkHB5ubSUn/CQkJCQkJCQlJBwebm5tJ//8JCQkJCQkJ
+              SQcHm+SbSf///wkJCQkJCUkHB5vk5En/////CQkJCQlJBweb5ORJ//////8JCQkJSQcHm+Tk
+              Sf///////wkJCUkHB5v/5En/////////CQlJBwebm5ubm5ubm5ubm5ubmwcHBwcHBwcHBwcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="Artifact">
+                <Property name="fileName" value=""/>
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+            <DiagramProperties>
+              <DiagramProperty name="Show As Requirement" option="DrawAsRequirement" default="1"/>
+            </DiagramProperties>
+          </Stereotype>
+          <Stereotype name="UserStory" metatype="UserStory" notes="" cx="110" cy="44" generalizes="WorkItem" baseStereotypes="WorkItem">
+            <Icon type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">
+              Qk02BQAAAAAAADYEAAAoAAAAEAAAABAAAAABAAgAAAAAAAABAAATCwAAEwsAAAABAAAAAAAA
+              AAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwADA3MAA8MqmAAAgQAAAIGAAACCAAAAg
+              oAAAIMAAACDgAABAAAAAQCAAAEBAAABAYAAAQIAAAECgAABAwAAAQOAAAGAAAABgIAAAYEAA
+              AGBgAABggAAAYKAAAGDAAABg4AAAgAAAAIAgAACAQAAAgGAAAICAAACAoAAAgMAAAIDgAACg
+              AAAAoCAAAKBAAACgYAAAoIAAAKCgAACgwAAAoOAAAMAAAADAIAAAwEAAAMBgAADAgAAAwKAA
+              AMDAAADA4AAA4AAAAOAgAADgQAAA4GAAAOCAAADgoAAA4MAAAODgAEAAAABAACAAQABAAEAA
+              YABAAIAAQACgAEAAwABAAOAAQCAAAEAgIABAIEAAQCBgAEAggABAIKAAQCDAAEAg4ABAQAAA
+              QEAgAEBAQABAQGAAQECAAEBAoABAQMAAQEDgAEBgAABAYCAAQGBAAEBgYABAYIAAQGCgAEBg
+              wABAYOAAQIAAAECAIABAgEAAQIBgAECAgABAgKAAQIDAAECA4ABAoAAAQKAgAECgQABAoGAA
+              QKCAAECgoABAoMAAQKDgAEDAAABAwCAAQMBAAEDAYABAwIAAQMCgAEDAwABAwOAAQOAAAEDg
+              IABA4EAAQOBgAEDggABA4KAAQODAAEDg4ACAAAAAgAAgAIAAQACAAGAAgACAAIAAoACAAMAA
+              gADgAIAgAACAICAAgCBAAIAgYACAIIAAgCCgAIAgwACAIOAAgEAAAIBAIACAQEAAgEBgAIBA
+              gACAQKAAgEDAAIBA4ACAYAAAgGAgAIBgQACAYGAAgGCAAIBgoACAYMAAgGDgAICAAACAgCAA
+              gIBAAICAYACAgIAAgICgAICAwACAgOAAgKAAAICgIACAoEAAgKBgAICggACAoKAAgKDAAICg
+              4ACAwAAAgMAgAIDAQACAwGAAgMCAAIDAoACAwMAAgMDgAIDgAACA4CAAgOBAAIDgYACA4IAA
+              gOCgAIDgwACA4OAAwAAAAMAAIADAAEAAwABgAMAAgADAAKAAwADAAMAA4ADAIAAAwCAgAMAg
+              QADAIGAAwCCAAMAgoADAIMAAwCDgAMBAAADAQCAAwEBAAMBAYADAQIAAwECgAMBAwADAQOAA
+              wGAAAMBgIADAYEAAwGBgAMBggADAYKAAwGDAAMBg4ADAgAAAwIAgAMCAQADAgGAAwICAAMCA
+              oADAgMAAwIDgAMCgAADAoCAAwKBAAMCgYADAoIAAwKCgAMCgwADAoOAAwMAAAMDAIADAwEAA
+              wMBgAMDAgADAwKAA8Pv/AKSgoACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwebSUlJSUlJ
+              SUlJSUlJSQcHm0lJSQkJCQkJCQkJCUkHB5ubSUn/CQkJCQkJCQlJBwebm5tJ//8JCQkJCQkJ
+              SQcHm+SbSf///wkJCQkJCUkHB5vk5En/////CQkJCQlJBweb5ORJ//////8JCQkJSQcHm+Tk
+              Sf///////wkJCUkHB5v/5En/////////CQlJBwebm5ubm5ubm5ubm5ubmwcHBwcHBwcHBwcH
+              BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=
+            </Icon>
+            <AppliesTo>
+              <Apply type="Artifact">
+                <Property name="fileName" value=""/>
+                <Property name="_defaultDiagramType" value="Project Management::Project Management"/>
+              </Apply>
+            </AppliesTo>
+            <DiagramProperties>
+              <DiagramProperty name="Show As Requirement" option="DrawAsRequirement" default="1"/>
+            </DiagramProperties>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes>
+          <TaggedValueType property="StartDate" description="" notes="Type=RefGUID;Stereotypes=Milestone;"/>
+          <TaggedValueType property="EndDate" description="" notes="Type=RefGUID;Stereotypes=Milestone;"/>
+          <TaggedValueType property="Milestone" description="" notes="Type=RefGUID;Stereotypes=Milestone;"/>
+          <TaggedValueType property="Retrospective" description="" notes="Type=RefGUID;Stereotypes=Meeting;"/>
+          <TaggedValueType property="PlanningEvent" description="" notes="Type=RefGUID;Stereotypes=Meeting;"/>
+          <TaggedValueType property="Showcase" description="" notes="Type=RefGUID;Stereotypes=Meeting;"/>
+          <TaggedValueType property="Backlog" description="" notes="Type=RefGUID;Stereotypes=Backlog;"/>
+          <TaggedValueType property="ReleaseDate" description="" notes="Type=RefGUID;Stereotypes=Milestone;"/>
+        </TaggedValueTypes>
+      </Content>
+    </UMLProfile>
+  </UMLProfiles>
+  <TaggedValueTypes>
+    <RefData version="1.0" exporter="EA.25">
+      <DataSet name="Property Types" table="t_propertytypes" filter="Property='#Property#'">
+        <DataRow>
+          <Column name="Property" value="Date"/>
+          <Column name="Description" value="Date"/>
+          <Column name="Notes" value="Type=Date;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="MeetingStart"/>
+          <Column name="Description" value="Start time"/>
+          <Column name="Notes" value="Type=Time;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="MeetingEnd"/>
+          <Column name="Description" value="End time"/>
+          <Column name="Notes" value="Type=Time;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="EventStart"/>
+          <Column name="Description" value="Start timestamp"/>
+          <Column name="Notes" value="Type=Timestamp;"/>
+        </DataRow>
+        <DataRow>
+          <Column name="Property" value="EventEnd"/>
+          <Column name="Description" value="End timestamp"/>
+          <Column name="Notes" value="Type=Timestamp;"/>
+        </DataRow>
+      </DataSet>
+    </RefData>
+  </TaggedValueTypes>
+  <DiagramProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="D90B8F02-4" name="Project Management" version="1.0" notes="Diagrams for Project Management modeling."/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="Project Management" notes="A diagram for modeling project management events, meetings and milestones.">
+            <AppliesTo>
+              <Apply type="Diagram_Custom">
+                <Property name="alias" value="Project Management"/>
+                <Property name="diagramID" value="pm"/>
+                <Property name="toolbox" value="Project::Project"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="Roadmap" notes="A roadmap diagram for modeling project management events, meetings and milestones.">
+            <AppliesTo>
+              <Apply type="Diagram_Custom">
+                <Property name="alias" value="Roadmap"/>
+                <Property name="toolbox" value="Project::Project"/>
+                <Property name="styleex" value="MatrixActive=0;SwimlanesActive=0;KanbanActive=0;Roadmap=RF=8195:TS=129:TLH=80:CustOpts=TITLE=Roadmap_;"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="Backlog" notes="A Kanban diagram for managing backlog work items.">
+            <AppliesTo>
+              <Apply type="Diagram_Custom">
+                <Property name="alias" value="Backlog"/>
+                <Property name="toolbox" value="Project::Project"/>
+                <Property name="styleex" value="MatrixActive=0;SwimlanesActive=0;KanbanActive=1;KB=1;"/>
+                <Property name="swimlanes" value="Lanes=3;Orientation=Vertical;Lane1=To Do:Default=1;Lane2=Doing;Lane3=Done;"/>
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </DiagramProfile>
+  <UIToolboxes>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="2EC3C637-4" name="Project" version="1.0" alias="Project Management" notes="Alias=Project Management;&#xA;Notes=Elements used in Project Management Modeling;"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="Project" alias="Project" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Project::Product(UML::Artifact)" type="" description="" unit="" values="" default="Product"/>
+              <Tag name="Project::Version(UML::Artifact)" type="" description="" unit="" values="" default="Version"/>
+              <Tag name="Project::Release(UML::Artifact)" type="" description="" unit="" values="" default="Release"/>
+              <Tag name="Project::Phase(UML::Artifact)" type="" description="" unit="" values="" default="Phase"/>
+              <Tag name="Project::Stage(UML::Artifact)" type="" description="" unit="" values="" default="Stage"/>
+              <Tag name="Project::Sprint(UML::Artifact)" type="" description="" unit="" values="" default="Sprint"/>
+              <Tag name="Project::Iteration(UML::Artifact)" type="" description="" unit="" values="" default="Iteration"/>
+              <Tag name="Project::Backlog(UML::Package)" type="" description="" unit="" values="" default="Backlog"/>
+              <Tag name="Project::Milestone(UML::Artifact)" type="" description="" unit="" values="" default="Milestone"/>
+              <Tag name="Project::Deliverable(UML::Artifact)" type="" description="" unit="" values="" default="Deliverable"/>
+              <Tag name="Project::ProductIncrement(UML::Artifact)" type="" description="" unit="" values="" default="Product Increment"/>
+              <Tag name="Project::Meeting(UML::Artifact)" type="" description="" unit="" values="" default="Meeting"/>
+              <Tag name="Project::CapabilityIncrement(UML::Artifact)" type="" description="" unit="" values="" default="Capability Increment"/>
+              <Tag name="Project::Event(UML::Artifact)" type="" description="" unit="" values="" default="Event"/>
+              <Tag name="Project::Decision(UML::Artifact)" type="" description="" unit="" values="" default="Decision"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Business" alias="Business" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Project::VisionAndScope(UML::Artifact)" type="" description="" unit="" values="" default="Vision and Scope"/>
+              <Tag name="Project::System(UML::Artifact)" type="" description="" unit="" values="" default="System"/>
+              <Tag name="Project::Strategy(UML::Artifact)" type="" description="" unit="" values="" default="Strategy"/>
+              <Tag name="Project::Goal(UML::Artifact)" type="" description="" unit="" values="" default="Goal"/>
+              <Tag name="Project::Objective(UML::Artifact)" type="" description="" unit="" values="" default="Objective"/>
+              <Tag name="Project::Capability(UML::Artifact)" type="" description="" unit="" values="" default="Capability"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Work Items" alias="Work Items" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="Project::Epic(UML::Artifact)" type="" description="" unit="" values="" default="Epic"/>
+              <Tag name="Project::UserStory(UML::Artifact)" type="" description="" unit="" values="" default="User Story"/>
+              <Tag name="Project::Task(UML::Task)" type="" description="" unit="" values="" default="Task"/>
+              <Tag name="Project::Issue(UML::Issue)" type="" description="" unit="" values="" default="Issue"/>
+              <Tag name="Project::Change(UML::Change)" type="" description="" unit="" values="" default="Change"/>
+              <Tag name="Project::Feature(UML::Feature)" type="" description="" unit="" values="" default="Feature"/>
+              <Tag name="Project::Defect(UML::Defect)" type="" description="" unit="" values="" default="Defect"/>
+              <Tag name="Project::Requirement(UML::Requirement)" type="" description="" unit="" values="" default="Requirement"/>
+              <Tag name="Project::wiDocument(UML::Artifact)" type="" description="" unit="" values="" default="Document"/>
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Checklists" alias="Checklists" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="EAUML::Checklist(UML::Artifact)" type="" description="" unit="" values="" default="Checklist"/>
+              <Tag name="EAUML::AuditedChecklist(UML::Artifact)" type="" description="" unit="" values="" default="Audited Checklist"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+      <Options>
+        <Option name="Notes" value="Elements used in Project Management Modeling"/>
+      </Options>
+    </UMLProfile>
+  </UIToolboxes>
+  <ModelTemplates>
+    <Model name="Under Construction" description="" groupName="Project Management" location="404.xml" default="yes" customizable="false" icon="31" filter="Simple"/>
+    <Model name="Strategy Roadmap" description="" groupName="Roadmaps" location="ro1.0-strategy-roadmap.xml" default="yes" customizable="false" icon="31" filter="Simple"/>
+    <Model name="Business Roadmap" description="" groupName="Roadmaps" location="ro1.0-business-roadmap.xml" default="yes" customizable="false" icon="31" filter="Simple"/>
+    <Model name="Capability Roadmap" description="" groupName="Roadmaps" location="ro1.0-capability-roadmap.xml" default="yes" customizable="false" icon="31" filter="Simple"/>
+    <Model name="Information Technology Roadmap" description="" groupName="Roadmaps" location="ro1.0-information-technology-roadmap.xml" default="yes" customizable="false" icon="31" filter="Simple"/>
+    <Model name="Marketing Roadmap" description="" groupName="Roadmaps" location="ro1.0-marketing-roadmap.xml" default="yes" customizable="false" icon="31" filter="Simple"/>
+    <Model name="PEST Roadmap" description="" groupName="Roadmaps" location="ro1.0-pest-roadmap.xml" default="yes" customizable="false" icon="31" filter="Simple"/>
+    <Model name="Portfolio Roadmap" description="" groupName="Roadmaps" location="ro1.0-portfolio-roadmap.xml" default="yes" customizable="false" icon="31" filter="Simple"/>
+    <Model name="Product Roadmap" description="" groupName="Roadmaps" location="ro1.0-product-roadmap.xml" default="yes" customizable="false" icon="31" filter="Simple"/>
+    <Model name="Product Development Roadmap" description="" groupName="Roadmaps" location="ro1.0-product-development-roadmap.xml" default="yes" customizable="false" icon="31" filter="Simple"/>
+    <Model name="Project Roadmap" description="" groupName="Roadmaps" location="ro1.0-project-roadmap.xml" default="yes" customizable="false" icon="31" filter="Simple"/>
+    <Model name="Technology Roadmap" description="" groupName="Roadmaps" location="ro1.0-technology-roadmap.xml" default="yes" customizable="false" icon="31" filter="Simple"/>
+  </ModelTemplates>
+</MDG.Technology>

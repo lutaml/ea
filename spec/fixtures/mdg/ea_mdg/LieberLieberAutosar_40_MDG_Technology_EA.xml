@@ -1,0 +1,714 @@
+<MDG.Technology version="1.0">
+	<Documentation id="AUTOSAR-401" name="LieberLieber AUTOSAR Engineer" version="2.3" notes="LieberLieber AUTOSAR Engineer technology. Contact us for ARXML Import/Export and other AUTOSAR enhancements at sales@lieberlieber.com" infoURI="http://www.lieberlieber.com" supportURI="sales@lieberlieber.com" categoryList="AUTOSAR" categoryMappings="AUTOSAR Diagram=AUTOSAR;AUTOSAR Framework=AUTOSAR;AUTOSAR Library=AUTOSAR;"/>
+	<Logo>
+		<Image type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">Qk12CAAAAAAAAHYAAAAoAAAAQAAAAEAAAAABAAQAAAAAAAAIAAAAAAAAAAAAABAAAAAAAAAA
+AbqwAF3d1gCT6OQAheXgAHji3QC78O4A////AMnz8QDk+fgA8fz7ANb29ACu7uoAoOvnAGrg
+2QBP2tMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABMgAAAAAAAAAAAAAAAAIkEAAAAA
+AAAAAAAAAAAAAARWagAAAAAAAAAAAAAAAAALZmiwAAAAAAAAAAAAAAAEhmbAAAAAAAAAAAAA
+AAAAAAAKZmZxAAAAAAAAAAAAAKZmZAAAAAAAAAAAAAAAAAAAAAC2ZmZQAAAAAAAAAABJZmZA
+AAAAAAAAAAAAAAAAAAAAAAtmZmgAAAAAAAAABGZmbAAAAAAAAAAAAAAAAAAAACIwALZmZpAA
+AAAAAABGZmZwAMd3IAAAAAAAAAAAAAB2ZmZQCmZmaQAAAAAAAGZmZgBJZmZpAAAAAAAAAAAA
+CmZmZmcAlmZmoAAAAAAKZmZiAGZqWGaQAAAAAAAAAAC2ZQAaZkAmZmZiAAAAACZmZpAFZkAA
+tmMAAAAAAAAAAJaAAABmUAlmZmkAAAAAlmZmsAZnAAAJZwAAAAAAAAAAZiAAAIZwAmZmZiAA
+AAJmZmYABmIAAApnAAAAAAAAAABmsAAAZlAAZmZmkAAACGZmaAAGaAAABmsAAAAAAAAAAKZk
+AAVmQACmZmZhAAAGZmZrAAtmsAGWYQAAAAAAAAAE1marhmoAAMZmZmIAADZmZmIAAJZmZmaz
+hAAAAAAABIYzZmZmoAAARmZmZwAAtmZmYQAACGZmbOlmZTEAATuWZmIbqXMAAAAWZmZqAAB2
+ZmZhAAAA0iMEZmZmZmZmZmZmZhAAAAAAABZmZmYAAHZmZmEAAAAATQCGZmZmZmZmZmZkACcA
+AAAAFmZmZgAAdmZmYQAAAAB5AAdmZmZmZmZmadAAbAAAAAAWZmZmAAB2ZmZhAAAAACagAElm
+ZmZmZmZQAAhiAAAAABZmZmoAAHZmZmIAAAAABmoAAEVmZmZosAAApmAAAAAAJmZmZwAAtmZm
+awAAAAAKZqAAAAETQQAAAApmgAAAAABWZmZiAAA2ZmZoAAAAAA1maSAAAAAAAAADlmYgAAAA
+AJZmZm0AAAZmZmYAAAAAAHZmaSAAAAAAA4ZmaQAAAAANZmZmkAAACGZmZrAAAAAACWZmZqsi
+MspmZmZtAAAAAAtmZmawAAACZmZmkAAAAAAAlmZmZmZmZmZmZsAAAAAABmZmZgAAAACWZmZs
+AAAAAAAJZmZmZmZmZmZrAAAAAAC2ZmZsAAAAACZmZmYAAAAAAAB2ZmZmZmZmaTAAAAAAAWZm
+ZpAAAAAACmZmZqAAAAAAAASGZmZmZmawAAAAAAAIZmZmEAAAAAAAlmZmZQAAAAAAAAHKZmaX
+MAAAAAAAAFZmZmQAAAAAAAAJZmZmsAAAAAAAAAAAAAAAAAAAAAALZmZmQAAAAAAAAACWZmZn
+AAAAAAAAAAAAAAAAAAAAALZmZmQAAAAAAAAAAAdmZmaBAAAAAAAAAAAAAAAAAAAKZmZqAAAA
+AAAAAAAAAEhmZmZQAAAAAAAAAAAAAAAAA5ZmaTAAAAAAAAAAAAAAAEVmZmZ0AAAAAAAAAAAA
+AASGZmVAAAAAAAAAAAAAAAAAAAEiIiIAAAAAAAAAAAAAMiIhAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAA</Image>
+	</Logo>
+	<Icon>
+		<Image type="bitmap" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAA
+////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////+fn5xMTE8vLy////////
+////////////////////////5eXlxMTE8vLy////+fn5qqqq0dHR7Ozs7Ozs////////////
+////////////2NjY0dHRy8vLnZ2d7Ozsvb29o6Ojy8vLo6OjnZ2d3d3d////////////////
+2NjYqqqqt7e3xMTEo6Ojt7e3nZ2dxMTEt7e3y8vLt7e30dHR////////////////2NjYqqqq
+t7e3xMTExMTElpaWlpaWy8vL7Ozst7e3vb291NTU1tbW6+vr6+vr1tbWysrK0dHR0dHR+fn5
+y8vLlpaWlpaWy8vL////////AbqwydPTvr6+vr6+vr6+vr6+1tbWAbqw////////y8vLlpaW
+lpaWt7e3////////AbqwAbqwvejl4+Pj4+Pj2O3sAbqwAbqw////////t7e3nZ2dvb29lpaW
+8vLy////8vz8AbqwAbqwAbqwAbqwAbqwAbqwyvTy////8vLylpaWy8vL8vLynZ2dqqqq+fn5
+////8vz8AbqwAbqwAbqwAbqw1/f1////+fn5qqqqqqqq+fn5////+fn5y8vL0dHR////////
+////////////////////////2NjY2NjY////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+////////////////AAA4cXMBAAAAABEAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAPTEdgEAAAAA
+AAAAAAAAAAAoU3MBAAAAAAAAAAD//////////wAAAAAAAAAAoKCgAAAAAAAAAAAAAAAAAAAA
+AACCAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAA
+AAAAAAAAAAAAAPA/AAAAAAAAAAAAAAAAdA9pAQAAAACAfzkdcIPoHAAAAAAAAAAAAAAA
+AA==</Image>
+	</Icon>
+	<UMLProfiles>
+		<UMLProfile profiletype="uml2">
+			<Documentation id="85E95C9C-6" name="AUTOSAR Behavior" version="1.0" notes="AUTOSAR Behavior"/>
+			<Content>
+				<Stereotypes>
+					<Stereotype name="AUTOSAR Artifact" metatype="AUTOSAR Artifact" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Artifact">
+								<Property name="fileName" value=""/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Behavior" metatype="AUTOSAR Behavior" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAMSLbERcge6pWwAAAIYAAAAHABEAc3RyLmRhdFVUDQAHqpkgU6qZIFOqmSBT
+K2bIYEhkKGBIZVBgyAWyMhnyGHgZuBiqwSQnQzBQpoTBDSieA4TODPlAMp+hiEGDwYjBFAh1
+kGgDBhMGTQZrqE4XoKpEhnIGPyBZAtRfBjQpGG6bBlxlLRADAFBLAQIXCxQAAAAIAMSLbERc
+ge6pWwAAAIYAAAAHAAkAAAAAAAAAAAAAgAAAAABzdHIuZGF0VVQFAAeqmSBTUEsFBgAAAAAB
+AAEAPgAAAJEAAAAAAA==</Image>
+						<AppliesTo>
+							<Apply type="Activity">
+								<Property name="isReadOnly" value="false"/>
+								<Property name="isSingleExecution" value=""/>
+								<Property name="parameterName" value=""/>
+								<Property name="postcondition" value=""/>
+								<Property name="precondition" value=""/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="SupportsMultipleInstantiation" type="boolean" description="" unit="" values="true,false" default="false"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Control Flow" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<Redefinitions>
+							<Redefine type="ControlFlow">
+								<Property name="direction" value="Source -&gt; Destination"/>
+							</Redefine>
+						</Redefinitions>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Data Element" metatype="AUTOSAR Data Element" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Object"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Dependency" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<Redefinitions>
+							<Redefine type="Dependency">
+								<Property name="direction" value="Source -&gt; Destination"/>
+							</Redefine>
+						</Redefinitions>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Event" metatype="AUTOSAR Event" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<Redefinitions>
+							<Redefine type="Action">
+								<Property name="context" value=""/>
+								<Property name="effect" value=""/>
+								<Property name="kind" value="AcceptEventTimer"/>
+							</Redefine>
+						</Redefinitions>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Inter Runnable Variable" metatype="AUTOSAR Inter Runnable Variable" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAGJSRERm8tzriAAAANoAAAAHABEAc3RyLmRhdFVUDQAHpb7wUqW+8FKlvvBS
+TY+7CsJQEERPG8F/kFQRUohoZekDK5v4A0F8QUzEBB9I/t1DjEGGnd29OzNwS06kXNkz4OJ0
+JqdPj3fDgfuBiLWXkq18dAudXo0nJNYXsuTpnqneWZUvQ/FN+CUFJDoqVioyMaeQC24mjpmK
++K+PmJgwa7112xeqUx5s5Mqcu4lJ94Ooc9TWB1BLAQIXCxQAAAAIAGJSRERm8tzriAAAANoA
+AAAHAAkAAAAAAAAAAAAAgAAAAABzdHIuZGF0VVQFAAelvvBSUEsFBgAAAAABAAEAPgAAAL4A
+AAAAAA==</Image>
+						<AppliesTo>
+							<Apply type="Object"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Type" type="enumeration" description="" unit="" values="Implicit,Explicit" default="Implicit"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Object Flow" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<Redefinitions>
+							<Redefine type="ObjectFlow">
+								<Property name="direction" value="Source -&gt; Destination"/>
+								<Property name="isMulticast" value="false"/>
+								<Property name="isMultireceive" value="false"/>
+							</Redefine>
+						</Redefinitions>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Realization" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<Redefinitions>
+							<Redefine type="Realization">
+								<Property name="direction" value="Source -&gt; Destination"/>
+							</Redefine>
+						</Redefinitions>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Resource Consumption" metatype="AUTOSAR Resource Consumption" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAMJVI0WNsM+noQAAAKIBAAAHABEAc3RyLmRhdFVUDQAHifEGVInxBlSJ8QZU
+lY+xCsJAEERfq+A/BKsIV2hEjIiVaGkRv0BUNBASkXTivzvZS4xFFGS5udtj3s3tiTNHCu4c
+KEl1ygl0KriRqL9wVTegz8O0Z95UVK77llmJGrJjI13Wzr1cJVs5MtVavszokIiZyjG2NXoT
+XhP7U/V6rvxMXVg7nahKow7qe1rD+tSW68qZmtPrRNpk/pfWzvc7rZrDMTcNiG1ffFBPrRdQ
+SwECFwsUAAAACADCVSNFjbDPp6EAAACiAQAABwAJAAAAAAAAAAAAAIAAAAAAc3RyLmRhdFVU
+BQAHifEGVFBLBQYAAAAAAQABAD4AAADXAAAAAAA=</Image>
+						<AppliesTo>
+							<Apply type="Class">
+								<Property name="isActive" value=""/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Runnable" metatype="AUTOSAR Runnable" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIADaLbEQ3Nb20SgEAAKQDAAAHABEAc3RyLmRhdFVUDQAHl5ggU5eYIFOXmCBT
+lZNNSwJRFIbfbUH/QaZNQouyrEW0MCkSUgLdh6jp0DjGOAoR/veec2Z0Uhkphnvmeu5zPt5z
+x7km6utTI1U0ZRcq1omO9e32iNM3vBH+MScV3bMCDeBjpdiEX3c5u/wHm9kE74CzPsSYyJHO
+dKFzX5fY4l3diXwl1npNiQh0qo4aauuRXbBhV25tDb3OjJg+ESE766+tL7Xcv63ZuDDv+jef
+6elQZVdHFzqlJ4tpQkeeo9BSU51nV0Ood5hnaszVw45dS9On8UCuFu8lmT7YDz1vTLcLMtvc
+rLsIBQH5ra8U7wK/6a/mFdaK1h0+UTPi+UuP2fQKhTaLxFXaTCZEFuyUXEuvMMN/7flut27N
+vop4Q9ScqB8grpwwW0ZkOcyWEZb/MHHjhNkyIsux3elLTvRK1drtDPlX7U8qs+t7aDhns03y
+e96f7ko/UEsBAhcLFAAAAAgANotsRDc1vbRKAQAApAMAAAcACQAAAAAAAAAAAACAAAAAAHN0
+ci5kYXRVVAUAB5eYIFNQSwUGAAAAAAEAAQA+AAAAgAEAAAAA</Image>
+						<AppliesTo>
+							<Apply type="Action">
+								<Property name="context" value=""/>
+								<Property name="effect" value=""/>
+								<Property name="kind" value=""/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="CanBeInvokedConcurrently" type="boolean" description="" unit="" values="true,false" default="false"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Runnable Port" metatype="AUTOSAR Runnable Port" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAMJJRER135MzjwAAAOYAAAAHABEAc3RyLmRhdFVUDQAHWa/wUlmv8FJZr/BS
+PY+7CsJAFERPm4D/IFttwEKDmMJORawsjD8QxGhAEzGrIpJ/d9g8uMzsfTAHtuZKxoMzY+7q
+CkpGhPy8B5pzLDtdao7yiybDii8HZXLpKZWc5IaJKAan3cvPkarl9LyAVBfHVuSbak0lr5Sw
+TH1+RsLCdzFz7SKWXbbp3tY3ymR82MudaG9x0+E3dsg10h9QSwECFwsUAAAACADCSUREdd+T
+M48AAADmAAAABwAJAAAAAAAAAAAAAIAAAAAAc3RyLmRhdFVUBQAHWa/wUlBLBQYAAAAAAQAB
+AD4AAADFAAAAAAA=</Image>
+						<AppliesTo>
+							<Apply type="ActionPin">
+								<Property name="isControlType" value="false"/>
+								<Property name="isException" value="false"/>
+								<Property name="isStream" value="false"/>
+								<Property name="kind" value="input"/>
+								<Property name="objectState" value=""/>
+								<Property name="ordering" value="FIFO"/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="ByReference" type="boolean" description="" unit="" values="true,false" default="false"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Software Component Implementation" metatype="AUTOSAR Software Component Implementation" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAPZRI0VT0Jw/qAAAAHQBAAAHABEAc3RyLmRhdFVUDQAHT+oGVE/qBlRP6gZU
+bY/NCsIwEITnasF3EE8KHqrgqXgQqScR0b6AWGmLMZFQvIjv3ummbdRKyORnv5lNUlxxgYHF
+GSUK7jRG3Bk8cOQ5Q87TEAFeogNhC7o07z89K84x9oipUcM6PZEusSWpODbklaRMEGImc4El
+x7TnqztY6kE65XR45s6MpySbLslXFbvprjpn7ZfYNUTyRbjVUzGZ9G9/p+2v1sLVL7bMuzG3
+73mLBqgAUEsBAhcLFAAAAAgA9lEjRVPQnD+oAAAAdAEAAAcACQAAAAAAAAAAAACAAAAAAHN0
+ci5kYXRVVAUAB0/qBlRQSwUGAAAAAAEAAQA+AAAA3gAAAAAA</Image>
+						<AppliesTo>
+							<Apply type="Class">
+								<Property name="isActive" value=""/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Software Version" type="string" description="" unit="" values="" default="1.0.0"/>
+							<Tag name="Vendor ID" type="string" description="" unit="" values="" default="0"/>
+							<Tag name="Programming Language" type="string" description="" unit="" values="" default="C"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="init" alias="AUTOSAR Initialization" metatype="AUTOSAR Initialization" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Dependency">
+								<Property name="direction" value="Source -&gt; Destination"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+				</Stereotypes>
+				<TaggedValueTypes/>
+			</Content>
+		</UMLProfile>
+		<UMLProfile profiletype="uml2">
+			<Documentation id="62579B22-E" name="AUTOSAR Components and Ports" version="1.0" notes="AUTOSAR Components and Ports"/>
+			<Content>
+				<Stereotypes>
+					<Stereotype name="AUTOSAR Client Server Port" metatype="AUTOSAR Client Server Port" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" strictness="all">
+						<Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIABR8VUSuFkgnYQIAAIQXAAAHABEAc3RyLmRhdFVUDQAHenEHU3pxB1N6cQdT
+7VZdS8MwFL2vE/wPpU8bDHSCIPi0yURBcWj/wNhncVvHVgWR/XdPkoWmbWaT2I4iIzRfzb3J
+PffktFua05DWNCGPluiFtKJzOqNvXjcwnlKTHvBmSwHqGUY+Zrf0BpsNfaI/Qs+nNjz4FGPu
+g49bKMKH9NXgNjHdw2aBckcR6ggWTerAXjwtut2v3zmeYYo1C7y1P8UVXaO0M23+RKJ+hZ8R
+PA2B2Qw+JvBwCSv2dFAnbeJB1I9KRAPsHPEMbODri8e2xpsNZlaY6dMY3kV0PvYMMZpjXh+b
+bNUdEszGsGZ+2alD7Lrae2VZV/2pHsvCP+u1QV3YjjjqDClR3yi1B+wlnrLvKYh6KW8srhjc
+2yAWiTYrMmcukejYnI9D8GnA82XDJtXahY3SnjGQcWeANgY3mrk15SLdR5zjX3ZT+zKuLrdh
+Z2Vsf0fMh+1NMil7yZwd4yP4T98hHeeZNhYzxZzxfY5FiPvN1h7KRx5xE0TsTmzD7Gq56YpJ
+EQurYZ7spb8EFygePcF6Cnsx567x0o9e4e14bqLsppwxZbmp2shvZKI4ujwX58Q1Hps78B/U
+3Qzvonul9su7Y7q8lqvt7jwx5b2rkukRqb+6u8ZrG3uWD7IVqhvQC9gmZtw1N+Br9YorW7af
+upstL+upxaxO//FJhchnziRbdnEch6l/1fAyNNgG5yINLk93T3qrQ8L2xMdhcZXxZjmg+7/t
+QfsCroDP+3l3ve1hbYwS0TKFWoKYHQfrqa3ynif/W4fvvEmW7OI4DivroK02OJ+01YTbVWqN
+3YmPw+Iq481yQNXWHZ4fUEsBAhcLFAAAAAgAFHxVRK4WSCdhAgAAhBcAAAcACQAAAAAAAAAA
+AACAAAAAAHN0ci5kYXRVVAUAB3pxB1NQSwUGAAAAAAEAAQA+AAAAlwIAAAAA</Image>
+						<AppliesTo>
+							<Apply type="Port">
+								<Property name="isBehavior" value="false"/>
+								<Property name="isConjugated" value="false"/>
+								<Property name="isService" value="true"/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="isService" type="boolean" description="" unit="" values="true,false" default="false"/>
+							<Tag name="direction" type="enumeration" description="" unit="" values="in,out" default="out"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Component" alias="AUTOSAR Component" metatype="AUTOSAR Component" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAJJGREQjCyvfKQMAAJ4aAAAHABEAc3RyLmRhdFVUDQAHOarwUjmq8FI5qvBS
+7VjbbtNAEJ3XIPEPVp9SKRIttNAK8RCgSEgQUB14RaEXYjVxK6dpi1C/iE/g5zhndje+ZJ2Y
+5ioRWZ51ds/sXHd2lIF0pSNXciaB9PEVSSyP5ZH8UlrD6jfM9jD/AyuBvMK7JW+Aj+UaNMGv
+lxY7TiM5l7pKGADdwR515eZMgvfE7hHpeoTfW9JQCU35Im35JCG+jjETKu5GMWdY38ZjZDhN
+a7CCO1EvSvld4AnlFpIvYeUVaGwtaMtPtf6PSt0e2XK/IDs+W44+8M5/VWwZ51sPe46wNsTY
+lO+KddyR6lTNNrOHf4f1sNJp0AP+Dr/fYnR5xV/c4+YfopnfL7tbdq/1sL0lX0FfQ9dLoC4q
+WtiCDSnPLJbQIx3wt0CpKX0TjqpWfcRnuPieYv4Ecsjn8ogxLLedXM4W8kVWwyy/qXwtZCsr
+XpDTcSA8lefA9vBQNi1PoN0OvMr3qezjSW2cd5RY62KgKJWnkZxD1Z8z/piR5xqVhZyMzjSd
+ndY17J9AgkEGlrq1muxixsylX77V/bE1N7OjUtOVY40oPRTDRzw1dWAbcqB0V+lhQdcneI40
+HhEyhREiD5GB7Fk5z+24V+D9CE8wz9oY63b/QKVlUR804x3qhfWZ0T2rRaDRTIC6xXcXHB3k
+aBoF2pVoJBivbianud63ujCSZVLymhjrSLMY+oEYs4/xdDG+R0Cclujhxnc2y5uKpfa07AI7
++/kSlTnEGJec8PmdgiYizapKTHp255X9hsPZn+UxWMfj4/VnsJPlzgRnVuW7tD4PgFt339Fj
+xm8NeTai07jM6TFch5W5zHkyUkzFWGWcqnTCy9RnvDNdvU4P6UqXqd+s/eQyda3W/y1To/wJ
+YAbyBrpDN+nXbbnVyo2+SpLe3uU138dnqk62bhVvdx9Xer8cKC3WuukxK9JpPXaIcSjsAd7r
+av6/hMmddSjFfxIWlTHrkCX5rs5FKovI93T+28rXgRYx+b7PYEjLMUbWZIzr1E0Wl+NMzgZT
+djN3axXMZOvSfqAcM+7rRdWph9xCmyzcZCHp/LJw1l5jk5GbjCSdX0ZW6yg3efd/59093r9Q
+SwECFwsUAAAACACSRkREIwsr3ykDAACeGgAABwAJAAAAAAAAAAAAAIAAAAAAc3RyLmRhdFVU
+BQAHOarwUlBLBQYAAAAAAQABAD4AAABfAwAAAAA=</Image>
+						<AppliesTo>
+							<Apply type="Part">
+								<Property name="isReference" value="false"/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Characteristic" type="enumeration" description="" unit="" values="AUTOSAR Application,AUTOSAR Sensor Actuator,AUTOSAR Service Proxy,AUTOSAR Composition,AUTOSAR Parameter,AUTOSAR Service,AUTOSAR Ecu Abstraction,AUTOSAR Complex Device Driver,AUTOSAR NV Block" default="AUTOSAR Application"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Component Classifier" alias="AUTOSAR Component Classifier" metatype="AUTOSAR Component Classifier" instanceMode="Property" instanceType="AUTOSAR Component" instanceOwner="AUTOSAR Component Classifier" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"/>
+					<Stereotype name="AUTOSAR Flow Connection" metatype="AUTOSAR Flow Connection" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIACyAZUG4Fqo7SAAAAFgAAAAHABEAc3RyLmRhdFVUDQAH0uKXUNLil1DS4pdQ
+C2bIYEhkKGBIZVBg8GXIZEgBwhwgz4khn6EECPMZchl8gCqSgGI5DLwMXAzVYJKTIYChCKg+
+D6hGg0EJCDUZrIGiILlaIAYAUEsBAhcLFAAAAAgALIBlQbgWqjtIAAAAWAAAAAcACQAAAAAA
+AAAAAACAAAAAAHN0ci5kYXRVVAUAB9Lil1BQSwUGAAAAAAEAAQA+AAAAfgAAAAAA</Image>
+						<AppliesTo>
+							<Apply type="Association">
+								<Property name="direction" value="Unspecified"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Mode Switch Port" metatype="AUTOSAR Mode Switch Port" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" strictness="all">
+						<Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAFaBVUTZ6t+JiAIAAGYfAAAHABEAc3RyLmRhdFVUDQAHY3oHU2N6B1NjegdT
+7VbbSgMxEJ3XCv5D6VMLBa0oCr4pioKiaH+gaG9Qu9JWQcR/9yTTdNNttpuJWzRUQrPZNDNJ
+zpkzs1MaUIdeqUtVesFoSGPapR361H0F7z2q0xX+mVIbfR9vNcxO6RE2E3rH+AmjGjXhoUYz
+zL3p9wYa+zC+KtpmRpewGaGdU4I+gUWdWrDnX4NO5+u/As/Qw5oR/pWf4oCO0JqZ5+qJuH+A
+nyd46gCzPnx04WEfVurXQp8+Uw/cX1s3usfOiWZgAl8f+m6v+GeCmTFmLugZ3vl2New5xNsA
+8+67mae9Q4rZM6yVX3XqIXYdz70q1m1/tsey8M96rdAeWhX25kZVfQ57RT5TrnjhdqHXDoGh
+OkGdjjWTLd2fLFgtsuL1h4v1zUwkuK14L+55L9VnreyxYmMGxUxwc3uViTTVpPi7NKhaeegX
+6cS2v9dxLLd2Yxszj2aUzslUmsD/su5dOlX5vDhOfqJSPscq065I8dcpM8U9M+XPbzY2iqx4
+PUcF8+uKCim/MvxDVSpB309p5eo0dh7NaLnWMw83sO4t0A+v4saPu4bLsoJP7faNSVlOUF88
+6haSyrE9+SCUA0leCGHAT9X/OcHFabmVOzxGZDoN+8bzV2qWIQm7f+PLTIa+RKFh2PuprFyN
+xs+iGa2r4G26A2I8E16/23qtu3qbp9rP3k2aM36jrudHpH82CMv1YdHHcce2HOtlxJEMW79s
+kI+sn1rL1XrsHMVWh/PZl+qKcWTOXDhmrRh9tk0jpMhqM/lZhm28uoqZIzNaV0PPUNXaurbd
+zufDK+kZ1s7QEnpZYjplWabwuKtmzJEjw/Zf3eutNsHR9lbNeL90pNjGq6uYOTIjV9X8wu8b
+UEsBAhcLFAAAAAgAVoFVRNnq34mIAgAAZh8AAAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRV
+VAUAB2N6B1NQSwUGAAAAAAEAAQA+AAAAvgIAAAAA</Image>
+						<AppliesTo>
+							<Apply type="Port">
+								<Property name="isBehavior" value="false"/>
+								<Property name="isConjugated" value="false"/>
+								<Property name="isService" value="true"/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="isService" type="boolean" description="" unit="" values="true,false" default="false"/>
+							<Tag name="direction" type="enumeration" description="" unit="" values="in,out" default="out"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="AUTOSAR NV Data Port" metatype="AUTOSAR NV Data Port" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" strictness="all">
+						<Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIABaCVUTBNfnbuwIAALYrAAAHABEAc3RyLmRhdFVUDQAHy3sHU8t7B1PLewdT
+7ZdtS8MwEMfv7QS/w9irDQY+4EDwlZOJguLQfQFxmw7dOrY6ENl393/JQtu1WZM6Q21LWJKm
+l0ty+d3tuqQ3eqY5jahOU/QmNKNDOqBvUdfwPKYm3eDNkgaoX/HUwOiSnjBnQSv0X9BrUBsa
+GuRj7FM8t1CkDqWrJub4dI05HyhX5KH2MKNJJ5gvfy262MivM+5hDJkPvLXfxSl1UNpbbXxH
+sn6EnhdoeobNXqFjBA3HmMW/E9RBG2iQ9W3oRH2s7IkbWEDXlzjbHG8WGJlhpEdDaJena2DN
+CZ7eMJ58NtWGVwhsNsRs1su7nmDV2UYr33pYX1jjvuy/rfU396Dms+3Zan20PqzSjMncQ+MK
+6wzQsl6+k07kRmS5EzZQcudCjqVN5LjelutBarhjX+G+ssClmMOnYiLesYrZfL0dk7xK7Y9l
+JyCN76lJZ8LOspY2T7J4uM8c+fD1BXYdllI+wsWWnKTowcWUG/155Zw+sU9VpO2fNDM7uqFO
+9YIxu2joQX80vibFQ/7fTKc6/9HQlL10lqW+/DKqjw5uuLTjpmixsDycmdnRBXOqF81bj1Dq
+sOkIPPqbsewZqdKTnI/aRV6TPNTUf6q4mxd/0EciFz4QjNnxU8VfnVzeeTOz41+xF0jE47Bt
+PEzORLMznfeYmM5eUb6X9NHhr7isctEycmZmRzfMqd6urHRADzizHMmek/LdzCO0BqSqltcL
+r2Ybm6tcNe4H6XLseXn2F32kcuMjdtwULS6n81MUzszs6IK5KjeN32GUTclSOnP6XOB/fT/p
+o4ILHm25KU4MLBtnZnZ0w5zq7cpNu8gWB8Q54/1mPHuG2oWsj+LRNEJuQK1dNC5HNlo2D9HH
+JjdeYcdNFYl1cnnnzMyOLpirstH4HZb7S0kfFVzwaMtNcWJg2Tgzs6Mb5lQvKRtd4/cDUEsB
+AhcLFAAAAAgAFoJVRME1+du7AgAAtisAAAcACQAAAAAAAAAAAACAAAAAAHN0ci5kYXRVVAUA
+B8t7B1NQSwUGAAAAAAEAAQA+AAAA8QIAAAAA</Image>
+						<AppliesTo>
+							<Apply type="Port">
+								<Property name="isBehavior" value="false"/>
+								<Property name="isConjugated" value="false"/>
+								<Property name="isService" value="true"/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="isService" type="boolean" description="" unit="" values="true,false" default="false"/>
+							<Tag name="direction" type="enumeration" description="" unit="" values="in,out" default="out"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Parameter Port" metatype="AUTOSAR Parameter Port" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" strictness="all">
+						<Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAKh+VUTUHmbrTQIAADAjAAAHABEAc3RyLmRhdFVUDQAHgHYHU4B2B1OAdgdT
+7VZdS8MwFL2vE/wPo08bDHTCQPDJyUTB4dD+Adk3buvo6kBk/91zk4amX7apeyhtCU3S9N6T
+5J6b9BxoRR+0pzm1aYvemnZ0SRf0I+oW3hfUoSd8OZCNeok3C6MHeoePS0f0p+hZ1AOCRR7G
+vsR7F0ViKKyW8PHoET4blAdyUDvw6FAf/vLp0p1vfyq4hgVsNvhqvoobGqD0Im18RbJ+A84U
+SB+I2RIYcyBcw4ufPuqgDRBk/aztaIKZHcGAC6xvsbc9vrgY2WFkRDOgy91ZmHONtxXGk/em
+Wn2GIGYzeDMur3qNWXc+KrOu4+mI54p/FPU/PCh/jj1HbYLWQ1Q6MZsxEI+Yx0bLuMzJIMSI
+LC8iBsruVtixdR47rqN2I1jN/liX3lcRuBc+vCvOiE/Mku7PLHo4aS589C8qQ7mY8pZ0drnk
+ZS3pDOs+E+KMbng+N8+qF4yZnX4H+OH7JOn8838iO4/Kf/rzsp2dPRKvrFlhxlrVzn49WFa9
+sC65QmljF3NkgOePFVccCidZb5jdNHl0Rt6Mbe6ZMmRgUfaa+ybNrmxsJ7F+XqVRPIvKfgdk
+s10NBWrGWtXOfl1YVr2o6pB6w6ZX4MuR4mqD47APZUaQFarl+fTZTG+hRoXEcy7bjrO8vLlp
+xlrVbqBs9qrAcqM64lELZ4NkL5vl9P9MubVoc+brx7LqRVWHrKX2GEIN2MSaYOyPF1cgQ9h6
+KA5tQ7kS5InZ7VMPtVGvnDRjrbl50uzKzHKjNuJRq6/2NGWtOme+XiyrXpLaOOH5BVBLAQIX
+CxQAAAAIAKh+VUTUHmbrTQIAADAjAAAHAAkAAAAAAAAAAAAAgAAAAABzdHIuZGF0VVQFAAeA
+dgdTUEsFBgAAAAABAAEAPgAAAIMCAAAAAA==</Image>
+						<AppliesTo>
+							<Apply type="Port">
+								<Property name="isBehavior" value="false"/>
+								<Property name="isConjugated" value="false"/>
+								<Property name="isService" value="true"/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="isService" type="boolean" description="" unit="" values="true,false" default="false"/>
+							<Tag name="direction" type="enumeration" description="" unit="" values="in,out" default="out"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Port" metatype="AUTOSAR Port" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" strictness="all">
+						<Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">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
+AAAArQoAAAAA</Image>
+						<TaggedValues>
+							<Tag name="direction" type="enumeration" description="" unit="" values="in,out" default="out"/>
+							<Tag name="PortCharacteristic" type="enumeration" description="" unit="" values="AUTOSAR Sender Receiver,AUTOSAR Client Server,AUTOSAR Parameter,AUTOSAR Trigger,AUTOSAR Mode Switch,AUTOSAR NV Data,AUTOSAR Sender Receiver Service,AUTOSAR Client Server Service,AUTOSAR Parameter Service,AUTOSAR Trigger Service,AUTOSAR Mode Switch Service,AUTOSAR NV Data Service" default="AUTOSAR Sender Receiver"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Sender Receiver Port" metatype="AUTOSAR Sender Receiver Port" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" strictness="all">
+						<Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAGiCVUS6H3zVSAIAADwhAAAHABEAc3RyLmRhdFVUDQAHiHwHU4h8B1OIfAdT
+7VZta8IwEL6vDvYfpJ8UhM2BMNinORwbTCabf0B8Z2qldsIY/vc91zT0xWib4mbWlqNJmtw9
+eXnuctnQjAa0pjFVaYnWnFZ0SRf07ZUV/E+oRk8Y2VAf5RR/Fno39A4bh7ZoD9GyqAEEi1z0
+fXr/dYjAkFgVz8alR9gsIA9ko7RhUaMm7MVXpztff5dxDRPoLDCqv4obakEasXp/RW9AGAJj
+gNOawnoM22vo89dEGdSBrSifQ3vpYU7bO3sHWF/ertYYcdCzQk+HRkAX+7Iw5xx/M/SrdyXr
+8AzBaY1gzbi86jlmXfmozHcYL4x4qpOPox5jQOUH0obPm0+qh9rFSdT2dLpA2QK7j5rZZB5a
+ERaEvHj7lnq3nh5rp9HjMq7XgdboyLoCdljkvu89K94X+8EH5jmMwNy5iCwHNuER6ZEsumyp
+YpUlLVdJ0SLt/y9vf8GabAV9ehFsAz96J6himG/5ZK8wM4LTMpzsMQLPVE/QY8rs6C0GZ7Il
+a1FeQarYxRh8un5f9rwvcdRZX++uSJPt0/pfeVOo1xVu/47XZWWsvDHOw52Kw9Nm++w+YWIU
+JzOcj5efHlNmR29ROJOteOYXOb9Pr8AXPdkzPp/DOsJzwLGseb7wbLr3SPkSSOuP7Nnm+qMe
+U2bfIclc5IGzMvMLiXqAYCyZ2cPZwew3YB6jtlicyVY884tS5P82MnKfOC93/f7sr4A2dF2I
+TcsI8wHrevdHfjN+sfxQj6ny7jg/Z2XGF1LcN58uU6ZGbbE4ky1Vxt/h+wFQSwECFwsUAAAA
+CABoglVEuh981UgCAAA8IQAABwAJAAAAAAAAAAAAAIAAAAAAc3RyLmRhdFVUBQAHiHwHU1BL
+BQYAAAAAAQABAD4AAAB+AgAAAAA=</Image>
+						<AppliesTo>
+							<Apply type="Port">
+								<Property name="isBehavior" value="false"/>
+								<Property name="isConjugated" value="false"/>
+								<Property name="isService" value="true"/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="isService" type="boolean" description="" unit="" values="true,false" default="false"/>
+							<Tag name="direction" type="enumeration" description="" unit="" values="in,out" default="out"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Trigger Port" metatype="AUTOSAR Trigger Port" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" strictness="all">
+						<Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAEKAVUTenJFJiQIAAJYfAAAHABEAc3RyLmRhdFVUDQAHeXgHU3l4B1N5eAdT
+7VZtS8MwEL6vE/wPsk8bDHxBRfGboigoiu4PiE4d6Dq2Koj4332ut5i0Hs0SRkUXjqZpmjyX
+Ps9drlN6olsa04DW6AW9IY1olVboo2hbeH6gDp3izZT6aB/x1MbolG6wZkJv6N+h16YeENqU
+Y+y1eO7CBMNgtYo1OZ1gzTPsiDK0GVZ0aBPr5erSwWz+Z+QeHjDnGW/Dd7FFO7Be5f5zR9Je
+A+cOSLfg7BEYAyBsYBVfm2jt3SJIe+Z80RU8Z4UCE2C9F982xpsJRkYYOaZ7oMvXteFziKcn
+jOvfZu6uB8vZPVYzLu96CK+jGSqr7uK5iIviv4raogvs4A2z+rh3aPebL8uW2HmxPzNvq5i3
+450nePvKvLLfvTn9bs/pV/A0v26fVciRKROsdGeZCGML5V3LPbYy6xL9V8TRFRL7Ykmzes1M
+z46FZWIG/HJua7nIZ7Y/JmIzUVjzsyus+dkVPI3dsl+JEr9fiRK/X8HT/IaqGsZ683mYFGOz
+ipleuV6vw9bgcQA189lYfCU2OHodDst65iDlfB1e0xEUy37K/SpeE8ppCi62AsdHRFw+pj8r
+tr9Ug5NibHX/wlo17tMl+JeR+FrMOx+XtLY6mzv7c72FngvMUfVUsN8aFp1xZwJrzLH4U5my
+gqxxr4if+nmssY6n+eX4qc7T/HL81M8Tvxqe258nwsJYb/5MSIqx/ZeaLKz6VRJWNZU0VjU8
+za9fJfGrqaT51fDC1Axl/bfyT2NYY24ZFDO9upp8iCrZJ66VF7Px+Mp8iLk5LKOXku5W87CT
+gFmpngP268LiMZ0COp7bnyemwlhPp0AVr2nF/kMV9qu0LP9Uoaz/Vv5pDGvMLYNipqdV4U9c
+X1BLAQIXCxQAAAAIAEKAVUTenJFJiQIAAJYfAAAHAAkAAAAAAAAAAAAAgAAAAABzdHIuZGF0
+VVQFAAd5eAdTUEsFBgAAAAABAAEAPgAAAL8CAAAAAA==</Image>
+						<AppliesTo>
+							<Apply type="Port">
+								<Property name="isBehavior" value="false"/>
+								<Property name="isConjugated" value="false"/>
+								<Property name="isService" value="true"/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="isService" type="boolean" description="" unit="" values="true,false" default="false"/>
+							<Tag name="direction" type="enumeration" description="" unit="" values="in,out" default="out"/>
+						</TaggedValues>
+					</Stereotype>
+				</Stereotypes>
+				<TaggedValueTypes/>
+				<QuickLink data="Part,AUTOSAR Component,Requirement,,,,,Dependency,satisfy,to,Satisfy,,TRUE,,,TRUE,,0,,,,,&#xA;Part,AUTOSAR Component,Part,AUTOSAR Component,,,,Composition,,to,Composition,,TRUE,,,TRUE,,0,,,,,&#xA;Port,AUTOSAR Client Server Port,Port,AUTOSAR Client Server Port,,,,Association,AUTOSAR Flow Connection,undirected,AUTOSAR Flow Connection,,TRUE,,,TRUE,,0,,,,,&#xA;Port,AUTOSAR Client Server Port,Part,AUTOSAR Component,,Port,AUTOSAR Client Server Port,Association,AUTOSAR Flow Connection,undirected,,New AUTOSAR Port,TRUE,TRUE,,TRUE,,0,,TRUE,,,&#xA;Port,AUTOSAR Mode Switch Port,Port,AUTOSAR Mode Switch Port,,,,Association,AUTOSAR Flow Connection,undirected,AUTOSAR Flow Connection,,TRUE,,,TRUE,,0,,,,,&#xA;Port,AUTOSAR Mode Switch Port,Part,AUTOSAR Component,,Port,AUTOSAR Mode Switch Port,Association,AUTOSAR Flow Connection,undirected,,New AUTOSAR Port,TRUE,TRUE,,TRUE,,0,,TRUE,,,&#xA;Port,AUTOSAR Parameter Port,Port,AUTOSAR Parameter Port,,,,Association,AUTOSAR Flow Connection,undirected,AUTOSAR Flow Connection,,TRUE,,,TRUE,,0,,,,,&#xA;Port,AUTOSAR Parameter Port,Part,AUTOSAR Component,,Port,AUTOSAR Parameter Port,Association,AUTOSAR Flow Connection,undirected,,New AUTOSAR Port,TRUE,TRUE,,TRUE,,0,,TRUE,,,&#xA;Port,AUTOSAR Sender Receiver Port,Port,AUTOSAR Sender Receiver Port,,,,Association,AUTOSAR Flow Connection,undirected,AUTOSAR Flow Connection,,TRUE,,,TRUE,,0,,,,,&#xA;Port,AUTOSAR Sender Receiver Port,Part,AUTOSAR Component,,Port,AUTOSAR Sender Receiver Port,Association,AUTOSAR Flow Connection,undirected,,New AUTOSAR Port,TRUE,TRUE,,TRUE,,0,,TRUE,,,&#xA;Port,AUTOSAR Trigger Port,Port,AUTOSAR Trigger Port,,,,Association,AUTOSAR Flow Connection,undirected,AUTOSAR Flow Connection,,TRUE,,,TRUE,,0,,,,,&#xA;Port,AUTOSAR Trigger Port,Part,AUTOSAR Component,,Port,AUTOSAR Trigger Port,Association,AUTOSAR Flow Connection,undirected,,New AUTOSAR Port,TRUE,TRUE,,TRUE,,0,,TRUE,,,&#xA;Port,AUTOSAR NV Data Port,Port,AUTOSAR NV Data Port,,,,Association,AUTOSAR Flow Connection,undirected,AUTOSAR Flow Connection,,TRUE,,,TRUE,,0,,,,,&#xA;Port,AUTOSAR NV Data Port,Part,AUTOSAR Component,,Port,AUTOSAR NV Data Port,Association,AUTOSAR Flow Connection,undirected,,New AUTOSAR Port,TRUE,TRUE,,TRUE,,0,,TRUE,,,&#xA;Port,AUTOSAR Client Server Port,Requirement,,,,,Dependency,satisfy,to,Satisfy,,TRUE,,,TRUE,,0,,,,,&#xA;Port,AUTOSAR Mode Switch Port,Requirement,,,,,Dependency,satisfy,to,Satisfy,,TRUE,,,TRUE,,0,,,,,&#xA;Port,AUTOSAR Parameter Port,Requirement,,,,,Dependency,satisfy,to,Satisfy,,TRUE,,,TRUE,,0,,,,,&#xA;Port,AUTOSAR Sender Receiver Port,Requirement,,,,,Dependency,satisfy,to,Satisfy,,TRUE,,,TRUE,,0,,,,,&#xA;Port,AUTOSAR Trigger Port,Requirement,,,,,Dependency,satisfy,to,Satisfy,,TRUE,,,TRUE,,0,,,,,&#xA;Port,AUTOSAR NV Data Port,Requirement,,,,,Dependency,satisfy,to,Satisfy,,TRUE,,,TRUE,,0,,,,,&#xA;Part,AUTOSAR Data Type Element,Class,AUTOSAR Data Type,,,,Composition,,to,Composition,,TRUE,,,TRUE,,0,,,,,&#xA;Part,AUTOSAR Data Type Element,Part,AUTOSAR Data Type Element,,,,Composition,,to,Composition,,TRUE,,,TRUE,,0,,,,,&#xA;Port,AUTOSAR Client Server Port,ActionPin,AUTOSAR Runnable Port,,,,ObjectFlow,,to,AUTOSAR Object Flow,,TRUE,,,TRUE,,0,,,,,&#xA;Port,AUTOSAR Client Server Port,Action,AUTOSAR Runnable,,ActionPin,AUTOSAR Runnable Port,ObjectFlow,,to,,New Runnable Port,TRUE,TRUE,,TRUE,,0,,TRUE,,,&#xA;Port,AUTOSAR Mode Switch Port,ActionPin,AUTOSAR Runnable Port,,,,ObjectFlow,,to,AUTOSAR Object Flow,,TRUE,,,TRUE,,0,,,,,&#xA;Port,AUTOSAR Mode Switch Port,Action,AUTOSAR Runnable,,ActionPin,AUTOSAR Runnable Port,ObjectFlow,,to,,New Runnable Port,TRUE,TRUE,,TRUE,,0,,TRUE,,,&#xA;Port,AUTOSAR Parameter Port,ActionPin,AUTOSAR Runnable Port,,,,ObjectFlow,,to,AUTOSAR Object Flow,,TRUE,,,TRUE,,0,,,,,&#xA;Port,AUTOSAR Parameter Port,Action,AUTOSAR Runnable,,ActionPin,AUTOSAR Runnable Port,ObjectFlow,,to,,New Runnable Port,TRUE,TRUE,,TRUE,,0,,TRUE,,,&#xA;Port,AUTOSAR Sender Receiver Port,ActionPin,AUTOSAR Runnable Port,,,,ObjectFlow,,to,AUTOSAR Object Flow,,TRUE,,,TRUE,,0,,,,,&#xA;Port,AUTOSAR Sender Receiver Port,Action,AUTOSAR Runnable,,ActionPin,AUTOSAR Runnable Port,ObjectFlow,,to,,New Runnable Port,TRUE,TRUE,,TRUE,,0,,TRUE,,,&#xA;Port,AUTOSAR Trigger Port,ActionPin,AUTOSAR Runnable Port,,,,ObjectFlow,,to,AUTOSAR Object Flow,,TRUE,,,TRUE,,0,,,,,&#xA;Port,AUTOSAR Trigger Port,Action,AUTOSAR Runnable,,ActionPin,AUTOSAR Runnable Port,ObjectFlow,,to,,New Runnable Port,TRUE,TRUE,,TRUE,,0,,TRUE,,,&#xA;Port,AUTOSAR NV Data Port,ActionPin,AUTOSAR Runnable Port,,,,ObjectFlow,,to,AUTOSAR Object Flow,,TRUE,,,TRUE,,0,,,,,&#xA;Port,AUTOSAR NV Data Port,Action,AUTOSAR Runnable,,ActionPin,AUTOSAR Runnable Port,ObjectFlow,,to,,New Runnable Port,TRUE,TRUE,,TRUE,,0,,TRUE,,,&#xA;Port,AUTOSAR Client Server Port,Port,flowPort,,,,Association,itemFlow,undirected,Item Flow (EnArSys),,TRUE,,,TRUE,,0,,,,,&#xA;Port,AUTOSAR Mode Switch Port,Port,flowPort,,,,Association,itemFlow,undirected,Item Flow (EnArSys),,TRUE,,,TRUE,,0,,,,,&#xA;Port,AUTOSAR Parameter Port,Port,flowPort,,,,Association,itemFlow,undirected,Item Flow (EnArSys),,TRUE,,,TRUE,,0,,,,,&#xA;Port,AUTOSAR Sender Receiver Port,Port,flowPort,,,,Association,itemFlow,undirected,Item Flow (EnArSys),,TRUE,,,TRUE,,0,,,,,&#xA;Port,AUTOSAR Trigger Port,Port,flowPort,,,,Association,itemFlow,undirected,Item Flow (EnArSys),,TRUE,,,TRUE,,0,,,,,&#xA;Port,AUTOSAR NV Data Port,Port,flowPort,,,,Association,itemFlow,undirected,Item Flow (EnArSys),,TRUE,,,TRUE,,0,,,,,&#xA;Port,flowPort,Port,AUTOSAR Client Server Port,,,,Association,itemFlow,undirected,Item Flow (EnArSys),,TRUE,,,TRUE,,0,,,,,&#xA;Port,flowPort,Port,AUTOSAR Mode Switch Port,,,,Association,itemFlow,undirected,Item Flow (EnArSys),,TRUE,,,TRUE,,0,,,,,&#xA;Port,flowPort,Port,AUTOSAR Parameter Port,,,,Association,itemFlow,undirected,Item Flow (EnArSys),,TRUE,,,TRUE,,0,,,,,&#xA;Port,flowPort,Port,AUTOSAR Sender Receiver Port,,,,Association,itemFlow,undirected,Item Flow (EnArSys),,TRUE,,,TRUE,,0,,,,,&#xA;Port,flowPort,Port,AUTOSAR Trigger Port,,,,Association,itemFlow,undirected,Item Flow (EnArSys),,TRUE,,,TRUE,,0,,,,,&#xA;Port,flowPort,Port,AUTOSAR NV Data Port,,,,Association,itemFlow,undirected,Item Flow (EnArSys),,TRUE,,,TRUE,,0,,,,,&#xA;Action,,Action,AUTOSAR Runnable,,,,ControlFlow,,to,AUTOSAR Control Flow,,TRUE,,,TRUE,,0,,,,,&#xA;&#xA;"/>
+			</Content>
+		</UMLProfile>
+		<UMLProfile profiletype="uml2">
+			<Documentation id="7921E07F-2" name="AUTOSAR Data Modeling" version="1.0" notes="AUTOSAR Data Modeling"/>
+			<Content>
+				<Stereotypes>
+					<Stereotype name="AUTOSAR Base Type" metatype="AUTOSAR Base Type" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="PrimitiveType"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Base Type Size" type="enumeration" description="" unit="" values="8 Bit,16 Bit,32 Bit,64 Bit" default="8 Bit"/>
+							<Tag name="Base Type Encoding" type="enumeration" description="" unit="" values="Unspecified,IEEE754,2C,NONE,BOOLEAN" default="Unspecified"/>
+							<Tag name="Native Declaration" type="enumeration" description="" unit="" values="boolean,float,double,short,long,signed char,unsigned short,unsigned long,unsigned char" default="unsigned char"/>
+							<Tag name="Memory Alignment" type="int" description="" unit="" values="" default="0"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Client Server Interface" metatype="AUTOSAR Client Server Interface" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Interface"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Compu Method" metatype="AUTOSAR Compu Method" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Enumeration"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Default Value" type="int" description="" unit="" values="" default="0"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Data Element" metatype="AUTOSAR Data Element" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Part">
+								<Property name="isReference" value="false"/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Release" type="string" description="" unit="" values="" default=""/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Data Type" metatype="AUTOSAR Data Type" instanceMode="property" instanceType="AUTOSAR Data Element" instanceOwner="AUTOSAR Data Type" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Class">
+								<Property name="isActive" value=""/>
+							</Apply>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="Initial Value" type="int" description="" unit="" values="" default=""/>
+							<Tag name="Invalid Value" type="int" description="" unit="" values="" default=""/>
+							<Tag name="Minimum Value" type="int" description="" unit="" values="" default=""/>
+							<Tag name="Maximum Value" type="int" description="" unit="" values="" default=""/>
+							<Tag name="Resolution" type="int" description="" unit="" values="" default=""/>
+							<Tag name="Category" type="enumeration" description="" unit="" values="Value,Array,Structure,Type Reference" default="Value"/>
+							<Tag name="Handle Invalid" type="enumeration" description="" unit="" values="Unspecified,Keep,Replace,Do not Invalidate" default="Unspecified"/>
+							<Tag name="unit"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Mode Switch Interface" metatype="AUTOSAR Mode Switch Interface" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Interface"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="AUTOSAR NV Data Interface" metatype="AUTOSAR NV Data Interface" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Interface"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Parameter Interface" metatype="AUTOSAR Parameter Interface" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Interface"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Sender Receiver Interface" metatype="AUTOSAR Sender Receiver Interface" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Interface"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Trigger Interface" metatype="AUTOSAR Trigger Interface" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Interface"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="Part Association" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<Redefinitions>
+							<Redefine type="Composition">
+								<Property name="direction" value="Source -&gt; Destination"/>
+							</Redefine>
+						</Redefinitions>
+					</Stereotype>
+					<Stereotype name="quantityKind" alias="QuantityKind" metatype="QuanitityKind" instanceOwner="QuantityKind" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Object"/>
+						</AppliesTo>
+						<TaggedValues>
+							<Tag name="qantityKind"/>
+						</TaggedValues>
+					</Stereotype>
+					<Stereotype name="unit" alias="Unit" metatype="Unit" instanceOwner="Unit" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Object"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="use" alias="AUTOSAR Usage" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Dependency">
+								<Property name="direction" value="Source -&gt; Destination"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+				</Stereotypes>
+				<TaggedValueTypes>
+					<TaggedValueType property="unit" description="" notes="Type=Classifier;Stereotypes=unit;"/>
+					<TaggedValueType property="qantityKind" description="" notes="Type=Classifier;Stereotypes=unit;"/>
+				</TaggedValueTypes>
+			</Content>
+		</UMLProfile>
+		<UMLProfile profiletype="uml2">
+			<Documentation id="05C7CBA8-0" name="AUTOSAR Framework" version="1.0" notes="AUTOSAR Framework"/>
+			<Content>
+				<Stereotypes>
+					<Stereotype name="abstraction level" metatype="Abstraction Level" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Package"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="viewpoints" metatype="Viewpoints" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Package"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="view" metatype="View" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Package"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="structural elements" metatype="Structural Elements" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Package"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="behaviour" metatype="Behaviour" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Package"/>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="requirements" metatype="Requirements" notes="" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Package"/>
+						</AppliesTo>
+					</Stereotype>
+				</Stereotypes>
+				<TaggedValueTypes/>
+			</Content>
+		</UMLProfile>
+	</UMLProfiles>
+	<DiagramProfile>
+		<UMLProfile profiletype="uml2">
+			<Documentation id="4FC6ADA2-8" name="LieberLieber Autosar Engineer" version="1.0" notes="LieberLieber Autosar Engineer"/>
+			<Content>
+				<Stereotypes>
+					<Stereotype name="AUTOSAR Behavior Diagram" notes="Diagram for AUTOSAR Behavior modeling (e.g. Runnables, Inter-Runnable-Variables etc.)." bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Diagram_Activity">
+								<Property name="alias" value="AUTOSAR Behavior"/>
+								<Property name="diagramID" value="arbeh"/>
+								<Property name="pdata" value="HideEStereo=1;"/>
+								<Property name="toolbox" value="AUTOSAR Behavior"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Diagram" notes="Diagram for AUTOSAR Virtual Function Bus (VFB) modeling." bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Diagram_CompositeStructure">
+								<Property name="alias" value="AUTOSAR"/>
+								<Property name="diagramID" value="AUTOSAR"/>
+								<Property name="pdata" value="HideEStereo=1;"/>
+								<Property name="toolbox" value="AUTOSAR Components and Ports"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+					<Stereotype name="AUTOSAR Type Definition Diagram" notes="Diagram for AUTOSAR Data Type definition." bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+						<AppliesTo>
+							<Apply type="Diagram_Logical">
+								<Property name="alias" value="AUTOSAR Type Definition"/>
+								<Property name="diagramID" value="ardd"/>
+								<Property name="toolbox" value="AUTOSAR Data Modeling"/>
+							</Apply>
+						</AppliesTo>
+					</Stereotype>
+				</Stereotypes>
+				<TaggedValueTypes/>
+			</Content>
+		</UMLProfile>
+	</DiagramProfile>
+	<ModelTemplates>
+		<Model name="AUTOSAR Diagram" description="" groupName="AUTOSAR Diagram" location="autosar-diagram.xml" default="yes" customizable="false" icon="31" filter="Simple"/>
+		<Model name="AUTOSAR Behavior Diagram" description="" groupName="AUTOSAR Diagram" location="autosar-behavior-diagram.xml" default="yes" customizable="false" icon="31" filter="Simple"/>
+		<Model name="AUTOSAR Type Definition Diagram" description="" groupName="AUTOSAR Diagram" location="autosar-type-definition-diagram.xml" default="yes" customizable="false" icon="31" filter="Simple"/>
+		<Model name="AUTOSAR System Model" description="" groupName="AUTOSAR Framework" location="autosar-system-model.xml" default="yes" customizable="false" icon="31" filter="Simple"/>
+		<Model name="AUTOSAR Global Model Library" description="" groupName="AUTOSAR Library" location="autosar-global-model-library.xml" default="yes" customizable="false" icon="31" filter="Simple" isFramework="true"/>
+	</ModelTemplates>
+</MDG.Technology>
