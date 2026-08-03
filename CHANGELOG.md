@@ -7,6 +7,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.1] — 2026-08-03
+
+### Added
+- Stereotype decorator icons now render inside element bodies via the
+  new `Compartment::StereotypeIcon` module. Falls back to hardcoded
+  polygons for FeatureType/Type; uses MDG-provided ShapeScript when
+  available.
+- OCL constraint evaluation wired into `ea validate`. Invariants from
+  `t_objectconstraint` are parsed and evaluated against owning
+  objects' attribute values.
+- Image rendering infrastructure: `Document#emit_images` walks the
+  `:images` collection and inlines `EmfRenderer` output. Gracefully
+  skips when `emfsvg` returns nil (current state — upstream parser
+  can't decode EA's EMF variant yet).
+- Diff comparator detects `:modified` changes via `to_hash`
+  comparison (was: add/remove/rename only).
+- PlantUML export now emits package nesting, generalizations
+  (`<\|--`), and composition arrows (`o--`, `*--`).
+- JSON export uses a per-class projection schema (no more raw
+  `to_hash` dumping Lutaml::Model internals).
+- CHANGELOG.md with full release history.
+
+### Changed
+- `ea export xmi` now routes to the full `Ea::Transformers::QeaToXmi`
+  (142 KB Sparx XMI) instead of the toy hand-rolled generator. The
+  toy `Ea::Export::Xmi` namespace is deleted.
+
+### Fixed
+- Removed all `respond_to?` calls from lib code (5 sites) — replaced
+  with `is_a?` type checks per the typing rule.
+- Renamed `object_id` attribute to `ea_object_id` in 12 new QEA
+  models to avoid collision with Ruby's `Object#object_id`.
+- XSD Generator no longer hardcodes `spec/fixtures/` paths; the CLI
+  layer loads fixtures and passes parsed data.
+- Bumped `lycheeverse/lychee-action` v1 → v2 (dependabot alert).
+
 ## [0.5.0] — 2026-08-03
 
 ### Added — CLI commands (13 new)
