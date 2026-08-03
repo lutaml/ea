@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
-module Ea
-  # Gem release version. Inlined here so lib/ea.rb has zero load-time
-  # `require_relative` calls — the canonical "no require_relative for
-  # internal library code" rule. The gemspec reads this constant
-  # directly when bundler loads the gemspec via `require_relative`.
-  VERSION = "0.5.0"
+# Version file. Required eagerly (not autoloaded) because gem-release
+# and the gemspec both expect VERSION to resolve on first load. See
+# lib/ea/version.rb.
+require "ea/version"
 
+module Ea
   class Error < StandardError; end
 
   autoload :Qea, "ea/qea"
