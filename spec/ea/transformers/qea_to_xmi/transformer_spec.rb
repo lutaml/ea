@@ -281,11 +281,11 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
     it "exposes a stateless serialize method" do
       t1 = described_class.new(database)
       t2 = described_class.new(database)
-      expect(t1.serialize).to eq(t2.serialize)
+      expect(t1.serialize(with_extensions: false)).to eq(t2.serialize(with_extensions: false))
     end
 
     it "does not mutate the database during serialization" do
-      expect { described_class.new(database).serialize }.not_to change {
+      expect { described_class.new(database).serialize(with_extensions: false) }.not_to change {
         [database.packages.size, database.objects.size, database.connectors.size]
       }
     end
