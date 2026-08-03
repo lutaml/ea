@@ -25,6 +25,15 @@ module Ea
       # `<a> and <b>`, `<a> or <b>`, `not <a>`
       BinaryOp = Struct.new(:op, :left, :right, keyword_init: true)
       UnaryOp = Struct.new(:op, :operand, keyword_init: true)
+
+      # `<collection>->size()` — returns integer cardinality.
+      CollectionSize = Struct.new(:collection, keyword_init: true)
+
+      # `<collection>->isEmpty()` — returns boolean.
+      CollectionIsEmpty = Struct.new(:collection, keyword_init: true)
+
+      # `<a> op <b>` where op ∈ {>, <, >=, <=, =, ==, !=}.
+      Comparison = Struct.new(:op, :left, :right, keyword_init: true)
     end
   end
 end
