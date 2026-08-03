@@ -86,17 +86,18 @@ module Ea
           with_extensions ? inject_extension_content(xml) : xml
         end
 
-        # Injects EA-specific extension content (connectors, diagrams)
-        # into the serialized XMI. The xmi gem's Extension type is
-        # modeled but doesn't declare `connectors` / `diagrams`
-        # children. We post-process the serialized XML to insert
-        # them inside the existing `<xmi:Extension>` element.
+        # Injects EA-specific extension content (elements, connectors,
+        # diagrams) into the serialized XMI. The xmi gem's Extension
+        # type is modeled but doesn't declare these children. We
+        # post-process the serialized XML to insert them inside the
+        # existing `<xmi:Extension>` element.
+        #
+        # Delegated to {ExtensionSerializer} — this class only handles
+        # the string substitution mechanics.
         def inject_extension_content(xml)
-          content = extension_inner_xml
+          content = ExtensionSerializer.new(@database, @context).call
           return xml if content.empty?
 
-          # Replace the empty `<xmi:Extension .../>` or the
-          # closing `</xmi:Extension>` with the populated version.
           if xml.include?("<xmi:Extension")
             xml.sub(%r{<xmi:Extension ([^>]+)>\s*</xmi:Extension>},
                    "<xmi:Extension \\1>\n#{content}\n\t</xmi:Extension>")
@@ -105,109 +106,6 @@ module Ea
           else
             xml
           end
-        end
-
-        # @return [String] XML for the inner content of <xmi:Extension>:
-        #   <elements>...</elements>, <connectors>...</connectors>,
-        #   <diagrams>...</diagrams>. Empty when none apply.
-        def extension_inner_xml
-          parts = []
-          connectors_xml = build_connectors_extension
-          parts << connectors_xml unless connectors_xml.empty?
-          diagrams_xml = build_diagrams_extension
-          parts << diagrams_xml unless diagrams_xml.empty?
-          parts.join("\n")
-        end
-
-        def build_connectors_extension
-          connectors = @database.collections[:connectors] || []
-          return "" if connectors.empty?
-
-          inner = connectors.map { |conn| connector_xml(conn) }.compact.join("\n")
-          return "" if inner.empty?
-
-          "\t\t<connectors>\n#{inner}\n\t\t</connectors>"
-        end
-
-        def build_diagrams_extension
-          diagrams = @database.collections[:diagrams] || []
-          return "" if diagrams.empty?
-
-          inner = diagrams.map { |dgm| diagram_xml(dgm) }.compact.join("\n")
-          return "" if inner.empty?
-
-          "\t\t<diagrams>\n#{inner}\n\t\t</diagrams>"
-        end
-
-        # Per-connector XML with xmi:idref to the model-level
-        # association (when present) plus source/target references.
-        def connector_xml(conn)
-          return nil unless conn.ea_guid
-
-          connector_id = "EAID_#{guid_to_xmi_id(conn.ea_guid)}"
-          source_obj = @database.collections[:objects]&.find { |o| o.ea_object_id == conn.start_object_id }
-          target_obj = @database.collections[:objects]&.find { |o| o.ea_object_id == conn.end_object_id }
-          return nil unless source_obj && target_obj
-
-          name_attr = conn.name ? %( name="#{escape(conn.name)}") : ""
-          inner = source_end_xml(conn, source_obj) + target_end_xml(conn, target_obj)
-          %(<connector xmi:idref="#{connector_id}"#{name_attr}>\n#{inner}\t\t</connector>)
-        end
-
-        def source_end_xml(conn, source_obj)
-          end_xml(source_obj, "source")
-        end
-
-        def target_end_xml(conn, target_obj)
-          end_xml(target_obj, "target")
-        end
-
-        def end_xml(obj, kind)
-          xmi_id = "EAID_#{guid_to_xmi_id(obj.ea_guid)}"
-          lines = [
-            "\t\t\t<#{kind} xmi:idref=\"#{xmi_id}\">",
-            "\t\t\t\t<model ea_localid=\"#{obj.ea_object_id}\" " \
-              "type=\"#{obj.object_type}\" name=\"#{escape(obj.name.to_s)}\"/>",
-            "\t\t\t\t<role visibility=\"Public\" targetScope=\"instance\"/>",
-            "\t\t\t</#{kind}>"
-          ]
-          lines.join("\n") + "\n"
-        end
-
-        def diagram_xml(dgm)
-          return nil unless dgm.ea_guid
-
-          diagram_id = "EAID_#{guid_to_xmi_id(dgm.ea_guid)}"
-          pkg_guid = package_guid_for(dgm)
-          pkg_ref = pkg_guid ? "EAPK_#{guid_to_xmi_id(pkg_guid)}" : ""
-          lines = [
-            "<diagram xmi:id=\"#{diagram_id}\">",
-            "\t\t\t<model package=\"#{pkg_ref}\" localID=\"#{dgm.diagram_id}\" owner=\"#{pkg_ref}\"/>",
-            "\t\t\t<properties name=\"#{escape(dgm.name.to_s)}\" type=\"#{escape(dgm.diagram_type.to_s)}\"/>",
-            "\t\t</diagram>"
-          ]
-          lines.join("\n")
-        end
-
-        def package_guid_for(dgm)
-          pkg = (@database.collections[:packages] || []).find { |p| p.package_id == dgm.package_id }
-          pkg&.ea_guid || dgm.ea_guid
-        end
-
-        def guid_to_xmi_id(guid)
-          return "" unless guid
-
-          guid.to_s.gsub(/[{}]/, "")
-                  .tr("-", "_")
-                  .prepend("EA") # truncated below
-                  .sub(/\AEA/, "")
-        end
-
-        def escape(text)
-          text.to_s.gsub("&", "&amp;")
-               .gsub("<", "&lt;")
-               .gsub(">", "&gt;")
-               .gsub('"', "&quot;")
         end
 
         private

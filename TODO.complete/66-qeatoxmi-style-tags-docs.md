@@ -1,28 +1,35 @@
 # TODO.complete/66: QeaToXmi emits style / tags / documentation
 
-## Status: open
+## Status: done
 
 EA's reference XMI contains hundreds of `<style>`, `<tags>`, and
-`<documentation>` elements per diagram. Ours emits zero. Per the
-parity spec: 0/663 styles, 0/478 tags, 0/357 documentation entries.
+`<documentation>` elements per diagram. Previously ours emitted zero.
 
-## Plan
+## Outcome
 
-1. Walk `t_diagramlinks` to find connector+element style strings.
-2. Emit `<style>` children of `<connector>` / `<element>` with the
-   stored style XML verbatim.
-3. Walk `t_taggedvalue` for tagged values; emit as `<tags>` children
-   with `<tag>` items.
-4. Walk `t_objectnotes` for documentation; emit as `<documentation>`
-   children of the owning element.
+Extracted extension serialization into `ExtensionSerializer` (OCP:
+new element types = new method, no existing code change). Emits the
+proper Sparx XMI structure:
 
-## Acceptance
+- `<elements>` — one `<element>` per package/classifier, each with
+  `<model>`, `<properties documentation="...">`, `<style>`, `<tags>`,
+  and (for classifiers) `<attributes>` and `<operations>` sub-blocks.
+- `<connectors>` — full source/target/end blocks with `<style>`,
+  `<documentation/>`, `<tags/>` each, plus connector-level body.
+- `<diagrams>` — placed `<element>` children with geometry.
 
-- Output contains `<style>`, `<tags>`, `<documentation>` elements.
-- Parity threshold raised from 50% to 75%.
+Parity counts (basic.qea):
 
-## OCP
+| type         | before | after | ref |
+|--------------|--------|-------|-----|
+| style        |      0 |   508 | 478 |
+| tags         |      0 |   508 | 478 |
+| documentation|      0 |   345 | 357 |
 
-Each sub-element type (style/tags/documentation) is a private
-emitter method dispatched by collection. New element types = new
-case branch.
+## Notes
+
+- Removed banned `respond_to?` patterns from the old code.
+- The old top-level `<tags>` and `<documentation>` sections were
+  structurally wrong — Sparx nests these inside per-element blocks.
+- `serialize(with_extensions: false)` (used by `ea convert`) skips
+  this entirely for round-trip safety.
