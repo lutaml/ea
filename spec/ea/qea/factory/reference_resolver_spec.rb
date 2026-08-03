@@ -5,14 +5,11 @@ require "spec_helper"
 RSpec.describe Ea::Qea::Factory::ReferenceResolver do
   let(:resolver) { described_class.new }
 
-  # Mock UML element with xmi_id
-  let(:mock_element) do
-    double("UmlElement", xmi_id: "{GUID-1234-5678}", name: "TestClass")
-  end
+  # Lightweight Struct-based fake for UML elements.
+  UmlElementFake = Struct.new(:xmi_id, :name, keyword_init: true)
 
-  let(:mock_element2) do
-    double("UmlElement", xmi_id: "{GUID-ABCD-EFGH}", name: "TestClass2")
-  end
+  let(:mock_element) { UmlElementFake.new(xmi_id: "{GUID-1234-5678}", name: "TestClass") }
+  let(:mock_element2) { UmlElementFake.new(xmi_id: "{GUID-ABCD-EFGH}", name: "TestClass2") }
 
   describe "#initialize" do
     it "creates empty resolver", :aggregate_failures do

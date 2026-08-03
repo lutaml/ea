@@ -124,7 +124,7 @@ RSpec.describe "XMI/QEA Comprehensive Equivalence Verification" do
             expect(matching_qea.name).to eq(xmi_class.name)
             expect(matching_qea.package_name).to eq(xmi_class.package_name)
 
-            if xmi_class.is_abstract && matching_qea.respond_to?(:is_abstract)
+            if xmi_class.is_abstract && matching_qea.is_a?(Ea::Model::Classifier)
               expect(matching_qea.is_abstract).to eq(xmi_class.is_abstract)
             end
           end

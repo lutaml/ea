@@ -89,7 +89,7 @@ RSpec.describe "Object Properties Support" do
   end
 
   describe Ea::Qea::Factory::ObjectPropertyTransformer do
-    let(:database) { instance_double(Ea::Qea::Database) }
+    let(:database) { Ea::Qea::Database.new("test.qea") }
     let(:transformer) { described_class.new(database) }
 
     describe "#transform" do

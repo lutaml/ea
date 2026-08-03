@@ -11,8 +11,7 @@ RSpec.describe Ea::Svg::EaEmitter::Compartment::InstanceUnderline do
   let(:bounds) { Ea::Model::Bounds.new(x: 50, y: 40, width: 90, height: 50) }
   let(:theme) { Ea::Theme::Registry.default }
   let(:geometry) do
-    instance_double("Ea::Svg::EaEmitter::Element::CompartmentGeometry",
-                    header_first_y: 59)
+    Struct.new(:header_first_y, keyword_init: true).new(header_first_y: 59)
   end
 
   def context_for(diagram_type, header_lines)

@@ -53,7 +53,7 @@ RSpec.describe Ea::Svg::EaEmitter::Element::OperationRenderer do
       op = build_op(name: "draw")
       op.parameters = []
       op.return_type_name = "void"
-      text = described_class.send(:operation_text, op)
+      text = described_class.operation_text( op)
       expect(text).to eq("draw(): void")
     end
 
@@ -61,7 +61,7 @@ RSpec.describe Ea::Svg::EaEmitter::Element::OperationRenderer do
       op = build_op(name: "draw")
       op.parameters = []
       op.return_type_name = nil
-      text = described_class.send(:operation_text, op)
+      text = described_class.operation_text( op)
       expect(text).to eq("draw()")
     end
 
@@ -71,7 +71,7 @@ RSpec.describe Ea::Svg::EaEmitter::Element::OperationRenderer do
       p2 = Ea::Model::Parameter.new(name: "h", type_name: "int")
       op.parameters = [p1, p2]
       op.return_type_name = "void"
-      text = described_class.send(:operation_text, op)
+      text = described_class.operation_text( op)
       expect(text).to eq("resize(int, int): void")
     end
   end

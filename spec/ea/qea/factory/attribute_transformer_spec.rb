@@ -3,7 +3,7 @@
 require "spec_helper"
 
 RSpec.describe Ea::Qea::Factory::AttributeTransformer do
-  let(:database) { double("Database") }
+  let(:database) { Ea::Qea::Database.new("test.qea") }
   let(:transformer) { described_class.new(database) }
 
   describe "#transform" do

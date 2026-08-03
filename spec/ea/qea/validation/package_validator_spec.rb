@@ -4,7 +4,7 @@ require "spec_helper"
 
 RSpec.describe Ea::Qea::Validation::PackageValidator do
   let(:result) { Ea::Qea::Validation::ValidationResult.new }
-  let(:database) { double("Database", packages: packages) }
+  let(:database) { Ea::Qea::Database.new("test.qea") }
   let(:context) { { db_packages: packages, database: database } }
   let(:validator) { described_class.new(result: result, context: context) }
 

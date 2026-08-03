@@ -3,7 +3,7 @@
 require "spec_helper"
 
 RSpec.describe Ea::Qea::Factory::ConstraintTransformer do
-  let(:database) { instance_double(Ea::Qea::Database) }
+  let(:database) { Ea::Qea::Database.new("test.qea") }
   let(:transformer) { described_class.new(database) }
 
   describe "#transform" do

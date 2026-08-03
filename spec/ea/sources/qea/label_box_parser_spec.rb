@@ -13,7 +13,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
     end
 
     def parse(geometry_str)
-      builder.send(:parse_label_boxes, geometry_str)
+      builder.parse_label_boxes(geometry_str)
     end
 
     it "parses all 12 styling fields from a label box" do

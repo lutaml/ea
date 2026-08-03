@@ -6,50 +6,47 @@ RSpec.describe Ea::Svg::EaEmitter::Document do
   describe "#emit_images" do
     let(:diagram) { Ea::Model::Diagram.new(id: "d1", name: "D") }
 
-    # Struct subclass matching Document's expected API: responds to
-    # #collections (a hash). Different from Struct.new's auto-kwargs.
-    class FakeDoc
-      attr_reader :collections
-
-      def initialize(collections)
-        @collections = collections
-      end
-    end
-
     it "returns nil when document is nil" do
       emitter = described_class.new(diagram, model_index: {})
-      expect(emitter.send(:emit_images)).to be_nil
+      expect(emitter.emit_images).to be_nil
     end
 
     it "returns nil when document is not an Ea::Qea::Database" do
-      doc = FakeDoc.new({})
+      doc = Struct.new(:collections).new({})
       emitter = described_class.new(diagram, model_index: {}, document: doc)
-      expect(emitter.send(:emit_images)).to be_nil
+      expect(emitter.emit_images).to be_nil
     end
 
     it "emits <g id=images> when Ea::Qea::Database carries images + EmfRenderer returns svg" do
-      # Construct a minimal Database-like object that is_a?(Ea::Qea::Database).
       image = Struct.new(:bytes).new("fake-bytes")
-      db = Ea::Qea::Database.allocate
-      allow(db).to receive(:collections).and_return(images: [image])
-
+      db = Ea::Qea::Database.new("test.qea")
+      db.add_collection(:images, [image])
       emitter = described_class.new(diagram, model_index: {}, document: db)
-      allow(Ea::Image::EmfRenderer).to receive(:render).and_return("<rect/>")
 
-      result = emitter.send(:emit_images)
+      stub_const("Ea::Image::EmfRenderer", Class.new do
+        def self.render(_bytes)
+          "<rect/>"
+        end
+      end)
+
+      result = emitter.emit_images
       expect(result).to include("<g id=\"images\">")
       expect(result).to include("<rect/>")
     end
 
     it "returns nil when EmfRenderer returns nil for all images" do
       image = Struct.new(:bytes).new("fake-bytes")
-      db = Ea::Qea::Database.allocate
-      allow(db).to receive(:collections).and_return(images: [image])
-
+      db = Ea::Qea::Database.new("test.qea")
+      db.add_collection(:images, [image])
       emitter = described_class.new(diagram, model_index: {}, document: db)
-      allow(Ea::Image::EmfRenderer).to receive(:render).and_return(nil)
 
-      expect(emitter.send(:emit_images)).to be_nil
+      stub_const("Ea::Image::EmfRenderer", Class.new do
+        def self.render(_bytes)
+          nil
+        end
+      end)
+
+      expect(emitter.emit_images).to be_nil
     end
   end
 end
