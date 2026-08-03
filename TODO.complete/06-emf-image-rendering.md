@@ -1,6 +1,6 @@
 # TODO.complete/06: EMF→SVG conversion for t_image
 
-## Status: open
+## Status: done
 
 EA's `t_image` table stores image blobs as Enhanced Metafile (EMF).
 We currently skip them entirely.

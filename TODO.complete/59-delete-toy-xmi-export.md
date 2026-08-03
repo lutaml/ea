@@ -1,6 +1,6 @@
 # TODO.complete/59: Delete toy Export::Xmi::Generator
 
-## Status: open
+## Status: done
 
 `Ea::Export::Xmi::Generator` is a minimal hand-rolled writer that
 duplicates `Ea::Transformers::QeaToXmi`. The latter is the proper

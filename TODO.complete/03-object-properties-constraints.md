@@ -1,6 +1,6 @@
 # TODO.complete/03: t_objectproperties + t_objectconstraint parsing
 
-## Status: open
+## Status: done
 
 Two EA tables we currently ignore. Both carry modeling metadata that maps
 to UML2 concepts:

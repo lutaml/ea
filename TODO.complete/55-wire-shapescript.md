@@ -1,6 +1,6 @@
 # TODO.complete/55: Wire ShapeScript into StereotypeIconRenderer
 
-## Status: open
+## Status: done
 
 `StereotypeIconRenderer` currently uses hardcoded fallback polygons.
 When the MDG technology defines a ShapeScript body for a stereotype,

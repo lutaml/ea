@@ -1,6 +1,6 @@
 # TODO.complete/20: `ea diff` CLI command
 
-## Status: open
+## Status: done
 
 Structural diff between two QEA files (or QEA vs XMI). Useful for:
 

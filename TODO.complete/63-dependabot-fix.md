@@ -1,6 +1,6 @@
 # TODO.complete/63: Address dependabot vulnerability
 
-## Status: open
+## Status: done
 
 `git push` reported: "GitHub found 1 vulnerability on lutaml/ea's
 default branch (1 moderate)". Need to triage.

@@ -1,6 +1,6 @@
 # TODO.complete/07: Auxiliary QEA tables
 
-## Status: open
+## Status: done
 
 EA has ~96 tables. We currently parse 24. Beyond the structural core
 (objects, connectors, diagrams, packages, operations, attributes, xref),

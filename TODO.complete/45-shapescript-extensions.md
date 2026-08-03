@@ -1,6 +1,6 @@
 # TODO.complete/45: ShapeScript extensions
 
-## Status: open
+## Status: done
 
 Current interpreter handles only primitives. Real EA ShapeScript
 files use variables, conditionals, and subshapes.

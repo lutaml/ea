@@ -1,6 +1,6 @@
 # TODO.complete/61: PlantUML export — relationships + packages
 
-## Status: open
+## Status: done
 
 Current `Ea::Export::PlantUml::Generator` only emits classes +
 their attributes. Doesn't emit:

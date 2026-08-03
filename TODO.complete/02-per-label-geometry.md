@@ -1,6 +1,6 @@
 # TODO.complete/02: Per-label Geometry box parsing
 
-## Status: open
+## Status: done
 
 EA's `t_diagramlinks.Geometry` field encodes per-label styling boxes:
 

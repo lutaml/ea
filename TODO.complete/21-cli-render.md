@@ -1,6 +1,6 @@
 # TODO.complete/21: `ea render` unified rendering command
 
-## Status: open
+## Status: done
 
 Consolidate the existing `svg` command into a more general `render`
 command that supports multiple output formats.

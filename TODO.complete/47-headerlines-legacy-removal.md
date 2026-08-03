@@ -1,6 +1,6 @@
 # TODO.complete/47: HeaderLines legacy module removal
 
-## Status: open
+## Status: done
 
 `Ea::Svg::EaEmitter::Element::HeaderLines` still exists alongside
 the new `HeaderLinePipeline`. After verifying the pipeline covers

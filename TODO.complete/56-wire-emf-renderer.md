@@ -1,6 +1,6 @@
 # TODO.complete/56: Wire EmfRenderer into SVG emitter
 
-## Status: open
+## Status: done
 
 `Ea::Image::EmfRenderer` is defined but never called from the SVG
 emitter. t_image rows are loaded into the database but never

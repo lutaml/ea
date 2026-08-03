@@ -55,12 +55,7 @@ module Ea
           end
 
           def self.visibility_prefix(operation)
-            case operation.visibility
-            when "private"   then "- "
-            when "protected" then "# "
-            when "package"   then "~ "
-            else "+ "
-            end
+            VisibilitySymbol.for(operation.visibility, with_space: true)
           end
           private_class_method :visibility_prefix
 

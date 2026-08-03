@@ -1,6 +1,6 @@
 # TODO.complete/40: OCL constraint evaluator
 
-## Status: open
+## Status: done
 
 `Ea::Qea::Models::EaObjectConstraint` carries OCL expressions like
 `inv: self.string->exists(o | o.matches('[a-zA-Z0-9]+'))`. We parse

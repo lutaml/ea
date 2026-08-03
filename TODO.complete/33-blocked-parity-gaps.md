@@ -1,6 +1,6 @@
 # TODO.complete/33: Blocked parity gaps (deferral log)
 
-## Status: open (informational)
+## Status: done
 
 Parity work that is currently blocked beyond reasonable effort. Documented
 so future contributors don't re-investigate the same dead ends.

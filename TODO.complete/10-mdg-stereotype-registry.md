@@ -1,6 +1,6 @@
 # TODO.complete/10: MDG stereotype registry
 
-## Status: open
+## Status: done
 
 We have 49 EA-bundled MDG/GML definition files in `spec/fixtures/mdg/`:
 

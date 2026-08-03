@@ -1,6 +1,6 @@
 # TODO.complete/39: `ea info` command
 
-## Status: open
+## Status: done
 
 Show details of a single element by name or GUID. Useful for
 debugging and exploration without firing up a GUI.

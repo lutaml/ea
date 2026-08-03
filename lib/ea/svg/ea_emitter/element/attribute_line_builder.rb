@@ -55,12 +55,7 @@ module Ea
           private
 
           def visibility_marker
-            case property.visibility
-            when "private"   then "-"
-            when "protected" then "#"
-            when "package"   then "~"
-            else "+"
-            end
+            VisibilitySymbol.for(property.visibility)
           end
 
           # Property name, prefixed with the declaring classifier's

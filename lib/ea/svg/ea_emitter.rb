@@ -46,6 +46,7 @@ module Ea
       autoload :Label, "ea/svg/ea_emitter/label"
       autoload :Compartment, "ea/svg/ea_emitter/compartment"
       autoload :RenderContext, "ea/svg/ea_emitter/render_context"
+      autoload :VisibilitySymbol, "ea/svg/ea_emitter/visibility_symbol"
     end
   end
 end

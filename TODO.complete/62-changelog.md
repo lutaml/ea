@@ -1,6 +1,6 @@
 # TODO.complete/62: Add CHANGELOG.md
 
-## Status: open
+## Status: done
 
 No CHANGELOG exists. Releases happen but aren't documented.
 

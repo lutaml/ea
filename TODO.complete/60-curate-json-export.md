@@ -1,6 +1,6 @@
 # TODO.complete/60: Curate JSON export schema
 
-## Status: open
+## Status: done
 
 `Ea::Export::Json::Generator` dumps `record.to_hash` raw, which
 includes Lutaml::Model internals (e.g. `record_type` field is

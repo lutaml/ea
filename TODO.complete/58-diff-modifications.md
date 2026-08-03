@@ -1,6 +1,6 @@
 # TODO.complete/58: Diff comparator detects attribute modifications
 
-## Status: open
+## Status: done
 
 Current `Ea::Diff::Comparator` only detects added / removed /
 renamed entities. It misses modifications — e.g. an attribute's
