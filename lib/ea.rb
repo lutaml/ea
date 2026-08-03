@@ -29,6 +29,7 @@ module Ea
   autoload :Lint, "ea/lint"
   autoload :Query, "ea/query"
   autoload :Ocl, "ea/ocl"
+  autoload :Validation, "ea/validation"
 
   class << self
     # Parse an EA file into its native representation.
