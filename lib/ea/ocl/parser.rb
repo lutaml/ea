@@ -33,7 +33,7 @@ module Ea
       end
 
       # Parse one expression. Returns a single AST node.
-      def parse_expression(source)
+      def parse_expression(source) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
         s = source.strip
 
         # Strip outer parens
@@ -50,8 +50,8 @@ module Ea
         if (split = split_on_comparison_op(s))
           op, left, right = split
           return Nodes::Comparison.new(op: op,
-                                      left: parse_expression(left),
-                                      right: parse_expression(right))
+                                       left: parse_expression(left),
+                                       right: parse_expression(right))
         end
         if (split = split_on_logical_op(s))
           op, left, right = split
@@ -116,7 +116,6 @@ module Ea
       # Find the topmost ` and ` or ` or ` outside of parens.
       # Returns [op, left_str, right_str] or nil.
       def split_on_logical_op(source)
-        depth = 0
         # Look for ' or ' first (lower precedence than 'and' in OCL?)
         # Actually OCL: 'or' < 'xor' < 'and' < 'implies'. We pick the
         # rightmost top-level operator (left-associative).
@@ -134,7 +133,6 @@ module Ea
       # Comparison has higher precedence than and/or, so we split here
       # BEFORE calling split_on_logical_op.
       def split_on_comparison_op(source)
-        depth = 0
         %w[>= <= == != = > <].each do |op|
           # Need to be careful with `>=` vs `>`: scan in order so
           # multi-char operators are detected first.
@@ -146,7 +144,7 @@ module Ea
         nil
       end
 
-      def find_top_level_op(source, op)
+      def find_top_level_op(source, op) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
         depth = 0
         i = 0
         while i < source.length
@@ -162,7 +160,7 @@ module Ea
               (op == "<" && source[i + 1, 1] == "=") || # <= matches as <
               (op == "=" && source[i + 1, 1] == "=") || # == matches as =
               (op == ">" && source[i - 1, 1] == "-") || # -> arrow
-              (op == "<" && source[i - 1, 1] == "-")   # <- arrow
+              (op == "<" && source[i - 1, 1] == "-") # <- arrow
             return i unless should_skip
           end
           i += 1
@@ -178,9 +176,8 @@ module Ea
           c = source[i]
           depth += 1 if c == "("
           depth -= 1 if c == ")"
-          if depth.zero? && source[i, substring.length] == substring
-            return i
-          end
+          return i if depth.zero? && source[i, substring.length] == substring
+
           i += 1
         end
         nil
