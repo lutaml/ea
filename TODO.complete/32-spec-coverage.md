@@ -1,6 +1,6 @@
 # TODO.complete/32: Specs for new code paths
 
-## Status: open
+## Status: done
 
 New code added in Streams A/B/C must have specs. This file is the
 tracking list — each completed TODO contributes specs.

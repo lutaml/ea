@@ -1,6 +1,6 @@
 # TODO.complete/38: `ea query` command
 
-## Status: open
+## Status: done
 
 Filter/search DSL for ad-hoc exploration. Currently you can list
 everything but can't say "find all classes named X" or "classes

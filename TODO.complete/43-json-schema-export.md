@@ -1,6 +1,6 @@
 # TODO.complete/43: JSON Schema export
 
-## Status: open
+## Status: done
 
 XSD is one XML schema format. JSON Schema is the JSON equivalent
 and equally useful for downstream tooling (API validation, form

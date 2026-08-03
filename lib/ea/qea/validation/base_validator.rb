@@ -128,54 +128,9 @@ module Ea
         # Maps table names to their corresponding collections in Database
         #
         # @param table [String] Table name (e.g., "t_package", "t_object")
-        # @return [Array, nil] Collection array or nil if table not mapped
-        def get_collection_for_table(table) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength
-          case table
-          when "t_package"
-            database.packages
-          when "t_object"
-            database.objects.all
-          when "t_attribute"
-            database.attributes
-          when "t_operation"
-            database.operations
-          when "t_operationparams"
-            database.operation_params
-          when "t_connector"
-            database.connectors
-          when "t_diagram"
-            database.diagrams
-          when "t_diagramobjects"
-            database.diagram_objects
-          when "t_diagramlinks"
-            database.diagram_links
-          when "t_objectconstraint"
-            database.object_constraints
-          when "t_objectproperties"
-            database.object_properties
-          when "t_taggedvalue"
-            database.tagged_values
-          when "t_attributetag"
-            database.attribute_tags
-          when "t_xref"
-            database.xrefs
-          when "t_stereotypes"
-            database.stereotypes
-          when "t_datatypes"
-            database.datatypes
-          when "t_constrainttypes"
-            database.constraint_types
-          when "t_connectortypes"
-            database.connector_types
-          when "t_diagramtypes"
-            database.diagram_types
-          when "t_objecttypes"
-            database.object_types
-          when "t_statustypes"
-            database.status_types
-          when "t_complexitytypes"
-            database.complexity_types
-          end
+        # @return [Array] Collection array or [] if table not mapped
+        def get_collection_for_table(table)
+          database.collection_for_table(table)
         end
 
         # Adds an error to the validation result

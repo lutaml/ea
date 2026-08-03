@@ -1,6 +1,6 @@
 # TODO.complete/11: GML XSD schema generation
 
-## Status: open
+## Status: done
 
 The `GMLClassMapping.xml` file defines how UML classes map to GML XML
 Schema constructs:

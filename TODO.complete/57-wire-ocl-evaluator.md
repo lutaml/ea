@@ -1,6 +1,6 @@
 # TODO.complete/57: Wire OCL evaluator into `ea validate`
 
-## Status: open
+## Status: done
 
 `Ea::Ocl::Parser` + `Evaluator` exist with full specs but no
 production caller. `ea validate` runs structural validators only;

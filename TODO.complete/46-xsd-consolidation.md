@@ -1,6 +1,6 @@
 # TODO.complete/46: XSD Generator consolidation
 
-## Status: open
+## Status: done
 
 `Ea::Export::Xsd::CliBridge` is glue that loads fixtures then
 delegates to `Generator`. The bridge exists only because the CLI

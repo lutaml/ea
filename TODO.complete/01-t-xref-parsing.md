@@ -1,6 +1,6 @@
 # TODO.complete/01: Full t_xref parser
 
-## Status: open
+## Status: done
 
 EA's `t_xref` table stores semi-structured metadata in a custom mini-language.
 We currently only consume the stereotype-application rows for classifier

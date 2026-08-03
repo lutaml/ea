@@ -24,7 +24,7 @@ gem runs anywhere Ruby runs.
 - **Stereotype icons**: StereotypeIconRenderer wired as compartment.
 - **HeaderLines**: OCP provider chain.
 - **Diff**: text + HTML report; detects added/removed/renamed/modified.
-- **Specs**: 2160 examples, 0 failures, 55 pending.
+- **Specs**: 2200+ examples, 0 failures, 55 pending.
 - **Code quality**: zero `respond_to?`, zero `instance_variable_get/set`,
   zero `require_relative` in lib code, zero internal `require` (all
   autoload).
@@ -75,6 +75,9 @@ gem runs anywhere Ruby runs.
 | 71 | [71-autoload-audit.md](71-autoload-audit.md) | Autoload audit | **done** |
 | 72 | [72-extension-serializer-ocp-naming.md](72-extension-serializer-ocp-naming.md) | ExtensionSerializer OCP + naming | **done** |
 | 73 | [73-ocl-validator-latent-bugs.md](73-ocl-validator-latent-bugs.md) | OCL validator latent bugs | **done** |
+| 74 | [74-visibility-symbol-dry.md](74-visibility-symbol-dry.md) | Visibility symbol DRY extraction | **done** |
+| 75 | [75-database-table-collection-registry.md](75-database-table-collection-registry.md) | Database table→collection registry (MECE) | **done** |
+| 76 | [76-stale-todo-cleanup.md](76-stale-todo-cleanup.md) | Stale TODO status cleanup (40 items) | **done** |
 
 ### Bonus (no TODO file; found during 51)
 

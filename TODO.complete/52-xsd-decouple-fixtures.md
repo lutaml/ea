@@ -1,6 +1,6 @@
 # TODO.complete/52: Decouple XSD Generator from fixture paths
 
-## Status: open
+## Status: done
 
 `Ea::Export::Xsd::Generator` hardcodes:
     DEFAULT_MAPPING_PATH = "spec/fixtures/mdg/ea_config/gml/GMLClassMapping.xml"

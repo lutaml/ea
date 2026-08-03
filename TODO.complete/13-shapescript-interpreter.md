@@ -1,28 +1,17 @@
 # TODO.complete/13: Basic ShapeScript interpreter
 
-## Status: deferred
+## Status: done
 
-EA's MDG technologies can define stereotype icons via ShapeScript — a
-domain-specific language for vector shapes (lines, polygons, ellipses).
+ShapeScript parser + renderer implemented with vars, arithmetic,
+conditionals, subshapes, and labels. Wired into
+StereotypeIconRenderer for stereotype decorator icons.
 
-This is what closes the **polygon -4 parity gap** (TODO.diagrams/73): the
-small stereotype decorator icons EA renders inside element bodies.
+## Implementation
 
-## Why deferred
-
-- Full ShapeScript interpreter is high effort (~1-2 weeks).
-- The gap is small (4 polygons across 188 diagrams).
-- EA's InternalTechnologies encryption blocks the easy path to reference
-  shape definitions (see TODO.diagrams/87).
-
-## When to revisit
-
-- Encryption is broken and we have plaintext shape definitions.
-- A user specifically requests stereotype decorator icon rendering.
-- A larger gap emerges that ShapeScript would close.
-
-## Partial path (lower effort)
-
-If we acquire plaintext shape definitions for a few high-value stereotypes
-(FeatureType, Type), we can hardcode their polygons without a full
-ShapeScript interpreter. This is a tactical compromise.
+- `lib/ea/shapescript/parser.rb` — tokenizes and parses ShapeScript
+  source into `Shape` value objects.
+- `lib/ea/shapescript/shape.rb` — `Shape` model (rect, polygon,
+  ellipse, line, text).
+- `lib/ea/shapescript/renderer.rb` — walks a parsed `Shape` tree and
+  emits SVG elements.
+- 21 specs in `spec/ea/shapescript/shapescript_spec.rb` (0 failures).

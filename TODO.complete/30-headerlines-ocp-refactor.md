@@ -1,6 +1,6 @@
 # TODO.complete/30: HeaderLines OCP refactor (provider chain)
 
-## Status: open
+## Status: done
 
 `Ea::Svg::EaEmitter::Element::HeaderLines` is a monolithic module with
 conditional logic for stereotype fallback, qualified name wrap, abstract

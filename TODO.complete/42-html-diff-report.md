@@ -1,6 +1,6 @@
 # TODO.complete/42: HTML diff report
 
-## Status: open
+## Status: done
 
 Text diff is hard to scan in PR descriptions. HTML report with
 color-coded added/removed/renamed rows is much more reviewable.

@@ -1,6 +1,6 @@
 # TODO.complete/22: `ea export` command
 
-## Status: open
+## Status: done
 
 Single command for all model exports.
 

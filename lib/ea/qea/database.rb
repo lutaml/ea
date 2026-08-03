@@ -65,6 +65,51 @@ module Ea
         documents scripts
       ].freeze
 
+      # Maps EA SQL table names to collection accessor symbols.
+      # Centralised here (MECE) so validators and services don't
+      # each maintain their own case/when dispatch. Adding a new
+      # table = adding one hash entry.
+      TABLE_TO_COLLECTION = {
+        "t_package"           => :packages,
+        "t_object"            => :objects,
+        "t_attribute"         => :attributes,
+        "t_operation"         => :operations,
+        "t_operationparams"   => :operation_params,
+        "t_connector"         => :connectors,
+        "t_diagram"           => :diagrams,
+        "t_diagramobjects"    => :diagram_objects,
+        "t_diagramlinks"      => :diagram_links,
+        "t_objectconstraint"  => :object_constraints,
+        "t_objectproperties"  => :object_properties,
+        "t_taggedvalue"       => :tagged_values,
+        "t_attributetag"      => :attribute_tags,
+        "t_xref"              => :xrefs,
+        "t_stereotypes"       => :stereotypes,
+        "t_datatypes"         => :datatypes,
+        "t_constrainttypes"   => :constraint_types,
+        "t_connectortypes"    => :connector_types,
+        "t_diagramtypes"      => :diagram_types,
+        "t_objecttypes"       => :object_types,
+        "t_statustypes"       => :status_types,
+        "t_complexitytypes"   => :complexity_types,
+        "t_documents"         => :documents,
+        "t_scripts"           => :scripts,
+      }.freeze
+
+      # @param table_name [String] EA SQL table name (e.g., "t_object")
+      # @return [Array] the collection for that table, or [] if unknown
+      def collection_for_table(table_name)
+        name = TABLE_TO_COLLECTION[table_name]
+        return [] unless name
+
+        records = @collections[name]
+        return [] unless records
+
+        # t_object is wrapped in ObjectRepository — call .all to
+        # get the plain Array that validators expect.
+        records.is_a?(Repositories::ObjectRepository) ? records.all : records
+      end
+
       COLLECTION_ACCESSORS.each do |name|
         define_method(name) do
           @collections[name] || []

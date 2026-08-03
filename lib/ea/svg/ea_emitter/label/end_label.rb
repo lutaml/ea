@@ -236,12 +236,7 @@ module Ea
           end
 
           def visibility_prefix(property)
-            case property.visibility
-            when "private"   then "-"
-            when "protected" then "#"
-            when "package"   then "~"
-            else "+"
-            end
+            VisibilitySymbol.for(property.visibility)
           end
 
           def text_at(x, y, content)

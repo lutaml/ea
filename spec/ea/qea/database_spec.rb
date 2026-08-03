@@ -532,4 +532,29 @@ RSpec.describe Ea::Qea::Database do
       end.to raise_error(FrozenError)
     end
   end
+
+  describe "#collection_for_table" do
+    before do
+      database.add_collection(:packages, [sample_package])
+      database.add_collection(:attributes, [sample_attribute])
+    end
+
+    it "maps t_package to packages collection" do
+      result = database.collection_for_table("t_package")
+      expect(result).to eq([sample_package])
+    end
+
+    it "maps t_attribute to attributes collection" do
+      result = database.collection_for_table("t_attribute")
+      expect(result).to eq([sample_attribute])
+    end
+
+    it "returns empty array for unknown table" do
+      expect(database.collection_for_table("t_unknown")).to eq([])
+    end
+
+    it "returns empty array for nil" do
+      expect(database.collection_for_table(nil)).to eq([])
+    end
+  end
 end

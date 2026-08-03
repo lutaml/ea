@@ -1,6 +1,6 @@
 # TODO.complete/23: `ea mdg` command
 
-## Status: open
+## Status: done
 
 Expose the MDG technology registry via CLI.
 

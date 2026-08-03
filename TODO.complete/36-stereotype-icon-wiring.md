@@ -1,6 +1,6 @@
 # TODO.complete/36: Stereotype icon wiring (closes polygon -4 parity gap)
 
-## Status: open
+## Status: done
 
 The `Ea::Shapescript::Parser` and `Renderer` exist but aren't wired
 into the SVG emitter. As a result, stereotype decorator icons

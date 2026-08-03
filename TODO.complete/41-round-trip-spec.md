@@ -1,6 +1,6 @@
 # TODO.complete/41: Round-trip stability spec
 
-## Status: open
+## Status: done
 
 The contract `parse → serialize → parse` should produce identical
 models. Currently there's no spec that verifies this end-to-end.

@@ -1,6 +1,6 @@
 # TODO.complete/05: Complete PDATA/StyleEx flag matrix
 
-## Status: open
+## Status: done
 
 EA's `t_diagram.PDATA` carries ~30 rendering flags as `Key=value;` pairs.
 We currently parse only ~4 (`HideAtts`, `HideOps`, `HideParents`, `HideProps`).

@@ -1,6 +1,6 @@
 # TODO.complete/04: t_operationparams parsing
 
-## Status: open
+## Status: done
 
 `t_operationparams` stores the parameters of an operation (method).
 We parse `t_operation` but lose the parameter list.

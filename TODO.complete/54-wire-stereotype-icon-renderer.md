@@ -1,6 +1,6 @@
 # TODO.complete/54: Wire StereotypeIconRenderer into SVG emitter
 
-## Status: open
+## Status: done
 
 `Ea::Svg::EaEmitter::Element::StereotypeIconRenderer` is defined
 and autoloaded but never invoked. The polygon -4 parity gap on

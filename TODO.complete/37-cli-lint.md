@@ -1,6 +1,6 @@
 # TODO.complete/37: `ea lint` command
 
-## Status: open
+## Status: done
 
 Model quality checks beyond structural validation:
 - Naming convention violations (CamelCase classes, camelCase attrs)

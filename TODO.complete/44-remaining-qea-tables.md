@@ -1,6 +1,6 @@
 # TODO.complete/44: Remaining QEA tables
 
-## Status: open
+## Status: done
 
 Still uncovered tables with real value:
 
