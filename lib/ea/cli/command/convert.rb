@@ -48,7 +48,7 @@ module Ea
 
         def qea_to_xmi_xml
           database = load_database(file_path)
-          Ea::Transformers.qea_to_xmi(database)
+          Ea::Transformers.qea_to_xmi(database, with_extensions: false)
         ensure
           database&.close_connection
         end
