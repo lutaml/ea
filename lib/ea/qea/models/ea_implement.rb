@@ -6,7 +6,7 @@ module Ea
       # UML-to-code mapping hint from t_implement.
       class EaImplement < BaseModel
         attribute :implement_id, :integer
-        attribute :object_id, :integer
+        attribute :ea_object_id, :integer
         attribute :language, :string
         attribute :code, :string
 
@@ -20,7 +20,7 @@ module Ea
 
         COLUMN_MAP = {
           "ImplementID" => :implement_id,
-          "Object_ID" => :object_id
+          "Object_ID" => :ea_object_id
         }.freeze
 
         def self.column_map

@@ -5,7 +5,6 @@ module Ea
   # One sub-namespace per output format; each is independent and
   # autoloadable.
   module Export
-    autoload :Xmi, "ea/export/xmi"
     autoload :Json, "ea/export/json"
     autoload :JsonSchema, "ea/export/json_schema"
     autoload :PlantUml, "ea/export/plantuml"

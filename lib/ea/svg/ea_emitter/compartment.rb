@@ -14,6 +14,7 @@ module Ea
         autoload :NoteBody, "ea/svg/ea_emitter/compartment/note_body"
         autoload :Header, "ea/svg/ea_emitter/compartment/header"
         autoload :HeaderDivider, "ea/svg/ea_emitter/compartment/header_divider"
+        autoload :StereotypeIcon, "ea/svg/ea_emitter/compartment/stereotype_icon"
         autoload :Attributes, "ea/svg/ea_emitter/compartment/attributes"
         autoload :Operations, "ea/svg/ea_emitter/compartment/operations"
         autoload :EnumLiterals, "ea/svg/ea_emitter/compartment/enum_literals"
@@ -32,6 +33,7 @@ module Ea
           NoteBody,
           Header,
           HeaderDivider,
+          StereotypeIcon,
           Attributes,
           Operations,
           EnumLiterals,

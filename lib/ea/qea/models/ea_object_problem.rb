@@ -6,7 +6,7 @@ module Ea
       # Object problem record from t_objectproblems.
       class EaObjectProblem < BaseModel
         attribute :object_problem_id, :integer
-        attribute :object_id, :integer
+        attribute :ea_object_id, :integer
         attribute :problem, :string
         attribute :problem_type, :string
         attribute :date_resolved, :string
@@ -23,7 +23,7 @@ module Ea
 
         COLUMN_MAP = {
           "ObjectProblemID" => :object_problem_id,
-          "Object_ID" => :object_id,
+          "Object_ID" => :ea_object_id,
           "ProblemType" => :problem_type,
           "DateResolved" => :date_resolved
         }.freeze

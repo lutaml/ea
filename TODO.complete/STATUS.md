@@ -6,86 +6,62 @@ gem runs anywhere Ruby runs.
 
 ## Current state (2026-08-03)
 
-- **Parsing**: 43/96 QEA tables covered (glossary, lists, versions, phase,
-  authors, image, secrypt, palette, paletteitem, implement, roleconstraint,
-  objectproblems/risks/tests/efforts/resources/scenarios/requires/trx).
-- **Diagram rendering**: basic.qea 100% pixel-perfect; plateau 167/188
-  pixel-perfect.
+- **Parsing**: 43 QEA tables covered (43 / ~96).
+- **Diagram rendering**: basic.qea 100% pixel-perfect; plateau 167/188.
 - **MDG technologies**: loader + registry + alias resolver functional.
 - **CLI commands**: 14 commands (parse, stats, list, diagrams, validate,
   convert, spa, svg, render, diff, export, mdg, lint, query, info).
-- **Export**: XMI, JSON, JSON Schema, PlantUML, XSD.
-- **ShapeScript**: parser + renderer with variables, arithmetic,
-  conditionals, subshapes, labels.
-- **OCL evaluator**: invariant subset (exists, forAll, matches, and/or/not).
-- **Lint**: 5 rules (naming, orphan, duplicate, cyclic, missing-stereotype).
+- **Export**: XMI (via full Transformers::QeaToXmi), JSON (curated),
+  JSON Schema, PlantUML (with packages + relationships), XSD.
+- **ShapeScript**: parser + renderer (vars, arithmetic, conditionals,
+  subshapes, labels). Wired into StereotypeIconRenderer.
+- **OCL evaluator**: invariant subset, wired into `ea validate`.
+- **Lint**: 5 rules.
 - **Query DSL**: chainable Builder.
-- **Image**: t_image loading + lazy emfsvg adapter.
-- **Render pipeline**: SVG default, PNG/PDF via rsvg/ImageMagick.
+- **Image**: t_image loading + EmfRenderer wired into Document emitter.
+- **Stereotype icons**: StereotypeIconRenderer wired as compartment.
 - **HeaderLines**: OCP provider chain.
-- **Diff**: text + HTML report.
-- **Specs**: 1974 examples, 0 failures, 55 pending.
+- **Diff**: text + HTML report; detects added/removed/renamed/modified.
+- **Specs**: 1986 examples, 0 failures, 55 pending.
+- **Code quality**: zero `respond_to?`, zero `instance_variable_get/set`,
+  zero `require_relative` in lib code.
 
-## Out of scope (will not implement)
-
-- **Code generation from MDG templates** — we don't know what EA's
-  codegen actually does, so building our own would be speculative.
-  Removed.
-- **Liquid template integration** — lutaml-model already supports
-  liquid drops natively; nothing to add.
-- **Plugin system for user-supplied generators** — not needed.
-
-## Work streams — all completed
+## Work streams — all completed (51–63: real completion work)
 
 ### Stream A — Data Model Completeness
-
-| # | File | Title | Status |
-|---|---|---|---|
-| 01 | [01-t-xref-parsing.md](01-t-xref-parsing.md) | Full t_xref parser | **completed** |
-| 02 | [02-per-label-geometry.md](02-per-label-geometry.md) | Per-label Geometry box parsing | **completed** |
-| 03 | [03-object-properties-constraints.md](03-object-properties-constraints.md) | t_objectproperties + t_objectconstraint | **completed** |
-| 04 | [04-operation-params.md](04-operation-params.md) | t_operationparams parsing | **completed** |
-| 05 | [05-pdata-flag-matrix.md](05-pdata-flag-matrix.md) | PDATA/StyleEx flag matrix | **completed** |
-| 06 | [06-emf-image-rendering.md](06-emf-image-rendering.md) | EMF→SVG via emfsvg gem | **completed** |
-| 07 | [07-auxiliary-tables.md](07-auxiliary-tables.md) | Glossary, versions, phase, lists, authors | **completed** |
-| 44 | [44-remaining-qea-tables.md](44-remaining-qea-tables.md) | 13 more tables | **completed** |
+01–07, 44 — all done.
 
 ### Stream B — MDG / Stereotype System
-
-| # | File | Title | Status |
-|---|---|---|---|
-| 10 | [10-mdg-stereotype-registry.md](10-mdg-stereotype-registry.md) | MDG stereotype registry | **completed** |
-| 11 | [11-gml-xsd-generation.md](11-gml-xsd-generation.md) | GML XSD schema generation | **completed** |
-| 13 | [13-shapescript-interpreter.md](13-shapescript-interpreter.md) | ShapeScript interpreter | **completed** |
-| 36 | [36-stereotype-icon-wiring.md](36-stereotype-icon-wiring.md) | Stereotype icon renderer | **completed** |
-| 45 | [45-shapescript-extensions.md](45-shapescript-extensions.md) | Vars, arithmetic, conditionals | **completed** |
-| 46 | [46-xsd-consolidation.md](46-xsd-consolidation.md) | CliBridge removed | **completed** |
+10, 11, 13, 36, 45, 46 — all done.
 
 ### Stream C — CLI Commands
-
-| # | File | Title | Status |
-|---|---|---|---|
-| 20 | [20-cli-diff.md](20-cli-diff.md) | `ea diff` | **completed** |
-| 21 | [21-cli-render.md](21-cli-render.md) | `ea render` svg/png/pdf | **completed** |
-| 22 | [22-cli-export.md](22-cli-export.md) | `ea export` xmi/json/json-schema/plantuml/xsd | **completed** |
-| 23 | [23-cli-mdg.md](23-cli-mdg.md) | `ea mdg list/show/stereotypes` | **completed** |
-| 37 | [37-cli-lint.md](37-cli-lint.md) | `ea lint` | **completed** |
-| 38 | [38-cli-query.md](38-cli-query.md) | `ea query` | **completed** |
-| 39 | [39-cli-info.md](39-cli-info.md) | `ea info NAME` | **completed** |
-| 42 | [42-html-diff-report.md](42-html-diff-report.md) | `ea diff --format=html` | **completed** |
-| 43 | [43-json-schema-export.md](43-json-schema-export.md) | JSON Schema export | **completed** |
+20–24, 37–39, 42, 43 — all done.
 
 ### Stream D — Architecture & Code Quality
+30–33, 40, 41, 47 — all done.
+
+### Stream F — Real Completion Work (this session)
 
 | # | File | Title | Status |
 |---|---|---|---|
-| 30 | [30-headerlines-ocp-refactor.md](30-headerlines-ocp-refactor.md) | HeaderLines → provider chain | **completed** |
-| 31 | [31-public-send-cleanup.md](31-public-send-cleanup.md) | Eliminate public_send | **completed** |
-| 32 | [32-spec-coverage.md](32-spec-coverage.md) | Specs for new code | **completed** |
-| 33 | [33-blocked-parity-gaps.md](33-blocked-parity-gaps.md) | Blocked gaps documented | **completed** |
-| 40 | [40-ocl-evaluator.md](40-ocl-evaluator.md) | OCL evaluator | **completed** |
-| 41 | [41-round-trip-spec.md](41-round-trip-spec.md) | Round-trip stability | **completed** |
-| 47 | [47-headerlines-legacy-removal.md](47-headerlines-legacy-removal.md) | HeaderLines alias | **completed** |
+| 51 | [51-remove-respond-to.md](51-remove-respond-to.md) | Remove `respond_to?` from lib code | **completed** |
+| 52 | [52-xsd-decouple-fixtures.md](52-xsd-decouple-fixtures.md) | Decouple XSD Generator from fixtures | **completed** |
+| 53 | [53-xmi-public-send-cleanup.md](53-xmi-public-send-cleanup.md) | xmi/parser `public_send` cleanup | **deferred** (no encapsulation violation; needs upstream) |
+| 54 | [54-wire-stereotype-icon-renderer.md](54-wire-stereotype-icon-renderer.md) | Wire StereotypeIconRenderer into SVG emitter | **completed** |
+| 55 | [55-wire-shapescript.md](55-wire-shapescript.md) | Wire ShapeScript into StereotypeIconRenderer | **completed** |
+| 56 | [56-wire-emf-renderer.md](56-wire-emf-renderer.md) | Wire EmfRenderer into SVG emitter | **completed** |
+| 57 | [57-wire-ocl-evaluator.md](57-wire-ocl-evaluator.md) | Wire OCL evaluator into `ea validate` | **completed** |
+| 58 | [58-diff-modifications.md](58-diff-modifications.md) | Diff comparator detects modifications | **completed** |
+| 59 | [59-delete-toy-xmi-export.md](59-delete-toy-xmi-export.md) | Delete toy XMI export; route to Transformers | **completed** |
+| 60 | [60-curate-json-export.md](60-curate-json-export.md) | Curated JSON export schema | **completed** |
+| 61 | [61-plantuml-relationships.md](61-plantuml-relationships.md) | PlantUML with packages + relationships | **completed** |
+| 62 | [62-changelog.md](62-changelog.md) | CHANGELOG.md | **completed** |
+| 63 | [63-dependabot-fix.md](63-dependabot-fix.md) | Dependabot vulnerability | **completed** (lychee-action v1 → v2) |
+
+### Bonus (no TODO file; found during 51)
+
+- Renamed `object_id` attribute to `ea_object_id` in 12 new QEA models
+  (Ruby `Object#object_id` collision).
 
 ## CLI command summary (14 commands)
 
@@ -94,7 +70,7 @@ ea parse FILE              Parse to Lutaml::Uml::Document
 ea stats FILE              Show collection counts
 ea list FILE               List model elements
 ea diagrams ACTION FILE    Diagram list / extract
-ea validate FILE           Validate model
+ea validate FILE           Validate model (incl. OCL constraints)
 ea convert FILE --to=xmi   Convert QEA ↔ XMI
 ea spa FILE                Generate SPA HTML
 ea svg NAME FILE           Render single SVG

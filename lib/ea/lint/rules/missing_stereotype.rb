@@ -3,31 +3,36 @@
 module Ea
   module Lint
     module Rules
-      # Packages named "Application Schema" or with `applicationSchema`
-      # stereotype should have at least one class with a GML stereotype.
+      # Flags classes with no applied stereotype. Stereotype
+      # detection walks t_xref for `@STEREO;Name=...;` blocks
+      # referencing the class's ea_guid.
       class MissingStereotypeRule < LintRule
         self.severity = :info
-
-        GML_STEREOTYPES = %w[FeatureType Type DataType CodeList
-                             Enumeration ObjectType].freeze
 
         def check(model)
           classes = (model.collections[:objects] || [])
                      .select { |o| o.object_type == "Class" }
-          classes_without_stereo = classes.select { |c| stereotype_refs(c).empty? }
-          classes_without_stereo.map do |klass|
+          xrefs = model.collections[:xrefs] || []
+          classes.map do |klass|
+            next nil if stereotype_name_for(klass, xrefs)
+
             offense(entity_id: klass.object_id,
                     entity_name: klass.name,
                     message: "Class has no applied stereotype",
                     severity: :info)
-          end
+          end.compact
         end
 
         private
 
-        def stereotype_refs(klass)
-          refs = klass.respond_to?(:stereotype_refs) ? klass.stereotype_refs : nil
-          refs || []
+        # Find the first @STEREO application in t_xref that references
+        # the class's ea_guid.
+        def stereotype_name_for(klass, xrefs)
+          return nil unless klass.is_a?(Ea::Qea::Models::EaObject)
+
+          xrefs.find do |xr|
+            xr.client == klass.ea_guid && xr.description&.include?("@STEREO")
+          end&.description&.match(/Name=([^;]+)/)&.[](1)
         end
       end
     end

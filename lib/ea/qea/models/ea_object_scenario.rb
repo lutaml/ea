@@ -6,7 +6,7 @@ module Ea
       # Use case scenario from t_objectscenarios.
       class EaObjectScenario < BaseModel
         attribute :object_scenario_id, :integer
-        attribute :object_id, :integer
+        attribute :ea_object_id, :integer
         attribute :scenario, :string
         attribute :scenario_type, :string
         attribute :notes, :string
@@ -21,7 +21,7 @@ module Ea
 
         COLUMN_MAP = {
           "ObjectScenarioID" => :object_scenario_id,
-          "Object_ID" => :object_id,
+          "Object_ID" => :ea_object_id,
           "ScenarioType" => :scenario_type
         }.freeze
 

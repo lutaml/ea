@@ -39,12 +39,33 @@ module Ea
         # a string. New formats add a new entry here without touching
         # this class body. Lambdas lazy-resolve autoloaded namespaces.
         EXPORTERS = {
-          xmi: ->(model, **o) { Ea::Export::Xmi::Generator.call(model, **o) },
+          xmi: ->(model, **_o) { Ea::Transformers.qea_to_xmi(model) },
           json: ->(model, **o) { Ea::Export::Json::Generator.call(model, **o) },
           "json-schema": ->(model, **o) { Ea::Export::JsonSchema::Generator.call(model, **o) },
           plantuml: ->(model, **o) { Ea::Export::PlantUml::Generator.call(model, **o) },
-          xsd: ->(model, **o) { Ea::Export::Xsd::Generator.call(model, **o) }
+          xsd: ->(model, **o) { Ea::Export::Xsd::Generator.call(model, **Ea::Cli::Command::Export.xsd_options(o)) }
         }.freeze
+
+        # Load GMLClassMapping + GMLNamespaces fixtures when present
+        # (repo-local dev path) and pass to the XSD generator. Keeps
+        # fixture-path knowledge in the CLI layer; lib stays pure.
+        def self.xsd_options(opts)
+          mapping = load_if_present("spec/fixtures/mdg/ea_config/gml/GMLClassMapping.xml",
+                                    Ea::Export::Xsd::ClassMapping)
+          namespaces = load_if_present("spec/fixtures/mdg/ea_config/gml/GMLNamespaces.xml",
+                                        Ea::Export::Xsd::NamespaceRegistry)
+          opts[:class_mapping] = mapping if mapping
+          opts[:namespaces] = namespaces if namespaces
+          opts
+        end
+
+        def self.load_if_present(path, loader)
+          return nil unless File.exist?(path)
+
+          loader.from_path(path)
+        rescue StandardError
+          nil
+        end
 
         def exporter_options
           opts = {}

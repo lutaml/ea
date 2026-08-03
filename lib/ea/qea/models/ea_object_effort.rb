@@ -6,7 +6,7 @@ module Ea
       # Effort estimate from t_objecteffort.
       class EaObjectEffort < BaseModel
         attribute :object_effort_id, :integer
-        attribute :object_id, :integer
+        attribute :ea_object_id, :integer
         attribute :effort, :string
         attribute :effort_type, :string
         attribute :notes, :string
@@ -21,7 +21,7 @@ module Ea
 
         COLUMN_MAP = {
           "ObjectEffortID" => :object_effort_id,
-          "Object_ID" => :object_id,
+          "Object_ID" => :ea_object_id,
           "EffortType" => :effort_type
         }.freeze
 

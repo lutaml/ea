@@ -58,13 +58,15 @@ module Ea
         filter_by { |o| o.package_id == pkg.package_id }
       end
 
-      # Filter by applied stereotype name.
+      # Filter by applied stereotype name. Stereotype lookup walks
+      # t_xref for @STEREO blocks referencing the object's ea_guid.
       # @param name [String]
       # @return [Builder]
       def with_stereotype(name)
+        xrefs = model.collections[:xrefs] || []
         filter_by do |o|
-          refs = o.respond_to?(:stereotype_refs) ? o.stereotype_refs : nil
-          refs&.any? { |r| r == name }
+          applied = stereotype_names_for(o, xrefs)
+          applied.any? { |r| r == name }
         end
       end
 
@@ -89,6 +91,23 @@ module Ea
       def filter_by(&block)
         Builder.new(model, filters: filters + [block], kind: @kind)
       end
+
+      # Extract stereotype names applied to an object via t_xref.
+      # Returns [] when no @STEREO block references the object's GUID.
+      # @param object [Ea::Qea::Models::EaObject]
+      # @param xrefs [Array<Ea::Qea::Models::EaXref>]
+      # @return [Array<String>]
+      def stereotype_names_for(object, xrefs)
+        return [] unless object.is_a?(Ea::Qea::Models::EaObject)
+        return [] unless object.ea_guid
+
+        xrefs.select do |xr|
+          xr.client == object.ea_guid && xr.description&.include?("@STEREO")
+        end.map do |xr|
+          xr.description.match(/Name=([^;]+)/)[1]
+        end.compact
+      end
+      private :stereotype_names_for
 
       # Materialize the filtered collection.
       # @return [Array]

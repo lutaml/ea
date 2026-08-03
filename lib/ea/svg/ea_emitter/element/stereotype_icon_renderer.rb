@@ -28,22 +28,63 @@ module Ea
           OFFSET_X = 0
           OFFSET_Y = 0
 
-          attr_reader :classifier, :bounds, :canvas
+          attr_reader :classifier, :bounds, :canvas, :mdg_registry
 
-          def initialize(classifier:, bounds:, canvas: nil)
+          # @param mdg_registry [Ea::Mdg::Registry, nil] optional
+          #   registry to look up MDG-provided ShapeScript for the
+          #   classifier's stereotype. When provided and the matching
+          #   stereotype has a ShapeScript body, it's parsed and
+          #   rendered. Otherwise falls back to FALLBACK_ICONS.
+          def initialize(classifier:, bounds:, canvas: nil, mdg_registry: nil)
             @classifier = classifier
             @bounds = bounds
             @canvas = canvas
+            @mdg_registry = mdg_registry
           end
 
-          def self.render(classifier:, bounds:, canvas: nil, **_)
-            new(classifier: classifier, bounds: bounds, canvas: canvas).to_svg
+          def self.render(classifier:, bounds:, canvas: nil, **opts)
+            new(classifier: classifier, bounds: bounds, canvas: canvas, **opts).to_svg
           end
 
-          # @return [String] SVG polygon fragment, or "" if no icon applies
+          # @return [String] SVG fragment, or "" if no icon applies
           def to_svg
             return "" unless classifier && bounds
+            return "" unless stereotype_name
 
+            shapescript_svg || fallback_svg
+          end
+
+          private
+
+          # Try MDG-provided ShapeScript first.
+          # @return [String, nil] SVG fragment from parsed ShapeScript
+          def shapescript_svg
+            return nil unless mdg_registry
+
+            body = lookup_shapescript(stereotype_name)
+            return nil unless body
+
+            shapes = Ea::Shapescript::Parser.parse(body)
+            return nil if shapes.empty?
+
+            Ea::Shapescript::Renderer.render(shapes, fill: "#FAF1EC",
+                                             stroke: "#69738C")
+          end
+
+          # @return [String, nil] ShapeScript source for the stereotype, if any
+          def lookup_shapescript(name)
+            mdg_registry.documents.each do |doc|
+              stereo = (doc.stereotypes || []).find { |s| s.name == name }
+              next unless stereo
+
+              notes = stereo.notes
+              return notes if notes && notes.include?("shape")
+            end
+            nil
+          end
+
+          # @return [String] hardcoded fallback polygon, or "" if none
+          def fallback_svg
             spec = FALLBACK_ICONS[stereotype_name]
             return "" unless spec
 
@@ -55,15 +96,11 @@ module Ea
             %(<polygon points="#{pts_str}" fill="#{fill}" stroke="#{stroke}" stroke-width="1"/>)
           end
 
-          private
-
           def stereotype_name
-            refs = classifier.respond_to?(:stereotype_refs) ? classifier.stereotype_refs : nil
-            return refs.first if refs&.any?
+            return nil unless classifier.is_a?(Ea::Model::Classifier)
 
-            # Walk xref description as a fallback when classifier has no
-            # explicit stereotype_refs slot (e.g. raw Ea::Qea::Models::EaObject).
-            nil
+            refs = classifier.stereotype_refs
+            refs&.first
           end
 
           def translate_point(x, y)

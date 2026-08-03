@@ -10,6 +10,8 @@ module Ea
                  "ea/qea/validation/database/orphan_validator"
         autoload :ReferentialIntegrityValidator,
                  "ea/qea/validation/database/referential_integrity_validator"
+        autoload :OclConstraintValidator,
+                 "ea/qea/validation/database/ocl_constraint_validator"
       end
     end
   end

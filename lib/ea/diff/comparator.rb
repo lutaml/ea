@@ -53,12 +53,38 @@ module Ea
             add(:removed, name, id, old_entry[:label])
           elsif new_entry[:label] != old_entry[:label]
             add(:renamed, name, id, "#{old_entry[:label]} → #{new_entry[:label]}")
+          else
+            compare_modifications(name, id, old_entry[:record], new_entry[:record])
           end
         end
 
         new_records.each_value do |entry|
           add(:added, name, entry[:id], entry[:label])
         end
+      end
+
+      # Compares two records of the same type by their to_hash
+      # representation. If they differ beyond identity (id and the
+      # label attribute), emit a :modified change with a list of
+      # the differing field names in #details.
+      def compare_modifications(collection, id, old_record, new_record)
+        old_hash = old_record.to_hash
+        new_hash = new_record.to_hash
+        changed = []
+        (old_hash.keys | new_hash.keys).each do |key|
+          next if key == "record_type"
+
+          old_val = old_hash[key]
+          new_val = new_hash[key]
+          next if old_val == new_val
+
+          changed << key
+        end
+        return if changed.empty?
+
+        @differences << Change.new(change: :modified, kind: collection,
+                                   id: id, name: changed.first(5).join(", "),
+                                   details: changed)
       end
 
       def index_by_id(db, collection_name, label_attr)
@@ -69,7 +95,8 @@ module Ea
 
           acc[id] = {
             id: id,
-            label: record.public_send(label_attr).to_s
+            label: record.public_send(label_attr).to_s,
+            record: record
           }
         end
       end

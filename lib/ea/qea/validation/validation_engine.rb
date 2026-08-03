@@ -83,6 +83,7 @@ module Ea
             orphan
             circular_reference
             package
+            ocl_constraint
           ]
 
           validator_names = if validators
@@ -213,6 +214,7 @@ module Ea
           @registry.register(:circular_reference,
                              CircularReferenceValidator)
           @registry.register(:package, PackageValidator)
+          @registry.register(:ocl_constraint, OclConstraintValidator)
 
           # Phase 2: UML Tree Structure Validators
           # DocumentStructureValidator lives in lutaml-uml and may not be

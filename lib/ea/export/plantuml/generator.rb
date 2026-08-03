@@ -1,18 +1,16 @@
-# frozen_string_literal: true
+# frozen_string: true
 
 module Ea
   module Export
     module PlantUml
       # Generates PlantUML class diagram text from a parsed QEA model.
       #
-      # Example output:
-      #   @startuml
-      #   class Person {
-      #     +name: String
-      #     +age: Integer
-      #   }
-      #   Person "1" --> "0..*" Address : lives_at
-      #   @enduml
+      # Emits:
+      # - Package nesting (`package "X" { ... }`)
+      # - Class declarations with attributes and operations
+      # - Generalizations (`Parent <|-- Child`)
+      # - Associations with multiplicities and role names
+      # - Enumerations as `enum` blocks
       class Generator
         def self.call(model, **_opts)
           new(model).call
@@ -25,8 +23,8 @@ module Ea
         end
 
         def call
-          lines = ["@startuml"]
-          lines.concat(class_lines)
+          lines = ["@startuml", "skinparam classAttributeIconSize 0"]
+          lines.concat(package_lines)
           lines.concat(connector_lines)
           lines << "@enduml"
           lines.join("\n") + "\n"
@@ -34,38 +32,107 @@ module Ea
 
         private
 
-        def class_lines
-          classes.map do |klass|
-            attrs = class_attributes(klass)
-            body = attrs.map { |a| "  +#{a.name}: #{a.type || 'String'}" }
-            ["class #{klass.name} {", *body, "}"].join("\n")
-          end
-        end
+        # Wrap classes/enums in their containing packages.
+        def package_lines
+          packages_by_id = packages_index
+          root_objects = (model.collections[:objects] || [])
 
-        def connector_lines
-          (model.collections[:connectors] || []).map do |conn|
-            source_obj = find_object(conn.start_object_id)
-            target_obj = find_object(conn.end_object_id)
-            next nil unless source_obj && target_obj
+          # Group classes by their package_id; emit each package.
+          grouped = root_objects.group_by(&:package_id)
+          grouped.flat_map do |pkg_id, objs|
+            next ungrouped_lines(objs) if pkg_id.nil?
 
-            label = conn.name ? " : #{conn.name}" : ""
-            %Q{#{source_obj.name} --> #{target_obj.name}#{label}}
+            pkg = packages_by_id[pkg_id]
+            pkg_name = pkg&.name || "Package#{pkg_id}"
+            inner = objs.flat_map { |o| class_block(o) }
+            next inner if inner.empty?
+
+            ["package \"#{pkg_name}\" {",
+             *inner.map { |line| "  #{line}" },
+             "}"]
           end.compact
         end
 
-        def classes
-          (model.collections[:objects] || [])
-            .select { |o| o.object_type == "Class" }
+        def ungrouped_lines(objs)
+          objs.flat_map { |o| class_block(o) }
+        end
+
+        # Emit `class X { +attr: T ... }` or `enum X { LITERAL1 ... }`.
+        def class_block(obj)
+          case obj.object_type
+          when "Class"
+            attrs = class_attributes(obj)
+            body = attrs.map { |a| "+#{a.name}: #{a.type || 'String'}" }
+            return ["class #{obj.name}"] if body.empty?
+
+            ["class #{obj.name} {", *body.map { |b| "  #{b}" }, "}"]
+          when "Enumeration"
+            literals = enum_literals(obj)
+            return ["enum #{obj.name}"] if literals.empty?
+
+            ["enum #{obj.name} {",
+             *literals.map { |l| "  #{l.name || l}" },
+             "}"]
+          when "Interface"
+            ["interface #{obj.name}"]
+          when "DataType"
+            ["abstract class #{obj.name}"]
+          else
+            ["class #{obj.name}"]
+          end
+        end
+
+        # Generalizations: `<|`-style inheritance.
+        # Associations: multiplicity + role names.
+        def connector_lines
+          (model.collections[:connectors] || []).filter_map do |conn|
+            src = find_object(conn.start_object_id)
+            tgt = find_object(conn.end_object_id)
+            next nil unless src && tgt
+
+            case conn.connector_type
+            when "Generalization"
+              "#{tgt.name} <|-- #{src.name}"
+            when "Association", "Aggregation", "Composition"
+              assoc_arrow(src, tgt, conn)
+            else
+              label = conn.name ? " : #{conn.name}" : ""
+              "#{src.name} --> #{tgt.name}#{label}"
+            end
+          end
+        end
+
+        def assoc_arrow(src, tgt, conn)
+          arrow = case conn.connector_type
+                  when "Composition" then "*--"
+                  when "Aggregation" then "o--"
+                  else "--"
+                  end
+          label = conn.name ? " : #{conn.name}" : ""
+          "#{src.name} #{arrow} #{tgt.name}#{label}"
+        end
+
+        def packages_index
+          (model.collections[:packages] || []).each_with_object({}) do |p, acc|
+            acc[p.package_id] = p
+          end
         end
 
         def class_attributes(klass)
           attrs = model.collections[:attributes] || []
-          attrs.select { |a| a.object_id == klass.object_id }
+          attrs.select { |a| a.ea_object_id == klass.ea_object_id }
+        end
+
+        def enum_literals(enum)
+          literals = model.collections[:enumeration_literals] ||
+                     model.collections[:enum_literals] || []
+          # Enumeration literals are linked to the enum via object_id.
+          literals.select { |l| l.respond_to?(:ea_object_id) && l.ea_object_id == enum.ea_object_id }
         end
 
         def find_object(object_id)
           (model.collections[:objects] || [])
-            .find { |o| o.object_id == object_id }
+            .find { |o| o.ea_object_id == object_id || o.object_id == object_id }
         end
       end
     end

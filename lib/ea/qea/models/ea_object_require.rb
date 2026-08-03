@@ -6,7 +6,7 @@ module Ea
       # Requirement trace from t_objectrequires.
       class EaObjectRequire < BaseModel
         attribute :object_require_id, :integer
-        attribute :object_id, :integer
+        attribute :ea_object_id, :integer
         attribute :requirement, :string
         attribute :requirement_type, :string
         attribute :notes, :string
@@ -21,7 +21,7 @@ module Ea
 
         COLUMN_MAP = {
           "ObjectReqID" => :object_require_id,
-          "Object_ID" => :object_id,
+          "Object_ID" => :ea_object_id,
           "ReqType" => :requirement_type
         }.freeze
 
