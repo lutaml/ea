@@ -30,6 +30,8 @@ module Ea
   autoload :Query, "ea/query"
   autoload :Ocl, "ea/ocl"
   autoload :Validation, "ea/validation"
+  autoload :XmlEscape, "ea/xml_escape"
+  autoload :GuidFormat, "ea/guid_format"
 
   class << self
     # Parse an EA file into its native representation.

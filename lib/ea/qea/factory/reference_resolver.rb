@@ -91,7 +91,7 @@ module Ea
         def normalize_guid(guid)
           return guid if guid.nil?
 
-          guid.to_s.gsub(/[{}]/, "").upcase
+          Ea::GuidFormat.strip_braces(guid).upcase
         end
       end
     end

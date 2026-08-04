@@ -517,10 +517,7 @@ module Ea
         end
 
         def escape(text)
-          text.to_s.gsub("&", "&amp;")
-              .gsub("<", "&lt;")
-              .gsub(">", "&gt;")
-              .gsub('"', "&quot;")
+          XmlEscape.call(text)
         end
       end
     end

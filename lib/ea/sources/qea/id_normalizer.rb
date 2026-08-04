@@ -17,7 +17,7 @@ module Ea
         def from_guid(ea_guid)
           return nil if ea_guid.nil? || ea_guid.empty?
 
-          ea_guid.to_s.gsub(/[{}]/, "")
+          Ea::GuidFormat.strip_braces(ea_guid)
         end
 
         # Convert a GUID to the EAID_ filename format used by EA's
@@ -26,7 +26,7 @@ module Ea
         def to_eaid(ea_guid)
           return nil if ea_guid.nil? || ea_guid.empty?
 
-          "EAID_" + ea_guid.to_s.gsub(/[{}]/, "").tr("-", "_")
+          Ea::GuidFormat.ea_guid_to_xmi_id(ea_guid, prefix: "EAID")
         end
 
         def synthetic(prefix, *parts)

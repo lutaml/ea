@@ -36,9 +36,7 @@ module Ea
       end
 
       def escape(text)
-        text.to_s.gsub("&", "&amp;")
-             .gsub("<", "&lt;")
-             .gsub(">", "&gt;")
+        XmlEscape.call(text)
       end
 
       def render_rect(p, fill, stroke)
