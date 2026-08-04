@@ -6,6 +6,7 @@ module Ea
   module Qea
     module Models
       autoload :BaseModel, "ea/qea/models/base_model"
+      autoload :ScopePredicate, "ea/qea/models/scope_predicate"
       autoload :EaAttribute, "ea/qea/models/ea_attribute"
       autoload :EaAttributeTag, "ea/qea/models/ea_attribute_tag"
       autoload :EaComplexityType, "ea/qea/models/ea_complexity_type"
