@@ -62,7 +62,7 @@ module Ea
         # Backwards-compatible API: count of marker bodies emitted.
         def count_for(connector)
           return 0 if connector.hidden
-          return 0 unless connector.waypoints&.any? { |w| w.position }
+          return 0 unless connector.waypoints&.any?(&:position)
 
           entries_for(connector).size
         end
@@ -95,32 +95,32 @@ module Ea
         SHAPE_REGISTRY = {
           diamond: {
             style_key: :diamond_filled,
-            render: ->(m, anchor, base) { m.diamond_polygon(anchor, base) },
+            render: ->(m, anchor, base) { m.diamond_polygon(anchor, base) }
           },
           triangle: {
             style_key: :triangle_open,
-            render: ->(m, anchor, base) { m.triangle_polygon(anchor, base) },
+            render: ->(m, anchor, base) { m.triangle_polygon(anchor, base) }
           },
           plus: {
             style_key: :connector_line,
-            render: ->(m, anchor, _base) { m.plus_path(anchor) },
+            render: ->(m, anchor, _base) { m.plus_path(anchor) }
           },
           arrow: {
             style_key: :connector_line,
-            render: ->(m, anchor, base) { m.arrow_path(anchor, base) },
+            render: ->(m, anchor, base) { m.arrow_path(anchor, base) }
           },
           package_anchor: {
             style_key: :connector_line,
-            render: ->(m, anchor, base) { m.package_anchor_path(anchor, base) },
-          },
+            render: ->(m, anchor, base) { m.package_anchor_path(anchor, base) }
+          }
         }.freeze
 
         # Style key → (fill, opacity) pair. The common stroke prefix
         # is shared, so only the fill and opacity vary.
         STYLE_MAP = {
           diamond_filled: { fill: "#000000", opacity: "1.00" },
-          triangle_open:  { fill: "#FFFFFF", opacity: "1.00" },
-          connector_line: { fill: "#000000", opacity: "0.00" },
+          triangle_open: { fill: "#FFFFFF", opacity: "1.00" },
+          connector_line: { fill: "#000000", opacity: "0.00" }
         }.freeze
 
         def style_for(key)

@@ -54,7 +54,7 @@ module Ea
             type: "uml:Stereotype",
             id: stereotype.name,
             name: stereotype.name,
-            owned_attribute: owned_attributes_for(stereotype),
+            owned_attribute: owned_attributes_for(stereotype)
           )
         end
 
@@ -79,9 +79,9 @@ module Ea
             name: "A_#{metaclass}_#{stereotype.name}",
             member_ends: [
               ::Xmi::Uml::MemberEnd.new(idref: "extension_#{stereotype.name}"),
-              ::Xmi::Uml::MemberEnd.new(idref: base_id),
+              ::Xmi::Uml::MemberEnd.new(idref: base_id)
             ],
-            owned_end: [build_extension_end(stereotype, member_ends)],
+            owned_end: [build_extension_end(stereotype, member_ends)]
           )
         end
 
@@ -90,7 +90,7 @@ module Ea
             type: "uml:ExtensionEnd",
             id: "extension_#{stereotype.name}",
             name: "extension_#{stereotype.name}",
-            association: member_ends,
+            association: member_ends
           )
         end
 
@@ -119,7 +119,7 @@ module Ea
             id: "#{stereotype.name}-base_#{metaclass}",
             name: "base_#{metaclass}",
             association: "#{metaclass}_#{stereotype.name}",
-            uml_type: ::Xmi::Uml::Type.new(href: "#{UML_TYPE_HREF}##{metaclass}"),
+            uml_type: ::Xmi::Uml::Type.new(href: "#{UML_TYPE_HREF}##{metaclass}")
           )
         end
 
@@ -135,7 +135,7 @@ module Ea
             type: "uml:Property",
             id: "#{stereo_name}-#{tagged_value.name}",
             name: tagged_value.name,
-            uml_type: ::Xmi::Uml::Type.new(href: "#{UML_TYPE_HREF}##{normalize_type(tagged_value.type)}"),
+            uml_type: ::Xmi::Uml::Type.new(href: "#{UML_TYPE_HREF}##{normalize_type(tagged_value.type)}")
           )
         end
 
@@ -155,7 +155,7 @@ module Ea
           "double" => "Real",
           "string" => "String",
           "enumeration" => "String",
-          "class" => "Class",
+          "class" => "Class"
         }.freeze
       end
     end
