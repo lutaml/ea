@@ -41,7 +41,7 @@ module Ea
       return nil if xmi_id.nil? || xmi_id.empty?
 
       body = xmi_id.sub(/\A(?:EAID|EAPK)_/, "")
-      "{#{body.tr('_', '-')}}"
+      "{#{body.tr("_", "-")}}"
     end
 
     # Strip braces from an EA GUID without adding prefix or

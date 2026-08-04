@@ -115,13 +115,13 @@ module Ea
         # Adding a new mapping = adding one entry, not editing a
         # case/when branch.
         UML_TYPE_FOR = {
-          "Class"         => "uml:Class",
-          "Interface"     => "uml:Interface",
-          "Enumeration"   => "uml:Enumeration",
-          "DataType"      => "uml:DataType",
+          "Class" => "uml:Class",
+          "Interface" => "uml:Interface",
+          "Enumeration" => "uml:Enumeration",
+          "DataType" => "uml:DataType",
           "PrimitiveType" => "uml:PrimitiveType",
-          "Object"        => "uml:Object",
-          "Package"       => "uml:Package",
+          "Object" => "uml:Object",
+          "Package" => "uml:Package"
         }.freeze
 
         def uml_type_for(obj)

@@ -113,4 +113,21 @@ RSpec.describe Ea::Transformers::QeaToXmi::ProfileSerializer do
       expect(Lutaml::Model::GlobalRegister.lookup(:ea_mdg_citygml)).to be_nil
     end
   end
+
+  describe "type normalization" do
+    let(:serializer) { described_class.new(registry) }
+    let(:blocks) { serializer.call }
+
+    it "maps Boolean tagged values to UML Boolean type" do
+      codelist = blocks.find { |b| b.name == "CodeList" }
+      as_dict = codelist.owned_attribute.find { |a| a.name == "asDictionary" }
+      expect(as_dict.uml_type.href).to end_with("#Boolean")
+    end
+
+    it "defaults unknown types to String" do
+      codelist = blocks.find { |b| b.name == "CodeList" }
+      encoding = codelist.owned_attribute.find { |a| a.name == "xsdEncodingRule" }
+      expect(encoding.uml_type.href).to end_with("#String")
+    end
+  end
 end

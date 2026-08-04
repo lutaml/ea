@@ -16,10 +16,10 @@ module Ea
       #   ~  package
       module VisibilitySymbol
         SYMBOLS = {
-          "public"    => "+",
-          "private"   => "-",
+          "public" => "+",
+          "private" => "-",
           "protected" => "#",
-          "package"   => "~",
+          "package" => "~"
         }.freeze
 
         # @param visibility [String, nil] EA scope string ("Public",
