@@ -81,10 +81,7 @@ module Ea
         end
 
         def escaped_content
-          content.gsub("&", "&amp;")
-                 .gsub("<", "&lt;")
-                 .gsub(">", "&gt;")
-                 .gsub("\"", "&quot;")
+          XmlEscape.call(content)
         end
       end
     end
