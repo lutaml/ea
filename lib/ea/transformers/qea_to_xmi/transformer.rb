@@ -34,6 +34,7 @@ module Ea
         MODEL_NAME = "EA_Model"
         EXPORTER   = "Enterprise Architect"
         EXPORTER_VERSION = "6.5"
+        BUILD_ID = "1624"
 
         RELATIONSHIP_AT_PACKAGE_LEVEL = {
           "Association" => :association,
@@ -84,7 +85,24 @@ module Ea
         # @return [String] XMI XML
         def serialize(with_extensions: true)
           xml = build_root.to_xml(use_prefix: true)
+          xml = normalize_namespaces(xml)
           with_extensions ? inject_extension_content(xml) : xml
+        end
+
+        # EA's reference XMI uses the 2011-07-01 XMI/UML namespace URIs;
+        # the xmi gem's Root model hard-codes 2013-10-01. Post-process
+        # the serialized XML to match EA's namespace version. This is a
+        # targeted string replacement on the xmlns declarations only,
+        # not a semantic change.
+        def normalize_namespaces(xml)
+          xml.gsub("http://www.omg.org/spec/XMI/20131001",
+                   "http://www.omg.org/spec/XMI/20110701")
+             .gsub("http://www.omg.org/spec/UML/20131001/UMLDI",
+                   "http://www.omg.org/spec/UML/20110701/UMLDI")
+             .gsub("http://www.omg.org/spec/UML/20131001/UMLDC",
+                   "http://www.omg.org/spec/UML/20110701/UMLDC")
+             .gsub("http://www.omg.org/spec/UML/20131001",
+                   "http://www.omg.org/spec/UML/20110701")
         end
 
         # Injects EA-specific extension content (elements, connectors,
@@ -125,6 +143,7 @@ module Ea
           ::Xmi::Documentation.new(
             exporter: EXPORTER,
             exporter_version: EXPORTER_VERSION,
+            exporter_id: BUILD_ID,
           )
         end
 
@@ -331,7 +350,7 @@ module Ea
             is_static: Visibility.boolean_from_flag(op.isstatic),
             is_abstract: Visibility.boolean_from_flag(op.abstract),
             is_query: Visibility.boolean_from_flag(op.pure),
-            concurrency: op.concurrency&.downcase,
+            concurrency: normalize_concurrency(op.concurrency),
             owned_parameter: operation_parameters(op),
           )
         end
@@ -468,7 +487,7 @@ module Ea
           ::Xmi::Uml::OwnedParameter.new(
             id: @context.xmi_id_for(param),
             name: param.name,
-            direction: param.kind&.downcase,
+            direction: normalize_direction(param.kind),
           )
         end
 
@@ -488,6 +507,26 @@ module Ea
 
         def class_xmi_type(obj)
           obj.interface? ? "uml:Interface" : "uml:Class"
+        end
+
+        # EA's operation concurrency defaults to "Sequential" — omit
+        # it so the xmi gem doesn't emit concurrency="sequential"
+        # (EA's reference XMI omits the default).
+        def normalize_concurrency(raw)
+          return nil if raw.nil? || raw.to_s.strip.empty?
+
+          value = raw.to_s.downcase
+          value == "sequential" ? nil : value
+        end
+
+        # UML parameter direction defaults to "in" — omit it so the
+        # xmi gem doesn't emit direction="in" (EA's reference XMI
+        # omits the default).
+        def normalize_direction(raw)
+          return nil if raw.nil? || raw.to_s.strip.empty?
+
+          value = raw.to_s.downcase
+          value == "in" ? nil : value
         end
 
         def inheritance_connectors(obj, type)
@@ -553,7 +592,7 @@ module Ea
         end
 
         def containment_for(conn, side)
-          side == :source ? conn.sourcecontainment : conn.destcontainment
+          side == :source ? conn.sourceisaggregate : conn.destisaggregate
         end
 
         # EA's t_connector does not expose per-end visibility (the

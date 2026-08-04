@@ -39,13 +39,17 @@ module Ea
         module_function
 
         # @param raw [String, Integer, nil]
-        # @return [String, nil] UML visibility token, or nil if EA's
-        #   scope field is blank / unrecognised.
+        # @return [String, nil] UML visibility token. Returns nil for
+        #   blank/unrecognised values AND for the UML default ("public")
+        #   so the xmi gem omits the attribute — matching EA's output,
+        #   which doesn't emit visibility="public".
         def from_scope(raw)
           return nil if raw.nil? || raw.to_s.strip.empty?
 
-          key = raw.to_i
-          SCOPE_MAP[key]
+          value = SCOPE_MAP[raw.to_i]
+          return nil if value == "public"
+
+          value
         end
 
         # @param raw [String, Integer, nil]
@@ -59,11 +63,13 @@ module Ea
         end
 
         # @param raw [String, Integer, nil] EA's abstract flag ("1"/"0")
-        # @return [Boolean, nil] true / false, or nil if unspecified.
-        #   Returns actual Ruby booleans (not strings) — the xmi gem's
-        #   `is_*` attributes are typed as `:boolean`.
+        # @return [Boolean, nil] true when EA marks the element abstract,
+        #   nil when blank OR "0" (false). Returning nil for false makes
+        #   the xmi gem omit isAbstract="false" — matching EA's output,
+        #   which doesn't emit the default.
         def boolean_from_flag(raw)
           return nil if raw.nil? || raw.to_s.strip.empty?
+          return nil if raw.to_s == "0"
 
           raw.to_s == "1"
         end
