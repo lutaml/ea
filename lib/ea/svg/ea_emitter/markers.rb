@@ -85,15 +85,51 @@ module Ea
           end
         end
 
+        # OCP registries for marker shapes. Adding a new marker shape
+        # = adding one entry to SHAPE_REGISTRY, not editing 3 case/when
+        # branches. Each entry carries the style_key and a render
+        # lambda that knows how to draw the shape.
+        #
+        # Style keys (:diamond_filled, :triangle_open, :connector_line)
+        # map to CSS strings via STYLE_MAP below.
+        SHAPE_REGISTRY = {
+          diamond: {
+            style_key: :diamond_filled,
+            render: ->(m, anchor, base) { m.diamond_polygon(anchor, base) },
+          },
+          triangle: {
+            style_key: :triangle_open,
+            render: ->(m, anchor, base) { m.triangle_polygon(anchor, base) },
+          },
+          plus: {
+            style_key: :connector_line,
+            render: ->(m, anchor, _base) { m.plus_path(anchor) },
+          },
+          arrow: {
+            style_key: :connector_line,
+            render: ->(m, anchor, base) { m.arrow_path(anchor, base) },
+          },
+          package_anchor: {
+            style_key: :connector_line,
+            render: ->(m, anchor, base) { m.package_anchor_path(anchor, base) },
+          },
+        }.freeze
+
+        # Style key → (fill, opacity) pair. The common stroke prefix
+        # is shared, so only the fill and opacity vary.
+        STYLE_MAP = {
+          diamond_filled: { fill: "#000000", opacity: "1.00" },
+          triangle_open:  { fill: "#FFFFFF", opacity: "1.00" },
+          connector_line: { fill: "#000000", opacity: "0.00" },
+        }.freeze
+
         def style_for(key)
-          case key
-          when :diamond_filled
-            "stroke-width:#{stroke_width};stroke-linecap:round;stroke-linejoin:bevel; fill:#000000;fill-opacity:1.00; stroke:#000000; stroke-opacity:1.00"
-          when :triangle_open
-            "stroke-width:#{stroke_width};stroke-linecap:round;stroke-linejoin:bevel; fill:#FFFFFF;fill-opacity:1.00; stroke:#000000; stroke-opacity:1.00"
-          when :connector_line
-            "stroke-width:#{stroke_width};stroke-linecap:round;stroke-linejoin:bevel; fill:#000000;fill-opacity:0.00; stroke:#000000; stroke-opacity:1.00"
-          end
+          spec = STYLE_MAP[key]
+          return nil unless spec
+
+          "stroke-width:#{stroke_width};stroke-linecap:round;stroke-linejoin:bevel; " \
+            "fill:#{spec[:fill]};fill-opacity:#{spec[:opacity]}; " \
+            "stroke:#000000; stroke-opacity:1.00"
         end
 
         def visible_connectors
@@ -210,13 +246,7 @@ module Ea
         end
 
         def style_key_for(spec)
-          case spec.shape
-          when :diamond  then :diamond_filled
-          when :triangle then :triangle_open
-          when :plus     then :connector_line # shares style with line <g>
-          when :arrow    then :connector_line # share with line <g>
-          when :package_anchor then :connector_line
-          end
+          SHAPE_REGISTRY.dig(spec.shape, :style_key)
         end
 
         # Rounded [x, y] of the marker's tip (anchor) in canvas
@@ -227,13 +257,10 @@ module Ea
         end
 
         def render_shape(spec)
-          case spec.shape
-          when :diamond  then diamond_polygon(spec.anchor, spec.base)
-          when :triangle then triangle_polygon(spec.anchor, spec.base)
-          when :plus     then plus_path(spec.anchor)
-          when :arrow    then arrow_path(spec.anchor, spec.base)
-          when :package_anchor then package_anchor_path(spec.anchor, spec.base)
-          end
+          entry = SHAPE_REGISTRY[spec.shape]
+          return nil unless entry
+
+          entry[:render].call(self, spec.anchor, spec.base)
         end
 
         # Plus marker: two crossed line segments at the anchor.
@@ -384,6 +411,8 @@ module Ea
 
           [dx / len, dy / len]
         end
+        public :diamond_polygon, :triangle_polygon, :plus_path,
+               :arrow_path, :package_anchor_path
 
         def translate_point(p)
           return p unless @canvas
