@@ -28,10 +28,27 @@ module Ea
 
       # Register an MDG Document. Subsequent registrations of the
       # same technology_name replace the prior one (last-wins).
+      #
+      # Also registers the technology with
+      # `Lutaml::Model::GlobalRegister` so it can be looked up via
+      # the framework-level register API. This keeps MDG swapping
+      # OCP-compliant: callers can query either Ea::Mdg::Registry
+      # or Lutaml::Model::GlobalRegister to find loaded MDGs.
       def register(document)
-        @documents.reject! { |d| d.technology_name == document.technology_name }
+        technology = document.technology_name
+        @documents.reject! { |d| d.technology_name == technology }
         @documents << document
+        register_with_lutaml(technology, document)
       end
+
+      # Remove an MDG Document by technology name. Also unregisters
+      # from Lutaml::Model::GlobalRegister.
+      def unregister(technology_name)
+        @documents.reject! { |d| d.technology_name == technology_name }
+        lutaml_register_id = lutaml_id_for(technology_name)
+        Lutaml::Model::GlobalRegister.remove(lutaml_register_id)
+      end
+      alias remove unregister
 
       def each(&block)
         @documents.each(&block)
@@ -92,6 +109,23 @@ module Ea
         end
 
         result
+      end
+
+      private
+
+      # Registers the MDG with Lutaml::Model::GlobalRegister under a
+      # stable, namespaced id. The register holds no model classes
+      # directly (MDG stereotypes are domain concepts, not lutaml-model
+      # types), but the registration makes the MDG discoverable via
+      # the framework's standard register API.
+      def register_with_lutaml(technology_name, _document)
+        lutaml_register_id = lutaml_id_for(technology_name)
+        register = Lutaml::Model::Register.new(lutaml_register_id)
+        Lutaml::Model::GlobalRegister.register(register)
+      end
+
+      def lutaml_id_for(technology_name)
+        :"ea_mdg_#{technology_name.to_s.downcase.gsub(/[^a-z0-9]/, "_")}"
       end
     end
   end
