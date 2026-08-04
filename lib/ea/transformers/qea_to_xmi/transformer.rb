@@ -58,8 +58,9 @@ module Ea
           instance:    ->(obj) { build_instance(obj) },
         }.freeze
 
-        def initialize(database)
+        def initialize(database, mdg_registry: nil)
           @database = database
+          @mdg_registry = mdg_registry
           @context  = Context.new(database: database)
         end
 
@@ -131,7 +132,7 @@ module Ea
           ::Xmi::Uml::UmlModel.new(
             type: "uml:Model",
             name: MODEL_NAME,
-            packaged_element: root_packages.map { |pkg| build_package(pkg) },
+            packaged_element: root_packages.map { |pkg| build_package(pkg) } + profile_elements,
           )
         end
 
@@ -143,6 +144,13 @@ module Ea
           @database.packages
                   .select(&:root?)
                   .sort_by { |p| [p.tpos || 0, p.name.to_s] }
+        end
+
+        # MDG stereotype definitions to include in the model tree.
+        # Empty when no MDG registry is wired. Each registered MDG
+        # contributes its stereotypes and extension relationships.
+        def profile_elements
+          ProfileSerializer.new(@mdg_registry).call
         end
 
         # ---- Package tree ------------------------------------------------
