@@ -210,10 +210,9 @@ module Ea
         end
 
         def tagged_values_for(element_guid)
-          tagged = @database.collections[:tagged_values] || []
           return [] unless element_guid
 
-          tagged.select { |tv| tv.element_id == element_guid }
+          @database.tagged_values_for_element(element_guid)
         end
 
         def element_ref_for_tag(tv)
@@ -388,8 +387,8 @@ module Ea
           return nil unless conn.ea_guid
 
           connector_id = @context.xmi_id_for(conn)
-          source_obj = @database.collections[:objects]&.find { |o| o.ea_object_id == conn.start_object_id }
-          target_obj = @database.collections[:objects]&.find { |o| o.ea_object_id == conn.end_object_id }
+          source_obj = @database.find_object(conn.start_object_id)
+          target_obj = @database.find_object(conn.end_object_id)
           return nil unless source_obj && target_obj
 
           name_attr = conn.name ? %( name="#{escape(conn.name)}") : ""
@@ -454,7 +453,7 @@ module Ea
 
           diagram_id = @context.xmi_id_for(dgm)
           pkg_guid = package_guid_for(dgm)
-          pkg_ref = pkg_guid ? "EAPK_#{strip_guid(pkg_guid)}" : ""
+          pkg_ref = pkg_guid ? GuidFormat.ea_guid_to_xmi_id(pkg_guid, prefix: "EAPK") : ""
           elements_xml = diagram_elements_xml(dgm)
           lines = [
             "\t\t<diagram xmi:id=\"#{diagram_id}\">",
@@ -479,7 +478,7 @@ module Ea
         end
 
         def diagram_element_xml(dl)
-          obj = @database.collections[:objects]&.find { |o| o.ea_object_id == dl.instance_id }
+          obj = @database.find_object(dl.instance_id)
           return nil unless obj
 
           subject = @context.xmi_id_for(obj)
@@ -494,30 +493,20 @@ module Ea
         def parent_package_ref(pkg)
           return nil unless pkg.parent_id
 
-          parent = (@database.collections[:packages] || []).find do |p|
-            p.package_id == pkg.parent_id
-          end
-          parent ? "EAPK_#{strip_guid(parent.ea_guid)}" : nil
+          parent = @database.find_package(pkg.parent_id)
+          parent ? GuidFormat.ea_guid_to_xmi_id(parent.ea_guid, prefix: "EAPK") : nil
         end
 
         def owner_package_ref(obj)
           return nil unless obj.package_id
 
-          pkg = (@database.collections[:packages] || []).find do |p|
-            p.package_id == obj.package_id
-          end
-          pkg ? "EAPK_#{strip_guid(pkg.ea_guid)}" : nil
+          pkg = @database.find_package(obj.package_id)
+          pkg ? GuidFormat.ea_guid_to_xmi_id(pkg.ea_guid, prefix: "EAPK") : nil
         end
 
         def package_guid_for(dgm)
-          pkg = (@database.collections[:packages] || []).find { |p| p.package_id == dgm.package_id }
+          pkg = @database.find_package(dgm.package_id)
           pkg&.ea_guid || dgm.ea_guid
-        end
-
-        def strip_guid(guid)
-          return "" unless guid
-
-          guid.to_s.gsub(/[{}]/, "").tr("-", "_")
         end
 
         # Returns the documentation string for a record. Package notes

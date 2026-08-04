@@ -106,23 +106,7 @@ module Ea
           styleex&.include?("Reception=1")
         end
 
-        # Check if operation is public
-        # @return [Boolean]
-        def public?
-          scope&.downcase == "public"
-        end
-
-        # Check if operation is private
-        # @return [Boolean]
-        def private?
-          scope&.downcase == "private"
-        end
-
-        # Check if operation is protected
-        # @return [Boolean]
-        def protected?
-          scope&.downcase == "protected"
-        end
+        include ScopePredicate
 
         # @return [Integer] pos for operation ordering within parent
         def sort_position

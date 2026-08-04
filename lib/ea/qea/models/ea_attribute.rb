@@ -81,23 +81,7 @@ module Ea
           const == 1
         end
 
-        # Check if attribute is public
-        # @return [Boolean]
-        def public?
-          scope&.downcase == "public"
-        end
-
-        # Check if attribute is private
-        # @return [Boolean]
-        def private?
-          scope&.downcase == "private"
-        end
-
-        # Check if attribute is protected
-        # @return [Boolean]
-        def protected?
-          scope&.downcase == "protected"
-        end
+        include ScopePredicate
 
         # @return [Integer] pos for attribute ordering within parent
         def sort_position
