@@ -5,8 +5,8 @@ require "ea/transformers/qea_to_xmi"
 
 RSpec.describe Ea::Transformers::QeaToXmi::Visibility do
   describe ".from_scope" do
-    it "maps 0 to 'public'" do
-      expect(described_class.from_scope(0)).to eq("public")
+    it "returns nil for 0 (public is UML default, omitted to match EA)" do
+      expect(described_class.from_scope(0)).to be_nil
     end
 
     it "maps 1 to 'private'" do
@@ -73,12 +73,12 @@ RSpec.describe Ea::Transformers::QeaToXmi::Visibility do
       expect(described_class.boolean_from_flag(1)).to be(true)
     end
 
-    it "maps '0' to false" do
-      expect(described_class.boolean_from_flag("0")).to be(false)
+    it "returns nil for '0' (false is UML default, omitted to match EA)" do
+      expect(described_class.boolean_from_flag("0")).to be_nil
     end
 
-    it "maps 0 (integer) to false" do
-      expect(described_class.boolean_from_flag(0)).to be(false)
+    it "returns nil for 0 (integer, false is UML default)" do
+      expect(described_class.boolean_from_flag(0)).to be_nil
     end
 
     it "returns nil for nil" do

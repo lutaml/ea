@@ -17,12 +17,13 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
   end
 
   describe "document framing" do
-    it "emits an xmi:XMI root with the Sparx namespace declarations" do
+    it "emits an xmi:XMI root with EA's Sparx namespace declarations" do
       root = parsed.root
       expect(root.name).to eq("XMI")
       expect(root.namespace.prefix).to eq("xmi")
-      expect(root.namespaces["xmlns:xmi"]).to eq(::Xmi::Namespace::Omg::Xmi.uri)
-      expect(root.namespaces["xmlns:uml"]).to eq(::Xmi::Namespace::Omg::Uml.uri)
+      # EA uses the 2011-07-01 XMI/UML namespace URIs (not 2013-10-01).
+      expect(root.namespaces["xmlns:xmi"]).to eq("http://www.omg.org/spec/XMI/20110701")
+      expect(root.namespaces["xmlns:uml"]).to eq("http://www.omg.org/spec/UML/20110701")
     end
 
     it "includes the xmi:Documentation block with EA exporter info" do
@@ -217,16 +218,22 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
     # (refactor/owned-end-schema-gap) closed TODO.next/26 fully and
     # wired up the Phase 2 attribute gaps from TODO.next/21 §2.
 
-    it "emits visibility on Property (from t_attribute.scope)" do
-      expect(parsed.xpath("//ownedAttribute[@visibility]")).not_to be_empty
+    it "omits visibility on Property when public (UML default, matches EA)" do
+      # EA omits visibility="public" — only non-public visibility is emitted.
+      # Verify the attribute is NOT always present by checking that at least
+      # some ownedAttribute elements exist without visibility.
+      attrs_without_vis = parsed.xpath("//ownedAttribute[not(@visibility)]")
+      expect(attrs_without_vis).not_to be_empty
     end
 
-    it "emits visibility on Operation (from t_operation.scope)" do
-      expect(parsed.xpath("//ownedOperation[@visibility]")).not_to be_empty
+    it "emits visibility on Operation only when non-public" do
+      ops_without_vis = parsed.xpath("//ownedOperation[not(@visibility)]")
+      expect(ops_without_vis).not_to be_empty
     end
 
-    it "emits isAbstract on packagedElement (from t_object.abstract)" do
-      expect(parsed.xpath("//packagedElement[@isAbstract]")).not_to be_empty
+    it "omits isAbstract when false (UML default, matches EA)" do
+      elements_without_abs = parsed.xpath("//packagedElement[not(@isAbstract)]")
+      expect(elements_without_abs).not_to be_empty
     end
 
     it "emits upperValue/lowerValue on ownedEnd (TODO 26 closed)" do
@@ -270,10 +277,11 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
       expect(parsed.xpath("//packagedElement[@classifier]")).not_to be_empty
     end
 
-    it "emits aggregation on ownedEnd only when EA indicates composite/shared" do
-      # basic.qea has no composite/shared containment, so the count
-      # is 0. Flip to positive when a fixture carries one.
-      expect(parsed.xpath("//ownedEnd[@aggregation]")).to be_empty
+    it "emits aggregation on ownedEnd when EA indicates composite/shared" do
+      # basic.qea has aggregation/composition connectors — the
+      # aggregation attribute should be emitted from the
+      # sourceisaggregate/destisaggregate fields.
+      expect(parsed.xpath("//ownedEnd[@aggregation]")).not_to be_empty
     end
   end
 
