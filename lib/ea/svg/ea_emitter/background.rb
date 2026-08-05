@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# frozen_string_string: true
 
 module Ea
   module Svg

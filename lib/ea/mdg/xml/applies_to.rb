@@ -1,4 +1,4 @@
-# frozen_string: true
+# frozen_string_literal: true
 
 require "lutaml/model"
 

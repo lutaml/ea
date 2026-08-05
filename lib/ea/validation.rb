@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# frozen_string: true
-
 module Ea
   # Top-level validation namespace. Hosts cross-cutting validators
   # that span multiple subsystems (QEA + XMI, lint rules, OCL).
