@@ -194,17 +194,27 @@ module Ea
         #   Note           — diagram note. Same situation as Text: rendering
         #                    hint, not a model element. Dropped.
         #
+        TRANSFORMER_TYPES = {
+          "Enumeration" => :enumeration,
+          "DataType" => :data_type,
+          "PrimitiveType" => :data_type,
+          "Class" => :class,
+          "Interface" => :class,
+          "Signal" => :signal,
+          "Object" => :instance,
+        }.freeze
+
         # @return [Symbol, nil] Registry key or nil if not a UML model element
         def transformer_type
-          if enumeration? || stereotype_is?("enumeration")
-            :enumeration
-          elsif data_type?
-            :data_type
-          elsif uml_class? || interface?
-            :class
-          elsif instance?
-            :instance
-          end
+          return :enumeration if stereotype_is?("enumeration")
+
+          TRANSFORMER_TYPES[object_type]
+        end
+
+        # Check if object is a Signal
+        # @return [Boolean]
+        def signal?
+          object_type == "Signal"
         end
 
         def stereotype_is?(expected)

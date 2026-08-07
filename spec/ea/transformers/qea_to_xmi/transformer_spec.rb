@@ -60,9 +60,18 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
       expect(count_xmi_type("uml:Package")).to eq(expected)
     end
 
-    it "emits one Class packagedElement per Class t_object" do
+    it "emits one Class node per Class t_object" do
+      # Counts every uml:Class node — packaged AND nested (EA nests
+      # child classes as nestedClassifier).
       expected = database.objects.count { |o| o.object_type == "Class" }
       expect(count_xmi_type("uml:Class")).to eq(expected)
+    end
+
+    it "nests child classes as nestedClassifier (EA convention)" do
+      # basic.qea: 35 Class rows have a nonzero parentid; EA's reference
+      # packages the other 30 and nests these 35.
+      expect(parsed.xpath(%(//packagedElement[@xmi:type="uml:Class"])).size).to eq(30)
+      expect(parsed.xpath(%(//nestedClassifier[@xmi:type="uml:Class"])).size).to eq(35)
     end
 
     it "emits one Enumeration per Enumeration t_object" do
@@ -175,7 +184,9 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
     # visible in the spec.
     def count_xmi_type_recursive(model, type)
       count = model.is_a?(::Xmi::Uml::PackagedElement) && model.type == type ? 1 : 0
-      children = if model.is_a?(::Xmi::Uml::PackagedElement) || model.is_a?(::Xmi::Uml::UmlModel)
+      children = if model.is_a?(::Xmi::Uml::PackagedElement)
+                   model.packaged_element + model.nested_classifier
+                 elsif model.is_a?(::Xmi::Uml::UmlModel)
                    model.packaged_element
                  else
                    []
@@ -220,10 +231,13 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
 
     it "omits visibility on Property when public (UML default, matches EA)" do
       # EA omits visibility="public" — only non-public visibility is emitted.
-      # Verify the attribute is NOT always present by checking that at least
-      # some ownedAttribute elements exist without visibility.
-      attrs_without_vis = parsed.xpath("//ownedAttribute[not(@visibility)]")
-      expect(attrs_without_vis).not_to be_empty
+      expect(parsed.xpath("//ownedAttribute[@visibility='public']")).to be_empty
+    end
+
+    it "emits visibility=private for Private-scoped attributes" do
+      # Every t_attribute row in basic.qea has Scope="Private"; EA's
+      # reference marks all 102 as visibility="private".
+      expect(parsed.xpath("//ownedAttribute[@visibility='private']").size).to eq(102)
     end
 
     it "emits visibility on Operation only when non-public" do
@@ -247,9 +261,16 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
       expect(parsed.xpath("//slot").size).to eq(22)
     end
 
-    it "emits each slot with an OpaqueExpression body (Sparx convention)" do
-      bodies = parsed.xpath("//slot/value[@type='uml:OpaqueExpression']/@body").map(&:value)
-      expect(bodies).to all(match(/\A=./))
+    it "emits each slot body with the RunState operator prepended verbatim" do
+      # Exact body set copied from examples/exports/basic/model.xml —
+      # including the one <= operator EA emits verbatim. (The previous
+      # form of this example matched @type instead of @xmi:type and
+      # passed vacuously over an empty node set.)
+      bodies = parsed.xpath("//slot/value[@xmi:type='uml:OpaqueExpression']/@body").map(&:value)
+      expect(bodies.tally).to eq(
+        "=Value One" => 5, "=valueOne" => 5, "=valueTwo" => 4,
+        "=valueThree" => 4, "=Value Two" => 3, "<=valueTwo" => 1
+      )
     end
 
     it "emits definingFeature on slots whose instance has a classifier" do
@@ -296,6 +317,142 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
       expect { described_class.new(database).serialize(with_extensions: false) }.not_to change {
         [database.packages.size, database.objects.size, database.connectors.size]
       }
+    end
+  end
+
+  describe "synthesized ID parity with EA" do
+    # Literal IDs copied from examples/exports/basic/model.xml. These
+    # protect the transformer call sites: owner, prefix, and allocation
+    # order (lower before upper, destination end before source end,
+    # global LI counter in document walk order).
+    it "gives the first association's ends the LI000001-4 ladder" do
+      (1..4).each do |n|
+        expect(xml).to include(%(xmi:id="EAID_LI00000#{n}__EEB1_4de7_98F5_670D6EE4A52B"))
+      end
+    end
+
+    it "derives attribute LI tails from the attribute's own GUID" do
+      expect(xml).to include(%(xmi:id="EAID_LI000009_CA01_4c63_8311_0EC8F355E932"))
+    end
+
+    it "numbers slots and values from zero per instance" do
+      expect(xml).to include(%(xmi:id="EAID_SL000000_9F66_4e33_8E49_469BD346DAA1"))
+      expect(xml).to include(%(xmi:id="EAID_OE000000_9F66_4e33_8E49_469BD346DAA1"))
+    end
+
+    it "numbers every return parameter RT000000 scoped to its operation" do
+      expect(xml).to include(%(xmi:id="EAID_RT000000_3EE1_4598_9615_F2068D192111"))
+    end
+  end
+
+  describe "classifier type resolution" do
+    it "resolves integer classifiers to the object's xmi id, never EAID_0" do
+      test_db = Ea::Qea.load("examples/qea/test.qea")
+      begin
+        test_xml = Ea::Transformers.qea_to_xmi(test_db)
+        expect(test_xml).not_to include(%(idref="EAID_0"))
+      ensure
+        test_db.close_connection
+      end
+    end
+
+    it "emits PrimitiveType objects (simple.qea AcmeUmlPrimitive)" do
+      simple_db = Ea::Qea.load("examples/qea/simple.qea")
+      begin
+        simple_xml = Ea::Transformers.qea_to_xmi(simple_db)
+        expect(simple_xml).to include(%(xmi:type="uml:PrimitiveType"))
+        expect(simple_xml).to include("AcmeUmlPrimitive")
+      ensure
+        simple_db.close_connection
+      end
+    end
+  end
+
+  describe "package dependencies" do
+    # Literal values from examples/exports/basic/model.xml: dependencies
+    # between Package objects resolve endpoints to EAPK_ package refs
+    # via the object's PDATA1 → t_package link.
+    it "emits the three package-level uml:Dependency elements" do
+      deps = parsed.xpath(%(//packagedElement[@xmi:type="uml:Dependency"]))
+      expect(deps.size).to eq(3)
+      dep = deps.find { |d| d["xmi:id"] == "EAID_3DC3F2A8_5EA3_4feb_B6D3_397DA58BBEA3" }
+      expect(dep["client"]).to eq("EAPK_F5BFAAC7_BB6F_4f69_8C78_3775A0C86CDB")
+      expect(dep["supplier"]).to eq("EAPK_45D98ADF_46E0_4bf6_B94F_8E504ABD1AB7")
+    end
+  end
+
+  describe "signals and primitive type references" do
+    # Literal expectations copied from examples/exports/basic/model.xml.
+    it "emits the three Signal objects as uml:Signal packagedElements" do
+      expect(parsed.xpath(%(//packagedElement[@xmi:type="uml:Signal"])).size).to eq(3)
+      expect(xml).to include(%(xmi:id="EAID_A53E4556_FAEE_458d_B9B2_93B41FA424AC"))
+    end
+
+    it "references int-typed attributes via the OMG PrimitiveTypes href" do
+      hrefs = parsed.xpath(%(//ownedAttribute/type[@href]))
+      expect(hrefs.size).to eq(90)
+      expect(hrefs.first["href"])
+        .to eq("http://www.omg.org/spec/UML/20110701/PrimitiveTypes.xmi#Integer")
+    end
+
+    it "types return parameters with their EAnone reference" do
+      returns = parsed.xpath(%(//ownedParameter[@direction="return"]))
+      expect(returns.size).to eq(12)
+      expect(returns.map { |p| p["type"] }.uniq).to eq(["EAnone_void"])
+    end
+  end
+
+  describe "interface realizations" do
+    let(:package) do
+      Ea::Qea::Models::EaPackage.new(
+        package_id: 1, name: "P", parent_id: 0,
+        ea_guid: "{AAAAAAAA-1111-2222-3333-444444444444}"
+      )
+    end
+
+    let(:client_class) do
+      Ea::Qea::Models::EaObject.new(
+        ea_object_id: 10, object_type: "Class", name: "C", package_id: 1,
+        ea_guid: "{BBBBBBBB-1111-2222-3333-444444444444}"
+      )
+    end
+
+    let(:supplier_interface) do
+      Ea::Qea::Models::EaObject.new(
+        ea_object_id: 11, object_type: "Interface", name: "I", package_id: 1,
+        ea_guid: "{CCCCCCCC-1111-2222-3333-444444444444}"
+      )
+    end
+
+    def realization_database(connector_type:, end_object_id: 11)
+      connector = Ea::Qea::Models::EaConnector.new(
+        connector_id: 5, connector_type: connector_type,
+        start_object_id: 10, end_object_id: end_object_id,
+        ea_guid: "{DDDDDDDD-1111-2222-3333-444444444444}"
+      )
+      build_test_database(
+        packages: [package],
+        objects: [client_class, supplier_interface],
+        connectors: [connector]
+      )
+    end
+
+    it "serializes a Realization connector as interfaceRealization" do
+      db = realization_database(connector_type: "Realization")
+      xml = described_class.new(db).serialize(with_extensions: false)
+      expect(xml).to include("<interfaceRealization")
+    end
+
+    it "serializes the UK-spelled Realisation the same way" do
+      db = realization_database(connector_type: "Realisation")
+      xml = described_class.new(db).serialize(with_extensions: false)
+      expect(xml).to include("<interfaceRealization")
+    end
+
+    it "skips the realization when the supplier object is missing" do
+      db = realization_database(connector_type: "Realization", end_object_id: 999)
+      xml = described_class.new(db).serialize(with_extensions: false)
+      expect(xml).not_to include("<interfaceRealization")
     end
   end
 end

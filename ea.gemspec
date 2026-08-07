@@ -36,7 +36,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "lutaml-path"
   spec.add_dependency "sqlite3"
   spec.add_dependency "rubyzip"
-  spec.add_dependency "xmi", "~> 0.6", ">= 0.6.0"
+  spec.add_dependency "xmi", "~> 0.7", ">= 0.7.0"
   spec.add_dependency "nokogiri", "~> 1.18"
   spec.add_dependency "liquid"
   spec.add_dependency "thor", "~> 1.4"

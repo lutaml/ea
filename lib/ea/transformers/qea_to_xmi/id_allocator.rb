@@ -4,87 +4,88 @@ module Ea
   module Transformers
     module QeaToXmi
       # Allocates synthetic xmi:id values for elements that don't have a
-      # natural GUID-based one — e.g. literal `<lowerValue>` nodes, or
-      # `<ownedComment>` bodies synthesized from EA's Note objects.
+      # natural GUID-based one — literal `<lowerValue>`/`<upperValue>`
+      # bounds, instance slots and their values, return parameters.
       #
-      # Sparx's EAID format reserves prefixes like `LI` (LiteralInt),
-      # `SL` (Slot), `NL` (NameLabel), `DB` (DiagramBounds), `OE` (OpaqueExpr),
-      # `RT` (Return parameter) for these synthesized identifiers.
+      # EA's scheme, derived from examples/exports/*/model.xml:
       #
-      # Output shape: `EAID_<PREFIX><NNNNNN><GUID_TAIL>` where:
+      #   EAID_<PREFIX><NNNNNN><SEP><TAIL27>
       #
-      # - `EAID_` matches the prefix used by all other Sparx XMI element IDs.
-      # - `<PREFIX>` is a Sparx-reserved literal prefix (LI, SL, OE, ...).
-      # - `<NNNNNN>` is a 6-digit zero-padded counter, scoped to the
-      #   IdAllocator instance (one per `Transformer#serialize` call).
-      # - `<GUID_TAIL>` is the parent element's EA GUID normalised to
-      #   Sparx's wire form. The leading underscore from the opening
-      #   brace of `{GUID-...}` is preserved so the output matches
-      #   real Sparx XMI byte-for-byte (e.g. `EAID_LI000001__EEB1_...`).
-      #   When `parent_guid` is nil, no tail is emitted.
+      # - `<PREFIX>` is a Sparx-reserved literal prefix (LI, SL, OE, RT).
+      # - `<NNNNNN>` is a 6-digit zero-padded counter. LI counts GLOBALLY
+      #   from 1 in allocation order (lower before upper, destination end
+      #   before source end, document walk order across owners). SL, OE
+      #   and RT count from 0 PER OWNING ELEMENT (slots/values per
+      #   InstanceSpecification, return parameters per operation).
+      # - `<TAIL27>` is the owner ID's last 27 characters (the EA GUID
+      #   minus its first segment).
+      # - `<SEP>` is as many underscores as keep the synthesized ID the
+      #   same total width as the owner ID (one for 41-char EAID_ owners,
+      #   two for 42-char src/dst association-end owners).
       #
-      # The allocator is memoised by `seed`: same seed returns the same
-      # allocated ID. Different seeds get different counters.
+      # The allocator memoizes by [owner_id, prefix, seed]: the same
+      # triple always returns the same ID without advancing any counter.
+      #
+      # @api private — internal to the QeaToXmi transformer; its
+      # signature follows the transformer's needs, not semver.
       class IdAllocator
         # Well-known prefixes Sparx uses for synthesized IDs.
         LITERAL_INTEGER   = "LI"
         OPAQUE_EXPRESSION = "OE"
         SLOT              = "SL"
-        NAME_LABEL        = "NL"
-        DIAGRAM_BOUNDS    = "DB"
         RETURN_PARAMETER  = "RT"
 
-        # Leading-underscore-preserving normalisation: `{AB-CD}` → `_AB_CD`.
-        # Matches the wire form Sparx emits for parent-guid-suffixed IDs.
-        GUID_BRACE_OR_DASH = /[-{}]/
+        # Prefixes whose counter runs across the whole document, starting
+        # at 1. All other prefixes restart at 0 per owner.
+        GLOBAL_PREFIXES = [LITERAL_INTEGER].freeze
+
+        TAIL_LENGTH = 27
+        # "EAID_" plus the 8-character prefix+counter token.
+        HEAD_LENGTH = 13
 
         def initialize
-          @counter = 0
+          @global_counters = Hash.new(0)
+          @owner_counters = Hash.new(0)
           @assigned = {}
         end
 
-        # @param prefix [String] one of LITERAL_INTEGER, OPAQUE_EXPRESSION, ...
-        # @param seed [String, nil] stable seed for memoization (e.g. the
-        #   source record's object_id). Same seed returns same allocated id.
-        # @param parent_guid [String, nil] the owning element's EA GUID
-        #   (e.g. `{EEB1-...}`). When provided, the synthesised ID carries
-        #   the parent GUID tail so it is traceable and round-trip-safe.
+        # @param prefix [String] LITERAL_INTEGER, SLOT, OPAQUE_EXPRESSION
+        #   or RETURN_PARAMETER
+        # @param owner_id [String] the owning element's full xmi:id — its
+        #   last 27 characters become the tail and its width sets the
+        #   separator
+        # @param seed [String] stable memoization key within the owner
         # @return [String] e.g. "EAID_LI000001__EEB1_4de7_98F5_670D6EE4A52B"
-        def allocate(prefix:, seed: nil, parent_guid: nil)
-          return @assigned[seed] if seed && @assigned.key?(seed)
+        def allocate(prefix:, owner_id:, seed:)
+          key = [owner_id, prefix, seed]
+          return @assigned[key] if @assigned.key?(key)
 
-          @counter += 1
-          id = compose_id(prefix: prefix, n: @counter, parent_guid: parent_guid)
-          @assigned[seed] = id if seed
-          id
+          @assigned[key] = compose_id(prefix, next_counter(prefix, owner_id), owner_id)
         end
 
         private
 
-        def compose_id(prefix:, n:, parent_guid:)
-          tail = guid_tail(parent_guid)
-          if tail
-            # The format is `EAID_LI<NN>_<guid_tail>` where guid_tail
-            # preserves its leading underscore. Together with the
-            # separator `_` that yields the double-underscore form
-            # Sparx emits (`EAID_LI000001__EEB1_...`).
-            format("EAID_%<prefix>s%<n>06d_%<tail>s", prefix: prefix, n: n, tail: tail)
+        def next_counter(prefix, owner_id)
+          if GLOBAL_PREFIXES.include?(prefix)
+            @global_counters[prefix] += 1
           else
-            format("EAID_%<prefix>s%<n>06d", prefix: prefix, n: n)
+            n = @owner_counters[[prefix, owner_id]]
+            @owner_counters[[prefix, owner_id]] = n + 1
+            n
           end
         end
 
-        # Sparx preserves the leading underscore that comes from the
-        # opening brace of the EA GUID. Strip the closing-brace trailing
-        # underscore only.
-        #
-        # `{EEB1-4de7-98F5-670D6EE4A52B}` → `_EEB1_4de7_98F5_670D6EE4A52B`
-        def guid_tail(parent_guid)
-          return nil if parent_guid.nil? || parent_guid.empty?
+        def compose_id(prefix, counter, owner_id)
+          # QEA guid columns are nullable — an owner with no id (or one
+          # too short to carry a 27-char tail) gets a tailless,
+          # counter-only identifier.
+          return format("EAID_%<prefix>s%<n>06d", prefix: prefix, n: counter) if
+            owner_id.to_s.length < TAIL_LENGTH + HEAD_LENGTH
 
-          parent_guid
-            .gsub(GUID_BRACE_OR_DASH, "_")
-            .sub(/_\z/, "")
+          tail = owner_id[-TAIL_LENGTH..]
+          separator = "_" * (owner_id.length - TAIL_LENGTH - HEAD_LENGTH)
+          format("EAID_%<prefix>s%<n>06d%<sep>s%<tail>s",
+                 prefix: prefix, n: counter, sep: separator, tail: tail)
         end
       end
     end

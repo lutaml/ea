@@ -26,6 +26,27 @@ module Ea
         @documents = []
       end
 
+      # Build a registry from MDG XML files and/or directories
+      # (directories are globbed recursively). Unloadable files are
+      # skipped — MDG discovery is a boundary where partial input is
+      # normal (set EA_DEBUG=1 to see what was skipped).
+      #
+      # @param paths [Array<String>]
+      # @return [Ea::Mdg::Registry]
+      def self.from_paths(paths)
+        new.tap do |registry|
+          paths.flat_map { |path| expand_mdg_path(path) }.each do |file|
+            registry.register(Loader.from_path(file).document)
+          rescue StandardError => e
+            warn "Skipped MDG #{file}: #{e.message}" if ENV["EA_DEBUG"]
+          end
+        end
+      end
+
+      def self.expand_mdg_path(path)
+        File.directory?(path) ? Dir.glob(File.join(path, "**/*.xml")).sort : [path]
+      end
+
       # Register an MDG Document. Subsequent registrations of the
       # same technology_name replace the prior one (last-wins).
       #

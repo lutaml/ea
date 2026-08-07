@@ -120,6 +120,7 @@ module Ea
       desc "export SUB FILE", "Export model (SUB: xmi|json|plantuml|xsd)"
       option :output, **OUTPUT_OPTION, desc: "Output path"
       option :package, type: :string, desc: "Restrict to a package name"
+      option :mdg, type: :array, desc: "MDG technology XML files or directories (xmi only)"
       def export(sub, file)
         Command::Export.new(sub: sub, file: file, **symbolize(options)).call
       end

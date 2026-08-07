@@ -235,4 +235,16 @@ RSpec.describe Ea::Qea::Models::EaXref do
       expect(described_class).to be < Ea::Qea::Models::BaseModel
     end
   end
+
+  describe "column mapping" do
+    it "maps the Visibility, Behavior and Partition columns" do
+      xref = described_class.from_db_row(
+        "XrefID" => "{X}", "Visibility" => "Public",
+        "Behavior" => "signal", "Partition" => "0"
+      )
+      expect(xref.visibility).to eq("Public")
+      expect(xref.behavior).to eq("signal")
+      expect(xref.partition).to eq("0")
+    end
+  end
 end

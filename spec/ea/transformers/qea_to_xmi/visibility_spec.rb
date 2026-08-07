@@ -36,6 +36,16 @@ RSpec.describe Ea::Transformers::QeaToXmi::Visibility do
     it "returns nil for unrecognised codes" do
       expect(described_class.from_scope(99)).to be_nil
     end
+
+    it "maps textual QEA scopes" do
+      expect(described_class.from_scope("Private")).to eq("private")
+      expect(described_class.from_scope("Protected")).to eq("protected")
+      expect(described_class.from_scope("Package")).to eq("package")
+    end
+
+    it "suppresses textual Public as the UML default" do
+      expect(described_class.from_scope("Public")).to be_nil
+    end
   end
 
   describe ".aggregation_from_containment" do

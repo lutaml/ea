@@ -20,11 +20,13 @@ module Ea
       # real Sparx XMI (see TODO 26).
       module Cardinality
         # Tokens EA uses for "unbounded". Matched case-insensitively.
-        UNLIMITED_TOKENS = %w[* *-1 unbounded].freeze
+        UNLIMITED_TOKENS = %w[* *-1 -1 unbounded].freeze
 
-        # UML defaults when EA carries no explicit bound.
+        # UML defaults when EA carries no explicit bound. EA's wire
+        # form for unlimited is "*" (never "-1" — the reference
+        # exports contain no value="-1" at all).
         DEFAULT_LOWER = "0"
-        DEFAULT_UPPER = "-1"
+        DEFAULT_UPPER = "*"
 
         module_function
 
@@ -38,17 +40,15 @@ module Ea
           return parse_range(stripped) if stripped.include?("..")
 
           # Bare unlimited token (e.g. "*") means "many" — lower bound
-          # is unspecified, which UML renders as 0..-1. Returning
-          # `{ lower: "-1", upper: "-1" }` here would be invalid:
-          # LiteralInteger cannot hold -1.
+          # is unspecified, which renders as 0..*.
           return defaults if UNLIMITED_TOKENS.include?(stripped.downcase)
 
           single = normalize_bound(stripped)
           { lower: single, upper: single }
         end
 
-        # Normalise an upper-bound token: `*` / `unbounded` → `-1`
-        # (UML LiteralUnlimitedNatural wire form).
+        # Normalise an upper-bound token: `*` / `unbounded` → `*`
+        # (EA's LiteralUnlimitedNatural wire form).
         # @param raw [String, Integer, nil]
         # @return [String]
         def normalize_upper(raw)
@@ -57,7 +57,7 @@ module Ea
           stripped = raw.to_s.strip
           return DEFAULT_UPPER if stripped.empty?
 
-          UNLIMITED_TOKENS.include?(stripped.downcase) ? "-1" : stripped
+          UNLIMITED_TOKENS.include?(stripped.downcase) ? "*" : stripped
         end
 
         # Normalise a lower-bound token: empty/nil → "0" (UML default).
@@ -82,13 +82,13 @@ module Ea
         end
 
         # A single bound token (one side of `..` or a bare scalar).
-        # Empty / `*` → UML unlimited (`-1`).
+        # Empty / `*` → EA's unlimited wire form (`*`).
         def normalize_bound(token)
-          return "-1" if token.nil?
-          return "-1" if token.strip.empty?
+          return "*" if token.nil?
+          return "*" if token.strip.empty?
 
           stripped = token.strip
-          UNLIMITED_TOKENS.include?(stripped.downcase) ? "-1" : stripped
+          UNLIMITED_TOKENS.include?(stripped.downcase) ? "*" : stripped
         end
       end
     end

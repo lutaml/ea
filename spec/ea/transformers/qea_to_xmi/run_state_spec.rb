@@ -81,12 +81,18 @@ RSpec.describe Ea::Transformers::QeaToXmi::RunState do
       expect(binding.body).to eq("Alice")
     end
 
-    it "uses only the first character of multi-character operators" do
-      # EA's Op field sometimes carries the literal characters of the
-      # comparison operator (`==`, `!=`, `<=`, `>=`). Sparx prepends
-      # only the first character to the body value.
+    it "prepends multi-character operators verbatim" do
+      # The mini-language stores equality as `Op==;` (parsed op "="),
+      # comparison ops as their literal text (`Op=<=;` → "<="). EA's
+      # reference export prepends the stored op verbatim:
+      # examples/exports/basic/model.xml contains body="<=valueTwo".
+      binding = described_class::Binding.new("n", "v", "<=")
+      expect(binding.body).to eq("<=v")
+    end
+
+    it "keeps != intact rather than truncating it" do
       binding = described_class::Binding.new("n", "v", "!=")
-      expect(binding.body).to eq("!v")
+      expect(binding.body).to eq("!=v")
     end
   end
 end

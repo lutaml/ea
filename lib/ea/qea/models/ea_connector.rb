@@ -119,10 +119,11 @@ module Ea
           connector_type == "Aggregation"
         end
 
-        # Check if connector is a realization
+        # Check if connector is a realization. EA writes both the US
+        # and UK spellings depending on version/edition.
         # @return [Boolean]
         def realization?
-          connector_type == "Realization"
+          %w[Realization Realisation].include?(connector_type)
         end
 
         # Check if source is aggregate
