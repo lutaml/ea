@@ -48,7 +48,7 @@ module Ea
         end
 
         # Normalise an upper-bound token: `*` / `unbounded` → `*`
-        # (EA's LiteralUnlimitedNatural wire form).
+        # (the LiteralUnlimitedNatural wire form EA also uses).
         # @param raw [String, Integer, nil]
         # @return [String]
         def normalize_upper(raw)

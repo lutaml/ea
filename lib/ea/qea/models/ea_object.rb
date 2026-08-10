@@ -211,12 +211,6 @@ module Ea
           TRANSFORMER_TYPES[object_type]
         end
 
-        # Check if object is a Signal
-        # @return [Boolean]
-        def signal?
-          object_type == "Signal"
-        end
-
         def stereotype_is?(expected)
           return false unless stereotype
 
