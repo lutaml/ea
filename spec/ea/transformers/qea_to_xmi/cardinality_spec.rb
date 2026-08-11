@@ -137,6 +137,10 @@ RSpec.describe Ea::Transformers::QeaToXmi::Cardinality do
     it "returns 0 for unbounded" do
       expect(described_class.normalize_lower("unbounded")).to eq("0")
     end
+
+    it "returns 0 for UNBOUNDED (case insensitive)" do
+      expect(described_class.normalize_lower("UNBOUNDED")).to eq("0")
+    end
   end
 
   describe "defaults constants" do
