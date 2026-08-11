@@ -40,6 +40,19 @@ RSpec.describe Ea::Transformers::QeaToXmi::Cardinality do
       expect(described_class.parse("*")).to eq(lower: "0", upper: "*")
     end
 
+    it "defaults a blank lower bound in a range to 0" do
+      # "..1" must not become lower="*" — LiteralInteger cannot hold *.
+      expect(described_class.parse("..1")).to eq(lower: "0", upper: "1")
+    end
+
+    it "defaults a blank upper bound in a range to unlimited" do
+      expect(described_class.parse("1..")).to eq(lower: "1", upper: "*")
+    end
+
+    it "treats a bare range separator as the UML default" do
+      expect(described_class.parse("..")).to eq(lower: "0", upper: "*")
+    end
+
     it "strips surrounding whitespace" do
       expect(described_class.parse("  1..*  ")).to eq(lower: "1", upper: "*")
     end

@@ -78,10 +78,10 @@ module Ea
 
         def parse_range(stripped)
           lower, upper = stripped.split("..", 2)
-          { lower: normalize_bound(lower), upper: normalize_bound(upper) }
+          { lower: normalize_lower(lower), upper: normalize_upper(upper) }
         end
 
-        # A single bound token (one side of `..` or a bare scalar).
+        # A bare scalar bound token (input containing no `..`).
         # Empty / `*` → EA's unlimited wire form (`*`).
         def normalize_bound(token)
           return "*" if token.nil?
