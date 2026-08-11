@@ -53,6 +53,14 @@ RSpec.describe Ea::Transformers::QeaToXmi::Cardinality do
       expect(described_class.parse("..")).to eq(lower: "0", upper: "*")
     end
 
+    it "defaults an unlimited lower bound in a range to 0" do
+      expect(described_class.parse("*..1")).to eq(lower: "0", upper: "1")
+    end
+
+    it "defaults EA's stored -1 lower bound in a range to 0" do
+      expect(described_class.parse("-1..1")).to eq(lower: "0", upper: "1")
+    end
+
     it "strips surrounding whitespace" do
       expect(described_class.parse("  1..*  ")).to eq(lower: "1", upper: "*")
     end
@@ -116,6 +124,18 @@ RSpec.describe Ea::Transformers::QeaToXmi::Cardinality do
 
     it "returns the token unchanged for zero" do
       expect(described_class.normalize_lower("0")).to eq("0")
+    end
+
+    it "returns 0 for * (LiteralInteger cannot hold it)" do
+      expect(described_class.normalize_lower("*")).to eq("0")
+    end
+
+    it "returns 0 for EA's stored -1" do
+      expect(described_class.normalize_lower("-1")).to eq("0")
+    end
+
+    it "returns 0 for unbounded" do
+      expect(described_class.normalize_lower("unbounded")).to eq("0")
     end
   end
 

@@ -43,8 +43,7 @@ module Ea
           # is unspecified, which renders as 0..*.
           return defaults if UNLIMITED_TOKENS.include?(stripped.downcase)
 
-          single = normalize_bound(stripped)
-          { lower: single, upper: single }
+          { lower: stripped, upper: stripped }
         end
 
         # Normalise an upper-bound token: `*` / `unbounded` → `*`
@@ -61,13 +60,17 @@ module Ea
         end
 
         # Normalise a lower-bound token: empty/nil → "0" (UML default).
+        # Unlimited tokens also → "0" — a lower bound serializes as
+        # uml:LiteralInteger, which cannot hold `*` or `-1`.
         # @param raw [String, Integer, nil]
         # @return [String]
         def normalize_lower(raw)
           return DEFAULT_LOWER if raw.nil?
 
           stripped = raw.to_s.strip
-          stripped.empty? ? DEFAULT_LOWER : stripped
+          return DEFAULT_LOWER if stripped.empty?
+
+          UNLIMITED_TOKENS.include?(stripped.downcase) ? DEFAULT_LOWER : stripped
         end
 
         # ---- Internal helpers ----
@@ -79,16 +82,6 @@ module Ea
         def parse_range(stripped)
           lower, upper = stripped.split("..", 2)
           { lower: normalize_lower(lower), upper: normalize_upper(upper) }
-        end
-
-        # A bare scalar bound token (input containing no `..`).
-        # Empty / `*` → EA's unlimited wire form (`*`).
-        def normalize_bound(token)
-          return "*" if token.nil?
-          return "*" if token.strip.empty?
-
-          stripped = token.strip
-          UNLIMITED_TOKENS.include?(stripped.downcase) ? "*" : stripped
         end
       end
     end
