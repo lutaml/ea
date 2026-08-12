@@ -16,6 +16,18 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
     parsed.xpath(%(//*[@xmi:type="#{type}"])).size
   end
 
+  describe "classifier dispatch registry" do
+    # The capabilities map is read with a default, so an unclassified
+    # kind loses its bounds or its nested children silently — wrong XML,
+    # no exception. This assertion is the only exhaustiveness check that
+    # exists, and it has to fail in both directions: a builder with no
+    # capabilities entry, and an entry with no builder.
+    it "classifies exactly the kinds the builder registry can build" do
+      expect(described_class::CLASSIFIER_CAPABILITIES.keys)
+        .to match_array(described_class::CLASSIFIER_BUILDERS.keys)
+    end
+  end
+
   describe "document framing" do
     it "emits an xmi:XMI root with EA's Sparx namespace declarations" do
       root = parsed.root
@@ -453,6 +465,298 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
       db = realization_database(connector_type: "Realization", end_object_id: 999)
       xml = described_class.new(db).serialize(with_extensions: false)
       expect(xml).not_to include("<interfaceRealization")
+    end
+  end
+
+  # Synthetic-model builders for the specs below.
+  def synthetic_package
+    Ea::Qea::Models::EaPackage.new(
+      package_id: 1, name: "P", parent_id: 0,
+      ea_guid: "{AAAAAAAA-1111-2222-3333-444444444444}"
+    )
+  end
+
+  def synthetic_object(id, type:, name:, parentid: 0)
+    Ea::Qea::Models::EaObject.new(
+      ea_object_id: id, object_type: type, name: name, package_id: 1,
+      parentid: parentid, ea_guid: "{#{format("%08d", id)}-1111-2222-3333-444444444444}"
+    )
+  end
+
+  describe "Association t_object rows" do
+    # simple.qea carries AcmeUmlAssociation as a t_object row, not a
+    # connector. EA exports it bare — see examples/exports/simple/
+    # model.xml:13.
+    let(:simple_doc) do
+      simple_db = Ea::Qea.load("examples/qea/simple.qea")
+      begin
+        Nokogiri::XML(Ea::Transformers.qea_to_xmi(simple_db))
+      ensure
+        simple_db.close_connection
+      end
+    end
+
+    let(:association_id) { "EAID_D1D68870_3A7C_4ce3_9F1A_BB7FF5D99E17" }
+
+    it "emits the association as a bare uml:Association packagedElement" do
+      node = simple_doc.at_xpath(%(//packagedElement[@xmi:id="#{association_id}"]))
+      expect(node["xmi:type"]).to eq("uml:Association")
+      expect(node["name"]).to eq("AcmeUmlAssociation")
+      expect(node.element_children).to be_empty
+    end
+
+    it "types its extension element as uml:Association" do
+      node = simple_doc.at_xpath(%(//element[@xmi:idref="#{association_id}"]))
+      expect(node["xmi:type"]).to eq("uml:Association")
+    end
+  end
+
+  describe "operation return types with a blank classifier" do
+    let(:operation) do
+      Ea::Qea::Models::EaOperation.new(
+        operationid: 3, ea_object_id: 10, name: "count", type: "int",
+        classifier: "", pos: 0, ea_guid: "{CCCCCCCC-1111-2222-3333-444444444444}"
+      )
+    end
+
+    let(:xml) do
+      database = build_test_database(packages: [synthetic_package], operations: [operation],
+                                     objects: [synthetic_object(10, type: "Class", name: "C")])
+      described_class.new(database).serialize
+    end
+
+    it "defines the EAnone_ primitive its return parameter references" do
+      expect(xml).to include(%(type="EAnone_int"))
+      expect(xml).to include(%(xmi:id="EAnone_int"))
+    end
+
+    it "leaves no EAnone_ reference undefined" do
+      referenced = xml.scan(/(?:type|idref)="(EAnone_[^"]*)"/).flatten.uniq
+      defined = xml.scan(/xmi:id="(EAnone_[^"]*)"/).flatten.uniq
+      expect(referenced - defined).to be_empty
+    end
+  end
+
+  describe "type names EA stores with surrounding whitespace" do
+    # t_operation.Type is free text. The reference and the
+    # <primitivetypes> definition used to normalize it differently, so
+    # the idref pointed at an id nobody defined.
+    let(:xml) do
+      operation = Ea::Qea::Models::EaOperation.new(
+        operationid: 3, ea_object_id: 10, name: "count", type: "  int  ",
+        classifier: "", pos: 0, ea_guid: "{CCCCCCCC-1111-2222-3333-444444444444}"
+      )
+      database = build_test_database(packages: [synthetic_package], operations: [operation],
+                                     objects: [synthetic_object(10, type: "Class", name: "C")])
+      described_class.new(database).serialize
+    end
+
+    it "references and defines the same stripped id" do
+      expect(xml).to include(%(type="EAnone_int"))
+      expect(xml).to include(%(xmi:id="EAnone_int"))
+    end
+
+    it "leaves no EAnone_ reference undefined" do
+      referenced = xml.scan(/(?:type|idref)="(EAnone_[^"]*)"/).flatten.uniq
+      defined = xml.scan(/xmi:id="(EAnone_[^"]*)"/).flatten.uniq
+      expect(referenced - defined).to be_empty
+    end
+  end
+
+  describe "a classifier id that resolves to nothing" do
+    # KNOWN GAP. The reference falls back to EAnone_int, but the
+    # definition side only defines names whose classifier is blank, so
+    # the idref dangles. Defining it from here instead over-emits:
+    # PrimitiveTypes scans every row in the database, including rows the
+    # walk never exports, and EA's own plateau export defines nothing
+    # for them. See lib/ea/transformers/qea_to_xmi/primitive_types.rb.
+    let(:xml) do
+      operation = Ea::Qea::Models::EaOperation.new(
+        operationid: 3, ea_object_id: 10, name: "count", type: "int",
+        classifier: "999", pos: 0, ea_guid: "{CCCCCCCC-1111-2222-3333-444444444444}"
+      )
+      database = build_test_database(packages: [synthetic_package], operations: [operation],
+                                     objects: [synthetic_object(10, type: "Class", name: "C")])
+      described_class.new(database).serialize
+    end
+
+    it "leaves no EAnone_ reference undefined" do
+      pending "definitions follow a whole-database scan, not the emitted references"
+      referenced = xml.scan(/(?:type|idref)="(EAnone_[^"]*)"/).flatten.uniq
+      defined = xml.scan(/xmi:id="(EAnone_[^"]*)"/).flatten.uniq
+      expect(referenced - defined).to be_empty
+    end
+  end
+
+  describe "attribute types EA maps to the OMG PrimitiveTypes library" do
+    # The href child replaces the idref only when there is no classifier
+    # to point at. A resolvable classifier wins over the href name.
+    def attribute_with(classifier)
+      Ea::Qea::Models::EaAttribute.new(
+        id: 5, ea_object_id: 10, name: "count", type: "int", pos: 0,
+        classifier: classifier, ea_guid: "{DDDDDDDD-1111-2222-3333-444444444444}"
+      )
+    end
+
+    def xml_for(classifier)
+      attribute = attribute_with(classifier)
+      database = build_test_database(
+        packages: [synthetic_package], attributes: [attribute],
+        objects: [synthetic_object(10, type: "Class", name: "C"),
+                  synthetic_object(11, type: "DataType", name: "Int")]
+      )
+      described_class.new(database).serialize
+    end
+
+    it "emits the OMG href when the classifier is blank" do
+      expect(xml_for("")).to include("PrimitiveTypes.xmi#Integer")
+    end
+
+    it "points at the classifier instead when it resolves" do
+      xml = xml_for("11")
+      expect(xml).to include(%(xmi:idref="EAID_00000011_1111_2222_3333_444444444444"))
+      expect(xml).not_to include("PrimitiveTypes.xmi#Integer")
+    end
+  end
+
+  describe "objects whose parent never nests them" do
+    let(:objects) do
+      [synthetic_object(20, type: "Enumeration", name: "E"),
+       synthetic_object(21, type: "Class", name: "UnderEnum", parentid: 20),
+       synthetic_object(30, type: "Class", name: "UnderMissing", parentid: 999),
+       synthetic_object(40, type: "Class", name: "Parent"),
+       synthetic_object(41, type: "Class", name: "UnderClass", parentid: 40)]
+    end
+
+    let(:parsed) do
+      database = build_test_database(packages: [synthetic_package], objects: objects)
+      Nokogiri::XML(described_class.new(database).serialize(with_extensions: false))
+    end
+
+    def names_at(xpath)
+      parsed.xpath(xpath).map { |node| node["name"] }
+    end
+
+    it "keeps children their parent never nests at package level" do
+      expect(names_at("//packagedElement/packagedElement")).to include("UnderEnum", "UnderMissing")
+    end
+
+    it "still nests a child of a class" do
+      expect(names_at("//packagedElement/packagedElement")).not_to include("UnderClass")
+      expect(names_at("//nestedClassifier")).to eq(["UnderClass"])
+    end
+  end
+
+  describe "a grandchild under an orphaned parent" do
+    # The orphan sorts AFTER its own child here, so a walk that decides
+    # orphan-hood from what it has emitted so far would snapshot the
+    # grandchild as un-nested and emit it a second time on the same
+    # xmi:id. Adoption is structural, so it is emitted exactly once.
+    let(:objects) do
+      [synthetic_object(20, type: "Enumeration", name: "E"),
+       synthetic_object(21, type: "Class", name: "OrphanUnderEnum", parentid: 20),
+       synthetic_object(22, type: "Class", name: "GrandchildUnderOrphan", parentid: 21)]
+    end
+
+    let(:nodes) do
+      database = build_test_database(packages: [synthetic_package], objects: objects)
+      parsed = Nokogiri::XML(described_class.new(database).serialize(with_extensions: false))
+      parsed.xpath(%(//*[@name="GrandchildUnderOrphan"]))
+    end
+
+    it "emits the grandchild exactly once" do
+      expect(nodes.size).to eq(1)
+    end
+
+    it "emits it as a nestedClassifier of the orphan" do
+      expect(nodes.first.name).to eq("nestedClassifier")
+      expect(nodes.first.parent["name"]).to eq("OrphanUnderEnum")
+    end
+  end
+
+  describe "a ParentID chain that never terminates" do
+    # A corrupt model can point an object at itself or round a cycle.
+    # Both ends are nesting kinds, so treating them as adopted would
+    # leave every one of them waiting on a parent that is never built —
+    # they would vanish from the export without a word.
+    def emitted_names(objects)
+      database = build_test_database(packages: [synthetic_package], objects: objects)
+      parsed = Nokogiri::XML(described_class.new(database).serialize(with_extensions: false))
+      objects.to_h { |obj| [obj.name, parsed.xpath(%(//*[@name="#{obj.name}"])).size] }
+    end
+
+    it "still emits an object that is its own parent" do
+      expect(emitted_names([synthetic_object(30, type: "Class", name: "Self", parentid: 30)]))
+        .to eq("Self" => 1)
+    end
+
+    it "still emits both halves of a two-object cycle" do
+      objects = [synthetic_object(40, type: "Class", name: "A", parentid: 41),
+                 synthetic_object(41, type: "Class", name: "B", parentid: 40)]
+      expect(emitted_names(objects)).to eq("A" => 1, "B" => 1)
+    end
+  end
+
+  describe "serializing the same transformer twice" do
+    it "returns identical XML both times" do
+      database = build_test_database(
+        packages: [synthetic_package],
+        objects: [synthetic_object(20, type: "Enumeration", name: "E"),
+                  synthetic_object(21, type: "Class", name: "UnderEnum", parentid: 20)]
+      )
+      transformer = described_class.new(database)
+      first = transformer.serialize
+      expect(transformer.serialize).to eq(first)
+    end
+  end
+
+  describe "attribute bounds with only one EA column set" do
+    # The explicit 1..1 is a property of the PAIR — EA applies it when
+    # both t_attribute columns are blank. Defaulting each column on its
+    # own would render the invalid 2..1 here.
+    def bounds_for(lowerbound:, upperbound:)
+      attribute = Ea::Qea::Models::EaAttribute.new(
+        id: 5, ea_object_id: 10, name: "a", type: "int",
+        lowerbound: lowerbound, upperbound: upperbound,
+        ea_guid: "{DDDDDDDD-1111-2222-3333-444444444444}"
+      )
+      database = build_test_database(packages: [synthetic_package], attributes: [attribute],
+                                     objects: [synthetic_object(10, type: "Class", name: "C")])
+      node = Nokogiri::XML(described_class.new(database).serialize(with_extensions: false))
+                     .at_xpath("//ownedAttribute")
+      [node.at_xpath("lowerValue")["value"], node.at_xpath("upperValue")["value"]]
+    end
+
+    it "keeps a set lower bound and falls back to * for a blank upper" do
+      expect(bounds_for(lowerbound: "2", upperbound: nil)).to eq(["2", "*"])
+    end
+
+    it "falls back to 0 for a blank lower and keeps a set upper" do
+      expect(bounds_for(lowerbound: nil, upperbound: "5")).to eq(%w[0 5])
+    end
+
+    it "still writes EA's explicit 1..1 when both columns are blank" do
+      expect(bounds_for(lowerbound: nil, upperbound: nil)).to eq(%w[1 1])
+    end
+  end
+
+  describe "attribute bounds with no EA multiplicity" do
+    # examples/exports/test/model.xml:183-187 — EA writes an explicit
+    # 1..1 for a Property whose t_attribute bounds are NULL.
+    it "emits 1..1 with the reference LI ids for test.qea Union.option1" do
+      test_db = Ea::Qea.load("examples/qea/test.qea")
+      begin
+        doc = Nokogiri::XML(Ea::Transformers.qea_to_xmi(test_db))
+        attr_node = doc.at_xpath(%(//ownedAttribute[@xmi:id="EAID_CDDC5C85_CD8A_48b4_BECD_FBFFBEAC015C"]))
+        lower = attr_node.at_xpath("lowerValue")
+        upper = attr_node.at_xpath("upperValue")
+        expect(lower["xmi:id"]).to eq("EAID_LI000063_CD8A_48b4_BECD_FBFFBEAC015C")
+        expect(lower["value"]).to eq("1")
+        expect(upper["xmi:id"]).to eq("EAID_LI000064_CD8A_48b4_BECD_FBFFBEAC015C")
+        expect(upper["value"]).to eq("1")
+      ensure
+        test_db.close_connection
+      end
     end
   end
 end

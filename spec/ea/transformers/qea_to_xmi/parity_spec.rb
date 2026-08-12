@@ -14,8 +14,8 @@ require "ea/transformers/qea_to_xmi"
 RSpec.describe "QEA to XMI parity ratchet" do
   RATCHET = {
     "basic" => { only_ours: 147, only_ea: 148, mismatched: 100 },
-    "simple" => { only_ours: 1, only_ea: 76, mismatched: 0 },
-    "test" => { only_ours: 73, only_ea: 363, mismatched: 3 },
+    "simple" => { only_ours: 1, only_ea: 75, mismatched: 0 },
+    "test" => { only_ours: 17, only_ea: 305, mismatched: 3 },
     "ArcGISWorkspace_template" => { only_ours: 1, only_ea: 463, mismatched: 2 },
     "UmlModel_template" => { only_ours: 0, only_ea: 1, mismatched: 0 },
   }.freeze

@@ -89,14 +89,69 @@ RSpec.describe Ea::Transformers::QeaToXmi::ProfileSerializer do
       expect(class_codelist.name).to eq("A_Class_CodeList")
     end
 
-    it "has two memberEnds (extension end + base property)" do
-      expect(class_codelist.member_ends.size).to eq(2)
+    it "carries both ends in one memberEnd attribute" do
+      expect(class_codelist.member_end).to eq("extension_CodeList CodeList-base_Class")
     end
 
-    it "has an ExtensionEnd owned end" do
-      ext_end = class_codelist.owned_end.first
+    it "has no memberEnd child elements" do
+      expect(class_codelist.member_ends).to be_nil
+    end
+  end
+
+  describe "extension end shape" do
+    let(:blocks) { described_class.new(registry).call }
+    let(:ext_end) { blocks.find { |b| b.id == "Class_CodeList" }.owned_end.first }
+
+    it "is a uml:ExtensionEnd named after the stereotype" do
       expect(ext_end.type).to eq("uml:ExtensionEnd")
       expect(ext_end.id).to eq("extension_CodeList")
+    end
+
+    it "repeats the memberEnd attribute and marks itself composite" do
+      expect(ext_end.member_end).to eq("extension_CodeList CodeList-base_Class")
+      expect(ext_end.is_composite).to be(true)
+    end
+
+    it "points its type child at the stereotype" do
+      expect(ext_end.uml_type.idref).to eq("CodeList")
+      expect(ext_end.association).to be_nil
+    end
+  end
+
+  describe "stereotype names defined by more than one MDG" do
+    let(:iso_document) do
+      Ea::Mdg::Loader.from_path("spec/fixtures/mdg/ISO19103MDG v1.0.0-beta.xml").document
+    end
+
+    def profile(*documents)
+      registry = Ea::Mdg::Registry.new
+      documents.each { |doc| registry.register(doc) }
+      described_class.new(registry).call
+    end
+
+    # Extension-end ids repeat once per metaclass within one MDG —
+    # EA's own exports do the same, so those must survive. They live on
+    # the owned_end children, so an id sweep that stops at the top-level
+    # blocks never sees the ids it claims to protect.
+    def all_ids(*documents)
+      profile(*documents).flat_map { |block| [block.id, *block.owned_end.to_a.map(&:id)] }
+    end
+
+    def duplicate_ids(*documents)
+      all_ids(*documents).tally.select { |_id, count| count > 1 }.keys.sort
+    end
+
+    it "keeps the extension-end ids EA repeats once per metaclass" do
+      expect(duplicate_ids(iso_document)).to include("extension_CodeList", "extension_Union")
+    end
+
+    it "leaves only the duplicate ids the winning document already had" do
+      expect(duplicate_ids(iso_document, document)).to eq(duplicate_ids(iso_document))
+    end
+
+    it "defines each stereotype name once" do
+      names = profile(iso_document, document).select { |b| b.type == "uml:Stereotype" }.map(&:name)
+      expect(names.uniq.size).to eq(names.size)
     end
   end
 

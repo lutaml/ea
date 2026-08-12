@@ -212,9 +212,19 @@ module Ea
         @diagram_links_by_id[id] || []
       end
 
-      # Find an object by ID
+      # Find an object by ID. Uses the repository's primary-key index
+      # rather than a scan: the parentid walk in QeaToXmi's
+      # `cyclic_ancestry?` calls this once per ancestor hop per object.
+      #
+      # Hash lookup matches on eql?, so it would miss a Float id that a
+      # scan's == would have caught. No caller here can do that:
+      # t_object.Object_ID is declared Type::Integer and the model
+      # coerces on construction, and every caller passes either such an
+      # attribute or an explicit to_i. Deliberately left unguarded — a
+      # scan fallback on miss would put every absent-parent lookup in
+      # the ancestry walk back on a linear scan.
       def find_object(id)
-        objects.find_by_key(:ea_object_id, id)
+        objects.find(id)
       end
 
       # Find object by ea_guid

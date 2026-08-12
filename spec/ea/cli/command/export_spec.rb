@@ -17,7 +17,10 @@ RSpec.describe Ea::Cli::Command::Export do
         mdg: [fixtures_path("mdg/CityGML_MDG_Technology.xml")]
       ).call
     end
-    expect(File.read(output_path)).to include("uml:Stereotype")
+    xml = File.read(output_path)
+    expect(xml).to include("uml:Stereotype")
+    expect(xml).to include(%(memberEnd="extension_))
+    expect(xml).not_to include(%(<memberEnd xmi:idref="extension_))
   end
 
   it "emits no stereotype definitions without --mdg" do

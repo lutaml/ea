@@ -59,6 +59,18 @@ RSpec.describe Ea::Qea::Repositories::BaseRepository do
       result = repository.find(999)
       expect(result).to be_nil
     end
+
+    it "returns the first record when a primary key is duplicated" do
+      # find and find_by_key must not disagree about which record
+      # answers for a duplicated key.
+      duplicate = Ea::Qea::Models::EaObject.new(
+        ea_object_id: 1, name: "Shadow", object_type: "Class",
+        visibility: "Public",
+      )
+      repo = described_class.new([object1, duplicate])
+      expect(repo.find(1)).to eq(repo.find_by_key(:ea_object_id, 1))
+      expect(repo.find(1).name).to eq("ClassA")
+    end
   end
 
   describe "#where" do

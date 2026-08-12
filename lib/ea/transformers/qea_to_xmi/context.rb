@@ -9,6 +9,11 @@ module Ea
       # - ID-derivation helpers (`xmi_id_for`, `end_xmi_id_for`) backed by
       #   {GuidFormat}
       # - delegated database lookups (objects, packages, attributes, etc.)
+      # - the walk's position ordering (`sorted_by_position`), applied at
+      #   the lookup for operation parameters so the UML tree and the
+      #   extension block cannot disagree about their order. Attributes
+      #   and operations are deliberately left for their callers to
+      #   order — see `attributes_for`.
       #
       # The {Ea::Qea::Database} already maintains its own lookup indexes
       # (object-by-id, connectors-by-object, attributes-by-object, etc.).
@@ -66,6 +71,11 @@ module Ea
           database.objects_in_package(package_id)
         end
 
+        # Deliberately NOT ordered here, unlike params_for_operation:
+        # the extension block emits attributes in database order while
+        # the LI-bound preallocation sorts them by name, so each caller
+        # orders for itself. Sorting at this lookup would move export
+        # bytes.
         # @param object_id [Integer]
         # @return [Array<Ea::Qea::Models::EaAttribute>]
         def attributes_for(object_id)
@@ -78,10 +88,23 @@ module Ea
           database.operations_for_object(object_id)
         end
 
+        # t_operationparams is loaded with an unordered SELECT, and both
+        # the UML tree and the extension block emit parameters in Pos
+        # order. Ordering here means no caller can obtain them unordered.
         # @param operation_id [Integer]
         # @return [Array<Ea::Qea::Models::EaOperationParam>]
         def params_for_operation(operation_id)
-          database.operation_params_for(operation_id)
+          sorted_by_position(database.operation_params_for(operation_id))
+        end
+
+        # ---- Ordering -----------------------------------------------------
+
+        # EA emits a record's children in tree-position order (TPos / Pos),
+        # ties broken by name.
+        # @param records [Array<Ea::Qea::Models::BaseModel>]
+        # @return [Array<Ea::Qea::Models::BaseModel>]
+        def sorted_by_position(records)
+          records.sort_by { |record| [record.sort_position, record.name.to_s] }
         end
 
         # Connectors where the object is on either side.

@@ -124,7 +124,8 @@ module Ea
           "PrimitiveType" => "uml:PrimitiveType",
           "Object" => "uml:Object",
           "Signal" => "uml:Signal",
-          "Package" => "uml:Package"
+          "Package" => "uml:Package",
+          "Association" => "uml:Association"
         }.freeze
 
         def uml_type_for(obj)
@@ -253,7 +254,7 @@ module Ea
             "\t\t\t\t\t<coords ordered=\"0\" scale=\"0\"/>",
             "\t\t\t\t\t<containment containment=\"Not Specified\" position=\"#{attr.pos || 0}\"/>",
             "\t\t\t\t\t<stereotype/>",
-            %(\t\t\t\t\t<bounds lower="#{attr.lowerbound || 1}" upper="#{attr.upperbound || 1}"/>),
+            bounds_xml(attr),
             "\t\t\t\t\t<options/>",
             "\t\t\t\t\t<style/>",
             %(\t\t\t\t\t<styleex value="#{escape(attr.styleex.to_s)}"/>),
@@ -262,6 +263,13 @@ module Ea
             "\t\t\t\t</attribute>"
           ]
           lines.join("\n")
+        end
+
+        # Shares the transformer's pair rule so the extension block and
+        # the UML tree can never report different multiplicities.
+        def bounds_xml(attr)
+          bounds = Cardinality.attribute_bounds(attr.lowerbound, attr.upperbound)
+          %(\t\t\t\t\t<bounds lower="#{escape(bounds[:lower])}" upper="#{escape(bounds[:upper])}"/>)
         end
 
         def attribute_scope(attr)
@@ -321,8 +329,8 @@ module Ea
         def operation_tail(op)
           [documentation_element(op.notes),
            "\t\t\t\t\t<tags/>",
-           xrefs_xml("\t\t\t\t\t", op.ea_guid, "operation property"),
            parameters_block_for(op),
+           xrefs_xml("\t\t\t\t\t", op.ea_guid, "operation property"),
            "\t\t\t\t</operation>"]
         end
 
@@ -346,11 +354,42 @@ module Ea
         end
 
         def parameters_block_for(op)
-          params = @context.params_for_operation(op.operationid)
-          return "" if params.empty?
+          entries = [return_parameter_xml(op), *declared_parameters_xml(op)].compact
+          return "" if entries.empty?
 
-          inner = params.map { |p| parameter_xml(p) }.join("\n")
-          "\t\t\t\t\t<parameters>\n#{inner}\n\t\t\t\t\t</parameters>"
+          "\t\t\t\t\t<parameters>\n#{entries.join("\n")}\n\t\t\t\t\t</parameters>"
+        end
+
+        def declared_parameters_xml(op)
+          @context.params_for_operation(op.operationid)
+                  .reject(&:return?)
+                  .map { |param| parameter_xml(param) }
+        end
+
+        # The trailing children of a synthesized return parameter —
+        # all empty, in EA's order.
+        RETURN_PARAMETER_TAIL = ["\t\t\t\t\t\t\t<style/>",
+                                 "\t\t\t\t\t\t\t<styleex/>",
+                                 "\t\t\t\t\t\t\t<documentation/>",
+                                 "\t\t\t\t\t\t\t<tags/>",
+                                 "\t\t\t\t\t\t\t<xrefs/>"].freeze
+
+        # EA lists the return first, as a synthesized parameter with no
+        # t_operationparams row behind it. Both its idref and its
+        # ea_guid come from the operation's own id via {GuidFormat}, so
+        # the two agree by construction — an untyped operation has no
+        # return to describe, and one whose nullable t_operation.ea_guid
+        # is blank has nothing to derive the ids from.
+        def return_parameter_xml(operation)
+          return nil if PrimitiveTypes.normalize_name(operation.type).empty?
+          return nil if operation.ea_guid.to_s.strip.empty?
+
+          return_id = GuidFormat.return_parameter_xmi_id(@context.xmi_id_for(operation))
+          [%(\t\t\t\t\t\t<parameter xmi:idref="#{return_id}" visibility="public">),
+           %(\t\t\t\t\t\t\t<properties pos="0" type="#{escape(operation.type.to_s)}" const="false" ) +
+             %(ea_guid="#{GuidFormat.xmi_id_to_ea_guid(return_id)}"/>),
+           *RETURN_PARAMETER_TAIL,
+           "\t\t\t\t\t\t</parameter>"].join("\n")
         end
 
         def parameter_xml(param)
@@ -506,7 +545,7 @@ module Ea
 
         def primitive_definition(name)
           "\t\t\t\t\t<packagedElement xmi:type=\"uml:PrimitiveType\" " \
-            "xmi:id=\"#{escape("EAnone_#{name}")}\" name=\"#{escape(name)}\"/>"
+            "xmi:id=\"#{escape(PrimitiveTypes.definition_id(name))}\" name=\"#{escape(name)}\"/>"
         end
 
         # ---- <diagrams> section ----------------------------------------
@@ -569,7 +608,7 @@ module Ea
 
           "\t\t\t\t<element geometry=\"#{placement_geometry(placement)}\" " \
             "subject=\"#{escape(@context.xmi_id_for(obj).to_s)}\" " \
-            "seqno=\"#{placement.sequence}\" style=\"#{escape(placement.objectstyle.to_s)}\"/>"
+            "seqno=\"#{placement.sequence.to_i}\" style=\"#{escape(placement.objectstyle.to_s)}\"/>"
         end
 
         # Sequence is nullable with DEFAULT 0 — nil sorts as 0, ties

@@ -80,6 +80,28 @@ RSpec.describe Ea::Transformers::QeaToXmi::GuidFormat do
     end
   end
 
+  describe ".return_parameter_xmi_id" do
+    let(:operation_id) { "EAID_AB12CDEF_5678_90AB_CDEF_1234567890AB" }
+
+    it "replaces the operation's first segment with RETURNID" do
+      expect(described_class.return_parameter_xmi_id(operation_id))
+        .to eq("EAID_RETURNID_5678_90AB_CDEF_1234567890AB")
+    end
+
+    it "handles an id with nothing after the first segment" do
+      expect(described_class.return_parameter_xmi_id("EAID_ABCD"))
+        .to eq("EAID_RETURNID_ABCD")
+    end
+
+    # The parameter's ea_guid is the braced form of this id, so the
+    # serializer derives it rather than spelling the shape twice.
+    it "converts to the ea_guid EA writes on the return parameter" do
+      return_id = described_class.return_parameter_xmi_id(operation_id)
+      expect(described_class.xmi_id_to_ea_guid(return_id))
+        .to eq("{RETURNID-5678-90AB-CDEF-1234567890AB}")
+    end
+  end
+
   describe "round-trip" do
     it "xmi_id_to_ea_guid(ea_guid_to_xmi_id(x)) == x for normal forms" do
       ea_guid = "{AB-CD-EF-01-23}"

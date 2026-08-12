@@ -61,6 +61,10 @@ RSpec.describe Ea::Transformers::QeaToXmi::ExtensionSerializer do
     it "maps PrimitiveType to uml:PrimitiveType" do
       expect(described_class::UML_TYPE_FOR["PrimitiveType"]).to eq("uml:PrimitiveType")
     end
+
+    it "maps Association to uml:Association" do
+      expect(described_class::UML_TYPE_FOR["Association"]).to eq("uml:Association")
+    end
   end
 
   describe "SKIP_OBJECT_TYPES" do
@@ -189,6 +193,213 @@ RSpec.describe Ea::Transformers::QeaToXmi::ExtensionSerializer do
       elements = diagrams[%r{<elements>.*?</elements>}m].scan(/<element [^>]*>/)
       expect(elements[0]).to include(%(seqno="1"))
       expect(elements[1]).to include(%(seqno="2"))
+    end
+  end
+
+  describe "placements with a NULL Sequence" do
+    # t_diagramobjects.Sequence is nullable with DEFAULT 0.
+    let(:object) do
+      Ea::Qea::Models::EaObject.new(
+        ea_object_id: 10, object_type: "Class", name: "C", package_id: 1,
+        ea_guid: "{BBBBBBBB-1111-2222-3333-444444444444}"
+      )
+    end
+
+    let(:diagram) do
+      Ea::Qea::Models::EaDiagram.new(
+        diagram_id: 7, package_id: 1, name: "D", diagram_type: "Logical",
+        ea_guid: "{CCCCCCCC-1111-2222-3333-444444444444}"
+      )
+    end
+
+    let(:placement) do
+      Ea::Qea::Models::EaDiagramObject.new(
+        diagram_id: 7, ea_object_id: 10, instance_id: 1, sequence: nil
+      )
+    end
+
+    it "renders seqno as 0" do
+      db = build_test_database(objects: [object], diagrams: [diagram], diagram_objects: [placement])
+      context = Ea::Transformers::QeaToXmi::Context.new(database: db)
+      expect(described_class.new(db, context).call).to include(%(seqno="0"))
+    end
+  end
+
+  describe "operation <parameters>" do
+    subject(:output) { serializer.call }
+
+    it "emits one synthesized return parameter per typed operation" do
+      expect(output.scan(/EAID_RETURNID_/).size).to eq(12)
+    end
+
+    it "puts the return parameter first, keyed off the operation id" do
+      block = output[%r{<parameters>.*?</parameters>}m]
+      expect(block.scan(/<parameter [^>]*>/).first)
+        .to include(%(xmi:idref="EAID_RETURNID_))
+      expect(block).to include(%(ea_guid="{RETURNID-))
+    end
+
+    it "orders parameters before xrefs inside an operation" do
+      operation = output[%r{<operation [^>]*>.*?</operation>}m]
+      expect(operation.index("<parameters>")).to be < operation.index("<xrefs")
+    end
+  end
+
+  describe "a typed operation with no ea_guid" do
+    # t_operation.ea_guid is nullable. The synthesized return entry
+    # derives both its idref and its ea_guid from the operation's own
+    # xmi id, so there is nothing to build it from here.
+    let(:owner) do
+      Ea::Qea::Models::EaObject.new(
+        ea_object_id: 10, object_type: "Class", name: "C", package_id: 1,
+        ea_guid: "{BBBBBBBB-1111-2222-3333-444444444444}"
+      )
+    end
+
+    def output_for(ea_guid)
+      operation = Ea::Qea::Models::EaOperation.new(
+        operationid: 3, ea_object_id: 10, name: "count", type: "int",
+        pos: 0, ea_guid: ea_guid
+      )
+      db = build_test_database(objects: [owner], operations: [operation])
+      context = Ea::Transformers::QeaToXmi::Context.new(database: db)
+      described_class.new(db, context).call
+    end
+
+    it "serializes without a return entry when the guid is nil" do
+      expect(output_for(nil)).not_to include("EAID_RETURNID_")
+    end
+
+    it "serializes without a return entry when the guid is empty" do
+      expect(output_for("")).not_to include("EAID_RETURNID_")
+    end
+
+    it "serializes without a return entry when the guid is whitespace" do
+      expect(output_for("   ")).not_to include("EAID_RETURNID_")
+    end
+  end
+
+  describe "an operation whose Type is whitespace only" do
+    # PrimitiveTypes strips type names, so a whitespace-only Type is
+    # absent as far as primitive discovery is concerned. Emitting a
+    # return for it anyway produced type="   " in both trees with no
+    # definition behind it.
+    let(:database) do
+      owner = Ea::Qea::Models::EaObject.new(
+        ea_object_id: 10, object_type: "Class", name: "C", package_id: 1,
+        ea_guid: "{BBBBBBBB-1111-2222-3333-444444444444}"
+      )
+      operation = Ea::Qea::Models::EaOperation.new(
+        operationid: 3, ea_object_id: 10, name: "count", type: "   ",
+        pos: 0, ea_guid: "{CCCCCCCC-1111-2222-3333-444444444444}"
+      )
+      # The package matters: without one the UML tree renders nothing
+      # at all, and the ownedParameter assertion below could not fail.
+      package = Ea::Qea::Models::EaPackage.new(
+        package_id: 1, name: "P", parent_id: 0,
+        ea_guid: "{AAAAAAAA-1111-2222-3333-444444444444}"
+      )
+      build_test_database(objects: [owner], operations: [operation],
+                          packages: [package])
+    end
+
+    it "emits no extension return entry" do
+      context = Ea::Transformers::QeaToXmi::Context.new(database: database)
+      expect(described_class.new(database, context).call)
+        .not_to include("EAID_RETURNID_")
+    end
+
+    it "emits no return ownedParameter in the UML tree" do
+      xml = Ea::Transformers::QeaToXmi::Transformer.new(database)
+                                                   .serialize(with_extensions: false)
+      expect(xml).not_to include(%(direction="return"))
+    end
+  end
+
+  describe "attribute <bounds> with blank EA columns" do
+    # `attr.lowerbound || 1` only caught nil, so a blank string used to
+    # render lower="" here while the UML tree said 1..1.
+    let(:owner) do
+      Ea::Qea::Models::EaObject.new(
+        ea_object_id: 10, object_type: "Class", name: "C", package_id: 1,
+        ea_guid: "{BBBBBBBB-1111-2222-3333-444444444444}"
+      )
+    end
+
+    def output_for(lowerbound, upperbound)
+      attribute = Ea::Qea::Models::EaAttribute.new(
+        id: 5, ea_object_id: 10, name: "a", type: "int",
+        lowerbound: lowerbound, upperbound: upperbound,
+        ea_guid: "{DDDDDDDD-1111-2222-3333-444444444444}"
+      )
+      db = build_test_database(objects: [owner], attributes: [attribute])
+      context = Ea::Transformers::QeaToXmi::Context.new(database: db)
+      described_class.new(db, context).call
+    end
+
+    it "defaults empty strings to EA's explicit 1..1" do
+      expect(output_for("", "")).to include(%(<bounds lower="1" upper="1"/>))
+    end
+
+    it "defaults whitespace-only columns to EA's explicit 1..1" do
+      expect(output_for(" ", " ")).to include(%(<bounds lower="1" upper="1"/>))
+    end
+
+    it "agrees with the UML tree when only one column is set" do
+      expect(output_for("2", "")).to include(%(<bounds lower="2" upper="*"/>))
+    end
+
+    # EA's bound columns are free text, so they carry the same XML
+    # metacharacters every other attribute value here is escaped for.
+    it "escapes markup characters instead of corrupting the document" do
+      expect(output_for("1&2", %(3"4)))
+        .to include(%(<bounds lower="1&amp;2" upper="3&quot;4"/>))
+    end
+
+    it "keeps the whole document well-formed" do
+      attribute = Ea::Qea::Models::EaAttribute.new(
+        id: 5, ea_object_id: 10, name: "a", type: "int",
+        lowerbound: "1&2", upperbound: %(3"4),
+        ea_guid: "{DDDDDDDD-1111-2222-3333-444444444444}"
+      )
+      db = build_test_database(objects: [owner], attributes: [attribute])
+      xml = Ea::Transformers::QeaToXmi::Transformer.new(db).serialize
+      expect(Nokogiri::XML(xml).errors).to be_empty
+    end
+  end
+
+  describe "declared parameter ordering" do
+    # t_operationparams is loaded unordered. The UML tree sorts by Pos,
+    # so the extension block has to as well or the two renderers
+    # disagree about the parameter list.
+    let(:owner) do
+      Ea::Qea::Models::EaObject.new(
+        ea_object_id: 10, object_type: "Class", name: "C", package_id: 1,
+        ea_guid: "{BBBBBBBB-1111-2222-3333-444444444444}"
+      )
+    end
+
+    let(:operation) do
+      Ea::Qea::Models::EaOperation.new(
+        operationid: 7, ea_object_id: 10, name: "m", type: "void",
+        ea_guid: "{0000000A-1111-2222-3333-444444444444}"
+      )
+    end
+
+    def parameter(name, pos, guid)
+      Ea::Qea::Models::EaOperationParam.new(
+        operationid: 7, name: name, type: "int", pos: pos, ea_guid: guid
+      )
+    end
+
+    it "emits them in Pos order regardless of insertion order" do
+      later = parameter("second", 2, "{0000000B-1111-2222-3333-444444444444}")
+      earlier = parameter("first", 1, "{0000000C-1111-2222-3333-444444444444}")
+      db = build_test_database(objects: [owner], operations: [operation],
+                               operation_params: [later, earlier])
+      context = Ea::Transformers::QeaToXmi::Context.new(database: db)
+      output = described_class.new(db, context).call
+      expect(output.scan(/<properties pos="(\d+)"/).flatten).to eq(%w[0 1 2])
     end
   end
 end

@@ -58,12 +58,34 @@ module Ea
           data_type:   ->(obj) { build_data_type(obj) },
           signal:      ->(obj) { build_class(obj, xmi_type: "uml:Signal") },
           instance:    ->(obj) { build_instance(obj) },
+          association_element: ->(obj) { build_association_element(obj) },
+        }.freeze
+
+        # What each builder in CLASSIFIER_BUILDERS actually emits, keyed
+        # by the same symbols. Every builder must appear here: a kind
+        # left out silently loses its attribute bounds or its nested
+        # children — wrong XML, no exception — so the spec asserts these
+        # keys match CLASSIFIER_BUILDERS exactly.
+        #
+        # `:owned_attribute` — the builder emits `<ownedAttribute>` and so
+        #   preallocates attribute bound IDs. Enumerations emit literals
+        #   (never bounds) and instances emit slots.
+        # `:nested_classifier` — the builder walks children, so a kind
+        #   listed here can adopt an object that carries a parentid.
+        #   `build_class` is the only builder that walks children.
+        CLASSIFIER_CAPABILITIES = {
+          class: %i[owned_attribute nested_classifier],
+          signal: %i[owned_attribute nested_classifier],
+          data_type: %i[owned_attribute],
+          enumeration: [],
+          instance: [],
+          association_element: []
         }.freeze
 
         def initialize(database, mdg_registry: nil)
           @database = database
           @mdg_registry = mdg_registry
-          @context  = Context.new(database: database)
+          @context = Context.new(database: database)
         end
 
         # @return [String] XMI XML document
@@ -194,12 +216,62 @@ module Ea
         end
 
         def subpackages(pkg)
-          sorted_by_position(@context.child_packages(pkg.package_id))
-            .map { |sub| build_package(sub) }
+          @context.sorted_by_position(@context.child_packages(pkg.package_id))
+                  .map { |sub| build_package(sub) }
         end
 
+        # EA emits a package's own classifiers first, then the children
+        # nobody adopted. The global LI counter follows that order.
         def classifier_objects(pkg)
-          classifiers_in(pkg).filter_map { |obj| build_classifier_with_bounds(obj) }
+          top_level, orphaned = package_level_classifiers(pkg)
+                                .partition { |obj| obj.parentid.to_i.zero? }
+          (top_level + orphaned).filter_map { |obj| build_classifier_with_bounds(obj) }
+        end
+
+        # Everything EA leaves at package level: an object stays here
+        # unless a classifier in the same package actually adopts it as
+        # a nestedClassifier. A child of an enumeration, of an
+        # instance, of a type we don't build, of a parent in another
+        # package, or of one that isn't there at all has no adopter.
+        #
+        # Adoption is decided from the package's own contents, never
+        # from what the walk has emitted so far — a child can sort
+        # before its own parent, and asking a set that the walk is
+        # still filling would emit that child twice.
+        def package_level_classifiers(pkg)
+          buildable_objects_in(pkg).reject { |obj| adopted?(obj) }
+        end
+
+        # A parent adopts a child only if it is a nesting kind in the
+        # same package AND the ParentID chain above the child actually
+        # terminates. A corrupt model can point an object at itself or
+        # round a cycle; leaving those adopted would drop them from the
+        # export, since the parent that owes them an emission is never
+        # reached. Shared with nested_classifiers_under so the two
+        # cannot disagree about who owns a child.
+        def adopted?(obj)
+          parent = nesting_parent_of(obj)
+          !parent.nil? && !cyclic_ancestry?(obj)
+        end
+
+        def nesting_parent_of(obj)
+          parent_id = obj.parentid.to_i
+          return nil unless parent_id.positive?
+
+          parent = @context.object_by_id(parent_id)
+          return nil unless parent && parent.package_id == obj.package_id
+          return nil unless nests_classifiers?(parent)
+
+          parent
+        end
+
+        def cyclic_ancestry?(obj)
+          seen = Set[obj.ea_object_id]
+          current = obj
+          while (current = nesting_parent_of(current))
+            return true unless seen.add?(current.ea_object_id)
+          end
+          false
         end
 
         # EA's class-centric LI allocation: attribute bounds first (name
@@ -216,19 +288,26 @@ module Ea
         # EA allocates a classifier's attribute LI bounds in attribute
         # NAME order, while the document emits attributes in Pos order.
         # Pre-allocating here (memoized) makes the later Pos-ordered
-        # build reuse the name-ordered counters.
+        # build reuse the name-ordered counters. Only owners that go on
+        # to emit ownedAttribute take counters — an enumeration's
+        # literals never carry bounds.
         def preallocate_attribute_bounds(obj)
+          return unless emits_attributes?(obj)
+
           @context.attributes_for(obj.ea_object_id)
                   .sort_by { |a| a.name.to_s }
-                  .each { |attr| preallocate_attribute_bound_pair(attr) }
+                  .each { |attr| build_attribute_bounds(attr) }
         end
 
-        def preallocate_attribute_bound_pair(attr)
-          return if attr.lowerbound.to_s.strip.empty? && attr.upperbound.to_s.strip.empty?
-
+        # Lower before upper — the global LI counter follows this order.
+        # @return [Array(Xmi::Uml::LowerValue, Xmi::Uml::UpperValue)]
+        def build_attribute_bounds(attr)
           attr_id = @context.xmi_id_for(attr)
-          build_lower_value(attr.lowerbound, seed: "mult-attr-#{attr.id}-lower", owner_id: attr_id)
-          build_upper_value(attr.upperbound, seed: "mult-attr-#{attr.id}-upper", owner_id: attr_id)
+          bounds = Cardinality.attribute_bounds(attr.lowerbound, attr.upperbound)
+          [build_lower_value(bounds[:lower],
+                             seed: "mult-attr-#{attr.id}-lower", owner_id: attr_id),
+           build_upper_value(bounds[:upper],
+                             seed: "mult-attr-#{attr.id}-upper", owner_id: attr_id)]
         end
 
         # EA's global LI counter is allocated class-centrically, not in
@@ -299,11 +378,24 @@ module Ea
         # ---- Classifier dispatch (OCP registry) --------------------------
 
         def build_classifier(obj)
-          kind = obj.transformer_type || obj.object_type&.downcase&.to_sym
-          builder = CLASSIFIER_BUILDERS[kind]
+          builder = CLASSIFIER_BUILDERS[obj.transformer_type]
           return nil unless builder
 
           instance_exec(obj, &builder)
+        end
+
+        # Objects that build no classifier at all (a Component parent, a
+        # Note) reach these predicates too, and answer no to both.
+        def capabilities_of(obj)
+          CLASSIFIER_CAPABILITIES.fetch(obj.transformer_type, [])
+        end
+
+        def emits_attributes?(obj)
+          capabilities_of(obj).include?(:owned_attribute)
+        end
+
+        def nests_classifiers?(obj)
+          capabilities_of(obj).include?(:nested_classifier)
         end
 
         def build_class(obj, xmi_type: nil)
@@ -359,6 +451,15 @@ module Ea
           )
         end
 
+        # EA stores some associations as t_object rows. Its export
+        # emits them bare — id and name only, no ownedEnds and no
+        # visibility. The connector-backed associations
+        # (build_association) are a separate path.
+        def build_association_element(obj)
+          ::Xmi::Uml::PackagedElement.new(type: "uml:Association", id: @context.xmi_id_for(obj),
+                                          name: obj.name)
+        end
+
         def build_comment(obj)
           ::Xmi::Uml::OwnedComment.new(
             type: "uml:Comment",
@@ -384,36 +485,30 @@ module Ea
         end
 
         def attributes_for(obj)
-          sorted_by_position(@context.attributes_for(obj.ea_object_id))
-            .map { |attr| build_attribute(attr) }
+          @context.sorted_by_position(@context.attributes_for(obj.ea_object_id))
+                  .map { |attr| build_attribute(attr) }
         end
 
         def operations_for(obj)
-          sorted_by_position(@context.operations_for(obj.ea_object_id))
-            .map { |op| build_operation(op) }
+          @context.sorted_by_position(@context.operations_for(obj.ea_object_id))
+                  .map { |op| build_operation(op) }
         end
 
         def enum_literals(obj)
-          sorted_by_position(@context.attributes_for(obj.ea_object_id))
-            .map { |attr| build_owned_literal(attr) }
+          @context.sorted_by_position(@context.attributes_for(obj.ea_object_id))
+                  .map { |attr| build_owned_literal(attr) }
         end
 
         # ---- Leaf element builders --------------------------------------
 
         def build_attribute(attr)
-          attr_id = @context.xmi_id_for(attr)
-          # EA allocates the global LI counter lower-then-upper, with the
-          # attribute's OWN id as the tail source. Bounds are omitted
-          # only when BOTH columns are blank (association ends check
-          # their single card field instead).
-          lower = upper = nil
-          unless attr.lowerbound.to_s.strip.empty? && attr.upperbound.to_s.strip.empty?
-            lower = build_lower_value(attr.lowerbound, seed: "mult-attr-#{attr.id}-lower", owner_id: attr_id)
-            upper = build_upper_value(attr.upperbound, seed: "mult-attr-#{attr.id}-upper", owner_id: attr_id)
-          end
+          # An attribute always carries both bounds; association ends
+          # check their single card field instead and stay bare when it
+          # is blank.
+          lower, upper = build_attribute_bounds(attr)
           ::Xmi::Uml::OwnedAttribute.new(
             type: "uml:Property",
-            id: attr_id,
+            id: @context.xmi_id_for(attr),
             name: attr.name,
             visibility: Visibility.from_scope(attr.scope),
             is_static: Visibility.boolean_from_flag(attr.isstatic),
@@ -582,10 +677,13 @@ module Ea
         # ---- Operation parameters ---------------------------------------
 
         def operation_parameters(op)
-          params = sorted_by_position(@context.params_for_operation(op.operationid))
+          params = @context.params_for_operation(op.operationid)
             .reject(&:return?)
             .map { |p| build_owned_parameter(p) }
-          params << build_return_parameter(op) if op.type && !op.type.empty?
+          # Blank-checked the way PrimitiveTypes normalizes names, so a
+          # whitespace-only Type cannot synthesize a return here that
+          # primitive discovery then treats as absent.
+          params << build_return_parameter(op) unless PrimitiveTypes.normalize_name(op.type).empty?
           params
         end
 
@@ -654,12 +752,10 @@ module Ea
 
         # EA walks classifiers in tree-position order (t_object.TPos,
         # ties broken by name then object id), not insertion order.
-        # The global LI counter depends on it. Only TOP-LEVEL
-        # classifiers emit at package level; nested ones (nonzero
-        # parentid) emit as nestedClassifier inside their parent.
-        def classifiers_in(pkg)
+        # The global LI counter depends on it.
+        def buildable_objects_in(pkg)
           @context.objects_in_package(pkg.package_id)
-                  .reject { |o| note?(o) || package_object?(o) || o.parentid.to_i.positive? }
+                  .reject { |o| note?(o) || package_object?(o) }
                   .sort_by { |o| [o.sort_position, o.name.to_s, o.ea_object_id] }
         end
 
@@ -669,7 +765,7 @@ module Ea
         # counters inside deep nests may drift until that's derived.
         def nested_classifiers_under(obj)
           @context.objects_in_package(obj.package_id)
-                  .select { |o| o.parentid.to_i == obj.ea_object_id }
+                  .select { |o| o.parentid.to_i == obj.ea_object_id && adopted?(o) }
                   .sort_by { |o| [o.sort_position, -o.ea_object_id] }
         end
 
@@ -685,27 +781,27 @@ module Ea
           obj.object_type == "Package"
         end
 
-        def sorted_by_position(records)
-          records.sort_by { |r| [r.sort_position, r.name.to_s] }
-        end
-
         def primitive?(obj)
           obj.object_type == "PrimitiveType" ||
             (obj.gentype == "Java" && obj.stereotype_is?("primitive"))
         end
 
+        # The fallback id comes from the same module that emits the
+        # <primitivetypes> definitions, so the two normalize the name
+        # identically. A name that is blank once stripped gets no
+        # reference at all — PrimitiveTypes defines nothing for it.
         def type_reference(type_name, classifier)
-          return nil if type_name.nil? || type_name.empty?
+          return nil if PrimitiveTypes.normalize_name(type_name).empty?
 
-          classifier_ref(classifier) || "EAnone_#{type_name}"
+          classifier_ref(classifier) || PrimitiveTypes.definition_id(type_name)
         end
 
         # QEA stores t_attribute.Classifier / t_operation.Classifier as
         # an INTEGER t_object id ("0" = unresolved); EAP-era data can
         # carry a GUID instead. Resolve either to the object's xmi id.
         def classifier_ref(classifier)
-          text = classifier.to_s.strip
-          return nil if text.empty? || text == "0"
+          text = PrimitiveTypes.normalize_name(classifier)
+          return nil if PrimitiveTypes.blank_classifier?(text)
           return GuidFormat.ea_guid_to_xmi_id(text) unless text.match?(/\A\d+\z/)
 
           obj = @context.object_by_id(text.to_i)
@@ -713,7 +809,7 @@ module Ea
         end
 
         def type_reference_model(type_name, classifier)
-          if PrimitiveTypes.blank_classifier?(classifier) && (href = PrimitiveTypes.href_for(type_name))
+          if (href = PrimitiveTypes.href_for(type_name, classifier))
             return ::Xmi::Uml::Type.new(href: href)
           end
 

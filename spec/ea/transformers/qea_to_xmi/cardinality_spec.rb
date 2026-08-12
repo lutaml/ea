@@ -69,6 +69,10 @@ RSpec.describe Ea::Transformers::QeaToXmi::Cardinality do
       result = described_class.parse("unbounded")
       expect(result[:upper]).to eq("*")
     end
+
+    it "treats EA's bare -1 as the UML default" do
+      expect(described_class.parse("-1")).to eq(lower: "0", upper: "*")
+    end
   end
 
   describe ".normalize_upper" do
