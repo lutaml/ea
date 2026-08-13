@@ -196,9 +196,32 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
       database = build_test_database(packages: [package], objects: [owner],
                                      operations: [operation])
       output = described_class.new(database).serialize
-      expect(output.scan(/direction="return"/).size)
-        .to eq(output.scan(/EAID_RETURNID_/).size)
+      # Assert absence outright: equal counts would also be satisfied by
+      # both renderers emitting one, which is not what "skips" means.
+      expect(output.scan(/direction="return"/)).to be_empty
+      expect(output.scan(/EAID_RETURNID_/)).to be_empty
       expect(output).not_to include(%(xmi:id="EAID_RT000000"))
+    end
+
+    it "skips it for an empty or whitespace guid too" do
+      # `to_s.strip` is what makes these distinct from nil; pin all three.
+      package = Ea::Qea::Models::EaPackage.new(
+        package_id: 1, name: "P", parent_id: 0,
+        ea_guid: "{AAAAAAAA-1111-2222-3333-444444444444}"
+      )
+      ["", "   "].each do |guid|
+        operation = Ea::Qea::Models::EaOperation.new(
+          operationid: 3, ea_object_id: 10, name: "m", type: "int",
+          pos: 0, ea_guid: guid
+        )
+        database = build_test_database(
+          packages: [package], objects: [synthetic_object(10, type: "Class", name: "C")],
+          operations: [operation]
+        )
+        output = described_class.new(database).serialize
+        expect(output.scan(/direction="return"/)).to be_empty, "guid=#{guid.inspect}"
+        expect(output.scan(/EAID_RETURNID_/)).to be_empty, "guid=#{guid.inspect}"
+      end
     end
 
     it "leaves a parameter name containing the literal xmi:type= alone" do
