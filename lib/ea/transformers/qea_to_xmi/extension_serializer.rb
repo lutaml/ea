@@ -382,7 +382,7 @@ module Ea
         # is blank has nothing to derive the ids from.
         def return_parameter_xml(operation)
           return nil if PrimitiveTypes.normalize_name(operation.type).empty?
-          return nil if operation.ea_guid.to_s.strip.empty?
+          return nil unless @context.identifiable?(operation)
 
           return_id = GuidFormat.return_parameter_xmi_id(@context.xmi_id_for(operation))
           [%(\t\t\t\t\t\t<parameter xmi:idref="#{return_id}" visibility="public">),

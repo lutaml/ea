@@ -38,6 +38,17 @@ module Ea
           GuidFormat.ea_guid_to_xmi_id(record.ea_guid, prefix: prefix)
         end
 
+        # Whether a record can anchor a synthesized id. EA derives a
+        # synthesized id's tail from its owner's GUID, so an owner
+        # without one yields a tailless id. Both the UML tree and the
+        # extension block ask this, so they cannot disagree about
+        # whether to emit the thing that id would have named.
+        # @param record [#ea_guid]
+        # @return [Boolean]
+        def identifiable?(record)
+          !record&.ea_guid.to_s.strip.empty?
+        end
+
         # @param connector_xmi_id [String]
         # @param side [Symbol] :source or :destination
         # @return [String]

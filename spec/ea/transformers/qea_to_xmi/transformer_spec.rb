@@ -179,6 +179,28 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
       expect(xml.scan(/<ownedParameter\b[^>]*\stype="/).size).to eq(expected)
     end
 
+    it "skips the return parameter when the operation has no usable guid" do
+      # EA derives the RT id's tail from the operation's GUID, so an
+      # operation without one produced a tailless `xmi:id="EAID_RT000000"`
+      # in the UML tree while the extension block emitted nothing —
+      # the two describing different operations.
+      package = Ea::Qea::Models::EaPackage.new(
+        package_id: 1, name: "P", parent_id: 0,
+        ea_guid: "{AAAAAAAA-1111-2222-3333-444444444444}"
+      )
+      owner = synthetic_object(10, type: "Class", name: "C")
+      operation = Ea::Qea::Models::EaOperation.new(
+        operationid: 3, ea_object_id: 10, name: "m", type: "int",
+        pos: 0, ea_guid: nil
+      )
+      database = build_test_database(packages: [package], objects: [owner],
+                                     operations: [operation])
+      output = described_class.new(database).serialize
+      expect(output.scan(/direction="return"/).size)
+        .to eq(output.scan(/EAID_RETURNID_/).size)
+      expect(output).not_to include(%(xmi:id="EAID_RT000000"))
+    end
+
     it "leaves a parameter name containing the literal xmi:type= alone" do
       # Parameter names are free text out of EA. Substituting on the raw
       # tag would rewrite this one inside its quotes.

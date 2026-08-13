@@ -710,11 +710,21 @@ module Ea
           params = @context.params_for_operation(op.operationid)
             .reject(&:return?)
             .map { |p| build_owned_parameter(p) }
-          # Blank-checked the way PrimitiveTypes normalizes names, so a
-          # whitespace-only Type cannot synthesize a return here that
-          # primitive discovery then treats as absent.
-          params << build_return_parameter(op) unless PrimitiveTypes.normalize_name(op.type).empty?
+          params << build_return_parameter(op) if synthesized_return?(op)
           params
+        end
+
+        # An untyped operation has no return to describe. One with no
+        # usable GUID has nothing to anchor the RT id's tail on, and the
+        # extension block skips it for the same reason — emitting it
+        # here would leave the two describing different operations.
+        # Type is blank-checked the way PrimitiveTypes normalizes names,
+        # so a whitespace-only Type cannot synthesize a return that
+        # primitive discovery then treats as absent.
+        def synthesized_return?(op)
+          return false if PrimitiveTypes.normalize_name(op.type).empty?
+
+          @context.identifiable?(op)
         end
 
         def build_owned_parameter(param)
