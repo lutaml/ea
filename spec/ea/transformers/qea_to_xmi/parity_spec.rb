@@ -36,7 +36,11 @@ RSpec.describe "QEA to XMI parity ratchet" do
         database = Ea::Qea.load("examples/qea/#{model}.qea")
         begin
           ours = id_map(Ea::Transformers.qea_to_xmi(database))
-          ref = id_map(File.read("examples/exports/#{model}/model.xml"))
+          # binread, not read: the references declare windows-1252 and
+          # carry bytes that are not valid UTF-8. Nokogiri honours the
+          # prolog either way, but a UTF-8-tagged invalid string raises
+          # on any later String operation.
+          ref = id_map(File.binread("examples/exports/#{model}/model.xml"))
           common = ours.keys & ref.keys
           mismatched = common.count { |id| ours[id] != ref[id] }
           expect((ours.keys - ref.keys).size).to be <= ceiling[:only_ours]
