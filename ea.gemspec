@@ -37,8 +37,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency "sqlite3"
   spec.add_dependency "rubyzip"
   # Requires unreleased xmi features (nestedClassifier, lowerValue-first
-  # order, plain OwnedParameter#type); CI installs them from the companion
-  # branch (see Gemfile). Tighten to "~> 0.7" once xmi 0.7.0 is released.
+  # order); CI installs them from the companion branch (see Gemfile).
+  # Tighten to "~> 0.7" once xmi 0.7.0 is released.
   spec.add_dependency "xmi", ">= 0.6.2"
   spec.add_dependency "nokogiri", "~> 1.18"
   spec.add_dependency "liquid"

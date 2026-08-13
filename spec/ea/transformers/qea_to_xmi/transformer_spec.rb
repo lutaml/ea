@@ -152,6 +152,54 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
     end
   end
 
+  describe "return parameter type spelling" do
+    # EA writes this one unprefixed. The xmi gem models the slot as an
+    # xmi-namespaced type, which is correct for general UML XMI, so the
+    # Sparx spelling is applied here rather than in the shared model.
+    # Nokogiri keys attributes by local name, so the parity ratchet
+    # cannot see this difference — only a raw string check can.
+    it "writes an unprefixed type, like EA" do
+      # Anchored on the space: `xmi:type="EAnone_void"` contains the
+      # unprefixed spelling as a substring, so a plain include passes
+      # either way.
+      expect(xml).to match(/<ownedParameter\b[^>]*\stype="EAnone_void"/)
+    end
+
+    it "leaves no xmi:type on any ownedParameter" do
+      expect(xml.scan(/<ownedParameter\b[^>]*xmi:type=/)).to be_empty
+    end
+
+    it "matches EA's reference count of unprefixed parameter types" do
+      # The reference carries bytes that are not valid UTF-8; scrub so
+      # String#scan does not raise on them.
+      reference = File.read("examples/exports/basic/model.xml").scrub
+      expected = reference.scan(/<ownedParameter\b[^>]*\stype="/).size
+      expect(xml.scan(/<ownedParameter\b[^>]*\stype="/).size).to eq(expected)
+    end
+
+    it "leaves a parameter name containing the literal xmi:type= alone" do
+      # Parameter names are free text out of EA. Substituting on the raw
+      # tag would rewrite this one inside its quotes.
+      package = Ea::Qea::Models::EaPackage.new(
+        package_id: 1, name: "P", parent_id: 0,
+        ea_guid: "{AAAAAAAA-1111-2222-3333-444444444444}"
+      )
+      owner = synthetic_object(10, type: "Class", name: "C")
+      operation = Ea::Qea::Models::EaOperation.new(
+        operationid: 3, ea_object_id: 10, name: "m", type: "int",
+        pos: 0, ea_guid: "{CCCCCCCC-1111-2222-3333-444444444444}"
+      )
+      param = Ea::Qea::Models::EaOperationParam.new(
+        operationid: 3, name: %(literal xmi:type= marker), type: "int", pos: 1,
+        ea_guid: "{DDDDDDDD-1111-2222-3333-444444444444}"
+      )
+      database = build_test_database(packages: [package], objects: [owner],
+                                     operations: [operation], operation_params: [param])
+      output = described_class.new(database).serialize(with_extensions: false)
+      expect(output).to include(%(name="literal xmi:type= marker"))
+    end
+  end
+
   describe "well-formedness" do
     it "parses without XML errors" do
       expect(parsed.errors).to be_empty
