@@ -153,9 +153,11 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
   end
 
   describe "return parameter type spelling" do
-    # EA writes this one unprefixed. The xmi gem models the slot as an
-    # xmi-namespaced type, which is correct for general UML XMI, so the
-    # Sparx spelling is applied here rather than in the shared model.
+    # EA writes the classifier reference unprefixed. The xmi gem keeps
+    # that slot namespaced for the XMI metaclass discriminator, which is
+    # correct for general UML XMI, so the exporter restores EA's form
+    # here rather than in the shared model.
+    #
     # Nokogiri keys attributes by local name, so the parity ratchet
     # cannot see this difference — only a raw string check can.
     it "writes an unprefixed type, like EA" do

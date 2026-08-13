@@ -117,13 +117,14 @@ module Ea
         # `<ownedParameter … type="EAnone_void"/>`. Its reference export
         # carries 12 of these and no `xmi:type` on ownedParameter at all.
         #
-        # The xmi gem models that slot as an xmi-namespaced type, which
-        # is right for general UML XMI, so it emits `xmi:type` here.
-        # Rewriting it in the general model would break round-tripping
-        # for every non-Sparx consumer of that gem — lutaml-model matches
-        # attributes by local name, so `type` and `xmi:type` share one
-        # slot and only one spelling can survive. The Sparx spelling
-        # belongs to the Sparx exporter, so it is applied here instead.
+        # `xmi:type` is the XMI metaclass discriminator; `type` is the
+        # classifier reference. Two different attributes — but
+        # lutaml-model matches by local name and collapses them into one
+        # slot, so the xmi gem can only emit one of them. It keeps the
+        # namespaced form, which is right for general UML XMI, and
+        # rewriting that in the shared model would break round-tripping
+        # for every non-Sparx consumer. Restoring the reference EA
+        # actually writes is this exporter's job, so it happens here.
         #
         # Scoped to ownedParameter: no other element wants it. Walks
         # complete name="value" pairs rather than scanning the tag as
