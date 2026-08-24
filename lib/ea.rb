@@ -63,3 +63,9 @@ module Ea
     end
   end
 end
+
+# Boot-time guard: fail loudly if the resolved xmi gem lacks the
+# unreleased features this gem depends on (see lib/ea/xmi_guard.rb and
+# the xmi dependency comment in ea.gemspec). Required last so
+# Ea::Error is defined when the guard raises.
+require "ea/xmi_guard"
