@@ -71,5 +71,21 @@ module Ea
       trimmed = first_segment.length > 2 ? first_segment[2..] : first_segment
       rest ? "EAID_#{tag}#{trimmed}_#{rest}" : "EAID_#{tag}#{trimmed}"
     end
+
+    # Build the xmi:id for an operation's synthesized return parameter.
+    #
+    # Sparx EA's convention: take the operation's own id and replace its
+    # first GUID segment with `RETURNID`. An id carrying no further
+    # segments has nothing to drop, so its only segment is kept. The
+    # parameter's ea_guid is the braced form of this id, so callers
+    # derive it with {xmi_id_to_ea_guid} rather than spelling the shape
+    # a second time.
+    #
+    # @param operation_xmi_id [String] e.g. "EAID_AB12CDEF_3456_..."
+    # @return [String] e.g. "EAID_RETURNID_3456_..."
+    def return_parameter_xmi_id(operation_xmi_id)
+      body = operation_xmi_id.sub(/\A(?:EAID|EAPK)_/, "")
+      "EAID_RETURNID_#{body.split("_", 2).last}"
+    end
   end
 end

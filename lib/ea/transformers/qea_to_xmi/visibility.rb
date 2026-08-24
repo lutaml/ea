@@ -3,19 +3,16 @@
 module Ea
   module Transformers
     module QeaToXmi
-      # Pure-function mapper from EA's integer scope/containment codes
-      # to UML visibility / aggregation wire strings.
+      # Pure-function mapper from EA's scope/aggregation codes to UML
+      # visibility / aggregation wire strings.
       #
-      # EA stores visibility as an integer in `t_attribute.scope`,
-      # `t_operation.scope`, `t_object.scope`. The encoding:
+      # QEA databases store scope as text in `t_attribute.Scope`,
+      # `t_operation.Scope`, `t_object.Scope`: "Public", "Private",
+      # "Protected", "Package". The integer codes (0-3, same order) are
+      # kept as a fallback for EAP-era databases.
       #
-      #   0 → Public
-      #   1 → Private
-      #   2 → Protected
-      #   3 → Package
-      #
-      # EA stores aggregation kind in `t_connector.sourcecontainment`
-      # and `t_connector.destcontainment`. The encoding:
+      # Aggregation kind comes from `t_connector.sourceisaggregate` /
+      # `destisaggregate` (via Transformer#containment_for). The encoding:
       #
       #   0 → None (omitted)
       #   1 → Shared (UML aggregation="shared")
@@ -23,6 +20,13 @@ module Ea
       #
       # Wire-side values are lower-case per the UML XMI schema.
       module Visibility
+        TEXT_SCOPES = {
+          "public" => "public",
+          "private" => "private",
+          "protected" => "protected",
+          "package" => "package",
+        }.freeze
+
         SCOPE_MAP = {
           0 => "public",
           1 => "private",
@@ -44,9 +48,10 @@ module Ea
         #   so the xmi gem omits the attribute — matching EA's output,
         #   which doesn't emit visibility="public".
         def from_scope(raw)
-          return nil if raw.nil? || raw.to_s.strip.empty?
+          text = raw.to_s.strip
+          return nil if text.empty?
 
-          value = SCOPE_MAP[raw.to_i]
+          value = TEXT_SCOPES[text.downcase] || SCOPE_MAP[text.to_i]
           return nil if value == "public"
 
           value

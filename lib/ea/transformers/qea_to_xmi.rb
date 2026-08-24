@@ -25,6 +25,7 @@ module Ea
       autoload :RunState,           "ea/transformers/qea_to_xmi/run_state"
       autoload :AssociationEnd,     "ea/transformers/qea_to_xmi/association_end"
       autoload :ExtensionSerializer, "ea/transformers/qea_to_xmi/extension_serializer"
+      autoload :PrimitiveTypes,    "ea/transformers/qea_to_xmi/primitive_types"
       autoload :ProfileSerializer, "ea/transformers/qea_to_xmi/profile_serializer"
     end
   end

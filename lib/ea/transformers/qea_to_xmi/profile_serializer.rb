@@ -32,18 +32,17 @@ module Ea
         # @return [Array<Xmi::Uml::PackagedElement>] stereotype and
         #   extension elements for all registered MDG documents.
         #   Empty array when no registry or no stereotypes.
+        #
+        # Stereotype ids are the bare names, so two MDGs defining the
+        # same name would emit clashing definitions. The first
+        # document to define a name wins.
         def call
           return [] unless @mdg_registry
-          return [] if @mdg_registry.documents.empty?
 
-          blocks = []
-          @mdg_registry.documents.each do |doc|
-            doc.stereotypes.each do |stereo|
-              blocks << build_stereotype(stereo)
-              blocks.concat(build_extensions(stereo))
-            end
-          end
-          blocks.compact
+          @mdg_registry.documents
+                       .flat_map(&:stereotypes)
+                       .uniq(&:name)
+                       .flat_map { |stereo| [build_stereotype(stereo), *build_extensions(stereo)] }
         end
 
         private
@@ -68,19 +67,18 @@ module Ea
           end
         end
 
+        # EA carries both ends as one space-separated memberEnd
+        # attribute on the Extension and repeats it on the
+        # ExtensionEnd — never as child <memberEnd> elements.
         def build_extension(stereotype, metaclass)
-          extension_id = "#{metaclass}_#{stereotype.name}"
           base_id = "#{stereotype.name}-base_#{metaclass}"
           member_ends = "extension_#{stereotype.name} #{base_id}"
 
           ::Xmi::Uml::PackagedElement.new(
             type: "uml:Extension",
-            id: extension_id,
+            id: "#{metaclass}_#{stereotype.name}",
             name: "A_#{metaclass}_#{stereotype.name}",
-            member_ends: [
-              ::Xmi::Uml::MemberEnd.new(idref: "extension_#{stereotype.name}"),
-              ::Xmi::Uml::MemberEnd.new(idref: base_id)
-            ],
+            member_end: member_ends,
             owned_end: [build_extension_end(stereotype, member_ends)]
           )
         end
@@ -90,7 +88,9 @@ module Ea
             type: "uml:ExtensionEnd",
             id: "extension_#{stereotype.name}",
             name: "extension_#{stereotype.name}",
-            association: member_ends
+            member_end: member_ends,
+            is_composite: true,
+            uml_type: ::Xmi::Uml::Type.new(idref: stereotype.name)
           )
         end
 

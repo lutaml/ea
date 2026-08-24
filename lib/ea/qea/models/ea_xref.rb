@@ -10,6 +10,9 @@ module Ea
         attribute :xref_id, Lutaml::Model::Type::String
         attribute :name, Lutaml::Model::Type::String
         attribute :xref_type, Lutaml::Model::Type::String
+        attribute :visibility, Lutaml::Model::Type::String
+        attribute :behavior, Lutaml::Model::Type::String
+        attribute :partition, Lutaml::Model::Type::String
         attribute :client, Lutaml::Model::Type::String
         attribute :supplier, Lutaml::Model::Type::String
         attribute :description, Lutaml::Model::Type::String

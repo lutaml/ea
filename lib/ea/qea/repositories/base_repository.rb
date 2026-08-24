@@ -215,9 +215,12 @@ module Ea
 
         private
 
+        # First occurrence wins, matching what a scan would return —
+        # `find` and `find_by_key` must not disagree about which record
+        # answers for a duplicated key.
         def build_pk_index
           @pk_index = {}
-          @records.each { |r| @pk_index[r.primary_key] = r }
+          @records.each { |r| @pk_index[r.primary_key] ||= r }
         end
       end
     end

@@ -108,7 +108,12 @@ RSpec.describe Ea::Qea::Models::EaConnector do
       expect(conn).to be_realization
     end
 
-    it "returns false when connector_type is not 'Realization'" do
+    it "recognizes the UK spelling EA databases use" do
+      conn = described_class.new(connector_type: "Realisation")
+      expect(conn).to be_realization
+    end
+
+    it "returns false for unrelated connector types" do
       conn = described_class.new(connector_type: "Association")
       expect(conn).not_to be_realization
     end

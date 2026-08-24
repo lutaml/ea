@@ -39,7 +39,7 @@ module Ea
         # a string. New formats add a new entry here without touching
         # this class body. Lambdas lazy-resolve autoloaded namespaces.
         EXPORTERS = {
-          xmi: ->(model, **_o) { Ea::Transformers.qea_to_xmi(model) },
+          xmi: ->(model, **o) { Ea::Transformers.qea_to_xmi(model, mdg_registry: o[:mdg_registry]) },
           json: ->(model, **o) { Ea::Export::Json::Generator.call(model, **o) },
           "json-schema": ->(model, **o) { Ea::Export::JsonSchema::Generator.call(model, **o) },
           plantuml: ->(model, **o) { Ea::Export::PlantUml::Generator.call(model, **o) },
@@ -71,7 +71,16 @@ module Ea
           opts = {}
           opts[:target_namespace] = options[:target_namespace] if options[:target_namespace]
           opts[:prefix] = options[:prefix] if options[:prefix]
+          add_mdg_registry(opts)
           opts
+        end
+
+        # Registry construction is xmi-only: the other exporters reject
+        # unknown keywords.
+        def add_mdg_registry(opts)
+          return unless options[:mdg] && sub == :xmi
+
+          opts[:mdg_registry] = Ea::Mdg::Registry.from_paths(options[:mdg])
         end
 
         def model

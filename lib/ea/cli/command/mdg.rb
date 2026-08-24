@@ -39,16 +39,7 @@ module Ea
         end
 
         def build_registry
-          registry = Ea::Mdg::Registry.new
-          Dir.glob("spec/fixtures/mdg/**/*.xml").each do |path|
-            begin
-              doc = Ea::Mdg::Loader.from_path(path).document
-              registry.register(doc)
-            rescue StandardError => e
-              warn "Skipped #{path}: #{e.message}" if ENV["EA_DEBUG"]
-            end
-          end
-          registry
+          Ea::Mdg::Registry.from_paths(["spec/fixtures/mdg"])
         end
 
         def list_technologies

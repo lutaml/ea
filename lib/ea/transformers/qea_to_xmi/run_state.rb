@@ -20,8 +20,9 @@ module Ea
       # `Variable` is the attribute name on the classifier (used to
       # resolve the definingFeature EAID at transformation time).
       # The `Value` plus `Op` form the OpaqueExpression body — Sparx
-      # prepends the operator character to the value (`Op==` →
-      # `body="=Value"`).
+      # prepends the stored operator verbatim. Equality is stored as
+      # `Op==;` (parsed op "="), so `body="=Value"`; comparison ops
+      # keep their full text (`Op=<=;` → `body="<=Value"`).
       #
       # The parser is pure: no I/O, no state. Same input always yields
       # the same output array of {Variable, Value, Op} structs.
@@ -32,15 +33,15 @@ module Ea
         # @!attribute value [String] the literal value text
         # @!attribute op [String] the operator character(s) EA stored
         Binding = Struct.new(:variable, :value, :op) do
-          # Sparx serialises the value with the operator character
-          # prepended (`Op==` → `body="=Value"`). For other operators
-          # (`!=`, `<`, `>`) the full operator string is prepended.
+          # Sparx serialises the value with the stored operator
+          # prepended verbatim ("=" for equality, "<=" etc. as-is —
+          # EA's reference exports contain body="<=valueTwo").
           #
           # @return [String] the body to set on the OpaqueExpression
           def body
             return value if op.nil? || op.empty?
 
-            "#{op[0]}#{value}"
+            "#{op}#{value}"
           end
         end
 

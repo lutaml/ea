@@ -36,6 +36,7 @@ module Ea
           sections = [
             build_elements_section,
             build_connectors_section,
+            build_primitivetypes_section,
             build_diagrams_section
           ].reject(&:empty?)
           sections.join("\n")
@@ -96,6 +97,7 @@ module Ea
                                                            is_abstract: obj.abstract?),
             style_for_object(obj),
             tags_block_for(obj.ea_guid),
+            xrefs_xml("\t\t\t", obj.ea_guid, "element property"),
             attributes_block_for(obj),
             operations_block_for(obj),
             "\t\t</element>"
@@ -121,7 +123,9 @@ module Ea
           "DataType" => "uml:DataType",
           "PrimitiveType" => "uml:PrimitiveType",
           "Object" => "uml:Object",
-          "Package" => "uml:Package"
+          "Signal" => "uml:Signal",
+          "Package" => "uml:Package",
+          "Association" => "uml:Association"
         }.freeze
 
         def uml_type_for(obj)
@@ -250,15 +254,22 @@ module Ea
             "\t\t\t\t\t<coords ordered=\"0\" scale=\"0\"/>",
             "\t\t\t\t\t<containment containment=\"Not Specified\" position=\"#{attr.pos || 0}\"/>",
             "\t\t\t\t\t<stereotype/>",
-            %(\t\t\t\t\t<bounds lower="#{attr.lowerbound || 1}" upper="#{attr.upperbound || 1}"/>),
+            bounds_xml(attr),
             "\t\t\t\t\t<options/>",
             "\t\t\t\t\t<style/>",
             %(\t\t\t\t\t<styleex value="#{escape(attr.styleex.to_s)}"/>),
             "\t\t\t\t\t<tags/>",
-            "\t\t\t\t\t<xrefs/>",
+            xrefs_xml("\t\t\t\t\t", attr.ea_guid, "attribute property"),
             "\t\t\t\t</attribute>"
           ]
           lines.join("\n")
+        end
+
+        # Shares the transformer's pair rule so the extension block and
+        # the UML tree can never report different multiplicities.
+        def bounds_xml(attr)
+          bounds = Cardinality.attribute_bounds(attr.lowerbound, attr.upperbound)
+          %(\t\t\t\t\t<bounds lower="#{escape(bounds[:lower])}" upper="#{escape(bounds[:upper])}"/>)
         end
 
         def attribute_scope(attr)
@@ -310,12 +321,17 @@ module Ea
             "\t\t\t\t\t<code/>",
             "\t\t\t\t\t<style/>",
             "\t\t\t\t\t<styleex/>",
-            documentation_element(op.notes),
-            "\t\t\t\t\t<tags/>",
-            parameters_block_for(op),
-            "\t\t\t\t</operation>"
+            *operation_tail(op)
           ]
           lines.join("\n")
+        end
+
+        def operation_tail(op)
+          [documentation_element(op.notes),
+           "\t\t\t\t\t<tags/>",
+           parameters_block_for(op),
+           xrefs_xml("\t\t\t\t\t", op.ea_guid, "operation property"),
+           "\t\t\t\t</operation>"]
         end
 
         def operation_scope(op)
@@ -338,11 +354,42 @@ module Ea
         end
 
         def parameters_block_for(op)
-          params = @context.params_for_operation(op.operationid)
-          return "" if params.empty?
+          entries = [return_parameter_xml(op), *declared_parameters_xml(op)].compact
+          return "" if entries.empty?
 
-          inner = params.map { |p| parameter_xml(p) }.join("\n")
-          "\t\t\t\t\t<parameters>\n#{inner}\n\t\t\t\t\t</parameters>"
+          "\t\t\t\t\t<parameters>\n#{entries.join("\n")}\n\t\t\t\t\t</parameters>"
+        end
+
+        def declared_parameters_xml(op)
+          @context.params_for_operation(op.operationid)
+                  .reject(&:return?)
+                  .map { |param| parameter_xml(param) }
+        end
+
+        # The trailing children of a synthesized return parameter —
+        # all empty, in EA's order.
+        RETURN_PARAMETER_TAIL = ["\t\t\t\t\t\t\t<style/>",
+                                 "\t\t\t\t\t\t\t<styleex/>",
+                                 "\t\t\t\t\t\t\t<documentation/>",
+                                 "\t\t\t\t\t\t\t<tags/>",
+                                 "\t\t\t\t\t\t\t<xrefs/>"].freeze
+
+        # EA lists the return first, as a synthesized parameter with no
+        # t_operationparams row behind it. Both its idref and its
+        # ea_guid come from the operation's own id via {GuidFormat}, so
+        # the two agree by construction — an untyped operation has no
+        # return to describe, and one whose nullable t_operation.ea_guid
+        # is blank has nothing to derive the ids from.
+        def return_parameter_xml(operation)
+          return nil if PrimitiveTypes.normalize_name(operation.type).empty?
+          return nil unless @context.identifiable?(operation)
+
+          return_id = GuidFormat.return_parameter_xmi_id(@context.xmi_id_for(operation))
+          [%(\t\t\t\t\t\t<parameter xmi:idref="#{return_id}" visibility="public">),
+           %(\t\t\t\t\t\t\t<properties pos="0" type="#{escape(operation.type.to_s)}" const="false" ) +
+             %(ea_guid="#{GuidFormat.xmi_id_to_ea_guid(return_id)}"/>),
+           *RETURN_PARAMETER_TAIL,
+           "\t\t\t\t\t\t</parameter>"].join("\n")
         end
 
         def parameter_xml(param)
@@ -392,11 +439,16 @@ module Ea
           return nil unless source_obj && target_obj
 
           name_attr = conn.name ? %( name="#{escape(conn.name)}") : ""
-          inner = end_xml(source_obj, "source") + end_xml(target_obj, "target") + connector_body_xml(conn)
+          inner = end_xml(conn, source_obj, "source") + end_xml(conn, target_obj, "target") + connector_body_xml(conn)
           %(\t\t<connector xmi:idref="#{connector_id}"#{name_attr}>\n#{inner}\t\t</connector>)
         end
 
-        def end_xml(obj, kind)
+        END_XREF_TYPE = {
+          "source" => "connectorSrcEnd property",
+          "target" => "connectorDestEnd property"
+        }.freeze
+
+        def end_xml(conn, obj, kind)
           xmi_id = @context.xmi_id_for(obj)
           lines = [
             "\t\t\t<#{kind} xmi:idref=\"#{xmi_id}\">",
@@ -408,7 +460,7 @@ module Ea
             "\t\t\t\t<modifiers isOrdered=\"false\" changeable=\"none\" isNavigable=\"false\"/>",
             "\t\t\t\t<style value=\"Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Unspecified;\"/>",
             "\t\t\t\t<documentation/>",
-            "\t\t\t\t<xrefs/>",
+            xrefs_xml("\t\t\t\t", conn.ea_guid, END_XREF_TYPE.fetch(kind)),
             "\t\t\t\t<tags/>",
             "\t\t\t</#{kind}>"
           ]
@@ -430,10 +482,70 @@ module Ea
               "seqno=\"0\" headStyle=\"0\" lineStyle=\"0\"/>",
             "\t\t\t<extendedProperties virtualInheritance=\"0\"/>",
             "\t\t\t<style/>",
-            "\t\t\t<xrefs/>",
+            xrefs_xml("\t\t\t", conn.ea_guid, "connector property"),
             "\t\t\t<tags/>"
           ]
           "#{lines.join("\n")}\n"
+        end
+
+        # ---- <xrefs> ----------------------------------------------------
+
+        # EA renders t_xref rows as a $XREFPROP mini-language string in
+        # a single value attribute. Derived from the reference exports:
+        # token order $XID $NAM $TYP $VIS [$BEH] $PAR $DES $CLT [$SUP]
+        # $ENDXREF; — $BEH only when Behavior is non-blank. A blank
+        # Supplier renders as "<none>" except on "connector property"
+        # rows, where EA omits the token entirely. "diagram properties"
+        # rows are never rendered (reference diagrams keep <xrefs/>).
+        def xrefs_xml(indent, ea_guid, type)
+          rows = @database.xrefs_for_client(ea_guid.to_s)
+                          .select { |xref| xref.xref_type == type }
+          return "#{indent}<xrefs/>" if rows.empty?
+
+          value = rows.map { |xref| xref_value(xref) }.join
+          %(#{indent}<xrefs value="#{escape(value)}"/>)
+        end
+
+        def xref_value(xref)
+          head = "$XREFPROP=$XID=#{xref.xref_id}$XID;$NAM=#{xref.name}$NAM;" \
+                 "$TYP=#{xref.xref_type}$TYP;$VIS=#{xref.visibility}$VIS;"
+          beh = xref.behavior.to_s.empty? ? "" : "$BEH=#{xref.behavior}$BEH;"
+          tail = "$PAR=#{xref.partition}$PAR;$DES=#{xref.description}$DES;" \
+                 "$CLT=#{xref.client}$CLT;#{supplier_token(xref)}$ENDXREF;"
+          "#{head}#{beh}#{tail}"
+        end
+
+        def supplier_token(xref)
+          return "$SUP=#{xref.supplier}$SUP;" unless xref.supplier.to_s.empty?
+          return "" if xref.xref_type == "connector property"
+
+          "$SUP=<none>$SUP;"
+        end
+
+        # ---- <primitivetypes> section ----------------------------------
+
+        # EA nests every synthesized EAnone_ PrimitiveType definition
+        # under a fixed two-package hierarchy inside the Extension.
+        def build_primitivetypes_section
+          names = PrimitiveTypes.unresolved_names(@database)
+          return "" if names.empty?
+
+          ["\t\t<primitivetypes>",
+           primitive_package("\t\t\t", "EAPrimitiveTypesPackage", "EA_PrimitiveTypes_Package"),
+           primitive_package("\t\t\t\t", "EAnoneTypesPackage", "EA_none_Types_Package"),
+           *names.map { |name| primitive_definition(name) },
+           "\t\t\t\t</packagedElement>",
+           "\t\t\t</packagedElement>",
+           "\t\t</primitivetypes>"].join("\n")
+        end
+
+        def primitive_package(indent, id, name)
+          %(#{indent}<packagedElement xmi:type="uml:Package" xmi:id="#{id}" name="#{name}">)
+        end
+
+        def primitive_definition(name)
+          "\t\t\t\t\t<packagedElement xmi:type=\"uml:PrimitiveType\" " \
+            "xmi:id=\"#{escape(PrimitiveTypes.definition_id(name))}\" name=\"#{escape(name)}\"/>"
         end
 
         # ---- <diagrams> section ----------------------------------------
@@ -465,27 +577,76 @@ module Ea
           lines.join("\n")
         end
 
+        # EA emits object placements (t_diagramobjects, ordered by
+        # Sequence) followed by connector entries (t_diagramlinks).
+        # Derived from examples/exports/basic/model.xml:
+        #   placement: geometry="Left=..;Top=..;Right=..;Bottom=..;
+        #     imgL=..;imgT=..;imgR=..;imgB=..;" from the Rect* columns
+        #     (Top/Bottom sign-flipped; img* at fixed +25/+30 offsets),
+        #     seqno=Sequence, style=ObjectStyle verbatim.
+        #   connector: subject is the CONNECTOR's EAID, geometry is the
+        #     link's Geometry plus "Path=<path>;", style is the link's
+        #     Style plus "Hidden=<hidden>;".
         def diagram_elements_xml(dgm)
-          elements = (@database.collections[:diagram_links] || []).select do |dl|
-            dl.diagramid == dgm.diagram_id
-          end
-          return "\t\t\t<elements/>" if elements.empty?
-
-          inner = elements.filter_map { |dl| diagram_element_xml(dl) }.join("\n")
+          placements = @database.diagram_objects_for(dgm.diagram_id)
+                                .sort_by { |placement| placement_order(placement) }
+                                .filter_map { |placement| object_placement_xml(placement) }
+          links = @database.diagram_links_for(dgm.diagram_id)
+                           .filter_map { |link| connector_entry_xml(link) }
+          inner = (placements + links).join("\n")
           return "\t\t\t<elements/>" if inner.empty?
 
           "\t\t\t<elements>\n#{inner}\n\t\t\t</elements>"
         end
 
-        def diagram_element_xml(dl)
-          obj = @database.find_object(dl.instance_id)
+        IMG_OFFSET_X = 25
+        IMG_OFFSET_Y = 30
+
+        def object_placement_xml(placement)
+          obj = @database.find_object(placement.ea_object_id)
           return nil unless obj
 
-          subject = @context.xmi_id_for(obj)
-          geometry = dl.geometry.to_s
-          attrs = [%(subject="#{subject}")]
-          attrs << %(geometry="#{escape(geometry)}") unless geometry.empty?
-          "\t\t\t\t<element #{attrs.join(" ")}/>"
+          "\t\t\t\t<element geometry=\"#{placement_geometry(placement)}\" " \
+            "subject=\"#{escape(@context.xmi_id_for(obj).to_s)}\" " \
+            "seqno=\"#{placement.sequence.to_i}\" style=\"#{escape(placement.objectstyle.to_s)}\"/>"
+        end
+
+        # Sequence is nullable with DEFAULT 0 — nil sorts as 0, ties
+        # broken stably by instance id.
+        def placement_order(placement)
+          [placement.sequence.to_i, placement.instance_id.to_i]
+        end
+
+        # Rect columns are nullable with DEFAULT 0 — coerce nil to 0.
+        def placement_geometry(placement)
+          left = placement.rectleft.to_i
+          top = -placement.recttop.to_i
+          right = placement.rectright.to_i
+          bottom = -placement.rectbottom.to_i
+          "Left=#{left};Top=#{top};Right=#{right};Bottom=#{bottom};" \
+            "imgL=#{left + IMG_OFFSET_X};imgT=#{top + IMG_OFFSET_Y};" \
+            "imgR=#{right + IMG_OFFSET_X};imgB=#{bottom + IMG_OFFSET_Y};"
+        end
+
+        def connector_entry_xml(link)
+          conn = @database.find_connector(link.connectorid)
+          return nil unless conn
+
+          # EA rewrites the Path waypoints' ";" separators to "$" and
+          # terminates with one ";" (reference: Path=165:-230$371:-230$;).
+          geometry = "#{style_fragment(link.geometry)}Path=#{link.path.to_s.tr(";", "$")};"
+          style = "#{style_fragment(link.style)}Hidden=#{link.hidden};"
+          "\t\t\t\t<element geometry=\"#{escape(geometry)}\" " \
+            "subject=\"#{escape(@context.xmi_id_for(conn).to_s)}\" style=\"#{escape(style)}\"/>"
+        end
+
+        # Real rows (plateau model) can lack the trailing ";" — append
+        # exactly one so concatenated tokens never fuse.
+        def style_fragment(text)
+          value = text.to_s
+          return "" if value.empty?
+
+          value.end_with?(";") ? value : "#{value};"
         end
 
         # ---- helpers ----------------------------------------------------

@@ -4,154 +4,87 @@ require "spec_helper"
 require "ea/transformers/qea_to_xmi"
 
 RSpec.describe Ea::Transformers::QeaToXmi::IdAllocator do
-  let(:allocator) { described_class.new }
+  subject(:allocator) { described_class.new }
 
+  # Expected IDs are copied verbatim from examples/exports/basic/model.xml.
+  # EA's scheme: the synthesized ID keeps the owner ID's total width —
+  # "EAID_" + prefix + 6-digit counter + underscore padding + the owner
+  # ID's last 27 characters. LI counts globally from 1 in allocation
+  # order; SL/OE/RT count from 0 per owning element.
   describe "#allocate" do
-    it "returns an EAID_ prefixed identifier" do
-      id = allocator.allocate(prefix: described_class::LITERAL_INTEGER)
-      expect(id).to start_with("EAID_LI")
-    end
-
-    it "zero-pads the counter to 6 digits" do
-      id = allocator.allocate(prefix: described_class::LITERAL_INTEGER)
-      expect(id).to match(/EAID_LI000001\z/)
-    end
-
-    it "increments the counter across allocations" do
-      first = allocator.allocate(prefix: described_class::LITERAL_INTEGER)
-      second = allocator.allocate(prefix: described_class::LITERAL_INTEGER)
-      third = allocator.allocate(prefix: described_class::LITERAL_INTEGER)
-
-      expect(first).to end_with("LI000001")
-      expect(second).to end_with("LI000002")
-      expect(third).to end_with("LI000003")
-    end
-
-    it "accepts different prefixes" do
-      li = allocator.allocate(prefix: described_class::LITERAL_INTEGER)
-      oe = allocator.allocate(prefix: described_class::OPAQUE_EXPRESSION)
-      rt = allocator.allocate(prefix: described_class::RETURN_PARAMETER)
-
-      expect(li).to start_with("EAID_LI")
-      expect(oe).to start_with("EAID_OE")
-      expect(rt).to start_with("EAID_RT")
-    end
-  end
-
-  describe "seed-based memoisation" do
-    it "returns the same ID for the same seed" do
-      id1 = allocator.allocate(prefix: described_class::LITERAL_INTEGER, seed: "attr-42-upper")
-      id2 = allocator.allocate(prefix: described_class::LITERAL_INTEGER, seed: "attr-42-upper")
-
-      expect(id1).to eq(id2)
-    end
-
-    it "returns different IDs for different seeds" do
-      upper = allocator.allocate(prefix: described_class::LITERAL_INTEGER, seed: "attr-42-upper")
-      lower = allocator.allocate(prefix: described_class::LITERAL_INTEGER, seed: "attr-42-lower")
-
-      expect(upper).not_to eq(lower)
-    end
-
-    it "does not advance the counter when returning a memoised ID" do
-      allocator.allocate(prefix: described_class::LITERAL_INTEGER, seed: "x")
-      allocator.allocate(prefix: described_class::LITERAL_INTEGER, seed: "x") # memoised
-      next_id = allocator.allocate(prefix: described_class::LITERAL_INTEGER, seed: "y")
-
-      # Counter advanced exactly twice (once per distinct seed)
-      expect(next_id).to end_with("LI000002")
-    end
-
-    it "still allocates when seed is nil" do
-      id = allocator.allocate(prefix: described_class::LITERAL_INTEGER, seed: nil)
-      expect(id).to start_with("EAID_LI")
-    end
-
-    it "treats nil seed as non-memoising (each call advances)" do
-      id1 = allocator.allocate(prefix: described_class::LITERAL_INTEGER, seed: nil)
-      id2 = allocator.allocate(prefix: described_class::LITERAL_INTEGER, seed: nil)
-
-      expect(id1).to end_with("LI000001")
-      expect(id2).to end_with("LI000002")
-    end
-  end
-
-  describe "parent_guid incorporation (Sparx-conformant suffix)" do
-    let(:guid) { "{6B8DB1D6-D01D-4acc-9C05-79018BCB3FB6}" }
-
-    it "appends the parent GUID tail after the counter" do
-      id = allocator.allocate(
-        prefix: described_class::LITERAL_INTEGER,
-        seed: "test",
-        parent_guid: guid,
+    it "builds the LI ladder for association ends in EA's order" do
+      dst = "EAID_dst2AA131_EEB1_4de7_98F5_670D6EE4A52B"
+      src = "EAID_src2AA131_EEB1_4de7_98F5_670D6EE4A52B"
+      ids = [
+        allocator.allocate(prefix: "LI", owner_id: dst, seed: "dst-lower"),
+        allocator.allocate(prefix: "LI", owner_id: dst, seed: "dst-upper"),
+        allocator.allocate(prefix: "LI", owner_id: src, seed: "src-lower"),
+        allocator.allocate(prefix: "LI", owner_id: src, seed: "src-upper")
+      ]
+      expect(ids).to eq(
+        %w[
+          EAID_LI000001__EEB1_4de7_98F5_670D6EE4A52B
+          EAID_LI000002__EEB1_4de7_98F5_670D6EE4A52B
+          EAID_LI000003__EEB1_4de7_98F5_670D6EE4A52B
+          EAID_LI000004__EEB1_4de7_98F5_670D6EE4A52B
+        ]
       )
-      expect(id).to eq("EAID_LI000001__6B8DB1D6_D01D_4acc_9C05_79018BCB3FB6")
     end
 
-    it "preserves the leading underscore from the opening brace" do
-      # Real Sparx format is `EAID_LI<NN>__<guid_tail>` — the double
-      # underscore is separator + brace-derived. Single underscore
-      # would mean the GUID couldn't be traced back to its parent.
-      id = allocator.allocate(
-        prefix: described_class::LITERAL_INTEGER,
-        seed: "test",
-        parent_guid: guid,
-      )
-      expect(id).to include("LI000001__")
+    it "keeps the global LI counter running across owners" do
+      other_owner = "EAID_dst2AA131_EEB1_4de7_98F5_670D6EE4A52B"
+      attr_id = "EAID_4D665E05_CA01_4c63_8311_0EC8F355E932"
+      8.times { |i| allocator.allocate(prefix: "LI", owner_id: other_owner, seed: "warm-#{i}") }
+      id = allocator.allocate(prefix: "LI", owner_id: attr_id, seed: "lower")
+      expect(id).to eq("EAID_LI000009_CA01_4c63_8311_0EC8F355E932")
     end
 
-    it "different parents with the same counter produce distinct IDs" do
-      other_guid = "{AAAAAAAA-BBBB-cccc-dddd-EEEEEEEEEEEE}"
-      id_a = allocator.allocate(prefix: described_class::LITERAL_INTEGER, seed: "a", parent_guid: guid)
-      id_b = allocator.allocate(prefix: described_class::LITERAL_INTEGER, seed: "b", parent_guid: other_guid)
-
-      expect(id_a).to include("6B8DB1D6")
-      expect(id_b).to include("AAAAAAAA")
-      expect(id_a).not_to eq(id_b)
+    it "counts SL and OE from zero per owning instance" do
+      instance = "EAID_7169D8F6_9F66_4e33_8E49_469BD346DAA1"
+      expect(allocator.allocate(prefix: "SL", owner_id: instance, seed: "s0"))
+        .to eq("EAID_SL000000_9F66_4e33_8E49_469BD346DAA1")
+      expect(allocator.allocate(prefix: "OE", owner_id: instance, seed: "v0"))
+        .to eq("EAID_OE000000_9F66_4e33_8E49_469BD346DAA1")
+      expect(allocator.allocate(prefix: "SL", owner_id: instance, seed: "s1"))
+        .to eq("EAID_SL000001_9F66_4e33_8E49_469BD346DAA1")
+      expect(allocator.allocate(prefix: "OE", owner_id: instance, seed: "v1"))
+        .to eq("EAID_OE000001_9F66_4e33_8E49_469BD346DAA1")
     end
 
-    it "omits the tail when parent_guid is nil" do
-      id = allocator.allocate(
-        prefix: described_class::LITERAL_INTEGER,
-        seed: "test",
-        parent_guid: nil,
-      )
-      expect(id).to eq("EAID_LI000001")
+    it "restarts RT at zero for every operation" do
+      op1 = "EAID_11111111_3EE1_4598_9615_F2068D192111"
+      op2 = "EAID_22222222_B122_4b05_863F_1918B52A0C0C"
+      expect(allocator.allocate(prefix: "RT", owner_id: op1, seed: "r1"))
+        .to eq("EAID_RT000000_3EE1_4598_9615_F2068D192111")
+      expect(allocator.allocate(prefix: "RT", owner_id: op2, seed: "r2"))
+        .to eq("EAID_RT000000_B122_4b05_863F_1918B52A0C0C")
     end
 
-    it "omits the tail when parent_guid is empty string" do
-      id = allocator.allocate(
-        prefix: described_class::LITERAL_INTEGER,
-        seed: "test",
-        parent_guid: "",
-      )
-      expect(id).to eq("EAID_LI000001")
-    end
-  end
-
-  describe "well-known Sparx prefixes" do
-    it "exposes LITERAL_INTEGER" do
-      expect(described_class::LITERAL_INTEGER).to eq("LI")
+    it "memoizes by owner, prefix and seed" do
+      owner = "EAID_4D665E05_CA01_4c63_8311_0EC8F355E932"
+      first = allocator.allocate(prefix: "LI", owner_id: owner, seed: "lower")
+      expect(allocator.allocate(prefix: "LI", owner_id: owner, seed: "lower")).to eq(first)
     end
 
-    it "exposes OPAQUE_EXPRESSION" do
-      expect(described_class::OPAQUE_EXPRESSION).to eq("OE")
+    it "does not advance the LI counter when returning a memoized ID" do
+      owner = "EAID_4D665E05_CA01_4c63_8311_0EC8F355E932"
+      allocator.allocate(prefix: "LI", owner_id: owner, seed: "x")
+      allocator.allocate(prefix: "LI", owner_id: owner, seed: "x")
+      second = allocator.allocate(prefix: "LI", owner_id: owner, seed: "y")
+      expect(second).to eq("EAID_LI000002_CA01_4c63_8311_0EC8F355E932")
     end
 
-    it "exposes SLOT" do
-      expect(described_class::SLOT).to eq("SL")
+    it "emits a tailless id when the owner has no usable id" do
+      expect(allocator.allocate(prefix: "LI", owner_id: nil, seed: "s"))
+        .to eq("EAID_LI000001")
     end
 
-    it "exposes NAME_LABEL" do
-      expect(described_class::NAME_LABEL).to eq("NL")
-    end
-
-    it "exposes DIAGRAM_BOUNDS" do
-      expect(described_class::DIAGRAM_BOUNDS).to eq("DB")
-    end
-
-    it "exposes RETURN_PARAMETER" do
-      expect(described_class::RETURN_PARAMETER).to eq("RT")
+    it "allocates independently for the same seed under different owners" do
+      op1 = "EAID_11111111_3EE1_4598_9615_F2068D192111"
+      op2 = "EAID_22222222_B122_4b05_863F_1918B52A0C0C"
+      first = allocator.allocate(prefix: "RT", owner_id: op1, seed: "return")
+      second = allocator.allocate(prefix: "RT", owner_id: op2, seed: "return")
+      expect(first).not_to eq(second)
     end
   end
 end
