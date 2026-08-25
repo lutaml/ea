@@ -35,11 +35,19 @@ module Ea
         end
 
         def definition
-          if @options[:with_assoc] && @model.association
-            @lookup.loopup_assoc_def(@model.association)
-          else
-            @model.definition
+          defn = if @options[:with_assoc] && @model.association
+                   @lookup.lookup_assoc_def(@model.association)
+                 else
+                   @model.definition
+                 end
+
+          if defn.nil? || defn.empty?
+            defn = @lookup.lookup_connector_def_by_associationclass(
+              @model.association,
+            )
           end
+
+          defn
         end
 
         def association

@@ -73,6 +73,10 @@ module Ea
         xmi_index.find_connector(link_id)
       end
 
+      def fetch_connector_by_associationclass(associationclass)
+        connector_by_associationclass_lookup[associationclass]
+      end
+
       def fetch_definition_node_value(link_id, node_name)
         connector_node = fetch_connector(link_id)
         return nil unless connector_node
@@ -196,6 +200,11 @@ module Ea
 
       def lookup_assoc_def(association)
         connector = fetch_connector(association)
+        connector&.documentation&.value
+      end
+
+      def lookup_connector_def_by_associationclass(association)
+        connector = fetch_connector_by_associationclass(association)
         connector&.documentation&.value
       end
 
@@ -703,12 +712,20 @@ module Ea
             gen_attr.xmi_id = attr.xmi_id
             gen_attr.is_derived = !!attr.is_derived
             gen_attr.cardinality = attr.cardinality
-            gen_attr.definition = attr.definition&.strip
+            gen_attr.definition = get_uml_general_attribute_definition(attr)
             gen_attr.association = attr.association
             gen_attr.has_association = !!attr.association
             gen_attr.type_ns = attr.type_ns
           end
         end
+      end
+
+      def get_uml_general_attribute_definition(attr)
+        return attr.definition&.strip unless attr.association
+
+        attr.definition&.strip ||
+          lookup_assoc_def(attr.association) ||
+          lookup_connector_def_by_associationclass(attr.association)
       end
 
       def set_uml_generalization(general_id)
@@ -920,6 +937,18 @@ module Ea
           lookup = {}
           connectors = @xmi_root_model.extension&.connectors&.connector || []
           connectors.each { |con| index_connector_directions(con, lookup) }
+          lookup
+        end
+      end
+
+      def connector_by_associationclass_lookup
+        @connector_by_associationclass_lookup ||= begin
+          lookup = {}
+          connectors = @xmi_root_model.extension&.connectors&.connector || []
+          connectors.each do |con|
+            assoc_class = con.extended_properties&.associationclass
+            lookup[assoc_class] = con if assoc_class
+          end
           lookup
         end
       end
