@@ -15,10 +15,6 @@ gemspec
   actual_path = sibling_gem == "emf" ? File.expand_path("~/src/claricle/emf") : actual_path
   if actual_path && File.directory?(actual_path) && ENV["EA_FORCE_RUBYGEMS"] != "1"
     gem sibling_gem, path: actual_path
-  elsif sibling_gem == "xmi"
-    # xmi 0.7.0 is unreleased; resolve the companion branch until it
-    # ships, then delete this elsif so xmi comes from rubygems again.
-    gem sibling_gem, github: "lutaml/xmi", branch: "feat/nested-classifier-mapping"
   else
     gem sibling_gem
   end
