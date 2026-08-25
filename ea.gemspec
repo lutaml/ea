@@ -36,14 +36,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency "lutaml-path"
   spec.add_dependency "sqlite3"
   spec.add_dependency "rubyzip"
-  # Requires unreleased xmi features (nestedClassifier, lowerValue-first
-  # order); CI installs them from the companion branch (see Gemfile).
-  # A released xmi (e.g. 0.6.2) satisfies this constraint but would
-  # silently drop nested classes, so lib/ea/xmi_guard.rb raises at
-  # require time when the loaded xmi lacks nestedClassifier support.
-  # Tighten to "~> 0.7" (and delete the guard) once xmi 0.7.0 is
-  # released.
-  spec.add_dependency "xmi", ">= 0.6.2"
+  # xmi 0.7.0 added nestedClassifier support and lowerValue-first
+  # ordering, both required for faithful QEA→XMI export.
+  spec.add_dependency "xmi", "~> 0.7"
   spec.add_dependency "nokogiri", "~> 1.18"
   spec.add_dependency "liquid"
   spec.add_dependency "thor", "~> 1.4"
