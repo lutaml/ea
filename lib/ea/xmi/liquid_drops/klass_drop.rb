@@ -101,8 +101,7 @@ module Ea
         def attributes
           Array(@model.attributes).filter_map do |owned_attr|
             if @options[:with_assoc] || owned_attr.association.nil?
-              ::Ea::Xmi::LiquidDrops::AttributeDrop.new(owned_attr,
-                                                            @options)
+              ::Ea::Xmi::LiquidDrops::AttributeDrop.new(owned_attr, @options)
             end
           end
         end

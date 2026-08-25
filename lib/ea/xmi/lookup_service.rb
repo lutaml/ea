@@ -37,6 +37,10 @@ module Ea
         @parser.lookup_assoc_def(association)
       end
 
+      def lookup_connector_def_by_associationclass(xmi_id)
+        @parser.lookup_connector_def_by_associationclass(xmi_id)
+      end
+
       def fetch_connector(link_id)
         @parser.fetch_connector(link_id)
       end

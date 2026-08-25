@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<xmi:XMI xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/UML/20161101/UMLDC">
+	<xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5" exporterID="1624"/>
+	<uml:Model xmi:type="uml:Model" name="TestModel">
+		<packagedElement xmi:type="uml:Package" xmi:id="EAPK_ROOT" name="Root">
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_CLASS_A" name="ClassA"/>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_CLASS_B" name="ClassB"/>
+			<packagedElement xmi:type="uml:Association" xmi:id="EAID_CONN_1" name="Rel1">
+				<memberEnd xmi:idref="EAID_CONN_1_src"/>
+				<ownedEnd xmi:type="uml:Property" xmi:id="EAID_CONN_1_src" association="EAID_CONN_1">
+					<type xmi:idref="EAID_CLASS_A"/>
+				</ownedEnd>
+				<memberEnd xmi:idref="EAID_CONN_1_dst"/>
+				<ownedEnd xmi:type="uml:Property" xmi:id="EAID_CONN_1_dst" association="EAID_CONN_1">
+					<type xmi:idref="EAID_CLASS_B"/>
+				</ownedEnd>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Association" xmi:id="EAID_CONN_2" name="Rel2">
+				<memberEnd xmi:idref="EAID_CONN_2_src"/>
+				<ownedEnd xmi:type="uml:Property" xmi:id="EAID_CONN_2_src" association="EAID_CONN_2">
+					<type xmi:idref="EAID_CLASS_A"/>
+				</ownedEnd>
+				<memberEnd xmi:idref="EAID_CONN_2_dst"/>
+				<ownedEnd xmi:type="uml:Property" xmi:id="EAID_CONN_2_dst" association="EAID_CONN_2">
+					<type xmi:idref="EAID_CLASS_B"/>
+				</ownedEnd>
+			</packagedElement>
+		</packagedElement>
+	</uml:Model>
+	<xmi:Extension extender="Enterprise Architect" extenderID="6.5">
+		<elements>
+			<element xmi:idref="EAID_CLASS_A" xmi:type="uml:Class" name="ClassA" scope="public">
+				<model package="EAPK_ROOT" ea_localid="1" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Class" nType="0" scope="public"/>
+			</element>
+			<element xmi:idref="EAID_CLASS_B" xmi:type="uml:Class" name="ClassB" scope="public">
+				<model package="EAPK_ROOT" ea_localid="2" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Class" nType="0" scope="public"/>
+			</element>
+		</elements>
+		<connectors>
+			<connector xmi:idref="EAID_CONN_1" name="Rel1">
+				<source xmi:idref="EAID_CLASS_A">
+					<model ea_localid="1" type="Class" name="ClassA"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Unspecified;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_CLASS_B">
+					<model ea_localid="2" type="Class" name="ClassB"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Unspecified;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="10"/>
+				<properties ea_type="Association" direction="Unspecified"/>
+				<documentation value="Connection with associationclass"/>
+				<extendedProperties virtualInheritance="0" associationclass="EAID_ASSOC_CLASS"/>
+			</connector>
+			<connector xmi:idref="EAID_CONN_2" name="Rel2">
+				<source xmi:idref="EAID_CLASS_A">
+					<model ea_localid="3" type="Class" name="ClassA"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Unspecified;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_CLASS_B">
+					<model ea_localid="4" type="Class" name="ClassB"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Unspecified;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="11"/>
+				<properties ea_type="Association" direction="Unspecified"/>
+				<documentation value="Connection without associationclass"/>
+				<extendedProperties virtualInheritance="0"/>
+			</connector>
+		</connectors>
+	</xmi:Extension>
+</xmi:XMI>
