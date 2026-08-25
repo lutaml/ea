@@ -16,6 +16,11 @@
 # Test artifacts from CLI invocations without --output
 *.svg
 
+# Built gem artifacts — never commit; a stray root-level .gem breaks
+# the release workflow's `gem push pkg/*.gem` glob ("Too many gem
+# names" when more than one gem lands there).
+*.gem
+
 # Frontend (Vue) — node_modules is local only; dist/ is committed so
 # the gem ships with a pre-built bundle and never needs npm at install.
 /frontend/node_modules/
