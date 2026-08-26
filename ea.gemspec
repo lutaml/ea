@@ -37,8 +37,10 @@ Gem::Specification.new do |spec|
   spec.add_dependency "sqlite3"
   spec.add_dependency "rubyzip"
   # xmi 0.7.0 added nestedClassifier support and lowerValue-first
-  # ordering, both required for faithful QEA→XMI export.
-  spec.add_dependency "xmi", "~> 0.7"
+  # ordering; 0.7.2 additionally constrains lutaml-model below
+  # 0.8.20, where Sparx type refs are silently dropped. Both are
+  # required for faithful QEA→XMI export.
+  spec.add_dependency "xmi", "~> 0.7.2"
   spec.add_dependency "nokogiri", "~> 1.18"
   spec.add_dependency "liquid"
   spec.add_dependency "thor", "~> 1.4"
