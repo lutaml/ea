@@ -12,7 +12,7 @@ module Ea
           @xmi_root_model = options[:xmi_root_model]
           @id_name_mapping = options[:id_name_mapping]
 
-          init_xmi_dependencies if @xmi_root_model
+          init_xmi_dependencies if @xmi_root_model && @model
           init_guidance(guidance) if guidance
         end
 
