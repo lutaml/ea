@@ -109,37 +109,7 @@ module Ea
         def serialize(with_extensions: true)
           xml = build_root.to_xml(use_prefix: true)
           xml = normalize_namespaces(xml)
-          xml = plain_parameter_type(xml)
           with_extensions ? inject_extension_content(xml) : xml
-        end
-
-        # EA writes a return parameter's type unprefixed:
-        # `<ownedParameter … type="EAnone_void"/>`. Its reference export
-        # carries 12 of these and no `xmi:type` on ownedParameter at all.
-        #
-        # `xmi:type` is the XMI metaclass discriminator; `type` is the
-        # classifier reference. Two different attributes — but
-        # lutaml-model matches by local name and collapses them into one
-        # slot, so the xmi gem can only emit one of them. It keeps the
-        # namespaced form, which is right for general UML XMI, and
-        # rewriting that in the shared model would break round-tripping
-        # for every non-Sparx consumer. Restoring the reference EA
-        # actually writes is this exporter's job, so it happens here.
-        #
-        # Scoped to ownedParameter: no other element wants it. Walks
-        # complete name="value" pairs rather than scanning the tag as
-        # text — a parameter name is free text out of EA and may itself
-        # contain the literal `xmi:type=`, which a raw substitution
-        # would happily rewrite inside the quotes.
-        ATTRIBUTE_PAIR = /([A-Za-z_][\w:.-]*)=("[^"]*")/
-
-        def plain_parameter_type(xml)
-          xml.gsub(/<ownedParameter\b[^>]*?>/m) do |tag|
-            tag.gsub(ATTRIBUTE_PAIR) do
-              name = Regexp.last_match(1)
-              name == "xmi:type" ? %(type=#{Regexp.last_match(2)}) : Regexp.last_match(0)
-            end
-          end
         end
 
         # EA's reference XMI uses the 2011-07-01 XMI/UML namespace URIs;
@@ -744,7 +714,11 @@ module Ea
             ),
             name: "return",
             direction: "return",
-            type: type_reference(op.type, op.classifier),
+            # EA writes the classifier reference as the UNPREFIXED
+            # type= attribute; the xmi-namespaced xmi:type is the
+            # metaclass discriminator and stays unset here. The xmi
+            # gem's classifier_type slot round-trips EA's spelling.
+            classifier_type: type_reference(op.type, op.classifier),
           )
         end
 
