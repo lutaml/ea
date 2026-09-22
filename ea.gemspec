@@ -38,9 +38,12 @@ Gem::Specification.new do |spec|
   spec.add_dependency "rubyzip"
   # xmi 0.7.0 added nestedClassifier support and lowerValue-first
   # ordering; 0.7.2 additionally constrains lutaml-model below
-  # 0.8.20, where Sparx type refs are silently dropped. Both are
-  # required for faithful QEA→XMI export.
-  spec.add_dependency "xmi", "~> 0.7.2"
+  # 0.8.20, where Sparx type refs are silently dropped. 0.7.5 split
+  # OwnedParameter's type into namespace-disjoint slots — the
+  # exporter writes the classifier to classifier_type, which does
+  # not exist before 0.7.5 (NoMethodError at serialization). All
+  # three are required for faithful QEA→XMI export.
+  spec.add_dependency "xmi", "~> 0.7.5"
   spec.add_dependency "nokogiri", "~> 1.18"
   spec.add_dependency "liquid"
   spec.add_dependency "thor", "~> 1.4"
