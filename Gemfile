@@ -22,3 +22,5 @@ end
 
 gem "rake"
 gem "rspec", "~> 3.0"
+# Install yeptris/native required by canon
+gem 'yeptris', force_ruby_platform: true
