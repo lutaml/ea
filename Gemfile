@@ -22,3 +22,11 @@ end
 
 gem "rake"
 gem "rspec", "~> 3.0"
+
+# The release preflight resolves the bundle fresh and something in the
+# GitHub Packages index pulls expressir 1.4.3, whose native extension
+# no longer compiles against rice 4.12 (Rice 4 API break) — the release
+# cannot cut. expressir 2.x is the rice-free line; pin it so the
+# resolution cannot land on 1.4.x. If a dependency really needs 1.4,
+# bundler will now name it instead of failing in a C compiler.
+gem "expressir", "~> 2.4"
