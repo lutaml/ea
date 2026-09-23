@@ -39,4 +39,40 @@ RSpec.describe Ea::Xmi::Parser do
       expect(doc).to be_nil
     end
   end
+
+  describe "data type generalization" do # rubocop:disable Metrics/BlockLength
+    let(:fixture_path) { fixtures_path("datatype_generalization.xmi") }
+    let(:document) { parser.parse(xmi_model) }
+    let(:data_types) { document.packages.first.data_types }
+
+    def data_type_named(collection, name)
+      collection.find { |dt| dt.name == name }
+    end
+
+    it "builds generalization for uml:DataType elements that declare one" do
+      data_type = data_type_named(data_types, "TexCoordGen")
+
+      expect(data_type.generalization).not_to be_nil
+      expect(data_type.generalization.has_general).to be true
+      expect(data_type.generalization.general.name)
+        .to eq("AbstractTextureParameterization")
+      expect(data_type.association_generalization.size).to eq(1)
+    end
+
+    it "leaves generalization nil when the XMI has no generalization child" do
+      data_type = data_type_named(data_types, "NoGen")
+
+      expect(data_type.generalization).to be_nil
+      expect(data_type.association_generalization).to be_empty
+    end
+
+    it "exposes generalization as a countable collection via liquid drops" do
+      drop = described_class.serialize_to_liquid(fixture_path)
+      types = drop.packages.first.data_types
+
+      expect(data_type_named(types, "TexCoordGen").generalization.count)
+        .to eq(1)
+      expect(data_type_named(types, "NoGen").generalization.count).to eq(0)
+    end
+  end
 end

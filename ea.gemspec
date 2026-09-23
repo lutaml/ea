@@ -59,7 +59,7 @@ Gem::Specification.new do |spec|
   # (lutaml/lutaml-uml#119) exercised indirectly via the SPA command.
   # The `~> 0.5` upper bound prevents bundler from resolving to the
   # pre-existing 1.0.0 release, which has a different API surface.
-  spec.add_development_dependency "lutaml-uml", "~> 0.5", ">= 0.5.2"
+  spec.add_development_dependency "lutaml-uml"
 
   # Development-only — Rakefile's default task runs spec + rubocop.
   # Without this, `bundle exec rake` (invoked by metanorma/ci's

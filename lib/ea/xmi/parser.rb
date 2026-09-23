@@ -442,6 +442,11 @@ module Ea
               data_type.operations = build_operations(dt)
               data_type.associations = build_associations(dt.id)
               data_type.constraints = build_constraints(dt.id)
+              data_type.association_generalization = build_assoc_generalizations(dt)
+              # build_generalization always returns a Generalization for the
+              # element itself, so only attach when XMI declares a parent.
+              data_type.generalization =
+                build_generalization(dt) if dt.generalization&.any?
             end
           end
       end
