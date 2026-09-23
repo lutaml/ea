@@ -57,6 +57,37 @@ module Ea
         def stereotype
           @model.stereotype&.first
         end
+
+        def owned_attributes
+          Array(@model.attributes).filter_map do |owned_attr|
+            ::Ea::Xmi::LiquidDrops::AttributeDrop.new(owned_attr, @options)
+          end
+        end
+
+        def generalization
+          if @model.generalization
+            ::Ea::Xmi::LiquidDrops::GeneralizationDrop.new(
+              @model.generalization, nil, @options
+            )
+          end
+        end
+
+        def upper_packaged_element
+          e = @lookup.find_upper_level_packaged_element(@model.xmi_id)
+          e&.name
+        end
+
+        def subtype_of
+          @lookup.find_subtype_of_from_generalization(@model.xmi_id) ||
+            @lookup.find_subtype_of_from_owned_attribute_type(@model.xmi_id)
+        end
+
+        def inheritances
+          Array(@inheritance_ids).filter_map do |inheritance_id|
+            connector = @lookup.fetch_connector(inheritance_id)
+            ::Ea::Xmi::LiquidDrops::ConnectorDrop.new(connector, @options)
+          end
+        end
       end
     end
   end

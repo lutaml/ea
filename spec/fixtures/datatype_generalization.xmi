@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<xmi:XMI xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/UML/20161101/UMLDC">
+	<xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5" exporterID="1624"/>
+	<uml:Model xmi:type="uml:Model" name="TestModel">
+		<packagedElement xmi:type="uml:Package" xmi:id="EAPK_ROOT" name="Root">
+			<packagedElement xmi:type="uml:DataType" xmi:id="EAID_DT_ABSTRACT" name="AbstractTextureParameterization" isAbstract="true"/>
+			<packagedElement xmi:type="uml:DataType" xmi:id="EAID_DT_TEXCOORDGEN" name="TexCoordGen">
+				<generalization xmi:type="uml:Generalization" xmi:id="EAID_GEN_TEXCOORDGEN" general="EAID_DT_ABSTRACT" isSubstitutable="true"/>
+			</packagedElement>
+			<packagedElement xmi:type="uml:DataType" xmi:id="EAID_DT_NOGEN" name="NoGen"/>
+		</packagedElement>
+	</uml:Model>
+	<xmi:Extension extender="Enterprise Architect" extenderID="6.5">
+		<elements>
+			<element xmi:idref="EAID_DT_ABSTRACT" xmi:type="uml:DataType" name="AbstractTextureParameterization" scope="public">
+				<model package="EAPK_ROOT" ea_localid="1" ea_eleType="element"/>
+				<properties isSpecification="false" sType="DataType" nType="0" scope="public" abstract="true"/>
+			</element>
+			<element xmi:idref="EAID_DT_TEXCOORDGEN" xmi:type="uml:DataType" name="TexCoordGen" scope="public">
+				<model package="EAPK_ROOT" ea_localid="2" ea_eleType="element"/>
+				<properties isSpecification="false" sType="DataType" nType="0" scope="public"/>
+			</element>
+			<element xmi:idref="EAID_DT_NOGEN" xmi:type="uml:DataType" name="NoGen" scope="public">
+				<model package="EAPK_ROOT" ea_localid="3" ea_eleType="element"/>
+				<properties isSpecification="false" sType="DataType" nType="0" scope="public"/>
+			</element>
+		</elements>
+		<connectors/>
+		<tools/>
+	</xmi:Extension>
+</xmi:XMI>
