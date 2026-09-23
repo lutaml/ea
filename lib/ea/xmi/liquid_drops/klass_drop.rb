@@ -12,6 +12,9 @@ module Ea
           @xmi_root_model = options[:xmi_root_model]
           @id_name_mapping = options[:id_name_mapping]
 
+          # Drops are built for template rendering where the model
+          # may be absent (guidance-only lookups); the dependency
+          # walk needs a model to anchor on.
           init_xmi_dependencies if @xmi_root_model && @model
           init_guidance(guidance) if guidance
         end

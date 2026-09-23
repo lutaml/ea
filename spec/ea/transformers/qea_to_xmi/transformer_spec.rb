@@ -153,10 +153,11 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
   end
 
   describe "return parameter type spelling" do
-    # EA writes the classifier reference unprefixed. The xmi gem keeps
-    # that slot namespaced for the XMI metaclass discriminator, which is
-    # correct for general UML XMI, so the exporter restores EA's form
-    # here rather than in the shared model.
+    # EA writes the classifier reference unprefixed. The xmi gem's
+    # OwnedParameter holds xmi:type (metaclass discriminator) and type
+    # (classifier reference) as namespace-disjoint slots, so passing
+    # the classifier to classifier_type serializes EA's spelling
+    # natively — no post-processing.
     #
     # Nokogiri keys attributes by local name, so the parity ratchet
     # cannot see this difference — only a raw string check can.
@@ -225,8 +226,8 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
     end
 
     it "leaves a parameter name containing the literal xmi:type= alone" do
-      # Parameter names are free text out of EA. Substituting on the raw
-      # tag would rewrite this one inside its quotes.
+      # Parameter names are free text out of EA and pass through the
+      # serializer untouched.
       package = Ea::Qea::Models::EaPackage.new(
         package_id: 1, name: "P", parent_id: 0,
         ea_guid: "{AAAAAAAA-1111-2222-3333-444444444444}"
