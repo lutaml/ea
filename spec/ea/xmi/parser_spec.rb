@@ -70,9 +70,8 @@ RSpec.describe Ea::Xmi::Parser do
       drop = described_class.serialize_to_liquid(fixture_path)
       types = drop.packages.first.data_types
 
-      expect(data_type_named(types, "TexCoordGen").generalization.count)
-        .to eq(1)
-      expect(data_type_named(types, "NoGen").generalization.count).to eq(0)
+      expect(data_type_named(types, "TexCoordGen").generalization).not_to be_nil
+      expect(data_type_named(types, "NoGen").generalization).to be_nil
     end
   end
 end
