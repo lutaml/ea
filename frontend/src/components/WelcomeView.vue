@@ -48,7 +48,7 @@ function formatDate(isoString?: string): string {
     <h1 class="welcome-title">{{ data.metadata?.title || 'UML Model Browser' }}</h1>
     <p class="welcome-subtitle">Explore UML model packages, classes, and associations</p>
 
-    <div class="welcome-stats" v-if="data.metadata">
+    <div class="welcome-stats" v-if="data.metadata?.statistics">
       <div class="welcome-stat">
         <div class="welcome-stat-value">{{ data.metadata.statistics.packages }}</div>
         <div class="welcome-stat-label">Packages</div>
@@ -68,7 +68,7 @@ function formatDate(isoString?: string): string {
     </div>
 
     <div class="welcome-meta" v-if="data.metadata">
-      <div class="meta-item">
+      <div class="meta-item" v-if="data.metadata.generator">
         <span class="meta-label">Generator</span>
         <span class="meta-value">{{ data.metadata.generator }}</span>
       </div>

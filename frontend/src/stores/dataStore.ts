@@ -1,79 +1,173 @@
 import { defineStore } from 'pinia'
 import type {
   SpaData,
-  SpaDocument,
-  SpaSearchIndex,
+  SpaMetadata,
+  SpaPackageTreeNode,
+  SpaPackageTree,
   SpaSearchEntry,
-  SpaClass,
-  SpaPackage,
-  SpaAttribute,
-  SpaAssociation,
-  SpaOperation,
-  SpaDiagram,
+  SpaSearchIndex,
+  SpaShard,
+  SpaSkeletonEntry,
 } from '../types'
+
+const SHARD_DIRS: Record<string, string> = {
+  class: 'classes',
+  enumeration: 'enumerations',
+  data_type: 'data_types',
+  primitive_type: 'primitive_types',
+  interface: 'interfaces',
+  package: 'packages',
+  diagram: 'diagrams',
+  property: 'properties',
+}
+
+const FETCH_CONCURRENCY = 12
+
+const inflight = new Map<string, Promise<SpaShard | null>>()
 
 export const useDataStore = defineStore('data', {
   state: () => ({
-    metadata: null as SpaDocument['metadata'] | null,
-    packageTree: null as SpaDocument['packageTree'] | null,
-    packages: {} as Record<string, SpaPackage>,
-    classes: {} as Record<string, SpaClass>,
-    attributes: {} as Record<string, SpaAttribute>,
-    associations: {} as Record<string, SpaAssociation>,
-    operations: {} as Record<string, SpaOperation>,
-    diagrams: {} as Record<string, SpaDiagram>,
+    metadata: null as SpaMetadata | null,
+    packageTree: null as SpaPackageTree | null,
+    entries: [] as SpaSkeletonEntry[],
     searchEntries: [] as SpaSearchEntry[],
+    elements: {} as Record<string, SpaShard>,
+    shardBase: '',
     loaded: false,
   }),
 
   getters: {
-    getClassById: (state) => (id: string) => state.classes[id],
-    getPackageById: (state) => (id: string) => state.packages[id],
-    getAttributeById: (state) => (id: string) => state.attributes[id],
-    getAssociationById: (state) => (id: string) => state.associations[id],
-    getOperationById: (state) => (id: string) => state.operations[id],
-    getDiagramById: (state) => (id: string) => state.diagrams[id],
+    entriesById(): Record<string, SpaSkeletonEntry> {
+      const map: Record<string, SpaSkeletonEntry> = {}
+      for (const e of this.entries) map[e.id] = e
+      return map
+    },
 
-    classCount: (state) => Object.keys(state.classes).length,
-    packageCount: (state) => Object.keys(state.packages).length,
-    associationCount: (state) => Object.keys(state.associations).length,
-    attributeCount: (state) => Object.keys(state.attributes).length,
+    nodesById(): Record<string, SpaPackageTreeNode> {
+      const map: Record<string, SpaPackageTreeNode> = {}
+      if (this.packageTree) {
+        for (const n of this.packageTree.nodes) map[n.id] = n
+      }
+      return map
+    },
+
+    rootNodes(): SpaPackageTreeNode[] {
+      const tree = this.packageTree
+      if (!tree) return []
+      const map = this.nodesById
+      return tree.rootIds.map((id) => map[id]).filter((n) => !!n)
+    },
   },
 
   actions: {
     loadFromEmbedded() {
       const win = window as any
-      if (!win.__SPA_DATA__) {
+      const raw = win.__SPA_DATA__ as SpaData
+      if (!raw) {
         throw new Error('No embedded SPA data found in window.__SPA_DATA__')
       }
-      this.loadData(win.__SPA_DATA__)
-    },
-
-    async loadFromUrl(dataUrl: string, searchUrl: string) {
-      const [dataRes, searchRes] = await Promise.all([
-        fetch(dataUrl),
-        fetch(searchUrl),
-      ])
-      const data = await dataRes.json()
-      const searchIndex = await searchRes.json()
-      this.loadData({ ...data, searchIndex })
-    },
-
-    loadData(raw: SpaData) {
       this.metadata = raw.metadata
       this.packageTree = raw.packageTree
-      this.packages = raw.packages || {}
-      this.classes = raw.classes || {}
-      this.attributes = raw.attributes || {}
-      this.associations = raw.associations || {}
-      this.operations = raw.operations || {}
-      this.diagrams = raw.diagrams || {}
-      this.searchEntries = raw.searchIndex?.documentStore || []
+      this.entries = raw.entries || []
+      this.searchEntries = raw.searchIndex?.entries || []
+      this.hydrateShards(raw.shards || [])
       this.loaded = true
     },
 
-    findClassByName(name: string): SpaClass | undefined {
-      return Object.values(this.classes).find((c) => c.name === name)
+    async loadFromSharded(skeletonUrl: string, searchUrl: string, shardBase: string) {
+      const [skeletonRes, searchRes] = await Promise.all([
+        fetch(skeletonUrl),
+        fetch(searchUrl),
+      ])
+      if (!skeletonRes.ok) {
+        throw new Error(`Failed to load ${skeletonUrl}: ${skeletonRes.status}`)
+      }
+      if (!searchRes.ok) {
+        throw new Error(`Failed to load ${searchUrl}: ${searchRes.status}`)
+      }
+      const skeleton = await skeletonRes.json()
+      const searchIndex: SpaSearchIndex = await searchRes.json()
+      this.metadata = skeleton.metadata
+      this.packageTree = skeleton.packageTree
+      this.entries = skeleton.entries || []
+      this.searchEntries = searchIndex.entries || []
+      this.shardBase = shardBase || ''
+      this.loaded = true
+    },
+
+    hydrateShards(shards: SpaShard[]) {
+      for (const shard of shards) this.elements[shard.id] = shard
+    },
+
+    elementFor(id: string): SpaShard | null {
+      return this.elements[id] || null
+    },
+
+    kindFor(id: string): string | null {
+      const entry = this.entriesById[id]
+      if (entry) return entry.kind
+      if (this.nodesById[id]) return 'package'
+      if (this.packageTree?.nodes.some((n) => n.diagramIds.includes(id))) {
+        return 'diagram'
+      }
+      return null
+    },
+
+    shardUrlFor(id: string, kind: string): string {
+      const dir = SHARD_DIRS[kind] || `${kind}s`
+      return `${this.shardBase}${dir}/${id}.json`
+    },
+
+    async ensureElement(id: string): Promise<SpaShard | null> {
+      const cached = this.elements[id]
+      if (cached) return cached
+
+      const kind = this.kindFor(id)
+      if (!kind) return null
+
+      const existing = inflight.get(id)
+      if (existing) return existing
+
+      const url = this.shardUrlFor(id, kind)
+      const pending = fetch(url)
+        .then(async (res) => {
+          if (!res.ok) {
+            throw new Error(`Failed to load ${url}: ${res.status}`)
+          }
+          const shard: SpaShard = await res.json()
+          this.elements[shard.id] = shard
+          return shard
+        })
+        .finally(() => {
+          inflight.delete(id)
+        })
+      inflight.set(id, pending)
+      return pending
+    },
+
+    async ensureElements(ids: string[]): Promise<void> {
+      const queue = [...ids]
+      const workers = Array.from(
+        { length: Math.min(FETCH_CONCURRENCY, queue.length) },
+        async () => {
+          for (;;) {
+            const id = queue.shift()
+            if (!id) return
+            try {
+              await this.ensureElement(id)
+            } catch {
+              // leave the element missing; views render what they have
+            }
+          }
+        },
+      )
+      await Promise.all(workers)
+    },
+
+    classifierEntryByName(name: string): SpaSkeletonEntry | undefined {
+      return this.entries.find(
+        (e) => e.qualifiedName === name || e.name === name,
+      )
     },
   },
 })

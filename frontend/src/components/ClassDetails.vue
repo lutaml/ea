@@ -1,39 +1,67 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { useDataStore } from '../stores/dataStore'
 import { useUiStore } from '../stores/uiStore'
+import type { SpaClassifierPayload, SpaGeneralizationStub } from '../types'
 
 const data = useDataStore()
 const ui = useUiStore()
 
+const clsId = computed(() => ui.currentClassId)
 const cls = computed(() =>
-  ui.currentClassId ? data.getClassById(ui.currentClassId) : null,
+  clsId.value ? (data.elementFor(clsId.value)?.payload as SpaClassifierPayload | undefined) ?? null : null,
 )
 
-function formatCardinality(c: any): string {
-  if (!c) return ''
-  return `${c.min || '0'}..${c.max || '*'}`
+watch(
+  clsId,
+  async (id) => {
+    if (!id) return
+    const shard = await data.ensureElement(id)
+    if (!shard) return
+    const parents = (shard.payload.generalizations || []).map(
+      (g: SpaGeneralizationStub) => g.targetId,
+    )
+    await data.ensureElements(parents)
+  },
+  { immediate: true },
+)
+
+const definition = computed(
+  () => cls.value?.annotations?.find((a) => a.kind === 'documentation')?.body || '',
+)
+
+const BASIC_TYPES = new Set([
+  'String', 'Integer', 'Boolean', 'Real', 'UnlimitedNatural',
+  'DateTime', 'URI', 'Any', 'Object',
+])
+
+function resolveTypeEntry(typeName?: string) {
+  if (!typeName) return null
+  return data.classifierEntryByName(typeName)
 }
 
-function resolveType(typeName: string): { isBasic: boolean; classId: string | null } {
-  const basicTypes = new Set([
-    'String', 'Integer', 'Boolean', 'Real', 'UnlimitedNatural',
-    'DateTime', 'URI', 'Any', 'Object',
-  ])
-  if (basicTypes.has(typeName)) return { isBasic: true, classId: null }
-  const found = data.findClassByName(typeName)
-  return { isBasic: false, classId: found ? found.id : null }
+function isBasicType(typeName?: string): boolean {
+  return !!typeName && BASIC_TYPES.has(typeName)
 }
 
-function associationTarget(assoc: any): any {
-  if (!cls.value) return null
-  if (assoc.source?.class !== cls.value.xmiId) return assoc.source
-  return assoc.target
+function entryName(id?: string): string {
+  if (!id) return ''
+  return data.entriesById[id]?.name || id
 }
 
-function badgeType(c: any): string {
-  if (c.literals && c.literals.length > 0) return 'ENUMERATION'
-  return c.type?.toUpperCase() || 'CLASS'
+function formatCardinality(m?: [number?, number?]): string {
+  if (!m) return ''
+  return `${m[0] ?? 0}..${m[1] ?? '*'}`
+}
+
+function formatParameters(op: { parameters: { name?: string; typeName?: string }[] }): string {
+  return op.parameters
+    .map((p) => `${p.name || ''}: ${p.typeName || '?'}`)
+    .join(', ')
+}
+
+function badgeType(c: SpaClassifierPayload): string {
+  return (c.modelKind || 'class').toUpperCase()
 }
 </script>
 
@@ -42,51 +70,52 @@ function badgeType(c: any): string {
     <div class="entity-header">
       <div class="entity-title">
         <h2 class="entity-name">{{ cls.qualifiedName }}</h2>
-        <div class="entity-subtitle" v-if="cls.package">
-          <a href="#" class="link-button" @click.prevent="ui.selectPackage(cls.package!, data.getPackageById(cls.package!)?.name)">
-            {{ data.getPackageById(cls.package)?.name || cls.package }}
+        <div class="entity-subtitle" v-if="cls.packageId">
+          <a href="#" class="link-button"
+             @click.prevent="ui.selectPackage(cls.packageId, data.nodesById[cls.packageId]?.name)">
+            {{ data.nodesById[cls.packageId]?.name || cls.packageName || cls.packageId }}
           </a>
         </div>
       </div>
-      <span class="entity-badge" :class="'badge-' + badgeType(cls)">{{ badgeType(cls) }}</span>
+      <span class="entity-badge" :class="'badge-' + cls.modelKind">{{ badgeType(cls) }}</span>
       <span class="entity-badge badge-abstract" v-if="cls.isAbstract">abstract</span>
     </div>
 
-    <div class="entity-metadata" v-if="cls.stereotypes.length">
+    <div class="entity-metadata" v-if="cls.stereotypeRefs.length">
       <div class="metadata-item">
         <span class="metadata-label">Stereotypes</span>
         <span class="metadata-value">
-          <span v-for="s in cls.stereotypes" :key="s" class="stereotype-tag">&laquo;{{ s }}&raquo;</span>
+          <span v-for="s in cls.stereotypeRefs" :key="s" class="stereotype-tag">&laquo;{{ s }}&raquo;</span>
         </span>
       </div>
     </div>
 
-    <div class="entity-definition" v-if="cls.definition">
-      <div class="definition-content">{{ cls.definition }}</div>
+    <div class="entity-definition" v-if="definition">
+      <div class="definition-content">{{ definition }}</div>
     </div>
 
     <!-- Inheritance -->
-    <div class="section" v-if="cls.generalizations.length || cls.specializations.length">
+    <div class="section" v-if="cls.generalizations?.length || cls.specializations?.length">
       <h3 class="section-title">Inheritance</h3>
-      <div v-if="cls.generalizations.length" class="inheritance-group">
+      <div v-if="cls.generalizations?.length" class="inheritance-group">
         <div class="inheritance-header">&#8593; Extends</div>
-        <div v-for="parentId in cls.generalizations" :key="parentId" class="list-item clickable-row"
-             @click="ui.selectClass(parentId)">
-          <span class="list-item-name">{{ data.getClassById(parentId)?.name || parentId }}</span>
+        <div v-for="g in cls.generalizations" :key="g.id" class="list-item clickable-row"
+             @click="ui.selectClass(g.targetId, entryName(g.targetId))">
+          <span class="list-item-name">{{ entryName(g.targetId) }}</span>
         </div>
       </div>
-      <div v-if="cls.specializations.length" class="inheritance-group">
+      <div v-if="cls.specializations?.length" class="inheritance-group">
         <div class="inheritance-header">&#8595; Extended by</div>
-        <div v-for="childId in cls.specializations" :key="childId" class="list-item clickable-row"
-             @click="ui.selectClass(childId)">
-          <span class="list-item-name">{{ data.getClassById(childId)?.name || childId }}</span>
+        <div v-for="g in cls.specializations" :key="g.id" class="list-item clickable-row"
+             @click="ui.selectClass(g.targetId, entryName(g.targetId))">
+          <span class="list-item-name">{{ entryName(g.targetId) }}</span>
         </div>
       </div>
     </div>
 
     <!-- Attributes -->
-    <div class="section" v-if="cls.attributes.length">
-      <h3 class="section-title">Attributes <span class="section-count">{{ cls.attributes.length }}</span></h3>
+    <div class="section" v-if="cls.properties.length">
+      <h3 class="section-title">Attributes <span class="section-count">{{ cls.properties.length }}</span></h3>
       <div class="table-wrapper">
         <table class="data-table">
           <thead>
@@ -99,59 +128,34 @@ function badgeType(c: any): string {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="attrId in cls.attributes" :key="attrId" class="clickable-row">
-              <td>{{ data.getAttributeById(attrId)?.name }}</td>
+            <tr v-for="attr in cls.properties" :key="attr.id" class="clickable-row">
+              <td>{{ attr.name }}</td>
               <td>
-                <template v-if="data.getAttributeById(attrId)?.type">
-                  <a v-if="resolveType(data.getAttributeById(attrId)!.type).classId"
+                <template v-if="attr.typeName">
+                  <a v-if="resolveTypeEntry(attr.typeName)"
                      href="#" class="type-link"
-                     @click.prevent="ui.selectClass(resolveType(data.getAttributeById(attrId)!.type).classId!)">
-                    {{ data.getAttributeById(attrId)?.type }}
+                     @click.prevent="ui.selectClass(resolveTypeEntry(attr.typeName)!.id, resolveTypeEntry(attr.typeName)!.name)">
+                    {{ attr.typeName }}
                   </a>
-                  <span v-else-if="resolveType(data.getAttributeById(attrId)!.type).isBasic"
-                        class="uml-basic-type">
-                    {{ data.getAttributeById(attrId)?.type }}
+                  <span v-else-if="isBasicType(attr.typeName)" class="uml-basic-type">
+                    {{ attr.typeName }}
                   </span>
-                  <span v-else class="type-unresolved">{{ data.getAttributeById(attrId)?.type }}</span>
+                  <span v-else class="type-unresolved">{{ attr.typeName }}</span>
                 </template>
               </td>
               <td>
-                <span v-if="data.getAttributeById(attrId)?.visibility"
-                      class="visibility-badge"
-                      :data-visibility="data.getAttributeById(attrId)?.visibility">
-                  {{ data.getAttributeById(attrId)?.visibility }}
+                <span v-if="attr.visibility" class="visibility-badge" :data-visibility="attr.visibility">
+                  {{ attr.visibility }}
                 </span>
               </td>
-              <td>{{ formatCardinality(data.getAttributeById(attrId)?.cardinality) }}</td>
+              <td>{{ formatCardinality([attr.multiplicityLower, attr.multiplicityUpper]) }}</td>
               <td>
-                <span v-if="data.getAttributeById(attrId)?.isStatic" class="modifier-badge">static</span>
-                <span v-if="data.getAttributeById(attrId)?.isReadOnly" class="modifier-badge">readonly</span>
+                <span v-if="attr.isReadonly" class="modifier-badge">readonly</span>
+                <span v-if="attr.isDerived" class="modifier-badge">derived</span>
               </td>
             </tr>
           </tbody>
         </table>
-      </div>
-    </div>
-
-    <!-- Inherited Attributes -->
-    <div class="section" v-if="cls.inheritedAttributes.length">
-      <h3 class="section-title">Inherited Attributes</h3>
-      <div v-for="ia in cls.inheritedAttributes" :key="ia.attributeId" class="inheritance-group">
-        <div class="inheritance-header">From {{ ia.inheritedFromName }}</div>
-        <div class="table-wrapper">
-          <table class="data-table inherited-table">
-            <thead>
-              <tr><th>Name</th><th>Type</th><th>Cardinality</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{{ ia.attribute.name }}</td>
-                <td>{{ ia.attribute.type }}</td>
-                <td>{{ formatCardinality(ia.attribute.cardinality) }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </div>
     </div>
 
@@ -164,25 +168,21 @@ function badgeType(c: any): string {
             <tr><th>Name</th><th>Return</th><th>Visibility</th><th>Modifiers</th></tr>
           </thead>
           <tbody>
-            <tr v-for="opId in cls.operations" :key="opId" class="clickable-row">
+            <tr v-for="op in cls.operations" :key="op.id" class="clickable-row">
               <td>
-                {{ data.getOperationById(opId)?.name }}(
-                <span v-if="data.getOperationById(opId)?.parameters.length">
-                  {{ data.getOperationById(opId)?.parameters.map(p => `${p.name}: ${p.type || '?'}`).join(', ') }}
-                </span>
+                {{ op.name }}(
+                <span v-if="op.parameters.length">{{ formatParameters(op) }}</span>
                 )
               </td>
-              <td>{{ data.getOperationById(opId)?.returnType || 'void' }}</td>
+              <td>{{ op.returnTypeName || 'void' }}</td>
               <td>
-                <span v-if="data.getOperationById(opId)?.visibility"
-                      class="visibility-badge"
-                      :data-visibility="data.getOperationById(opId)?.visibility">
-                  {{ data.getOperationById(opId)?.visibility }}
+                <span v-if="op.visibility" class="visibility-badge" :data-visibility="op.visibility">
+                  {{ op.visibility }}
                 </span>
               </td>
               <td>
-                <span v-if="data.getOperationById(opId)?.isStatic" class="modifier-badge">static</span>
-                <span v-if="data.getOperationById(opId)?.isAbstract" class="modifier-badge">abstract</span>
+                <span v-if="op.isStatic" class="modifier-badge">static</span>
+                <span v-if="op.isAbstract" class="modifier-badge">abstract</span>
               </td>
             </tr>
           </tbody>
@@ -191,7 +191,7 @@ function badgeType(c: any): string {
     </div>
 
     <!-- Associations -->
-    <div class="section" v-if="cls.associations.length">
+    <div class="section" v-if="cls.associations?.length">
       <h3 class="section-title">Associations <span class="section-count">{{ cls.associations.length }}</span></h3>
       <div class="table-wrapper">
         <table class="data-table">
@@ -199,47 +199,30 @@ function badgeType(c: any): string {
             <tr><th>Name</th><th>Target</th><th>Cardinality</th><th>Aggregation</th></tr>
           </thead>
           <tbody>
-            <tr v-for="assocId in cls.associations" :key="assocId">
-              <td>{{ data.getAssociationById(assocId)?.name }}</td>
+            <tr v-for="assoc in cls.associations" :key="assoc.id">
+              <td>{{ assoc.name || assoc.thisEndRoleName || '' }}</td>
               <td>
-                <template v-if="associationTarget(data.getAssociationById(assocId))">
-                  <a v-if="associationTarget(data.getAssociationById(assocId))?.className"
-                     href="#" class="type-link"
-                     @click.prevent="() => {
-                       const found = data.findClassByName(associationTarget(data.getAssociationById(assocId))?.className || '')
-                       if (found) ui.selectClass(found.id)
-                     }">
-                    {{ associationTarget(data.getAssociationById(assocId))?.className }}
-                  </a>
-                </template>
+                <a v-if="data.entriesById[assoc.otherEndId]" href="#" class="type-link"
+                   @click.prevent="ui.selectClass(assoc.otherEndId, entryName(assoc.otherEndId))">
+                  {{ entryName(assoc.otherEndId) }}
+                </a>
+                <span v-else>{{ assoc.otherEndId }}</span>
               </td>
-              <td>{{ formatCardinality(associationTarget(data.getAssociationById(assocId))?.cardinality) }}</td>
-              <td>{{ associationTarget(data.getAssociationById(assocId))?.aggregation }}</td>
+              <td>{{ formatCardinality(assoc.otherEndMultiplicity) }}</td>
+              <td>{{ assoc.otherEndAggregation }}</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- Inherited Associations -->
-    <div class="section" v-if="cls.inheritedAssociations.length">
-      <h3 class="section-title">Inherited Associations</h3>
-      <div v-for="ia in cls.inheritedAssociations" :key="ia.associationId" class="inheritance-group">
-        <div class="inheritance-header">From {{ ia.inheritedFromName }}</div>
-        <div class="list-item">
-          <span class="list-item-name">{{ data.getAssociationById(ia.associationId)?.name }}</span>
-          <span class="list-item-meta">{{ ia.localRole }}</span>
-        </div>
-      </div>
-    </div>
-
     <!-- Enum Literals -->
-    <div class="section" v-if="cls.literals.length">
+    <div class="section" v-if="cls.literals?.length">
       <h3 class="section-title">Literals <span class="section-count">{{ cls.literals.length }}</span></h3>
       <div class="item-list">
-        <div v-for="lit in cls.literals" :key="lit.name" class="list-item">
+        <div v-for="lit in cls.literals" :key="lit.id" class="list-item">
           <span class="list-item-name">{{ lit.name }}</span>
-          <span v-if="lit.definition" class="list-item-meta">{{ lit.definition }}</span>
+          <span v-if="lit.value && lit.value !== lit.name" class="list-item-meta">{{ lit.value }}</span>
         </div>
       </div>
     </div>

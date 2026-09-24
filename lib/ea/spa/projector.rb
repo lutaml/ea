@@ -76,7 +76,22 @@ module Ea
       def metadata_hash
         base = document.metadata
         merged = configuration ? configuration.apply_to_metadata(base) : base
-        JSON.parse(merged.to_json)
+        hash = JSON.parse(merged.to_json)
+        hash["statistics"] = statistics_hash
+        hash
+      end
+
+      def statistics_hash
+        {
+          "packages" => document.packages.size,
+          "classes" => document.classifiers.size,
+          "attributes" => document.classifiers.sum { |c| c.properties.size },
+          "operations" => document.classifiers.sum { |c| c.operations.size },
+          "associations" => document.relationships.count do |r|
+            r.is_a?(Ea::Model::Association)
+          end,
+          "diagrams" => render_diagrams? ? document.diagrams.size : 0
+        }
       end
 
       def view_extras
@@ -84,14 +99,16 @@ module Ea
       end
 
       def build_package_tree
+        sub_ids_by_parent = document.packages.group_by(&:parent_id)
         nodes = document.packages.map do |pkg|
           PackageTreeNode.new(
             id: pkg.id,
             name: pkg.name,
             parent_id: pkg.parent_id,
-            child_ids: pkg.sub_package_ids,
+            child_ids: (pkg.sub_package_ids +
+                        (sub_ids_by_parent[pkg.id] || []).map(&:id)).uniq,
             classifier_ids: classifiers_in_package_ids(pkg.id),
-            diagram_ids: pkg.diagram_ids
+            diagram_ids: diagram_ids_for_package(pkg.id)
           )
         end
         PackageTree.new(
@@ -105,7 +122,7 @@ module Ea
       end
 
       def build_entries
-        document.classifiers.map do |c|
+        classifier_entries = document.classifiers.map do |c|
           SkeletonEntry.new(
             id: c.id,
             name: c.name,
@@ -115,6 +132,27 @@ module Ea
             shard_url: shard_url_for.call(c)
           )
         end
+        package_entries = document.packages.map do |p|
+          SkeletonEntry.new(
+            id: p.id,
+            name: p.name,
+            kind: "package",
+            package_id: p.parent_id,
+            qualified_name: p.qualified_name,
+            shard_url: shard_url_for.call(p)
+          )
+        end
+        diagram_entries = render_diagrams? ? document.diagrams.map do |d|
+          SkeletonEntry.new(
+            id: d.id,
+            name: d.name,
+            kind: "diagram",
+            package_id: d.package_id,
+            qualified_name: d.name,
+            shard_url: shard_url_for.call(d)
+          )
+        end : []
+        classifier_entries + package_entries + diagram_entries
       end
 
       def build_search_entries
@@ -191,8 +229,72 @@ module Ea
         end
       end
 
-      def payload_for(element)
-        JSON.parse(element.to_json)
+      def payload_for(model_element)
+        payload = JSON.parse(model_element.to_json)
+        case model_element
+        when Ea::Model::Classifier
+          augment_classifier_payload!(payload, model_element)
+        when Ea::Model::Package
+          payload["classifierIds"] = classifiers_in_package_ids(model_element.id)
+          payload["diagramIds"] = diagram_ids_for_package(model_element.id)
+        when Ea::Model::Diagram
+          augment_diagram_payload!(payload, model_element)
+        end
+        payload
+      end
+
+      def diagram_ids_for_package(package_id)
+        (document.packages.find { |p| p.id == package_id }&.diagram_ids ||
+          []) + document.diagrams.select { |d| d.package_id == package_id }.map(&:id)
+      end
+
+      def augment_classifier_payload!(payload, classifier)
+        rels = document.relationships_for(classifier.id)
+        payload["generalizations"] = rels
+          .select { |r| r.is_a?(Ea::Model::Generalization) && r.specific_id == classifier.id }
+          .map { |r| { "id" => r.id, "targetId" => r.general_id } }
+        payload["specializations"] = rels
+          .select { |r| r.is_a?(Ea::Model::Generalization) && r.general_id == classifier.id }
+          .map { |r| { "id" => r.id, "targetId" => r.specific_id } }
+        payload["associations"] = rels
+          .select { |r| r.is_a?(Ea::Model::Association) }
+          .map { |r| association_stub(r, classifier.id) }
+        payload
+      end
+
+      def association_stub(assoc, classifier_id)
+        {
+          "id" => assoc.id,
+          "name" => assoc.name,
+          "sourceId" => assoc.source_id,
+          "targetId" => assoc.target_id,
+          "thisEndRoleName" => assoc.source_id == classifier_id ? assoc.source_role_name : assoc.target_role_name,
+          "otherEndRoleName" => assoc.source_id == classifier_id ? assoc.target_role_name : assoc.source_role_name,
+          "otherEndId" => assoc.source_id == classifier_id ? assoc.target_id : assoc.source_id,
+          "otherEndMultiplicity" => cardinality(assoc, classifier_id),
+          "otherEndAggregation" => assoc.source_id == classifier_id ? assoc.target_aggregation : assoc.source_aggregation
+        }
+      end
+
+      def cardinality(assoc, classifier_id)
+        if assoc.source_id == classifier_id
+          [assoc.target_multiplicity_lower, assoc.target_multiplicity_upper]
+        else
+          [assoc.source_multiplicity_lower, assoc.source_multiplicity_upper]
+        end
+      end
+
+      def augment_diagram_payload!(payload, diagram)
+        payload["svg"] = Ea::Svg::EaEmitter::Document.new(
+          diagram,
+          model_index: document.index_by_id,
+          document: document
+        ).render
+        payload
+      rescue StandardError => e
+        warn "ea: skipping SVG render for diagram #{diagram.id} " \
+             "(#{diagram.name.inspect}): #{e.class}: #{e.message}"
+        payload
       end
     end
   end

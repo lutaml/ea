@@ -1,146 +1,10 @@
-export interface SpaCardinality {
-  min?: string
-  max?: string
-}
-
-export interface SpaAttribute {
-  id: string
-  name: string
-  type: string
-  visibility?: string
-  owner: string
-  ownerName: string
-  cardinality?: SpaCardinality
-  definition?: string
-  stereotypes: string[]
-  isStatic: boolean
-  isReadOnly: boolean
-  defaultValue?: string
-}
-
-export interface SpaAssociationEnd {
-  class?: string
-  className?: string
-  role?: string
-  cardinality?: SpaCardinality
-  aggregation?: string
-}
-
-export interface SpaAssociation {
-  id: string
-  xmiId: string
-  name: string
-  type: string
-  definition?: string
-  source?: SpaAssociationEnd
-  target?: SpaAssociationEnd
-}
-
-export interface SpaOperation {
-  id: string
-  name: string
-  visibility?: string
-  returnType?: string
-  owner: string
-  ownerName: string
-  parameters: SpaParameter[]
-  isStatic: boolean
-  isAbstract: boolean
-}
-
-export interface SpaParameter {
-  name: string
-  type?: string
-  direction?: string
-}
-
-export interface SpaLiteral {
-  name: string
-  definition?: string
-}
-
-export interface SpaInheritedAttribute {
-  attributeId: string
-  attribute: SpaAttribute
-  inheritedFrom: string
-  inheritedFromName: string
-  parentOrder: number
-}
-
-export interface SpaInheritedAssociation {
-  associationId: string
-  inheritedFrom: string
-  inheritedFromName: string
-  parentOrder: number
-  localRole: string
-}
-
-export interface SpaClass {
-  id: string
-  xmiId: string
-  name: string
-  qualifiedName: string
-  type: string
-  package?: string
-  stereotypes: string[]
-  definition?: string
-  attributes: string[]
-  operations: string[]
-  associations: string[]
-  generalizations: string[]
-  specializations: string[]
-  isAbstract: boolean
-  literals: SpaLiteral[]
-  inheritedAttributes: SpaInheritedAttribute[]
-  inheritedAssociations: SpaInheritedAssociation[]
-}
-
-export interface SpaPackage {
-  id: string
-  xmiId: string
-  name: string
-  path: string
-  definition?: string
-  stereotypes: string[]
-  classes: string[]
-  subPackages: string[]
-  diagrams: string[]
-  parent?: string
-}
-
-export interface SpaTreeClassRef {
-  id: string
-  name: string
-  stereotypes: string[]
-}
-
-export interface SpaPackageTreeNode {
-  id: string
-  name: string
-  path: string
-  stereotypes: string[]
-  classCount: number
-  classes: SpaTreeClassRef[]
-  children: SpaPackageTreeNode[]
-}
-
-export interface SpaDiagram {
-  id: string
-  xmiId: string
-  name: string
-  type: string
-  package?: string
-  objectCount: number
-  linkCount: number
-  svg?: string
-}
-
 export interface SpaStatistics {
   packages: number
   classes: number
-  associations: number
   attributes: number
   operations: number
+  associations: number
+  diagrams: number
 }
 
 export interface SpaLogoVariant {
@@ -163,59 +27,192 @@ export interface SpaAppearance {
 }
 
 export interface SpaMetadata {
+  id?: string
   title?: string
   description?: string
-  generated: string
-  generator: string
-  version: string
-  homepage?: string
-  repository?: string
-  license?: string
-  authors?: string
-  tags?: string[]
+  version?: string
+  generated?: string
+  generator?: string
+  createdDate?: string
+  modifiedDate?: string
+  sourceFormat?: string
+  sourceTool?: string
+  sourcePath?: string
   appearance?: SpaAppearance
-  statistics: SpaStatistics
+  statistics?: SpaStatistics
+}
+
+export interface SpaPackageTreeNode {
+  id: string
+  name: string
+  parentId?: string
+  childIds: string[]
+  classifierIds: string[]
+  diagramIds: string[]
+}
+
+export interface SpaPackageTree {
+  rootIds: string[]
+  nodes: SpaPackageTreeNode[]
+}
+
+export interface SpaSkeletonEntry {
+  id: string
+  name: string
+  kind: string
+  packageId?: string
+  qualifiedName?: string
+  shardUrl: string
+}
+
+export interface SpaShard {
+  id: string
+  kind: string
+  payload: any
 }
 
 export interface SpaSearchEntry {
   id: string
-  type: string
-  entityType: string
-  entityId: string
+  kind: string
   name: string
   qualifiedName: string
   package: string
   content: string
-  boost: number
+  boost?: number
 }
 
 export interface SpaSearchIndex {
   version: string
-  fields: { name: string; boost: number }[]
-  ref: string
-  documentStore: SpaSearchEntry[]
-  pipeline: string[]
+  fields: string[]
+  entries: SpaSearchEntry[]
 }
 
-export interface SpaDocument {
-  metadata: SpaMetadata
-  packageTree: SpaPackageTreeNode
-  packages: Record<string, SpaPackage>
-  classes: Record<string, SpaClass>
-  attributes: Record<string, SpaAttribute>
-  associations: Record<string, SpaAssociation>
-  operations: Record<string, SpaOperation>
-  diagrams: Record<string, SpaDiagram>
+export interface SpaAnnotation {
+  id: string
+  kind: string
+  body?: string
 }
 
-export interface SpaData {
+export interface SpaPropertyPayload {
+  id: string
+  name: string
+  ownerId: string
+  typeName?: string
+  qualifiedName?: string
+  multiplicityLower?: number
+  multiplicityUpper?: number
+  isDerived: boolean
+  isReadonly: boolean
+  visibility?: string
+  stereotypeRefs: string[]
+  annotations: SpaAnnotation[]
+}
+
+export interface SpaParameterPayload {
+  name?: string
+  direction?: string
+  typeName?: string
+  multiplicityLower?: number
+  multiplicityUpper?: number
+  defaultValue?: string
+}
+
+export interface SpaOperationPayload {
+  id: string
+  name: string
+  ownerId: string
+  qualifiedName?: string
+  returnTypeName?: string
+  isStatic: boolean
+  isAbstract: boolean
+  visibility?: string
+  parameters: SpaParameterPayload[]
+  stereotypeRefs: string[]
+  annotations: SpaAnnotation[]
+}
+
+export interface SpaGeneralizationStub {
+  id: string
+  targetId: string
+}
+
+export interface SpaAssociationStub {
+  id: string
+  name?: string
+  sourceId: string
+  targetId: string
+  thisEndRoleName?: string
+  otherEndRoleName?: string
+  otherEndId: string
+  otherEndMultiplicity?: [number?, number?]
+  otherEndAggregation?: string
+}
+
+export interface SpaEnumerationLiteralPayload {
+  id: string
+  name: string
+  value?: string
+  ordinal?: number
+}
+
+export interface SpaClassifierPayload {
+  id: string
+  name: string
+  qualifiedName: string
+  packageId: string
+  packageName?: string
+  isAbstract: boolean
+  visibility?: string
+  modelKind: string
+  properties: SpaPropertyPayload[]
+  operations: SpaOperationPayload[]
+  stereotypeRefs: string[]
+  taggedValues: any[]
+  constraints: any[]
+  annotations: SpaAnnotation[]
+  literals?: SpaEnumerationLiteralPayload[]
+  generalizations?: SpaGeneralizationStub[]
+  specializations?: SpaGeneralizationStub[]
+  associations?: SpaAssociationStub[]
+}
+
+export interface SpaPackagePayload {
+  id: string
+  name: string
+  parentId?: string
+  subPackageIds: string[]
+  classifierIds: string[]
+  diagramIds: string[]
+  stereotypeRefs: string[]
+  taggedValues: any[]
+  annotations: SpaAnnotation[]
+}
+
+export interface SpaDiagramPayload {
+  id: string
+  name: string
+  packageId?: string
+  diagramType?: string
+  elements: any[]
+  connectors: any[]
+  annotations: SpaAnnotation[]
+  svg?: string
+}
+
+export interface SpaViewExtras {
+  ui?: Record<string, any>
+  appearance?: SpaAppearance
+  diagrams?: { enabled?: boolean }
+}
+
+export interface SpaSkeleton {
   metadata: SpaMetadata
-  packageTree: SpaPackageTreeNode
-  packages: Record<string, SpaPackage>
-  classes: Record<string, SpaClass>
-  attributes: Record<string, SpaAttribute>
-  associations: Record<string, SpaAssociation>
-  operations: Record<string, SpaOperation>
-  diagrams: Record<string, SpaDiagram>
+  packageTree: SpaPackageTree
+  entries: SpaSkeletonEntry[]
+  viewExtras?: SpaViewExtras
+}
+
+export interface SpaData extends SpaSkeleton {
   searchIndex: SpaSearchIndex
+  shards: SpaShard[]
 }

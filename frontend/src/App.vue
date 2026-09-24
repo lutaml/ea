@@ -17,8 +17,12 @@ onMounted(async () => {
   const win = window as any
   if (win.__SPA_DATA__) {
     data.loadFromEmbedded()
-  } else if (win.__SPA_DATA_URL__) {
-    await data.loadFromUrl(win.__SPA_DATA_URL__, win.__SPA_SEARCH_URL__)
+  } else if (win.__SPA_SKELETON_URL__) {
+    await data.loadFromSharded(
+      win.__SPA_SKELETON_URL__,
+      win.__SPA_SEARCH_URL__,
+      win.__SPA_SHARD_BASE__,
+    )
   }
 
   ui.navigateToHash()

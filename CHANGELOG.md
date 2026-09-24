@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `Ea::Spa::Projector` embeds model statistics (packages, classes,
+  attributes, operations, associations, diagrams) in the skeleton
+  metadata hash, restoring the stats panels in the SPA sidebar and
+  welcome view.
+- Classifier shards now carry relationship stubs — `generalizations`,
+  `specializations`, and `associations` (with other-end id, role,
+  cardinality, aggregation) — so the SPA can render inheritance and
+  association tables without extra round trips.
+- Diagram shards now embed the pre-rendered SVG from
+  `Ea::Svg::EaEmitter::Document`, plus skeleton entries for packages
+  and diagrams so every shard is addressable by id.
+
+### Fixed
+- Sharded SPA output was unbootable: `index.html` published
+  `__SPA_SKELETON_URL__`/`__SPA_SEARCH_URL__`/`__SPA_SHARD_BASE__`
+  globals that the frontend bundle never read (and no shard loader
+  existed). The frontend now boots from skeleton.json + search.json
+  and lazily fetches shards with per-request dedupe and bounded
+  concurrency.
+- Single-file SPA embedded the skeleton entries under
+  `skeletonEntries` while skeleton.json used `entries`; both now
+  emit `entries`.
+- Package tree `childIds`/`classifierIds`/`diagramIds` and the
+  package shard payload now derive children/classifiers/diagrams
+  from the document (`parent_id`, `package_id` links) — the parser
+  leaves `Package#sub_package_ids`, `Package#classifier_ids`, and
+  `Package#diagram_ids` empty, which flattened the whole tree under
+  an empty root.
+- SPA views (class/package/diagram details, tree, search modal) are
+  rewired to the `Ea::Model` shard payload shape; the header search
+  modal now actually queries the search index.
+
 ## [0.5.1] — 2026-08-03
 
 ### Added
