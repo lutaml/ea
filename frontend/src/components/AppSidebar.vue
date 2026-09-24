@@ -78,13 +78,13 @@ function formatDate(isoString?: string): string {
           </div>
         </div>
         <div class="package-tree" v-if="data.packageTree">
-          <PackageTreeNode :node="data.packageTree" />
+          <PackageTreeNode v-for="id in data.packageTree.rootIds" :key="id" :node-id="id" />
         </div>
         <div v-else class="loading">Loading...</div>
       </div>
 
       <!-- Stats -->
-      <div class="sidebar-section stats-section" v-if="data.metadata">
+      <div class="sidebar-section stats-section" v-if="data.metadata?.statistics">
         <div class="stats-grid">
           <div class="stat-item">
             <span class="stat-value">{{ data.metadata.statistics.packages }}</span>

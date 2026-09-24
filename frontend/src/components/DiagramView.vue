@@ -1,14 +1,27 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useDataStore } from '../stores/dataStore'
 import { useUiStore } from '../stores/uiStore'
+import type { SpaDiagramPayload } from '../types'
 
 const data = useDataStore()
 const ui = useUiStore()
 
+const diagId = computed(() => ui.currentDiagramId)
 const diagram = computed(() =>
-  ui.currentDiagramId ? data.getDiagramById(ui.currentDiagramId) : null,
+  diagId.value ? (data.elementFor(diagId.value)?.payload as SpaDiagramPayload | undefined) ?? null : null,
 )
+
+watch(
+  diagId,
+  (id) => {
+    if (id) data.ensureElement(id)
+  },
+  { immediate: true },
+)
+
+const objectCount = computed(() => diagram.value?.elements?.length ?? 0)
+const linkCount = computed(() => diagram.value?.connectors?.length ?? 0)
 
 const zoom = ref(1)
 const panX = ref(0)
@@ -50,17 +63,17 @@ const svgTransform = computed(() =>
     </div>
 
     <div class="entity-metadata">
-      <div class="metadata-item" v-if="diagram.type">
+      <div class="metadata-item" v-if="diagram.diagramType">
         <span class="metadata-label">Type</span>
-        <span class="metadata-value">{{ diagram.type }}</span>
+        <span class="metadata-value">{{ diagram.diagramType }}</span>
       </div>
       <div class="metadata-item">
         <span class="metadata-label">Elements</span>
-        <span class="metadata-value">{{ diagram.objectCount }}</span>
+        <span class="metadata-value">{{ objectCount }}</span>
       </div>
       <div class="metadata-item">
         <span class="metadata-label">Connectors</span>
-        <span class="metadata-value">{{ diagram.linkCount }}</span>
+        <span class="metadata-value">{{ linkCount }}</span>
       </div>
     </div>
 

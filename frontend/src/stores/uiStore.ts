@@ -132,16 +132,15 @@ export const useUiStore = defineStore('ui', {
 
       if (hash.startsWith('/package/')) {
         const id = hash.slice('/package/'.length)
-        const pkg = data.getPackageById(id)
+        const pkg = data.nodesById[id]
         this.selectPackage(id, pkg?.name)
       } else if (hash.startsWith('/class/')) {
         const id = hash.slice('/class/'.length)
-        const cls = data.getClassById(id)
+        const cls = data.entriesById[id]
         this.selectClass(id, cls?.name)
       } else if (hash.startsWith('/diagram/')) {
         const id = hash.slice('/diagram/'.length)
-        const diag = data.getDiagramById(id)
-        this.selectDiagram(id, diag?.name)
+        this.selectDiagram(id)
       }
     },
 

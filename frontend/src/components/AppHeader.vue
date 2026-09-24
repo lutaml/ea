@@ -1,13 +1,26 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useUiStore } from '../stores/uiStore'
+import { useDataStore } from '../stores/dataStore'
 
 const ui = useUiStore()
+const data = useDataStore()
 const searchInput = ref<HTMLInputElement | null>(null)
 const showSearchModal = ref(false)
 const searchQuery = ref('')
-const searchResults = ref<any[]>([])
 const selectedIndex = ref(0)
+
+const searchResults = computed(() => {
+  const q = searchQuery.value.trim().toLowerCase()
+  if (!q) return []
+  return data.searchEntries
+    .filter((e) =>
+      e.name.toLowerCase().includes(q) ||
+      (e.qualifiedName || '').toLowerCase().includes(q) ||
+      (e.content || '').toLowerCase().includes(q))
+    .sort((a, b) => (b.boost || 1) - (a.boost || 1))
+    .slice(0, 20)
+})
 
 function openSearch() {
   showSearchModal.value = true
@@ -17,7 +30,20 @@ function openSearch() {
 function closeSearch() {
   showSearchModal.value = false
   searchQuery.value = ''
-  searchResults.value = []
+  selectedIndex.value = 0
+}
+
+function onSearchKeydown(e: KeyboardEvent) {
+  if (e.key === 'ArrowDown') {
+    e.preventDefault()
+    selectedIndex.value = Math.min(selectedIndex.value + 1, searchResults.value.length - 1)
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault()
+    selectedIndex.value = Math.max(selectedIndex.value - 1, 0)
+  } else if (e.key === 'Enter') {
+    const result = searchResults.value[selectedIndex.value]
+    if (result) navigateTo(result.id, result.kind)
+  }
 }
 
 function handleKeydown(e: KeyboardEvent) {
@@ -35,8 +61,9 @@ function handleKeydown(e: KeyboardEvent) {
 }
 
 function navigateTo(id: string, type: string) {
-  if (type === 'class') ui.selectClass(id)
-  else if (type === 'package') ui.selectPackage(id)
+  if (type === 'package') ui.selectPackage(id, data.entriesById[id]?.name)
+  else if (type === 'diagram') ui.selectDiagram(id, data.entriesById[id]?.name)
+  else if (type !== 'property') ui.selectClass(id, data.entriesById[id]?.name)
   closeSearch()
 }
 
@@ -97,12 +124,12 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
       <div class="search-modal">
         <div class="search-input-wrapper">
           <input ref="searchInput" v-model="searchQuery" placeholder="Search classes, packages, attributes..."
-                 @keydown.escape="closeSearch" autofocus />
+                 @keydown.escape="closeSearch" @keydown="onSearchKeydown" autofocus />
         </div>
         <div class="search-results" v-if="searchResults.length">
           <div v-for="(result, i) in searchResults" :key="result.id"
                class="search-result" :class="{ focused: i === selectedIndex }"
-               @click="navigateTo(result.entityId, result.type)">
+               @click="navigateTo(result.id, result.kind)">
             <span class="result-icon">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.2"/>
@@ -110,7 +137,7 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
             </span>
             <div class="result-content">
               <span class="result-name">{{ result.name }}</span>
-              <span class="result-path">{{ result.entityType }}</span>
+              <span class="result-path">{{ result.kind }}</span>
             </div>
           </div>
         </div>

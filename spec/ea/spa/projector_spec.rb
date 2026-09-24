@@ -59,13 +59,17 @@ RSpec.describe Ea::Spa::Projector do
       expect(root.classifier_ids).to include("c1")
     end
 
-    it "emits a skeleton entry per classifier with shard_url" do
+    it "emits a skeleton entry per classifier and package with shard_url" do
       entries = projector.skeleton.entries
-      expect(entries.map(&:id)).to contain_exactly("c1", "e1")
+      expect(entries.map(&:id)).to contain_exactly("c1", "e1", "p1", "p2")
 
       klass_entry = entries.find { |e| e.id == "c1" }
       expect(klass_entry.kind).to eq("class")
       expect(klass_entry.shard_url).to eq("data/classes/c1.json")
+
+      pkg_entry = entries.find { |e| e.id == "p1" }
+      expect(pkg_entry.kind).to eq("package")
+      expect(pkg_entry.shard_url).to eq("data/packages/p1.json")
     end
 
     it "uses custom shard_url_for when provided" do
@@ -121,6 +125,93 @@ RSpec.describe Ea::Spa::Projector do
       shards = projector.each_shard.to_a
       ids = shards.map(&:id)
       expect(ids).to include("c1", "e1", "p1", "p2")
+    end
+  end
+
+  describe "metadata statistics" do
+    it "embeds model counts into the skeleton metadata" do
+      stats = projector.skeleton.metadata["statistics"]
+      expect(stats["packages"]).to eq(2)
+      expect(stats["classes"]).to eq(2)
+      expect(stats["attributes"]).to eq(1)
+      expect(stats["diagrams"]).to eq(0)
+    end
+  end
+
+  describe "classifier payload relationship stubs" do
+    let(:document_with_relationships) do
+      Ea::Model::Document.new(
+        metadata: Ea::Model::Metadata.new(title: "Rel", source_format: "qea"),
+        packages: [
+          Ea::Model::Package.new(id: "p1", name: "Root", qualified_name: "Root")
+        ],
+        classifiers: [
+          Ea::Model::Klass.new(id: "parent", name: "Parcel", package_id: "p1",
+                               qualified_name: "Root::Parcel"),
+          Ea::Model::Klass.new(id: "child", name: "Building", package_id: "p1",
+                               qualified_name: "Root::Building"),
+          Ea::Model::Klass.new(id: "other", name: "Owner", package_id: "p1",
+                               qualified_name: "Root::Owner")
+        ],
+        relationships: [
+          Ea::Model::Generalization.new(id: "g1", specific_id: "child",
+                                        general_id: "parent"),
+          Ea::Model::Association.new(id: "a1", name: "ownedBy",
+                                     source_id: "child", target_id: "other",
+                                     target_multiplicity_lower: 0,
+                                     target_multiplicity_upper: nil)
+        ]
+      )
+    end
+
+    let(:rel_projector) { described_class.new(document_with_relationships) }
+
+    it "adds generalization and specialization stubs to the payload" do
+      child = document_with_relationships.classifiers.find { |c| c.id == "child" }
+      payload = rel_projector.shard_for(child).payload
+      expect(payload["generalizations"].map { |g| g["targetId"] }).to eq(%w[parent])
+
+      parent = document_with_relationships.classifiers.find { |c| c.id == "parent" }
+      parent_payload = rel_projector.shard_for(parent).payload
+      expect(parent_payload["specializations"].map { |g| g["targetId"] }).to eq(%w[child])
+      expect(parent_payload["generalizations"]).to be_empty
+    end
+
+    it "adds association stubs pointing at the other end" do
+      child = document_with_relationships.classifiers.find { |c| c.id == "child" }
+      payload = rel_projector.shard_for(child).payload
+      stub = payload["associations"].first
+      expect(stub["name"]).to eq("ownedBy")
+      expect(stub["otherEndId"]).to eq("other")
+      expect(stub["otherEndAggregation"]).to eq("none")
+    end
+  end
+
+  describe "package tree diagram ids" do
+    let(:document_with_diagram) do
+      Ea::Model::Document.new(
+        metadata: Ea::Model::Metadata.new(title: "Diag", source_format: "qea"),
+        packages: [
+          Ea::Model::Package.new(id: "p1", name: "Root", qualified_name: "Root")
+        ],
+        diagrams: [
+          Ea::Model::Diagram.new(id: "d1", name: "Overview", package_id: "p1")
+        ]
+      )
+    end
+
+    it "derives diagram_ids from the document when the package has none" do
+      tree = described_class.new(document_with_diagram).skeleton.package_tree
+      root = tree.nodes.find { |n| n.id == "p1" }
+      expect(root.diagram_ids).to eq(%w[d1])
+    end
+
+    it "lists diagram skeleton entries for shard routing" do
+      entries = described_class.new(document_with_diagram).skeleton.entries
+      diag = entries.find { |e| e.id == "d1" }
+      expect(diag).not_to be_nil
+      expect(diag.kind).to eq("diagram")
+      expect(diag.shard_url).to eq("data/diagrams/d1.json")
     end
   end
 end

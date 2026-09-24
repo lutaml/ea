@@ -19,7 +19,7 @@ module Ea
           payload = {
             metadata: skeleton.metadata,
             packageTree: skeleton.package_tree,
-            skeletonEntries: skeleton.entries,
+            entries: skeleton.entries,
             searchIndex: projector.search_index,
             shards: projector.each_shard.to_a
           }
