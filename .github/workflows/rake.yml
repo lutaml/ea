@@ -15,5 +15,31 @@ on:
 jobs:
   rake:
     uses: metanorma/ci/.github/workflows/generic-rake.yml@main
+
+  # Autonomous release: green main runs release patch directly via
+  # workflow_dispatch — the ONE event GITHUB_TOKEN can self-trigger,
+  # unlike the repository_dispatch relay the shared template uses,
+  # whose events never create workflow runs (lutaml/ea#45: the
+  # cascade has been dead since Aug 3; every release since has been
+  # a manual dispatch). Trusted Publishing (OIDC) still does the
+  # rubygems push inside release.yml.
+  release-on-green:
+    needs: rake
+    if: >-
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/main' &&
+      needs.rake.result == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Dispatch the patch release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run release.yml --ref main -f next_version=patch
+          echo "release.yml dispatched (patch) — the release run itself
+          pushes via Trusted Publishing."
+
     secrets:
       pat_token: ${{ secrets.LUTAML_CI_PAT_TOKEN }}
