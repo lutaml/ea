@@ -30,7 +30,7 @@ module Ea
                           header_top_padding: 12,
                           header_line_offset: 6,
                           divider_offset: 8,
-                          attr_line_offset: 7,
+                          attr_line_offset: 6,
                           attr_first_offset: 7)
             @bounds = bounds
             @size = size
@@ -69,7 +69,7 @@ module Ea
           def attr_bottom_y
             return attr_first_y unless attr_lines_count&.positive?
 
-            attr_first_y + (attr_lines_count - 1) * (size + (attr_line_offset || 7))
+            attr_first_y + (attr_lines_count - 1) * (size + (attr_line_offset || 6))
           end
 
           def op_divider_y
@@ -88,12 +88,14 @@ module Ea
             op_first_y + (op_lines_count - 1) * (size + 4)
           end
 
-          def enum_divider_y
-            op_bottom_y + size + 5
-          end
-
+          # EA draws a single divider under the header and seats
+          # enumeration literals directly after it (+14 at 7pt),
+          # exactly like attribute rows - no second divider and no
+          # "literals" header. Verified against EA-published SVGs.
           def enum_literal_first_y
-            enum_divider_y + size + 5
+            return nil unless divider_y
+
+            divider_y + size + (attr_first_offset || 7)
           end
 
           # Tagged values appear after attributes (or after ops if

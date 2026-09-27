@@ -52,8 +52,8 @@ RSpec.describe Ea::Svg::EaEmitter::Element::CompartmentGeometry do
 
     it "extends by (n-1) lines when attrs are present" do
       g = build(header_lines: 1, attr_lines: 3, size: 9)
-      # attr_first_y (95) + (3-1)*(9+7) = 95 + 32 = 127
-      expect(g.attr_bottom_y).to eq(127)
+      # attr_first_y (95) + (3-1)*(9+6) = 95 + 30 = 125
+      expect(g.attr_bottom_y).to eq(125)
     end
   end
 
