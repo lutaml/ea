@@ -7,6 +7,8 @@ module Ea
     # source format (.qea or .xmi) from specs or a rake task.
     module Parity
       autoload :Checker, "ea/svg/parity/checker"
+      autoload :CorpusReport, "ea/svg/parity/corpus_report"
+      autoload :Differ, "ea/svg/parity/differ"
       autoload :Suite, "ea/svg/parity/suite"
       autoload :Source, "ea/svg/parity/source"
     end
