@@ -17,12 +17,11 @@ module Ea
       # text-emitting layer.
       class FontResolver
         DEFAULT_FONT_FAMILY = "Yu Gothic UI"
-        # EA's default element compartment font size (matches
-        # reference SVGs which use 9pt for classifier header,
-        # attributes, operations, etc. — distinct from theme's
-        # diagram-level font size which applies only to frame
-        # label and swimlanes).
-        DEFAULT_ELEMENT_FONT_SIZE = 9
+        # EA's default element compartment font size. EA-published
+        # reference SVGs render body text at 7pt (the current EA
+        # theme size) for every element whose objectstyle fontsz is
+        # a use-default marker (see QEA DiagramBuilder.font_size_from).
+        DEFAULT_ELEMENT_FONT_SIZE = 7
 
         attr_reader :diagram, :theme
 

@@ -49,7 +49,7 @@ module Ea
         end
 
         def parse_upper(row)
-          return -1 if row.upperbound.to_s == "*"
+          return -1 if row.upperbound.to_s.match?(/\A[*nN]\z/)
 
           begin
             Integer(row.upperbound || 1)

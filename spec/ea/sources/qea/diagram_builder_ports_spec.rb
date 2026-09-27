@@ -15,13 +15,15 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
   let(:connector_row) { FakeConnectorRow.new(4, 3) }
 
   describe "#font_size_from" do
-    it "converts EA's tenth-point fontsz into points" do
-      expect(builder.font_size_from(fontsz: "80")).to eq(8)
+    it "converts genuinely custom fontsz values into points" do
       expect(builder.font_size_from(fontsz: "105")).to eq(11)
+      expect(builder.font_size_from(fontsz: "70")).to eq(7)
     end
 
-    it "treats fontsz=0 and missing values as use-default" do
+    it "treats default-marker fontsz values as use-default" do
       expect(builder.font_size_from(fontsz: "0")).to be_nil
+      expect(builder.font_size_from(fontsz: "80")).to be_nil
+      expect(builder.font_size_from(fontsz: "90")).to be_nil
       expect(builder.font_size_from(fontsz: "")).to be_nil
       expect(builder.font_size_from({})).to be_nil
     end
@@ -50,21 +52,22 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
     it "docks the source port inward from the right edge for positive SX" do
       port = builder.connection_port(diagram_row, connector_row,
                                      :source, { sx: 5, sy: 38 })
-      # source bounds: x=179 y=-669 w=315 h=202 → x + width - 5, y + 38
-      expect([port.x, port.y]).to eq([489, -631])
+      # flipped source bounds: x=179 y=467 w=315 h=202 → x + width - 5,
+      # y + height - 38 (positive SY measures up from the box bottom)
+      expect([port.x, port.y]).to eq([489, 631])
     end
 
     it "wraps negative source SX to the left edge and SY to the bottom edge" do
       port = builder.connection_port(diagram_row, connector_row,
                                      :source, { sx: -5, sy: -29 })
-      expect([port.x, port.y]).to eq([184, -496])
+      expect([port.x, port.y]).to eq([184, 496])
     end
 
     it "docks the target port inward from the left edge for positive EX" do
       port = builder.connection_port(diagram_row, connector_row,
                                      :target, { ex: 5, ey: 32 })
-      # target bounds: x=597 y=-579 w=326 h=112 → x + 5, y + 32
-      expect([port.x, port.y]).to eq([602, -547])
+      # flipped target bounds: x=597 y=467 w=326 h=112 → x + 5, y + height - 32
+      expect([port.x, port.y]).to eq([602, 547])
     end
 
     it "returns nil when the geometry carries no offsets" do
