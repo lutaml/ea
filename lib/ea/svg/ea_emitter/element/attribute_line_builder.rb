@@ -103,7 +103,9 @@ module Ea
           end
 
           def bound_text(value)
-            value == -1 ? "*" : value.to_s
+            # EA renders the unbounded upper as "n" in attribute lines
+            # (verified against EA-published reference SVGs).
+            value == -1 ? "n" : value.to_s
           end
         end
       end

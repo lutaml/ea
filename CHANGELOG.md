@@ -16,14 +16,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   diamonds terminate on the element border exactly where EA places
   them.
 - QEA `diagram_builder` maps per-element `font_size` (EA's tenth-point
-  `fontsz`, e.g. 80 → 8pt) and `font_underline` from the objectstyle
-  string (fixes #53). Rendered SVGs now use the model's fonts instead
-  of theme defaults.
+  `fontsz`, custom values only) and `font_underline` from the
+  objectstyle string (fixes #53).
 - `Ea::Svg::Parity::Checker` compares font-family and font-size
   histograms across all emitted text (was: first-text only), so a
   single wrong-size compartment fails the parity check (#54).
 
 ### Fixed
+- QEA diagram coordinates are now mirrored into EA's screen-down
+  space at build time (stored t_diagramobjects rects are bottom-up;
+  EA's own published SVGs draw the mirrored view). Connector ports,
+  Path waypoints, and bend fallbacks flip consistently, so SVG and
+  SPA output matches EA's orientation exactly.
+- Element font sizes stored as EA's classic defaults (fontsz 80/90)
+  are treated as use-default markers: rendering falls back to the
+  7pt theme size EA actually emits, and only genuinely custom sizes
+  override it.
+- Attribute multiplicity bounds stored as EA's "n" no longer parse
+  to 1 (which silently dropped the `[1..n]` suffix); unbounded
+  uppers render as `[1..n]` like EA.
 - `Ea::Svg::EaEmitter::TextRenderer` no longer raises
   `TypeError: can't convert nil into Float` on degenerate placements
   with missing coordinates or font size — it renders at the origin

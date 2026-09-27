@@ -110,11 +110,19 @@ module Ea
         end
 
         # EA stores the element font size in tenths of a point in the
-        # objectstyle string (fontsz=80 → 8pt; fontsz=0 means "use
-        # default" → nil).
+        # objectstyle string. 0 means "use default", and 80/90 (8pt /
+        # 9pt) are EA's classic defaults the dialogs write back when
+        # the user never customized — verified against EA-published
+        # reference images, where such elements render at the theme
+        # size. Only genuinely custom sizes are surfaced as explicit
+        # element fonts.
+        USE_DEFAULT_FONTSZ = [0, 80, 90].freeze
+
         def font_size_from(style_hash)
           raw = style_hash[:fontsz]
-          return nil if raw.nil? || raw.to_s.empty? || raw.to_i.zero?
+          return nil if raw.nil? || raw.to_s.empty?
+
+          return nil if USE_DEFAULT_FONTSZ.include?(raw.to_i)
 
           (raw.to_f / 10).round
         end
@@ -410,7 +418,9 @@ module Ea
               else
                 x_off >= 0 ? b.x + x_off : b.x + b.width + x_off
               end
-          y = y_off >= 0 ? b.y + y_off : b.y + b.height + y_off
+          # Bounds are already mirrored to screen-down space, so a
+          # positive SY measures up from the box bottom now.
+          y = y_off >= 0 ? b.y + b.height - y_off : b.y - y_off
           Ea::Model::Point.new(x: x, y: y)
         end
 
@@ -420,7 +430,7 @@ module Ea
           raw = link_row.path.to_s
           return [] if raw.empty?
 
-          raw.scan(/(-?\d+):(-?\d+)/).map { |x, y| [x.to_i, y.to_i] }
+          raw.scan(/(-?\d+):(-?\d+)/).map { |x, y| [x.to_i, -y.to_i] }
         end
 
         # Fallback when no explicit Path: compute source/target bend
@@ -428,10 +438,10 @@ module Ea
         def sx_sy_ex_ey_waypoints(source_point, target_point, geom)
           points = [source_point]
           if geom[:sx] && geom[:sy] && (geom[:sx].nonzero? || geom[:sy].nonzero?)
-            points << [source_point[0] + geom[:sx], source_point[1] + geom[:sy]]
+            points << [source_point[0] + geom[:sx], source_point[1] - geom[:sy]]
           end
           if geom[:ex] && geom[:ey] && (geom[:ex].nonzero? || geom[:ey].nonzero?)
-            points << [target_point[0] - geom[:ex], target_point[1] - geom[:ey]]
+            points << [target_point[0] - geom[:ex], target_point[1] + geom[:ey]]
           end
           points << target_point
           points
@@ -572,8 +582,10 @@ module Ea
         # EA's t_diagramobjects stores rect with the origin at the
         # bottom-left (math convention) — recttop > rectbottom for
         # valid bounds, and y values are often negative. Convert to
-        # screen-space (origin top-left) by taking min/max and using
-        # absolute width/height.
+        # screen-space (origin top-left, y increasing downward) by
+        # mirroring: EA's own SVG export draws the model mirrored, so
+        # the flipped top edge is -(max(top, bottom)); verified
+        # against EA-published reference images (dx=0, dy=-mirror).
         def bounds_from_rect(obj_row)
           left = obj_row.rectleft || 0
           right = obj_row.rectright || 0
@@ -581,7 +593,7 @@ module Ea
           bottom = obj_row.rectbottom || 0
           Ea::Model::Bounds.new(
             x: [left, right].min,
-            y: [top, bottom].min,
+            y: -[top, bottom].max,
             width: (right - left).abs,
             height: (bottom - top).abs
           )
