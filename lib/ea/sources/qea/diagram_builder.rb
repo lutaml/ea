@@ -92,15 +92,31 @@ module Ea
             model_element_ref: ref_for_object(obj_row),
             bounds: bounds_from_rect(obj_row),
             style: style_hash,
-            font_family: style_hash[:font],
+            font_family: presence(style_hash[:font]),
+            font_size: font_size_from(style_hash),
             font_bold: truthy?(style_hash[:bold]),
             font_italic: truthy?(style_hash[:italic]),
+            font_underline: truthy?(style_hash[:ul]),
             show_tagged_values: truthy?(style_hash[:tag])
           )
         end
 
         def truthy?(raw)
           raw == "1" || raw == "-1"
+        end
+
+        def presence(value)
+          value.nil? || value.to_s.empty? ? nil : value
+        end
+
+        # EA stores the element font size in tenths of a point in the
+        # objectstyle string (fontsz=80 → 8pt; fontsz=0 means "use
+        # default" → nil).
+        def font_size_from(style_hash)
+          raw = style_hash[:fontsz]
+          return nil if raw.nil? || raw.to_s.empty? || raw.to_i.zero?
+
+          (raw.to_f / 10).round
         end
 
         def build_connectors(diagram_row)
@@ -216,6 +232,8 @@ module Ea
             connector_type: connector&.connector_type,
             direction: connector&.direction,
             waypoints: waypoints_for_link(link_row, diagram_row),
+            source_port: connection_port(diagram_row, connector, :source, geom),
+            target_port: connection_port(diagram_row, connector, :target, geom),
             label_boxes: geom[:label_boxes] || {},
             style: DiagramStyleParser.parse(link_row.style),
             hidden: hidden?(link_row),
@@ -340,12 +358,22 @@ module Ea
           geom = parse_geometry_fields(link_row.geometry)
           edge_out = geom[:edge] || 0
 
-          source_point = element_edge_point(source_placement, :source, edge_out)
-          target_point = element_edge_point(target_placement, :target, edge_out)
+          source_port = connection_port(diagram_row, connector, :source, geom)
+          target_port = connection_port(diagram_row, connector, :target, geom)
+          # Waypoint points flow through this method as [x, y] arrays;
+          # keep the ports in the same shape.
+          source_point = source_port ? [source_port.x, source_port.y] :
+                         element_edge_point(source_placement, :source, edge_out)
+          target_point = target_port ? [target_port.x, target_port.y] :
+                         element_edge_point(target_placement, :target, edge_out)
 
           intermediate = intermediate_waypoints(link_row)
           if intermediate.any?
             points = [source_point, *intermediate, target_point]
+          elsif source_port || target_port
+            # Exact ports are known — the SX/SY bend heuristics in
+            # sx_sy_ex_ey_waypoints would double-apply the offsets.
+            points = [source_point, target_point]
           else
             points = sx_sy_ex_ey_waypoints(source_point, target_point, geom)
           end
@@ -353,6 +381,37 @@ module Ea
           points.map do |x, y|
             Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y))
           end
+        end
+
+        # Absolute connection point EA docks the connector's visible
+        # endpoint at, derived from the Geometry SX/SY (source) and
+        # EX/EY (target) offsets. The offsets are measured inward from
+        # the placed object's box edges — the X offset counts from the
+        # edge FACING the other end (source: right edge for positive
+        # values, left edge for negative; target mirrored), while the
+        # Y offset counts from the top edge for positive values and
+        # from the bottom edge for negative. Derived and verified
+        # against EA's own rendering on the PLATEAU models.
+        def connection_port(diagram_row, connector, end_kind, geom)
+          return nil unless connector
+
+          ea_object_id = end_kind == :source ? connector.start_object_id : connector.end_object_id
+          placement = ea_object_id &&
+                      diagram_object_placement(diagram_row.diagram_id, ea_object_id)
+          return nil unless placement
+
+          x_off = geom[end_kind == :source ? :sx : :ex]
+          y_off = geom[end_kind == :source ? :sy : :ey]
+          return nil if x_off.nil? || y_off.nil?
+
+          b = bounds_from_rect(placement)
+          x = if end_kind == :source
+                x_off >= 0 ? b.x + b.width - x_off : b.x - x_off
+              else
+                x_off >= 0 ? b.x + x_off : b.x + b.width + x_off
+              end
+          y = y_off >= 0 ? b.y + y_off : b.y + b.height + y_off
+          Ea::Model::Point.new(x: x, y: y)
         end
 
         # Parse t_diagramlinks.Path into [[x, y], ...] intermediate
@@ -426,6 +485,10 @@ module Ea
           boxes
         end
         public :parse_label_boxes
+
+        # Pure helpers exposed for specs and consumers — no database
+        # access, safe to call in isolation.
+        public :font_size_from, :connection_port
 
         # Parse one label box's colon-separated key=value body into
         # a Hash with string keys. Returns nil if OX/OY are absent.

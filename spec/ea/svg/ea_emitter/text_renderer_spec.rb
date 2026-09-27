@@ -79,4 +79,17 @@ RSpec.describe Ea::Svg::EaEmitter::TextRenderer do
     )
     expect(renderer.to_svg).to include('transform="rotate(45.50 5.00 10.00)"')
   end
+
+  it "renders without raising on nil coordinates and size" do
+    renderer = described_class.new(
+      content: "label", x: nil, y: nil, family: "Arial", size: nil
+    )
+    svg = renderer.to_svg
+    expect(svg).to include('x="0.00" y="0.00"')
+    expect(svg).to include("font-family:Arial")
+  end
+
+  it "estimates zero width for a nil size instead of crashing" do
+    expect(described_class.estimate_width("label", nil)).to eq(0.0)
+  end
 end

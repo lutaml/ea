@@ -55,8 +55,11 @@ module Ea
 
         private
 
+        # nil coordinates occur on degenerate placements (e.g. label
+        # boxes without offsets); EA always has a position, so render
+        # at the origin rather than crashing the whole diagram.
         def format_attrs
-          %(x="#{format('%.2f', x)}" y="#{format('%.2f', y)}")
+          %(x="#{format('%.2f', x.to_f)}" y="#{format('%.2f', y.to_f)}")
         end
 
         def format_style
@@ -67,7 +70,7 @@ module Ea
           content = text.to_s
           space_count = content.count(" ")
           letter_count = content.length - space_count
-          letter_count * size * width_factor + space_count * size * 0.3
+          letter_count * size.to_f * width_factor + space_count * size.to_f * 0.3
         end
 
         def formatted_text_length
@@ -77,7 +80,7 @@ module Ea
         end
 
         def formatted_transform
-          "rotate(#{format('%<r>.2f', r: rotation)} #{format('%.2f', x)} #{format('%.2f', y)})"
+          "rotate(#{format('%<r>.2f', r: rotation)} #{format('%.2f', x.to_f)} #{format('%.2f', y.to_f)})"
         end
 
         def escaped_content

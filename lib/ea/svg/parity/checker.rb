@@ -25,6 +25,7 @@ module Ea
             text: count_diff("text"),
             group: top_level_group_diff,
             font_family: font_family_match,
+            font_size: font_size_match,
             view_box: view_box_match,
             text_overlap: text_overlap_ratio
           )
@@ -51,9 +52,23 @@ module Ea
         end
 
         def font_family_match
-          our_family = first_text_style(our_doc)[/font-family:([^;]+)/, 1]
-          ref_family = first_text_style(ref_doc)[/font-family:([^;]+)/, 1]
-          our_family == ref_family
+          font_style_histogram(our_doc, "font-family") ==
+            font_style_histogram(ref_doc, "font-family")
+        end
+
+        # Exact histogram of every emitted font-size (e.g.
+        # {"9.00"=>42, "13.00"=>21}) — a first-text comparison would
+        # pass diagrams whose body text renders at the wrong size.
+        def font_size_match
+          font_style_histogram(our_doc, "font-size") ==
+            font_style_histogram(ref_doc, "font-size")
+        end
+
+        def font_style_histogram(doc, property)
+          doc.css("text").each_with_object(Hash.new(0)) do |node, acc|
+            value = (node["style"] || "")[/#{Regexp.quote(property)}:([^;]+)/, 1]
+            acc[value] += 1 if value
+          end
         end
 
         def view_box_match
@@ -69,11 +84,6 @@ module Ea
           (our_set & ref_set).size.to_f / (our_set | ref_set).size.to_f
         end
 
-        def first_text_style(doc)
-          first = doc.css("text").first
-          first ? (first["style"] || "") : ""
-        end
-
         Diff = Struct.new(:ours, :reference, keyword_init: true) do
           def delta
             ours - reference
@@ -85,7 +95,7 @@ module Ea
         end
 
         Report = Struct.new(:rect, :path, :polygon, :text, :group,
-                            :font_family, :view_box, :text_overlap,
+                            :font_family, :font_size, :view_box, :text_overlap,
                             keyword_init: true) do
           def shape_delta_total
             [rect, path, polygon].sum(&:delta).abs

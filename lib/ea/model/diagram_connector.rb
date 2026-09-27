@@ -33,6 +33,13 @@ module Ea
       # connectors (no SX/SY) get a plain solid line.
       attribute :has_geometry_offsets, :boolean, default: false
 
+      # Absolute connection points on the source/target element boxes,
+      # derived from the Geometry SX/SY and EX/EY edge offsets. EA
+      # docks the connector's visible endpoints at these ports; nil
+      # when the geometry string carries no offsets (auto-routed).
+      attribute :source_port, Ea::Model::Point
+      attribute :target_port, Ea::Model::Point
+
       json do
         map "id", to: :id
         map "diagramId", to: :diagram_id
@@ -43,6 +50,8 @@ module Ea
         map "targetDuid", to: :target_duid
         map "sourceEdge", to: :source_edge
         map "targetEdge", to: :target_edge
+        map "sourcePort", to: :source_port
+        map "targetPort", to: :target_port
         map "connectorType", to: :connector_type
         map "direction", to: :direction
         map "waypoints", to: :waypoints, render_empty: true
