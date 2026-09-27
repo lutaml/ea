@@ -19,8 +19,8 @@ RSpec.describe Ea::Svg::EaEmitter::Element::CompartmentGeometry do
   describe "#header_first_y" do
     it "places the first header baseline below the element top + size + padding" do
       g = build(size: 9)
-      # bounds.y (50) + size (9) + header_top_padding (9) = 68
-      expect(g.header_first_y).to eq(68)
+      # bounds.y (50) + size (9) + header_top_padding (12) = 71
+      expect(g.header_first_y).to eq(71)
     end
   end
 
@@ -31,16 +31,16 @@ RSpec.describe Ea::Svg::EaEmitter::Element::CompartmentGeometry do
 
     it "places the divider below the last header line" do
       g = build(header_lines: 2, size: 9)
-      # header_first_y (68) + (2-1)*(9+6) + 8 = 91
-      expect(g.divider_y).to eq(91)
+      # header_first_y (71) + (2-1)*(9+6) + 8 = 94
+      expect(g.divider_y).to eq(94)
     end
   end
 
   describe "#attr_first_y" do
     it "uses the divider position when present" do
       g = build(header_lines: 1, size: 9)
-      # divider_y (68 + 0*(15) + 8 = 76) + 9 + 7 = 92
-      expect(g.attr_first_y).to eq(92)
+      # divider_y (71 + 0*(15) + 8 = 79) + 9 + 7 = 95
+      expect(g.attr_first_y).to eq(95)
     end
   end
 
@@ -52,8 +52,8 @@ RSpec.describe Ea::Svg::EaEmitter::Element::CompartmentGeometry do
 
     it "extends by (n-1) lines when attrs are present" do
       g = build(header_lines: 1, attr_lines: 3, size: 9)
-      # attr_first_y (92) + (3-1)*(9+4) = 92 + 26 = 118
-      expect(g.attr_bottom_y).to eq(118)
+      # attr_first_y (95) + (3-1)*(9+7) = 95 + 32 = 127
+      expect(g.attr_bottom_y).to eq(127)
     end
   end
 
@@ -64,8 +64,8 @@ RSpec.describe Ea::Svg::EaEmitter::Element::CompartmentGeometry do
 
     it "places after the attr compartment" do
       g = build(header_lines: 1, attr_lines: 1, op_lines: 2, size: 9)
-      # attr_bottom_y = 92 + 0*(13) = 92; op_divider_y = 92+9+5 = 106; op_first_y = 106+9+5 = 120
-      expect(g.op_first_y).to eq(120)
+      # attr_bottom_y = 95; op_divider_y = 95+9+5 = 109; op_first_y = 109+9+5 = 123
+      expect(g.op_first_y).to eq(123)
     end
   end
 
@@ -76,14 +76,14 @@ RSpec.describe Ea::Svg::EaEmitter::Element::CompartmentGeometry do
 
     it "places after the attr compartment when no ops" do
       g = build(header_lines: 1, attr_lines: 1, tagged_values: 1, size: 9)
-      # base = attr_bottom_y (92), then + size + 5 = 92 + 9 + 5 = 106
-      expect(g.tagged_value_first_y).to eq(106)
+      # base = attr_bottom_y (95), then + size + 5 = 95 + 9 + 5 = 109
+      expect(g.tagged_value_first_y).to eq(109)
     end
 
     it "places after the op compartment when ops present" do
       g = build(header_lines: 1, attr_lines: 1, op_lines: 1, tagged_values: 1, size: 9)
-      # base = op_bottom_y = 120, then + size + 5 = 134
-      expect(g.tagged_value_first_y).to eq(134)
+      # base = op_bottom_y = 123, then + size + 5 = 137
+      expect(g.tagged_value_first_y).to eq(137)
     end
   end
 end

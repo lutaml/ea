@@ -48,8 +48,8 @@ RSpec.describe Ea::Svg::EaEmitter::TextRenderer do
 
   it "computes textLength when not provided" do
     svg = renderer.to_svg
-    # 5 chars * 13 * 0.65 = 42.25 → rounded to 42
-    expect(svg).to include('textLength="42"')
+    # 5 chars * 13 * 0.612 = 39.78 → rounded to 40
+    expect(svg).to include('textLength="40"')
   end
 
   it "uses provided textLength when given" do

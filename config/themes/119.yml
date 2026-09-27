@@ -60,10 +60,10 @@ frame:
 # diagram byte-diff: element at y=40 size=9, stereotype y=58 →
 # offset = 18 = size * 2; name y=73 → line_h = size + 6).
 compartments:
-  header_top_padding: 9
+  header_top_padding: 12
   header_line_offset: 6
   divider_offset: 8
-  attr_line_offset: 4
+  attr_line_offset: 7
   attr_first_offset: 7
   op_line_offset: 4
   op_line_offset: 4

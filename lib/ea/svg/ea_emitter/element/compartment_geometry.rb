@@ -27,10 +27,10 @@ module Ea
           def initialize(bounds:, size:, header_lines_count:,
                           attr_lines_count:, op_lines_count:,
                           tagged_values_count:,
-                          header_top_padding: 9,
+                          header_top_padding: 12,
                           header_line_offset: 6,
                           divider_offset: 8,
-                          attr_line_offset: 4,
+                          attr_line_offset: 7,
                           attr_first_offset: 7)
             @bounds = bounds
             @size = size
@@ -46,7 +46,7 @@ module Ea
           end
 
           def header_first_y
-            bounds.y + size + (header_top_padding || 9)
+            bounds.y + size + (header_top_padding || 12)
           end
 
           # Y of the divider line between header and the rest.
@@ -61,7 +61,7 @@ module Ea
           end
 
           def attr_first_y
-            return bounds.y + size + (header_top_padding || 9) + 12 unless divider_y
+            return bounds.y + size + (header_top_padding || 12) + 12 unless divider_y
 
             divider_y + size + (attr_first_offset || 7)
           end
@@ -69,7 +69,7 @@ module Ea
           def attr_bottom_y
             return attr_first_y unless attr_lines_count&.positive?
 
-            attr_first_y + (attr_lines_count - 1) * (size + (attr_line_offset || 4))
+            attr_first_y + (attr_lines_count - 1) * (size + (attr_line_offset || 7))
           end
 
           def op_divider_y

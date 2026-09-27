@@ -14,7 +14,7 @@ module Ea
           def self.render(lines, bounds:, first_y:, family:,
                           size:, size_unit: "pt",
                           fill: "#000000", weight_normal: 400, weight_bold: 700,
-                          stroke_in_text: "#000000", width_factor: 0.65,
+                          stroke_in_text: "#000000", width_factor: 0.612,
                           line_offset: 6)
             line_h = size + line_offset
             text_blocks = lines.each_with_index.map do |(text, style), idx|
