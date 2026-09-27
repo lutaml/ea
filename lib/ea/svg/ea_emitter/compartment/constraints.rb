@@ -14,6 +14,7 @@ module Ea
 
           def render(context)
             return nil unless context.constraints&.any?
+            return nil unless context.geometry.tagged_value_first_y
 
             Element::ConstraintRenderer.render(
               context.constraints,

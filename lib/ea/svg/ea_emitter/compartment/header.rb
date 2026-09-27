@@ -11,6 +11,7 @@ module Ea
 
           def render(context)
             return nil if context.header_lines.empty?
+            return nil unless context.geometry.header_first_y
 
             Element::HeaderRenderer.render(
               context.header_lines,

@@ -10,6 +10,7 @@ module Ea
 
           def render(context)
             return nil if context.attr_lines.empty?
+            return nil unless context.geometry.attr_first_y
 
             Element::AttributeRenderer.render(
               context.attr_lines,
