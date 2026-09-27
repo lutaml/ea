@@ -21,7 +21,28 @@ module Ea
         def initialize(ours:, reference:)
           @ours = parse(ours)
           @reference = parse(reference)
+          @shift = dominant_shift
         end
+
+        # EA crops each published image to its own content bounds, so
+        # the two canvases differ by a per-diagram translation. Estimate
+        # it as the modal delta over content-matched texts and subtract
+        # it before comparing positions.
+        def dominant_shift
+          ref_by_content = @reference.select { |p| p[:kind] == :text }
+                                     .group_by { |p| p[:content] }
+          deltas = []
+          @ours.select { |p| p[:kind] == :text }.each do |ours|
+            ref = ref_by_content[ours[:content]]&.min_by { |c| distance(ours, c) }
+            next unless ref
+
+            deltas << [(ref[:x] - ours[:x]).round, (ref[:y] - ours[:y]).round]
+          end
+          return [0.0, 0.0] if deltas.empty?
+
+          deltas.tally.max_by { |_, count| count }.first.map(&:to_f)
+        end
+        private :dominant_shift
 
         # --- primitive extraction -----------------------------------
 
@@ -158,6 +179,7 @@ module Ea
         # point-level comparison and are reported as count mismatches).
         def shape_summary
           our_shapes = @ours.reject { |p| p[:kind] == :text }
+                            .map { |p| shift_primitive(p) }
           ref_shapes = @reference.reject { |p| p[:kind] == :text }
 
           matched = 0
@@ -175,6 +197,15 @@ module Ea
           }
         end
 
+        def shift_primitive(p)
+          if p[:centroid]
+            p.merge(centroid: [p[:centroid][0] + @shift[0], p[:centroid][1] + @shift[1]])
+          else
+            p
+          end
+        end
+        private :shift_primitive
+
         def shape_distance(a, b)
           return Float::INFINITY unless a[:kind] == b[:kind]
           return Float::INFINITY if a[:centroid].nil? || b[:centroid].nil?
@@ -185,7 +216,8 @@ module Ea
         private :shape_distance
 
         def moved?(ours, ref)
-          (ours[:x] - ref[:x]).abs > EPSILON || (ours[:y] - ref[:y]).abs > EPSILON
+          ((ours[:x] + @shift[0]) - ref[:x]).abs > EPSILON ||
+            ((ours[:y] + @shift[1]) - ref[:y]).abs > EPSILON
         end
         private :moved?
 

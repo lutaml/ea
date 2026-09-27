@@ -49,25 +49,27 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
                                                           .and_return(target_box)
     end
 
-    it "docks the source port inward from the right edge for positive SX" do
+    it "ray-casts the source port from the center through the offset" do
       port = builder.connection_port(diagram_row, connector_row,
                                      :source, { sx: 5, sy: 38 })
-      # flipped source bounds: x=179 y=467 w=315 h=202 → x + width - 5,
-      # y + height - 38 (positive SY measures up from the box bottom)
-      expect([port.x, port.y]).to eq([489, 631])
+      # flipped source bounds x=179 y=467 w=315 h=202, center (336.5,568);
+      # direction (5,-38) exits the top edge at t = 101/38
+      expect([port.x, port.y]).to eq([350, 467])
     end
 
-    it "wraps negative source SX to the left edge and SY to the bottom edge" do
+    it "ray-casts downward when the offset points down" do
       port = builder.connection_port(diagram_row, connector_row,
                                      :source, { sx: -5, sy: -29 })
-      expect([port.x, port.y]).to eq([184, 496])
+      # direction (-5, 29) exits the bottom edge at t = 101/29
+      expect([port.x, port.y]).to eq([319, 669])
     end
 
-    it "docks the target port inward from the left edge for positive EX" do
+    it "ray-casts the target port through its own center offset" do
       port = builder.connection_port(diagram_row, connector_row,
                                      :target, { ex: 5, ey: 32 })
-      # flipped target bounds: x=597 y=467 w=326 h=112 → x + 5, y + height - 32
-      expect([port.x, port.y]).to eq([602, 547])
+      # flipped target bounds x=597 y=467 w=326 h=112, center (760,523);
+      # direction (5,-32) exits the top edge at t = 56/32
+      expect([port.x, port.y]).to eq([769, 467])
     end
 
     it "returns nil when the geometry carries no offsets" do
