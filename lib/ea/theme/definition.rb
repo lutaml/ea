@@ -47,7 +47,7 @@ module Ea
       DEFAULT_COMPARTMENTS = CompartmentSpec.new(header_top_padding: 12,
                                                    header_line_offset: 6,
                                                    divider_offset: 8,
-                                                   attr_line_offset: 7,
+                                                   attr_line_offset: 6,
                                                    attr_first_offset: 7,
                                                    op_line_offset: 4).freeze
       DEFAULT_ATTR = AttrSpec.new(visibility_x_offset: 5,
