@@ -8,6 +8,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `Ea::Model::DiagramConnector` now carries `source_port` / `target_port`
+  — the absolute connection points EA docks each connector endpoint
+  at, derived from the `t_diagramlinks.Geometry` SX/SY and EX/EY edge
+  offsets (fixes #52). QEA-built connectors route from these ports
+  instead of edge-midpoint guesses, so arrows and aggregation
+  diamonds terminate on the element border exactly where EA places
+  them.
+- QEA `diagram_builder` maps per-element `font_size` (EA's tenth-point
+  `fontsz`, e.g. 80 → 8pt) and `font_underline` from the objectstyle
+  string (fixes #53). Rendered SVGs now use the model's fonts instead
+  of theme defaults.
+- `Ea::Svg::Parity::Checker` compares font-family and font-size
+  histograms across all emitted text (was: first-text only), so a
+  single wrong-size compartment fails the parity check (#54).
+
+### Fixed
+- `Ea::Svg::EaEmitter::TextRenderer` no longer raises
+  `TypeError: can't convert nil into Float` on degenerate placements
+  with missing coordinates or font size — it renders at the origin
+  with zero-width estimation instead (fixes #51; 297 of 3,702 PLATEAU
+  CG3 diagrams previously crashed `ea svg --all` and shipped without
+  SVG in SPA output).
+
+## [0.6.4]
+
+### Added
 - `Ea::Spa::Projector` embeds model statistics (packages, classes,
   attributes, operations, associations, diagrams) in the skeleton
   metadata hash, restoring the stats panels in the SPA sidebar and
