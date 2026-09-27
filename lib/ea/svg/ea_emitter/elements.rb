@@ -78,7 +78,7 @@ module Ea
                                               attr_lines_count: attr_lines.size,
                                               op_lines_count: op_lines.size,
                                               tagged_values_count: tagged_values_for(classifier).size,
-                                              header_top_padding: theme.compartments.header_top_padding,
+                                              header_top_padding: header_padding_for(header_lines),
                                               header_line_offset: theme.compartments.header_line_offset,
                                               divider_offset: theme.compartments.divider_offset,
                                               attr_line_offset: theme.compartments.attr_line_offset,
@@ -107,6 +107,15 @@ module Ea
             model_index: model_index,
             off_canvas_parent_name: parent_name
           )
+        end
+
+        # EA seats a stereotype line 3px higher than a bare class name
+        # (first baseline +16 vs +19 at 7pt) - verified against the
+        # EA-published reference SVGs.
+        def header_padding_for(header_lines)
+          first = header_lines.first
+          stereo_led = first && first.first.to_s.start_with?("«")
+          stereo_led ? 9 : theme.compartments.header_top_padding
         end
 
         def enum_literals_for(classifier)

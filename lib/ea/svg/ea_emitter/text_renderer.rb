@@ -20,7 +20,7 @@ module Ea
         DEFAULT_FILL = "#000000"
         DEFAULT_ROTATION = -0.00
         DEFAULT_STROKE_IN_TEXT = "#000000"
-        DEFAULT_WIDTH_FACTOR = 0.65
+        DEFAULT_WIDTH_FACTOR = 0.612
 
         attr_reader :content, :x, :y, :family, :size, :weight, :style,
                     :fill, :text_length, :rotation, :size_unit,

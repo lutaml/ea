@@ -86,10 +86,10 @@ module Ea
               tab_padding: frame["tab_padding"] || 7
             ),
             compartments: comps.empty? ? nil : Definition::CompartmentSpec.new(
-              header_top_padding: comps["header_top_padding"] || 9,
+              header_top_padding: comps["header_top_padding"] || 12,
               header_line_offset: comps["header_line_offset"] || 6,
               divider_offset: comps["divider_offset"] || 8,
-              attr_line_offset: comps["attr_line_offset"] || 4,
+              attr_line_offset: comps["attr_line_offset"] || 7,
               attr_first_offset: comps["attr_first_offset"] || 7,
               op_line_offset: comps["op_line_offset"] || 4
             ),

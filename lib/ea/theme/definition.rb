@@ -44,10 +44,10 @@ module Ea
       DEFAULT_FRAME = FrameSpec.new(inset: 6, tab_height: 20, tab_slant: 13,
                                      tab_label_x: 11, tab_label_y: 19,
                                      tab_padding: 7).freeze
-      DEFAULT_COMPARTMENTS = CompartmentSpec.new(header_top_padding: 9,
+      DEFAULT_COMPARTMENTS = CompartmentSpec.new(header_top_padding: 12,
                                                    header_line_offset: 6,
                                                    divider_offset: 8,
-                                                   attr_line_offset: 4,
+                                                   attr_line_offset: 7,
                                                    attr_first_offset: 7,
                                                    op_line_offset: 4).freeze
       DEFAULT_ATTR = AttrSpec.new(visibility_x_offset: 5,
