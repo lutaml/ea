@@ -412,16 +412,23 @@ module Ea
           y_off = geom[end_kind == :source ? :sy : :ey]
           return nil if x_off.nil? || y_off.nil?
 
+          # EA's SX/SY and EX/EY are the offset of the docking line's
+          # direction from the element's CENTER (stored math coords,
+          # y up): the port is where the ray from the center through
+          # center+offset crosses the box border. Verified against
+          # EA-published reference SVGs. Bounds are already mirrored
+          # to screen-down space, so the offset's Y negates too.
           b = bounds_from_rect(placement)
-          x = if end_kind == :source
-                x_off >= 0 ? b.x + b.width - x_off : b.x - x_off
-              else
-                x_off >= 0 ? b.x + x_off : b.x + b.width + x_off
-              end
-          # Bounds are already mirrored to screen-down space, so a
-          # positive SY measures up from the box bottom now.
-          y = y_off >= 0 ? b.y + b.height - y_off : b.y - y_off
-          Ea::Model::Point.new(x: x, y: y)
+          center_x = b.x + b.width / 2.0
+          center_y = b.y + b.height / 2.0
+          dx = x_off.to_f
+          dy = -y_off.to_f
+          return nil if dx.zero? && dy.zero?
+
+          tx = dx.zero? ? Float::INFINITY : (dx > 0 ? b.x + b.width - center_x : b.x - center_x) / dx
+          ty = dy.zero? ? Float::INFINITY : (dy > 0 ? b.y + b.height - center_y : b.y - center_y) / dy
+          t = [tx, ty].min
+          Ea::Model::Point.new(x: (center_x + t * dx).round, y: (center_y + t * dy).round)
         end
 
         # Parse t_diagramlinks.Path into [[x, y], ...] intermediate

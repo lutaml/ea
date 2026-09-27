@@ -10,11 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - `Ea::Model::DiagramConnector` now carries `source_port` / `target_port`
   — the absolute connection points EA docks each connector endpoint
-  at, derived from the `t_diagramlinks.Geometry` SX/SY and EX/EY edge
-  offsets (fixes #52). QEA-built connectors route from these ports
-  instead of edge-midpoint guesses, so arrows and aggregation
-  diamonds terminate on the element border exactly where EA places
-  them.
+  at, derived from the `t_diagramlinks.Geometry` SX/SY and EX/EY
+  offsets by ray-casting from the element center through
+  center+offset to the box border (fixes #52; semantics verified
+  against EA-published reference SVGs). QEA-built connectors route
+  from these ports instead of edge-midpoint guesses, so arrows and
+  aggregation diamonds terminate on the element border exactly where
+  EA places them.
 - QEA `diagram_builder` maps per-element `font_size` (EA's tenth-point
   `fontsz`, custom values only) and `font_underline` from the
   objectstyle string (fixes #53).
