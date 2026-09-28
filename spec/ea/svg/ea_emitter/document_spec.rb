@@ -32,8 +32,8 @@ RSpec.describe Ea::Svg::EaEmitter::Document do
             Ea::Model::DiagramElement.new(
               id: "de1",
               model_element_ref: "c1",
-              bounds: Ea::Model::Bounds.new(x: 10, y: 10, width: 200, height: 80),
-              image_bounds: Ea::Model::Bounds.new(x: 10, y: 10, width: 200, height: 80),
+              bounds: Ea::Model::Bounds.new(x: 10, y: 10, width: 200, height: 100),
+              image_bounds: Ea::Model::Bounds.new(x: 10, y: 10, width: 200, height: 100),
               background_color: 13_434_879, # BCol stored BGR: 0xCCFFFF → decodes to #FFFFCC
               font_family: "Calibri",
               font_size: 13
@@ -158,8 +158,8 @@ RSpec.describe Ea::Svg::EaEmitter::Document do
             Ea::Model::DiagramElement.new(
               id: "de_assoc",
               model_element_ref: "k1",
-              bounds: Ea::Model::Bounds.new(x: 0, y: 0, width: 100, height: 80),
-              image_bounds: Ea::Model::Bounds.new(x: 0, y: 0, width: 100, height: 80),
+              bounds: Ea::Model::Bounds.new(x: 0, y: 0, width: 100, height: 110),
+              image_bounds: Ea::Model::Bounds.new(x: 0, y: 0, width: 100, height: 110),
               background_color: 13_434_879
             )
           ]
