@@ -90,17 +90,10 @@ RSpec.describe Ea::Svg::EaEmitter::Element::HeaderLines do
   end
 
   describe ".display_name with package scoping" do
-    it "returns the qualified name when diagram_package_id is nil" do
+    it "always returns the plain name (EA renders unqualified headers)" do
       klass = Ea::Model::Klass.new(id: "K", name: "X",
                                      qualified_name: "pkg::X")
-      expect(described_class.display_name(klass, nil)).to eq("pkg::X")
-    end
-
-    it "returns the simple name when the qualifier matches the diagram package" do
-      klass = Ea::Model::Klass.new(id: "K", name: "pkg::X",
-                                     qualified_name: "pkg::X",
-                                     package_id: "PK1",
-                                     package_name: "pkg")
+      expect(described_class.display_name(klass, nil)).to eq("X")
       expect(described_class.display_name(klass, "PK1")).to eq("X")
     end
 

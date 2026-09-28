@@ -51,22 +51,13 @@ module Ea
                 (bounds_width - QUALIFIED_WRAP_PADDING)
             end
 
-            def self.display_name(classifier, diagram_package_id = nil,
+            # EA renders the plain classifier name in element headers
+            # (element ownership qualification is a display option the
+            # corpus diagrams leave off - verified against EA-published
+            # reference SVGs).
+            def self.display_name(classifier, _diagram_package_id = nil,
                                   _visually_nested = false)
-              name = if classifier.is_a?(Ea::Model::Classifier)
-                       (classifier.qualified_name || classifier.name).to_s
-                     else
-                       classifier.name.to_s
-                     end
-              return name if diagram_package_id.nil?
-              return name unless name.include?("::")
-
-              if classifier.is_a?(Ea::Model::Classifier) &&
-                 classifier.package_id == diagram_package_id
-                name.split("::").last
-              else
-                name
-              end
+              classifier.name.to_s
             end
           end
         end
