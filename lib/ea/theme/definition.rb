@@ -74,7 +74,7 @@ module Ea
                      stroke_in_text_color: "#000000",
                      element_border_width: 2, connector_line_width: 2,
                      divider_stroke_width: 2, marker_stroke_width: 2,
-                     text_width_factor: 0.65,
+                     text_width_factor: 0.612,
                      geometry: nil, frame: nil, compartments: nil,
                      attribute_spec: nil, markers: nil, package: nil,
                      note: nil, fills: {})

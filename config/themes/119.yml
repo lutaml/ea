@@ -38,7 +38,7 @@ strokes:
 # Text geometry — EA uses GDI text metrics for exact widths. We
 # approximate with character_count * size * factor.
 text_metrics:
-  width_factor: 0.65
+  width_factor: 0.612
 
 # Canvas frame insets (EA places element (0,0) at SVG (left, top)).
 canvas:
