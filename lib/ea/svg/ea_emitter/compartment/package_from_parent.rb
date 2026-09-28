@@ -43,15 +43,17 @@ module Ea
             bounds = context.bounds
             fill = context.theme.attribute_text_color
             y = bounds.y + bounds.height - Y_OFFSET_FROM_BOTTOM
-            # EA centers the subtitle in the package BODY, which is
-            # 15px wider than the autosized tab — not in the stored
-            # element bounds.
+            # EA centers the subtitle by its integer textLength inside
+            # the package BODY and floors x.
             body_width = Element::PackageShapeRenderer.body_width_for(
               label: context.model_element.name.to_s,
               stereotype: nil, size: context.size
             )
-            text_width = TextRenderer.estimate_width(text, context.size)
-            x = bounds.x + (body_width - text_width) / 2.0
+            len = TextRenderer.estimate_width(
+              text, context.size, nil,
+              family: context.family, style: "italic"
+            ).round
+            x = (bounds.x + (body_width - len) / 2.0).floor
             body = TextRenderer.new(
               content: text, x: x, y: y,
               family: context.family, size: context.size,

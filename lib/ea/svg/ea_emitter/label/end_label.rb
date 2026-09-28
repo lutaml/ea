@@ -295,8 +295,7 @@ module Ea
             TextRenderer.new(content:, x: x_t, y: y_t,
                              family: font_family, size: font_size,
                              size_unit: font_unit,
-                             fill: fill_color,
-                             text_length: content.length * 6).to_svg
+                             fill: fill_color).to_svg
           end
 
           def fill_color
