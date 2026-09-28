@@ -104,8 +104,7 @@ module Ea
             TextRenderer.new(content: content,
                               x: x, y: y,
                               family: family, size: size, size_unit: size_unit,
-                              weight: weight, fill: text_fill,
-                              text_length: content.length * 6).to_svg
+                              weight: weight, fill: text_fill).to_svg
           end
 
           def label_x

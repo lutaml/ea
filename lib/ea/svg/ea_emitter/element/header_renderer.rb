@@ -30,12 +30,16 @@ module Ea
                   (idx >= 1 && lines.first.last == :italic ? 6 : 0)
               x = if style == :italic
                     # EA right-aligns the off-canvas parent ghost at
-                    # the box's right edge (verified across EA-published
-                    # reference SVGs).
+                    # the box's right edge by its integer textLength.
                     bounds.x + bounds.width -
-                      Ea::Svg::EaEmitter::TextRenderer.estimate_width(text, size, width_factor)
+                      Ea::Svg::EaEmitter::TextRenderer.estimate_width(
+                        text, size, width_factor,
+                        family: family, weight: weight, style: font_style
+                      ).round
                   else
-                    center_x_for(text, bounds, size, width_factor)
+                    center_x_for(text, bounds, size, width_factor,
+                                 family: family, weight: weight,
+                                 style: font_style)
                   end
               TextRenderer.new(
                 content: text,
@@ -48,9 +52,14 @@ module Ea
             %(<g style="#{Style::TEXT_GROUP}">\n#{text_blocks.join("\n")}\n</g>)
           end
 
-          def self.center_x_for(text, bounds, size, width_factor)
-            text_width = Ea::Svg::EaEmitter::TextRenderer.estimate_width(text, size, width_factor)
-            bounds.x + (bounds.width - text_width) / 2.0
+          # EA centers text by its INTEGER textLength and floors the
+          # resulting x (verified exact against EA-published SVGs).
+          def self.center_x_for(text, bounds, size, width_factor,
+                                family: nil, weight: nil, style: nil)
+            len = Ea::Svg::EaEmitter::TextRenderer.estimate_width(
+              text, size, width_factor, family: family, weight: weight, style: style
+            ).round
+            (bounds.x + (bounds.width - len) / 2.0).floor
           end
           private_class_method :center_x_for
         end

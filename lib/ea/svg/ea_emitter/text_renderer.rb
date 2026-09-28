@@ -153,7 +153,13 @@ module Ea
         }.freeze
         GLYPH_FALLBACK = 0.61
 
-        def self.estimate_width(text, size, _width_factor = nil)
+        def self.estimate_width(text, size, _width_factor = nil, family: nil,
+                                weight: nil, style: nil)
+          real = Ea::Fonts::Metrics.text_length(text, size, family: family,
+                                                            weight: weight,
+                                                            style: style)
+          return real if real
+
           text.to_s.each_char.sum do |ch|
             (GLYPH_WIDTHS[ch] || GLYPH_FALLBACK) * size.to_f
           end
@@ -162,7 +168,10 @@ module Ea
         def formatted_text_length
           return text_length.to_i.to_s if text_length
 
-          TextRenderer.estimate_width(content, size, width_factor).round.to_s
+          width = self.class.estimate_width(content, size, width_factor,
+                                            family: family, weight: weight,
+                                            style: style)
+          width.round.to_s
         end
 
         def formatted_transform
