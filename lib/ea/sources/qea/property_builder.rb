@@ -24,7 +24,10 @@ module Ea
             id: IdNormalizer.from_guid(row.ea_guid),
             name: row.name,
             owner_id: IdNormalizer.from_guid(owner_object.ea_guid),
-            type_name: row.type,
+            # EA stores the literal "<undefined>" in t_attribute.Type
+            # for enumeration literals; EA's published SVGs render
+            # those rows as bare names with no type suffix.
+            type_name: normalize_type(row.type),
             qualified_name: "#{owner_object.name}::#{row.name}",
             multiplicity_lower: parse_lower(row),
             multiplicity_upper_raw: raw_upper(row),
@@ -49,6 +52,13 @@ module Ea
         def raw_upper(row)
           raw = row.upperbound.to_s
           raw.match?(/\A[nN]\z/) ? raw.downcase : nil
+        end
+
+        def normalize_type(type)
+          text = type.to_s
+          return nil if text.empty? || text == "<undefined>"
+
+          text
         end
 
         def parse_lower(row)
