@@ -18,25 +18,26 @@ module Ea
               classifier = context.classifier
               return [] if classifier.is_a?(Ea::Model::InstanceSpecification)
 
-              label = label_for(classifier, context.umldi_keyword)
-              return [] unless label
+              labels = label_for(classifier, context.umldi_keyword)
+              return [] if labels.empty?
 
-              [[label, :normal]]
+              labels.map { |l| [l, :normal] }
             end
 
-            # @return [String, nil] «name» label or nil
+            # @return [Array<String>] «name» labels (EA renders one
+            # line per applied stereotype)
             def self.label_for(classifier, umldi_keyword)
-              return "«#{umldi_keyword}»" if umldi_keyword && !umldi_keyword.empty?
+              return ["«#{umldi_keyword}»"] if umldi_keyword && !umldi_keyword.empty?
 
               explicit = explicit_stereotype(classifier)
               return explicit if explicit
 
               case classifier
               when Ea::Model::Klass, Ea::Model::Package, Ea::Model::Note
-                nil
+                []
               else
                 fallback = fallback_name(classifier)
-                fallback ? "«#{fallback}»" : nil
+                fallback ? ["«#{fallback}»"] : []
               end
             end
 
@@ -47,7 +48,23 @@ module Ea
               refs = classifier.stereotype_refs
               return nil unless refs&.any?
 
-              "«#{refs.first}»"
+              refs.map { |ref| "«#{canonical(ref)}»" }
+            end
+
+            # EA displays canonical stereotype spellings regardless of
+            # how the QEA stored them (property → Property). Prefer the
+            # MDG alias registry when its definition is available; the
+            # overrides map covers the spellings verified directly
+            # against EA-published reference SVGs.
+            DISPLAY_OVERRIDES = {
+              "property" => "Property",
+              "featuretype" => "FeatureType",
+              "objecttype" => "ObjectType",
+              "codelist" => "CodeList"
+            }.freeze
+
+            def self.canonical(ref)
+              DISPLAY_OVERRIDES.fetch(ref.downcase, ref)
             end
 
             def self.fallback_name(classifier)
