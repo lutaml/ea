@@ -50,8 +50,9 @@ module Ea
           #
           # Pass a `lookup` (any callable returning a Classifier for
           # an id) to enable inherited-property namespace prefixing.
-          def self.lines_for(classifier, lookup: nil)
-            props = displayable_properties(classifier)
+          def self.lines_for(classifier, lookup: nil,
+                            exclude_association_ids: nil)
+            props = displayable_properties(classifier, exclude_association_ids)
             return [] unless props
 
             stereotypes = props.map { |p| property_stereotype(p) }.compact.uniq
@@ -105,10 +106,19 @@ module Ea
           end
           private_class_method :build_text
 
-          def self.displayable_properties(classifier)
+          # Association-end properties render in the box only when
+          # their association is NOT drawn on the diagram (drawn ones
+          # render as connector role labels). exclude_association_ids
+          # carries the diagram's drawn association ids; nil preserves
+          # the legacy hide-all behavior.
+          def self.displayable_properties(classifier, exclude_association_ids)
             return nil unless classifier.properties
 
-            classifier.properties.reject(&:association_id)
+            classifier.properties.reject do |prop|
+              prop.association_id &&
+                (exclude_association_ids.nil? ||
+                 exclude_association_ids.include?(prop.association_id))
+            end
           end
           private_class_method :displayable_properties
 

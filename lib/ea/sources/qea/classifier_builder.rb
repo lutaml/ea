@@ -155,8 +155,10 @@ module Ea
 
         def build_assoc_property(conn, role, owner_object)
           target = database.find_object(conn.end_object_id) if conn.end_object_id&.to_i&.positive?
+          guid = IdNormalizer.from_guid(conn.ea_guid)
           Ea::Model::Property.new(
-            id: IdNormalizer.from_guid(conn.ea_guid),
+            id: guid,
+            association_id: guid,
             name: role,
             owner_id: IdNormalizer.from_guid(owner_object.ea_guid),
             type_name: target&.name,

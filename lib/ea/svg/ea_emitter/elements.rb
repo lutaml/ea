@@ -71,7 +71,14 @@ module Ea
                                                                 font_size: size,
                                                                 off_canvas_parent_name: parent_name) : []
           is_classifier = classifier.is_a?(Ea::Model::Classifier)
-          attr_lines = (is_classifier && show_attributes?) ? Element::AttributeRenderer.lines_for(classifier, lookup: attribute_lookup) : []
+          attr_lines = if is_classifier && show_attributes?
+                         Element::AttributeRenderer.lines_for(
+                           classifier, lookup: attribute_lookup,
+                           exclude_association_ids: drawn_association_ids
+                         )
+                       else
+                         []
+                       end
           op_lines = (is_classifier && show_operations?) ? Element::OperationRenderer.lines_for(classifier) : []
           geometry = CompartmentGeometry.new(bounds: bounds, size: size,
                                               header_lines_count: header_lines.size,
@@ -129,6 +136,11 @@ module Ea
         # plain rows start (divider+18 vs divider+14 at 7pt).
         def attr_first_offset_for(attr_lines)
           attr_lines.first.to_s.start_with?("«") ? 11 : 7
+        end
+
+        def drawn_association_ids
+          (diagram.connectors || []).select(&:renderable?)
+                                    .map(&:relationship_ref).compact.to_set
         end
 
         def enum_literals_for(classifier)
