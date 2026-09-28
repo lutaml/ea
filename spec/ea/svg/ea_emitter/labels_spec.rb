@@ -94,8 +94,11 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
       )
     end
 
-    it "emits no labels without geometry boxes (EA behavior)" do
-      expect(renderer.render).to eq("")
+    it "emits multiplicity labels at EA default positions" do
+      # target end (100,0): mult at 18px along, 21px below in flipped space
+      svg = renderer.render
+      expect(svg).to include("0..1")
+      expect(svg).to include("82.00")
     end
   end
 end
