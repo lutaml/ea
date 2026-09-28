@@ -81,13 +81,33 @@ RSpec.describe Ea::Svg::EaEmitter::Document do
     expect(svg).to include("Integer")
   end
 
-  it "hides properties that are navigable association ends" do
+  it "shows undrawn association properties in-box and hides drawn ones" do
+    # The corpus rule: an association-end property renders inside the
+    # attribute compartment only when its association is NOT drawn on
+    # the diagram (drawn ones render as connector role labels).
     svg_with_assoc_prop = described_class.new(
       diagram_with_association_property,
       model_index: document_with_association_property.index_by_id
     ).render
     expect(svg_with_assoc_prop).to include("simpleAttr")
-    expect(svg_with_assoc_prop).not_to include("assocAttr")
+    expect(svg_with_assoc_prop).to include("assocAttr")
+
+    drawn = diagram_with_association_property
+    drawn.connectors = [
+      Ea::Model::DiagramConnector.new(
+        id: "dc_assoc", diagram_id: "d_assoc",
+        relationship_ref: "r_assoc", connector_type: "Association",
+        waypoints: [
+          Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: 0, y: 0)),
+          Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: 50, y: 50))
+        ]
+      )
+    ]
+    svg_drawn = described_class.new(
+      drawn, model_index: document_with_association_property.index_by_id
+    ).render
+    expect(svg_drawn).to include("simpleAttr")
+    expect(svg_drawn).not_to include("assocAttr")
   end
 
   it "renders Package model elements as polygon body+tab" do
