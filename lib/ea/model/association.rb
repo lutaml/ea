@@ -14,6 +14,10 @@ module Ea
       attribute :source_multiplicity_upper, :integer
       attribute :target_multiplicity_lower, :integer
       attribute :target_multiplicity_upper, :integer
+      # Verbatim SourceCard/DestCard text; EA renders end
+      # multiplicities exactly as stored ("*", "1..1", "n", ...).
+      attribute :source_multiplicity_raw, :string
+      attribute :target_multiplicity_raw, :string
       attribute :source_aggregation, :string, default: -> { "none" }
       attribute :target_aggregation, :string, default: -> { "none" }
       attribute :source_navigable, :boolean, default: true
@@ -30,6 +34,8 @@ module Ea
         map "sourceMultiplicityUpper", to: :source_multiplicity_upper
         map "targetMultiplicityLower", to: :target_multiplicity_lower
         map "targetMultiplicityUpper", to: :target_multiplicity_upper
+        map "sourceMultiplicityRaw", to: :source_multiplicity_raw
+        map "targetMultiplicityRaw", to: :target_multiplicity_raw
         map "sourceAggregation", to: :source_aggregation, render_default: true
         map "targetAggregation", to: :target_aggregation, render_default: true
         map "sourceNavigable", to: :source_navigable, render_default: true

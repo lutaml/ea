@@ -60,6 +60,8 @@ module Ea
             source_multiplicity_upper: parse_upper(row.sourcecard),
             target_multiplicity_lower: parse_lower(row.destcard),
             target_multiplicity_upper: parse_upper(row.destcard),
+            source_multiplicity_raw: raw_card(row.sourcecard),
+            target_multiplicity_raw: raw_card(row.destcard),
             source_aggregation: ConnectorRelationshipMap
                                 .source_aggregation_for(row.connector_type),
             target_aggregation: aggregation_from(row.destaccess),
@@ -80,6 +82,13 @@ module Ea
         # distinguish "no multiplicity specified" from an explicit
         # "1". EA only renders the "1" label when the modeller set it
         # explicitly (SourceCard/DestCard = "1").
+        # Verbatim cardinality text. Blank cards stay nil so the
+        # renderer keeps suppressing unspecified multiplicities.
+        def raw_card(cardinality)
+          text = cardinality.to_s.strip
+          text.empty? ? nil : text
+        end
+
         def parse_lower(cardinality)
           return nil if cardinality.nil? || cardinality.empty?
 

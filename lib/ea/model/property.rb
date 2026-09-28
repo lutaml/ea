@@ -17,6 +17,10 @@ module Ea
       # column value is non-numeric; rendered as-is by the SVG line
       # builder while computed-unbounded uppers render as "*".
       attribute :multiplicity_upper_raw, :string   # -1 means "many"
+      # Verbatim stored cardinality text (e.g. "*", "1..1", "n") for
+      # association ends; EA renders connector-end multiplicities
+      # exactly as stored rather than from parsed bounds.
+      attribute :multiplicity_raw, :string
       attribute :default_value, :string
       attribute :is_derived, :boolean, default: false
       attribute :is_readonly, :boolean, default: false
@@ -38,6 +42,7 @@ module Ea
         map "qualifiedName", to: :qualified_name
         map "multiplicityLower", to: :multiplicity_lower
         map "multiplicityUpperRaw", to: :multiplicity_upper_raw
+        map "multiplicityRaw", to: :multiplicity_raw
         map "multiplicityUpper", to: :multiplicity_upper
         map "defaultValue", to: :default_value
         map "isDerived", to: :is_derived, render_default: true

@@ -18,7 +18,7 @@ module Ea
         # cross-package associations but suppresses label rendering
         # for those — only simple role names render.
         class EndLabel
-          PROPERTY_STEREOTYPE = "«property»"
+          PROPERTY_STEREOTYPE = "«Property»"
 
           attr_reader :canvas, :model_index, :document, :theme,
                       :font_family, :font_size, :font_unit
@@ -204,12 +204,13 @@ module Ea
 
           def association_role(assoc, end_kind)
             name = end_kind == :source ? assoc.source_role_name : assoc.target_role_name
+            raw = end_kind == :source ? assoc.source_multiplicity_raw : assoc.target_multiplicity_raw
             lower = end_kind == :source ? assoc.source_multiplicity_lower : assoc.target_multiplicity_lower
             upper = end_kind == :source ? assoc.source_multiplicity_upper : assoc.target_multiplicity_upper
-            return [nil, multiplicity_string(lower, upper)] if name.to_s.include?("::")
+            mult = raw && !raw.empty? ? raw : multiplicity_string(lower, upper)
+            return [nil, mult] if name.to_s.include?("::")
 
             role = name.nil? || name.empty? ? nil : "+#{name}"
-            mult = multiplicity_string(lower, upper)
             [role, mult]
           end
 
@@ -254,6 +255,9 @@ module Ea
           end
 
           def multiplicity_text(property)
+            raw = property.multiplicity_raw
+            return raw if raw && !raw.empty?
+
             multiplicity_string(property.multiplicity_lower,
                                 property.multiplicity_upper)
           end
