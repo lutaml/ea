@@ -122,13 +122,23 @@ module Ea
             assoc = association_for(connector)
             return [nil, nil, nil] unless assoc
 
-            prop = property_at_end(assoc, end_kind)
+            prop = property_at_end(assoc, end_kind, connector)
             return [true, *property_role(prop)] if prop
 
             [false, *association_role(assoc, end_kind)]
           end
 
-          def property_at_end(association, end_kind)
+          def property_at_end(association, end_kind, connector = nil)
+            # EA renders the source classifier's synthesized
+            # association-end property (matched by the connector's
+            # relationship guid), falling back to the property index
+            # lookup by association source/target id.
+            if connector&.relationship_ref
+              placed = placed_classifier_id(association, end_kind)
+              prop = assoc_end_property(placed, connector.relationship_ref)
+              return prop if prop
+            end
+
             id = end_kind == :source ? association.source_id : association.target_id
             return nil unless id
 
@@ -137,9 +147,29 @@ module Ea
             fallback_property_lookup(id)
           end
 
+          def placed_classifier_id(association, end_kind)
+            end_kind == :source ? association.source_id : association.target_id
+          end
+
+          # Find the synthesized association-end property on the
+          # placed classifier whose association_id matches the
+          # connector's relationship reference.
+          def assoc_end_property(classifier_id, relationship_ref)
+            return nil unless classifier_id
+
+            classifier = model_index[classifier_id]
+            return nil unless classifier.is_a?(Ea::Model::Classifier)
+
+            (classifier.properties || []).find do |p|
+              p.association_id == relationship_ref
+            end
+          end
+
           # Linear-scan fallback for callers that did not wire in
           # the Document. Production paths go through Document's
           # property_index for O(1) lookup.
+
+
           def fallback_property_lookup(id)
             return nil unless model_index
 
@@ -155,9 +185,21 @@ module Ea
           def property_role(property)
             visibility = visibility_prefix(property)
             name = property.name.to_s
-            role = name.empty? ? nil : "#{visibility}#{name}"
+            type_name = property.type_name.to_s
+            line = if type_name.empty? || type_name == " "
+                     "#{visibility}#{name}"
+                   else
+                     "#{visibility}#{name}: #{namespace_double_colon(type_name)}"
+                   end
+            role = line.empty? ? nil : line
             mult = multiplicity_text(property)
             [role, mult]
+          end
+
+          def namespace_double_colon(type_name)
+            return type_name if type_name.nil? || type_name.empty?
+
+            type_name.to_s.gsub(/([A-Za-z0-9_]):([A-Za-z])/, '\1::\2')
           end
 
           def association_role(assoc, end_kind)
