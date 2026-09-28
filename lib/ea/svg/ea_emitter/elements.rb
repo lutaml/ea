@@ -94,6 +94,15 @@ module Ea
                                              tagged_values_for(classifier).size,
                                              header_lines)
           end
+          # EA suppresses the operations compartment when its rows
+          # overflow the stored box height (same rule as attributes).
+          if op_lines.any? && geometry.op_first_y &&
+             geometry.op_bottom_y.to_i + size > bounds.y + bounds.height
+            op_lines = []
+            geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
+                                             tagged_values_for(classifier).size,
+                                             header_lines)
+          end
           RenderContext.new(
             element: element,
             bounds: bounds,
