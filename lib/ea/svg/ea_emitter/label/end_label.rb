@@ -202,7 +202,9 @@ module Ea
             offset_y = box["oy"] || box[:oy]
             return nil if offset_x.nil? && offset_y.nil?
 
-            [anchor[0] + offset_x.to_i, anchor[1] + offset_y.to_i]
+            # Waypoint anchors are mirrored to screen-down space; the
+            # stored OY offset counts the other way, so negate it.
+            [anchor[0] + offset_x.to_i, anchor[1] - offset_y.to_i]
           end
 
           def property_y_offset
