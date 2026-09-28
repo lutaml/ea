@@ -73,14 +73,50 @@ module Ea
           target_pt = points.last
           boxes = connector.label_boxes || {}
 
+          src_tb, src_mb = end_boxes(boxes, :llt, :llb) ||
+                           default_label_boxes(points, :source)
+          tgt_tb, tgt_mb = end_boxes(boxes, :lrt, :lrb) ||
+                           default_label_boxes(points, :target)
+
           texts = []
-          end_renderer.texts(text_box: boxes[:llt], mult_box: boxes[:llb],
+          end_renderer.texts(text_box: src_tb, mult_box: src_mb,
                              anchor: source_pt, connector: connector,
                              end_kind: :source).each { |t| texts << t }
-          end_renderer.texts(text_box: boxes[:lrt], mult_box: boxes[:lrb],
+          end_renderer.texts(text_box: tgt_tb, mult_box: tgt_mb,
                              anchor: target_pt, connector: connector,
                              end_kind: :target).each { |t| texts << t }
           texts
+        end
+
+        def end_boxes(boxes, text_key, mult_key)
+          return nil if boxes[text_key].nil? && boxes[mult_key].nil?
+
+          [boxes[text_key], boxes[mult_key]]
+        end
+
+        # EA's default label placement for connectors without stored
+        # label boxes: role name 5px along the line and 31px below it,
+        # multiplicity 18px along and 21px above (screen-down coords).
+        # Derived from 219 labels across EA-published reference SVGs.
+        def default_label_boxes(points, end_kind)
+          e = end_kind == :source ? points.first : points.last
+          other = end_kind == :source ? points[1] : points[-2]
+          return [nil, nil] unless e && other
+
+          ux = other[0] - e[0]
+          uy = other[1] - e[1]
+          len = Math.sqrt(ux**2 + uy**2)
+          return [nil, nil] if len < 0.5
+
+          ux /= len
+          uy /= len
+          vx = uy
+          vy = -ux
+          role_box = { "ox" => (5 * ux - 31 * vx).round,
+                       "oy" => (5 * uy - 31 * vy).round }
+          mult_box = { "ox" => (18 * ux + 21 * vx).round,
+                       "oy" => (18 * uy + 21 * vy).round }
+          [role_box, mult_box]
         end
 
         def registry
