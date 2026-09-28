@@ -74,8 +74,12 @@ RSpec.describe Ea::Svg::EaEmitter::Element::AttributeLineBuilder do
     end
 
     it "renders * for unlimited upper" do
-      prop = build_property(name: "x", multiplicity_lower: 0, multiplicity_upper: -1)
+      prop = build_property(name: "x", multiplicity_lower: 0, multiplicity_upper: -1,
+                            multiplicity_upper_raw: "n")
       expect(described_class.new(prop).to_s).to include("[0..n]")
+
+      computed = build_property(name: "x", multiplicity_lower: 0, multiplicity_upper: -1)
+      expect(described_class.new(computed).to_s).to include("[0..*]")
     end
   end
 
