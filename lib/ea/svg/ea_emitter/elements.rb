@@ -80,16 +80,20 @@ module Ea
                          []
                        end
           op_lines = (is_classifier && show_operations?) ? Element::OperationRenderer.lines_for(classifier) : []
-          geometry = CompartmentGeometry.new(bounds: bounds, size: size,
-                                              header_lines_count: header_lines.size,
-                                              attr_lines_count: attr_lines.size,
-                                              op_lines_count: op_lines.size,
-                                              tagged_values_count: tagged_values_for(classifier).size,
-                                              header_top_padding: header_padding_for(header_lines),
-                                              header_line_offset: theme.compartments.header_line_offset,
-                                              divider_offset: theme.compartments.divider_offset,
-                                              attr_line_offset: theme.compartments.attr_line_offset,
-                                              attr_first_offset: attr_first_offset_for(attr_lines))
+          geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
+                                           tagged_values_for(classifier).size,
+                                           header_lines)
+          # EA suppresses the whole attribute compartment when it does
+          # not fit the stored box height (never truncates rows) - the
+          # AOS box on CityFurniture hides its association property
+          # this way. Verified against EA-published reference SVGs.
+          if attr_lines.any? &&
+             geometry.attr_bottom_y.to_i + size > bounds.y + bounds.height
+            attr_lines = []
+            geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
+                                             tagged_values_for(classifier).size,
+                                             header_lines)
+          end
           RenderContext.new(
             element: element,
             bounds: bounds,
@@ -114,6 +118,20 @@ module Ea
             model_index: model_index,
             off_canvas_parent_name: parent_name
           )
+        end
+
+        def compartment_geometry(bounds, size, attr_lines, op_lines,
+                                 tagged_count, header_lines)
+          CompartmentGeometry.new(bounds: bounds, size: size,
+                                   header_lines_count: header_lines.size,
+                                   attr_lines_count: attr_lines.size,
+                                   op_lines_count: op_lines.size,
+                                   tagged_values_count: tagged_count,
+                                   header_top_padding: header_padding_for(header_lines),
+                                   header_line_offset: theme.compartments.header_line_offset,
+                                   divider_offset: theme.compartments.divider_offset,
+                                   attr_line_offset: theme.compartments.attr_line_offset,
+                                   attr_first_offset: attr_first_offset_for(attr_lines))
         end
 
         # EA seats a stereotype line 3px higher than a bare class name
