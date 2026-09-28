@@ -71,7 +71,7 @@ compartments:
 # Attribute text x-offsets within element bounds.
 attribute:
   visibility_x_offset: 5
-  content_x_offset: 26
+  content_x_offset: 22
 
 # Marker geometry constants.
 markers:

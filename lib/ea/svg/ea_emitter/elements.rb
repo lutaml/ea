@@ -82,7 +82,7 @@ module Ea
                                               header_line_offset: theme.compartments.header_line_offset,
                                               divider_offset: theme.compartments.divider_offset,
                                               attr_line_offset: theme.compartments.attr_line_offset,
-                                              attr_first_offset: theme.compartments.attr_first_offset)
+                                              attr_first_offset: attr_first_offset_for(attr_lines))
           RenderContext.new(
             element: element,
             bounds: bounds,
@@ -116,6 +116,12 @@ module Ea
           first = header_lines.first
           stereo_led = first && first.first.to_s.start_with?("«")
           stereo_led ? 9 : theme.compartments.header_top_padding
+        end
+
+        # A stereotype group header («Property») sits 4px below where
+        # plain rows start (divider+18 vs divider+14 at 7pt).
+        def attr_first_offset_for(attr_lines)
+          attr_lines.first.to_s.start_with?("«") ? 11 : 7
         end
 
         def enum_literals_for(classifier)
