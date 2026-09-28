@@ -114,8 +114,15 @@ module Ea
         # EA-published reference SVGs.
         def header_padding_for(header_lines)
           first = header_lines.first
-          stereo_led = first && first.first.to_s.start_with?("«")
-          stereo_led ? 9 : theme.compartments.header_top_padding
+          return theme.compartments.header_top_padding unless first
+
+          if first.last == :italic
+            6 # ghost-led: EA seats the right-aligned ghost at +13
+          elsif first.first.to_s.start_with?("«")
+            9
+          else
+            theme.compartments.header_top_padding
+          end
         end
 
         # A stereotype group header («Property») sits 4px below where

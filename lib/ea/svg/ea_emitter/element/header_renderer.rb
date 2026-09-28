@@ -23,11 +23,23 @@ module Ea
                        else weight_normal
                        end
               font_style = (style == :italic || style == :bold_italic) ? "italic" : "normal"
-              y = first_y + (idx * line_h)
-              centered_x = center_x_for(text, bounds, size, width_factor)
+              # EA spaces the line AFTER a right-aligned ghost 6px
+              # wider (ghost +13, next +32 at 7pt) - verified against
+              # EA-published reference SVGs.
+              y = first_y + (idx * line_h) +
+                  (idx >= 1 && lines.first.last == :italic ? 6 : 0)
+              x = if style == :italic
+                    # EA right-aligns the off-canvas parent ghost at
+                    # the box's right edge (verified across EA-published
+                    # reference SVGs).
+                    bounds.x + bounds.width -
+                      Ea::Svg::EaEmitter::TextRenderer.estimate_width(text, size, width_factor)
+                  else
+                    center_x_for(text, bounds, size, width_factor)
+                  end
               TextRenderer.new(
                 content: text,
-                x: centered_x, y: y,
+                x: x, y: y,
                 family: family, size: size, size_unit: size_unit,
                 weight: weight, style: font_style, fill: fill,
                 stroke_in_text: stroke_in_text, width_factor: width_factor
