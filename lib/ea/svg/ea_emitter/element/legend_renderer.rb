@@ -24,8 +24,8 @@ module Ea
         class LegendRenderer
           CONTAINER_RX = 3
           ICON_SIZE = 17
-          TITLE_Y_OFFSET = 19
-          FIRST_ITEM_Y_OFFSET = 30
+          TITLE_Y_OFFSET = 22
+          FIRST_ITEM_Y_OFFSET = 33
           ITEM_SPACING = 19
           ICON_X_OFFSET = 10
           ICON_LABEL_GAP = 22
@@ -130,9 +130,34 @@ module Ea
           end
 
           def title_text
-            x = bounds.x + (bounds.width / 2) - (title_text_width / 2)
+            x = title_x
             y = bounds.y + TITLE_Y_OFFSET
             build_text(legend.title, x: x, y: y, size: title_font_size, weight: 700)
+          end
+
+          # EA centers the title over the ITEM BLOCK (icon left edge
+          # to the right end of the widest label), not the container
+          # box - verified against EA-published reference SVGs.
+          def title_x
+            icon_left = bounds.x + ICON_X_OFFSET
+            block_right = icon_left + ICON_LABEL_GAP +
+                          widest_item_label_width
+            block_left = icon_left
+            block_left + (block_right - block_left - title_text_width) / 2.0
+          end
+
+          CJK_RANGE = /[\u3000-\u9fff\uff00-\uffef]/
+
+          # CJK glyphs run ~0.82em, others ~0.612em (regressed from
+          # EA's own textLength values on mixed-script labels).
+          def estimated_width(text, size)
+            text.to_s.each_char.sum do |ch|
+              ch.match?(CJK_RANGE) ? size * 0.70 : size * 0.612
+            end
+          end
+
+          def widest_item_label_width
+            legend.items.map { |i| estimated_width(i.name, item_font_size) }.max || 0.0
           end
 
           def item_top_y(index)
@@ -148,7 +173,7 @@ module Ea
           end
 
           def title_text_width
-            legend.title.to_s.length * title_font_size * 0.6
+            estimated_width(legend.title, title_font_size)
           end
 
           def build_text(content, x:, y:, size:, weight:)
