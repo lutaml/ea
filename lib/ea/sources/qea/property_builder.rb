@@ -27,6 +27,7 @@ module Ea
             type_name: row.type,
             qualified_name: "#{owner_object.name}::#{row.name}",
             multiplicity_lower: parse_lower(row),
+            multiplicity_upper_raw: raw_upper(row),
             multiplicity_upper: parse_upper(row),
             default_value: row.default,
             is_ordered: boolean(row.isordered),
@@ -42,6 +43,14 @@ module Ea
 
         private
 
+        # EA stores some bounds as literal text ("n"); those render
+        # verbatim in attribute lines while computed-unbounded bounds
+        # render as "*" (verified against EA-published SVGs).
+        def raw_upper(row)
+          raw = row.upperbound.to_s
+          raw.match?(/\A[nN]\z/) ? raw.downcase : nil
+        end
+
         def parse_lower(row)
           Integer(row.lowerbound || 1)
         rescue StandardError
@@ -49,10 +58,11 @@ module Ea
         end
 
         def parse_upper(row)
-          return -1 if row.upperbound.to_s.match?(/\A[*nN]\z/)
+          raw = row.upperbound.to_s
+          return -1 if raw.match?(/\A[*nN]\z/)
 
           begin
-            Integer(row.upperbound || 1)
+            Integer(raw.empty? ? 1 : raw)
           rescue StandardError
             1
           end

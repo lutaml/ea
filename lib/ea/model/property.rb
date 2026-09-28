@@ -12,7 +12,11 @@ module Ea
       attribute :type_name, :string             # name shown when type is external/primitive
       attribute :qualified_name, :string
       attribute :multiplicity_lower, :integer
-      attribute :multiplicity_upper, :integer   # -1 means "many"
+      attribute :multiplicity_upper, :integer
+      # Verbatim stored bound text (e.g. EA's literal "n") when the
+      # column value is non-numeric; rendered as-is by the SVG line
+      # builder while computed-unbounded uppers render as "*".
+      attribute :multiplicity_upper_raw, :string   # -1 means "many"
       attribute :default_value, :string
       attribute :is_derived, :boolean, default: false
       attribute :is_readonly, :boolean, default: false
@@ -33,6 +37,7 @@ module Ea
         map "typeName", to: :type_name
         map "qualifiedName", to: :qualified_name
         map "multiplicityLower", to: :multiplicity_lower
+        map "multiplicityUpperRaw", to: :multiplicity_upper_raw
         map "multiplicityUpper", to: :multiplicity_upper
         map "defaultValue", to: :default_value
         map "isDerived", to: :is_derived, render_default: true
