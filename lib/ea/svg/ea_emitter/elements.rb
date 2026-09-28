@@ -175,19 +175,17 @@ module Ea
           (diagram.elements || []).any? { |e| e.model_element_ref == model_element_ref }
         end
 
-        # Returns true when any element placed on the current diagram
-        # lives in the same package as `parent`. EA suppresses the
-        # parent-class ghost line in that case — the parent's package
-        # is already "represented" on the diagram, so the off-canvas
-        # parent is implicitly visible to the reader.
+        # EA suppresses the parent-class ghost line only when the
+        # parent's package is itself placed on the diagram as a
+        # package element. A mere same-package classifier does NOT
+        # suppress it — verified against EA-published reference SVGs
+        # (CityFurniture renders the ghost for AbstractOccupiedSpace
+        # although the class shares its parent's package).
         def parent_package_represented_on_diagram?(parent)
           parent_pkg = parent.is_a?(Ea::Model::Classifier) ? parent.package_id : nil
           return false unless parent_pkg
 
-          (diagram.elements || []).any? do |e|
-            sibling = model_index[e.model_element_ref]
-            sibling.is_a?(Ea::Model::Classifier) && sibling.package_id == parent_pkg
-          end
+          (diagram.elements || []).any? { |e| e.model_element_ref == parent_pkg }
         end
 
         # EA renders a package's child classifiers and sub-packages as
