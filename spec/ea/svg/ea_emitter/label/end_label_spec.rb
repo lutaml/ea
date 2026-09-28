@@ -51,15 +51,55 @@ RSpec.describe Ea::Svg::EaEmitter::Label::EndLabel do
                         font_family: "Carlito", font_size: 7, font_unit: "pt")
   end
 
-  it "emits role name + «property» + multiplicity at the source box" do
+  it "emits role name + «Property» + multiplicity at the source box" do
     out = renderer.texts(text_box: { "ox" => 10, "oy" => 15 },
                           mult_box: { "ox" => 0, "oy" => 0 },
                           anchor: [0, 0], connector: connector,
                           end_kind: :source)
     joined = out.join
     expect(joined).to include("+items")
-    expect(joined).to include("«property»")
+    expect(joined).to include("«Property»")
     expect(joined).to include("0..*")
+  end
+
+  it "renders the stored cardinality verbatim when present" do
+    source_property.multiplicity_raw = "*"
+    out = renderer.texts(text_box: { "ox" => 10, "oy" => 15 },
+                          mult_box: { "ox" => 0, "oy" => 0 },
+                          anchor: [0, 0], connector: connector,
+                          end_kind: :source)
+    joined = out.join
+    expect(joined).not_to include("0..*")
+    expect(joined).to include(">*</text>")
+  end
+
+  it "renders association raw cards verbatim on the fallback path" do
+    assoc = Ea::Model::Association.new(
+      id: "r3", source_id: "c1", target_id: "c2",
+      source_multiplicity_raw: "1..1",
+      source_multiplicity_lower: 1,
+      source_multiplicity_upper: 1
+    )
+    doc = Ea::Model::Document.new(
+      metadata: Ea::Model::Metadata.new(title: "T", source_format: "qea"),
+      classifiers: [
+        Ea::Model::Klass.new(id: "c1", name: "A"),
+        Ea::Model::Klass.new(id: "c2", name: "B")
+      ],
+      relationships: [assoc]
+    )
+    conn = Ea::Model::DiagramConnector.new(
+      id: "dc3", relationship_ref: assoc.id,
+      connector_type: "Association", direction: "Source -> Destination"
+    )
+    r = described_class.new(canvas: nil, model_index: doc.index_by_id,
+                            document: doc, theme: Ea::Theme::Registry.default,
+                            font_family: "Carlito", font_size: 7, font_unit: "pt")
+    out = r.texts(text_box: { "ox" => 5, "oy" => 5 },
+                  mult_box: { "ox" => 2, "oy" => 2 }, anchor: [0, 0],
+                  connector: conn, end_kind: :source)
+    expect(out.join).to include("1..1")
+    expect(out.join).not_to include(">1<")
   end
 
   it "returns [] when no text or mult box is positioned" do

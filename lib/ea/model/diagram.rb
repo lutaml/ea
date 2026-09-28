@@ -16,6 +16,10 @@ module Ea
       attribute :hand_draw, :boolean, default: false
       attribute :show_notes, :boolean, default: false
       attribute :show_parents, :boolean, default: true
+      # t_diagram.ShowForeign: EA annotates placed elements whose
+      # owner package differs from the diagram's package with a
+      # "(from Owner)" subtitle only when this flag is set.
+      attribute :show_foreign, :boolean, default: false
       attribute :elements, DiagramElement, collection: true, initialize_empty: true
       attribute :connectors, DiagramConnector, collection: true, initialize_empty: true
       attribute :annotations, Annotation, collection: true, initialize_empty: true
@@ -33,6 +37,7 @@ module Ea
         map "handDraw", to: :hand_draw
         map "showNotes", to: :show_notes
         map "showParents", to: :show_parents
+        map "showForeign", to: :show_foreign
         map "elements", to: :elements, render_empty: true
         map "connectors", to: :connectors, render_empty: true
         map "annotations", to: :annotations, render_empty: true

@@ -165,12 +165,18 @@ module Ea
             qualified_name: "#{owner_object.name}::#{role}",
             multiplicity_lower: parse_cardinality(conn.sourcecard, :lower),
             multiplicity_upper: parse_cardinality(conn.sourcecard, :upper),
+            multiplicity_raw: raw_card(conn.sourcecard),
             visibility: "public",
             aggregation: "none",
             stereotype_refs: ["property"],
             tagged_values: [],
             annotations: []
           )
+        end
+
+        def raw_card(card_str)
+          text = card_str.to_s.strip
+          text.empty? ? nil : text
         end
 
         def parse_cardinality(card_str, bound)

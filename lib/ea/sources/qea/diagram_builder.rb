@@ -32,6 +32,7 @@ module Ea
             hand_draw: hand_draw_enabled?(diagram_row),
             show_notes: show_notes_enabled?(diagram_row),
             show_parents: show_parents_enabled?(diagram_row),
+            show_foreign: diagram_row.showforeign.to_i.nonzero? ? true : false,
             elements: build_elements(diagram_row),
             connectors: build_connectors(diagram_row),
             annotations: AnnotationBuilder.from_note(diagram_row.notes,
