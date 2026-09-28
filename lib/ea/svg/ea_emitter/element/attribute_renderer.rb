@@ -9,15 +9,19 @@ module Ea
         # content) matching EA's encoding.
         class AttributeRenderer
           DEFAULT_VISIBILITY_X_OFFSET = 5
-          DEFAULT_CONTENT_X_OFFSET = 26
+          DEFAULT_CONTENT_X_OFFSET = 22
           DEFAULT_FONT_UNIT = "pt"
+          # EA seats compartment stereotype headers («Property») 12px
+          # from the box edge and spaces rows 13px at 7pt.
+          STEREOTYPE_HEADER_X_OFFSET = 12
+          ROW_LINE_OFFSET = 6
 
           def self.render(lines, bounds:, first_y:, family:,
                           size:, size_unit: DEFAULT_FONT_UNIT,
                           fill: "#000000",
                           visibility_x_offset: DEFAULT_VISIBILITY_X_OFFSET,
                           content_x_offset: DEFAULT_CONTENT_X_OFFSET)
-            line_h = size + 4
+            line_h = size + ROW_LINE_OFFSET
             text_blocks = []
             lines.each_with_index do |line, idx|
               y = first_y + (idx * line_h)
@@ -25,6 +29,8 @@ module Ea
               if visibility
                 text_blocks << build_text(bounds.x + visibility_x_offset, y, visibility, family, size, size_unit, fill)
                 text_blocks << build_text(bounds.x + content_x_offset, y, rest, family, size, size_unit, fill)
+              elsif line.strip.start_with?("«")
+                text_blocks << build_text(bounds.x + STEREOTYPE_HEADER_X_OFFSET, y, line.strip, family, size, size_unit, fill)
               else
                 text_blocks << build_text(bounds.x + visibility_x_offset, y, line.strip, family, size, size_unit, fill)
               end
@@ -48,13 +54,37 @@ module Ea
             props = displayable_properties(classifier)
             return [] unless props
 
-            props.flat_map do |prop|
-              lines = []
-              stereotype = property_stereotype(prop)
-              lines << "«#{stereotype}»" if stereotype
-              lines << AttributeLineBuilder.new(prop, host: classifier,
+            stereotypes = props.map { |p| property_stereotype(p) }.compact.uniq
+            if stereotypes.size == 1 && props.all? { |p| property_stereotype(p) }
+              # EA renders ONE compartment stereotype header for a
+              # uniformly-stereotyped attribute set (e.g. «Property»
+              # above GML property rows) and lists rows
+              # alphabetically - verified against EA-published SVGs.
+              header = "«#{canonical_stereotype(stereotypes.first)}»"
+              [header] + props.sort_by { |p| p.name.to_s }.map do |prop|
+                AttributeLineBuilder.new(prop, host: classifier,
+                                         lookup: lookup).to_s
+              end
+            else
+              props.flat_map do |prop|
+                lines = []
+                stereotype = property_stereotype(prop)
+                lines << "«#{stereotype}»" if stereotype
+                lines << AttributeLineBuilder.new(prop, host: classifier,
                                                   lookup: lookup).to_s
+              end
             end
+          end
+
+          STEREOTYPE_DISPLAY = {
+            "property" => "Property",
+            "featuretype" => "FeatureType",
+            "objecttype" => "ObjectType",
+            "codelist" => "CodeList"
+          }.freeze
+
+          def self.canonical_stereotype(ref)
+            STEREOTYPE_DISPLAY.fetch(ref.to_s.downcase, ref.to_s)
           end
 
           # Internal helpers
