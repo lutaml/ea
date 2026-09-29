@@ -377,7 +377,10 @@ module Ea
                          element_edge_point(target_placement, :target, edge_out)
 
           intermediate = intermediate_waypoints(link_row)
-          if intermediate.any?
+          if tree_route?(edge_out, intermediate)
+            points = tree_waypoints(source_placement, target_placement,
+                                    intermediate.first)
+          elsif intermediate.any?
             points = [source_point, *intermediate, target_point]
           elsif source_port || target_port
             # Exact ports are known — the SX/SY bend heuristics in
@@ -390,6 +393,26 @@ module Ea
           points.map do |x, y|
             Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y))
           end
+        end
+
+        # EA's tree-style routing (Geometry EDGE=2 with a single Path
+        # bend): the visible line leaves the SOURCE's right edge at
+        # the bend's y, runs horizontally to the bend x, then
+        # vertically to the target's facing edge — replacing the
+        # ray-cast ports entirely. Verified against the
+        # CityObjectGroup reference (parent + groupMember lines).
+        def tree_route?(edge_out, intermediate)
+          edge_out == 2 && intermediate.size == 1
+        end
+
+        def tree_waypoints(source_placement, target_placement, bend)
+          src = bounds_from_rect(source_placement)
+          tgt = bounds_from_rect(target_placement)
+          bend_x = bend[0]
+          source_point = [src.x + src.width, bend[1]]
+          going_up = tgt.y + tgt.height <= src.y
+          target_y = going_up ? tgt.y + tgt.height : tgt.y
+          [source_point, [bend_x, bend[1]], [bend_x, target_y]]
         end
 
         # Absolute connection point EA docks the connector's visible
