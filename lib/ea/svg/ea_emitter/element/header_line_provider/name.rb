@@ -33,8 +33,7 @@ module Ea
             end
 
             def self.wrapped_name_lines(classifier, context, weight)
-              name = display_name(classifier, context.diagram_package_id,
-                                  context.visually_nested)
+              name = display_name(classifier)
               unless context.bounds_width && name.include?("::") &&
                      name_exceeds_bounds?(name, context.bounds_width,
                                            context.font_size || 9)
@@ -51,12 +50,10 @@ module Ea
                 (bounds_width - QUALIFIED_WRAP_PADDING)
             end
 
-            # EA renders the plain classifier name in element headers
-            # (element ownership qualification is a display option the
-            # corpus diagrams leave off - verified against EA-published
-            # reference SVGs).
-            def self.display_name(classifier, _diagram_package_id = nil,
-                                  _visually_nested = false)
+            # EA renders the plain classifier name in element headers.
+            # (Some ISO-corpus diagrams show "Pkg::Name" headers — the
+            # storage of that flag is not in the QEA; render plain.)
+            def self.display_name(classifier, *_)
               classifier.name.to_s
             end
           end

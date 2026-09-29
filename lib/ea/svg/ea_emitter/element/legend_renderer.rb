@@ -136,21 +136,25 @@ module Ea
           end
 
           # EA centers the title over the ITEM BLOCK (icon left edge
-          # to the right end of the widest label), not the container
-          # box - verified against EA-published reference SVGs.
+          # to the right end of the widest label) by its INTEGER
+          # textLength and floors x - verified against EA-published
+          # reference SVGs.
           def title_x
             icon_left = bounds.x + ICON_X_OFFSET
             block_right = icon_left + ICON_LABEL_GAP +
                           widest_item_label_width
             block_left = icon_left
-            block_left + (block_right - block_left - title_text_width) / 2.0
+            (block_left + (block_right - block_left - title_text_width.round) / 2.0).floor
           end
 
           CJK_RANGE = /[\u3000-\u9fff\uff00-\uffef]/
 
-          # CJK glyphs run ~0.82em, others ~0.612em (regressed from
-          # EA's own textLength values on mixed-script labels).
+          # Real font metrics when available; legacy per-char
+          # estimate otherwise (families without metric tables).
           def estimated_width(text, size)
+            measured = Ea::Fonts::Metrics.text_length(text, size, family: family)
+            return measured if measured
+
             text.to_s.each_char.sum do |ch|
               ch.match?(CJK_RANGE) ? size * 0.70 : size * 0.612
             end
@@ -181,8 +185,7 @@ module Ea
             TextRenderer.new(
               content: content.to_s, x: tx, y: ty,
               family: family, size: size, size_unit: "pt",
-              weight: weight, fill: label_fill,
-              text_length: (content.to_s.length * size * 0.65).round
+              weight: weight, fill: label_fill
             ).to_svg
           end
 
