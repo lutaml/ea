@@ -17,8 +17,8 @@ module Ea
 
           # Delegate to the Name provider so historical callers and
           # specs that test display_name keep working.
-          def display_name(classifier, diagram_package_id = nil, *_)
-            HeaderLineProvider::Name.display_name(classifier, diagram_package_id)
+          def display_name(classifier, *_)
+            HeaderLineProvider::Name.display_name(classifier)
           end
         end
       end

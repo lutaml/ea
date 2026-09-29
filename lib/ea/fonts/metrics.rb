@@ -28,8 +28,10 @@ module Ea
       DEFAULT_ADVANCE = 0.25
 
       # Carlito has no CJK glyphs; EA's renderer falls back to a
-      # full-width CJK font (~1em per glyph) for those ranges.
-      CJK_ADVANCE = 1.0
+      # proportional CJK font whose advances measure ~0.709em at the
+      # NOMINAL size (not scaled by the per-style factors) — fitted
+      # from EA-published textLengths (52 mixed-script samples).
+      CJK_ADVANCE = 0.709
       CJK_RANGES = [
         (0x3000..0x303F),   # CJK punctuation
         (0x3040..0x309F),   # Hiragana
@@ -46,19 +48,28 @@ module Ea
         return nil unless supported_family?(family)
         return nil if text.nil? || text.empty?
 
-        em = advance_em(text, weight: weight, style: style)
-        (em * size_pt.to_f * factor_for(weight, style)).round(3)
+        latin, cjk_count = split_advance(text, weight: weight, style: style)
+        (latin * size_pt.to_f * factor_for(weight, style) +
+         cjk_count * CJK_ADVANCE * size_pt.to_f).round(3)
       end
 
       def supported_family?(family)
         SUPPORTED_FAMILIES.include?(family.to_s)
       end
 
-      def advance_em(text, weight: nil, style: nil)
+      # Returns [latin_em (factor-scaled later), cjk_glyph_count].
+      def split_advance(text, weight: nil, style: nil)
         table = table_for(weight, style)
-        text.each_char.sum do |ch|
-          table[cp_key(ch)] || (cjk?(ch.ord) ? CJK_ADVANCE : DEFAULT_ADVANCE)
+        latin = 0.0
+        cjk = 0
+        text.each_char.each do |ch|
+          if cjk?(ch.ord)
+            cjk += 1
+          else
+            latin += table[cp_key(ch)] || DEFAULT_ADVANCE
+          end
         end
+        [latin, cjk]
       end
 
       def cjk?(cp)
