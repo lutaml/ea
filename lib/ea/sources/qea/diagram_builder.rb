@@ -377,7 +377,16 @@ module Ea
                          element_edge_point(target_placement, :target, edge_out)
 
           intermediate = intermediate_waypoints(link_row)
-          if intermediate.any?
+          if edge_out == 2 && source_port && target_port
+            # EA computes tree routes at DRAW TIME from current
+            # element positions — the stored Path is stale for them
+            # (hand-verified: SY 8542 stored corner (271,-42) vs EA
+            # drawn (298,70)). Route: source port -> corner at
+            # (target dock x, source exit y) -> target port.
+            points = [[source_point[0], source_point[1]],
+                      [target_point[0], source_point[1]],
+                      [target_point[0], target_point[1]]]
+          elsif intermediate.any?
             points = [source_point, *intermediate, target_point]
           elsif source_port || target_port
             # Exact ports are known — the SX/SY bend heuristics in

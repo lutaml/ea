@@ -69,11 +69,12 @@ module Ea
 
           private
 
-          # EA's tree-route label clusters (verified against
-          # EA-published reference SVGs): source-end pairs stack at
-          # the exit point (role +3/-23, mult +3/0); target-end pairs
-          # sit astride the trunk — the mult starts at trunk+8 and
-          # the role's right edge meets it (role_x = trunk+8-width).
+          # EA's tree-route label clusters (hand-verified against the
+          # EA-published reference, SY 8542 with canvas=(0,0)):
+          # source-end pairs stack at the exit point (role +3/-23,
+          # mult +3/0); target-end pairs sit just above the dock
+          # astride the trunk — role right edge at trunk+7, mult
+          # starting at trunk+8, both at dock_y - 8.
           def zero_offset?(text_box, mult_box)
             [text_box, mult_box].compact.all? do |b|
               b["ox"].to_i.zero? && b["oy"].to_i.zero?
@@ -88,8 +89,8 @@ module Ea
               width = Ea::Fonts::Metrics.text_length(
                 role.to_s, font_size, family: font_family
               ) || role.to_s.length * 6
-              [[anchor[0] + 8 - width, text_pos ? text_pos[1] : anchor[1]],
-               [anchor[0] + 8, mult_pos ? mult_pos[1] : anchor[1]]]
+              [[anchor[0] + 7 - width, anchor[1] - 8],
+               [anchor[0] + 8, anchor[1] - 8]]
             end
           end
 
