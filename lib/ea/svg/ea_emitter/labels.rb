@@ -72,6 +72,7 @@ module Ea
           source_pt = points.first
           target_pt = points.last
           boxes = connector.label_boxes || {}
+          tree = tree_shaped?(points)
 
           src_tb, src_mb = end_boxes(boxes, :llt, :llb) ||
                            default_label_boxes(points, :source)
@@ -81,11 +82,23 @@ module Ea
           texts = []
           end_renderer.texts(text_box: src_tb, mult_box: src_mb,
                              anchor: source_pt, connector: connector,
-                             end_kind: :source).each { |t| texts << t }
-          end_renderer.texts(text_box: tgt_tb, mult_box: tgt_mb,
+                             end_kind: :source, tree: tree && tree[:source]).each { |t| texts << t }
+          end_renderer.texts(text_box: tgt_tb,
+                             mult_box: tgt_mb,
                              anchor: target_pt, connector: connector,
-                             end_kind: :target).each { |t| texts << t }
+                             end_kind: :target, tree: tree && tree[:target]).each { |t| texts << t }
           texts
+        end
+
+        # EA tree routes are a perfect L: source-exit horizontal into
+        # the corner, vertical trunk into the target dock. Returns
+        # per-end flags when the connector matches, else nil.
+        def tree_shaped?(points)
+          return nil unless points.size == 3
+          return nil unless points[0][1] == points[1][1] &&
+                           points[1][0] == points[2][0]
+
+          { source: true, target: true }
         end
 
         def end_boxes(boxes, text_key, mult_key)
