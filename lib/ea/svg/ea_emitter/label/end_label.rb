@@ -41,7 +41,8 @@ module Ea
           #   anchor     - [x, y] of the connector endpoint
           #   connector  - the DiagramConnector (for relationship lookup)
           #   end_kind   - :source or :target
-          def texts(text_box:, mult_box:, anchor:, connector:, end_kind:)
+          def texts(text_box:, mult_box:, anchor:, connector:, end_kind:,
+                    tree: false)
             from_property, role, mult = role_and_multiplicity(connector, end_kind)
             if role_empty?(role) && mult_empty?(mult)
               other_from_prop, other_role, other_mult = role_and_multiplicity(connector,
@@ -56,6 +57,10 @@ module Ea
 
             text_pos = position_at(text_box, anchor)
             mult_pos = position_at(mult_box, anchor) || text_pos
+            if tree && zero_offset?(text_box, mult_box)
+              text_pos, mult_pos = tree_positions(end_kind, anchor, role,
+                                                  text_pos, mult_pos)
+            end
             show_property = property_label?(connector)
 
             build_texts(role:, mult:, standalone:,
@@ -63,6 +68,30 @@ module Ea
           end
 
           private
+
+          # EA's tree-route label clusters (verified against
+          # EA-published reference SVGs): source-end pairs stack at
+          # the exit point (role +3/-23, mult +3/0); target-end pairs
+          # sit astride the trunk — the mult starts at trunk+8 and
+          # the role's right edge meets it (role_x = trunk+8-width).
+          def zero_offset?(text_box, mult_box)
+            [text_box, mult_box].compact.all? do |b|
+              b["ox"].to_i.zero? && b["oy"].to_i.zero?
+            end
+          end
+
+          def tree_positions(end_kind, anchor, role, text_pos, mult_pos)
+            if end_kind == :source
+              [[anchor[0] + 3, anchor[1] - 23],
+               [anchor[0] + 3, anchor[1]]]
+            else
+              width = Ea::Fonts::Metrics.text_length(
+                role.to_s, font_size, family: font_family
+              ) || role.to_s.length * 6
+              [[anchor[0] + 8 - width, text_pos ? text_pos[1] : anchor[1]],
+               [anchor[0] + 8, mult_pos ? mult_pos[1] : anchor[1]]]
+            end
+          end
 
           def build_texts(role:, mult:, standalone:, text_pos:, mult_pos:,
                           show_property:)
