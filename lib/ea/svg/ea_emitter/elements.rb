@@ -82,7 +82,9 @@ module Ea
           op_lines = (is_classifier && show_operations?) ? Element::OperationRenderer.lines_for(classifier) : []
           geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
                                            tagged_values_for(classifier).size,
-                                           header_lines)
+                                           header_lines,
+                                           constraints_count: constraints_for(classifier).size,
+                                           enum_literals_count: enum_literals_for(classifier).size)
           # EA suppresses the whole attribute compartment when it does
           # not fit the stored box height (never truncates rows) - the
           # AOS box on CityFurniture hides its association property
@@ -92,7 +94,9 @@ module Ea
             attr_lines = []
             geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
                                              tagged_values_for(classifier).size,
-                                             header_lines)
+                                             header_lines,
+                                             constraints_count: constraints_for(classifier).size,
+                                           enum_literals_count: enum_literals_for(classifier).size)
           end
           # EA suppresses the operations compartment when its rows
           # overflow the stored box height (same rule as attributes).
@@ -101,7 +105,9 @@ module Ea
             op_lines = []
             geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
                                              tagged_values_for(classifier).size,
-                                             header_lines)
+                                             header_lines,
+                                             constraints_count: constraints_for(classifier).size,
+                                           enum_literals_count: enum_literals_for(classifier).size)
           end
           RenderContext.new(
             element: element,
@@ -130,12 +136,15 @@ module Ea
         end
 
         def compartment_geometry(bounds, size, attr_lines, op_lines,
-                                 tagged_count, header_lines)
+                                 tagged_count, header_lines,
+                                 constraints_count: 0, enum_literals_count: 0)
           CompartmentGeometry.new(bounds: bounds, size: size,
                                    header_lines_count: header_lines.size,
                                    attr_lines_count: attr_lines.size,
                                    op_lines_count: op_lines.size,
                                    tagged_values_count: tagged_count,
+                                   constraints_count: constraints_count,
+                                   enum_literals_count: enum_literals_count,
                                    header_top_padding: header_padding_for(header_lines),
                                    header_line_offset: theme.compartments.header_line_offset,
                                    divider_offset: theme.compartments.divider_offset,
@@ -185,7 +194,24 @@ module Ea
         def constraints_for(classifier)
           return [] unless classifier.is_a?(Ea::Model::Classifier)
 
-          classifier.constraints || []
+          marker_line = root_leaf_marker_for(classifier)
+          marker = marker_line ? [marker_constraint(marker_line)] : []
+          marker + (classifier.constraints || [])
+        end
+
+        # EA renders the element's Root/Leaf checkboxes as {root},
+        # {leaf}, or {root,leaf} first in the constraints compartment
+        # (t_object.IsRoot/IsLeaf — verified on LanguageCode boxes).
+        def root_leaf_marker_for(classifier)
+          parts = []
+          parts << "root" if classifier.is_root
+          parts << "leaf" if classifier.is_leaf
+          parts.empty? ? nil : "{#{parts.join(',')}}"
+        end
+
+        def marker_constraint(text)
+          name = text[1..-2]
+          Ea::Model::Constraint.new(name: name, kind: "Marker")
         end
 
         # EA renders the off-canvas parent classifier's name as an

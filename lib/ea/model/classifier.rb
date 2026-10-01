@@ -15,6 +15,8 @@ module Ea
       attribute :package_id, :string # containing package
       attribute :package_name, :string # containing package name
       attribute :is_abstract, :boolean, default: false
+      attribute :is_root, :boolean, default: false
+      attribute :is_leaf, :boolean, default: false
       attribute :visibility, :string
       attribute :model_kind, :string, default: -> { "classifier" }
       attribute :properties, Property, collection: true, initialize_empty: true
@@ -31,6 +33,8 @@ module Ea
         map "packageId", to: :package_id
         map "packageName", to: :package_name
         map "isAbstract", to: :is_abstract, render_default: true
+        map "isRoot", to: :is_root, render_default: true
+        map "isLeaf", to: :is_leaf, render_default: true
         map "visibility", to: :visibility
         map "modelKind", to: :model_kind, render_default: true
         map "properties", to: :properties, render_empty: true
