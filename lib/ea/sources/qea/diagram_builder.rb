@@ -377,15 +377,31 @@ module Ea
                          element_edge_point(target_placement, :target, edge_out)
 
           intermediate = intermediate_waypoints(link_row)
-          if edge_out == 2 && source_port && target_port
-            # EA computes tree routes at DRAW TIME from current
-            # element positions — the stored Path is stale for them
-            # (hand-verified: SY 8542 stored corner (271,-42) vs EA
-            # drawn (298,70)). Route: source port -> corner at
-            # (target dock x, source exit y) -> target port.
+          if edge_out == 2 && source_port && target_port &&
+             !valid_tree_path?(intermediate, source_placement)
+            # EA recomputes tree routes at DRAW TIME from current
+            # element positions when the stored Path no longer lands
+            # on the source's facing edge (hand-verified: SY 8542's
+            # stale Path vs EA-drawn route; CityObjectGroup's current
+            # Path renders byte-exact and is kept). Computed route:
+            # source port -> corner at (target dock x, source exit
+            # y) -> target port.
             points = [[source_point[0], source_point[1]],
                       [target_point[0], source_point[1]],
                       [target_point[0], target_point[1]]]
+          elsif edge_out == 2 && intermediate.size == 1
+            # Current tree Path (bend on the source's facing edge):
+            # EA's draw-time route shape — source right edge at the
+            # bend's y, corner at the bend, target facing edge at the
+            # bend's x (byte-exact on CityObjectGroup).
+            src = bounds_from_rect(source_placement)
+            tgt = bounds_from_rect(target_placement)
+            bend = intermediate.first
+            going_up = tgt.y + tgt.height <= src.y
+            target_y = going_up ? tgt.y + tgt.height : tgt.y
+            points = [[src.x + src.width, bend[1]],
+                      [bend[0], bend[1]],
+                      [bend[0], target_y]]
           elsif intermediate.any?
             points = [source_point, *intermediate, target_point]
           elsif source_port || target_port
@@ -399,6 +415,19 @@ module Ea
           points.map do |x, y|
             Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y))
           end
+        end
+
+        # A tree Path is current when its bend height still falls
+        # within the source element's y-range (the exit height EA
+        # records); a bend outside the element is stale and EA
+        # re-derives the route at draw time. The bend's x may sit
+        # arbitrarily far right (trunk position).
+        def valid_tree_path?(intermediate, source_placement)
+          return false if intermediate.empty?
+
+          bend = intermediate.first
+          b = bounds_from_rect(source_placement)
+          bend[1].between?(b.y - 5, b.y + b.height + 5)
         end
 
         # Absolute connection point EA docks the connector's visible
