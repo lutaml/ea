@@ -20,6 +20,8 @@ module Ea
           attr_reader :bounds, :size, :header_lines_count,
                       :attr_lines_count, :op_lines_count,
                       :tagged_values_count,
+                      :constraints_count,
+                      :enum_literals_count,
                       :header_top_padding, :header_line_offset,
                       :divider_offset, :attr_line_offset,
                       :attr_first_offset
@@ -27,6 +29,8 @@ module Ea
           def initialize(bounds:, size:, header_lines_count:,
                           attr_lines_count:, op_lines_count:,
                           tagged_values_count:,
+                          constraints_count: 0,
+                          enum_literals_count: 0,
                           header_top_padding: 12,
                           header_line_offset: 6,
                           divider_offset: 8,
@@ -38,6 +42,8 @@ module Ea
             @attr_lines_count = attr_lines_count
             @op_lines_count = op_lines_count
             @tagged_values_count = tagged_values_count
+            @constraints_count = constraints_count
+            @enum_literals_count = enum_literals_count
             @header_top_padding = header_top_padding
             @header_line_offset = header_line_offset
             @divider_offset = divider_offset
@@ -102,11 +108,24 @@ module Ea
           # present). EA does not emit a separate divider — the
           # italic "tags" header marks the compartment.
           def tagged_value_first_y
-            return nil unless tagged_values_count&.positive?
+            return nil unless tagged_values_count.to_i.positive? || constraints_count.to_i.positive?
 
-            base = attr_bottom_y
-            base = op_bottom_y if op_lines_count&.positive?
-            base + size + 5
+            content_bottom_y + size + 5
+          end
+
+          # The lowest content edge among attributes, enum literals,
+          # and operations — the anchor for trailing compartments.
+          def content_bottom_y
+            bottoms = [attr_bottom_y]
+            bottoms << enum_literals_bottom_y if enum_literals_count.to_i.positive?
+            bottoms << op_bottom_y if op_lines_count.to_i.positive?
+            bottoms.compact.max
+          end
+
+          def enum_literals_bottom_y
+            return nil unless enum_literal_first_y
+
+            enum_literal_first_y + ([enum_literals_count, 1].max - 1) * (size + 6)
           end
         end
       end

@@ -94,6 +94,8 @@ module Ea
             package_name: package_name_for(object),
             qualified_name: qualified_name_for(object),
             is_abstract: abstract?(object),
+            is_root: object.isroot.to_i == 1,
+            is_leaf: object.isleaf.to_i == 1,
             visibility: visibility_from_scope(object.scope),
             properties: properties_for(object),
             operations: OperationBuilder.new(database).build_all_for(object),
