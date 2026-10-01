@@ -99,6 +99,44 @@ module Ea
       def cp_key(ch)
         format("U+%04X", ch.ord)
       end
+
+      # Resolves the four Carlito style TTFs through the fontist gem
+      # (system index + downloaded formulas). Empty when fontist is
+      # unavailable or Carlito is not installed.
+      def carlito_font_files
+        require "fontist"
+        styles = %w[Regular Bold Italic BoldItalic]
+        Fontist::SystemFont.find("Carlito").filter_map do |path|
+          next unless path.downcase.end_with?(".ttf")
+
+          style = File.basename(path, ".ttf").delete_prefix("Carlito-")
+          match = styles.find { |s| s.casecmp?(style) }
+          next unless match
+
+          [match, path]
+        end.to_h
+      rescue LoadError, StandardError => e
+        raise if ENV['EA_FONTS_DEBUG']
+
+        {}
+      end
+
+      # Reads advance widths from a TTF via the fontian gem (used by
+      # `rake fonts:validate` to re-derive the tables).
+      def advances_from_font(path)
+        require "fontisan"
+        font = Fontisan::FontLoader.load(path)
+        hmtx = font.table("hmtx")
+        hmtx.parse_with_context(font.table("hhea").number_of_h_metrics,
+                                font.table("maxp").num_glyphs)
+        upem = font.table("head").units_per_em
+        cmap = font.table("cmap").unicode_mappings
+        cmap.each_with_object({}) do |(cp, gid), out|
+          adv = hmtx.metric_for(gid)[:advance_width]
+          out[cp] = (adv.to_f / upem).round(4) if adv
+        end
+      end
+
     end
   end
 end
