@@ -4,12 +4,14 @@ require "json"
 
 module Ea
   module Fonts
-    # Advance-width metrics for Carlito, metric-compatible with
-    # Calibri. EA's exported textLength values encode Carlito
-    # advances scaled by per-style factors, so text widths computed
-    # here match EA's published SVGs to sub-pixel precision — far
-    # tighter than the legacy fitted-codepoint table, and style-aware
-    # (bold/italic variants), which the legacy table lacked.
+    # Advance-width metrics for the fonts EA's published SVGs use:
+    # Carlito (metric-compatible with Calibri), Arial, and Arial
+    # Narrow. EA's exported textLength values encode per-family,
+    # per-style, per-POINT-SIZE scale factors applied to the font's
+    # design advances (fitted by exact-count maximization against
+    # EA-published SVGs), so text widths computed here match EA's
+    # output to sub-pixel precision — far tighter than any legacy
+    # fitted-codepoint table, and style/size aware.
     module Metrics
       DATA_PATH = File.expand_path("carlito_metrics.json", __dir__)
 
@@ -21,16 +23,23 @@ module Ea
         [true, true] => :bold_italic
       }.freeze
 
-      # Families whose glyph metrics match the Carlito tables.
-      SUPPORTED_FAMILIES = %w[Carlito Calibri].freeze
+      # Families metric-compatible with a data-file family (the key
+      # is rendered even when the QEA named the other one).
+      FAMILY_ALIASES = {
+        "calibri" => "Carlito",
+        "carlito" => "Carlito",
+        "arial" => "Arial",
+        "arial narrow" => "Arial Narrow"
+      }.freeze
 
       # Advance used for codepoints missing from the tables.
       DEFAULT_ADVANCE = 0.25
 
-      # Carlito has no CJK glyphs; EA's renderer falls back to a
-      # proportional CJK font whose advances measure ~0.709em at the
-      # NOMINAL size (not scaled by the per-style factors) — fitted
-      # from EA-published textLengths (52 mixed-script samples).
+      # Carlito/Arial have no CJK glyphs; EA's renderer falls back to
+      # a proportional CJK font whose advances measure ~0.709em at
+      # the NOMINAL size (not scaled by the per-style factors) —
+      # fitted from EA-published textLengths (52 mixed-script
+      # samples).
       CJK_ADVANCE = 0.709
       CJK_RANGES = [
         (0x3000..0x303F),   # CJK punctuation
@@ -48,18 +57,23 @@ module Ea
         return nil unless supported_family?(family)
         return nil if text.nil? || text.empty?
 
-        latin, cjk_count = split_advance(text, weight: weight, style: style)
-        (latin * size_pt.to_f * factor_for(weight, style) +
+        latin, cjk_count = split_advance(text, family: family,
+                                                weight: weight, style: style)
+        (latin * size_pt.to_f * factor_for(family, size_pt, weight, style) +
          cjk_count * CJK_ADVANCE * size_pt.to_f).round(3)
       end
 
       def supported_family?(family)
-        SUPPORTED_FAMILIES.include?(family.to_s)
+        !resolve_family(family).nil?
+      end
+
+      def resolve_family(family)
+        FAMILY_ALIASES[family.to_s.downcase]
       end
 
       # Returns [latin_em (factor-scaled later), cjk_glyph_count].
-      def split_advance(text, weight: nil, style: nil)
-        table = table_for(weight, style)
+      def split_advance(text, family: nil, weight: nil, style: nil)
+        table = table_for(family, weight, style)
         latin = 0.0
         cjk = 0
         text.each_char.each do |ch|
@@ -76,12 +90,20 @@ module Ea
         CJK_RANGES.any? { |range| range.cover?(cp) }
       end
 
-      def factor_for(weight, style)
-        data["factors"][STYLE_KEYS.fetch([bold?(weight), italic?(style)], :regular).to_s]
+      # EA's scale factor varies by point size (GDI quantization):
+      # Carlito regular fits 1.390 at 7pt but 1.432 at 9pt. Sizes
+      # without a fitted entry use the style's default (7pt, the
+      # corpus's dominant size).
+      def factor_for(family, size_pt, weight, style)
+        style = STYLE_KEYS.fetch([bold?(weight), italic?(style)], :regular).to_s
+        table = data["factors"].fetch(resolve_family(family), {})
+                                  .fetch(style, {})
+        table[size_pt.to_i.to_s] || table["default"] || 1.0
       end
 
-      def table_for(weight, style)
-        data["advance"][STYLE_KEYS.fetch([bold?(weight), italic?(style)], :regular).to_s]
+      def table_for(family, weight, style)
+        style = STYLE_KEYS.fetch([bold?(weight), italic?(style)], :regular).to_s
+        data["advance"].fetch(resolve_family(family), {}).fetch(style, {})
       end
 
       def data
@@ -100,28 +122,46 @@ module Ea
         format("U+%04X", ch.ord)
       end
 
-      # Resolves the four Carlito style TTFs through the fontist gem
-      # (system index + downloaded formulas). Empty when fontist is
-      # unavailable or Carlito is not installed.
-      def carlito_font_files
+      # Resolves a family's four style TTFs through the fontist gem
+      # (system index + downloaded formulas). Style variants are
+      # identified from each file's head.macStyle bits — filenames
+      # vary across fontist formulas and system copies ("ArialBd",
+      # "Arial Narrow Bold"), so name-matching is unreliable. The
+      # first file matching each style wins (fontist orders the
+      # downloaded formulas ahead of system copies). Empty when
+      # fontist is unavailable or the family is not installed.
+      def font_files_for(family)
         require "fontist"
-        styles = %w[Regular Bold Italic BoldItalic]
-        Fontist::SystemFont.find("Carlito").filter_map do |path|
+        Fontist::SystemFont.find(family).each_with_object({}) do |path, out|
           next unless path.downcase.end_with?(".ttf")
 
-          style = File.basename(path, ".ttf").delete_prefix("Carlito-")
-          match = styles.find { |s| s.casecmp?(style) }
-          next unless match
+          style = style_from_mac_style(path)
+          next unless style
 
-          [match, path]
-        end.to_h
+          out[style] ||= path
+        end
       rescue LoadError, StandardError => e
-        raise if ENV['EA_FONTS_DEBUG']
+        raise if ENV["EA_FONTS_DEBUG"]
 
         {}
       end
 
-      # Reads advance widths from a TTF via the fontian gem (used by
+      # head.macStyle: bit 0 = BOLD, bit 1 = ITALIC.
+      def style_from_mac_style(path)
+        require "fontisan"
+        font = Fontisan::FontLoader.load(path)
+        mac_style = font.table("head").mac_style
+        key = [mac_style & 1 == 1, mac_style & 2 == 2]
+        STYLE_KEYS[key]
+      end
+
+      # Carlito's data-file name (historical) differs from the
+      # fontist family name used to resolve its TTFs.
+      def carlito_font_files
+        font_files_for("Carlito")
+      end
+
+      # Reads advance widths from a TTF via the fontisan gem (used by
       # `rake fonts:validate` to re-derive the tables).
       def advances_from_font(path)
         require "fontisan"
