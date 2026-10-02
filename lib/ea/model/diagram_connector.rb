@@ -19,6 +19,11 @@ module Ea
       attribute :target_edge, :integer
       attribute :connector_type, :string
       attribute :direction, :string
+      # t_connector.SourceStereotype / DestStereotype — EA renders
+      # the «Property» end-label exactly on the stereotyped end
+      # (corpus-verified; direction alone does not decide).
+      attribute :source_stereotype, :string
+      attribute :target_stereotype, :string
       attribute :waypoints, Waypoint, collection: true, initialize_empty: true
       attribute :label, :string
       attribute :style, :hash, default: -> { {} }
@@ -54,6 +59,8 @@ module Ea
         map "targetPort", to: :target_port
         map "connectorType", to: :connector_type
         map "direction", to: :direction
+        map "sourceStereotype", to: :source_stereotype
+        map "targetStereotype", to: :target_stereotype
         map "waypoints", to: :waypoints, render_empty: true
         map "label", to: :label
         map "style", to: :style

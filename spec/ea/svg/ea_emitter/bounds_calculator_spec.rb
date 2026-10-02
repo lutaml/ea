@@ -29,11 +29,11 @@ RSpec.describe Ea::Svg::EaEmitter::BoundsCalculator do
   it "extends y-extent via image_bounds union" do
     out = described_class.new(diagram_with_bounds).compute
     # element 1 image bottom = 110 + 90 = 200; element 2 bounds bottom = 280
-    # max y = 280, min y = 100, height = 180 + INSET_TOP(40) + INSET_BOTTOM(57) = 277
-    expect(out[3]).to eq(277)
+    # max y = 280, min y = 100, height = 180 + INSET_TOP(40) + INSET_BOTTOM(36) = 256
+    expect(out[3]).to eq(256)
   end
 
-  it "includes marker extent around connector endpoints" do
+  it "ignores connector waypoints outside the element rects" do
     diagram = Ea::Model::Diagram.new(
       id: "d2", name: "Conn",
       elements: [
@@ -53,9 +53,9 @@ RSpec.describe Ea::Svg::EaEmitter::BoundsCalculator do
       ]
     )
     out = described_class.new(diagram).compute
-    # connector goes to x=200, marker extent adds 15 → max_x = 215
-    # width = 215 - 0 + INSET_LEFT(35) + INSET_RIGHT(50) = 300
-    expect(out[2]).to eq(300)
+    # EA's canvas covers element rects only — the connector at
+    # x=200 does not extend it. width = 100 + 85 = 185
+    expect(out[2]).to eq(185)
   end
 
   it "returns minimal canvas for empty diagram" do

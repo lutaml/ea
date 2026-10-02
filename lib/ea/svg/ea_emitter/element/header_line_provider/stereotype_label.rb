@@ -51,20 +51,12 @@ module Ea
               refs.map { |ref| "«#{canonical(ref)}»" }
             end
 
-            # EA displays canonical stereotype spellings regardless of
-            # how the QEA stored them (property → Property). Prefer the
-            # MDG alias registry when its definition is available; the
-            # overrides map covers the spellings verified directly
-            # against EA-published reference SVGs.
-            DISPLAY_OVERRIDES = {
-              "property" => "Property",
-              "featuretype" => "FeatureType",
-              "objecttype" => "ObjectType",
-              "codelist" => "CodeList"
-            }.freeze
-
+            # EA renders the stereotype string exactly as stored in
+            # t_object.Stereotype — corpus-verified: 3,284 placements
+            # render verbatim ('CodeList', 'codeList', 'codelist',
+            # 'featureType' …), zero case-canonicalized.
             def self.canonical(ref)
-              DISPLAY_OVERRIDES.fetch(ref.downcase, ref)
+              ref
             end
 
             def self.fallback_name(classifier)

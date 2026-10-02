@@ -34,6 +34,8 @@ RSpec.describe Ea::Svg::EaEmitter::Label::EndLabel do
       relationship_ref: association.id,
       connector_type: "Association",
       direction: "Source -> Destination",
+      source_stereotype: "Property",
+      target_stereotype: nil,
       waypoints: [
         Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: 0, y: 0)),
         Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: 100, y: 0))
@@ -60,6 +62,24 @@ RSpec.describe Ea::Svg::EaEmitter::Label::EndLabel do
     expect(joined).to include("+items")
     expect(joined).to include("«Property»")
     expect(joined).to include("0..*")
+  end
+
+  it "omits «Property» when the end carries no stereotype" do
+    bare = Ea::Model::DiagramConnector.new(
+      id: "dc2",
+      relationship_ref: association.id,
+      connector_type: "Association",
+      direction: "Destination -> Source",
+      waypoints: connector.waypoints,
+      label_boxes: connector.label_boxes
+    )
+    out = renderer.texts(text_box: { "ox" => 10, "oy" => 15 },
+                          mult_box: { "ox" => 0, "oy" => 0 },
+                          anchor: [0, 0], connector: bare,
+                          end_kind: :source)
+    joined = out.join
+    expect(joined).to include("+items")
+    expect(joined).not_to include("«Property»")
   end
 
   it "renders the stored cardinality verbatim when present" do

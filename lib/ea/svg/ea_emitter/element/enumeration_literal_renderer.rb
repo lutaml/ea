@@ -13,9 +13,13 @@ module Ea
         # Rendered as a third compartment below the attribute
         # compartment for Enumeration classifiers.
         class EnumerationLiteralRenderer
+          # EA lists literals alphabetically (case-insensitive) and
+          # spaces rows at the same 13px pitch as attributes at 7pt
+          # (size + 6) — corpus-verified against EA-published SVGs.
           def self.render(literals, bounds:, first_y:, family:, size:)
-            line_h = size + 4
-            text_blocks = literals.each_with_index.map do |literal, idx|
+            line_h = size + 6
+            sorted = literals.sort_by { |l| [l.name.to_s.downcase, l.name.to_s] }
+            text_blocks = sorted.each_with_index.map do |literal, idx|
               y = first_y + (idx * line_h)
               build_text(bounds.x + 5, y, literal.name.to_s, family, size)
             end

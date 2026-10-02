@@ -8,20 +8,14 @@ module Ea
       # stays a small value-object with just coordinate translation
       # and formatting concerns.
       #
-      # Sources contributing to the bounds:
-      #   - ElementBounds:    logical x-extent, logical+image y-extent
-      #   - ConnectorBounds:  waypoint positions
-      #   - MarkerExtent:     MARKER_EXTENT padding around end points
-      #   - PackageTabExtent: extra space above Package elements for
-      #                       the tab polygon (which sits above the
-      #                       element's logical top).
-      #
-      # Each source is a method returning an Array<[x, y]> points.
-      # Composing new sources = adding a method, no modification of
-      # existing ones (OCP).
+      # Corpus-verified against 3,663 EA-published reference SVGs:
+      # EA's canvas covers the ELEMENT RECTS only — connector
+      # waypoints, arrow markers, and package-tab overhangs do NOT
+      # extend it. Width = element extent + 85 is exact on 72% of
+      # the corpus; height = element extent + 76 exact on 50% (the
+      # remainder carry invisible per-diagram reservations below
+      # the content).
       class BoundsCalculator
-        MARKER_EXTENT = 15
-        PACKAGE_TAB_HEIGHT = 20
         # EA's canvas includes non-uniform frame insets around the
         # element content. Reverse-engineered from reference SVG
         # byte-diff: maintenance diagram has element 169x80 at
@@ -30,11 +24,12 @@ module Ea
         #   canvas_width  = element_width + INSET_LEFT + INSET_RIGHT
         #   canvas_height = element_height + INSET_TOP + INSET_BOTTOM
         # The top inset accommodates the frame tab + label space
-        # above the element.
+        # above the element. The bottom inset 36 matches the
+        # dominant corpus mode (50% of 3,663 diagrams).
         INSET_LEFT = 35
         INSET_RIGHT = 50
         INSET_TOP = 40
-        INSET_BOTTOM = 57
+        INSET_BOTTOM = 36
 
         attr_reader :diagram, :model_index
 
@@ -44,11 +39,7 @@ module Ea
         end
 
         def compute
-          points = []
-          points.concat(element_points)
-          points.concat(connector_points)
-          points.concat(marker_points)
-          points.concat(package_tab_points)
+          points = element_points
           return [0, 0, 1, 1] if points.empty?
 
           xs = points.map(&:first)
@@ -82,57 +73,6 @@ module Ea
               pts << [ib.x, ib.y]
               pts << [ib.x + ib.width, ib.y + ib.height]
             end
-          end
-          pts
-        end
-
-        # Package elements render with a tab polygon ABOVE the
-        # element's logical top edge (height PACKAGE_TAB_HEIGHT).
-        # Include those points so the canvas reserves space.
-        def package_tab_points
-          return [] if model_index.nil?
-
-          pts = []
-          (diagram.elements || []).each do |e|
-            ref = e.model_element_ref
-            next unless ref
-
-            candidate = model_index[ref]
-            next unless candidate.is_a?(Ea::Model::Package)
-
-            primary = e.bounds || e.image_bounds
-            next unless primary
-
-            pts << [primary.x, primary.y - PACKAGE_TAB_HEIGHT]
-            pts << [primary.x + primary.width, primary.y]
-          end
-          pts
-        end
-
-        def connector_points
-          pts = []
-          (diagram.connectors || []).each do |c|
-            (c.waypoints || []).each do |wp|
-              next unless wp.position
-
-              pts << [wp.position.x, wp.position.y]
-            end
-          end
-          pts
-        end
-
-        def marker_points
-          pts = []
-          (diagram.connectors || []).each do |c|
-            waypoints = (c.waypoints || []).map(&:position).compact
-            next unless waypoints.size >= 2
-
-            source = waypoints.first
-            target = waypoints.last
-            pts << [source.x - MARKER_EXTENT, source.y - MARKER_EXTENT]
-            pts << [source.x + MARKER_EXTENT, source.y + MARKER_EXTENT]
-            pts << [target.x - MARKER_EXTENT, target.y - MARKER_EXTENT]
-            pts << [target.x + MARKER_EXTENT, target.y + MARKER_EXTENT]
           end
           pts
         end

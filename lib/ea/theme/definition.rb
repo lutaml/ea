@@ -62,7 +62,7 @@ module Ea
                                           tab_label_padding: 10,
                                           default_tab_width: 105).freeze
       DEFAULT_NOTE = NoteSpec.new(fold_size: 12, text_x_offset: 5,
-                                    text_y_offset: 12, line_height: 12).freeze
+                                    text_y_offset: 12, line_height: 13).freeze
 
       def initialize(id:, name: nil, font_family: nil, font_size: nil,
                      font_size_unit: "pt", text_weight_normal: 400,

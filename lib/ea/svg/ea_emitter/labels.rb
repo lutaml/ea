@@ -47,6 +47,10 @@ module Ea
         end
 
         def texts_for(connector)
+          # EA never labels NoteLink connectors — the note text lives
+          # in t_connector.Name but renders only inside the Note box.
+          return [] if connector.connector_type.to_s.casecmp("NoteLink").zero?
+
           points = waypoint_pairs(connector)
           return [] if points.size < 2
 

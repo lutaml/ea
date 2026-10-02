@@ -21,10 +21,16 @@ module Ea
             %(<g style="#{group_style(context)}">\n#{text_blocks.join("\n")}\n</g>)
           end
 
+          # EA wraps note text by MEASURED width (Carlito advances),
+          # not character count: lines break at the last word whose
+          # cumulative integer textLength fits bounds.width - 15.
+          # Verified against EA-published reference SVGs.
           def wrapped_lines(context, body)
-            max_chars = [(context.bounds.width / (context.size * 0.6)).floor, 10].max
+            usable = context.bounds.width - 15
+            size = context.size
+            family = context.family
             body.to_s.split(/\n/).flat_map do |para|
-              para.gsub(/(.{1,#{max_chars}})(\s+|$)/, "\\1\n").strip.split(/\n/)
+              wrap_paragraph(para, usable, size, family)
             end.each_with_index.map do |line, idx|
               y = context.bounds.y + context.theme.note.text_y_offset +
                   (idx * context.theme.note.line_height)
@@ -39,6 +45,26 @@ module Ea
               ).to_svg
             end
           end
+
+          def wrap_paragraph(para, usable, size, family)
+            words = para.strip.split(/\s+/)
+            lines = []
+            current = ""
+            words.each do |word|
+              candidate = current.empty? ? word : "#{current} #{word}"
+              width = TextRenderer.estimate_width(candidate, size, nil,
+                                                  family: family).round
+              if current.empty? || width <= usable
+                current = candidate
+              else
+                lines << current
+                current = word
+              end
+            end
+            lines << current unless current.empty?
+            lines
+          end
+          module_function :wrap_paragraph
 
           def group_style(context)
             "stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; " \
