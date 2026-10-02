@@ -3,30 +3,35 @@
 require "ea/fonts/metrics"
 
 namespace :fonts do
-  desc "Validate the shipped Carlito metrics against Fontist-resolved TTFs"
+  desc "Validate the shipped font metrics against Fontist-resolved TTFs"
   task :validate do
-    files = Ea::Fonts::Metrics.carlito_font_files
-    abort "Carlito not resolvable via Fontist — install it first" if files.empty?
-
     shipped = JSON.parse(File.read(Ea::Fonts::Metrics::DATA_PATH))["advance"]
     style_key = { "regular" => "regular", "bold" => "bold",
                   "italic" => "italic", "bold_italic" => "bold_italic",
                   "bolditalic" => "bold_italic" }
     drift = []
 
-    files.each do |style, path|
-      table = shipped[style_key[style.downcase]]
-      actual = Ea::Fonts::Metrics.advances_from_font(path)
-      missing = actual.keys.count { |cp| table[format("U+%04X", cp)].nil? }
-      puts "  (shipped table lacks #{missing} of #{actual.size} codepoints — skipped)"
-      actual.each do |cp, adv|
-        key = format("U+%04X", cp)
-        ours = table[key]
-        next if ours.nil? || (ours - adv).abs <= 0.0005
-
-        drift << format("%s %s: json=%s font=%s", style, key, ours, adv)
+    shipped.keys.each do |family|
+      files = Ea::Fonts::Metrics.font_files_for(family)
+      if files.empty?
+        puts "#{family}: NOT RESOLVABLE VIA FONTIST — skipped"
+        next
       end
-      puts "#{style}: #{path} — #{actual.size} codepoints checked"
+
+      files.each do |style, path|
+        table = shipped[family][style_key[style.downcase]] || {}
+        actual = Ea::Fonts::Metrics.advances_from_font(path)
+        missing = actual.keys.count { |cp| table[format("U+%04X", cp)].nil? }
+        puts "  (shipped #{family}/#{style} table lacks #{missing} of #{actual.size} codepoints — skipped)"
+        actual.each do |cp, adv|
+          key = format("U+%04X", cp)
+          ours = table[key]
+          next if ours.nil? || (ours - adv).abs <= 0.0005
+
+          drift << format("%s/%s %s: json=%s font=%s", family, style, key, ours, adv)
+        end
+        puts "#{family}/#{style}: #{path} — #{actual.size} codepoints checked"
+      end
     end
 
     if drift.empty?
