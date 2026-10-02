@@ -102,7 +102,7 @@ module Ea
           # TK_PositionType keeps 7 rows ending 6px above the bottom,
           # while a 13px-tighter box loses them all.
           if attr_lines.any? &&
-             geometry.attr_bottom_y.to_i + 3 > bounds.y + bounds.height
+             geometry.attr_bottom_y.to_i > bounds.y + bounds.height
             attr_lines = []
             geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
                                              tagged_values_for(classifier).size,
@@ -114,7 +114,7 @@ module Ea
           # EA suppresses the operations compartment when its rows
           # overflow the stored box height (same rule as attributes).
           if op_lines.any? && geometry.op_first_y &&
-             geometry.op_bottom_y.to_i + 3 > bounds.y + bounds.height
+             geometry.op_bottom_y.to_i > bounds.y + bounds.height
             op_lines = []
             geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
                                              tagged_values_for(classifier).size,
