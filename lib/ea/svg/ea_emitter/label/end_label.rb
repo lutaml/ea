@@ -61,7 +61,7 @@ module Ea
               text_pos, mult_pos = tree_positions(end_kind, anchor, role,
                                                   text_pos, mult_pos)
             end
-            show_property = property_label?(connector)
+            show_property = property_label?(connector, end_kind)
 
             build_texts(role:, mult:, standalone:,
                         text_pos:, mult_pos:, show_property:)
@@ -113,27 +113,18 @@ module Ea
             end
           end
 
-          # EA renders «property» between role name and multiplicity
-          # ONLY for directed associations/aggregations — those with
-          # t_connector.Direction set to "Source -> Destination" or
-          # "Destination -> Source". "Unspecified" / "Bi-Directional"
-          # connectors do NOT get the stereotype label.
-          #
-          # Verified against both QEAs (output by the same EA in the
-          # same run):
-          #   - basic.qea: 4 Associations with Direction="Unspecified"
-          #     and role+mult → 0 «property» labels.
-          #   - plateau QEA: aggregations with Direction="Destination
-          #     -> Source" → «property» rendered (737 instances across
-          #     137 diagrams).
-          UNDIRECTED_DIRECTIONS = %w[Unspecified Bi-Directional].freeze
+          # EA renders «Property» between role name and multiplicity
+          # exactly on connector ends carrying
+          # t_connector.SourceStereotype / DestStereotype = "Property"
+          # (case-insensitive; stored variants include "property").
+          # Direction does not decide — Fig 11's directed aggregations
+          # carry no end stereotype and render none, while the CityGML
+          # profile diagrams mark ends explicitly.
+          PROPERTY_KEYWORD = "property"
 
-          def property_label?(connector)
-            direction = connector.direction.to_s
-            return false if direction.empty?
-            return false if UNDIRECTED_DIRECTIONS.include?(direction)
-
-            true
+          def property_label?(connector, end_kind)
+            stereo = end_kind == :source ? connector.source_stereotype : connector.target_stereotype
+            stereo.to_s.downcase == PROPERTY_KEYWORD
           end
 
           def role_empty?(role)

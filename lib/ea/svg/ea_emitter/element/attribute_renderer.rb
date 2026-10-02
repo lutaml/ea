@@ -67,7 +67,11 @@ module Ea
                                          lookup: lookup).to_s
               end
             else
-              props.flat_map do |prop|
+              # EA lists attribute rows alphabetically (case-
+              # insensitive) — corpus-verified: 991 boxes strictly
+              # alphabetical vs 24 strictly stored-Pos order.
+              props.sort_by { |p| [p.name.to_s.downcase, p.name.to_s] }
+                   .flat_map do |prop|
                 lines = []
                 stereotype = property_stereotype(prop)
                 lines << "«#{stereotype}»" if stereotype

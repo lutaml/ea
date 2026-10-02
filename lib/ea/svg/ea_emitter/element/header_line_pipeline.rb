@@ -11,16 +11,17 @@ module Ea
         #
         # Context (Struct) carries everything a provider might need:
         #   classifier, diagram_package_id, visually_nested,
-        #   umldi_keyword, bounds_width, font_size,
-        #   off_canvas_parent_name
+        #   umldi_keyword, bounds_width, font_size, family,
+        #   off_canvas_parent_name, foreign_package_name
         #
         # Each provider implements:
         #   def self.call(context)  →  Array<[[text, style], ...]>
         module HeaderLinePipeline
           Context = Struct.new(:classifier, :diagram_package_id,
                                :visually_nested, :umldi_keyword,
-                               :bounds_width, :font_size,
+                               :bounds_width, :font_size, :family,
                                :off_canvas_parent_name,
+                               :foreign_package_name,
                                keyword_init: true)
 
           PROVIDERS = [

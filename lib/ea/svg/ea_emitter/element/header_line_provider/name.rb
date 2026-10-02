@@ -8,16 +8,19 @@ module Ea
           # Emits the classifier's display name, with these behaviors:
           #
           # - Bold-italic for abstract Klass; bold otherwise.
-          # - Qualified name wrap when the rendered width exceeds the
-          #   element bounds. EA splits "pkg::Class" across two lines
-          #   when the combined width is too wide.
+          # - Foreign elements (owning package ≠ the diagram's package,
+          #   gated on t_diagram.ShowForeign) render the qualified
+          #   name "OwningPackage::Name".
+          # - Qualified-name wrap: when the combined integer
+          #   textLength exceeds the element bounds width, EA splits
+          #   "pkg::Class" across two lines ("pkg::" then "Class"),
+          #   each centered independently. Corpus-verified: every
+          #   wrapped header overflows its box and every single-line
+          #   header fits (tightest observed slack 6px).
           #
           # InstanceSpecification returns [] (InstanceSpec provider
           # already emitted the full label).
           class Name
-            QUALIFIED_WRAP_WIDTH_FACTOR = 0.55
-            QUALIFIED_WRAP_PADDING = 8
-
             def self.call(context)
               classifier = context.classifier
               return [] if classifier.is_a?(Ea::Model::InstanceSpecification)
@@ -34,9 +37,9 @@ module Ea
 
             def self.wrapped_name_lines(classifier, context, weight)
               name = display_name(classifier)
+              name = "#{context.foreign_package_name}::#{name}" if context.foreign_package_name
               unless context.bounds_width && name.include?("::") &&
-                     name_exceeds_bounds?(name, context.bounds_width,
-                                           context.font_size || 9)
+                     name_exceeds_bounds?(name, context, weight)
                 return [[name, weight]]
               end
 
@@ -44,15 +47,18 @@ module Ea
               [["#{qualifier}::", weight], [base, weight]]
             end
 
-            def self.name_exceeds_bounds?(name, bounds_width, font_size)
-              TextRenderer.estimate_width(name, font_size,
-                                          QUALIFIED_WRAP_WIDTH_FACTOR) >
-                (bounds_width - QUALIFIED_WRAP_PADDING)
+            def self.name_exceeds_bounds?(name, context, weight)
+              font_style = weight == :bold_italic ? "italic" : "normal"
+              len = TextRenderer.estimate_width(
+                name, context.font_size || 9, nil,
+                family: context.family, weight: "700", style: font_style
+              ).round
+              len > context.bounds_width
             end
 
-            # EA renders the plain classifier name in element headers.
-            # (Some ISO-corpus diagrams show "Pkg::Name" headers — the
-            # storage of that flag is not in the QEA; render plain.)
+            # EA renders the plain classifier name in element headers;
+            # qualification is layered on by the pipeline via
+            # context.foreign_package_name.
             def self.display_name(classifier, *_)
               classifier.name.to_s
             end

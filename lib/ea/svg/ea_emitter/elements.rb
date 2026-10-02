@@ -69,7 +69,9 @@ module Ea
                                                                 umldi_keyword: element.umldi_keyword,
                                                                 bounds_width: raw_bounds&.width,
                                                                 font_size: size,
-                                                                off_canvas_parent_name: parent_name) : []
+                                                                family: family,
+                                                                off_canvas_parent_name: parent_name,
+                                                                foreign_package_name: foreign_package_name_for(classifier)) : []
           is_classifier = classifier.is_a?(Ea::Model::Classifier)
           attr_lines = if is_classifier && show_attributes?
                          Element::AttributeRenderer.lines_for(
@@ -212,6 +214,26 @@ module Ea
         def marker_constraint(text)
           name = text[1..-2]
           Ea::Model::Constraint.new(name: name, kind: "Marker")
+        end
+
+        # EA qualifies a placed classifier's header with its owning
+        # package name ("OwningPackage::Name") exactly when the
+        # diagram's t_diagram.ShowForeign flag is set AND the
+        # classifier lives in a different package than the diagram
+        # (descendant packages included). Corpus-verified (450
+        # diagrams): ShowForeign=0 renders plain everywhere.
+        def foreign_package_name_for(classifier)
+          return nil unless diagram.show_foreign
+          return nil unless classifier.is_a?(Ea::Model::Classifier)
+
+          pkg_id = classifier.package_id
+          return nil if pkg_id.nil? || pkg_id == diagram.package_id
+
+          pkg = model_index ? model_index[pkg_id] : nil
+          return nil unless pkg.is_a?(Ea::Model::Package)
+
+          name = pkg.name.to_s
+          name.empty? ? nil : name
         end
 
         # EA renders the off-canvas parent classifier's name as an

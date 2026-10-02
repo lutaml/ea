@@ -90,19 +90,47 @@ RSpec.describe Ea::Svg::EaEmitter::Element::HeaderLines do
   end
 
   describe ".display_name with package scoping" do
-    it "always returns the plain name (EA renders unqualified headers)" do
+    it "always returns the plain name (qualification comes from the pipeline)" do
       klass = Ea::Model::Klass.new(id: "K", name: "X",
                                      qualified_name: "pkg::X")
       expect(described_class.display_name(klass, nil)).to eq("X")
       expect(described_class.display_name(klass, "PK1")).to eq("X")
     end
+  end
 
-    it "keeps the qualified name when the classifier's package differs" do
-      klass = Ea::Model::Klass.new(id: "K", name: "other::X",
-                                     qualified_name: "other::X",
-                                     package_id: "PK2",
-                                     package_name: "other")
-      expect(described_class.display_name(klass, "PK1")).to eq("other::X")
+  describe "foreign-package qualification" do
+    it "prepends the owning package name for foreign elements" do
+      klass = Ea::Model::Klass.new(id: "K", name: "CV_GridValueCell")
+      lines = described_class.for(klass, foreign_package_name: "Quadrilateral Grid")
+      expect(lines).to eq([["Quadrilateral Grid::CV_GridValueCell", :bold]])
+    end
+
+    it "wraps the qualified name when it exceeds the bounds width" do
+      klass = Ea::Model::Klass.new(id: "K", name: "CV_SequenceType")
+      lines = described_class.for(klass, foreign_package_name: "Quadrilateral Grid",
+                                            bounds_width: 118, font_size: 7,
+                                            family: "Carlito")
+      expect(lines).to eq([["Quadrilateral Grid::", :bold], ["CV_SequenceType", :bold]])
+    end
+
+    it "keeps a fitting qualified name on one line" do
+      klass = Ea::Model::Klass.new(id: "K", name: "CV_GridPoint")
+      lines = described_class.for(klass, foreign_package_name: "Quadrilateral Grid",
+                                            bounds_width: 174, font_size: 7,
+                                            family: "Carlito")
+      expect(lines).to eq([["Quadrilateral Grid::CV_GridPoint", :bold]])
+    end
+
+    it "qualifies abstract classes with the bold-italic style" do
+      klass = Ea::Model::Klass.new(id: "K", name: "CV_ValueObject", is_abstract: true)
+      lines = described_class.for(klass, foreign_package_name: "Coverage Core")
+      expect(lines).to eq([["Coverage Core::CV_ValueObject", :bold_italic]])
+    end
+
+    it "renders the plain name when no foreign package is given" do
+      klass = Ea::Model::Klass.new(id: "K", name: "IF_QuadGriddedData")
+      lines = described_class.for(klass, foreign_package_name: nil)
+      expect(lines).to eq([["IF_QuadGriddedData", :bold]])
     end
   end
 end

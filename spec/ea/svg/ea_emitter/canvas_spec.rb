@@ -27,9 +27,9 @@ RSpec.describe Ea::Svg::EaEmitter::Canvas do
       expect(canvas.min_x).to eq(100)   # 100 (source min, no subtraction)
       expect(canvas.min_y).to eq(100)
       # canvas_width = element_extent + INSET_LEFT(35) + INSET_RIGHT(50) = 500 + 85 = 585
-      # canvas_height = element_extent + INSET_TOP(40) + INSET_BOTTOM(57) = 180 + 97 = 277
+      # canvas_height = element_extent + INSET_TOP(40) + INSET_BOTTOM(36) = 180 + 76 = 256
       expect(canvas.width).to eq(585)
-      expect(canvas.height).to eq(277)
+      expect(canvas.height).to eq(256)
     end
 
     it "formats width as cm" do
