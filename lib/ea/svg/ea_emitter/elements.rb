@@ -74,7 +74,8 @@ module Ea
                                                                 foreign_package_name: foreign_package_name_for(classifier)) : []
           is_classifier = classifier.is_a?(Ea::Model::Classifier)
           attr_lines = if is_classifier && show_attributes? &&
-                          !classifier.is_a?(Ea::Model::Interface)
+                          !classifier.is_a?(Ea::Model::Interface) &&
+                          attributes_visible?(element)
                          Element::AttributeRenderer.lines_for(
                            classifier, lookup: attribute_lookup,
                            exclude_association_ids: drawn_association_ids
@@ -82,7 +83,11 @@ module Ea
                        else
                          []
                        end
-          op_lines = (is_classifier && show_operations?) ? Element::OperationRenderer.lines_for(classifier) : []
+          op_lines = if is_classifier && show_operations? && operations_visible?(element)
+                        Element::OperationRenderer.lines_for(classifier)
+                      else
+                        []
+                      end
           geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
                                            tagged_values_for(classifier).size,
                                            header_lines, classifier: classifier,
@@ -97,7 +102,7 @@ module Ea
           # TK_PositionType keeps 7 rows ending 6px above the bottom,
           # while a 13px-tighter box loses them all.
           if attr_lines.any? &&
-             geometry.attr_bottom_y.to_i + 4 > bounds.y + bounds.height
+             geometry.attr_bottom_y.to_i + 3 > bounds.y + bounds.height
             attr_lines = []
             geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
                                              tagged_values_for(classifier).size,
@@ -109,7 +114,7 @@ module Ea
           # EA suppresses the operations compartment when its rows
           # overflow the stored box height (same rule as attributes).
           if op_lines.any? && geometry.op_first_y &&
-             geometry.op_bottom_y.to_i + 4 > bounds.y + bounds.height
+             geometry.op_bottom_y.to_i + 3 > bounds.y + bounds.height
             op_lines = []
             geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
                                              tagged_values_for(classifier).size,
@@ -192,6 +197,32 @@ module Ea
         # plain rows start (divider+18 vs divider+14 at 7pt).
         def attr_first_offset_for(attr_lines)
           attr_lines.first.to_s.start_with?("«") ? 11 : 7
+        end
+
+        # EA's per-instance attribute visibility toggles (ObjectStyle
+        # AttPub/AttPri/AttPro/AttPkg). When ANY toggle is stored, only
+        # attributes of an enabled visibility class render; the GM_*
+        # geometry boxes carry all four at 0 and render header-only.
+        def attributes_visible?(element)
+          toggles = visibility_toggles(element)
+          return true if toggles.empty?
+
+          toggles.values.any? { |v| v == "1" }
+        end
+
+        def visibility_toggles(element)
+          style = element.style || {}
+          %i[attpub attpri attpro attpkg]
+            .each_with_object({}) { |k, acc| acc[k] = style[k] if style.key?(k) }
+        end
+
+        def operations_visible?(element)
+          style = element.style || {}
+          keys = %i[oppub oppri oppro oppkg]
+          present = keys.select { |k| style.key?(k) }
+          return true if present.empty?
+
+          present.any? { |k| style[k] == "1" }
         end
 
         def drawn_association_ids
