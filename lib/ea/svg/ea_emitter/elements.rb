@@ -84,7 +84,7 @@ module Ea
           op_lines = (is_classifier && show_operations?) ? Element::OperationRenderer.lines_for(classifier) : []
           geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
                                            tagged_values_for(classifier).size,
-                                           header_lines,
+                                           header_lines, classifier: classifier,
                                            constraints_count: constraints_for(classifier).size,
                                            marker_count: marker_lines_for(classifier).size,
                                            enum_literals_count: enum_row_count_for(classifier))
@@ -100,7 +100,7 @@ module Ea
             attr_lines = []
             geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
                                              tagged_values_for(classifier).size,
-                                             header_lines,
+                                             header_lines, classifier: classifier,
                                              constraints_count: constraints_for(classifier).size,
                                            marker_count: marker_lines_for(classifier).size,
                                            enum_literals_count: enum_row_count_for(classifier))
@@ -112,7 +112,7 @@ module Ea
             op_lines = []
             geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
                                              tagged_values_for(classifier).size,
-                                             header_lines,
+                                             header_lines, classifier: classifier,
                                              constraints_count: constraints_for(classifier).size,
                                            marker_count: marker_lines_for(classifier).size,
                                            enum_literals_count: enum_row_count_for(classifier))
@@ -145,7 +145,7 @@ module Ea
         end
 
         def compartment_geometry(bounds, size, attr_lines, op_lines,
-                                 tagged_count, header_lines,
+                                 tagged_count, header_lines, classifier: nil,
                                  constraints_count: 0, marker_count: 0,
                                  enum_literals_count: 0)
           CompartmentGeometry.new(bounds: bounds, size: size,
@@ -156,7 +156,7 @@ module Ea
                                    constraints_count: constraints_count,
                                    marker_count: marker_count,
                                    enum_literals_count: enum_literals_count,
-                                   header_top_padding: header_padding_for(header_lines),
+                                   header_top_padding: header_padding_for(header_lines, classifier),
                                    header_line_offset: theme.compartments.header_line_offset,
                                    divider_offset: theme.compartments.divider_offset,
                                    attr_line_offset: theme.compartments.attr_line_offset,
@@ -164,19 +164,27 @@ module Ea
         end
 
         # EA seats a stereotype line 3px higher than a bare class name
-        # (first baseline +16 vs +19 at 7pt) - verified against the
-        # EA-published reference SVGs.
-        def header_padding_for(header_lines)
+        # (first baseline +16 vs +19 at 7pt) - and Enumeration /
+        # Interface elements seat their stereotype 3px higher still
+        # (+13). Corpus-verified by identity-matched elements:
+        # Interface +13 x44 vs +16 x17, Enumeration +13 x13 vs +16
+        # x3, Class/Object/DataType +16 x515.
+        def header_padding_for(header_lines, classifier)
           first = header_lines.first
           return theme.compartments.header_top_padding unless first
 
           if first.last == :italic
             6 # ghost-led: EA seats the right-aligned ghost at +13
           elsif first.first.to_s.start_with?("«")
-            9
+            enumeration_or_interface?(classifier) ? 6 : 9
           else
             theme.compartments.header_top_padding
           end
+        end
+
+        def enumeration_or_interface?(classifier)
+          classifier.is_a?(Ea::Model::Enumeration) ||
+            classifier.is_a?(Ea::Model::Interface)
         end
 
         # A stereotype group header («Property») sits 4px below where
