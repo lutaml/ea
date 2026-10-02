@@ -25,12 +25,46 @@ module Ea
           def render_literals_block(context)
             line_h = context.size + LITERAL_LINE_OFFSET
             text_blocks = []
+            row_y = context.geometry.enum_literal_first_y
+            # EA renders a centered italic "literals" caption above
+            # the rows when the literals carry stored code values
+            # (t_attribute.Default); bare literal lists render the
+            # rows directly. Corpus-verified (PT_TypeOfSA:
+            # "literals" caption + "ServingParcel = SP" rows;
+            # CV_SequenceType: bare rows, no caption).
+            if caption?(context)
+              text_blocks << caption_text(context, row_y)
+              row_y += line_h
+            end
             context.enum_literals.each_with_index do |literal, idx|
-              y = context.geometry.enum_literal_first_y + (idx * line_h)
+              y = row_y + (idx * line_h)
               text_blocks << visibility_placeholder(context, y)
               text_blocks << literal_name_text(context, literal, y)
             end
             wrap_group(text_blocks, context.theme.text_color)
+          end
+
+          def caption?(context)
+            context.enum_literals.any? do |l|
+              value = l.value.to_s
+              !value.empty? && value != l.name.to_s
+            end
+          end
+
+          def caption_text(context, y)
+            content = "literals"
+            len = TextRenderer.estimate_width(content, context.size, nil,
+                                              family: context.family).round
+            x = (context.bounds.x + (context.bounds.width - len) / 2.0).floor
+            TextRenderer.new(
+              content: content,
+              x: x, y: y,
+              family: context.family, size: context.size, size_unit: context.size_unit,
+              fill: context.theme.text_color,
+              stroke_in_text: context.theme.stroke_in_text_color,
+              width_factor: context.theme.text_width_factor,
+              style: "italic"
+            ).to_svg
           end
 
           def visibility_placeholder(context, y)
@@ -46,8 +80,9 @@ module Ea
           end
 
           def literal_name_text(context, literal, y)
+            content = literal_display(literal)
             TextRenderer.new(
-              content: literal.name.to_s,
+              content: content,
               x: context.bounds.x + (context.theme.attribute_spec.content_x_offset || 26),
               y: y,
               family: context.family, size: context.size, size_unit: context.size_unit,
@@ -55,6 +90,15 @@ module Ea
               stroke_in_text: context.theme.stroke_in_text_color,
               width_factor: context.theme.text_width_factor
             ).to_svg
+          end
+
+          # EA shows "Name = Code" for literals with a stored
+          # default value; bare names otherwise.
+          def literal_display(literal)
+            value = literal.value.to_s
+            return literal.name.to_s if value.empty? || value == literal.name.to_s
+
+            "#{literal.name} = #{value}"
           end
 
           def wrap_group(text_blocks, text_color)
