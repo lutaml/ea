@@ -139,17 +139,21 @@ module Ea
             return nil unless tagged_values_count.to_i.positive? ||
                               constraints_count.to_i.positive?
 
-            content_bottom_y + size + 5
+            (content_bottom_y || raw_attr_first_y) + size + 5
           end
 
           # The lowest content edge among attributes, enum literals,
           # operations, and constraints — the anchor for trailing
           # compartments and the autosize height.
+          # Nil when no compartment rows render (header-only box):
+          # the autosize gate must not treat the empty-compartment
+          # anchor as content.
           def content_bottom_y
-            bottoms = [attr_bottom_y]
+            bottoms = []
+            bottoms << attr_bottom_y if attr_lines_count.to_i.positive?
             bottoms << enum_literals_bottom_y if enum_literals_count.to_i.positive?
             bottoms << op_bottom_y if op_lines_count.to_i.positive?
-            bottoms.compact.max
+            bottoms.max
           end
 
           def enum_literals_bottom_y
