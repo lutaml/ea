@@ -16,7 +16,7 @@ module Ea
         :fill, :stroke, :stroke_width, :text_fill,
         :family, :size, :size_unit,
         :header_lines, :attr_lines, :op_lines,
-        :enum_literals, :tagged_values, :constraints,
+        :enum_literals, :tagged_values, :constraints, :marker_lines,
         :package_content_lines,
         :geometry, :theme, :canvas, :diagram, :model_index,
         :off_canvas_parent_name,

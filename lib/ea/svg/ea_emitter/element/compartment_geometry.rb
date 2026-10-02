@@ -21,6 +21,7 @@ module Ea
                       :attr_lines_count, :op_lines_count,
                       :tagged_values_count,
                       :constraints_count,
+                      :marker_count,
                       :enum_literals_count,
                       :header_top_padding, :header_line_offset,
                       :divider_offset, :attr_line_offset,
@@ -30,6 +31,7 @@ module Ea
                           attr_lines_count:, op_lines_count:,
                           tagged_values_count:,
                           constraints_count: 0,
+                          marker_count: 0,
                           enum_literals_count: 0,
                           header_top_padding: 12,
                           header_line_offset: 6,
@@ -43,6 +45,7 @@ module Ea
             @op_lines_count = op_lines_count
             @tagged_values_count = tagged_values_count
             @constraints_count = constraints_count
+            @marker_count = marker_count
             @enum_literals_count = enum_literals_count
             @header_top_padding = header_top_padding
             @header_line_offset = header_line_offset
@@ -67,6 +70,29 @@ module Ea
           end
 
           def attr_first_y
+            base = raw_attr_first_y
+            return base unless marker_count.to_i.positive?
+
+            # EA renders the {root}/{leaf} marker compartment BETWEEN
+            # the header divider and the attributes: its rows occupy
+            # (attr_base - 9) onward at the 13px pitch, and attributes
+            # shift down one row per marker line. Real OCL constraints
+            # do NOT shift attributes — they render trailing.
+            # Corpus-verified (TK_PositionType: name +13 {root} +22
+            # first-attr; MD_Identification keeps attrs at +22 despite
+            # carrying OCL constraints).
+            base + (size + 6) * marker_count
+          end
+
+          # First marker-line baseline: one row slot above where
+          # attributes would start without markers.
+          def marker_first_y
+            return nil unless marker_count.to_i.positive?
+
+            raw_attr_first_y - 9
+          end
+
+          def raw_attr_first_y
             return bounds.y + size + (header_top_padding || 12) + 12 unless divider_y
 
             divider_y + size + (attr_first_offset || 7)
@@ -106,15 +132,19 @@ module Ea
 
           # Tagged values appear after attributes (or after ops if
           # present). EA does not emit a separate divider — the
-          # italic "tags" header marks the compartment.
+          # italic "tags" header marks the compartment. Constraints
+          # render ABOVE the attributes (constraints_first_y), not
+          # here.
           def tagged_value_first_y
-            return nil unless tagged_values_count.to_i.positive? || constraints_count.to_i.positive?
+            return nil unless tagged_values_count.to_i.positive? ||
+                              constraints_count.to_i.positive?
 
             content_bottom_y + size + 5
           end
 
           # The lowest content edge among attributes, enum literals,
-          # and operations — the anchor for trailing compartments.
+          # operations, and constraints — the anchor for trailing
+          # compartments and the autosize height.
           def content_bottom_y
             bottoms = [attr_bottom_y]
             bottoms << enum_literals_bottom_y if enum_literals_count.to_i.positive?

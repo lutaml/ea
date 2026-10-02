@@ -14,6 +14,7 @@ RSpec.describe Ea::Svg::EaEmitter::Compartment do
         Ea::Svg::EaEmitter::Compartment::Header,
         Ea::Svg::EaEmitter::Compartment::HeaderDivider,
         Ea::Svg::EaEmitter::Compartment::StereotypeIcon,
+        Ea::Svg::EaEmitter::Compartment::Marker,
         Ea::Svg::EaEmitter::Compartment::Attributes,
         Ea::Svg::EaEmitter::Compartment::Operations,
         Ea::Svg::EaEmitter::Compartment::EnumLiterals,

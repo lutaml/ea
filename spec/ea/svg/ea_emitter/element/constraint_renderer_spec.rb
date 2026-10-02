@@ -12,30 +12,32 @@ RSpec.describe Ea::Svg::EaEmitter::Element::ConstraintRenderer do
   end
 
   describe ".render" do
-    it "emits an italic 'constraints' header followed by {name} lines" do
+    it "emits bare {name} lines with no caption" do
       svg = described_class.render([constraint], bounds: bounds,
                                      first_y: 240, family: "Carlito", size: 7)
-      expect(svg).to include(">constraints</text>")
+      expect(svg).not_to include(">constraints</text>")
       expect(svg).to include(">{pattern}</text>")
-      expect(svg).to include("italic")
-    end
-
-    it "wraps the output in a <g> element" do
-      svg = described_class.render([constraint], bounds: bounds,
-                                     first_y: 240, family: "Carlito", size: 7)
       expect(svg).to start_with(%(<g style="))
       expect(svg).to end_with("</g>")
     end
 
-    it "renders one {name} line per constraint" do
+    it "right-aligns each line to the box right edge" do
+      svg = described_class.render([constraint], bounds: bounds,
+                                     first_y: 240, family: "Carlito", size: 7)
+      len = Ea::Svg::EaEmitter::TextRenderer.estimate_width("{pattern}", 7, nil,
+                                                            family: "Carlito").round
+      expect(svg).to include(%(x="#{bounds.x + bounds.width - len}.00"))
+    end
+
+    it "spaces lines at the compartment pitch (size + 6)" do
       constraints = [
         Ea::Model::Constraint.new(name: "alpha"),
         Ea::Model::Constraint.new(name: "beta")
       ]
       svg = described_class.render(constraints, bounds: bounds,
                                      first_y: 240, family: "Carlito", size: 7)
-      expect(svg).to include("{alpha}")
-      expect(svg).to include("{beta}")
+      ys = svg.scan(/y="([\d.]+)"/).flatten.map(&:to_f)
+      expect(ys).to eq([240, 253])
     end
   end
 end
