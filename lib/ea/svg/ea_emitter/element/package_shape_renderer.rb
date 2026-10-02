@@ -9,15 +9,18 @@ module Ea
         # Package as this folder-like silhouette regardless of diagram
         # type.
         #
-        # Layout (element bounds cover tab + body together):
+        # Layout (element bounds cover tab + body together; the tab
+        # occupies the TOP of the stored rect — corpus-verified
+        # against EA-published package polygons, single tab 20px and
+        # stereotype tab 36px, both inside):
         #
         #   ┌───┐
-        #   │tab│   ← top TAB_HEIGHT_SINGLE rows ABOVE element bounds;
-        #   │   │     when a stereotype is present, the tab grows to
-        #   └───┴──────────┐  TAB_HEIGHT_DOUBLE rows and extends INTO
-        #   │               │   the bounds; the name renders bold,
-        #   │     body      │   left-aligned. The body always starts
-        #   │               │   where the tab ends.
+        #   │tab│   ← top TAB_HEIGHT rows of the bounds;
+        #   │   │     36px when a stereotype is present
+        #   ├───┴──────────┐
+        #   │               │  the name renders bold, left-aligned;
+        #   │     body      │  the body always starts where the
+        #   │               │  tab ends
         #   └───────────────┘
         #
         class PackageShapeRenderer
@@ -128,11 +131,9 @@ module Ea
             tab_top_y + TAB_LABEL_Y_OFFSET
           end
 
-          # Tab anchored 20px above the bounds top — matches EA's
-          # folder silhouette regardless of whether the tab holds one
-          # line or two.
+          # Tab occupies the top of the stored rect.
           def tab_top_y
-            bounds.y - TAB_HEIGHT_SINGLE
+            bounds.y
           end
 
           def tab_height
@@ -153,12 +154,9 @@ module Ea
             ]
           end
 
-          # Body extends from tab.bottom to (bounds.bottom - 20px
-          # bottom margin). Total body height = bounds.height -
-          # tab_height (because tab takes (tab_height - 20) from the
-          # top of the bounds plus 20 above the bounds).
+          # Body extends from the tab bottom to the bounds bottom.
           def body_height(body_top)
-            bounds.y + bounds.height - TAB_HEIGHT_SINGLE - body_top
+            bounds.y + bounds.height - body_top
           end
 
           def tab_points

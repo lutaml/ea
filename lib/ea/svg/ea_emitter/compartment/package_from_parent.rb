@@ -13,8 +13,6 @@ module Ea
         # (379 diagrams, 378 exact): classifiers never render the
         # subtitle, and ShowForeign=0 diagrams render none.
         module PackageFromParent
-          Y_OFFSET_FROM_BOTTOM = 5
-
           module_function
 
           def render(context)
@@ -39,10 +37,14 @@ module Ea
 
           module_function :render
 
+          # EA draws the subtitle 15px BELOW the body bottom (outside
+          # the box) — verified against EA-published package SVGs.
+          Y_OFFSET_FROM_BOTTOM = 15
+
           def subtitle(text, context)
             bounds = context.bounds
             fill = context.theme.attribute_text_color
-            y = bounds.y + bounds.height - Y_OFFSET_FROM_BOTTOM
+            y = bounds.y + bounds.height + Y_OFFSET_FROM_BOTTOM
             # EA centers the subtitle by its integer textLength inside
             # the package BODY and floors x.
             body_width = Element::PackageShapeRenderer.body_width_for(

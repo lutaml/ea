@@ -20,6 +20,7 @@ module Ea
         autoload :EnumLiterals, "ea/svg/ea_emitter/compartment/enum_literals"
         autoload :TaggedValues, "ea/svg/ea_emitter/compartment/tagged_values"
         autoload :Constraints, "ea/svg/ea_emitter/compartment/constraints"
+        autoload :Marker, "ea/svg/ea_emitter/compartment/marker"
         autoload :PackageContents, "ea/svg/ea_emitter/compartment/package_contents"
         autoload :InstanceUnderline, "ea/svg/ea_emitter/compartment/instance_underline"
         autoload :InstanceSlots, "ea/svg/ea_emitter/compartment/instance_slots"
@@ -34,6 +35,7 @@ module Ea
           Header,
           HeaderDivider,
           StereotypeIcon,
+          Marker,
           Attributes,
           Operations,
           EnumLiterals,

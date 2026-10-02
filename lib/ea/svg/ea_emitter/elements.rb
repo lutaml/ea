@@ -86,29 +86,35 @@ module Ea
                                            tagged_values_for(classifier).size,
                                            header_lines,
                                            constraints_count: constraints_for(classifier).size,
+                                           marker_count: marker_lines_for(classifier).size,
                                            enum_literals_count: enum_literals_for(classifier).size)
-          # EA suppresses the whole attribute compartment when it does
-          # not fit the stored box height (never truncates rows) - the
-          # AOS box on CityFurniture hides its association property
-          # this way. Verified against EA-published reference SVGs.
+          # EA suppresses the whole attribute compartment when its
+          # rows do not fit the stored box height (never truncates
+          # rows) - the AOS box on CityFurniture hides its
+          # association property this way. The gate compares the last
+          # baseline + text descent (~4px) against the box bottom:
+          # TK_PositionType keeps 7 rows ending 6px above the bottom,
+          # while a 13px-tighter box loses them all.
           if attr_lines.any? &&
-             geometry.attr_bottom_y.to_i + size > bounds.y + bounds.height
+             geometry.attr_bottom_y.to_i + 4 > bounds.y + bounds.height
             attr_lines = []
             geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
                                              tagged_values_for(classifier).size,
                                              header_lines,
                                              constraints_count: constraints_for(classifier).size,
+                                           marker_count: marker_lines_for(classifier).size,
                                            enum_literals_count: enum_literals_for(classifier).size)
           end
           # EA suppresses the operations compartment when its rows
           # overflow the stored box height (same rule as attributes).
           if op_lines.any? && geometry.op_first_y &&
-             geometry.op_bottom_y.to_i + size > bounds.y + bounds.height
+             geometry.op_bottom_y.to_i + 4 > bounds.y + bounds.height
             op_lines = []
             geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
                                              tagged_values_for(classifier).size,
                                              header_lines,
                                              constraints_count: constraints_for(classifier).size,
+                                           marker_count: marker_lines_for(classifier).size,
                                            enum_literals_count: enum_literals_for(classifier).size)
           end
           RenderContext.new(
@@ -127,6 +133,7 @@ module Ea
             enum_literals: enum_literals_for(classifier),
             tagged_values: element.show_tagged_values ? tagged_values_for(classifier) : [],
             constraints: constraints_for(classifier),
+            marker_lines: marker_lines_for(classifier),
             package_content_lines: package_content_lines_for(model_element),
             geometry: geometry,
             theme: theme,
@@ -139,13 +146,15 @@ module Ea
 
         def compartment_geometry(bounds, size, attr_lines, op_lines,
                                  tagged_count, header_lines,
-                                 constraints_count: 0, enum_literals_count: 0)
+                                 constraints_count: 0, marker_count: 0,
+                                 enum_literals_count: 0)
           CompartmentGeometry.new(bounds: bounds, size: size,
                                    header_lines_count: header_lines.size,
                                    attr_lines_count: attr_lines.size,
                                    op_lines_count: op_lines.size,
                                    tagged_values_count: tagged_count,
                                    constraints_count: constraints_count,
+                                   marker_count: marker_count,
                                    enum_literals_count: enum_literals_count,
                                    header_top_padding: header_padding_for(header_lines),
                                    header_line_offset: theme.compartments.header_line_offset,
@@ -193,12 +202,20 @@ module Ea
           classifier.tagged_values || []
         end
 
+        # Real OCL constraints render trailing, after the content
+        # compartment; the {root}/{leaf} marker renders its own
+        # compartment between the divider and the attributes.
         def constraints_for(classifier)
           return [] unless classifier.is_a?(Ea::Model::Classifier)
 
+          classifier.constraints || []
+        end
+
+        def marker_lines_for(classifier)
+          return [] unless classifier.is_a?(Ea::Model::Classifier)
+
           marker_line = root_leaf_marker_for(classifier)
-          marker = marker_line ? [marker_constraint(marker_line)] : []
-          marker + (classifier.constraints || [])
+          marker_line ? [marker_constraint(marker_line)] : []
         end
 
         # EA renders the element's Root/Leaf checkboxes as {root},
