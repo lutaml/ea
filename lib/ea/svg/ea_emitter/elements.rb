@@ -73,7 +73,8 @@ module Ea
                                                                 off_canvas_parent_name: parent_name,
                                                                 foreign_package_name: foreign_package_name_for(classifier)) : []
           is_classifier = classifier.is_a?(Ea::Model::Classifier)
-          attr_lines = if is_classifier && show_attributes?
+          attr_lines = if is_classifier && show_attributes? &&
+                          !classifier.is_a?(Ea::Model::Interface)
                          Element::AttributeRenderer.lines_for(
                            classifier, lookup: attribute_lookup,
                            exclude_association_ids: drawn_association_ids
