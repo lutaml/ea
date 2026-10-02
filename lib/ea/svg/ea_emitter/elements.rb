@@ -87,7 +87,7 @@ module Ea
                                            header_lines,
                                            constraints_count: constraints_for(classifier).size,
                                            marker_count: marker_lines_for(classifier).size,
-                                           enum_literals_count: enum_literals_for(classifier).size)
+                                           enum_literals_count: enum_row_count_for(classifier))
           # EA suppresses the whole attribute compartment when its
           # rows do not fit the stored box height (never truncates
           # rows) - the AOS box on CityFurniture hides its
@@ -103,7 +103,7 @@ module Ea
                                              header_lines,
                                              constraints_count: constraints_for(classifier).size,
                                            marker_count: marker_lines_for(classifier).size,
-                                           enum_literals_count: enum_literals_for(classifier).size)
+                                           enum_literals_count: enum_row_count_for(classifier))
           end
           # EA suppresses the operations compartment when its rows
           # overflow the stored box height (same rule as attributes).
@@ -115,7 +115,7 @@ module Ea
                                              header_lines,
                                              constraints_count: constraints_for(classifier).size,
                                            marker_count: marker_lines_for(classifier).size,
-                                           enum_literals_count: enum_literals_for(classifier).size)
+                                           enum_literals_count: enum_row_count_for(classifier))
           end
           RenderContext.new(
             element: element,
@@ -194,6 +194,14 @@ module Ea
           return [] unless classifier.is_a?(Ea::Model::Enumeration)
 
           classifier.literals || []
+        end
+
+        # The "literals" caption occupies a row slot when any
+        # literal carries a stored code value.
+        def enum_row_count_for(classifier)
+          literals = enum_literals_for(classifier)
+          caption = literals.any? { |l| !l.value.to_s.empty? && l.value.to_s != l.name.to_s }
+          literals.size + (caption ? 1 : 0)
         end
 
         def tagged_values_for(classifier)
