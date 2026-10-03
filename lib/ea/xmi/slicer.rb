@@ -118,6 +118,7 @@ module Ea
           @nodes = {}
           @stack = [] # [id_or_nil, shared_refs_array]
           @section = []
+          @refs_off = 0
         end
 
         # Only gated containers become nodes (packagedElement in the
@@ -129,6 +130,7 @@ module Ea
         # the enclosing container's reference set instead.
         def on_start_element(name, attributes = {}, _namespaces = {})
           @section << section_for(name, @section.last)
+          @refs_off += 1 if name == "links"
           id = attributes["xmi:id"] || attributes["xmi:idref"]
           is_node = id && GATED.fetch(@section.last, []).include?(name)
           if is_node && (existing = @nodes[id])
@@ -158,7 +160,8 @@ module Ea
           collect_refs(attributes, refs)
         end
 
-        def on_end_element(_name)
+        def on_end_element(name)
+          @refs_off -= 1 if name == "links"
           @stack.pop
           @section.pop
         end
@@ -185,7 +188,14 @@ module Ea
           end
         end
 
+        # The links blocks inside extension entries restate every
+        # relation's endpoints; the connector records in the connectors
+        # section already carry both ends, so collecting from links
+        # would pull the endpoint classes of every relation into the
+        # closure transitively (half the model per class).
         def collect_refs(attributes, refs)
+          return if @refs_off.positive?
+
           attributes.each_value do |v|
             refs << v if v.is_a?(String) && v.match?(EA_ID_RE)
           end
