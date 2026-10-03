@@ -408,6 +408,22 @@ module Ea
                       [bend[0], target_y]]
           elsif intermediate.any?
             points = [source_point, *intermediate, target_point]
+            # Generalizations with the parent ABOVE keep their stored
+            # interior bends verbatim but re-dock the endpoints onto
+            # the box edges AT THE ADJACENT BEND's x (hand-verified:
+            # stored (542,975)(541,807)(543,807)(486,757) draws as
+            # (541,975)(541,807)(543,807)(543,757) — only the two
+            # endpoints move; the stale final x is replaced by the
+            # last bend's trunk x).
+            if connector.connector_type == "Generalization"
+              src_b = bounds_from_rect(source_placement)
+              tgt_b = bounds_from_rect(target_placement)
+              if tgt_b.y + tgt_b.height <= src_b.y
+                points[0] = [points[1][0].clamp(src_b.x, src_b.x + src_b.width), src_b.y]
+                points[-1] = [points[-2][0].clamp(tgt_b.x, tgt_b.x + tgt_b.width),
+                              tgt_b.y + tgt_b.height]
+              end
+            end
           elsif source_port || target_port
             # Exact ports are known — the SX/SY bend heuristics in
             # sx_sy_ex_ey_waypoints would double-apply the offsets.
