@@ -8,10 +8,10 @@ RSpec.describe Ea::Svg::EaEmitter::Element::DividerRenderer do
   let(:bounds) { Ea::Model::Bounds.new(x: 10, y: 20, width: 100, height: 50) }
 
   describe ".render" do
-    it "emits a horizontal <path> from bounds.x to bounds.x + width" do
+    it "emits a horizontal <path> from the left edge to one inside the right edge" do
       svg = described_class.render(bounds, y: 30, stroke: "#000000", stroke_width: 2)
       path = Nokogiri::XML("<svg>#{svg}</svg>").at_css("path")
-      expect(path["d"]).to eq("M 10 30 L 110 30")
+      expect(path["d"]).to eq("M 10 30 L 109 30")
     end
 
     it "uses the stroke and stroke-width in the group style" do
