@@ -120,30 +120,40 @@ module Ea
           @section = []
         end
 
+        # Only gated containers become nodes (packagedElement in the
+        # model, element and connector in the extension, and the
+        # embedded umldi:Diagram blocks). Other id-bearing elements -
+        # `<type xmi:idref>`, `<model package>` and the like - are pure
+        # references: recording them as nodes would let a reference
+        # define the element's ancestry, so their EA-id values flow into
+        # the enclosing container's reference set instead.
         def on_start_element(name, attributes = {}, _namespaces = {})
           @section << section_for(name, @section.last)
           id = attributes["xmi:id"] || attributes["xmi:idref"]
-          parent_id = nearest_id
-          if id && (existing = @nodes[id])
-            # An element id occurs twice in an EA export: as the model
+          is_node = id && GATED.fetch(@section.last, []).include?(name)
+          if is_node && (existing = @nodes[id])
+            # A container id occurs twice in an EA export: as the model
             # element (uml:Model subtree) and as the extension entry
-            # (elements/connectors keyed by xmi:idref). Merge so one
-            # node carries the model ancestry and both occurrences'
-            # references; the entry usually carries the name.
+            # keyed by xmi:idref. Merge so one node carries the model
+            # ancestry and both occurrences' references; the entry
+            # usually carries the name.
             existing.name ||= attributes["name"]
             existing.xmi_type ||= attributes["xmi:type"]
             collect_refs(attributes, existing.refs)
             @stack << [id, existing.refs]
             return
           end
-          refs = id ? [] : (@stack.last ? @stack.last[1] : [])
-          @stack << [id, refs]
-          return unless id
+          refs = is_node ? [] : (@stack.last ? @stack.last[1] : [])
+          @stack << [is_node ? id : nil, refs]
+          unless is_node
+            collect_refs(attributes, refs)
+            return
+          end
 
           @nodes[id] = Node.new(
             id: id, tag: name,
             xmi_type: attributes["xmi:type"], name: attributes["name"],
-            parent_id: parent_id, section: @section.last, refs: refs,
+            parent_id: nearest_id, section: @section.last, refs: refs,
           )
           collect_refs(attributes, refs)
         end
@@ -221,18 +231,20 @@ module Ea
 
       def seed_ids(nodes, wanted)
         seeds = []
-        nodes.each_value do |node|
-          next if node.name.nil? || !wanted.any? { |p, n| wanted?(node, p, n, nodes) }
+        wanted.each do |package, name|
+          named = nodes.values.select { |n| n.name == name }
+          next if named.empty?
 
-          seeds << node.id
+          # package-anchored matches first; consumers resolve by name,
+          # so when no package chain matches, every same-named element
+          # is seeded and the resolver picks among them as usual
+          anchored = package ? named.select { |n| under_package?(n, package, nodes) } : []
+          (anchored.empty? ? named : anchored).each { |n| seeds << n.id }
         end
-        seeds
+        seeds.uniq
       end
 
-      def wanted?(node, package, name, nodes)
-        return false if node.name != name
-        return true if package.nil?
-
+      def under_package?(node, package, nodes)
         anc = nodes[node.parent_id]
         while anc && anc.id != node.id
           return true if anc.name == package && anc.xmi_type == "uml:Package"
