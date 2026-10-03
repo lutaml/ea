@@ -5,8 +5,13 @@ module Ea
     module EaEmitter
       module Marker
         # Open triangle marker for UML generalization, realization,
-        # and dependency. White-filled 3-point polygon at the
-        # general / supplier end.
+        # and dependency. Generalization/Realization render a
+        # white-filled 3-point polygon at the general / supplier end;
+        # DEPENDENCY renders a line-style open path triangle (same
+        # style group as the connector line) — corpus-verified on
+        # E58034A3 where 22 directed dependencies converging on one
+        # package each draw a 'M a b L c d L a e' path triangle while
+        # the diagram's generalizations use polygons.
         class OpenTriangle < Kind
           def self.handles?(effective_type)
             %w[Generalization Realization Dependency].include?(effective_type)
@@ -16,7 +21,12 @@ module Ea
             whole_end_at_source = whole_end_at_source?(connector)
             anchor = whole_end_at_source ? target : source
             base = whole_end_at_source ? before_target : after_source
-            [Registry::Spec.new(shape: :triangle, anchor: anchor, base: base)]
+            shape = effective_type?(connector) == "Dependency" ? :arrow : :triangle
+            [Registry::Spec.new(shape: shape, anchor: anchor, base: base)]
+          end
+
+          def self.effective_type?(connector)
+            connector.connector_type
           end
         end
       end
