@@ -9,6 +9,7 @@ module Ea
   module Xmi
     autoload :Parser, "ea/xmi/parser"
     autoload :LookupService, "ea/xmi/lookup_service"
+    autoload :Slicer, "ea/xmi/slicer"
 
     module LiquidDrops
       autoload :RootDrop, "ea/xmi/liquid_drops/root_drop"
