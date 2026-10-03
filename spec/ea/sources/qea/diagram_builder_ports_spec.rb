@@ -85,22 +85,36 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
       Ea::Sources::Qea::Adapter.new(database, path).to_document
     end
 
-    it "docks each connector's waypoint endpoints at its ports" do
+    it "docks each connector's endpoints on element perimeters" do
+      # EA redraws stored connectors between the closest FACING edges
+      # when the stored port route does not already dock them, so the
+      # waypoints are no longer the raw ports — but every endpoint
+      # terminates on an element perimeter (corpus: 417 identity-
+      # paired connectors on EA-published references).
       checked = 0
-      document.diagrams.flat_map(&:connectors).each do |connector|
-        next unless connector.source_port || connector.target_port
+      document.diagrams.each do |diagram|
+        rects = (diagram.elements || []).filter_map do |e|
+          b = e.bounds || e.image_bounds
+          b && [b.x, b.y, b.width, b.height]
+        end
+        next if rects.empty?
 
-        waypoints = connector.waypoints.map(&:position)
-        expect(waypoints.size).to be >= 2
-        if connector.source_port
-          expect([waypoints.first.x, waypoints.first.y])
-            .to eq([connector.source_port.x, connector.source_port.y])
+        (diagram.connectors || []).each do |connector|
+          next unless connector.source_port || connector.target_port
+
+          waypoints = connector.waypoints.map(&:position)
+          expect(waypoints.size).to be >= 2
+          [waypoints.first, waypoints.last].each do |pt|
+            on_box = rects.any? do |x, y, w, h|
+              (((pt.x - x).abs <= 2 || (pt.x - (x + w)).abs <= 2) &&
+                pt.y.between?(y - 2, y + h + 2)) ||
+                (((pt.y - y).abs <= 2 || (pt.y - (y + h)).abs <= 2) &&
+                  pt.x.between?(x - 2, x + w + 2))
+            end
+            expect(on_box).to be(true)
+          end
+          checked += 1
         end
-        if connector.target_port
-          expect([waypoints.last.x, waypoints.last.y])
-            .to eq([connector.target_port.x, connector.target_port.y])
-        end
-        checked += 1
       end
       expect(checked).to be > 10
     end
