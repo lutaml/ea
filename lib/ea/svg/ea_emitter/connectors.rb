@@ -58,17 +58,23 @@ module Ea
           pts = waypoints_for(connector)
           return nil if pts.size < 2
 
-          d = pts.each_with_index.map do |p, idx|
-            x, y = translate_point(p)
-            "#{idx.zero? ? 'M' : 'L'} #{Canvas.coord(x)} #{Canvas.coord(y)}"
-          end.join(" ")
-          # EA writes a trailing zero-length "M <start>" repeat for
-          # DIRECT (auto-routed straight) connectors — verified on
-          # context diagrams where every line carries it (B6847577,
-          # E58034A3, 8CF27BE8).
+          # DIRECT (auto-routed straight) connectors: EA writes the
+          # segment TARGET-FIRST with a trailing zero-length repeat —
+          # "M target L source M target" (B6847577, E58034A3,
+          # 8CF27BE8). Same pixels as source-first; only the byte
+          # order differs, so reversal lives here at the emitter and
+          # the marker anchoring (source = first waypoint) is
+          # untouched.
           if pts.size == 2 && direct?(connector)
-            x, y = translate_point(pts.first)
-            d = "#{d} M #{Canvas.coord(x)} #{Canvas.coord(y)}"
+            x1, y1 = translate_point(pts.first)
+            x2, y2 = translate_point(pts.last)
+            d = "M #{Canvas.coord(x2)} #{Canvas.coord(y2)} L #{Canvas.coord(x1)} #{Canvas.coord(y1)} " \
+                "M #{Canvas.coord(x2)} #{Canvas.coord(y2)}"
+          else
+            d = pts.each_with_index.map do |p, idx|
+              x, y = translate_point(p)
+              "#{idx.zero? ? 'M' : 'L'} #{Canvas.coord(x)} #{Canvas.coord(y)}"
+            end.join(" ")
           end
           %(<path d="#{d}" shape-rendering="auto"/>)
         end

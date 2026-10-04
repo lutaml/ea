@@ -165,8 +165,8 @@ module Ea
           target = diagram_object_placement(diagram_row.diagram_id, target_id)
           return nil unless source && target
 
-          source_bounds = bounds_from_rect(source)
-          target_bounds = bounds_from_rect(target)
+          source_bounds = drawn_bounds_for(source)
+          target_bounds = drawn_bounds_for(target)
           waypoints = if source_id == target_id
                         self_loop_waypoints(source_bounds)
                       else
@@ -224,8 +224,8 @@ module Ea
           target_placement = diagram_object_placement(diagram_row.diagram_id, target_id)
           return nil unless source_placement && target_placement
 
-          source_bounds = bounds_from_rect(source_placement)
-          target_bounds = bounds_from_rect(target_placement)
+          source_bounds = drawn_bounds_for(source_placement)
+          target_bounds = drawn_bounds_for(target_placement)
           waypoints = direct_waypoints(source_bounds, target_bounds)
           Ea::Model::DiagramConnector.new(
             id: IdNormalizer.synthetic("xc", diagram_row.diagram_id, object_id),
@@ -383,7 +383,33 @@ module Ea
                                             connector.end_object_id)
           return [] unless source && target
 
-          direct_waypoints(bounds_from_rect(source), bounds_from_rect(target))
+          direct_waypoints(drawn_bounds_for(source),
+                           drawn_bounds_for(target))
+        end
+
+        # The outline EA clips connector rays against: the DRAWN
+        # autosized box, not the stored logical rect. Packages draw
+        # narrower than their stored rect (body = autosized tab +
+        # 15), so their docks land on the drawn edges (E58034A3:
+        # supplier right-edge dock 155 drawn vs 121 stored). All
+        # other element kinds draw at the stored rect.
+        PACKAGE_BODY_EXTRA = 15
+
+        def drawn_bounds_for(placement)
+          logical = bounds_from_rect(placement)
+          obj = database.find_object(placement.ea_object_id.to_i)
+          return logical unless obj && obj.object_type == "Package"
+
+          tab = ::Ea::Svg::EaEmitter::Element::PackageShapeRenderer
+                .autosized_tab_width(label: obj.name.to_s,
+                                     stereotype: obj.stereotype.to_s,
+                                     size: 7)
+          Ea::Model::Bounds.new(
+            x: logical.x,
+            y: logical.y,
+            width: tab + PACKAGE_BODY_EXTRA,
+            height: logical.height
+          )
         end
 
         # Straight-line waypoints between the two box-outline
