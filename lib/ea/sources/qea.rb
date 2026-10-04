@@ -27,6 +27,7 @@ module Ea
       autoload :InstanceBuilder, "ea/sources/qea/instance_builder"
       autoload :LegendBuilder, "ea/sources/qea/legend_builder"
       autoload :DiagramBuilder, "ea/sources/qea/diagram_builder"
+      autoload :ContextDiagramSupport, "ea/sources/qea/context_diagram_support"
       autoload :DiagramStyleParser, "ea/sources/qea/diagram_style_parser"
       autoload :Xref, "ea/sources/qea/xref"
       autoload :Adapter, "ea/sources/qea/adapter"

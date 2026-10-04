@@ -21,7 +21,7 @@ module Ea
             whole_end_at_source = whole_end_at_source?(connector)
             anchor = whole_end_at_source ? target : source
             base = whole_end_at_source ? before_target : after_source
-            shape = effective_type?(connector) == "Dependency" ? :arrow : :triangle
+            shape = effective_type?(connector) == "Dependency" ? :dependency_arrow : :triangle
             [Registry::Spec.new(shape: shape, anchor: anchor, base: base)]
           end
 
