@@ -14,14 +14,19 @@ module Ea
         # the diagram's generalizations use polygons.
         class OpenTriangle < Kind
           def self.handles?(effective_type)
-            %w[Generalization Realization Dependency].include?(effective_type)
+            %w[Generalization Realization Realisation Dependency
+               InformationFlow NoteLink].include?(effective_type)
           end
 
           def self.specs_for(connector, source, target, before_target, after_source, relationship: nil)
             whole_end_at_source = whole_end_at_source?(connector)
             anchor = whole_end_at_source ? target : source
             base = whole_end_at_source ? before_target : after_source
-            shape = effective_type?(connector) == "Dependency" ? :dependency_arrow : :triangle
+            shape = if %w[Dependency InformationFlow].include?(effective_type?(connector))
+                    :dependency_arrow
+                  else
+                    :triangle
+                  end
             [Registry::Spec.new(shape: shape, anchor: anchor, base: base)]
           end
 

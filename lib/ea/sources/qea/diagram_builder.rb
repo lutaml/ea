@@ -247,10 +247,15 @@ module Ea
         # renders as a straight line between the two element edges,
         # with SourceRole labels and appropriate markers.
         #
-        # Only Association and Aggregation types produce phantom
-        # connectors. Generalization, Dependency, and Package types
-        # do NOT get phantom rendering.
-        PHANTOM_CONNECTOR_TYPES = %w[Association Aggregation].freeze
+        # Dependency AND Generalization phantoms draw: Main/
+        # 9FCDB717 renders 12 of 13 model dependencies among the
+        # placed packages (the 13th suppressed by the diagram's
+        # single Hidden link row); All/F209CE4B renders all 11
+        # row-less generalizations as white triangles. A Hidden
+        # link row suppresses; absence of a row does not.
+        PHANTOM_CONNECTOR_TYPES = %w[Association Aggregation Dependency
+                                     Generalization].freeze
+        PHANTOM_DOUBLE_BACK_TYPES = %w[Dependency].freeze
 
         def phantom_connectors(diagram_row, explicit_connectors)
           placed_ids = placed_object_ids_on(diagram_row.diagram_id)
@@ -308,7 +313,7 @@ module Ea
             target_stereotype: conn.deststereotype,
             waypoints: waypoints,
             label_boxes: DEFAULT_LABEL_BOXES,
-            style: {},
+            style: PHANTOM_DOUBLE_BACK_TYPES.include?(conn.connector_type) ? { direct: true } : {},
             hidden: false,
             has_geometry_offsets: false
           )
