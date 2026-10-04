@@ -21,8 +21,15 @@ module Ea
         DIAMOND_HALF_H = 10
         TRI_HALF_BASE = 6
         TRI_HEIGHT = 11
+        # EA's path arrowheads are height 15 corpus-wide, with
+        # distinct bases per connector kind: association
+        # navigability arrows base 12, dependency arrows base 10
+        # (measured across E58034A3/8CF27BE8 context diagrams and
+        # 46217EA4/C2B04372/7A3B5001 dependency figures).
         ARROW_HALF_BASE = 6
-        ARROW_HEIGHT = 11
+        ARROW_HEIGHT = 15
+        DEP_ARROW_HALF_BASE = 5
+        DEP_ARROW_HEIGHT = 15
 
         attr_reader :diagram, :model_index, :canvas, :grouped, :stroke_width
 
@@ -108,6 +115,10 @@ module Ea
           arrow: {
             style_key: :connector_line,
             render: ->(m, anchor, base) { m.arrow_path(anchor, base) }
+          },
+          dependency_arrow: {
+            style_key: :connector_line,
+            render: ->(m, anchor, base) { m.dependency_arrow_path(anchor, base) }
           },
           package_anchor: {
             style_key: :connector_line,
@@ -403,6 +414,28 @@ module Ea
           %(<path d="#{d}" shape-rendering="auto"/>)
         end
 
+        # Dependency arrowhead: same open-path form as arrow_path
+        # but EA's slimmer base-10 template. Coordinates are whole
+        # pixels in EA's output (e.g. "M 2732 183 L 2747 178
+        # L 2732 173").
+        def dependency_arrow_path(tip, base)
+          tx, ty = translate_point(tip)
+          bx, by = translate_point(base)
+          ux, uy = unit_vector(tx, ty, bx, by)
+          return nil unless ux
+
+          back_x = tx - ux * DEP_ARROW_HEIGHT
+          back_y = ty - uy * DEP_ARROW_HEIGHT
+          w1_x = back_x + (-uy) * DEP_ARROW_HALF_BASE
+          w1_y = back_y + ux * DEP_ARROW_HALF_BASE
+          w2_x = back_x - (-uy) * DEP_ARROW_HALF_BASE
+          w2_y = back_y - ux * DEP_ARROW_HALF_BASE
+          d = "M #{Canvas.coord(w1_x.round)} #{Canvas.coord(w1_y.round)} " \
+              "L #{Canvas.coord(tx.round)} #{Canvas.coord(ty.round)} " \
+              "L #{Canvas.coord(w2_x.round)} #{Canvas.coord(w2_y.round)}"
+          %(<path d="#{d}" shape-rendering="auto"/>)
+        end
+
         def unit_vector(tx, ty, bx, by)
           dx = tx - bx
           dy = ty - by
@@ -412,7 +445,7 @@ module Ea
           [dx / len, dy / len]
         end
         public :diamond_polygon, :triangle_polygon, :plus_path,
-               :arrow_path, :package_anchor_path
+               :arrow_path, :dependency_arrow_path, :package_anchor_path
 
         def translate_point(p)
           return p unless @canvas

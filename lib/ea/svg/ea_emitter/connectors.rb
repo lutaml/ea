@@ -62,7 +62,20 @@ module Ea
             x, y = translate_point(p)
             "#{idx.zero? ? 'M' : 'L'} #{Canvas.coord(x)} #{Canvas.coord(y)}"
           end.join(" ")
+          # EA writes a trailing zero-length "M <start>" repeat for
+          # DIRECT (auto-routed straight) connectors — verified on
+          # context diagrams where every line carries it (B6847577,
+          # E58034A3, 8CF27BE8).
+          if pts.size == 2 && direct?(connector)
+            x, y = translate_point(pts.first)
+            d = "#{d} M #{Canvas.coord(x)} #{Canvas.coord(y)}"
+          end
           %(<path d="#{d}" shape-rendering="auto"/>)
+        end
+
+        def direct?(connector)
+          style = connector.style || {}
+          style.key?(:direct) || style.key?("direct")
         end
 
         def waypoints_for(connector)

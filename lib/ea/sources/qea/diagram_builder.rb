@@ -130,9 +130,114 @@ module Ea
 
         def build_connectors(diagram_row)
           links = database.diagram_links_for(diagram_row.diagram_id) || []
+          context = ContextDiagramSupport.context?(diagram_row)
+          # EA regenerates context diagrams at draw time; their
+          # Hidden link rows are stale and never render.
+          links = links.reject { |link_row| hidden?(link_row) } if context
           explicit = links.map { |link_row| build_connector(link_row, diagram_row) }
-          phantom = phantom_connectors(diagram_row, explicit)
+          explicit += if ContextDiagramSupport.package_context(diagram_row)
+                        context_autolines(diagram_row)
+                      else
+                        regenerated_element_connectors(diagram_row)
+                      end
+          # EA does not phantom-synthesize on context diagrams — it
+          # regenerates instead (3072804C: phantoms doubled the
+          # drawn arrows until disabled).
+          phantom = context ? [] : phantom_connectors(diagram_row, explicit)
           explicit + phantom
+        end
+
+        # SuppressFOC=0 element contexts regenerate every model
+        # connector among the placed elements; only the visible rows
+        # carry stored geometry, the rest synthesize direct routes.
+        def regenerated_element_connectors(diagram_row)
+          ContextDiagramSupport
+            .regenerated_element_connectors(diagram_row, database)
+            .each_with_index.map do |conn, idx|
+              build_regenerated_connector(conn, diagram_row, idx)
+            end.compact
+        end
+
+        def build_regenerated_connector(conn, diagram_row, idx)
+          source_id = conn.start_object_id.to_i
+          target_id = conn.end_object_id.to_i
+          source = diagram_object_placement(diagram_row.diagram_id, source_id)
+          target = diagram_object_placement(diagram_row.diagram_id, target_id)
+          return nil unless source && target
+
+          source_bounds = bounds_from_rect(source)
+          target_bounds = bounds_from_rect(target)
+          waypoints = if source_id == target_id
+                        self_loop_waypoints(source_bounds)
+                      else
+                        direct_waypoints(source_bounds, target_bounds)
+                      end
+          Ea::Model::DiagramConnector.new(
+            id: IdNormalizer.synthetic("ec", diagram_row.diagram_id, idx),
+            diagram_id: IdNormalizer.from_guid(diagram_row.ea_guid),
+            relationship_ref: ref_for_raw_connector(conn),
+            connector_type: conn.connector_type,
+            direction: conn.direction,
+            source_stereotype: conn.sourcestereotype,
+            target_stereotype: conn.deststereotype,
+            waypoints: waypoints,
+            label_boxes: {},
+            style: { direct: true },
+            hidden: false,
+            has_geometry_offsets: false
+          )
+        end
+
+        # EA's regenerated self-loop: a small elbow exiting and
+        # re-entering the box's right edge (568CDFC9: 30px out,
+        # 15px tall, centered on the box's vertical middle).
+        SELF_LOOP_OUT = 30
+        SELF_LOOP_TALL = 15
+
+        def self_loop_waypoints(bounds)
+          right = bounds.x + bounds.width
+          cy = bounds.y + (bounds.height / 2)
+          pts = [[right, cy + SELF_LOOP_TALL / 2.0],
+                 [right + SELF_LOOP_OUT, cy + SELF_LOOP_TALL / 2.0],
+                 [right + SELF_LOOP_OUT, cy - SELF_LOOP_TALL / 2.0],
+                 [right, cy - SELF_LOOP_TALL / 2.0]]
+          pts.map { |x, y| Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y)) }
+        end
+
+        # Package context diagrams synthesize one Dependency line per
+        # placed client/supplier of the focal package that has no
+        # visible link row connecting it (see ContextDiagramSupport).
+        def context_autolines(diagram_row)
+          ContextDiagramSupport.autoline_candidates(diagram_row, database)
+                               .map { |object_id, conn| context_autoline(conn, diagram_row, object_id) }
+                               .compact
+        end
+
+        def context_autoline(conn, diagram_row, object_id)
+          focal = ContextDiagramSupport.focal_placements(diagram_row, database).first
+          return nil unless focal
+
+          into_focal = ContextDiagramSupport.package_context(diagram_row)["variant"] == "Clients"
+          source_id = into_focal ? object_id : focal.ea_object_id.to_i
+          target_id = into_focal ? focal.ea_object_id.to_i : object_id
+          source_placement = diagram_object_placement(diagram_row.diagram_id, source_id)
+          target_placement = diagram_object_placement(diagram_row.diagram_id, target_id)
+          return nil unless source_placement && target_placement
+
+          source_bounds = bounds_from_rect(source_placement)
+          target_bounds = bounds_from_rect(target_placement)
+          waypoints = direct_waypoints(source_bounds, target_bounds)
+          Ea::Model::DiagramConnector.new(
+            id: IdNormalizer.synthetic("xc", diagram_row.diagram_id, object_id),
+            diagram_id: IdNormalizer.from_guid(diagram_row.ea_guid),
+            relationship_ref: ref_for_raw_connector(conn),
+            connector_type: conn.connector_type,
+            waypoints: waypoints,
+            label_boxes: {},
+            style: { direct: true },
+            hidden: false,
+            has_geometry_offsets: false
+          )
         end
 
         # EA renders PHANTOM CONNECTORS for associations that exist
@@ -235,6 +340,8 @@ module Ea
         def build_connector(link_row, diagram_row)
           connector = database.find_connector(link_row.connectorid)
           geom = parse_geometry_fields(link_row.geometry)
+          context = ContextDiagramSupport.package_context(diagram_row) ||
+                    ContextDiagramSupport.element_regenerate?(diagram_row)
           Ea::Model::DiagramConnector.new(
             id: IdNormalizer.synthetic("dc", diagram_row.diagram_id,
                                        link_row.instance_id),
@@ -244,15 +351,43 @@ module Ea
             direction: connector&.direction,
             source_stereotype: connector&.sourcestereotype,
             target_stereotype: connector&.deststereotype,
-            waypoints: waypoints_for_link(link_row, diagram_row),
+            waypoints: context ? context_waypoints_for(connector, diagram_row) :
+                         waypoints_for_link(link_row, diagram_row),
             source_port: connection_port(diagram_row, connector, :source, geom),
             target_port: connection_port(diagram_row, connector, :target, geom),
-            label_boxes: geom[:label_boxes] || {},
-            style: DiagramStyleParser.parse(link_row.style),
+            label_boxes: context ? {} : (geom[:label_boxes] || {}),
+            style: context ? { direct: true } :
+                     DiagramStyleParser.parse(link_row.style),
             hidden: hidden?(link_row),
             ghost_labels: ghost_labels_for(connector, diagram_row, link_row),
             has_geometry_offsets: geometry_has_offsets?(link_row.geometry)
           )
+        end
+
+        # Context diagrams re-route every drawn connector as a
+        # direct line at draw time: the center-to-center ray clipped
+        # at both box outlines. The stored SX/SY/EDGE geometry is
+        # stale on these diagrams (corpus-verified E58034A3: 22
+        # visible links render straight despite EDGE= geometry).
+        def context_waypoints_for(connector, diagram_row)
+          return [] unless connector
+
+          source = diagram_object_placement(diagram_row.diagram_id,
+                                            connector.start_object_id)
+          target = diagram_object_placement(diagram_row.diagram_id,
+                                            connector.end_object_id)
+          return [] unless source && target
+
+          direct_waypoints(bounds_from_rect(source), bounds_from_rect(target))
+        end
+
+        # Straight-line waypoints between the two box-outline
+        # crossings of the center-to-center ray.
+        def direct_waypoints(source_bounds, target_bounds)
+          s = bounds_edge_point(source_bounds, target_bounds)
+          t = bounds_edge_point(target_bounds, source_bounds)
+          [Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: s[0], y: s[1])),
+           Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: t[0], y: t[1]))]
         end
 
         # EA's t_diagramlinks.Geometry may carry explicit SX/SY/EX/EY
