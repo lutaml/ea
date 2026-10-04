@@ -101,7 +101,13 @@ module Ea
           # baseline + text descent (~4px) against the box bottom:
           # TK_PositionType keeps 7 rows ending 6px above the bottom,
           # while a 13px-tighter box loses them all.
+          # The drop applies only to association-derived property
+          # rows (AOS/CityFurniture). When the element has REAL
+          # attributes EA instead GROWS the drawn box past the
+          # stored height and shows every row (0CABA7D7: parent at
+          # stored h44 draws at h59 with +minimumOccurs visible).
           if attr_lines.any? &&
+             !classifier.properties.to_a.any? { |p| !p.association_id } &&
              geometry.attr_bottom_y.to_i > bounds.y + bounds.height
             attr_lines = []
             geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
@@ -122,6 +128,24 @@ module Ea
                                              constraints_count: constraints_for(classifier).size,
                                            marker_count: marker_lines_for(classifier).size,
                                            enum_literals_count: enum_row_count_for(classifier))
+          end
+          # Real attributes grow the DRAWN box past the stored
+          # height instead of being dropped (0CABA7D7: stored h44
+          # draws at h59). Grown height = last row baseline + EA's
+          # ~8px bottom padding. Render-local: the diagram-level
+          # canvas still derives from stored bounds.
+          # content_bottom_y is nil when no compartment has rows;
+          # op_bottom_y is NOT a sentinel (it reports the op-divider
+          # position even with zero operations), so it must stay out
+          # of the max.
+          grown_bottom = geometry.content_bottom_y.to_i
+          if attr_lines.any? && grown_bottom.positive? &&
+             grown_bottom + 8 > bounds.y + bounds.height
+            bounds = Ea::Model::Bounds.new(
+              x: bounds.x, y: bounds.y,
+              width: bounds.width,
+              height: grown_bottom + 8 - bounds.y
+            )
           end
           RenderContext.new(
             element: element,

@@ -182,7 +182,12 @@ module Ea
             target_stereotype: conn.deststereotype,
             waypoints: waypoints,
             label_boxes: {},
-            style: { direct: true },
+            # Only the Dependency family carries EA's double-back
+            # "M t L s M t" byte form; regenerated generalizations
+            # and associations draw as plain source-first lines
+            # (0CABA7D7's gen "M 125 130 L 125 99"; 568CDFC9's
+            # regenerated assocs).
+            style: conn.connector_type == "Dependency" ? { direct: true } : {},
             hidden: false,
             has_geometry_offsets: false
           )
