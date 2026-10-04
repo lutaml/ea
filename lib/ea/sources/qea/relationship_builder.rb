@@ -62,9 +62,8 @@ module Ea
             target_multiplicity_upper: parse_upper(row.destcard),
             source_multiplicity_raw: raw_card(row.sourcecard),
             target_multiplicity_raw: raw_card(row.destcard),
-            source_aggregation: ConnectorRelationshipMap
-                                .source_aggregation_for(row.connector_type),
-            target_aggregation: aggregation_from(row.destaccess),
+            source_aggregation: source_aggregation_for(row),
+            target_aggregation: aggregation_from(row.destisaggregate),
             source_navigable: navigable?(row.sourceaccess, row.direction,
                                          :source),
             target_navigable: navigable?(row.destaccess, row.direction, :target)
@@ -112,13 +111,25 @@ module Ea
           end
         end
 
-        def aggregation_from(access_value)
-          case access_value.to_s
-          when "0" then "none"
-          when "1" then "shared"
-          when "2" then "composite"
+        # EA stores the aggregate end in t_connector.SourceIsAggregate/
+        # DestIsAggregate (0 none, 1 shared, 2 composite) — NOT in
+        # DestAccess, which carries the accessibility string
+        # ("Public"). The connector TYPE only implies a source-side
+        # aggregation when the flags are silent (legacy
+        # Connector_Type encoding).
+        def aggregation_from(flag_value)
+          case flag_value.to_i
+          when 1 then "shared"
+          when 2 then "composite"
           else "none"
           end
+        end
+
+        def source_aggregation_for(row)
+          flagged = aggregation_from(row.sourceisaggregate)
+          return flagged if flagged != "none"
+
+          ConnectorRelationshipMap.source_aggregation_for(row.connector_type)
         end
 
         def navigable?(_access, direction, end_label)

@@ -36,10 +36,19 @@ RSpec.describe Ea::Svg::EaEmitter::Markers do
   context "with a navigable Association" do
     let(:relationship) { Ea::Model::Association.new(id: "r1", source_id: "c1", target_id: "c2") }
 
-    it "emits a filled arrow as a <path> at the target end" do
+    it "emits a filled arrow as a <path> at the target end when directed" do
+      connector = diagram.connectors.first
+      connector.direction = "Source -> Destination"
       out = renderer.render
       expect(out).to include("<path")
       expect(out).to include("stroke:#000000; stroke-opacity:1.00")
+    end
+
+    it "emits no arrow when the direction is Unspecified" do
+      connector = diagram.connectors.first
+      connector.direction = "Unspecified"
+      out = renderer.render
+      expect(out).not_to include("<path")
     end
   end
 

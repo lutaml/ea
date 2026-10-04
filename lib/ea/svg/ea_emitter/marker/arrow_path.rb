@@ -16,6 +16,15 @@ module Ea
 
           def self.specs_for(connector, source, target, before_target,
                              after_source, relationship: nil)
+            # EA draws the navigability arrow on directed
+            # associations AND aggregations (333EFCCF: 6 aggregations
+            # render diamond + path arrow); Direction
+            # "Unspecified"/empty draws a plain line (EC670ED5: the
+            # single Unspecified association is arrowless;
+            # C852CC42/TransferNode: 9 Unspecified all arrowless).
+            direction = connector.direction.to_s
+            return [] if direction.empty? || direction == "Unspecified"
+
             return bidirectional_specs(source, target, before_target,
                                        after_source) if bidirectional?(connector)
 
