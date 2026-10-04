@@ -44,7 +44,19 @@ module Ea
           !attr_lines.empty? || !op_lines.empty? ||
             enum_literals.any? || tagged_values.any? ||
             (constraints&.any?) ||
-            (!package_content_lines.nil? && !package_content_lines.empty?)
+            (!package_content_lines.nil? && !package_content_lines.empty?) ||
+            hidden_features_present?
+        end
+
+        # EA draws the header divider whenever the element HAS a
+        # feature compartment — even one whose rows are all hidden
+        # by visibility flags (10E3E08A: CodeList with 3 attributes
+        # toggled off still renders the divider over an empty body;
+        # only feature-less elements omit it).
+        def hidden_features_present?
+          return false unless classifier.respond_to?(:properties)
+
+          classifier.properties.any? || classifier.operations.any?
         end
       end
     end
