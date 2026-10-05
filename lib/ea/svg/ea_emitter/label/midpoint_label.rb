@@ -33,6 +33,17 @@ module Ea
             return nil if content.nil?
 
             mx, my = midpoint(points)
+            # EA splits a "name: value" label at the colon-space into
+            # two lines centered on the same slot (81F92FC7: "new
+            # ownership:" / "LA_Right" at y 172/185, both centered on
+            # x=480).
+            if (idx = content.index(": ")) && content.length > idx + 2
+              return [
+                render_text(mx, my, content[0..idx]),
+                render_text(mx, my + LINE_PITCH, content[(idx + 2)..])
+              ].join("\n")
+            end
+
             render_text(mx, my, content)
           end
 
@@ -73,6 +84,8 @@ module Ea
           end
 
           private
+
+          LINE_PITCH = 13
 
           def midpoint(points)
             mid_idx = points.size / 2
