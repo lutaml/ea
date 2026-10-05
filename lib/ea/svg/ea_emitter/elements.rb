@@ -63,6 +63,14 @@ module Ea
         # packages). Heights/widths are translation-invariant, so the
         # connector emitters can redock in logical space and run the
         # normal canvas translation afterwards.
+        def classifier_package?(classifier)
+          classifier.is_a?(Ea::Model::Package)
+        end
+
+        def package_stereotype(context)
+          context.classifier.stereotype_refs.first.to_s
+        end
+
         def record_drawn_bounds(element, context)
           return unless element.model_element_ref
 
@@ -76,7 +84,7 @@ module Ea
               stereotype: package_stereotype(context),
               size: context.size
             )
-            width = tab + Element::PackageShapeRenderer::TAB_BODY_EXTRA
+            width = [raw.width, tab + Element::PackageShapeRenderer::TAB_BODY_EXTRA].max
           end
           @drawn_bounds[element.model_element_ref] = Ea::Model::Bounds.new(
             x: raw.x, y: raw.y,
@@ -85,13 +93,7 @@ module Ea
           )
         end
 
-        def classifier_package?(classifier)
-          classifier.class == Ea::Model::Package
-        end
 
-        def package_stereotype(context)
-          context.classifier.stereotype_refs.first.to_s
-        end
 
         # Build the RenderContext for one element. Returns nil when
         # the element has no usable bounds (skip rendering).

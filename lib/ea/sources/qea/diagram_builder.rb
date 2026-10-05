@@ -396,12 +396,9 @@ module Ea
                            drawn_bounds_for(target))
         end
 
-        # The outline EA clips connector rays against: the DRAWN
-        # autosized box, not the stored logical rect. Packages draw
-        # narrower than their stored rect (body = autosized tab +
-        # 15), so their docks land on the drawn edges (E58034A3:
-        # supplier right-edge dock 155 drawn vs 121 stored). All
-        # other element kinds draw at the stored rect.
+        # The outline EA clips connector rays against: the drawn box.
+        # Package bodies = max(stored width, autosized tab + 15);
+        # every other kind draws at the stored rect.
         PACKAGE_BODY_EXTRA = 15
 
         def drawn_bounds_for(placement)
@@ -416,7 +413,7 @@ module Ea
           Ea::Model::Bounds.new(
             x: logical.x,
             y: logical.y,
-            width: tab + PACKAGE_BODY_EXTRA,
+            width: [logical.width, tab + PACKAGE_BODY_EXTRA].max,
             height: logical.height
           )
         end
