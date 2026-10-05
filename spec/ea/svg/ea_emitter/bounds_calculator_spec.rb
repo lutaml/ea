@@ -54,8 +54,9 @@ RSpec.describe Ea::Svg::EaEmitter::BoundsCalculator do
     )
     out = described_class.new(diagram).compute
     # EA's canvas covers element rects only — the connector at
-    # x=200 does not extend it. width = 100 + 85 = 185
-    expect(out[2]).to eq(185)
+    # x=200 does not extend it. The element touches stored x=0, so
+    # the left inset is 30: width = 100 + 30 + 50 = 180
+    expect(out[2]).to eq(180)
   end
 
   it "returns minimal canvas for empty diagram" do
