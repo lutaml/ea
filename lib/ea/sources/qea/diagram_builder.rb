@@ -85,6 +85,7 @@ module Ea
         end
 
         def build_element(obj_row, diagram_row)
+          @current_obj_row = obj_row
           style_hash = DiagramStyleParser.parse(obj_row.objectstyle)
           Ea::Model::DiagramElement.new(
             id: IdNormalizer.synthetic("de", diagram_row.diagram_id,
@@ -123,9 +124,25 @@ module Ea
           raw = style_hash[:fontsz]
           return nil if raw.nil? || raw.to_s.empty?
 
+          return nil if raw.to_i.zero?
+
+          stored = (raw.to_f / 10).round
+          return stored - 1 if note_element? && stored > 1
+
           return nil if USE_DEFAULT_FONTSZ.include?(raw.to_i)
 
-          (raw.to_f / 10).round
+          stored
+        end
+
+        # Text/Note elements carry their real font size in fontsz
+        # shifted by one point (stored 100 renders 9pt, 80 renders
+        # 7pt - corpus-verified on EA-published note SVGs);
+        # classifiers keep the use-default convention.
+        def note_element?
+          return false unless database && @current_obj_row
+
+          obj = database.find_object(@current_obj_row.ea_object_id.to_i)
+          obj&.object_type.to_s == "Text"
         end
 
         def build_connectors(diagram_row)

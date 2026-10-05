@@ -19,8 +19,10 @@ module Ea
               )
             elsif context.model_element.is_a?(Ea::Model::Package) ||
                   context.model_element.is_a?(Ea::Model::Note)
-              label = package_label(context.model_element)
-              stereotype = package_stereotype(context.model_element)
+              # Notes keep the folder silhouette but never render a
+              # label (EA publishes note bodies only).
+              label = package_label(context.model_element) if context.model_element.is_a?(Ea::Model::Package)
+              stereotype = package_stereotype(context.model_element) if context.model_element.is_a?(Ea::Model::Package)
               Element::PackageShapeRenderer.render(
                 context.bounds,
                 fill: context.fill, stroke: context.stroke,
