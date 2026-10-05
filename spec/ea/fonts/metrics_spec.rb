@@ -16,10 +16,10 @@ RSpec.describe Ea::Fonts::Metrics do
     end
 
     it "scales by the size-specific factor when fitted" do
-      # Carlito regular: 7pt uses factor 1.390, 9pt uses 1.432.
+      # Carlito regular: 7pt uses factor 1.390, 9pt uses 1.440.
       seven = described_class.text_length("Hello", 7, family: "Carlito")
       nine = described_class.text_length("Hello", 9, family: "Carlito")
-      expect(nine / seven).to be_within(0.01).of(9 * 1.432 / (7 * 1.390))
+      expect(nine / seven).to be_within(0.01).of(9 * 1.440 / (7 * 1.390))
     end
 
     it "treats Calibri as metric-compatible with Carlito" do
