@@ -383,9 +383,14 @@ module Ea
           end
         end
 
+        # XML attribute-value normalization folds raw newlines and tabs
+        # into spaces, which would flatten the asciidoc block structure
+        # EA stores inside documentation attributes; character
+        # references survive normalization, so emit those instead
         def esc_attr(value)
-          value.gsub(/[&<>"]/) do |c|
-            { "&" => "&amp;", "<" => "&lt;", ">" => "&gt;", '"' => "&quot;" }[c]
+          value.gsub(/[&<>"\n\r\t]/) do |c|
+            { "&" => "&amp;", "<" => "&lt;", ">" => "&gt;", '"' => "&quot;",
+              "\n" => "&#xA;", "\r" => "&#xD;", "\t" => "&#x9;" }[c]
           end
         end
 
