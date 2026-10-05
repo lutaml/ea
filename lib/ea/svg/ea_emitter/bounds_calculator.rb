@@ -38,6 +38,8 @@ module Ea
           @model_index = model_index
         end
 
+        attr_reader :effective_inset_left
+
         def compute
           points = element_points
           return [0, 0, 1, 1] if points.empty?
@@ -48,12 +50,13 @@ module Ea
           min_y = ys.min || 0
           # When the leftmost element touches stored x=0 the left
           # inset is 30, not 35 (all five such sample diagrams are
-          # exactly 5px narrower; min_x>0 diagrams keep 35).
-          left = min_x.zero? ? INSET_LEFT - 5 : INSET_LEFT
+          # exactly 5px narrower; min_x>0 diagrams keep 35). Canvas
+          # translation must use the same value.
+          @effective_inset_left = min_x.zero? ? INSET_LEFT - 5 : INSET_LEFT
           [
             min_x,
             min_y,
-            (xs.max - min_x) + left + INSET_RIGHT,
+            (xs.max - min_x) + @effective_inset_left + INSET_RIGHT,
             (ys.max - min_y) + INSET_TOP + INSET_BOTTOM
           ]
         end

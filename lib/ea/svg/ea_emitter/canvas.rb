@@ -21,15 +21,17 @@ module Ea
         # against the maintenance diagram.
         PX_PER_CM = 37.795275591
         FRAME_INSET_LEFT = 35
+        INSET_TOUCHING_ORIGIN = 30
         FRAME_INSET_TOP = 40
 
-        attr_reader :min_x, :min_y, :width, :height
+        attr_reader :min_x, :min_y, :width, :height, :inset_left
 
-        def initialize(min_x:, min_y:, width:, height:)
+        def initialize(min_x:, min_y:, width:, height:, inset_left: FRAME_INSET_LEFT)
           @min_x = min_x
           @min_y = min_y
           @width = width
           @height = height
+          @inset_left = inset_left
         end
 
         # Build a Canvas for a diagram by running the bound
@@ -37,9 +39,10 @@ module Ea
         # element bounds needed) for callers that only need a
         # frame-size estimate.
         def self.from(diagram, model_index: nil)
-          min_x, min_y, width, height =
-            BoundsCalculator.new(diagram, model_index: model_index).compute
-          new(min_x: min_x, min_y: min_y, width: width, height: height)
+          bc = BoundsCalculator.new(diagram, model_index: model_index)
+          min_x, min_y, width, height = bc.compute
+          new(min_x: min_x, min_y: min_y, width: width, height: height,
+              inset_left: bc.effective_inset_left || FRAME_INSET_LEFT)
         end
 
         # Second-pass canvas over the DRAWN extents captured by the
@@ -62,11 +65,14 @@ module Ea
           max_y = (pts + extra).map(&:last).max || 0
           return from(diagram, model_index: model_index) if pts.empty?
 
+          inset_left = min_x.zero? ? INSET_TOUCHING_ORIGIN
+                                    : BoundsCalculator::INSET_LEFT
           new(min_x: min_x, min_y: min_y,
-              width: (max_x - min_x) + BoundsCalculator::INSET_LEFT +
+              width: (max_x - min_x) + inset_left +
                      BoundsCalculator::INSET_RIGHT,
               height: (max_y - min_y) + BoundsCalculator::INSET_TOP +
-                      BoundsCalculator::INSET_BOTTOM)
+                      BoundsCalculator::INSET_BOTTOM,
+              inset_left: inset_left)
         end
 
         def view_box
@@ -85,7 +91,7 @@ module Ea
         # the content area from the canvas top-left by
         # FRAME_INSET_LEFT/TOP.
         def translate_x(x)
-          x - min_x + FRAME_INSET_LEFT
+          x - min_x + inset_left
         end
 
         def translate_y(y)
