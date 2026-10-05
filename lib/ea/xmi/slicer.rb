@@ -30,6 +30,17 @@ module Ea
       XML_DECL = %(<?xml version="1.0" encoding="UTF-8"?>\n)
       private_constant :XML_DECL
 
+      # SAX passes over ~100 MB EA exports fire millions of events whose
+      # per-event strings and hashes outrun the collector (malloc grows
+      # for GBs before an automatic cycle). Collect at a fixed event
+      # cadence once the malloc budget is blown.
+      GC_BUDGET_BYTES = 512 * 1024 * 1024
+      private_constant :GC_BUDGET_BYTES
+
+      def self.gc_when_bloated
+        GC.start if GC.stat(:malloc_increase_bytes) > GC_BUDGET_BYTES
+      end
+
       # Containers whose membership is gated against the keep set, by
       # document section. umldi:Diagram carries the embedded diagram
       # shapes (tens of MB with waypoints and bounds in an EA export)
@@ -39,6 +50,7 @@ module Ea
         model: ["packagedElement", "umldi:Diagram"].freeze,
         elements: ["element"].freeze,
         connectors: ["connector"].freeze,
+        diagrams: ["diagram"].freeze,
       }.freeze
       private_constant :GATED
 
@@ -51,7 +63,7 @@ module Ea
       private_constant :SECTION_CHILD
 
       Node = Struct.new(:id, :tag, :xmi_type, :name, :parent_id, :section,
-                        :refs, keyword_init: true)
+                        :refs, :links_refs, keyword_init: true)
 
       class << self
         # Single slice for one wanted set.
@@ -119,6 +131,8 @@ module Ea
           @stack = [] # [id_or_nil, shared_refs_array]
           @section = []
           @refs_off = 0
+          @events = 0
+          @links_depth = 0
         end
 
         # Only gated containers become nodes (packagedElement in the
@@ -129,8 +143,10 @@ module Ea
         # define the element's ancestry, so their EA-id values flow into
         # the enclosing container's reference set instead.
         def on_start_element(name, attributes = {}, _namespaces = {})
+          Slicer.gc_when_bloated if (@events += 1) % 50_000 == 0
           @section << section_for(name, @section.last)
           @refs_off += 1 if name == "links"
+          @links_depth += 1 if name == "links"
           id = attributes["xmi:id"] || attributes["xmi:idref"]
           is_node = id && GATED.fetch(@section.last, []).include?(name)
           if is_node && (existing = @nodes[id])
@@ -216,27 +232,47 @@ module Ea
 
       def closure(nodes, seeds)
         keep = {}
-        frontier = seeds.dup
+        frontier = seeds.map { |i| [i, false] }
         until frontier.empty?
-          id = frontier.pop
+          id, via_links = frontier.pop
           next if keep[id]
 
           node = nodes[id]
           next unless node
+          # links references only buy the connector record they name;
+          # following them further pulled every relation's endpoints
+          # into a class's closure (half the model per class)
+          next if via_links && node.section != :connectors
 
           keep[id] = true
-          frontier.concat(node.refs)
+          node.refs.each { |r| frontier << [r, false] }
+          node.links_refs.each { |r| frontier << [r, true] }
           # keeping a model element keeps its package ancestry
           if node.section == :model
             anc = nodes[node.parent_id]
             while anc && !keep[anc.id]
               keep[anc.id] = true
-              frontier.concat(anc.refs) unless anc.section == :model
+              anc.refs.each { |r| frontier << [r, false] } unless anc.section == :model
               anc = nodes[anc.parent_id]
             end
           end
         end
+        keep_diagrams(nodes, keep)
         keep
+      end
+
+      # The klass tables embed each class's EA diagram; diagrams point
+      # INTO the model (their shapes carry modelElement ids), a
+      # direction the closure never walks, so diagrams whose shapes
+      # reference kept elements are kept in a second pass.
+      def keep_diagrams(nodes, keep)
+        nodes.each_value do |n|
+          next unless n.section == :diagrams && n.tag == "diagram" ||
+                      (n.section == :model && n.xmi_type == "umldi:Diagram")
+
+          keep[n.id] = true if n.refs.any? { |r| keep[r] } ||
+                               n.links_refs.any? { |r| keep[r] }
+        end
       end
 
       def seed_ids(nodes, wanted)
@@ -272,6 +308,7 @@ module Ea
           @outputs = outputs
           @open = []   # [name, keys] - keys = group indexes keeping this element
           @section = []
+          @events = 0
         end
 
         def on_start_document
@@ -279,6 +316,7 @@ module Ea
         end
 
         def on_start_element(name, attributes = {}, namespaces = {})
+          Slicer.gc_when_bloated if (@events += 1) % 50_000 == 0
           section = section_for(name, @section.last)
           @section << section
           parent_keys = @open.empty? ? (0...@keeps.size).to_a : @open.last[1]
