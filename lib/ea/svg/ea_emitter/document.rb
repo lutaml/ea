@@ -21,11 +21,25 @@ module Ea
 
         def render
           canvas = Canvas.from(diagram, model_index: model_index)
-          layers = LayerSequencer.new(diagram, model_index: model_index,
-                                        canvas: canvas, frame: frame,
-                                        document: document)
-                                  .layers
-                                  .reject { |s| s.nil? || s.empty? }
+          seq = LayerSequencer.new(diagram, model_index: model_index,
+                                   canvas: canvas, frame: frame,
+                                   document: document)
+          seq.layers
+          # Second pass over the DRAWN extents: grown classifiers and
+          # autosized packages can exceed the stored-rect canvas EA
+          # sizes from drawn extents. Skip when the first pass already
+          # covers the drawn extents (the common case).
+          grown = seq.drawn_bounds
+          if grown && grown.values.any? &&
+             exceeds?(canvas, grown.values)
+            canvas = Canvas.from_drawn(diagram, grown,
+                                       model_index: model_index)
+            seq = LayerSequencer.new(diagram, model_index: model_index,
+                                     canvas: canvas, frame: frame,
+                                     document: document)
+            seq.layers
+          end
+          layers = seq.layers.reject { |s| s.nil? || s.empty? }
           image_layer = emit_images
           layers << image_layer if image_layer
 
@@ -53,6 +67,16 @@ module Ea
           return nil if fragments.empty?
 
           %(<g id="images">\n#{fragments.join("\n")}\n</g>)
+        end
+
+        # True when any drawn bound falls outside the stored-rect
+        # canvas content area.
+        def exceeds?(canvas, bounds)
+          bounds.any? do |b|
+            b.x < canvas.min_x || b.y < canvas.min_y ||
+              b.x + b.width > canvas.min_x + canvas.width ||
+              b.y + b.height > canvas.min_y + canvas.height
+          end
         end
 
         def render_image(image)

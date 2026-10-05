@@ -59,7 +59,27 @@ module Ea
         # Element x-extent: logical bounds only (matches EA's canvas
         # left/right exactly).
         # Element y-extent: union of logical + image_bounds (image
-        # extends below bounds for shadow / image padding).
+        # extends below bounds for shadow / image padding), plus the
+        # "(from Parent)" subtitle extent: EA draws the subtitle 15px
+        # below the body and its text descent adds ~4 more, reserving
+        # 19px of canvas below subtitle-bearing packages (the +19
+        # height family: 05DF5000 Main, Metadata All, package
+        # Clients/Suppliers contexts).
+        SUBTITLE_CANVAS_EXTRA = 19
+
+        def subtitle_points
+          pts = []
+          (diagram.elements || []).each do |e|
+            primary = e.bounds || e.image_bounds
+            next unless primary
+            next unless subtitle_extends_below?(e)
+
+            pts << [primary.x, primary.y + primary.height +
+                                 SUBTITLE_CANVAS_EXTRA]
+          end
+          pts
+        end
+
         def element_points
           pts = []
           (diagram.elements || []).each do |e|
@@ -67,6 +87,10 @@ module Ea
             if primary
               pts << [primary.x, primary.y]
               pts << [primary.x + primary.width, primary.y + primary.height]
+              if subtitle_extends_below?(e)
+                pts << [primary.x, primary.y + primary.height +
+                                     SUBTITLE_CANVAS_EXTRA]
+              end
             end
             if e.bounds && e.image_bounds
               ib = e.image_bounds
@@ -75,6 +99,24 @@ module Ea
             end
           end
           pts
+        end
+
+        # Mirrors Compartment::PackageFromParent's render conditions:
+        # the subtitle draws only on ShowForeign diagrams for a
+        # placed package whose parent differs from the diagram's
+        # package.
+        def subtitle_extends_below?(element)
+          return false unless model_index
+          return false unless diagram.show_foreign
+
+          pkg = model_index[element.model_element_ref]
+          return false unless pkg.is_a?(Ea::Model::Package)
+
+          parent_id = pkg.parent_id
+          return false if parent_id.nil? || parent_id.empty?
+          return false if parent_id == diagram.package_id
+
+          model_index[parent_id].is_a?(Ea::Model::Package)
         end
       end
     end
