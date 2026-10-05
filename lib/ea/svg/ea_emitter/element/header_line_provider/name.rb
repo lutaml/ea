@@ -38,13 +38,18 @@ module Ea
             def self.wrapped_name_lines(classifier, context, weight)
               name = display_name(classifier)
               name = "#{context.foreign_package_name}::#{name}" if context.foreign_package_name
-              unless context.bounds_width && name.include?("::") &&
-                     name_exceeds_bounds?(name, context, weight)
+              unless context.bounds_width && name_exceeds_bounds?(name, context, weight)
                 return [[name, weight]]
               end
 
-              qualifier, base = name.split("::", 2)
-              [["#{qualifier}::", weight], [base, weight]]
+              if name.include?("::")
+                qualifier, base = name.split("::", 2)
+                [["#{qualifier}::", weight], [base, weight]]
+              else
+                HeaderLinePipeline.wrap_words(name, context, weight).map do |line|
+                  [line, weight]
+                end
+              end
             end
 
             def self.name_exceeds_bounds?(name, context, weight)
