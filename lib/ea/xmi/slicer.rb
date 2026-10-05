@@ -168,12 +168,16 @@ module Ea
             return
           end
 
-          @nodes[id] = Node.new(
+          node = Node.new(
             id: id, tag: name,
             xmi_type: attributes["xmi:type"], name: attributes["name"],
             parent_id: nearest_id, section: @section.last, refs: refs,
+            links_refs: [],
           )
-          collect_refs(attributes, refs)
+          @nodes[id] = node
+          collect_refs(attributes, node.refs)
+          collect_refs(attributes, node.links_refs) if @links_depth.positive?
+          node
         end
 
         def on_end_element(name)
