@@ -17,7 +17,9 @@ module Ea
           CONTENT_X_OFFSET = 20
 
           def self.render(operations, bounds:, first_y:, family:, size:)
-            line_h = size + 4
+            # EA's op rows pitch 13 (size + 6), same as attribute
+            # rows (6D4C665D: ops 541..658 step 13).
+            line_h = size + 6
             text_blocks = []
             has_receptions = operations.any?(&:is_reception)
             if has_receptions
