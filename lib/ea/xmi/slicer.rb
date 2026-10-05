@@ -178,6 +178,7 @@ module Ea
 
         def on_end_element(name)
           @refs_off -= 1 if name == "links"
+          @links_depth -= 1 if name == "links" && @links_depth.positive?
           @stack.pop
           @section.pop
         end
