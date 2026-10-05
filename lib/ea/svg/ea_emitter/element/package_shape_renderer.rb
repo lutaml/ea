@@ -31,9 +31,11 @@ module Ea
           TAB_LABEL_Y_OFFSET = 13
           TAB_LINE_OFFSET = 13
           DEFAULT_TAB_WIDTH = 105
-          # EA autosizes: tab = max(text width + 15, 105) and the body
-          # is always 15px wider than the tab. Corpus-verified against
-          # EA-published package element polygons.
+          # EA autosizes the TAB: max(text width + 15, 105). The BODY
+          # width = max(stored rect, tab + 15): user-widened packages
+          # keep their stored width (05DF5000: bodies 248/194 with
+          # tabs 141/105), while EA-autosized packages grow to
+          # tab + 15 (E58034A3: stored 86 -> body 120 with tab 105).
           TAB_NAME_EXTRA = 15
           TAB_BODY_EXTRA = 15
 
@@ -143,7 +145,7 @@ module Ea
           def body_points
             x = bounds.x
             y = tab_top_y + tab_height
-            w = self.class.body_width_for(label: label, stereotype: stereotype, size: size)
+            w = body_width
             h = body_height(y)
             [
               [x, y],
@@ -173,8 +175,13 @@ module Ea
             ]
           end
 
+          def body_width
+            [bounds.width, self.class.autosized_tab_width(label: label, stereotype: stereotype, size: size) + TAB_BODY_EXTRA].max
+          end
+
           def tab_width
-            self.class.autosized_tab_width(label: label, stereotype: stereotype, size: size)
+            [body_width,
+             self.class.autosized_tab_width(label: label, stereotype: stereotype, size: size)].min
           end
 
           # Tab width fits the widest text line (stereotype or name)
@@ -189,6 +196,7 @@ module Ea
           def self.body_width_for(label:, stereotype:, size:)
             autosized_tab_width(label: label, stereotype: stereotype, size: size) + TAB_BODY_EXTRA
           end
+
         end
       end
     end

@@ -41,30 +41,62 @@ module Ea
           # the box) — verified against EA-published package SVGs.
           Y_OFFSET_FROM_BOTTOM = 15
 
+          LINE_PITCH = 13
+          WRAP_PADDING = 15
+
           def subtitle(text, context)
             bounds = context.bounds
             fill = context.theme.attribute_text_color
             y = bounds.y + bounds.height + Y_OFFSET_FROM_BOTTOM
-            # EA centers the subtitle by its integer textLength inside
-            # the package BODY and floors x.
-            body_width = Element::PackageShapeRenderer.body_width_for(
-              label: context.model_element.name.to_s,
-              stereotype: nil, size: context.size
-            )
-            len = TextRenderer.estimate_width(
-              text, context.size, nil,
-              family: context.family, style: "italic"
-            ).round
-            x = (bounds.x + (body_width - len) / 2.0).floor
-            body = TextRenderer.new(
-              content: text, x: x, y: y,
-              family: context.family, size: context.size,
-              size_unit: context.size_unit, fill: fill,
-              style: "italic"
-            ).to_svg
-            wrap(body, fill)
+            # EA word-wraps the subtitle to the package BODY width
+            # (minus padding), centers each line by its integer
+            # textLength inside the body, and floors x; successive
+            # lines pitch +13 (05DF5000: "(from ISO 19115-1:2014
+            # Metadata" / "Fundamentals)" at y 123/136).
+            body_width = bounds.width
+            lines = wrap_lines(text, context, body_width - WRAP_PADDING)
+            bodies = lines.each_with_index.map do |line, i|
+              len = TextRenderer.estimate_width(
+                line, context.size, nil,
+                family: context.family, style: "italic"
+              ).round
+              x = (bounds.x + (body_width - len) / 2.0).floor
+              TextRenderer.new(
+                content: line, x: x, y: y + i * LINE_PITCH,
+                family: context.family, size: context.size,
+                size_unit: context.size_unit, fill: fill,
+                style: "italic"
+              ).to_svg
+            end
+            wrap(bodies.join("\n"), fill)
           end
           module_function :subtitle
+
+          # EA carries the break space onto the broken line: line 1
+          # is "(from ... Metadata - " with the trailing space, and
+          # its textLength includes it (05DF5000: tl 146).
+          def wrap_lines(text, context, max_width)
+            words = text.split(" ")
+            return [text] if words.size <= 1
+
+            lines = []
+            current = +""
+            words.each do |word|
+              candidate = current.empty? ? word : "#{current} #{word}"
+              if !current.empty? && TextRenderer.estimate_width(
+                candidate, context.size, nil,
+                family: context.family, style: "italic"
+              ) > max_width
+                lines << "#{current} "
+                current = word
+              else
+                current = candidate
+              end
+            end
+            lines << current unless current.empty?
+            lines
+          end
+          module_function :wrap_lines
 
           def wrap(body, fill)
             group_style = "stroke-width:1;stroke-linecap:round;" \
