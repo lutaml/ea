@@ -32,16 +32,18 @@ module Ea
         DEP_ARROW_HEIGHT = 15
 
         attr_reader :diagram, :model_index, :canvas, :grouped, :stroke_width,
-                    :drawn_bounds
+                    :drawn_bounds, :divider_y_by_ref
 
         def initialize(diagram, model_index:, canvas: nil, grouped: true,
-                       stroke_width: 2, drawn_bounds: nil)
+                       stroke_width: 2, drawn_bounds: nil,
+                       divider_y_by_ref: nil)
           @diagram = diagram
           @model_index = model_index
           @canvas = canvas
           @grouped = grouped
           @stroke_width = stroke_width
           @drawn_bounds = drawn_bounds
+          @divider_y_by_ref = divider_y_by_ref
         end
 
         def layers
@@ -459,7 +461,12 @@ module Ea
         def waypoint_pairs(connector)
           redocked = ConnectorRedock.pairs_for(connector, diagram,
                                                model_index, drawn_bounds)
-          return redocked if redocked
+          if redocked
+            return ConnectorRedock.row_slot_adjust(redocked, connector,
+                                                   diagram, model_index,
+                                                   drawn_bounds,
+                                                   divider_y_by_ref) || redocked
+          end
 
           (connector.waypoints || []).filter_map do |w|
             next unless w.position

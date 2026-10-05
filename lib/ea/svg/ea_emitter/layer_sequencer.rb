@@ -49,6 +49,10 @@ module Ea
           @elements&.drawn_bounds
         end
 
+        def divider_y_by_ref
+          @elements&.divider_y
+        end
+
         private
 
         def frame_layers
@@ -67,11 +71,13 @@ module Ea
                                                   grouped: true,
                                                   stroke_width: DEFAULT_STROKE_WIDTH,
                                                   drawn_bounds: drawn_bounds,
+                                                  divider_y_by_ref: divider_y_by_ref,
                                                   model_index: model_index).layers
           marker_layers_raw = Markers.new(diagram, model_index: model_index,
                                            canvas: canvas, grouped: true,
                                            stroke_width: DEFAULT_STROKE_WIDTH,
-                                           drawn_bounds: drawn_bounds).layers
+                                           drawn_bounds: drawn_bounds,
+                                           divider_y_by_ref: divider_y_by_ref).layers
           merge_layers_by_style(connector_layers_raw + marker_layers_raw).map(&:to_svg)
         end
 

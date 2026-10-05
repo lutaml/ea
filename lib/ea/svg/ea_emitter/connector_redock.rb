@@ -39,6 +39,46 @@ module Ea
            edge_point(target_bounds, source_bounds)]
         end
 
+        # EA never docks a horizontal connector line at the header
+        # divider: endpoints landing on (box side edge, divider_y)
+        # move down one row slot to divider_y + 13 - the first
+        # attribute-row slot (E0C65C12/TK_PositionType: EA docks at
+        # (451,90) where the stored route says (451,77) = our
+        # divider; the (0,-13) endpoint-delta family, 57 lines).
+        ROW_SLOT_PITCH = 13
+
+        def row_slot_adjust(pairs, connector, diagram, model_index,
+                            bounds_map, divider_y_by_ref)
+          return nil unless bounds_map && divider_y_by_ref
+          return nil unless pairs.size == 2
+
+          rel = relationship_for(connector, model_index)
+          return nil unless rel
+
+          source_ref, target_ref = end_refs(rel)
+          return nil unless source_ref && target_ref
+
+          bounds = [bounds_map[source_ref], bounds_map[target_ref]]
+          dividers = [divider_y_by_ref[source_ref],
+                      divider_y_by_ref[target_ref]]
+          return nil unless bounds.all? && dividers.all?
+
+          changed = false
+          adjusted = pairs.each_with_index.map do |(x, y), i|
+            box = bounds[i]
+            divider = dividers[i]
+            at_edge = (x - box.x).abs <= 1 || (x - (box.x + box.width)).abs <= 1
+            at_divider = (y - divider.to_f).abs <= 1
+            if at_edge && at_divider
+              changed = true
+              [x, y + ROW_SLOT_PITCH]
+            else
+              [x, y]
+            end
+          end
+          changed ? adjusted : nil
+        end
+
         def direct?(connector)
           style = connector.style || {}
           %i[direct regenerated].any? { |k| style.key?(k) } ||
