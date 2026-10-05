@@ -29,11 +29,15 @@ module Ea
             usable = context.bounds.width - 15
             size = context.size
             family = context.family
+            # EA's note body pitch and first-line offset scale with
+            # the note font (9pt notes: pitch 16 = size+7, first line
+            # at bounds.y + 18 = size+9 - 9BA1CE54).
+            pitch = context.size + 7
+            first_offset = context.size + 9
             body.to_s.split(/\n/).flat_map do |para|
-              wrap_paragraph(para, usable, size, family)
+              wrap_paragraph(para, usable, size, context.family)
             end.each_with_index.map do |line, idx|
-              y = context.bounds.y + context.theme.note.text_y_offset +
-                  (idx * context.theme.note.line_height)
+              y = context.bounds.y + first_offset + (idx * pitch)
               TextRenderer.new(
                 content: line,
                 x: context.bounds.x + context.theme.note.text_x_offset,
