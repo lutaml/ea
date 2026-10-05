@@ -42,6 +42,13 @@ module Ea
           layers
         end
 
+        # Final drawn Bounds per model element ref (grown heights,
+        # autosized packages) captured by the element pass; connector
+        # emission re-docks direct lines against these.
+        def drawn_bounds
+          @elements&.drawn_bounds
+        end
+
         private
 
         def frame_layers
@@ -49,17 +56,22 @@ module Ea
         end
 
         def element_layers
-          Elements.new(diagram, model_index: model_index, canvas: canvas,
-                        document: document).groups
+          @elements = Elements.new(diagram, model_index: model_index,
+                                             canvas: canvas,
+                                             document: document)
+          @elements.groups
         end
 
         def connector_layers
           connector_layers_raw = Connectors.new(diagram, canvas: canvas,
                                                   grouped: true,
-                                                  stroke_width: DEFAULT_STROKE_WIDTH).layers
+                                                  stroke_width: DEFAULT_STROKE_WIDTH,
+                                                  drawn_bounds: drawn_bounds,
+                                                  model_index: model_index).layers
           marker_layers_raw = Markers.new(diagram, model_index: model_index,
                                            canvas: canvas, grouped: true,
-                                           stroke_width: DEFAULT_STROKE_WIDTH).layers
+                                           stroke_width: DEFAULT_STROKE_WIDTH,
+                                           drawn_bounds: drawn_bounds).layers
           merge_layers_by_style(connector_layers_raw + marker_layers_raw).map(&:to_svg)
         end
 
