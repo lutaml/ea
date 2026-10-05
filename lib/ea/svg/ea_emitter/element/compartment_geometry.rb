@@ -61,35 +61,31 @@ module Ea
           # Y of the divider line between header and the rest.
           # Returns nil when there's no header content to separate
           # from empty below-header content.
+          # {root}/{leaf} marker lines sit INSIDE the header region:
+          # each pushes the divider down one row slot (E0C65C12/
+          # TK_PositionType: name at 69, EA divider at 90 = our old
+          # 77 + 13, attrs follow at 104 on both sides).
           def divider_y
             return nil if header_lines_count.zero?
 
             header_first_y +
               ([header_lines_count, 1].max - 1) * (size + (header_line_offset || 6)) +
+              (marker_count.to_i * (size + 6)) +
               (divider_offset || 8)
           end
 
           def attr_first_y
-            base = raw_attr_first_y
-            return base unless marker_count.to_i.positive?
-
-            # EA renders the {root}/{leaf} marker compartment BETWEEN
-            # the header divider and the attributes: its rows occupy
-            # (attr_base - 9) onward at the 13px pitch, and attributes
-            # shift down one row per marker line. Real OCL constraints
-            # do NOT shift attributes — they render trailing.
-            # Corpus-verified (TK_PositionType: name +13 {root} +22
-            # first-attr; MD_Identification keeps attrs at +22 despite
-            # carrying OCL constraints).
-            base + (size + 6) * marker_count
+            raw_attr_first_y
           end
 
-          # First marker-line baseline: one row slot above where
-          # attributes would start without markers.
+          # First marker-line baseline: its own row between the name
+          # and the divider it pushes down (E0C65C12: name 69, {root}
+          # 82, divider 90 = {root} + 8).
           def marker_first_y
             return nil unless marker_count.to_i.positive?
+            return nil unless divider_y
 
-            raw_attr_first_y - 9
+            divider_y - 8
           end
 
           def raw_attr_first_y

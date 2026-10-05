@@ -32,6 +32,7 @@ module Ea
         # divider, attrs) in EA's per-entity layer order.
         def groups
           @drawn_bounds = {}
+          @divider_y = {}
           ordered_elements.flat_map { |e| groups_for(e) }
         end
 
@@ -41,6 +42,11 @@ module Ea
         # direct lines against these — EA clips connector rays at the
         # drawn outlines, never the stored rect.
         attr_reader :drawn_bounds
+
+        # Logical-space header divider y per model element ref, for
+        # connector row-slot docking (EA docks horizontal exits at
+        # divider_y + 13, the first attribute-row slot).
+        attr_reader :divider_y
 
         private
 
@@ -91,6 +97,9 @@ module Ea
             width: width,
             height: context.bounds.height
           )
+          return unless context.geometry
+
+          @divider_y[element.model_element_ref] = context.geometry.divider_y
         end
 
 
