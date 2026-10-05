@@ -26,27 +26,35 @@ module Ea
           # cumulative integer textLength fits bounds.width - 15.
           # Verified against EA-published reference SVGs.
           def wrapped_lines(context, body)
-            usable = context.bounds.width - 15
+            # EA's note wrap padding is 4: lines fit bounds.width - 4
+            # (9BA1CE54: width 214, longest line tl 210). Pitch and
+            # first-line offset scale with the note font (9pt: pitch
+            # 16 = size+7, first line at bounds.y + 18 = size+9), and
+            # each paragraph break adds one blank pitch row
+            # (paragraph 2 starts 32 after the last line of
+            # paragraph 1).
+            usable = context.bounds.width - 4
             size = context.size
             family = context.family
-            # EA's note body pitch and first-line offset scale with
-            # the note font (9pt notes: pitch 16 = size+7, first line
-            # at bounds.y + 18 = size+9 - 9BA1CE54).
-            pitch = context.size + 7
-            first_offset = context.size + 9
-            body.to_s.split(/\n/).flat_map do |para|
-              wrap_paragraph(para, usable, size, context.family)
-            end.each_with_index.map do |line, idx|
-              y = context.bounds.y + first_offset + (idx * pitch)
-              TextRenderer.new(
-                content: line,
-                x: context.bounds.x + context.theme.note.text_x_offset,
-                y: y,
-                family: context.family, size: context.size, size_unit: context.size_unit,
-                fill: context.theme.text_color,
-                stroke_in_text: context.theme.stroke_in_text_color,
-                width_factor: context.theme.text_width_factor
-              ).to_svg
+            pitch = size + 7
+            first_offset = size + 9
+            y_index = 0
+            paragraphs = body.to_s.split(/\n/).reject { |p| p.strip.empty? }
+            paragraphs.flat_map do |para|
+              lines = wrap_paragraph(para, usable, size, context.family)
+              lines.each_with_index.map do |line, i|
+                y = context.bounds.y + first_offset + ((y_index + i) * pitch)
+                TextRenderer.new(
+                  content: line,
+                  x: context.bounds.x + context.theme.note.text_x_offset,
+                  y: y,
+                  family: context.family, size: context.size,
+                  size_unit: context.size_unit,
+                  fill: context.theme.text_color,
+                  stroke_in_text: context.theme.stroke_in_text_color,
+                  width_factor: context.theme.text_width_factor
+                ).to_svg
+              end.tap { y_index += lines.size + 1 }
             end
           end
 
