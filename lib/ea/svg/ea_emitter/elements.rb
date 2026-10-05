@@ -31,8 +31,16 @@ module Ea
         # Each element contributes up to 4 groups (shape, header,
         # divider, attrs) in EA's per-entity layer order.
         def groups
+          @drawn_bounds = {}
           ordered_elements.flat_map { |e| groups_for(e) }
         end
+
+        # Final drawn Bounds per model element reference, captured
+        # during rendering (grown heights for overflowing classifiers,
+        # autosized outlines for packages). Connector emission re-docks
+        # direct lines against these — EA clips connector rays at the
+        # drawn outlines, never the stored rect.
+        attr_reader :drawn_bounds
 
         private
 
@@ -46,7 +54,43 @@ module Ea
           context = build_context(element)
           return [] unless context
 
+          record_drawn_bounds(element, context)
           Compartment.render_all(context).compact
+        end
+
+        # Logical-space drawn bounds: stored x/y with the RENDERED
+        # height (grown classifiers) and rendered width (autosized
+        # packages). Heights/widths are translation-invariant, so the
+        # connector emitters can redock in logical space and run the
+        # normal canvas translation afterwards.
+        def record_drawn_bounds(element, context)
+          return unless element.model_element_ref
+
+          raw = element.bounds || element.image_bounds
+          return unless raw
+
+          width = raw.width
+          if classifier_package?(context.classifier)
+            tab = Element::PackageShapeRenderer.autosized_tab_width(
+              label: context.classifier.name.to_s,
+              stereotype: package_stereotype(context),
+              size: context.size
+            )
+            width = tab + Element::PackageShapeRenderer::TAB_BODY_EXTRA
+          end
+          @drawn_bounds[element.model_element_ref] = Ea::Model::Bounds.new(
+            x: raw.x, y: raw.y,
+            width: width,
+            height: context.bounds.height
+          )
+        end
+
+        def classifier_package?(classifier)
+          classifier.class == Ea::Model::Package
+        end
+
+        def package_stereotype(context)
+          context.classifier.stereotype_refs.first.to_s
         end
 
         # Build the RenderContext for one element. Returns nil when

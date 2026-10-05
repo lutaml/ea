@@ -187,7 +187,11 @@ module Ea
             # and associations draw as plain source-first lines
             # (0CABA7D7's gen "M 125 130 L 125 99"; 568CDFC9's
             # regenerated assocs).
-            style: conn.connector_type == "Dependency" ? { direct: true } : {},
+            style: if conn.connector_type == "Dependency"
+                     { direct: true, regenerated: true }
+                   else
+                     { regenerated: true }
+                   end,
             hidden: false,
             has_geometry_offsets: false
           )

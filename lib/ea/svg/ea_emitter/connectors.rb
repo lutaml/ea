@@ -16,13 +16,17 @@ module Ea
       class Connectors
         LINE_STYLE_KEY = :connector_line
 
-        attr_reader :diagram, :canvas, :grouped, :stroke_width
+        attr_reader :diagram, :canvas, :grouped, :stroke_width, :drawn_bounds,
+                    :model_index
 
-        def initialize(diagram, canvas: nil, grouped: true, stroke_width: 2)
+        def initialize(diagram, canvas: nil, grouped: true, stroke_width: 2,
+                       drawn_bounds: nil, model_index: nil)
           @diagram = diagram
           @canvas = canvas
           @grouped = grouped
           @stroke_width = stroke_width
+          @drawn_bounds = drawn_bounds
+          @model_index = model_index
         end
 
         def layers
@@ -55,7 +59,9 @@ module Ea
         end
 
         def path_for(connector)
-          pts = waypoints_for(connector)
+          pts = ConnectorRedock.pairs_for(connector, diagram, model_index,
+                                          drawn_bounds) ||
+                waypoints_for(connector)
           return nil if pts.size < 2
 
           # DIRECT (auto-routed straight) connectors: EA writes the
