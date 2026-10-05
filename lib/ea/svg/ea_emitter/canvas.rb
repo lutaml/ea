@@ -42,6 +42,33 @@ module Ea
           new(min_x: min_x, min_y: min_y, width: width, height: height)
         end
 
+        # Second-pass canvas over the DRAWN extents captured by the
+        # element pass (grown classifiers, autosized packages, plus
+        # BoundsCalculator's subtitle reservation). EA sizes the
+        # canvas from drawn extents, so diagrams whose lowest/rightmost
+        # element grew get a taller/wider canvas than the stored-rect
+        # first pass provides.
+        def self.from_drawn(diagram, drawn_bounds, model_index: nil)
+          base = BoundsCalculator.new(diagram, model_index: model_index)
+          pts = []
+          drawn_bounds.each_value do |b|
+            pts << [b.x, b.y]
+            pts << [b.x + b.width, b.y + b.height]
+          end
+          extra = base.send(:subtitle_points)
+          min_x = (pts + extra).map(&:first).min || 0
+          min_y = (pts + extra).map(&:last).min || 0
+          max_x = (pts + extra).map(&:first).max || 0
+          max_y = (pts + extra).map(&:last).max || 0
+          return from(diagram, model_index: model_index) if pts.empty?
+
+          new(min_x: min_x, min_y: min_y,
+              width: (max_x - min_x) + BoundsCalculator::INSET_LEFT +
+                     BoundsCalculator::INSET_RIGHT,
+              height: (max_y - min_y) + BoundsCalculator::INSET_TOP +
+                      BoundsCalculator::INSET_BOTTOM)
+        end
+
         def view_box
           "0 0 #{width} #{height}"
         end
