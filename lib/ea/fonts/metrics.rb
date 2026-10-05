@@ -91,7 +91,7 @@ module Ea
       end
 
       # EA's scale factor varies by point size (GDI quantization):
-      # Carlito regular fits 1.390 at 7pt but 1.432 at 9pt. Sizes
+      # Carlito regular fits 1.390 at 7pt but 1.440 at 9pt. Sizes
       # without a fitted entry use the style's default (7pt, the
       # corpus's dominant size).
       def factor_for(family, size_pt, weight, style)
