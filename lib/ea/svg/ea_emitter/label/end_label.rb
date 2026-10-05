@@ -62,11 +62,11 @@ module Ea
                                                   text_pos, mult_pos)
             elsif mult_box && stored_offsets_zero?(mult_box)
               # A stored mult box with OX=0:OY=0 means "EA default":
-              # the multiplicity sits 15px BELOW the endpoint anchor,
-              # regardless of line direction (87-sample corpus fit:
-              # dy = +15 constant; the dx residual follows the
-              # dock-slot family).
-              mult_pos = [anchor[0], anchor[1] + 15]
+              # the multiplicity sits 12px right of and 15px below the
+              # endpoint anchor, regardless of line direction
+              # (87-sample corpus fit: dy = +15 constant, dx = +12
+              # dominant with a +3 minority).
+              mult_pos = [anchor[0] + 12, anchor[1] + 15]
             end
             show_property = property_label?(connector, end_kind)
 
