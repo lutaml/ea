@@ -10,6 +10,8 @@ module Ea
     autoload :Parser, "ea/xmi/parser"
     autoload :LookupService, "ea/xmi/lookup_service"
     autoload :Slicer, "ea/xmi/slicer"
+    autoload :Loader, "ea/xmi/loader"
+    autoload :Loaded, "ea/xmi/loader"
 
     module LiquidDrops
       autoload :RootDrop, "ea/xmi/liquid_drops/root_drop"
@@ -44,10 +46,27 @@ module Ea
     # To get a `Lutaml::Uml::Document` instead (requires the optional
     # `lutaml-uml` gem), use `Ea::Bridge::XmiToUml.transform(root)`.
     #
-    # @param path [String] path to a .xmi file
+    # @param path [String, IO] path to a .xmi file, or an IO
+    # @param partial [Array, nil] wanted [package, name] pairs; when
+    #   given, only the reference closure of those elements is parsed,
+    #   assembled in memory (see Ea::Xmi::Slicer). Partial load
+    #   produces the same content as whole load for everything derived
+    #   from the model's elements; it exists so reading a handful of
+    #   classes out of a large export does not hydrate the whole of
+    #   it. Whole load is the default. package may be nil, matching by
+    #   name in any package.
     # @return [Xmi::Sparx::Root]
-    def load(path)
-      ::Xmi::Sparx::Root.parse_xml(File.read(path))
+    def load(path, partial: nil)
+      Loader.call(path, partial: partial)
+    end
+
+    # Load an export into the parsed EA graph: the parser, the parsed
+    # document, and the lookup indexes the table renders resolve
+    # through. See #load for whole vs partial loading.
+    #
+    # @return [Ea::Xmi::Loaded]
+    def load_graph(path, partial: nil)
+      Loader.graph(path, partial: partial)
     end
   end
 end

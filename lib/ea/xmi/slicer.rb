@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "moxml"
+require "stringio"
 
 module Ea
   module Xmi
@@ -66,19 +67,21 @@ module Ea
                         :refs, :links_refs, keyword_init: true)
 
       class << self
-        # Single slice for one wanted set.
+        # Single slice for one wanted set, as a string: the in-memory
+        # form partial loading consumes.
         # wanted: array of [package_name, element_name]; package may be
         # nil, in which case elements match by name in any package.
-        def call(source, wanted, output)
-          new(source).single(wanted, output)
-          output
+        def slice(source, wanted)
+          new(source).single(wanted)
         end
 
-        # One index pass, one write pass, one standalone slice per group.
-        # groups: hash key => wanted array (same shape as +wanted+
-        # above). Returns { key => slice size in bytes }.
-        def slices(source, groups, dir:, prefix: "slice")
-          new(source).multi(groups, dir: dir, prefix: prefix)
+        # One index pass, one write pass, one standalone slice per
+        # group, returned as strings. groups: hash key => wanted array
+        # (same shape as +wanted+ above). Groups whose wanted set
+        # matches nothing are skipped entirely, so callers can fall
+        # back to the full source for them.
+        def slices(source, groups)
+          new(source).multi(groups)
         end
       end
 
@@ -87,36 +90,29 @@ module Ea
         @moxml = Moxml.new(:leptris)
       end
 
-      def single(wanted, output)
+      def single(wanted)
         nodes = index_pass
         keep = closure(nodes, seed_ids(nodes, wanted))
+        output = StringIO.new(+"")
         writer = GroupWriter.new([keep], [output])
         @moxml.sax_parse(source_string, writer)
-        self
+        output.string
       end
 
-      # Returns { group key => slice path }; groups whose wanted set
-      # matches nothing are skipped entirely so callers can fall back
-      # to the full source.
-      def multi(groups, dir:, prefix: "slice")
-        require "fileutils"
-        FileUtils.mkdir_p(dir)
+      def multi(groups)
         nodes = index_pass
         keeps = []
-        outputs = []
-        paths = {}
+        keys = []
         groups.each do |key, wanted|
           seeds = seed_ids(nodes, wanted)
           next if seeds.empty?
 
           keeps << closure(nodes, seeds)
-          file = File.join(dir, "#{prefix}_#{key.hash.abs}.xmi")
-          outputs << File.open(file, "w")
-          paths[key] = file
+          keys << key
         end
+        outputs = keys.map { StringIO.new(+"") }
         @moxml.sax_parse(source_string, GroupWriter.new(keeps, outputs))
-        outputs.each(&:close)
-        paths
+        keys.zip(outputs).to_h { |k, o| [k, o.string] }
       end
 
       private
@@ -233,7 +229,15 @@ module Ea
       end
 
       def source_string
-        @source.is_a?(IO) || @source.is_a?(StringIO) ? @source.read : File.read(@source)
+        case @source
+        when IO, StringIO
+          @source.read
+        else
+          s = @source.to_s
+          # partial loading hands us the export content itself; a path
+          # never starts with markup
+          s.lstrip.start_with?("<") ? s : File.read(s)
+        end
       end
 
       # --- closure ------------------------------------------------------
