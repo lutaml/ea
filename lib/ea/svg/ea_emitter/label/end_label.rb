@@ -60,6 +60,13 @@ module Ea
             if tree && zero_offset?(text_box, mult_box)
               text_pos, mult_pos = tree_positions(end_kind, anchor, role,
                                                   text_pos, mult_pos)
+            elsif mult_box && stored_offsets_zero?(mult_box)
+              # A stored mult box with OX=0:OY=0 means "EA default":
+              # the multiplicity sits 15px BELOW the endpoint anchor,
+              # regardless of line direction (87-sample corpus fit:
+              # dy = +15 constant; the dx residual follows the
+              # dock-slot family).
+              mult_pos = [anchor[0], anchor[1] + 15]
             end
             show_property = property_label?(connector, end_kind)
 
@@ -75,6 +82,10 @@ module Ea
           # mult +3/0); target-end pairs sit just above the dock
           # astride the trunk — role right edge at trunk+7, mult
           # starting at trunk+8, both at dock_y - 8.
+          def stored_offsets_zero?(box)
+            box["ox"].to_i.zero? && box["oy"].to_i.zero?
+          end
+
           def zero_offset?(text_box, mult_box)
             [text_box, mult_box].compact.all? do |b|
               b["ox"].to_i.zero? && b["oy"].to_i.zero?
