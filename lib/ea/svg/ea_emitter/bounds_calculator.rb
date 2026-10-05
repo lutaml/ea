@@ -46,10 +46,14 @@ module Ea
           ys = points.map(&:last)
           min_x = xs.min || 0
           min_y = ys.min || 0
+          # When the leftmost element touches stored x=0 the left
+          # inset is 30, not 35 (all five such sample diagrams are
+          # exactly 5px narrower; min_x>0 diagrams keep 35).
+          left = min_x.zero? ? INSET_LEFT - 5 : INSET_LEFT
           [
             min_x,
             min_y,
-            (xs.max - min_x) + INSET_LEFT + INSET_RIGHT,
+            (xs.max - min_x) + left + INSET_RIGHT,
             (ys.max - min_y) + INSET_TOP + INSET_BOTTOM
           ]
         end
