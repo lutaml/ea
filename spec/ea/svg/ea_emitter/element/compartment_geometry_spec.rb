@@ -64,8 +64,9 @@ RSpec.describe Ea::Svg::EaEmitter::Element::CompartmentGeometry do
 
     it "places after the attr compartment" do
       g = build(header_lines: 1, attr_lines: 1, op_lines: 2, size: 9)
-      # attr_bottom_y = 95; op_divider_y = 95+9+5 = 109; op_first_y = 109+9+5 = 123
-      expect(g.op_first_y).to eq(123)
+      # attr_bottom_y = 95; EA's op block starts 21 below the last
+      # attribute row: 95 + 9 + 14 = 118
+      expect(g.op_first_y).to eq(118)
     end
   end
 
@@ -82,8 +83,8 @@ RSpec.describe Ea::Svg::EaEmitter::Element::CompartmentGeometry do
 
     it "places after the op compartment when ops present" do
       g = build(header_lines: 1, attr_lines: 1, op_lines: 1, tagged_values: 1, size: 9)
-      # base = op_bottom_y = 123, then + size + 5 = 137
-      expect(g.tagged_value_first_y).to eq(137)
+      # base = op_bottom_y = 118, then + size + 5 = 132
+      expect(g.tagged_value_first_y).to eq(132)
     end
   end
 end

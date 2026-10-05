@@ -31,14 +31,14 @@ RSpec.describe Ea::Svg::EaEmitter::Element::OperationRenderer do
       expect(texts[1]["x"].to_i).to eq(10 + described_class::CONTENT_X_OFFSET)
     end
 
-    it "stacks operations by (size + 4) line height" do
+    it "stacks operations by (size + 6) line height" do
       ops = [build_op(name: "a"), build_op(name: "b"), build_op(name: "c")]
       svg = described_class.render(ops, bounds: bounds, first_y: 50,
                                      family: "Carlito", size: 7)
       texts = Nokogiri::XML("<svg>#{svg}</svg>").css("text")
-      # Each op produces 2 text elements; op index 1 is at y = 50 + (7+4) = 61
-      expect(texts[2]["y"].to_i).to eq(61)
-      expect(texts[4]["y"].to_i).to eq(72)
+      # Each op produces 2 text elements; op index 1 is at y = 50 + (7+6) = 63
+      expect(texts[2]["y"].to_i).to eq(63)
+      expect(texts[4]["y"].to_i).to eq(76)
     end
 
     it "returns an empty group when operations list is empty" do

@@ -104,16 +104,19 @@ module Ea
             attr_bottom_y + size + 5
           end
 
+          # EA's op block: first row 21 below the last attribute row
+          # (9pt... 7pt: attr_bottom + 21), uniform 13px pitch across
+          # attrs AND ops (6D4C665D: attrs ..520, ops 541..658 step 13).
           def op_first_y
             return nil unless op_lines_count&.positive?
 
-            op_divider_y + size + 5
+            attr_bottom_y + size + 14
           end
 
           def op_bottom_y
             return op_divider_y unless op_lines_count&.positive?
 
-            op_first_y + (op_lines_count - 1) * (size + 4)
+            op_first_y + (op_lines_count - 1) * (size + 6)
           end
 
           # EA draws a single divider under the header and seats
