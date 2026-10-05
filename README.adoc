@@ -35,6 +35,42 @@ db = Ea.parse("model.qea")   #=> Ea::Qea::Database
 puts "#{db.packages.size} packages, #{db.objects.size} objects"
 ----
 
+=== Whole and partial XMI loading (pure — no lutaml-uml needed)
+
+`Ea::Xmi.load` parses an EA XMI export into the typed Sparx model.
+Whole load is the default and parses the entire file:
+
+[source,ruby]
+----
+require "ea/xmi"
+
+model = Ea::Xmi.load("export.xmi")
+----
+
+Partial load parses only the reference closure of the named elements.
+The wanted pairs are `[package, name]`; a nil package matches by name
+in any package. The closure is assembled in memory by
+`Ea::Xmi::Slicer` — the export is streamed once, no temporary files
+are written, and the parse runs over the slice:
+
+[source,ruby]
+----
+model = Ea::Xmi.load("export.xmi", partial: [["bldg", "Building"]])
+----
+
+Partial load produces the same content as whole load for everything
+derived from the model's elements: the slice keeps each wanted class
+with its attributes, operations, connectors, generalization parents,
+package ancestry, and the diagrams that reference kept elements. Use
+it when reading a handful of classes out of a large export — a
+100 MB export parses as a few MB slice instead of a 10+ GB object
+graph.
+
+`Ea::Xmi.load_graph` wraps the same two modes one layer up, returning
+the parsed EA graph: the parser, the parsed document, and the lookup
+indexes the table renders resolve through
+(`Ea::Xmi::Loaded`).
+
 === Generate a SPA from QEA (requires lutaml-uml)
 
 [source,bash]
