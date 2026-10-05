@@ -161,6 +161,9 @@ module Ea
             @stack << [id, existing.refs]
             return
           end
+          # the parent is the nearest id-bearing element already on the
+          # stack, so it has to be read before this element is pushed
+          parent = nearest_id
           refs = is_node ? [] : (@stack.last ? @stack.last[1] : [])
           @stack << [is_node ? id : nil, refs]
           unless is_node
@@ -171,7 +174,7 @@ module Ea
           node = Node.new(
             id: id, tag: name,
             xmi_type: attributes["xmi:type"], name: attributes["name"],
-            parent_id: nearest_id, section: @section.last, refs: refs,
+            parent_id: parent, section: @section.last, refs: refs,
             links_refs: [],
           )
           @nodes[id] = node
