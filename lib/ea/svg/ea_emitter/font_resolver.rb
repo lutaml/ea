@@ -42,8 +42,11 @@ module Ea
           explicit = element&.font_size
           explicit = nil if explicit&.zero?
           return explicit if explicit
-          return diagram_default_size if diagram_default_size
 
+          # An element's own explicit fontsz never re-sizes its
+          # neighbours: default elements always render at the theme
+          # size (9BA1CE54: one 9pt label + six use-default
+          # instances; EA publishes the six at 7pt).
           DEFAULT_ELEMENT_FONT_SIZE
         end
 
@@ -77,13 +80,6 @@ module Ea
           most_common(families)
         end
 
-        def diagram_default_size
-          sizes = element_sizes
-          return nil if sizes.empty?
-
-          most_common(sizes)
-        end
-
         FALLBACK_DEFAULT_FAMILY = "Calibri"
 
         def most_common(values)
@@ -95,10 +91,6 @@ module Ea
 
         def element_families
           (diagram.elements || []).map(&:font_family).compact
-        end
-
-        def element_sizes
-          (diagram.elements || []).map(&:font_size).compact.reject(&:zero?)
         end
 
         def tally_values(values)
