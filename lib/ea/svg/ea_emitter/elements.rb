@@ -263,7 +263,7 @@ module Ea
           first = header_lines.first
           return theme.compartments.header_top_padding unless first
 
-          if first.last == :italic
+          if first.last == :italic || first.last == :italic_tight
             6 # ghost-led: EA seats the right-aligned ghost at +13
           elsif first.first.to_s.start_with?("«")
             enumeration_or_interface?(classifier) ? 6 : 9
