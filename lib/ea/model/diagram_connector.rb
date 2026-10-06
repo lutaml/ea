@@ -44,6 +44,13 @@ module Ea
       # when the geometry string carries no offsets (auto-routed).
       attribute :source_port, Ea::Model::Point
       attribute :target_port, Ea::Model::Point
+      # Ray origins for the drawn line: element center translated by
+      # the stored Geometry SX/SY / EX/EY offsets. EA clips the
+      # segment between the two anchors at the DRAWN outlines
+      # (F851A657: anchors center+(-29,0)/center+(-29,0) clip to EA's
+      # (297,788)/(433,514) within 1.5px).
+      attribute :source_anchor, Ea::Model::Point
+      attribute :target_anchor, Ea::Model::Point
 
       json do
         map "id", to: :id
@@ -57,6 +64,8 @@ module Ea
         map "targetEdge", to: :target_edge
         map "sourcePort", to: :source_port
         map "targetPort", to: :target_port
+        map "sourceAnchor", to: :source_anchor
+        map "targetAnchor", to: :target_anchor
         map "connectorType", to: :connector_type
         map "direction", to: :direction
         map "sourceStereotype", to: :source_stereotype
