@@ -111,26 +111,27 @@ module Ea
           value.nil? || value.to_s.empty? ? nil : value
         end
 
-        # EA stores the element font size in tenths of a point in the
-        # objectstyle string, SHIFTED one point up from what it
-        # renders: explicit fontsz 100 renders 9pt (0D31AED1: every
-        # element stores 100, all 321 texts publish at 9pt), 70
-        # renders 6pt, 140 renders 13pt. 0 means "use default", and
-        # 80/90 (8pt / 9pt) are EA's classic defaults the dialogs
-        # write back when the user never customized — such elements
-        # render at the theme size. Only genuinely custom sizes are
-        # surfaced as explicit element fonts.
-        USE_DEFAULT_FONTSZ = [0, 80, 90].freeze
+        # EA stores the element font size in tenths of a point and
+        # renders it through GDI's double rounding: pixel height =
+        # floor(tenths * 96 / 720), then point size =
+        # floor(pixels * 72 / 96). 70 -> 9px -> 6pt (F3660305 Text),
+        # 80 -> 10px -> 7pt, 90 -> 12px -> 9pt (4EBDE645's PI_*
+        # classes), 100 -> 13px -> 9pt (0D31AED1's all-100 elements
+        # publish 321 texts at 9pt), 120 -> 16px -> 12pt
+        # (412BC89E's Boundary title), 140 -> 18px -> 13pt.
+        # fontsz=0 ("use default", written back by the font dialog)
+        # renders at the 7pt theme size.
+        USE_DEFAULT_FONTSZ = [0].freeze
+        GDI_DPI = 96
 
         def font_size_from(style_hash)
           raw = style_hash[:fontsz]
           return nil if raw.nil? || raw.to_s.empty?
 
-          return nil if raw.to_i.zero?
-
           return nil if USE_DEFAULT_FONTSZ.include?(raw.to_i)
 
-          (raw.to_f / 10).round - 1
+          pixels = (raw.to_f * GDI_DPI / 720).floor
+          (pixels * 72.0 / GDI_DPI).floor
         end
 
         def build_connectors(diagram_row)
