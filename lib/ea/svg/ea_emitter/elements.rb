@@ -129,8 +129,11 @@ module Ea
                                                                 foreign_package_name: foreign_package_name_for(classifier),
                                                                 suppress_stereotypes: suppress_stereotypes?) : []
           is_classifier = classifier.is_a?(Ea::Model::Classifier)
+          # Interfaces DO render attribute compartments when they own
+          # attribute rows (936AA434/Surface lists its nine 19107
+          # attributes); the earlier corpus evidence for
+          # header-only interfaces was zero-attribute leaf types.
           attr_lines = if is_classifier && show_attributes? &&
-                          !classifier.is_a?(Ea::Model::Interface) &&
                           attributes_visible?(element)
                          Element::AttributeRenderer.lines_for(
                            classifier, lookup: attribute_lookup,
