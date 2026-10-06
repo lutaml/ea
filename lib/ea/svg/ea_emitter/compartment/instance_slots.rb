@@ -7,9 +7,10 @@ module Ea
         # Instance slot compartment. Renders each slot on an
         # InstanceSpecification as "name op value", then appends
         # "(from PackageName)" in italics below the slots when the
-        # instance has a classifier. Skipped entirely when the model
-        # element is not an InstanceSpecification or has neither
-        # slots nor a classifier.
+        # instance is foreign to the diagram's package. Skipped
+        # entirely when the model element is not an
+        # InstanceSpecification or has neither slots nor a
+        # classifier.
         module InstanceSlots
           ROW_OFFSET = 13
           SUBTITLE_EXTRA_OFFSET = 10
@@ -21,7 +22,7 @@ module Ea
 
             instance = context.model_element
             slots = instance.slots || []
-            subtitle = from_package_subtitle(instance)
+            subtitle = from_package_subtitle(instance, context.diagram)
             return nil if slots.empty? && subtitle.nil?
 
             first_y = context.geometry.attr_first_y
@@ -44,7 +45,17 @@ module Ea
           end
           module_function :instance?
 
-          def from_package_subtitle(instance)
+          # EA draws "(from PackageName)" only for instances FOREIGN
+          # to the diagram's own package: every instance diagram in
+          # the corpus has local instances and EA renders the
+          # subtitle nowhere (FC590D99: 23 local FIG2010 instances,
+          # zero "(from" lines in the published SVG).
+          def from_package_subtitle(instance, diagram)
+            if diagram && instance.package_id && diagram.package_id &&
+               instance.package_id == diagram.package_id
+              return nil
+            end
+
             pkg = instance.package_name
             return nil if pkg.nil? || pkg.empty?
 

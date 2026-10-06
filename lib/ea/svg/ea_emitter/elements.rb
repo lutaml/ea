@@ -126,7 +126,8 @@ module Ea
                                                                 font_size: size,
                                                                 family: family,
                                                                 off_canvas_parent_name: parent_name,
-                                                                foreign_package_name: foreign_package_name_for(classifier)) : []
+                                                                foreign_package_name: foreign_package_name_for(classifier),
+                                                                suppress_stereotypes: suppress_stereotypes?) : []
           is_classifier = classifier.is_a?(Ea::Model::Classifier)
           attr_lines = if is_classifier && show_attributes? &&
                           !classifier.is_a?(Ea::Model::Interface) &&
@@ -274,6 +275,14 @@ module Ea
         def enumeration_or_interface?(classifier)
           classifier.is_a?(Ea::Model::Enumeration) ||
             classifier.is_a?(Ea::Model::Interface)
+        end
+
+        # t_diagram pdata HideEStereo=1 suppresses every stereotype
+        # line on the diagram - instance boxes ("Case C25" renders
+        # no «featureType» despite every instance carrying one) and
+        # classifier boxes alike.
+        def suppress_stereotypes?
+          diagram.style.to_s.match?(/HideEStereo=1/)
         end
 
         # A stereotype group header («Property») sits 4px below where

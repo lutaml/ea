@@ -22,6 +22,7 @@ module Ea
                                :bounds_width, :font_size, :family,
                                :off_canvas_parent_name,
                                :foreign_package_name,
+                               :suppress_stereotypes,
                                keyword_init: true)
 
           PROVIDERS = [
@@ -39,9 +40,18 @@ module Ea
           end
 
           # Greedy word wrap measured with the header's own font.
-          # EA wraps overflowing headers at word boundaries
-          # (81F92FC7: instance header "new ownership: LA_Right"
+          # EA wraps overflowing headers at word boundaries and after
+          # "::" qualifiers (F851A657: class "Content
+          # information::MD_FeatureCatalogueDescription" renders as
+          # "Content information::" / "MD_FeatureCatalogueDescription";
+          # 81F92FC7: instance header "new ownership: LA_Right"
           # renders as "new ownership:" / "LA_Right").
+          # Headers wrap against a USABLE width of box width - 6:
+          # EA wrapped "SU_PB2: LA_SpatialUnit" (parts 36 + 59 +
+          # space 4 = 99) inside a 100px box, while
+          # "FuelStation: LA_BAUnit" (94) stayed single in a 100px
+          # box - the corpus boundary is margin 5 wrapped vs 6
+          # unwrapped (FC590D99 vs CBC03448).
           def self.wrap_words(text, context, weight)
             font_style = weight == :bold_italic ? "italic" : "normal"
             width = lambda do |s|
@@ -51,21 +61,49 @@ module Ea
               ).round
             end
             return [text] if context.bounds_width.nil?
-            return [text] if width.call(text) <= context.bounds_width.to_i
+            usable = context.bounds_width.to_i - 6
+            return [text] if width.call(text) <= usable
 
+            segments = wrap_segments(text)
             lines = []
             current = +""
-            text.split(" ").each do |word|
-              candidate = current.empty? ? word : "#{current} #{word}"
-              if !current.empty? && width.call(candidate) > context.bounds_width.to_i
+            segments.each do |segment|
+              candidate = current + segment
+              if !current.empty? && width.call(candidate) > usable
                 lines << current
-                current = word
+                current = +segment.lstrip
               else
                 current = candidate
               end
             end
             lines << current unless current.empty?
             lines
+          end
+
+          # Break opportunities: after each space and after each
+          # "::". Each segment carries the separator that PRECEDES
+          # it ("" after "::", " " after a word), so joining all
+          # segments reproduces the original text exactly.
+          def self.wrap_segments(text)
+            segments = []
+            pending = ""
+            text.split(" ").each do |word|
+              chunk = +""
+              word.split(/(::)/).each_slice(2) do |part, sep|
+                chunk << pending << part
+                pending = ""
+                if sep
+                  chunk << sep
+                  segments << chunk.dup
+                  chunk.clear
+                end
+              end
+              unless chunk.empty?
+                segments << chunk.dup
+                pending = " "
+              end
+            end
+            segments
           end
         end
       end
