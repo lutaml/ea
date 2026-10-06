@@ -112,12 +112,14 @@ module Ea
         end
 
         # EA stores the element font size in tenths of a point in the
-        # objectstyle string. 0 means "use default", and 80/90 (8pt /
-        # 9pt) are EA's classic defaults the dialogs write back when
-        # the user never customized — verified against EA-published
-        # reference images, where such elements render at the theme
-        # size. Only genuinely custom sizes are surfaced as explicit
-        # element fonts.
+        # objectstyle string, SHIFTED one point up from what it
+        # renders: explicit fontsz 100 renders 9pt (0D31AED1: every
+        # element stores 100, all 321 texts publish at 9pt), 70
+        # renders 6pt, 140 renders 13pt. 0 means "use default", and
+        # 80/90 (8pt / 9pt) are EA's classic defaults the dialogs
+        # write back when the user never customized — such elements
+        # render at the theme size. Only genuinely custom sizes are
+        # surfaced as explicit element fonts.
         USE_DEFAULT_FONTSZ = [0, 80, 90].freeze
 
         def font_size_from(style_hash)
@@ -126,23 +128,9 @@ module Ea
 
           return nil if raw.to_i.zero?
 
-          stored = (raw.to_f / 10).round
-          return stored - 1 if note_element? && stored > 1
-
           return nil if USE_DEFAULT_FONTSZ.include?(raw.to_i)
 
-          stored
-        end
-
-        # Text/Note elements carry their real font size in fontsz
-        # shifted by one point (stored 100 renders 9pt, 80 renders
-        # 7pt - corpus-verified on EA-published note SVGs);
-        # classifiers keep the use-default convention.
-        def note_element?
-          return false unless database && @current_obj_row
-
-          obj = database.find_object(@current_obj_row.ea_object_id.to_i)
-          obj&.object_type.to_s == "Text"
+          (raw.to_f / 10).round - 1
         end
 
         def build_connectors(diagram_row)

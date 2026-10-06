@@ -15,9 +15,13 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
   let(:connector_row) { FakeConnectorRow.new(4, 3) }
 
   describe "#font_size_from" do
-    it "converts genuinely custom fontsz values into points" do
-      expect(builder.font_size_from(fontsz: "105")).to eq(11)
-      expect(builder.font_size_from(fontsz: "70")).to eq(7)
+    it "converts custom fontsz into points, shifted one down" do
+      # 0D31AED1: every element stores fontsz 100, EA publishes all
+      # its texts at 9pt; 70 renders 6pt, 140 renders 13pt.
+      expect(builder.font_size_from(fontsz: "105")).to eq(10)
+      expect(builder.font_size_from(fontsz: "100")).to eq(9)
+      expect(builder.font_size_from(fontsz: "70")).to eq(6)
+      expect(builder.font_size_from(fontsz: "140")).to eq(13)
     end
 
     it "treats default-marker fontsz values as use-default" do

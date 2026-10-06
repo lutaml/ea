@@ -38,8 +38,12 @@ RSpec.describe Ea::Svg::EaEmitter::FontResolver do
       expect(resolver.size_for(element_with_font)).to eq(10)
     end
 
-    it "falls back to diagram default when nil" do
-      expect(resolver.size_for(element_without_font)).to eq(10)
+    it "falls back to the theme default size, ignoring neighbours" do
+      # An element's explicit fontsz never re-sizes its neighbours
+      # (9BA1CE54: one 9pt label, six use-default instances that EA
+      # publishes at 7pt).
+      expect(resolver.size_for(element_without_font))
+        .to eq(described_class::DEFAULT_ELEMENT_FONT_SIZE)
     end
   end
 
@@ -73,11 +77,9 @@ RSpec.describe Ea::Svg::EaEmitter::FontResolver do
       expect(resolver.family_for(element_without_font)).to eq("Carlito")
     end
 
-    it "uses diagram-default size (10) when other elements specify sizes" do
-      # Diagram has elements with font_size=10, so diagram_default_size
-      # returns 10 (most common). Theme font_size=7 is NOT used for
-      # elements — it only applies to frame label.
-      expect(resolver.size_for(element_without_font)).to eq(10)
+    it "uses the theme default size regardless of other elements" do
+      expect(resolver.size_for(element_without_font))
+        .to eq(described_class::DEFAULT_ELEMENT_FONT_SIZE)
     end
 
     it "element-level font still wins over theme" do
