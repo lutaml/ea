@@ -36,6 +36,7 @@ module Ea
             name: row.name.to_s,
             classifier_id: classifier_id_for(row),
             classifier_name: classifier_name_for(row),
+            stereotype: row.stereotype.to_s,
             package_id: package_id_for(row),
             package_name: package_name_for(row),
             qualified_name: qualified_name_for(row),

@@ -17,6 +17,10 @@ module Ea
             def self.call(context)
               classifier = context.classifier
               return [] if classifier.is_a?(Ea::Model::InstanceSpecification)
+              # Diagram pdata HideEStereo=1 suppresses classifier
+              # stereotype lines too (the Annex C "Case" diagrams
+              # render zero «...» lines, classes included).
+              return [] if context.suppress_stereotypes
 
               labels = label_for(classifier, context.umldi_keyword)
               return [] if labels.empty?

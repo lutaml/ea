@@ -58,7 +58,11 @@ module Ea
                 name, context.font_size || 9, nil,
                 family: context.family, weight: "700", style: font_style
               ).round
-              len > context.bounds_width
+              # Same usable width as wrap_words: box width - 6.
+              # EA wraps "Content information::MD_FeatureCatalogue-
+              # Description" (parts 86 + 137 + space 4 = 227) inside
+              # a 230px box (F851A657).
+              len > context.bounds_width.to_i - 6
             end
 
             # EA renders the plain classifier name in element headers;

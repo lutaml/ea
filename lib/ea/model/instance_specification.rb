@@ -10,6 +10,7 @@ module Ea
       attribute :name, :string
       attribute :classifier_id, :string
       attribute :classifier_name, :string
+      attribute :stereotype, :string
       attribute :package_id, :string
       attribute :package_name, :string
       attribute :qualified_name, :string
@@ -22,6 +23,7 @@ module Ea
         map "name", to: :name
         map "classifierId", to: :classifier_id
         map "classifierName", to: :classifier_name
+        map "stereotype", to: :stereotype
         map "packageId", to: :package_id
         map "packageName", to: :package_name
         map "qualifiedName", to: :qualified_name
