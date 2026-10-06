@@ -15,19 +15,22 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
   let(:connector_row) { FakeConnectorRow.new(4, 3) }
 
   describe "#font_size_from" do
-    it "converts custom fontsz into points, shifted one down" do
-      # 0D31AED1: every element stores fontsz 100, EA publishes all
-      # its texts at 9pt; 70 renders 6pt, 140 renders 13pt.
-      expect(builder.font_size_from(fontsz: "105")).to eq(10)
-      expect(builder.font_size_from(fontsz: "100")).to eq(9)
+    it "rounds fontsz through GDI pixel metrics" do
+      # EA creates the GDI font at floor(tenths * 96 / 720) pixels,
+      # then reports floor(pixels * 72 / 96) points. Corpus anchors:
+      # 0D31AED1 (all-100 elements) publishes 9pt, 4EBDE645's 90 =
+      # 9pt, F3660305's 70 = 6pt, 412BC89E's Boundary 120 = 12pt.
       expect(builder.font_size_from(fontsz: "70")).to eq(6)
+      expect(builder.font_size_from(fontsz: "80")).to eq(7)
+      expect(builder.font_size_from(fontsz: "90")).to eq(9)
+      expect(builder.font_size_from(fontsz: "100")).to eq(9)
+      expect(builder.font_size_from(fontsz: "105")).to eq(10)
+      expect(builder.font_size_from(fontsz: "120")).to eq(12)
       expect(builder.font_size_from(fontsz: "140")).to eq(13)
     end
 
-    it "treats default-marker fontsz values as use-default" do
+    it "treats fontsz 0 as use-default" do
       expect(builder.font_size_from(fontsz: "0")).to be_nil
-      expect(builder.font_size_from(fontsz: "80")).to be_nil
-      expect(builder.font_size_from(fontsz: "90")).to be_nil
       expect(builder.font_size_from(fontsz: "")).to be_nil
       expect(builder.font_size_from({})).to be_nil
     end
