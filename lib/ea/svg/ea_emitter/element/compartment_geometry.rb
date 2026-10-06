@@ -18,6 +18,7 @@ module Ea
         # coordinate math changes don't ripple into rendering.
         class CompartmentGeometry
           attr_reader :bounds, :size, :header_lines_count, :header_ghost,
+                      :header_ghost_tight,
                       :attr_lines_count, :op_lines_count,
                       :tagged_values_count,
                       :constraints_count,
@@ -38,7 +39,8 @@ module Ea
                           divider_offset: 8,
                           attr_line_offset: 6,
                           attr_first_offset: 7,
-                          header_ghost: false)
+                          header_ghost: false,
+                          header_ghost_tight: false)
             @bounds = bounds
             @size = size
             @header_lines_count = header_lines_count
@@ -54,6 +56,7 @@ module Ea
             @attr_line_offset = attr_line_offset
             @attr_first_offset = attr_first_offset
             @header_ghost = header_ghost
+            @header_ghost_tight = header_ghost_tight
           end
 
           def header_first_y
@@ -71,9 +74,9 @@ module Ea
             return nil if header_lines_count.zero?
 
             # The off-canvas parent ghost shifts every following
-            # header line +6, and the divider tracks the LAST header
-            # baseline + 8 (DD2AC61B: name baseline 85, divider 93).
-            ghost_shift = header_ghost ? 6 : 0
+            # header line +3, and the divider tracks the LAST header
+            # baseline + 8 (936AA434: ghost 100, stereo 116 = +16).
+            ghost_shift = header_ghost ? (header_ghost_tight ? 3 : 6) : 0
 
             header_first_y +
               ([header_lines_count, 1].max - 1) * (size + (header_line_offset || 6)) +
