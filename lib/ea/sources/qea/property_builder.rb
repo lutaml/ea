@@ -33,6 +33,7 @@ module Ea
             multiplicity_upper_raw: raw_upper(row),
             multiplicity_upper: parse_upper(row),
             default_value: row.default,
+            is_derived: boolean(row.derived),
             is_ordered: boolean(row.isordered),
             is_unique: !boolean(row.allowduplicates),
             visibility: visibility_from_scope(row.scope),

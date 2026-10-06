@@ -22,6 +22,21 @@ RSpec.describe Ea::Svg::EaEmitter::Element::AttributeLineBuilder do
     Ea::Model::Property.new(defaults.merge(attrs))
   end
 
+  describe "derived marker" do
+    it "prefixes the name with / for derived properties" do
+      # EA renders "+ /columns: Integer" - visibility slot keeps +
+      # while the name gains / (096AF2FD/GM_GriddedSurface).
+      prop = build_property(name: "columns", type_name: "Integer",
+                            is_derived: true)
+      expect(described_class.new(prop).to_s).to eq("+ /columns: Integer")
+    end
+
+    it "leaves non-derived names bare" do
+      prop = build_property(name: "controlPoint", type_name: "GM_PointGrid")
+      expect(described_class.new(prop).to_s).to eq("+ controlPoint: GM_PointGrid")
+    end
+  end
+
   describe "visibility marker" do
     it "uses + for public" do
       prop = build_property(visibility: "public")

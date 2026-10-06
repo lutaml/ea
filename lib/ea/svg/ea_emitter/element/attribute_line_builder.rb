@@ -64,6 +64,10 @@ module Ea
           def namespaced_name
             prefix = inherited_namespace_prefix
             base = property.name.to_s
+            # EA flags derived attributes with a '/' on the NAME (the
+            # visibility slot still shows '+'): 096AF2FD/GM_GriddedSurface
+            # renders "+ /columns: Integer" / "+ /rows: Integer".
+            base = "/#{base}" if property.is_derived
             prefix && !prefix.empty? ? "#{prefix}::#{base}" : base
           end
 
