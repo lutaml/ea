@@ -4,5 +4,5 @@ module Ea
   # Gem release version. Extracted to its own file so the
   # `gem-release` tool's `gem bump` can find and update it via the
   # standard `lib/<gem>/version.rb` convention.
-  VERSION = "0.6.53"
+  VERSION = "0.6.54"
 end
