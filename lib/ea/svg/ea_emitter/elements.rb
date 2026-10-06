@@ -235,7 +235,9 @@ module Ea
                                  enum_literals_count: 0)
           CompartmentGeometry.new(bounds: bounds, size: size,
                                    header_ghost: header_lines.any? &&
-                                                  header_lines.first.last == :italic,
+                                                  %i[italic italic_tight].include?(header_lines.first.last),
+                                   header_ghost_tight: header_lines.any? &&
+                                                       header_lines.first.last == :italic_tight,
                                    header_lines_count: header_lines.size,
                                    attr_lines_count: attr_lines.size,
                                    op_lines_count: op_lines.size,

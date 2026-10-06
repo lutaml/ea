@@ -23,11 +23,16 @@ module Ea
                        else weight_normal
                        end
               font_style = (style == :italic || style == :bold_italic) ? "italic" : "normal"
-              # EA spaces the line AFTER a right-aligned ghost 6px
-              # wider (ghost +13, next +32 at 7pt) - verified against
-              # EA-published reference SVGs.
+              # EA spaces the line AFTER a right-aligned ghost 3px
+              # wider than the pitch. Interfaces use a tighter +3
+              # (936AA434/Surface: ghost 100, «interface» 116).
+              ghost_shift = case lines.first.last
+                            when :italic then 6
+                            when :italic_tight then 3
+                            else 0
+                            end
               y = first_y + (idx * line_h) +
-                  (idx >= 1 && lines.first.last == :italic ? 6 : 0)
+                  (idx >= 1 && ghost_shift.positive? ? ghost_shift : 0)
               x = if style == :italic
                     # EA right-aligns the off-canvas parent ghost at
                     # the box's right edge by its integer textLength.

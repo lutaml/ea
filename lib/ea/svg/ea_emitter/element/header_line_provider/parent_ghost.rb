@@ -15,7 +15,7 @@ module Ea
               name = context.off_canvas_parent_name
               return [] unless name
 
-              [[name, :italic]]
+              [[name, context.classifier.is_a?(Ea::Model::Interface) ? :italic_tight : :italic]]
             end
           end
         end
