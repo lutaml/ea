@@ -373,6 +373,10 @@ module Ea
             target_stereotype: connector&.deststereotype,
             waypoints: context ? context_waypoints_for(connector, diagram_row) :
                          waypoints_for_link(link_row, diagram_row),
+            source_anchor: port_anchor_for(connector, diagram_row,
+                                           geom, :source),
+            target_anchor: port_anchor_for(connector, diagram_row,
+                                           geom, :target),
             source_port: connection_port(diagram_row, connector, :source, geom),
             target_port: connection_port(diagram_row, connector, :target, geom),
             label_boxes: context ? {} : (geom[:label_boxes] || {}),
@@ -382,6 +386,26 @@ module Ea
             ghost_labels: ghost_labels_for(connector, diagram_row, link_row),
             has_geometry_offsets: geometry_has_offsets?(link_row.geometry)
           )
+        end
+
+        # Ray origin for one connector end: the element's center
+        # translated by the stored SX/SY (source) or EX/EY (target)
+        # offset. EA clips the anchor-to-anchor segment at the drawn
+        # outlines.
+        def port_anchor_for(connector, diagram_row, geom, end_kind)
+          return nil unless connector
+
+          object_id = end_kind == :source ? connector.start_object_id :
+                                           connector.end_object_id
+          placement = diagram_object_placement(diagram_row.diagram_id,
+                                               object_id)
+          return nil unless placement
+
+          bounds = bounds_from_rect(placement)
+          dx = (end_kind == :source ? geom[:sx] : geom[:ex]).to_i
+          dy = (end_kind == :source ? geom[:sy] : geom[:ey]).to_i
+          Ea::Model::Point.new(x: bounds.x + bounds.width / 2 + dx,
+                               y: bounds.y + bounds.height / 2 + dy)
         end
 
         # Context diagrams re-route every drawn connector as a

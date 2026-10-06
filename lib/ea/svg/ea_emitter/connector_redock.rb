@@ -19,10 +19,11 @@ module Ea
         # self-loop, or no drawn bounds for either end).
         def pairs_for(connector, diagram, model_index, bounds_map)
           return nil unless bounds_map
-          return nil unless direct?(connector)
+          return nil unless direct?(connector) || two_point?(connector)
 
           points = waypoint_pairs(connector)
           return nil unless points.size == 2
+
 
           rel = relationship_for(connector, model_index)
           return nil unless rel
@@ -35,8 +36,45 @@ module Ea
           return nil unless source_bounds && target_bounds
           return nil if source_ref == target_ref
 
-          [edge_point(source_bounds, target_bounds),
-           edge_point(target_bounds, source_bounds)]
+          sa = connector.source_anchor
+          ta = connector.target_anchor
+          if sa && ta
+            [anchor_exit(sa, source_bounds, ta),
+             anchor_exit(ta, target_bounds, sa)]
+          else
+            [edge_point(source_bounds, target_bounds),
+             edge_point(target_bounds, source_bounds)]
+          end
+        end
+
+        # Exit point of the anchor-to-anchor segment through a box's
+        # outline: smallest positive t whose crossing lies on the
+        # rectangle perimeter.
+        def anchor_exit(anchor, bounds, other)
+          ax, ay = anchor.x.to_f, anchor.y.to_f
+          ox, oy = other.x.to_f, other.y.to_f
+          dx, dy = ox - ax, oy - ay
+          candidates = []
+          if dx != 0
+            [bounds.x, bounds.x + bounds.width].each do |x|
+              t = (x - ax) / dx
+              candidates << [t, x, ay + t * dy] if t.positive?
+            end
+          end
+          if dy != 0
+            [bounds.y, bounds.y + bounds.height].each do |y|
+              t = (y - ay) / dy
+              candidates << [t, ax + t * dx, y] if t.positive?
+            end
+          end
+          on_perimeter = candidates.select do |_t, x, y|
+            x >= bounds.x - 0.01 && x <= bounds.x + bounds.width + 0.01 &&
+              y >= bounds.y - 0.01 && y <= bounds.y + bounds.height + 0.01
+          end
+          best = on_perimeter.min_by(&:first)
+          # EA floors the dock coordinates (F851A657: 297.75 -> 297,
+          # 433.7 -> 433) - a rounded-up dock is a visible miss.
+          best ? [best[1].floor, best[2].floor] : [ax.floor, ay.floor]
         end
 
         # EA never docks a horizontal connector line at the header
@@ -85,6 +123,12 @@ module Ea
             %w[direct regenerated].any? { |k| style.key?(k) }
         end
 
+        # EXPERIMENT: every auto-laid 2-waypoint connector re-docks
+        # as the center-to-center ray clipped at the drawn outlines.
+        def two_point?(connector)
+          (connector.waypoints || []).size == 2
+        end
+
         def waypoint_pairs(connector)
           (connector.waypoints || []).filter_map do |wp|
             next unless wp.position
@@ -126,11 +170,11 @@ module Ea
           if dx.abs * bounds.height > dy.abs * bounds.width
             x = dx.positive? ? bounds.x + bounds.width : bounds.x
             y = safe_y(cx, cy, dx, dy, x)
-            [x, y]
+            [x, y.floor]
           else
             y = dy.positive? ? bounds.y + bounds.height : bounds.y
             x = safe_x(cx, cy, dx, dy, y)
-            [x, y]
+            [x.floor, y]
           end
         end
 
