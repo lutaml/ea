@@ -29,6 +29,17 @@ RSpec.describe Ea::Svg::EaEmitter::Element::ConstraintRenderer do
       expect(svg).to include(%(x="#{bounds.x + bounds.width - len}.00"))
     end
 
+    it "seats marker text 6px inside the box right edge" do
+      # E0C65C12/47581C14: EA's {root} x is uniformly 6px left of a
+      # flush right-aligned render.
+      svg = described_class.render([constraint], bounds: bounds,
+                                     first_y: 240, family: "Carlito", size: 7,
+                                     right_inset: 6)
+      len = Ea::Svg::EaEmitter::TextRenderer.estimate_width("{pattern}", 7, nil,
+                                                            family: "Carlito").round
+      expect(svg).to include(%(x="#{bounds.x + bounds.width - len - 6}.00"))
+    end
+
     it "spaces lines at the compartment pitch (size + 6)" do
       constraints = [
         Ea::Model::Constraint.new(name: "alpha"),
