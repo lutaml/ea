@@ -269,15 +269,33 @@ module Ea
           if first.last == :italic || first.last == :italic_tight
             6 # ghost-led: EA seats the right-aligned ghost at +13
           elsif first.first.to_s.start_with?("«")
-            enumeration_or_interface?(classifier) ? 6 : 9
+            fallback_stereotype_label?(first.first, classifier) ? 6 : 9
           else
             theme.compartments.header_top_padding
           end
         end
 
-        def enumeration_or_interface?(classifier)
-          classifier.is_a?(Ea::Model::Enumeration) ||
-            classifier.is_a?(Ea::Model::Interface)
+        # EA seats the FALLBACK stereotype label («enumeration»,
+        # «interface», … from the element TYPE with no stored
+        # stereotype) 3px higher than a class name; EXPLICIT
+        # stereotype labels («CodeList», «TopLevelFeatureType»)
+        # keep the class padding (C45FC57E's «CodeList» seats at
+        # +16 while fallback «enumeration» boxes seat at +13).
+        FALLBACK_LABELS = {
+          Ea::Model::Enumeration => "«enumeration»",
+          Ea::Model::Interface => "«interface»",
+          Ea::Model::DataType => "«dataType»",
+          Ea::Model::PrimitiveType => "«primitive»",
+          Ea::Model::Signal => "«signal»"
+        }.freeze
+
+        def fallback_stereotype_label?(label, classifier)
+          return false if classifier.respond_to?(:stereotype_refs) &&
+                          classifier.stereotype_refs&.any?
+
+          FALLBACK_LABELS.any? do |type, expected|
+            classifier.is_a?(type) && label == expected
+          end
         end
 
         # t_diagram pdata HideEStereo=1 suppresses every stereotype
