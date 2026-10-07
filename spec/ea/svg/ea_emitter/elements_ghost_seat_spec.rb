@@ -62,4 +62,27 @@ RSpec.describe Ea::Svg::EaEmitter::Elements do
     stereo = rendered_lines.find { |_y, c| c.include?("interface") }
     expect(stereo.first).to eq(69.0)
   end
+  it "tracks the divider one pixel lower on fallback interface headers" do
+    with_attr = Ea::Model::Interface.new(
+      id: "IF2", name: "Curve", package_id: "PKG1",
+      properties: [Ea::Model::Property.new(name: "boundary",
+                                           type_name: "Curve")]
+    )
+    index = model_index.merge("IF2" => with_attr)
+    plain = Ea::Model::Diagram.new(
+      id: "D2", name: "T", package_id: "PKG0",
+      elements: [
+        Ea::Model::DiagramElement.new(
+          id: "E2",
+          model_element_ref: "IF2",
+          bounds: Ea::Model::Bounds.new(x: 10, y: 40, width: 200, height: 90)
+        )
+      ],
+      connectors: []
+    )
+    svg = described_class.new(plain, model_index: index).render
+    ys = svg.scan(/<path[^>]*d="M ([\d.]+) ([\d.]+) L/).map { |m| Float(m[1]) }
+    # «interface» 53, name 66, divider 75 = name + 9 (class rule: 74)
+    expect(ys.min).to eq(75.0)
+  end
 end

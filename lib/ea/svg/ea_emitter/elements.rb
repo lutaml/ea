@@ -251,7 +251,7 @@ module Ea
                                    enum_literals_count: enum_literals_count,
                                    header_top_padding: header_padding_for(header_lines, classifier),
                                    header_line_offset: theme.compartments.header_line_offset,
-                                   divider_offset: theme.compartments.divider_offset,
+                                   divider_offset: divider_offset_for(header_lines, classifier),
                                    attr_line_offset: theme.compartments.attr_line_offset,
                                    attr_first_offset: attr_first_offset_for(attr_lines))
         end
@@ -262,6 +262,24 @@ module Ea
         # (+13). Corpus-verified by identity-matched elements:
         # Interface +13 x44 vs +16 x17, Enumeration +13 x13 vs +16
         # x3, Class/Object/DataType +16 x515.
+        # True Interface-typed elements (fallback «interface» label,
+        # no stored stereotype) track the divider at last header + 9
+        # instead of +8: 96EFAA3B/936AA434 compartments sit one
+        # pixel lower than the class rule, while Class-typed elements
+        # carrying an explicit "interface" stereotype keep +8
+        # (5EA23C08's CoordinateSet).
+        def divider_offset_for(header_lines, classifier)
+          first = header_lines.first
+          return theme.compartments.divider_offset unless first
+
+          if classifier.is_a?(Ea::Model::Interface) &&
+             fallback_stereotype_label?(first.first, classifier)
+            9
+          else
+            theme.compartments.divider_offset
+          end
+        end
+
         def header_padding_for(header_lines, classifier)
           first = header_lines.first
           return theme.compartments.header_top_padding unless first
