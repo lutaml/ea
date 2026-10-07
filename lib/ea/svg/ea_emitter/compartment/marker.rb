@@ -20,7 +20,8 @@ module Ea
               context.marker_lines,
               bounds: context.bounds,
               first_y: context.geometry.marker_first_y,
-              family: context.family, size: context.size
+              family: context.family, size: context.size,
+              right_inset: 6
             )
           end
         end
