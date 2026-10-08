@@ -128,6 +128,29 @@ module Ea
                                                                 off_canvas_parent_name: parent_name,
                                                                 foreign_package_name: foreign_package_name_for(classifier),
                                                                 suppress_stereotypes: suppress_stereotypes?) : []
+          # Regenerated contexts (SuppressFOC=0) re-size EVERY box to
+          # fit ALL content (7F10BFBD: Set enum box stored 70x59 ->
+          # EA 165x223 with all six literals unwrapped): width =
+          # max(stored, title + pad_t, widest row + 8), height likewise
+          # grows via the standard content growth. Frozen contexts
+          # (SuppressFOC=1) keep stored sizes and wrap.
+          if regenerated_context? && classifier.is_a?(Ea::Model::Classifier) &&
+             !classifier.is_a?(Ea::Model::Package)
+            preview_lines = []
+            if show_attributes? && attributes_visible?(element) &&
+               !classifier.is_a?(Ea::Model::Interface)
+              preview_lines += Element::AttributeRenderer.lines_for(
+                classifier, lookup: attribute_lookup,
+                exclude_association_ids: drawn_association_ids
+              )
+            end
+            if show_operations? && operations_visible?(element)
+              preview_lines += Element::OperationRenderer.lines_for(classifier)
+            end
+            bounds = context_resized_bounds(bounds, classifier, size, family,
+                                            preview_lines)
+          end
+
           is_classifier = classifier.is_a?(Ea::Model::Classifier)
           # Interfaces DO render attribute compartments when they own
           # attribute rows (936AA434/Surface lists its nine 19107
@@ -419,6 +442,34 @@ module Ea
         # classifier lives in a different package than the diagram
         # (descendant packages included). Corpus-verified (450
         # diagrams): ShowForeign=0 renders plain everywhere.
+        def regenerated_context?
+          diagram.name.to_s.downcase.start_with?("context diagram") &&
+            diagram.style_ex.to_s !~ /SuppressFOC=1/
+        end
+
+        TITLE_PAD = 18
+
+        def context_resized_bounds(bounds, classifier, size, family, rows)
+          label = classifier.name.to_s
+          pkg = foreign_package_name_for(classifier)
+          label = "#{pkg}::#{label}" if pkg
+          title_w = TextRenderer.estimate_width(
+            label, size, nil, family: family, weight: "700"
+          ).round
+          pad = title_w.odd? ? TITLE_PAD : 16
+          row_w = rows.map do |line|
+            line = line.sub(/\A«[^»]*»\z/, "")
+            TextRenderer.estimate_width(
+              line, size, nil, family: family, weight: "400"
+            ).round + 8
+          end.max.to_i
+          needed = [bounds.width, title_w + pad, row_w].max
+          return bounds if needed <= bounds.width
+
+          Ea::Model::Bounds.new(x: bounds.x, y: bounds.y,
+                                width: needed, height: bounds.height)
+        end
+
         def foreign_package_name_for(classifier)
           return nil unless diagram.show_foreign
           return nil unless classifier.is_a?(Ea::Model::Classifier)
