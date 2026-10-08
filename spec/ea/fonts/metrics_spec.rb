@@ -15,11 +15,17 @@ RSpec.describe Ea::Fonts::Metrics do
       expect(described_class.text_length(nil, 7, family: "Carlito")).to be_nil
     end
 
-    it "scales by the size-specific factor when fitted" do
-      # Carlito regular: 7pt uses factor 1.390, 9pt uses 1.440.
+    it "quantizes each glyph advance at the GDI logical height" do
+      # Carlito: H = round(pt * 10/7) - 7pt -> 10, 9pt -> 13; each
+      # glyph advance is round(em * H) and the textLength is the
+      # integer sum (corpus-fitted, bold 7pt 1666/1671 exact).
       seven = described_class.text_length("Hello", 7, family: "Carlito")
       nine = described_class.text_length("Hello", 9, family: "Carlito")
-      expect(nine / seven).to be_within(0.01).of(9 * 1.440 / (7 * 1.390))
+      table = described_class.data["advance"]["Carlito"]["regular"]
+      exp7 = "Hello".each_char.sum { |ch| (table["U+%04X" % ch.ord] * 10).round }
+      exp9 = "Hello".each_char.sum { |ch| (table["U+%04X" % ch.ord] * 13).round }
+      expect(seven).to eq(exp7.to_f)
+      expect(nine).to eq(exp9.to_f)
     end
 
     it "treats Calibri as metric-compatible with Carlito" do
