@@ -50,7 +50,10 @@ module Ea
 
             ops.map do |op|
               visibility = visibility_prefix(op).strip
-              params = (op.parameters || []).map { |p| "#{p.name}: #{namespace_double_colon(p.type_name)}" }.join(", ")
+              params = (op.parameters || []).map do |p|
+                type = namespace_double_colon(p.type_name)
+                p.direction == "inout" ? "#{type}*" : "#{p.name}: #{type}"
+              end.join(", ")
               return_type = namespace_double_colon(op.return_type_name)
               "#{visibility} #{op.name}(#{params}): #{return_type}".strip
             end
@@ -79,7 +82,9 @@ module Ea
 
           def self.reception_params(operation)
             params = (operation.parameters || []).filter_map { |p|
-              p.type_name.to_s.empty? ? nil : p.type_name.to_s
+              next nil if p.type_name.to_s.empty?
+
+              p.direction == "inout" ? "#{p.type_name}*" : "#{p.name}: #{p.type_name}"
             }.join(", ")
             params
           end
