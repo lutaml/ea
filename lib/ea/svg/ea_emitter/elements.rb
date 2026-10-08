@@ -166,6 +166,7 @@ module Ea
                          []
                        end
           op_lines = if is_classifier && show_operations? && operations_visible?(element)
+            $stderr.puts "DBG ops: show=#{show_operations?} vis=#{operations_visible?(element)} cls=#{classifier.class} nops=#{classifier.operations.to_a.size}"
                         Element::OperationRenderer.lines_for(classifier)
                       else
                         []
@@ -200,8 +201,24 @@ module Ea
                                            enum_literals_count: enum_row_count_for(classifier))
           end
           # EA suppresses the operations compartment when its rows
-          # overflow the stored box height (same rule as attributes).
-          if op_lines.any? && geometry.op_first_y &&
+          # overflow the stored box height (same rule as attributes)
+          # - EXCEPT on regenerated contexts, where EA GROWS the box
+          # to fit every row instead (7F10BFBD: Set stored 70x59 ->
+          # drawn 165x223 with all twelve operations).
+          if regenerated_context? && op_lines.any? && geometry.op_first_y &&
+             geometry.op_bottom_y.to_i > bounds.y + bounds.height
+            bounds = Ea::Model::Bounds.new(
+              x: bounds.x, y: bounds.y,
+              width: bounds.width,
+              height: geometry.op_bottom_y.to_i + 8 - bounds.y
+            )
+            geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
+                                             tagged_values_for(classifier).size,
+                                             header_lines, classifier: classifier,
+                                             constraints_count: constraints_for(classifier).size,
+                                           marker_count: marker_lines_for(classifier).size,
+                                           enum_literals_count: enum_row_count_for(classifier))
+          elsif op_lines.any? && geometry.op_first_y &&
              geometry.op_bottom_y.to_i > bounds.y + bounds.height
             op_lines = []
             geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
