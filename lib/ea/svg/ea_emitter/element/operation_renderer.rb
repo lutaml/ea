@@ -14,7 +14,7 @@ module Ea
         # compartment for Klass / Interface classifiers.
         class OperationRenderer
           VISIBILITY_X_OFFSET = 5
-          CONTENT_X_OFFSET = 20
+          CONTENT_X_OFFSET = 22
 
           def self.render(operations, bounds:, first_y:, family:, size:)
             # EA's op rows pitch 13 (size + 6), same as attribute
