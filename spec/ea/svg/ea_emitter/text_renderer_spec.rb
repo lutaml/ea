@@ -48,9 +48,9 @@ RSpec.describe Ea::Svg::EaEmitter::TextRenderer do
 
   it "computes textLength when not provided" do
     svg = renderer.to_svg
-    # real Carlito bold-italic advances for "Hello" (2.1406em) × 13pt
-    # × EA scale factor 1.4046 → 39.09 → 39
-    expect(svg).to include('textLength="39"')
+    # per-glyph GDI advances: bold-italic em × H(13pt)=round(13*10/7)=19
+    # → integer per glyph, summed = 41
+    expect(svg).to include('textLength="41"')
   end
 
   it "uses provided textLength when given" do

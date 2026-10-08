@@ -53,15 +53,42 @@ module Ea
 
       # Width of `text` in EA's exported SVG units for the given pt
       # size, or nil when the family is not metric-compatible.
+      #
+      # EA's GDI driver quantizes each glyph advance to an integer
+      # pixel count at the logical font height H = round(pt * 10/7)
+      # (Carlito: 7pt -> H10, 9pt -> H13) and the published
+      # textLength is the SUM of those per-glyph integers - corpus
+      # fitted to 97-100% exact on 10k Carlito texts (bold 7pt
+      # 1666/1671). The legacy sum-then-round model matched only 27%.
       def text_length(text, size_pt, family: nil, weight: nil, style: nil)
         return nil unless supported_family?(family)
         return nil if text.nil? || text.empty?
 
-        latin, cjk_count = split_advance(text, family: family,
-                                                weight: weight, style: style)
-        (latin * size_pt.to_f * factor_for(family, size_pt, weight, style) +
+        resolved = resolve_family(family)
+        if GDI_HEIGHT_FAMILIES.include?(resolved)
+          height = (size_pt.to_f * 10 / 7).round
+          table = table_for(family, weight, style)
+          latin = 0
+          cjk_count = 0
+          text.each_char do |ch|
+            if cjk?(ch.ord)
+              cjk_count += 1
+            else
+              latin += ((table[cp_key(ch)] || DEFAULT_ADVANCE) * height).round
+            end
+          end
+          return latin + cjk_count * CJK_ADVANCE * size_pt.to_f
+        end
+
+        _latin, cjk_count = split_advance(text, family: family,
+                                                 weight: weight, style: style)
+        (_latin * size_pt.to_f * factor_for(family, size_pt, weight, style) +
          cjk_count * CJK_ADVANCE * size_pt.to_f).round(3)
       end
+
+      # Families whose EA driver quantizes per-glyph advances
+      # (fitted from published textLengths).
+      GDI_HEIGHT_FAMILIES = %w[Carlito].freeze
 
       def supported_family?(family)
         !resolve_family(family).nil?
