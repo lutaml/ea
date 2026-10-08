@@ -65,14 +65,14 @@ RSpec.describe Ea::Svg::EaEmitter::Element::OperationRenderer do
       expect(text).to eq("draw()")
     end
 
-    it "joins parameter type names with commas (no param names)" do
+    it "renders in-params named and inout params as type with star" do
       op = build_op(name: "resize")
       p1 = Ea::Model::Parameter.new(name: "w", type_name: "int")
-      p2 = Ea::Model::Parameter.new(name: "h", type_name: "int")
+      p2 = Ea::Model::Parameter.new(name: "h", type_name: "int", direction: "inout")
       op.parameters = [p1, p2]
       op.return_type_name = "void"
-      text = described_class.operation_text( op)
-      expect(text).to eq("resize(int, int): void")
+      text = described_class.operation_text(op)
+      expect(text).to eq("resize(w: int, int*): void")
     end
   end
 end
