@@ -134,7 +134,6 @@ module Ea
                          []
                        end
           op_lines = if is_classifier && show_operations? && operations_visible?(element)
-            $stderr.puts "DBG ops: show=#{show_operations?} vis=#{operations_visible?(element)} cls=#{classifier.class} nops=#{classifier.operations.to_a.size}"
                         Element::OperationRenderer.lines_for(classifier)
                       else
                         []
