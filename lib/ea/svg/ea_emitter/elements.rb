@@ -221,7 +221,12 @@ module Ea
           # position even with zero operations), so it must stay out
           # of the max.
           grown_bottom = geometry.content_bottom_y.to_i
-          if attr_lines.any? && grown_bottom.positive? &&
+          # Enum literals grow the box too (7F10BFBD 'Context Diagram:
+          # Bag': Set enum box stored h59 -> EA 223 fitting six
+          # literals); op-only boxes keep the no-growth behavior
+          # (op_bottom_y is a divider sentinel, not content).
+          if (attr_lines.any? || enum_literals_for(classifier).any?) &&
+             grown_bottom.positive? &&
              grown_bottom + 8 > bounds.y + bounds.height
             bounds = Ea::Model::Bounds.new(
               x: bounds.x, y: bounds.y,
