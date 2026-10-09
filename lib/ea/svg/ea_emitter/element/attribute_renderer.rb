@@ -37,7 +37,9 @@ module Ea
               y = first_y + (idx * line_h)
               visibility, rest = split_visibility(line)
               if visibility
-                text_blocks << build_text(bounds.x + visibility_x_offset, y, visibility, family, size, size_unit, fill)
+                unless visibility.strip.empty?
+                  text_blocks << build_text(bounds.x + visibility_x_offset, y, visibility, family, size, size_unit, fill)
+                end
                 offset = (content_x_offset || DEFAULT_CONTENT_X_OFFSET) +
                          2 * (size - 7)
                 text_blocks << build_text(bounds.x + offset, y, rest, family, size, size_unit, fill)
