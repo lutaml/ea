@@ -37,7 +37,7 @@ module Ea
               y = first_y + ((idx + offset) * line_h)
               text_blocks << build_text(bounds.x + VISIBILITY_X_OFFSET, y,
                                          visibility_prefix(op), family, size)
-              text_blocks << build_text(bounds.x + CONTENT_X_OFFSET, y,
+              text_blocks << build_text(bounds.x + AttributeRenderer.content_x_offset(size), y,
                                          operation_text(op), family, size)
             end
             %(<g style="#{Style::TEXT_GROUP}">\n#{text_blocks.join("\n")}\n</g>)

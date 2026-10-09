@@ -10,17 +10,27 @@ module Ea
         class AttributeRenderer
           DEFAULT_VISIBILITY_X_OFFSET = 5
           DEFAULT_CONTENT_X_OFFSET = 22
+
           DEFAULT_FONT_UNIT = "pt"
           # EA seats compartment stereotype headers («Property») 12px
           # from the box edge and spaces rows 13px at 7pt.
           STEREOTYPE_HEADER_X_OFFSET = 12
           ROW_LINE_OFFSET = 6
 
+
+          # EA scales the row text inset with point size:
+          # 7pt rows sit at box.x+22, 9pt at box.x+26 (the '+ '
+          # visibility run stays at box.x+5 for both).
+          def self.content_x_offset(size)
+            DEFAULT_CONTENT_X_OFFSET + 2 * (size - 7)
+          end
+
           def self.render(lines, bounds:, first_y:, family:,
                           size:, size_unit: DEFAULT_FONT_UNIT,
                           fill: "#000000",
                           visibility_x_offset: DEFAULT_VISIBILITY_X_OFFSET,
-                          content_x_offset: DEFAULT_CONTENT_X_OFFSET)
+                          content_x_offset: nil)
+
             line_h = size + ROW_LINE_OFFSET
             text_blocks = []
             lines.each_with_index do |line, idx|
@@ -28,7 +38,9 @@ module Ea
               visibility, rest = split_visibility(line)
               if visibility
                 text_blocks << build_text(bounds.x + visibility_x_offset, y, visibility, family, size, size_unit, fill)
-                text_blocks << build_text(bounds.x + content_x_offset, y, rest, family, size, size_unit, fill)
+                offset = (content_x_offset || DEFAULT_CONTENT_X_OFFSET) +
+                         2 * (size - 7)
+                text_blocks << build_text(bounds.x + offset, y, rest, family, size, size_unit, fill)
               elsif line.strip.start_with?("«")
                 text_blocks << build_text(bounds.x + STEREOTYPE_HEADER_X_OFFSET, y, line.strip, family, size, size_unit, fill)
               else
