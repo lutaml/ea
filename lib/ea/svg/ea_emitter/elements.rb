@@ -124,8 +124,15 @@ module Ea
           # attribute rows (936AA434/Surface lists its nine 19107
           # attributes); the earlier corpus evidence for
           # header-only interfaces was zero-attribute leaf types.
+          # Regenerated contexts ignore stored per-element visibility
+          # toggles - EXCEPT for boxes whose only rows are
+          # association-derived properties (5833A95E keeps those
+          # suppressed even on FOC=0; 0CABA7D7 shows its association
+          # row because the class also owns real attributes).
           attr_lines = if is_classifier && show_attributes? &&
-                          attributes_visible?(element)
+                          (attributes_visible?(element) ||
+                           (regenerated_context? &&
+                            classifier.properties.to_a.any? { |pr| !pr.association_id }))
                          Element::AttributeRenderer.lines_for(
                            classifier, lookup: attribute_lookup,
                            exclude_association_ids: drawn_association_ids
@@ -133,7 +140,8 @@ module Ea
                        else
                          []
                        end
-          op_lines = if is_classifier && show_operations? && operations_visible?(element)
+          op_lines = if is_classifier && show_operations? &&
+                        (operations_visible?(element) || regenerated_context?)
                         Element::OperationRenderer.lines_for(classifier)
                       else
                         []
@@ -471,8 +479,7 @@ module Ea
         # (descendant packages included). Corpus-verified (450
         # diagrams): ShowForeign=0 renders plain everywhere.
         def regenerated_context?
-          diagram.name.to_s.downcase.start_with?("context diagram") &&
-            diagram.style_ex.to_s !~ /SuppressFOC=1/
+          diagram.style_ex.to_s !~ /SuppressFOC=1/
         end
 
         def foreign_package_name_for(classifier)
