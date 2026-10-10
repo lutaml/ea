@@ -12,6 +12,27 @@ module Ea
           DEFAULT_CONTENT_X_OFFSET = 22
 
           DEFAULT_FONT_UNIT = "pt"
+          # EA seats each group-header row («...» following a
+          # non-stereotype row) 4px below the uniform pitch (XSD
+          # schema diagrams: attr row 68 -> «XSDelement» 85 -> row 98;
+          # single-header boxes like «Property» sit at the first row
+          # and keep the plain pitch).
+          GROUP_HEADER_LEAD = 4
+
+          def self.group_lead_offsets(lines)
+            extra = 0
+            lines.each_with_index.map do |line, idx|
+              stereo = line.to_s.strip.start_with?("«")
+              prev_stereo = idx.positive? ? lines[idx - 1].to_s.strip.start_with?("«") : true
+              extra += GROUP_HEADER_LEAD if stereo && idx.positive? && !prev_stereo
+              extra
+            end
+          end
+
+          def self.group_lead_total(lines)
+            group_lead_offsets(lines).last.to_i
+          end
+
           # EA seats compartment stereotype headers («Property») 12px
           # from the box edge and spaces rows 13px at 7pt.
           STEREOTYPE_HEADER_X_OFFSET = 12
@@ -32,9 +53,10 @@ module Ea
                           content_x_offset: nil)
 
             line_h = size + ROW_LINE_OFFSET
+            offsets = group_lead_offsets(lines)
             text_blocks = []
             lines.each_with_index do |line, idx|
-              y = first_y + (idx * line_h)
+              y = first_y + (idx * line_h) + offsets[idx]
               visibility, rest = split_visibility(line)
               if visibility
                 unless visibility.strip.empty?

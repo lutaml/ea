@@ -39,6 +39,7 @@ module Ea
                           divider_offset: 8,
                           attr_line_offset: 6,
                           attr_first_offset: 7,
+                          attr_group_lead: 0,
                           header_ghost: false,
                           header_ghost_tight: false)
             @bounds = bounds
@@ -55,6 +56,7 @@ module Ea
             @divider_offset = divider_offset
             @attr_line_offset = attr_line_offset
             @attr_first_offset = attr_first_offset
+            @attr_group_lead = attr_group_lead
             @header_ghost = header_ghost
             @header_ghost_tight = header_ghost_tight
           end
@@ -108,7 +110,8 @@ module Ea
           def attr_bottom_y
             return attr_first_y unless attr_lines_count&.positive?
 
-            attr_first_y + (attr_lines_count - 1) * (size + (attr_line_offset || 6))
+            attr_first_y + (attr_lines_count - 1) * (size + (attr_line_offset || 6)) +
+              @attr_group_lead.to_i
           end
 
           def op_divider_y
