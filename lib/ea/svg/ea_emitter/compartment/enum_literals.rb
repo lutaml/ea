@@ -45,6 +45,21 @@ module Ea
           end
 
           def caption?(context)
+            values_caption?(context) || grown?(context)
+          end
+
+          # EA draws the 'literals' caption on every enum box it
+          # re-lays (grown height) - corpus 8/8 grown=caption. Boxes
+          # keeping stored size keep their stored caption state,
+          # captured by the stored literal values.
+          def grown?(context)
+            stored = context.element&.bounds
+            return false unless stored
+
+            context.bounds.height > stored.height + 4
+          end
+
+          def values_caption?(context)
             context.enum_literals.any? do |l|
               value = l.value.to_s
               !value.empty? && value != l.name.to_s
