@@ -32,7 +32,7 @@ Gem::Specification.new do |spec|
   # standalone (QEA, XMI, Diagram, Transformations). The optional
   # UML bridge (Ea::Qea.to_uml) lazy-requires `lutaml/uml` inside the
   # method body and raises a clear error if the gem is not installed.
-  spec.add_dependency "lutaml-model"
+  spec.add_dependency "lutaml-model", "~> 0.8"
   spec.add_dependency "lutaml-path"
   spec.add_dependency "sqlite3"
   spec.add_dependency "rubyzip"
