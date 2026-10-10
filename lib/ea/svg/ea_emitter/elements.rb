@@ -176,7 +176,8 @@ module Ea
                                            header_lines, classifier: classifier,
                                            constraints_count: constraints_for(classifier).size,
                                            marker_count: marker_lines_for(classifier).size,
-                                           enum_literals_count: enum_row_count_for(classifier))
+                                           enum_literals_count: enum_row_count_for(classifier),
+                                                 attr_group_lead: Element::AttributeRenderer.group_lead_total(attr_lines))
           # EA suppresses the whole attribute compartment when its
           # rows do not fit the stored box height (never truncates
           # rows) - the AOS box on CityFurniture hides its
@@ -198,7 +199,8 @@ module Ea
                                              header_lines, classifier: classifier,
                                              constraints_count: constraints_for(classifier).size,
                                            marker_count: marker_lines_for(classifier).size,
-                                           enum_literals_count: enum_row_count_for(classifier))
+                                           enum_literals_count: enum_row_count_for(classifier),
+                                                 attr_group_lead: Element::AttributeRenderer.group_lead_total(attr_lines))
           end
           # EA suppresses the operations compartment when its rows
           # overflow the stored box height (same rule as attributes)
@@ -217,7 +219,8 @@ module Ea
                                              header_lines, classifier: classifier,
                                              constraints_count: constraints_for(classifier).size,
                                            marker_count: marker_lines_for(classifier).size,
-                                           enum_literals_count: enum_row_count_for(classifier))
+                                           enum_literals_count: enum_row_count_for(classifier),
+                                                 attr_group_lead: Element::AttributeRenderer.group_lead_total(attr_lines))
           elsif op_lines.any? && geometry.op_first_y &&
              geometry.op_bottom_y.to_i > bounds.y + bounds.height
             op_lines = []
@@ -226,7 +229,8 @@ module Ea
                                              header_lines, classifier: classifier,
                                              constraints_count: constraints_for(classifier).size,
                                            marker_count: marker_lines_for(classifier).size,
-                                           enum_literals_count: enum_row_count_for(classifier))
+                                           enum_literals_count: enum_row_count_for(classifier),
+                                                 attr_group_lead: Element::AttributeRenderer.group_lead_total(attr_lines))
           end
           # Real attributes grow the DRAWN box past the stored
           # height instead of being dropped (0CABA7D7: stored h44
@@ -295,7 +299,8 @@ module Ea
         def compartment_geometry(bounds, size, attr_lines, op_lines,
                                  tagged_count, header_lines, classifier: nil,
                                  constraints_count: 0, marker_count: 0,
-                                 enum_literals_count: 0)
+                                 enum_literals_count: 0,
+                                 attr_group_lead: 0)
           CompartmentGeometry.new(bounds: bounds, size: size,
                                    header_ghost: header_lines.any? &&
                                                   %i[italic italic_tight].include?(header_lines.first.last),
@@ -312,7 +317,8 @@ module Ea
                                    header_line_offset: theme.compartments.header_line_offset,
                                    divider_offset: divider_offset_for(header_lines, classifier),
                                    attr_line_offset: theme.compartments.attr_line_offset,
-                                   attr_first_offset: attr_first_offset_for(attr_lines))
+                                   attr_first_offset: attr_first_offset_for(attr_lines),
+                                   attr_group_lead: attr_group_lead)
         end
 
         # EA seats a stereotype line 3px higher than a bare class name
