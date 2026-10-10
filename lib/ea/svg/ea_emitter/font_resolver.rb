@@ -30,9 +30,17 @@ module Ea
           @theme = theme || Ea::Theme::Registry.default
         end
 
+        # Families EA stores as "use default" markers - the export
+        # renders them with the theme font (corpus-wide, no published
+        # SVG ever carries Yu Gothic UI).
+        DEFAULT_MARKER_FAMILIES = ["Yu Gothic UI"].freeze
+
         def family_for(element)
           explicit = element&.font_family
-          return explicit if explicit && !explicit.empty?
+          unless explicit.nil? || explicit.empty? ||
+                 DEFAULT_MARKER_FAMILIES.include?(explicit)
+            return explicit
+          end
           return theme.font_family if theme.themed? && theme.font_family
 
           diagram_default_family || DEFAULT_FONT_FAMILY
