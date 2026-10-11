@@ -48,11 +48,10 @@ module Ea
           ys = points.map(&:last)
           min_x = xs.min || 0
           min_y = ys.min || 0
-          # When the leftmost element touches stored x=0 the left
-          # inset is 30, not 35 (all five such sample diagrams are
-          # exactly 5px narrower; min_x>0 diagrams keep 35). Canvas
-          # translation must use the same value.
-          @effective_inset_left = min_x.zero? ? INSET_LEFT - 5 : INSET_LEFT
+          # Left inset scales from 30 up to the 35 cap with the
+          # stored leftmost x: leftmost drawn x = 30 + min_x capped
+          # at 35 (corpus: min_x 0 -> 30, 2 -> 32, 4 -> 34, >=5 -> 35).
+          @effective_inset_left = [INSET_LEFT - 5 + min_x, INSET_LEFT].min
           [
             min_x,
             min_y,
