@@ -65,8 +65,10 @@ module Ea
           max_y = (pts + extra).map(&:last).max || 0
           return from(diagram, model_index: model_index) if pts.empty?
 
-          inset_left = min_x.zero? ? INSET_TOUCHING_ORIGIN
-                                    : BoundsCalculator::INSET_LEFT
+          # Same scaled rule as BoundsCalculator: drawn leftmost =
+          # min(35, 30 + min_x).
+          inset_left = [BoundsCalculator::INSET_LEFT - 5 + min_x,
+                        BoundsCalculator::INSET_LEFT].min
           new(min_x: min_x, min_y: min_y,
               width: (max_x - min_x) + inset_left +
                      BoundsCalculator::INSET_RIGHT,
