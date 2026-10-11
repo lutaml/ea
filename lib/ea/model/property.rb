@@ -17,6 +17,7 @@ module Ea
       # column value is non-numeric; rendered as-is by the SVG line
       # builder while computed-unbounded uppers render as "*".
       attribute :multiplicity_upper_raw, :string   # -1 means "many"
+      attribute :multiplicity_lower_raw, :string   # literal text bounds ("size")
       # Verbatim stored cardinality text (e.g. "*", "1..1", "n") for
       # association ends; EA renders connector-end multiplicities
       # exactly as stored rather than from parsed bounds.

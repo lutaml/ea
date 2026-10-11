@@ -30,6 +30,7 @@ module Ea
             type_name: normalize_type(row.type),
             qualified_name: "#{owner_object.name}::#{row.name}",
             multiplicity_lower: parse_lower(row),
+            multiplicity_lower_raw: raw_bound(row.lowerbound),
             multiplicity_upper_raw: raw_upper(row),
             multiplicity_upper: parse_upper(row),
             default_value: row.default,
@@ -52,7 +53,17 @@ module Ea
         # render as "*" (verified against EA-published SVGs).
         def raw_upper(row)
           raw = row.upperbound.to_s
-          raw.match?(/\A[nN]\z/) ? raw.downcase : nil
+          return raw.downcase if raw.match?(/\A[nN]\z/)
+
+          raw_bound(raw)
+        end
+
+        # Literal text bounds EA displays verbatim in brackets
+        # ('elements: Character [size]' - LowerBound/UpperBound both
+        # 'size').
+        def raw_bound(value)
+          raw = value.to_s
+          raw.empty? || raw.match?(/\A\d+\z/) ? nil : raw
         end
 
         def normalize_type(type)

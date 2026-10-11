@@ -100,8 +100,16 @@ module Ea
           def multiplicity
             lower = property.multiplicity_lower
             upper = property.multiplicity_upper
+            if lower == 1 && upper == 1
+              raw = property.multiplicity_lower_raw
+              # Literal text bounds EA displays verbatim ('elements:
+              # Character [size]' - stored bounds 'size'/'size' parse
+              # to the 1..1 default).
+              return "[#{raw}]" if raw && raw == property.multiplicity_upper_raw
+
+              return ""
+            end
             return "" if lower.nil? && upper.nil?
-            return "" if lower == 1 && upper == 1
 
             "[#{lower || 0}..#{bound_text(upper)}]"
           end
