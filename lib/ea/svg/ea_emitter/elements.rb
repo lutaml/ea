@@ -524,6 +524,10 @@ module Ea
           return nil unless document
           return nil unless diagram.show_parents
 
+          # GenLinks holds EA's verbatim ghost text ('Parent=X;').
+          gl = classifier.gen_links_parent.to_s
+          return gl unless gl.empty?
+
           gen = parent_generalization_for(classifier)
           return nil unless gen
 

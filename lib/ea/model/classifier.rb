@@ -13,6 +13,7 @@ module Ea
     class Classifier < Base
       attribute :qualified_name, :string
       attribute :nested_parent_name, :string # t_object.ParentID owner class
+      attribute :gen_links_parent, :string # t_object.GenLinks 'Parent=X;' ghost
       attribute :package_id, :string # containing package
       attribute :package_name, :string # containing package name
       attribute :is_abstract, :boolean, default: false
@@ -31,6 +32,8 @@ module Ea
         map "id", to: :id
         map "name", to: :name
         map "qualifiedName", to: :qualified_name
+        map "nestedParentName", to: :nested_parent_name
+        map "genLinksParent", to: :gen_links_parent
         map "packageId", to: :package_id
         map "packageName", to: :package_name
         map "isAbstract", to: :is_abstract, render_default: true
