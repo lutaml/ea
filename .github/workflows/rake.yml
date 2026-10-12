@@ -15,6 +15,8 @@ on:
 jobs:
   rake:
     uses: metanorma/ci/.github/workflows/generic-rake.yml@main
+    secrets:
+      pat_token: ${{ secrets.LUTAML_CI_PAT_TOKEN }}
 
   # Autonomous release: green main runs release patch directly via
   # workflow_dispatch — the ONE event GITHUB_TOKEN can self-trigger,
@@ -40,6 +42,3 @@ jobs:
           gh workflow run release.yml --ref main -f next_version=patch
           echo "release.yml dispatched (patch) — the release run itself
           pushes via Trusted Publishing."
-
-    secrets:
-      pat_token: ${{ secrets.LUTAML_CI_PAT_TOKEN }}
