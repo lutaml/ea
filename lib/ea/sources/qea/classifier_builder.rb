@@ -94,6 +94,7 @@ module Ea
             package_name: package_name_for(object),
             qualified_name: qualified_name_for(object),
             nested_parent_name: nested_parent_name(object),
+            gen_links_parent: parse_gen_links_parent(object.genlinks),
             is_abstract: abstract?(object),
             is_root: object.isroot.to_i == 1,
             is_leaf: object.isleaf.to_i == 1,
@@ -268,6 +269,15 @@ module Ea
           pkg = database.find_package(object.package_id)
           pkg_name = pkg&.name
           pkg_name ? "#{pkg_name}::#{name}" : name
+        end
+
+        # EA stores the off-canvas parent's VERBATIM display text in
+        # GenLinks ('Parent=r:LicensePart;' - owner-qualified nested
+        # names included). The ghost renders this string as-is.
+        def parse_gen_links_parent(links)
+          return nil if links.nil? || links.to_s.empty?
+
+          links.to_s[/Parent=([^;]+);?/, 1]
         end
 
         # When t_object.ParentID points at a Class (not a Package),
