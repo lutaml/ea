@@ -38,6 +38,7 @@ jobs:
       - name: Dispatch the patch release
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
         run: |
           gh workflow run release.yml --ref main -f next_version=patch
           echo "release.yml dispatched (patch) — the release run itself
