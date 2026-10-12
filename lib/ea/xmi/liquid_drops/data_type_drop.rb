@@ -4,12 +4,25 @@ module Ea
   module Xmi
     module LiquidDrops
       class DataTypeDrop < Liquid::Drop
-        def initialize(model, options = {}) # rubocop:disable Lint/MissingSuper
+        def initialize(model, guidance = nil, options = {}) # rubocop:disable Lint/MissingSuper
           @model = model
+          @guidance = guidance
           @options = options
           @lookup = options[:lookup]
           @xmi_root_model = options[:xmi_root_model]
+
+          init_guidance(guidance) if guidance
         end
+
+        private
+
+        def init_guidance(guidance)
+          @data_type_guidance = guidance["data_types"]&.find do |data_type|
+            data_type["name"] == name || data_type["name"] == absolute_path
+          end
+        end
+
+        public
 
         def xmi_id
           @model.xmi_id
@@ -17,6 +30,20 @@ module Ea
 
         def name
           @model.name
+        end
+
+        def absolute_path
+          absolute_path_arr = [@model.name]
+          e = @lookup.find_upper_level_packaged_element(@model.xmi_id)
+          absolute_path_arr << e.name if e
+
+          while e
+            e = @lookup.find_upper_level_packaged_element(e.id)
+            absolute_path_arr << e.name if e
+          end
+
+          absolute_path_arr << "::#{@xmi_root_model.model.name}"
+          absolute_path_arr.reverse.join("::")
         end
 
         def attributes
@@ -67,9 +94,13 @@ module Ea
         def generalization
           if @model.generalization
             ::Ea::Xmi::LiquidDrops::GeneralizationDrop.new(
-              @model.generalization, nil, @options
+              @model.generalization, @data_type_guidance, @options
             )
           end
+        end
+
+        def has_guidance?
+          !!@data_type_guidance
         end
 
         def upper_packaged_element

@@ -57,7 +57,8 @@ module Ea
 
         def data_types
           Array(@model.data_types).map do |data_type|
-            ::Ea::Xmi::LiquidDrops::DataTypeDrop.new(data_type, @options)
+            ::Ea::Xmi::LiquidDrops::DataTypeDrop.new(data_type, @guidance,
+                                                     @options)
           end
         end
 
