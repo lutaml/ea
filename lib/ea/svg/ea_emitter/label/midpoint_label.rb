@@ -62,6 +62,14 @@ module Ea
           # Returns the midpoint label content: stereotype if
           # present, else the relationship Name.
           def midpoint_content(connector)
+            # Generalizations carrying EA's isSubstitutable
+            # CustomProperty draw the constraint at the label seat.
+            if connector.respond_to?(:is_substitutable) &&
+               connector.is_substitutable &&
+               stereotype_label(connector).nil?
+              return "{isSubstitutable=false}"
+            end
+
             stereotype = stereotype_label(connector)
             return stereotype if stereotype
 
