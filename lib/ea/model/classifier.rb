@@ -12,6 +12,7 @@ module Ea
     # (t_object.Object_Type, xmi:type) to pick the right subclass.
     class Classifier < Base
       attribute :qualified_name, :string
+      attribute :nested_parent_name, :string # t_object.ParentID owner class
       attribute :package_id, :string # containing package
       attribute :package_name, :string # containing package name
       attribute :is_abstract, :boolean, default: false
