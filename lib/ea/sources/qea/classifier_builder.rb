@@ -93,6 +93,7 @@ module Ea
             package_id: package_id_for(object),
             package_name: package_name_for(object),
             qualified_name: qualified_name_for(object),
+            nested_parent_name: nested_parent_name(object),
             is_abstract: abstract?(object),
             is_root: object.isroot.to_i == 1,
             is_leaf: object.isleaf.to_i == 1,

@@ -492,6 +492,12 @@ module Ea
           return nil unless diagram.show_foreign
           return nil unless classifier.is_a?(Ea::Model::Classifier)
 
+          # Nested classifiers (t_object.ParentID -> a Class) qualify
+          # with the OWNER CLASS name even when the package matches
+          # the diagram's (026D353E: 'set::ComplexTypeClass3').
+          nested = classifier.nested_parent_name.to_s
+          return nested.empty? ? nil : nested unless nested.empty?
+
           pkg_id = classifier.package_id
           return nil if pkg_id.nil? || pkg_id == diagram.package_id
 
