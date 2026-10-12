@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "set"
+
 module Ea
   module Sources
     module Qea
@@ -9,6 +11,20 @@ module Ea
       # styles).
       class DiagramBuilder
         attr_reader :database
+
+        # Generalizations whose EA CustomProperties carry
+        # isSubstitutable draw '{isSubstitutable=false}' at the label
+        # seat (t_xref 'connector property' rows keyed by connector
+        # guid; VALU 0/empty both mean false).
+        def substitutable_connector?(conn)
+          @substitutable_guids ||= database.collections[:xrefs]
+                                           .select do |x|
+            x.xref_type == "connector property" &&
+              x.name == "CustomProperties" &&
+              x.description.to_s.include?("isSubstitutable")
+          end.map(&:client).to_set
+          @substitutable_guids.include?(conn.ea_guid)
+        end
 
         def initialize(database)
           @database = database
@@ -188,6 +204,7 @@ module Ea
             target_stereotype: conn.deststereotype,
             waypoints: waypoints,
             label_boxes: {},
+            is_substitutable: substitutable_connector?(conn),
             # Only the Dependency family carries EA's double-back
             # "M t L s M t" byte form; regenerated generalizations
             # and associations draw as plain source-first lines
@@ -249,6 +266,7 @@ module Ea
             connector_type: conn.connector_type,
             waypoints: waypoints,
             label_boxes: {},
+            is_substitutable: substitutable_connector?(conn),
             style: { direct: true },
             hidden: false,
             has_geometry_offsets: false
@@ -384,7 +402,8 @@ module Ea
                      DiagramStyleParser.parse(link_row.style),
             hidden: hidden?(link_row),
             ghost_labels: ghost_labels_for(connector, diagram_row, link_row),
-            has_geometry_offsets: geometry_has_offsets?(link_row.geometry)
+            has_geometry_offsets: geometry_has_offsets?(link_row.geometry),
+            is_substitutable: substitutable_connector?(connector)
           )
         end
 

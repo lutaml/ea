@@ -30,6 +30,7 @@ module Ea
       attribute :line_color, :integer
       attribute :line_width, :integer
       attribute :hidden, :boolean
+      attribute :is_substitutable, :boolean, default: false
       attribute :label_boxes, :hash, default: -> { {} }
       attribute :ghost_labels, GhostLabel, collection: true, initialize_empty: true
       # True when the t_diagramlinks.Geometry string carries explicit
@@ -59,6 +60,7 @@ module Ea
         map "sourceElementRef", to: :source_element_ref
         map "targetElementRef", to: :target_element_ref
         map "sourceDuid", to: :source_duid
+        map "isSubstitutable", to: :is_substitutable
         map "targetDuid", to: :target_duid
         map "sourceEdge", to: :source_edge
         map "targetEdge", to: :target_edge
