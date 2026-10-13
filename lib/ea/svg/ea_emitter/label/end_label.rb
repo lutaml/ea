@@ -68,10 +68,14 @@ module Ea
               # dominant with a +3 minority).
               mult_pos = [anchor[0] + 12, anchor[1] + 15]
             end
-            show_property = property_label?(connector, end_kind)
+            # The end's stored stereotype renders verbatim («Type» on
+            # 066E0FD1, «Property» on the Property ends); no line when
+            # the end has none.
+            stereo = connector_source_dest_stereotype(connector, end_kind)
+            stereo = stereo.nil? || stereo.empty? ? nil : "«#{stereo}»"
 
             build_texts(role:, mult:, standalone:,
-                        text_pos:, mult_pos:, show_property:)
+                        text_pos:, mult_pos:, stereo:)
           end
 
           private
@@ -106,12 +110,12 @@ module Ea
           end
 
           def build_texts(role:, mult:, standalone:, text_pos:, mult_pos:,
-                          show_property:)
+                          stereo:)
             if role && !role.empty? && text_pos
               x, y = text_pos
               texts = [text_at(x, y, role)]
-              if show_property
-                texts << text_at(x, y + property_y_offset, PROPERTY_STEREOTYPE)
+              if stereo
+                texts << text_at(x, y + property_y_offset, stereo)
               end
               if mult && !mult.empty? && mult_pos
                 texts << text_at(*mult_pos, mult)
@@ -132,6 +136,12 @@ module Ea
           # carry no end stereotype and render none, while the CityGML
           # profile diagrams mark ends explicitly.
           PROPERTY_KEYWORD = "property"
+
+          def connector_source_dest_stereotype(connector, end_kind)
+            stereo = end_kind == :source ? connector.source_stereotype :
+                       connector.target_stereotype
+            stereo.to_s.strip
+          end
 
           def property_label?(connector, end_kind)
             stereo = end_kind == :source ? connector.source_stereotype : connector.target_stereotype
