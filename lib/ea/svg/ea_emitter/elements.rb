@@ -175,7 +175,7 @@ module Ea
                                            tagged_values_for(classifier).size,
                                            header_lines, classifier: classifier,
                                            constraints_count: constraints_for(classifier).size,
-                                           marker_count: marker_lines_for(classifier).size,
+                                           marker_count: marker_lines_for(classifier, element).size,
                                            enum_literals_count: enum_row_count_for(classifier),
                                                  attr_group_lead: Element::AttributeRenderer.group_lead_total(attr_lines))
           # EA suppresses the whole attribute compartment when its
@@ -198,7 +198,7 @@ module Ea
                                              tagged_values_for(classifier).size,
                                              header_lines, classifier: classifier,
                                              constraints_count: constraints_for(classifier).size,
-                                           marker_count: marker_lines_for(classifier).size,
+                                           marker_count: marker_lines_for(classifier, element).size,
                                            enum_literals_count: enum_row_count_for(classifier),
                                                  attr_group_lead: Element::AttributeRenderer.group_lead_total(attr_lines))
           end
@@ -218,7 +218,7 @@ module Ea
                                              tagged_values_for(classifier).size,
                                              header_lines, classifier: classifier,
                                              constraints_count: constraints_for(classifier).size,
-                                           marker_count: marker_lines_for(classifier).size,
+                                           marker_count: marker_lines_for(classifier, element).size,
                                            enum_literals_count: enum_row_count_for(classifier),
                                                  attr_group_lead: Element::AttributeRenderer.group_lead_total(attr_lines))
           elsif op_lines.any? && geometry.op_first_y &&
@@ -228,7 +228,7 @@ module Ea
                                              tagged_values_for(classifier).size,
                                              header_lines, classifier: classifier,
                                              constraints_count: constraints_for(classifier).size,
-                                           marker_count: marker_lines_for(classifier).size,
+                                           marker_count: marker_lines_for(classifier, element).size,
                                            enum_literals_count: enum_row_count_for(classifier),
                                                  attr_group_lead: Element::AttributeRenderer.group_lead_total(attr_lines))
           end
@@ -456,8 +456,13 @@ module Ea
           classifier.constraints || []
         end
 
-        def marker_lines_for(classifier)
+        def marker_lines_for(classifier, element = nil)
           return [] unless classifier.is_a?(Ea::Model::Classifier)
+          # Boxes with an EXPLICIT background colour drop the
+          # {root}/{leaf} markers (corpus: every drawn marker sits on
+          # a BCol=-1/default box; custom-filled boxes like
+          # SY_RelativePlacement BCol=13816530 suppress it).
+          return [] if element&.background_color.to_i.positive?
 
           marker_line = root_leaf_marker_for(classifier)
           marker_line ? [marker_constraint(marker_line)] : []
