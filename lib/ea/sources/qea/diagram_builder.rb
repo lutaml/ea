@@ -115,7 +115,8 @@ module Ea
             font_bold: truthy?(style_hash[:bold]),
             font_italic: truthy?(style_hash[:italic]),
             font_underline: truthy?(style_hash[:ul]),
-            show_tagged_values: truthy?(style_hash[:tag])
+            show_tagged_values: truthy?(style_hash[:tag]),
+            background_color: style_hash[:bcol]&.to_i
           )
         end
 
