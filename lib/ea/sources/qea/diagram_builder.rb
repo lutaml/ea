@@ -642,9 +642,12 @@ module Ea
               tgt_b = bounds_from_rect(target_placement)
               if tgt_b.y + tgt_b.height <= src_b.y
                 inset = generalization_outline_offset(link_row, points.size)
-                points[0] = [points[1][0].clamp(src_b.x, src_b.x + src_b.width), src_b.y - inset]
-                points[-1] = [points[-2][0].clamp(tgt_b.x, tgt_b.x + tgt_b.width),
-                              tgt_b.y + tgt_b.height + inset]
+                source_y = src_b.y
+                target_y = tgt_b.y + tgt_b.height
+                source_y -= inset if points[1][1] < source_y - inset
+                target_y += inset if points[-2][1] > target_y + inset
+                points[0] = [points[1][0].clamp(src_b.x, src_b.x + src_b.width), source_y]
+                points[-1] = [points[-2][0].clamp(tgt_b.x, tgt_b.x + tgt_b.width), target_y]
               end
             end
           elsif source_port || target_port
