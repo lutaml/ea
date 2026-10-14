@@ -49,8 +49,8 @@ module Ea
         def attributes
           Array(@model.attributes).filter_map do |owned_attr|
             if @options[:with_assoc] || owned_attr.association.nil?
-              ::Ea::Xmi::LiquidDrops::AttributeDrop.new(owned_attr,
-                                                            @options)
+              ::Ea::Xmi::LiquidDrops::AttributeDrop
+                .new(owned_attr, @options, @data_type_guidance)
             end
           end
         end
@@ -87,16 +87,17 @@ module Ea
 
         def owned_attributes
           Array(@model.attributes).filter_map do |owned_attr|
-            ::Ea::Xmi::LiquidDrops::AttributeDrop.new(owned_attr, @options)
+            ::Ea::Xmi::LiquidDrops::AttributeDrop
+              .new(owned_attr, @options, @data_type_guidance)
           end
         end
 
         def generalization
-          if @model.generalization
-            ::Ea::Xmi::LiquidDrops::GeneralizationDrop.new(
-              @model.generalization, @data_type_guidance, @options
-            )
-          end
+          return unless @model.generalization
+
+          ::Ea::Xmi::LiquidDrops::GeneralizationDrop.new(
+            @model.generalization, @data_type_guidance, @options
+          )
         end
 
         def has_guidance?

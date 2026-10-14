@@ -4,10 +4,11 @@ module Ea
   module Xmi
     module LiquidDrops
       class AttributeDrop < Liquid::Drop
-        def initialize(model, options = {}) # rubocop:disable Lint/MissingSuper
+        def initialize(model, options = {}, guidance = nil) # rubocop:disable Lint/MissingSuper
           @model = model
           @options = options
           @lookup = options[:lookup]
+          @guidance = guidance
         end
 
         def id
@@ -43,7 +44,7 @@ module Ea
 
           if defn.nil? || defn.empty?
             defn = @lookup.lookup_connector_def_by_associationclass(
-              @model.association,
+              @model.association
             )
           end
 
@@ -51,28 +52,47 @@ module Ea
         end
 
         def association
-          if @options[:with_assoc] && @model.association
-            @model.association
-          end
+          return unless @options[:with_assoc] && @model.association
+
+          @model.association
         end
 
         def association_connector
           return unless @model.association
 
           connector = @lookup.fetch_connector(@model.association)
-          if connector
-            ::Ea::Xmi::LiquidDrops::ConnectorDrop.new(connector, @options)
-          end
+          return unless connector
+
+          ::Ea::Xmi::LiquidDrops::ConnectorDrop.new(connector, @options)
         end
 
         def type_ns
-          if @options[:with_assoc] && @model.association
-            @model.type_ns
-          end
+          return unless @options[:with_assoc] && @model.association
+
+          @model.type_ns
         end
 
         def stereotype
           @lookup.doc_node_attribute_value(@model.xmi_id, "stereotype")
+        end
+
+        def used?
+          if @guidance
+            col_name = name
+            attr = @guidance["attributes"].find { |a| a["name"] == col_name }
+            return attr["used"].to_s if attr
+          end
+
+          "true"
+        end
+
+        def guidance
+          return unless @guidance
+
+          col_name = "#{name_ns}:#{name}"
+          attr = @guidance["attributes"].find { |a| a["name"] == col_name }
+
+          attr["guidance"] if attr
         end
       end
     end
