@@ -65,8 +65,8 @@ module Ea
 
           links.flat_map do |link|
             link.generalization
-              .select { |gen| gen.end == @model.xmi_id }
-              .map(&:id)
+                .select { |gen| gen.end == @model.xmi_id }
+                .map(&:id)
           end.compact
         end
 
@@ -79,7 +79,7 @@ module Ea
           ::Ea::Xmi::LiquidDrops::PackageDrop.new(
             build_uml_package(xmi_pkg),
             @guidance,
-            @options.merge(absolute_path: "#{@options[:absolute_path]}::#{name}"),
+            @options.merge(absolute_path: "#{@options[:absolute_path]}::#{name}")
           )
         end
 
@@ -104,14 +104,16 @@ module Ea
         def attributes
           Array(@model.attributes).filter_map do |owned_attr|
             if @options[:with_assoc] || owned_attr.association.nil?
-              ::Ea::Xmi::LiquidDrops::AttributeDrop.new(owned_attr, @options)
+              ::Ea::Xmi::LiquidDrops::AttributeDrop
+                .new(owned_attr, @options, @klass_guidance)
             end
           end
         end
 
         def owned_attributes
           Array(@model.attributes).filter_map do |owned_attr|
-            ::Ea::Xmi::LiquidDrops::AttributeDrop.new(owned_attr, @options)
+            ::Ea::Xmi::LiquidDrops::AttributeDrop
+              .new(owned_attr, @options, @klass_guidance)
           end
         end
 
@@ -153,18 +155,18 @@ module Ea
         end
 
         def generalization
-          if @options[:with_gen] && @model.generalization
-            ::Ea::Xmi::LiquidDrops::GeneralizationDrop.new(
-              @model.generalization, @klass_guidance, @options
-            )
-          end
+          return unless @options[:with_gen] && @model.generalization
+
+          ::Ea::Xmi::LiquidDrops::GeneralizationDrop.new(
+            @model.generalization, @klass_guidance, @options
+          )
         end
 
         def upper_packaged_element
-          if @options[:with_gen]
-            e = @lookup.find_upper_level_packaged_element(@model.xmi_id)
-            e&.name
-          end
+          return unless @options[:with_gen]
+
+          e = @lookup.find_upper_level_packaged_element(@model.xmi_id)
+          e&.name
         end
 
         def subtype_of

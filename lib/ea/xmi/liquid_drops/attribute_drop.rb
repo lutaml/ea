@@ -89,7 +89,7 @@ module Ea
         def guidance
           return unless @guidance
 
-          col_name = "#{name_ns}:#{name}"
+          col_name = name
           attr = @guidance["attributes"].find { |a| a["name"] == col_name }
 
           attr["guidance"] if attr
