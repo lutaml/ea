@@ -166,4 +166,64 @@ RSpec.describe Ea::Svg::EaEmitter::Label::EndLabel do
                   end_kind: :source)
     expect(out.join).to include("+things")
   end
+
+  shared_context "stored end-label geometry" do
+    let(:association) do
+      Ea::Model::Association.new(
+        id: "r1", source_id: "c1", target_id: "c2",
+        source_multiplicity_raw: "0..*", target_multiplicity_raw: "0..*"
+      )
+    end
+    let(:connector) do
+      Ea::Model::DiagramConnector.new(id: "dc1", relationship_ref: association.id)
+    end
+    let(:label_cases) do
+      [
+        ["trafficVolumeAttribute", 94, 1, "property", 135],
+        ["trafficVolumeAttributeX", 99, 1, "property", 138],
+        ["target", 29, 1, "property", 102],
+        ["trafficVolumeAttribute", 94, 0, "property", 110],
+        ["trafficVolumeAttribute", 94, nil, "property", 110],
+        ["trafficVolumeAttribute", 94, 2, "property", 110],
+        ["trafficVolumeAttribute", 94, "1", "property", 110],
+        ["trafficVolumeAttribute", 94, "unknown", "property", 110],
+        ["trafficVolumeAttribute", 94, :absent, "property", 110],
+        ["trafficVolumeAttribute", 94, 1, nil, nil]
+      ]
+    end
+  end
+
+  shared_examples "stored end-label alignment" do
+    it "centers only explicitly aligned stereotypes while preserving the rest of the cluster" do
+      label_cases.each do |role_name, role_length, alignment, stereotype, stereotype_x|
+        association.source_role_name = association.target_role_name = role_name
+        connector.source_stereotype = connector.target_stereotype = stereotype
+        box = { "ox" => 10, "oy" => 15 }
+        box.merge!("cx" => 93, "cy" => 13, "alignment" => alignment) unless alignment == :absent
+        texts = renderer.texts(text_box: box,
+                               mult_box: { "ox" => 30, "oy" => 5 },
+                               anchor: [100, 200], connector:, end_kind:)
+        parsed = texts.map { |text| Nokogiri::XML(text).at_css("text") }
+
+        expect(parsed.map(&:text)).to eq(
+          ["+#{role_name}", stereotype && "«#{stereotype}»", "0..*"].compact
+        )
+        expect(parsed.map { |text| text["textLength"].to_i }).to eq(
+          [role_length, stereotype && 44, 16].compact
+        )
+        expect(parsed.map { |text| [text["x"].to_f, text["y"].to_f] }).to eq(
+          [[110, 185], stereotype && [stereotype_x, 198], [130, 195]].compact
+        )
+      end
+    end
+  end
+
+  %i[source target].each do |end_kind|
+    context "with stored label geometry at the #{end_kind} end" do
+      include_context "stored end-label geometry"
+      let(:end_kind) { end_kind }
+
+      include_examples "stored end-label alignment"
+    end
+  end
 end
