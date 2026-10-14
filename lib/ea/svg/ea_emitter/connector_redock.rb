@@ -36,16 +36,45 @@ module Ea
           return nil unless source_bounds && target_bounds
           return nil if source_ref == target_ref
 
-          sa = connector.source_anchor
-          ta = connector.target_anchor
-          if sa && ta
-            [anchor_exit(sa, source_bounds, ta),
-             anchor_exit(ta, target_bounds, sa)]
+          anchors = [connector.source_anchor, connector.target_anchor]
+          bounds = [source_bounds, target_bounds]
+          original = clipped_pairs(bounds, anchors)
+          return original unless stroke_outline?(connector, bounds)
+
+          # EA docks these markers on the outer edge of the 2px box stroke.
+          outline = bounds.map do |box|
+            Ea::Model::Bounds.new(x: box.x - 1, y: box.y - 1,
+                                  width: box.width + 2, height: box.height + 2)
+          end
+          candidate = clipped_pairs(outline, anchors)
+          forward_route?(original, candidate) ? candidate : original
+        end
+
+        def stroke_outline?(connector, bounds)
+          connector.style.to_h[:lwidth] == "2" &&
+            %w[Generalization Aggregation].include?(connector.connector_type) &&
+            bounds.all? { |box| box.width.positive? && box.height.positive? }
+        end
+        private_class_method :stroke_outline?
+
+        def clipped_pairs(bounds, anchors)
+          source, target = bounds
+          source_anchor, target_anchor = anchors
+          if source_anchor && target_anchor
+            [anchor_exit(source_anchor, source, target_anchor),
+             anchor_exit(target_anchor, target, source_anchor)]
           else
-            [edge_point(source_bounds, target_bounds),
-             edge_point(target_bounds, source_bounds)]
+            [edge_point(source, target), edge_point(target, source)]
           end
         end
+        private_class_method :clipped_pairs
+
+        def forward_route?(original, candidate)
+          before = original.first.zip(original.last).map { |start, finish| finish - start }
+          after = candidate.first.zip(candidate.last).map { |start, finish| finish - start }
+          before.zip(after).sum { |old, current| old * current }.positive?
+        end
+        private_class_method :forward_route?
 
         # Exit point of the anchor-to-anchor segment through a box's
         # outline: smallest positive t whose crossing lies on the
@@ -101,21 +130,29 @@ module Ea
                       divider_y_by_ref[target_ref]]
           return nil unless bounds.all? && dividers.all?
 
-          changed = false
-          adjusted = pairs.each_with_index.map do |(x, y), i|
-            box = bounds[i]
-            divider = dividers[i]
-            at_edge = (x - box.x).abs <= 1 || (x - (box.x + box.width)).abs <= 1
-            at_divider = (y - divider.to_f).abs <= 1
-            if at_edge && at_divider
-              changed = true
-              [x, y + ROW_SLOT_PITCH]
-            else
-              [x, y]
-            end
+          adjusted = row_slot_pairs(pairs, bounds, dividers)
+          if stroke_outline?(connector, bounds) &&
+             pairs == pairs_for(connector, diagram, model_index, bounds_map)
+            original = clipped_pairs(bounds, [connector.source_anchor, connector.target_anchor])
+            original_final = row_slot_pairs(original, bounds, dividers)
+            adjusted = original_final if original != pairs && !forward_route?(original_final, adjusted)
           end
-          changed ? adjusted : nil
+          adjusted == pairs ? nil : adjusted
         end
+
+        def row_slot_pairs(pairs, bounds, dividers)
+          pairs.each_with_index.map do |(x, y), index|
+            row_slot?(x, y, bounds[index], dividers[index]) ? [x, y + ROW_SLOT_PITCH] : [x, y]
+          end
+        end
+        private_class_method :row_slot_pairs
+
+        def row_slot?(x_position, y_position, bounds, divider)
+          at_edge = (x_position - bounds.x).abs <= 1 ||
+                    (x_position - (bounds.x + bounds.width)).abs <= 1
+          at_edge && (y_position - divider.to_f).abs <= 1
+        end
+        private_class_method :row_slot?
 
         def direct?(connector)
           style = connector.style || {}

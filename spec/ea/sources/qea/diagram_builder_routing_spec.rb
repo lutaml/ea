@@ -19,7 +19,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
       [{ path: "150:-250;450:-250;", style: "TREE=V;LWidth=2;",
          source: [100, 100, 200, 100], target: [400, 300, 200, 100] },
        "M 135 40 L 85 190 L 385 190 L 435 240"],
-      [{ path: "", style: "TREE=V;LWidth=2;" }, "M 210 240 L 360 140"]
+      [{ path: "", style: "TREE=V;LWidth=2;" }, "M 211 239 L 358 141"]
     ]
     [
       [199, "M 85 239 L 85 139 L 385 139 L 385 140"],
