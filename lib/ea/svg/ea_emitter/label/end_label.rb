@@ -75,7 +75,7 @@ module Ea
             stereo = stereo.nil? || stereo.empty? ? nil : "«#{stereo}»"
 
             build_texts(role:, mult:, standalone:,
-                        text_pos:, mult_pos:, stereo:)
+                        text_pos:, mult_pos:, stereo:, text_box:)
           end
 
           private
@@ -110,12 +110,13 @@ module Ea
           end
 
           def build_texts(role:, mult:, standalone:, text_pos:, mult_pos:,
-                          stereo:)
+                          stereo:, text_box:)
             if role && !role.empty? && text_pos
               x, y = text_pos
               texts = [text_at(x, y, role)]
               if stereo
-                texts << text_at(x, y + property_y_offset, stereo)
+                stereo_x = x + stereotype_offset(role, stereo, text_box)
+                texts << text_at(stereo_x, y + property_y_offset, stereo)
               end
               if mult && !mult.empty? && mult_pos
                 texts << text_at(*mult_pos, mult)
@@ -126,6 +127,16 @@ module Ea
             else
               []
             end
+          end
+
+          def stereotype_offset(role, stereo, text_box)
+            return 0 unless text_box && text_box["alignment"] == 1
+
+            role_width = TextRenderer.estimate_width(role, font_size,
+                                                     family: font_family).round
+            stereo_width = TextRenderer.estimate_width(stereo, font_size,
+                                                       family: font_family).round
+            ((role_width - stereo_width) / 2.0).round
           end
 
           # EA renders «Property» between role name and multiplicity

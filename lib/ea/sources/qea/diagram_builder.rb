@@ -605,21 +605,15 @@ module Ea
           intermediate = intermediate_waypoints(link_row)
           if edge_out == 2 && source_port && target_port &&
              !valid_tree_path?(intermediate, source_placement)
-            # EA recomputes tree routes at DRAW TIME from current
-            # element positions when the stored Path no longer lands
-            # on the source's facing edge (hand-verified: SY 8542's
-            # stale Path vs EA-drawn route; CityObjectGroup's current
-            # Path renders byte-exact and is kept). Computed route:
-            # source port -> corner at (target dock x, source exit
-            # y) -> target port.
+            # A stale tree Path (not on the source's facing edge) is
+            # recomputed: source port -> corner at (target dock x,
+            # source exit y) -> target port.
             points = [[source_point[0], source_point[1]],
                       [target_point[0], source_point[1]],
                       [target_point[0], target_point[1]]]
           elsif edge_out == 2 && intermediate.size == 1
-            # Current tree Path (bend on the source's facing edge):
-            # EA's draw-time route shape — source right edge at the
-            # bend's y, corner at the bend, target facing edge at the
-            # bend's x (byte-exact on CityObjectGroup).
+            # Current tree Path: source right edge at the bend's y,
+            # corner at the bend, target facing edge at the bend's x.
             src = bounds_from_rect(source_placement)
             tgt = bounds_from_rect(target_placement)
             bend = intermediate.first
@@ -630,21 +624,11 @@ module Ea
                       [bend[0], target_y]]
           elsif intermediate.any?
             points = [source_point, *intermediate, target_point]
-            # Generalizations with the parent ABOVE keep their stored
-            # interior bends verbatim but re-dock the endpoints onto
-            # the box edges AT THE ADJACENT BEND's x (hand-verified:
-            # stored (542,975)(541,807)(543,807)(486,757) draws as
-            # (541,975)(541,807)(543,807)(543,757) — only the two
-            # endpoints move; the stale final x is replaced by the
-            # last bend's trunk x).
+            # Parent-above Generalizations keep stored interior bends
+            # and re-dock only the endpoints, at the adjacent bend's x.
             if connector.connector_type == "Generalization"
-              src_b = bounds_from_rect(source_placement)
-              tgt_b = bounds_from_rect(target_placement)
-              if tgt_b.y + tgt_b.height <= src_b.y
-                points[0] = [points[1][0].clamp(src_b.x, src_b.x + src_b.width), src_b.y]
-                points[-1] = [points[-2][0].clamp(tgt_b.x, tgt_b.x + tgt_b.width),
-                              tgt_b.y + tgt_b.height]
-              end
+              redock_parent_above(points, link_row, source_placement,
+                                  target_placement)
             end
           elsif source_port || target_port
             # Exact ports are known — the SX/SY bend heuristics in
@@ -654,20 +638,22 @@ module Ea
             points = sx_sy_ex_ey_waypoints(source_point, target_point, geom)
           end
 
-          # Associations/Aggregations between DISJOINT boxes: when the
-          # stored route does not already dock the closest FACING edge
-          # pair, EA redraws a straight aligned line between those
-          # edges (corpus: edge pair = min facing gap, 85% accurate;
-          # dock coordinate = the stored route's own coordinate
-          # clamped into the edges' overlap; simulation on 417
-          # identity-paired connectors: exact routes 41 -> 100).
-          # Tree-style (EDGE=2) connectors are excluded — their
-          # computed routes are already byte-exact.
+          # Between DISJOINT boxes, a stored route that does not dock the
+          # closest facing edge pair is redrawn straight between them.
+          # EDGE=2 routes are excluded; they are already exact.
           if %w[Association Aggregation].include?(connector.connector_type) &&
              edge_out != 2
             points = facing_edge_route(points,
                                        bounds_from_rect(source_placement),
                                        bounds_from_rect(target_placement))
+            # A width-2 Aggregation that keeps its stored bends is
+            # docked like a Generalization one.
+            if connector.connector_type == "Aggregation" &&
+               intermediate.any? && points.size >= 4 &&
+               generalization_outline_offset(link_row, points.size) == 1
+              redock_parent_above(points, link_row, source_placement,
+                                  target_placement, strict: true)
+            end
           end
 
           points.map do |x, y|
@@ -977,6 +963,35 @@ module Ea
           return nil unless conn
 
           IdNormalizer.from_guid(conn.ea_guid)
+        end
+
+        # Docks both ends of a bent route on the box edges at the
+        # adjacent bend's x when the target is above the source; interior
+        # bends stay. strict: skip an end whose bend is not beyond its dock.
+        def redock_parent_above(points, link_row, source_placement,
+                                target_placement, strict: false)
+          src_b = bounds_from_rect(source_placement)
+          tgt_b = bounds_from_rect(target_placement)
+          return points unless tgt_b.y + tgt_b.height <= src_b.y
+
+          inset = generalization_outline_offset(link_row, points.size)
+          source_y = src_b.y
+          target_y = tgt_b.y + tgt_b.height
+          source_y -= inset if points[1][1] < source_y - inset
+          target_y += inset if points[-2][1] > target_y + inset
+          unless strict && points[1][1] >= source_y
+            points[0] = [points[1][0].clamp(src_b.x, src_b.x + src_b.width), source_y]
+          end
+          unless strict && points[-2][1] <= target_y
+            points[-1] = [points[-2][0].clamp(tgt_b.x, tgt_b.x + tgt_b.width), target_y]
+          end
+          points
+        end
+
+        def generalization_outline_offset(link_row, point_count)
+          return 0 if point_count < 4
+
+          DiagramStyleParser.parse(link_row.style)[:lwidth] == "2" ? 1 : 0
         end
       end
     end
