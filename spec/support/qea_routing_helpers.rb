@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 module QeaRoutingHelpers
-  # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/ParameterLists
   def render_qea_route(path:, style:, source: [100, 300, 200, 100],
                        target: [400, 100, 200, 100],
-                       geometry: "SX=0;SY=0;EX=0;EY=0;EDGE=1;")
+                       geometry: "SX=0;SY=0;EX=0;EY=0;EDGE=1;",
+                       connector_type: "Generalization")
     rows = Ea::Qea::Models
     database = build_test_database(
       objects: [
@@ -15,7 +16,7 @@ module QeaRoutingHelpers
       ],
       packages: [rows::EaPackage.new(package_id: 1, name: "P", ea_guid: "package")],
       connectors: [rows::EaConnector.new(
-        connector_id: 1, connector_type: "Generalization", start_object_id: 1,
+        connector_id: 1, connector_type: connector_type, start_object_id: 1,
         end_object_id: 2, direction: "Source -> Destination", ea_guid: "relationship"
       )],
       diagrams: [rows::EaDiagram.new(
@@ -44,5 +45,5 @@ module QeaRoutingHelpers
       markers: xml.css("polygon").map { |node| node["points"] }
     }
   end
-  # rubocop:enable Metrics/AbcSize,Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize,Metrics/MethodLength,Metrics/ParameterLists
 end
