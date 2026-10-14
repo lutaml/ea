@@ -32,7 +32,7 @@ module Ea
             content = midpoint_content(connector)
             return nil if content.nil?
 
-            mx, my = midpoint(points)
+            mx, my = label_position(connector, points)
             # EA splits a "name: value" label at the colon-space into
             # two lines centered on the same slot (81F92FC7: "new
             # ownership:" / "LA_Right" at y 172/185, both centered on
@@ -94,6 +94,35 @@ module Ea
           private
 
           LINE_PITCH = 13
+
+          def label_position(connector, points)
+            return midpoint(points) unless default_substitutable_seat?(connector) &&
+                                           upward_four_point_route?(points)
+
+            source, bend = points
+            [source[0] + 3, ((source[1] + bend[1]) / 2).floor - 1]
+          end
+
+          def default_substitutable_seat?(connector)
+            connector.is_a?(Ea::Model::DiagramConnector) && connector.is_substitutable &&
+              connector.connector_type == "Generalization" && font_size == 7 &&
+              stereotype_label(connector).nil? &&
+              default_constraint_box?(connector.label_boxes.to_h[:lmb])
+          end
+
+          def default_constraint_box?(box)
+            box && !box["hidden"] &&
+              box.values_at("ox", "oy", "rotation", "alignment") == [0, 0, 0, 0]
+          end
+
+          def upward_four_point_route?(points)
+            return false unless points.size == 4
+
+            source, first_bend, last_bend, target = points
+            source[0] == first_bend[0] && first_bend[1] == last_bend[1] &&
+              last_bend[0] == target[0] && source[1] > first_bend[1] &&
+              target[1] < last_bend[1]
+          end
 
           def midpoint(points)
             mid_idx = points.size / 2
