@@ -641,9 +641,10 @@ module Ea
               src_b = bounds_from_rect(source_placement)
               tgt_b = bounds_from_rect(target_placement)
               if tgt_b.y + tgt_b.height <= src_b.y
-                points[0] = [points[1][0].clamp(src_b.x, src_b.x + src_b.width), src_b.y]
+                inset = generalization_outline_offset(link_row, points.size)
+                points[0] = [points[1][0].clamp(src_b.x, src_b.x + src_b.width), src_b.y - inset]
                 points[-1] = [points[-2][0].clamp(tgt_b.x, tgt_b.x + tgt_b.width),
-                              tgt_b.y + tgt_b.height]
+                              tgt_b.y + tgt_b.height + inset]
               end
             end
           elsif source_port || target_port
@@ -977,6 +978,12 @@ module Ea
           return nil unless conn
 
           IdNormalizer.from_guid(conn.ea_guid)
+        end
+
+        def generalization_outline_offset(link_row, point_count)
+          return 0 if point_count < 4
+
+          DiagramStyleParser.parse(link_row.style)[:lwidth] == "2" ? 1 : 0
         end
       end
     end
