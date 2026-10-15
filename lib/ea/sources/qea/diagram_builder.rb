@@ -577,9 +577,8 @@ module Ea
         #     describe the source-side and target-side bend offsets
         #     relative to the edge attachment points.
         #
-        # Path takes precedence when present — it's the authoritative
-        # routing. SX/SY/EX/EY are fallback for auto-routed direct
-        # connectors with at most one bend on each end.
+        # Custom-line Path takes precedence when present. Direct mode
+        # ignores old custom bends; SX/SY/EX/EY supply its endpoint ports.
         #
         # If we can't resolve the source or target element placement
         # for this diagram, we emit no waypoints (the connector will
@@ -607,8 +606,10 @@ module Ea
                          element_edge_point(target_placement, :target, edge_out)
 
           intermediate = intermediate_waypoints(link_row)
-          if edge_out == 2 && source_port && target_port &&
-             !valid_tree_path?(intermediate, source_placement)
+          if DiagramStyleParser.parse(link_row.style)[:mode] == "1"
+            points = [source_point, target_point]
+          elsif edge_out == 2 && source_port && target_port &&
+                !valid_tree_path?(intermediate, source_placement)
             # A stale tree Path (not on the source's facing edge) is
             # recomputed: source port -> corner at (target dock x,
             # source exit y) -> target port.
@@ -923,7 +924,7 @@ module Ea
           target_y = tgt_b.y + tgt_b.height
           source_y -= inset if points[1][1] < source_y - inset
           target_y += inset if points[-2][1] > target_y + inset
-          unless strict && points[1][1] >= source_y
+          unless lateral_source_exit?(points, link_row, src_b) || (strict && points[1][1] >= source_y)
             points[0] = [points[1][0].clamp(src_b.x, src_b.x + src_b.width), source_y]
           end
           unless strict && points[-2][1] <= target_y
