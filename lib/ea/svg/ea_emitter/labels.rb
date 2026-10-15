@@ -91,7 +91,7 @@ module Ea
           end_renderer.texts(text_box: src_tb, mult_box: src_mb,
                              anchor: source_pt, connector: connector,
                              end_kind: :source, tree: tree && tree[:source],
-                             heading: stored_src && leg_heading(points),
+                             heading: stored_src && source_heading(connector, points),
                              stored_labels: stored_labels).each { |t| texts << t }
           end_renderer.texts(text_box: tgt_tb,
                              mult_box: tgt_mb,
@@ -110,6 +110,19 @@ module Ea
                            points[1][0] == points[2][0]
 
           { source: true, target: true }
+        end
+
+        # Clipping can slant a stored vertical leg. Keep its label direction
+        # while the label position follows the final emitted endpoint.
+        def source_heading(connector, points)
+          heading = leg_heading(points)
+          return heading unless points.size == 2 && heading.none?(&:zero?)
+
+          stored = waypoint_pairs(connector)
+          return heading unless stored.size == 2
+
+          original = leg_heading(stored)
+          original[0].zero? && original[1].negative? ? original : heading
         end
 
         def leg_heading(points)

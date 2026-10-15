@@ -188,6 +188,46 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
     end
   end
 
+  describe "stored directions after endpoint clipping" do
+    include LabelHeadingHelpers
+
+    let(:heading_record) do
+      { points: [[493, 251], [493, 173]], anchors: [[450, 296], [453, 103]],
+        box: { "ox" => 24, "oy" => -21, "alignment" => 1 } }
+    end
+    let(:heading_connector) { build_heading_connector(heading_record) }
+    let(:heading_bounds) do
+      { "source" => Ea::Model::Bounds.new(x: 324, y: 251, width: 250, height: 88),
+        "target" => Ea::Model::Bounds.new(x: 335, y: 31, width: 248, height: 142) }
+    end
+
+    it "keeps an upward stored seat at the final slanted dock" do
+      positions = heading_positions(heading_connector, heading_bounds)
+
+      expect(positions["+trafficAreaStructureAttribute"]).to eq([285, 223])
+      expect(positions["«property»"]).to eq([326, 235])
+      expect(positions["0..1"]).to eq([463, 242])
+      expect(positions["+owner"]).to eq([456, 167])
+    end
+
+    it "keeps genuinely diagonal stored routes unchanged" do
+      heading_connector.waypoints.last.position.x = 515
+      positions = heading_positions(heading_connector, heading_bounds)
+
+      expect(positions["+trafficAreaStructureAttribute"]).to eq([474, 271])
+      expect(positions["0..1"]).to eq([460, 252])
+    end
+
+    it "keeps the final cardinal direction when the stored route is diagonal" do
+      heading_connector.waypoints.last.position.x = 515
+      heading_connector.target_anchor.x = 450
+      positions = heading_positions(heading_connector, heading_bounds)
+
+      expect(positions["+trafficAreaStructureAttribute"]).to eq([285, 223])
+      expect(positions["0..1"]).to eq([463, 242])
+    end
+  end
+
   describe "stored source-end label seats" do
     include LabelSeatHelpers
     include LabelPresenceHelpers
