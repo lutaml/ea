@@ -97,6 +97,7 @@ module Ea
                              mult_box: tgt_mb,
                              anchor: target_pt, connector: connector,
                              end_kind: :target, tree: tree && tree[:target],
+                             heading: stored_tgt && leg_heading(points.reverse),
                              stored_labels: stored_labels).each { |t| texts << t }
           texts
         end
@@ -112,17 +113,70 @@ module Ea
           { source: true, target: true }
         end
 
-        # Clipping can slant a stored vertical leg. Keep its label direction
-        # while the label position follows the final emitted endpoint.
+        # A diagonal clipped leg keeps the seat of its unambiguous exit face.
+        # Unknown faces retain the stored-upward fallback.
         def source_heading(connector, points)
           heading = leg_heading(points)
-          return heading unless points.size == 2 && heading[0].nonzero? && heading[1].negative?
+          return heading unless points.size == 2 && heading.none?(&:zero?)
+
+          box = source_dock_bounds(connector)
+          face = box && dock_face_heading(points.first, box)
+          return face if face && face.zip(heading).any? { |axis, delta| (axis * delta).positive? }
+
+          stored_upward_heading(connector, heading)
+        end
+
+        def stored_upward_heading(connector, heading)
+          return heading unless heading[1].negative?
 
           stored = waypoint_pairs(connector)
           return heading unless stored.size == 2
 
           original = leg_heading(stored)
           original[0].zero? && original[1].negative? ? original : heading
+        end
+
+        def source_dock_bounds(connector)
+          return nil unless model_index && drawn_bounds
+
+          relationship = model_index[connector.relationship_ref]
+          return nil unless relationship
+
+          source, target = ConnectorRedock.end_refs(relationship)
+          return nil if source == target
+          return nil unless drawn_bounds[target]
+
+          drawn_bounds[source]
+        end
+
+        def dock_face_heading(point, box)
+          return nil unless box.width.positive? && box.height.positive?
+
+          vertical_dock_heading(point, box) || horizontal_dock_heading(point, box)
+        end
+
+        def vertical_dock_heading(point, box)
+          x, y = point
+          left = box.x
+          return nil unless x > left && x < left + box.width
+
+          top = box.y
+          return [0, -1] if [top, top - 1].include?(y)
+
+          bottom = top + box.height
+          [0, 1] if [bottom, bottom + 1].include?(y)
+        end
+
+        def horizontal_dock_heading(point, box)
+          x, y = point
+          top = box.y
+          return nil unless y > top && y < top + box.height
+
+          left = box.x
+          return [-1, 0] if [left, left - 1].include?(x)
+
+          right = left + box.width
+          [1, 0] if [right, right + 1].include?(x)
         end
 
         def leg_heading(points)
@@ -172,7 +226,7 @@ module Ea
             theme: theme,
             font_family: label_font_family,
             font_size: label_font_size,
-            font_unit: theme.font_size_unit
+            font_unit: theme.label_font_size_unit
           )
         end
 
@@ -182,7 +236,7 @@ module Ea
             model_index: model_index,
             font_family: label_font_family,
             font_size: label_font_size,
-            font_unit: theme.font_size_unit
+            font_unit: theme.label_font_size_unit
           )
         end
 
@@ -212,7 +266,7 @@ module Ea
         end
 
         def label_font_size
-          theme.font_size || DEFAULT_SIZE
+          theme.label_font_size || DEFAULT_SIZE
         end
       end
     end

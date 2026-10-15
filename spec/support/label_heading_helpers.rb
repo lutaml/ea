@@ -8,27 +8,39 @@ module LabelHeadingHelpers
       source_anchor: heading_point(record[:anchors][0]),
       target_anchor: heading_point(record[:anchors][1]),
       waypoints: record[:points].map { |x, y| Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y)) },
-      label_boxes: { llt: record[:box], llb: { "ox" => 10, "oy" => -2, "alignment" => 1 },
-                     lrt: { "ox" => 5, "oy" => 7 } }
+      label_boxes: heading_label_boxes(record)
     )
+  end
+
+  def heading_label_boxes(record)
+    { llt: record[:box].transform_keys(&:to_s),
+      llb: record.fetch(:mult_box, { "ox" => 10, "oy" => -2, "alignment" => 1 }).transform_keys(&:to_s),
+      lrt: { "ox" => 5, "oy" => 7 } }
+  end
+
+  def heading_bounds_for(record)
+    %i[source target].to_h do |name|
+      x, y, width, height = record[name]
+      [name.to_s, Ea::Model::Bounds.new(x: x, y: y, width: width, height: height)]
+    end
   end
 
   def heading_point(coordinates)
     Ea::Model::Point.new(x: coordinates[0], y: coordinates[1])
   end
 
-  def heading_relationship
+  def heading_relationship(role, mult)
     Ea::Model::Association.new(
       id: "heading", source_id: "source", target_id: "target",
-      source_role_name: "trafficAreaStructureAttribute", source_multiplicity_raw: "0..1",
+      source_role_name: role, source_multiplicity_raw: mult,
       target_role_name: "owner"
     )
   end
 
-  def heading_positions(connector, bounds)
+  def heading_positions(connector, bounds, role: "trafficAreaStructureAttribute", mult: "0..1")
     diagram = Ea::Model::Diagram.new(id: "d", connectors: [connector])
     labels = Ea::Svg::EaEmitter::Labels.new(
-      diagram, model_index: { "heading" => heading_relationship }, drawn_bounds: bounds,
+      diagram, model_index: { "heading" => heading_relationship(role, mult) }, drawn_bounds: bounds,
                theme: Ea::Theme::Definition.new(id: "headings", font_family: "Cambria", font_size: 7)
     )
     Nokogiri::XML("<svg>#{labels.render}</svg>").css("text").to_h do |node|

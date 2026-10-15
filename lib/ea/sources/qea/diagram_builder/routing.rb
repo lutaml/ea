@@ -8,6 +8,78 @@ module Ea
         module Routing
           private
 
+          # Stored SY/EY use mathematical Y; ray origins use screen Y.
+          # Computed-jog origins are already normalized to their derived ports.
+          def correct_stored_ray_origins(model, link_row, diagram_row, geom, context)
+            return model if context
+            return model unless stored_ray_candidate?(model, link_row, geom)
+
+            source, target = stored_ray_boxes(link_row, diagram_row)
+            return model unless stored_ray_gap?(source, target, model.style[:mode], geom[:edge])
+
+            set_stored_ray_origins(model, source, target, geom)
+          end
+
+          def stored_ray_boxes(link_row, diagram_row)
+            connector = database.find_connector(link_row.connectorid)
+            [source_placement_for(connector, diagram_row),
+             target_placement_for(connector, diagram_row)].map { |placement| bounds_from_rect(placement) }
+          end
+
+          def set_stored_ray_origins(model, source, target, geom)
+            model.source_anchor = stored_ray_origin(source, geom[:sx], geom[:sy])
+            model.target_anchor = stored_ray_origin(target, geom[:ex], geom[:ey])
+            model
+          end
+
+          def stored_ray_candidate?(model, link_row, geom)
+            %w[Generalization Aggregation].include?(model.connector_type) &&
+              model.waypoints.size == 2 && stored_ray_style?(model.style, link_row) &&
+              stored_ray_geometry?(model, geom) && !normalized_port_anchors?(model)
+          end
+
+          def stored_ray_style?(style, link_row)
+            %w[1 3].include?(style[:mode]) && !style[:tree] &&
+              (style[:mode] == "1" || link_row.path.to_s.empty?)
+          end
+
+          def stored_ray_geometry?(model, geom)
+            model.has_geometry_offsets && model.source_port && model.target_port &&
+              (!geom[:sy].to_i.zero? || !geom[:ey].to_i.zero?)
+          end
+
+          def normalized_port_anchors?(model)
+            same_port_anchor?(model.source_anchor, model.source_port) &&
+              same_port_anchor?(model.target_anchor, model.target_port)
+          end
+
+          def same_port_anchor?(anchor, port)
+            anchor.x == port.x && anchor.y == port.y
+          end
+
+          def stored_ray_gap?(source, target, mode, edge)
+            return horizontal_ray_gap?(source, target) || vertical_ray_gap?(source, target) if mode == "1"
+
+            if edge == 1
+              target.y + target.height < source.y
+            elsif edge == 4
+              target.x + target.width < source.x
+            end
+          end
+
+          def horizontal_ray_gap?(source, target)
+            source.x + source.width < target.x || target.x + target.width < source.x
+          end
+
+          def vertical_ray_gap?(source, target)
+            source.y + source.height < target.y || target.y + target.height < source.y
+          end
+
+          def stored_ray_origin(bounds, x_offset, y_offset)
+            Ea::Model::Point.new(x: bounds.x + bounds.width / 2 + x_offset.to_i,
+                                 y: bounds.y + bounds.height / 2 - y_offset.to_i)
+          end
+
           # Square routing keeps the stored orthogonal trunk, even when a
           # shorter facing-edge route exists between the same boxes.
           def stored_square_route(link_row, connector, source, target)

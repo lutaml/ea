@@ -1,0 +1,8 @@
+id: "39"
+name: EA theme 39 connector labels
+font:
+  unit: px
+label_font:
+  family: Cambria
+  size: 7
+  unit: pt

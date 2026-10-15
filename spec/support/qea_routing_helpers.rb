@@ -35,6 +35,7 @@ module QeaRoutingHelpers
       )]
     )
     document = Ea::Sources::Qea::Adapter.new(database, "routing.qea").to_document
+    yield document if block_given?
     svg = Ea::Svg::EaEmitter::Document.new(
       document.diagrams.first, model_index: document.index_by_id,
                                document: document, frame: false

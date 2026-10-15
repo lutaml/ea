@@ -91,6 +91,8 @@ module Ea
                          role_seat(direction, anchor, text_box, role) || text_pos
               mult_pos = directional_multiplicity(connector, direction, anchor, mult_box, mult) ||
                          mult_seat(direction, anchor, mult_box) || mult_pos
+            elsif end_kind == :target && !(tree && zero_offset?(text_box, mult_box))
+              mult_pos = target_multiplicity_seat(heading, anchor, mult_box) || mult_pos
             end
 
             build_texts(role:, mult:, standalone:,
@@ -249,6 +251,14 @@ module Ea
 
             width = Ea::Fonts::Metrics.text_length(mult, font_size, family: font_family)
             [x - width - 3, y + 15] if width
+          end
+
+          def target_multiplicity_seat(heading, anchor, box)
+            return nil unless seat_font?
+            return nil unless heading && heading[0].zero? && heading[1].negative?
+            return nil unless cambria_box?(box) && stored_offsets_zero?(box)
+
+            [anchor[0] + 8, anchor[1] - 7]
           end
 
           def cambria_box?(box)

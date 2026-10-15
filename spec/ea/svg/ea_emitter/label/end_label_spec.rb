@@ -249,6 +249,46 @@ RSpec.describe Ea::Svg::EaEmitter::Label::EndLabel do
       expect(positions["+traffic☃"]).to eq([182, 434])
     end
 
+    it "seats upward target multiplicities from zero stored boxes" do
+      records = [{ role: "target", mult: "1", anchor: [310, 800], expected: [318, 793] },
+                 { role: "role c", mult: "0..*", anchor: [72, 213], expected: [80, 206] }]
+      records.each do |record|
+        positions = upward_property_positions(
+          record.merge(box: { "ox" => 5, "oy" => 7 }),
+          end_kind: :target,
+          heading: [0, -100], mult_box: { "ox" => 0, "oy" => 0, "alignment" => 1 }
+        )
+        expect(positions[record[:mult]]).to eq(record[:expected])
+        expect(positions["+#{record[:role]}"]).to eq([record[:anchor][0] + 5, record[:anchor][1] - 7])
+      end
+    end
+
+    it "preserves target defaults outside the measured zero-box upward seat" do
+      controls = [{ family: "Carlito" }, { size: 10 }, { unit: "px" },
+                  { heading: [1, -100] }, { heading: [0, 100] }, { heading: nil },
+                  { mult_box: { "ox" => 0, "oy" => 0, "bold" => true } }]
+      record = { role: "owner", mult: "0..*", anchor: [72, 213], box: { "ox" => 5, "oy" => 7 } }
+      controls.each do |options|
+        positions = upward_property_positions(
+          record, end_kind: :target, heading: [0, -100], mult_box: { "ox" => 0, "oy" => 0 }, **options
+        )
+        expect(positions["0..*"]).to eq([84, 228])
+      end
+    end
+
+    it "preserves a target perfect-L default and explicit target offsets" do
+      record = { role: "owner", mult: "0..*", anchor: [72, 213], box: { "ox" => 0, "oy" => 0 } }
+      tree = upward_property_positions(
+        record, end_kind: :target, tree: true, heading: [0, -100], mult_box: { "ox" => 0, "oy" => 0 }
+      )
+      explicit = upward_property_positions(
+        record, end_kind: :target, heading: [0, -100], mult_box: { "ox" => 5, "oy" => 7 }
+      )
+
+      expect(tree["0..*"]).to eq([80, 205])
+      expect(explicit["0..*"]).to eq([77, 206])
+    end
+
     it "seats the direct role at its published reference position" do
       positions = upward_property_positions(traffic)
 

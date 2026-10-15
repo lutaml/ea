@@ -24,6 +24,57 @@ RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do # rubocop:disable Metrics/
     expect(redock_output(fixture).last).to eq(["M 856 1072 L 862 1087 L 868 1072"])
   end
 
+  it "clips offset-free computed Associations on the stroke outline" do
+    # Plateau {B62C02B3}: dc110:577,582,584 store only EDGE=4.
+    [
+      [[150, 230, 140, 80], [430, 230, 140, 80], [[220, 270], [500, 270]], "M 291 270 L 429 270"],
+      [[20, 390, 162, 80], [510, 391, 110, 80], [[101, 430], [565, 431]], "M 183 430 L 509 430"],
+      [[200, 460, 100, 80], [640, 460, 120, 80], [[250, 500], [700, 500]], "M 301 500 L 639 500"]
+    ].each do |source, target, anchors, path|
+      fixture = redock_fixture(type: "Association", source: source, target: target, anchors: anchors)
+      fixture[:diagram].connectors.first.style[:mode] = "3"
+
+      expect(redock_output(fixture).first).to eq([path])
+    end
+  end
+
+  it "preserves unsupported offset-free styles and partial metadata" do
+    [{ mode: nil }, { mode: "1" }, { mode: "2" }, { tree: "V" },
+     { direct: true }, { regenerated: true }, { lwidth: "0" }, { lwidth: "1" },
+     { lwidth: "3" }, { "mode" => "3", mode: nil }].each do |style|
+      fixture = redock_fixture(type: "Association")
+      fixture[:diagram].connectors.first.style = { mode: "3", lwidth: "2" }.merge(style)
+
+      expected = style[:direct] ? "M 20 40 L 20 100 M 20 40" : "M 20 100 L 20 40"
+      expect(redock_output(fixture).first).to eq([expected])
+    end
+    [
+      ->(connector) { connector.has_geometry_offsets = true },
+      ->(connector) { connector.source_port = redock_point([20, 100]) },
+      ->(connector) { connector.target_port = redock_point([20, 40]) },
+      ->(connector) { connector.source_anchor = nil },
+      ->(connector) { connector.target_anchor = nil }
+    ].each do |change|
+      fixture = redock_fixture(type: "Association")
+      fixture[:diagram].connectors.first.style[:mode] = "3"
+      change.call(fixture[:diagram].connectors.first)
+
+      expect(redock_output(fixture).first).to eq(["M 20 100 L 20 40"])
+    end
+    fixture = redock_fixture(type: "Association", source: [100, 100, 40, 40],
+                             anchors: [[120, 120], [20, 20]])
+    fixture[:diagram].connectors.first.style[:mode] = "3"
+    expect(redock_output(fixture).first).to eq(["M 100 100 L 40 40"])
+  end
+
+  it "keeps offset-free docks when stroke expansion would reverse the route" do
+    fixture = redock_fixture(type: "Association", source: [0, 41, 40, 40],
+                             anchors: [[20, 61], [20, 20]])
+    fixture[:diagram].connectors.first.style[:mode] = "3"
+
+    expect(redock_output(fixture).first).to eq(["M 20 41 L 20 40"])
+  end
+
   it "keeps Association tree and legacy geometry on their centerline docks" do
     ["LV", "LH", "H", "V"].each do |tree|
       fixture = redock_fixture(type: "Association", source: [115, 527, 161, 80],
