@@ -45,7 +45,13 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
         markers: ["382 362 372.24 356.54 370.76 345.46 380.51 350.92"]
       ), change.inspect
     end
-    %w[0 1 3].each do |width|
+    # Width 0 is not thin-stroke fallback: 8 pinned-220 references keep the
+    # stored trunk and dock it on the box edges themselves.
+    expect(render_qea_route(**input.merge(style: "TREE=V;LWidth=0;"))).to eq(
+      paths: ["M 463 363 L 463 283 L 228 283 L 228 233"],
+      markers: ["463 363 458 353 463 343 468 353"]
+    )
+    %w[1 3].each do |width|
       expect(render_qea_route(**input.merge(style: "TREE=V;LWidth=#{width};"))).to eq(
         paths: ["M 383 363 L 294 233"],
         markers: ["383 363 373.23 357.57 371.7 346.5 381.48 351.92"]

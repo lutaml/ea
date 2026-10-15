@@ -265,44 +265,51 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
   end
 
   it "docks width-0 vertical tree Aggregations on the box edges, keeping the trunk" do
+    # Records: t_diagramlinks 199/742 (plateau) and 20/59 (basic.qea).
     records = [
-      flush_trunk,
-      { source: [382, 209, 110, 70], target: [287, 30, 110, 70],
-        path: "437:-150;342:-150;", geometry: "SX=0;SY=0;EX=0;EY=0;EDGE=1;",
-        style: "Mode=3;LWidth=0;TREE=V;" }
+      [flush_trunk, "M 191 231 L 191 160 L 124 160 L 124 110", "191 231 186 221 191 211 196 221"],
+      [{ source: [382, 209, 110, 70], target: [287, 30, 110, 70],
+         path: "437:-150;342:-150;", geometry: "SX=0;SY=0;EX=0;EY=0;EDGE=1;",
+         style: "Mode=3;LWidth=0;TREE=V;" },
+       "M 185 219 L 185 160 L 90 160 L 90 110", "185 219 180 209 185 199 190 209"]
     ]
 
-    records.each do |input|
+    records.each do |input, path, tip|
       result = render_qea_route(connector_type: "Aggregation", **input)
 
-      puts "POS #{result[:paths].inspect} | #{result[:markers].inspect}"
+      expect(result).to eq({ paths: [path], markers: [tip] }),
+                        "route input: #{input.inspect}"
     end
   end
 
   it "keeps other width-0 tree inputs on their existing routes" do
+    flattened = [["M 179 231 L 136 110"], ["179 231 170.94 223.25 172.3 212.15 180.36 219.9"]]
     cases = [
-      ["width 1", { style: "Mode=3;LWidth=1;TREE=V;" }],
-      ["width 3", { style: "Mode=3;LWidth=3;TREE=V;" }],
-      ["no width", { style: "Mode=3;TREE=V;" }],
-      ["tree H", { style: "Mode=3;LWidth=0;TREE=H;" }],
-      ["no tree", { style: "Mode=3;LWidth=0;" }],
-      ["width 2", { style: "Mode=3;LWidth=2;TREE=V;" }],
-      ["association", { connector_type: "Association" }],
-      ["generalization", { connector_type: "Generalization" }],
-      ["bend left of source", { path: "420:-169;467:-169;" }],
-      ["bend right of target", { path: "534:-169;600:-169;" }],
-      ["bends differ in y", { path: "534:-169;467:-160;" }],
-      ["bends share x", { path: "534:-169;534:-160;" }],
-      ["three bends", { path: "534:-169;500:-169;467:-169;" }],
-      ["trunk at target edge", { path: "534:-119;467:-119;" }],
-      ["trunk at source edge", { path: "534:-240;467:-240;" }]
+      ["width 1", { style: "Mode=3;LWidth=1;TREE=V;" }, *flattened],
+      ["width 3", { style: "Mode=3;LWidth=3;TREE=V;" }, *flattened],
+      ["no width", { style: "Mode=3;TREE=V;" }, *flattened],
+      ["tree H", { style: "Mode=3;LWidth=0;TREE=H;" }, *flattened],
+      ["no tree", { style: "Mode=3;LWidth=0;" }, *flattened],
+      ["width 2", { style: "Mode=3;LWidth=2;TREE=V;" },
+       ["M 191 230 L 191 160 L 124 160 L 124 111"], ["191 230 186 220 191 210 196 220"]],
+      ["association", { connector_type: "Association" },
+       ["M 179 231 L 136 110", "M 146.68 122.12 L 136 110 L 135.37 126.14"], []],
+      ["generalization", { connector_type: "Generalization" },
+       ["M 191 231 L 191 160 L 124 160 L 124 110"], ["124 110 130 121 118 121"]],
+      ["bend left of source", { path: "420:-169;467:-169;" }, *flattened],
+      ["bend right of target", { path: "534:-169;600:-169;" }, *flattened],
+      ["bends differ in y", { path: "534:-169;467:-160;" }, *flattened],
+      ["bends share x", { path: "534:-169;534:-160;" }, *flattened],
+      ["three bends", { path: "534:-169;500:-169;467:-169;" }, *flattened],
+      ["trunk at target edge", { path: "534:-119;467:-119;" }, *flattened],
+      ["trunk at source edge", { path: "534:-240;467:-240;" }, *flattened]
     ]
 
-    cases.each do |name, override|
+    cases.each do |name, override, paths, markers|
       input = flush_trunk.merge(override)
       result = render_qea_route(**{ connector_type: "Aggregation" }.merge(input))
 
-      puts "CASE #{name} | #{result[:paths].inspect} | #{result[:markers].inspect}"
+      expect(result).to eq({ paths: paths, markers: markers }), name
     end
   end
 
