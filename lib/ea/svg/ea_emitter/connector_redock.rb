@@ -39,10 +39,15 @@ module Ea
             return target && [points[0], points[1], target]
           end
 
+          return nil if flush_lateral_line?(connector, points, source_bounds, target_bounds)
+
           anchors = [connector.source_anchor, connector.target_anchor]
           bounds = [source_bounds, target_bounds]
           original = clipped_pairs(bounds, anchors)
-          return original unless stroke_outline?(connector, bounds) || overlap_ray?(connector)
+          unless stroke_outline?(connector, bounds) || overlap_ray?(connector) ||
+                 bordered_outline?(connector, diagram, [source_ref, target_ref], bounds)
+            return original
+          end
 
           # EA docks these markers on the outer edge of the 2px box stroke.
           outline = bounds.map do |box|
@@ -52,6 +57,29 @@ module Ea
           candidate = clipped_pairs(outline, anchors)
           forward_route?(original, candidate) ? candidate : original
         end
+
+        # A horizontal lateral tree the QEA builder derived as one level
+        # line (internal style flag) keeps it between the facing side edges.
+        def flush_lateral_line?(connector, points, source, target)
+          style = connector.style.to_h
+          return false unless style[:derived_lateral_line] && style[:mode] == "3" &&
+                              style[:tree] == "LH" && points.size == 2 &&
+                              %w[Association Generalization].include?(connector.connector_type)
+          return false unless connector.source_anchor && connector.target_anchor
+
+          first, last = points
+          pinned = [[connector.source_anchor.x, connector.source_anchor.y],
+                    [connector.target_anchor.x, connector.target_anchor.y]]
+          pinned == [first, last] && first[1] == last[1] &&
+            on_side_edge?(first, source) && on_side_edge?(last, target)
+        end
+        private_class_method :flush_lateral_line?
+
+        def on_side_edge?(point, bounds)
+          [bounds.x, bounds.x + bounds.width].include?(point[0]) &&
+            point[1].between?(bounds.y, bounds.y + bounds.height)
+        end
+        private_class_method :on_side_edge?
 
         def lateral_tree?(connector, points)
           style = connector.style.to_h
@@ -97,7 +125,7 @@ module Ea
         private_class_method :facing_coordinate
 
         def stroke_outline?(connector, bounds)
-          connector.style.to_h[:lwidth] == "2" &&
+          (connector.style.to_h[:lwidth] == "2" || default_model_connector?(connector)) &&
             bounds.all? { |box| box.width.positive? && box.height.positive? } &&
             outline_connector?(connector, bounds)
         end
@@ -111,9 +139,42 @@ module Ea
         end
         private_class_method :overlap_ray?
 
+        # The QEA builder flags a model relationship drawn without any
+        # diagram link row; EA strokes it at the 2px box outline.
+        def default_model_connector?(connector)
+          connector.style.to_h[:phantom_outline] == true && !connector.has_geometry_offsets &&
+            %w[Aggregation Association].include?(connector.connector_type)
+        end
+        private_class_method :default_model_connector?
+
+        # A thin straight Generalization/Aggregation/Association between two elements
+        # drawn with a 2px border stops on the outer edge of those borders.
+        def bordered_outline?(connector, diagram, refs, bounds)
+          style = connector.style.to_h
+          return false unless style[:lwidth] == "0" && !style[:tree]
+          return false unless %w[Generalization Aggregation Association].include?(connector.connector_type)
+          return false unless bounds.all? { |box| box.width.positive? && box.height.positive? }
+
+          ends = [[refs.first, style[:soid]], [refs.last, style[:eoid]]]
+          ends.all? { |ref, duid| border_two?(diagram, ref, duid) }
+        end
+        private_class_method :bordered_outline?
+
+        # Every placement of the element (the DUID-matched one when the
+        # connector names it) must declare a border width of 2.
+        def border_two?(diagram, ref, duid)
+          placed = Array(diagram&.elements).select { |el| el.model_element_ref == ref }
+          named = placed.select { |el| duid && el.duid.to_s.casecmp?(duid.to_s) }
+          placed = named unless named.empty?
+          placed.any? && placed.all? { |el| el.line_width == 2 || el.style.to_h[:lwth] == "2" }
+        end
+        private_class_method :border_two?
+
         def outline_connector?(connector, bounds)
+          return true if default_model_connector?(connector)
           return true if %w[Generalization Aggregation].include?(connector.connector_type)
 
+          return true if association_ray_outline?(connector)
           return false unless stored_association?(connector) || offset_free_association?(connector)
 
           # Diagonal Association rounding and tree docks keep their existing rules.
@@ -121,6 +182,15 @@ module Ea
           pairs.first.zip(pairs.last).any? { |first, last| first == last }
         end
         private_class_method :outline_connector?
+
+        # The QEA builder marks the stored Association rays it produced;
+        # their diagonal docks sit on the outer stroke edge like the
+        # axis-aligned ones. Unmarked diagonals keep the legacy docking.
+        def association_ray_outline?(connector)
+          connector.connector_type == "Association" &&
+            connector.style.to_h[:association_ray_outline] == true
+        end
+        private_class_method :association_ray_outline?
 
         def stored_association?(connector)
           style = connector.style.to_h
@@ -244,12 +314,20 @@ module Ea
         # anchor row is one explicit horizontal line: EA seats neither end
         # in a compartment row, unlike Generalization/Aggregation targets.
         def explicit_association_ray?(pairs, connector)
+          produced = connector.style.to_h[:stored_association_ray] == true
+          return true if produced && pairs.first[1] == pairs.last[1]
+
+          certified_association_ray?(pairs, connector)
+        end
+
+        def certified_association_ray?(pairs, connector)
           return false unless explicit_horizontal_ray?(connector, %w[Association])
 
           connector.source_anchor.y == connector.target_anchor.y &&
             connector.source_port.y == connector.source_anchor.y &&
             pairs.first[1] == pairs.last[1]
         end
+        private_class_method :certified_association_ray?
         private_class_method :explicit_association_ray?
 
         def explicit_horizontal_ray?(connector, types = %w[Generalization Aggregation])

@@ -39,6 +39,54 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
     end
   end
 
+  let(:corners) do
+    {
+      wide: { connector_type: "Aggregation", source: [420, 601, 300, 292],
+              target: [857, 300, 343, 465], path: "670:-531;",
+              geometry: "EDGE=1;SX=100;SY=0;EX=0;EY=0;", style: "Mode=3;LWidth=2;" },
+      narrow: { connector_type: "Aggregation", source: [2, 574, 300, 292],
+                target: [346, 190, 343, 445], path: "177:-412;",
+                geometry: "EDGE=1;SX=25;SY=-2;", style: "Mode=3;LWidth=2;" }
+    }
+  end
+
+  it "keeps a single stored corner that is level with both boxes" do
+    expected = {
+      wide: [["M 285 340 L 285 271 L 471 271"], ["285 340 280 330 285 320 290 330"]],
+      narrow: [["M 207 423 L 207 262 L 375 262"], ["207 423 202 413 207 403 212 413"]]
+    }
+
+    corners.each do |name, input|
+      paths, markers = expected.fetch(name)
+
+      expect(render_qea_route(**input)).to eq({ paths: paths, markers: markers }), name.to_s
+    end
+  end
+
+  it "keeps other single-corner inputs on their existing routes" do
+    base = corners[:wide]
+    flat = [["M 336 456 L 471 375"], ["336 456 342 446.57 353.15 445.71 347.15 455.14"]]
+    cases = [
+      ["mode 2", { style: "Mode=2;LWidth=2;" }, *flat],
+      ["width 0", { style: "Mode=3;LWidth=0;" }, ["M 335 456 L 472 374"],
+       ["335 456 341.01 446.57 352.16 445.73 346.15 455.15"]],
+      ["tree V", { style: "Mode=3;LWidth=2;TREE=V;" }, *flat],
+      ["association", { connector_type: "Association" },
+       ["M 335 456 L 472 374", "M 462.21 386.85 L 472 374 L 456.05 376.56"], []],
+      ["generalization", { connector_type: "Generalization" },
+       ["M 285 340 L 285 271 L 471 271"], ["471 271 460 277 460 265"]],
+      ["corner not level with source", { path: "800:-531;" }, *flat],
+      ["corner not level with target", { path: "670:-200;" }, *flat],
+      ["two corners", { path: "670:-531;700:-531;" }, *flat]
+    ]
+
+    cases.each do |name, override, paths, markers|
+      result = render_qea_route(**base.merge(override))
+
+      expect(result).to eq({ paths: paths, markers: markers }), name
+    end
+  end
+
   it "keeps other stored-path inputs on their existing routes" do
     base = records[:generalization]
     kept = [["M 35 991 L -39 1031 L -39 91 L 285 162"],

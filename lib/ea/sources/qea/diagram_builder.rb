@@ -362,10 +362,18 @@ module Ea
             target_stereotype: conn.deststereotype,
             waypoints: waypoints,
             label_boxes: DEFAULT_LABEL_BOXES,
-            style: PHANTOM_DOUBLE_BACK_TYPES.include?(conn.connector_type) ? { direct: true } : {},
+            style: phantom_style(conn.connector_type),
             hidden: false,
             has_geometry_offsets: false
           )
+        end
+
+        # Internal producer flag, like :direct. A model relationship with no
+        # link row is stroked at the 2px box outline, so its ends dock there.
+        def phantom_style(connector_type)
+          return { direct: true } if PHANTOM_DOUBLE_BACK_TYPES.include?(connector_type)
+
+          %w[Aggregation Association].include?(connector_type) ? { phantom_outline: true } : {}
         end
 
         # Computes the edge attachment point on source bounds that
@@ -422,7 +430,9 @@ module Ea
             is_substitutable: substitutable_connector?(connector)
           ), link_row, diagram_row, geom)
           model = collapse_partial_port_jog(model, link_row, diagram_row)
+          model = correct_partial_port_origins(model, link_row, diagram_row, geom, context)
           model = direct_empty_path_ray(model, link_row, diagram_row, geom, context)
+          model = pin_derived_lateral_line(model, link_row, diagram_row, context)
           model = mode2_overlap_ray(model, link_row, diagram_row, geom, context)
           model = association_stored_ray(model, link_row, diagram_row, geom, context)
           model = correct_stored_ray_origins(model, link_row, diagram_row, geom, context)
@@ -666,15 +676,17 @@ module Ea
           src = bounds_from_rect(source_placement)
           tgt = bounds_from_rect(target_placement)
           tree_route = stored_square_route(link_row, connector, src, tgt) ||
+                       stored_stair_route(link_row, connector, src, tgt) ||
                        stored_lateral_route(link_row, connector, src, tgt,
                                             ported: source_port && target_port) ||
+                       derived_lateral_route(link_row, connector, src, tgt) ||
                        horizontal_tree_route(points, link_row, connector, src, tgt)
           if tree_route
             points = tree_route
           elsif %w[Association Aggregation].include?(connector.connector_type) &&
                 edge_out != 2
             stored_tree = preserve_stored_tree?(points, link_row, connector, src, tgt)
-            unless stored_tree
+            unless stored_tree || level_corner_route?(points, link_row, connector, src, tgt)
               points = facing_edge_route(points, src, tgt)
             end
             # A width-2 Aggregation that keeps its stored bends is

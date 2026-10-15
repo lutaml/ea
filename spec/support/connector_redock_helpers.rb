@@ -12,7 +12,8 @@ module ConnectorRedockHelpers
     width = options.fetch(:width, "2")
     connector = Ea::Model::DiagramConnector.new(
       id: "c", relationship_ref: "r", connector_type: type,
-      direction: "Source -> Destination", style: width ? { lwidth: width } : {},
+      direction: "Source -> Destination",
+      style: (width ? { lwidth: width } : {}).merge(options.fetch(:style, {})),
       waypoints: options.fetch(:points, [[20, 100], [20, 40]]).map do |x, y|
         Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y))
       end
@@ -43,5 +44,20 @@ module ConnectorRedockHelpers
       svg = renderer.new(diagram, **arguments).render
       Nokogiri::XML(svg).css("path, polygon").map { |node| node["d"] || node["points"] }
     end
+  end
+
+  def phantom_route(type:, id: "c", style: {}, anchors: nil)
+    fixture = redock_fixture(type: type, width: nil, anchors: anchors)
+    connector = fixture[:diagram].connectors.first
+    connector.id = id
+    connector.style = style
+    redock_output(fixture).first
+  end
+
+  def lateral_output(type, flag)
+    style = { mode: "3", tree: "LH" }.merge(flag ? { derived_lateral_line: true } : {})
+    redock_output(redock_fixture(type: type, style: style, source: [0, 0, 100, 80],
+                                 target: [200, 0, 100, 80], points: [[100, 40], [200, 40]],
+                                 anchors: [[100, 40], [200, 40]]))
   end
 end
