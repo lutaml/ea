@@ -22,8 +22,9 @@ module Ea
           SEAT_FONT_SIZE = 7
           SEAT_X_INSET = 3
           SEAT_STEREOTYPE_GAP = 12
-          # EA keeps a role cluster's left edge at diagram x >= 3; the
-          # stereotype line moves with the role.
+          # EA keeps an upward property seat's left edge at diagram x >= 3;
+          # the stereotype line moves with the role. Measured only for the
+          # default Cambria 7pt boxed cluster.
           MIN_ROLE_X = 3
 
           attr_reader :canvas, :model_index, :document, :theme,
@@ -102,17 +103,10 @@ module Ea
             end
 
             build_texts(role:, mult:, standalone:,
-                        text_pos: clamp_role_left(text_pos),
-                        mult_pos:, stereo:, text_box:)
+                        text_pos:, mult_pos:, stereo:, text_box:)
           end
 
           private
-
-          def clamp_role_left(pos)
-            return pos if pos.nil? || pos[0] >= MIN_ROLE_X
-
-            [MIN_ROLE_X, pos[1]]
-          end
 
           # With stored boxes on the connector, an end that carries no
           # data of its own draws only its own stereotype; the data end
@@ -198,7 +192,9 @@ module Ea
 
             x, y = seat_corner(anchor, box)
             inset, baseline = property_role_offsets(direction)
-            [x - inset - width, y + baseline]
+            left = x - inset - width
+            left = [left, MIN_ROLE_X].max if direction == :up
+            [left, y + baseline]
           end
 
           def plain_upward_seat(connector, direction, anchor, box, role)
@@ -253,10 +249,14 @@ module Ea
           # with line width 2; every other vertical seat needs the plain
           # width-0 route.
           def plain_vertical_connector?(connector, end_kind, direction)
-            style = connector.style.to_h
             return false unless connector.connector_type == "Association" &&
-                                connector_source_dest_stereotype(connector, end_kind).empty? &&
-                                style[:mode] == "3"
+                                connector_source_dest_stereotype(connector, end_kind).empty?
+
+            plain_vertical_style?(connector.style.to_h, direction)
+          end
+
+          def plain_vertical_style?(style, direction)
+            return false unless style[:mode] == "3"
 
             if direction == :target_down
               style[:lwidth] == "2" && style[:tree] == "LV"

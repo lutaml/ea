@@ -546,6 +546,21 @@ RSpec.describe Ea::Svg::EaEmitter::Label::EndLabel do
       end
     end
 
+    it "keeps negative role positions outside the measured upward Cambria 7pt cluster" do
+      record = { role: "tunBaseAttribute", anchor: [120, 449],
+                 box: { "ox" => -200, "oy" => 0, "alignment" => 1 } }
+      controls = [{ family: "Carlito" }, { size: 9 }, { unit: "px" },
+                  { box: record[:box].merge("rotation" => 90) },
+                  { box: record[:box].merge("bold" => true) },
+                  { heading: [-100, 0] }, { heading: nil }]
+      controls.each do |options|
+        positions = upward_property_positions(record, heading: [0, -60],
+                                                      style: { mode: "3", lwidth: "2", tree: "V" }, **options)
+
+        expect(positions["+tunBaseAttribute"][0]).to be_negative, options.inspect
+      end
+    end
+
     it "leaves a role cluster whose left edge is at or beyond x = 3 where it was" do
       # anchor 3 + 60 + 79 puts the left edge at exactly 3; one less would clamp.
       [[142, 3], [143, 4]].each do |anchor_x, expected_x|

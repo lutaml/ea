@@ -324,6 +324,33 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
       expect(positions["+trafficAreaStructureAttribute"]).to eq([285, 223])
       expect(positions["0..1"]).to eq([463, 242])
     end
+
+    context "with a target dock that clips a stored horizontal leg" do
+      let(:target_bounds) do
+        { "source" => Ea::Model::Bounds.new(x: 984, y: 140, width: 120, height: 100),
+          "target" => Ea::Model::Bounds.new(x: 700, y: 144, width: 176, height: 100) }
+      end
+
+      def clipped_target_connector(stored_target_y)
+        build_heading_connector(
+          points: [[984, 188], [876, stored_target_y]],
+          anchors: [[1044, 190], [788, 194]],
+          box: { "ox" => 5, "oy" => 7, "alignment" => 1 }
+        )
+      end
+
+      it "seats the target role at the stored cardinal leg's corner" do
+        positions = heading_positions(clipped_target_connector(188), target_bounds)
+
+        expect(positions["+owner"]).to eq([885, 192])
+      end
+
+      it "keeps the stored offset when the stored leg is itself diagonal" do
+        positions = heading_positions(clipped_target_connector(196), target_bounds)
+
+        expect(positions["+owner"]).to eq([882, 185])
+      end
+    end
   end
 
   describe "stored source-end label seats" do
