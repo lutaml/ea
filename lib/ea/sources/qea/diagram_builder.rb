@@ -16,16 +16,11 @@ module Ea
 
         attr_reader :database
 
-        # Generalizations whose EA CustomProperties carry
-        # isSubstitutable draw '{isSubstitutable=false}' at the label
-        # seat (t_xref 'connector property' rows keyed by connector
-        # guid; VALU 0/empty both mean false).
+        # This flag requests the false annotation, not the property's Boolean
+        # value. An explicit true (-1) must not request a false annotation.
         def substitutable_connector?(conn)
-          @substitutable_guids ||= database.collections[:xrefs]
-                                           .select do |x|
-            x.xref_type == "connector property" &&
-              x.name == "CustomProperties" &&
-              x.description.to_s.include?("isSubstitutable")
+          @substitutable_guids ||= database.collections[:xrefs].select do |xref|
+            false_substitutability_xref?(xref)
           end.map(&:client).to_set
           @substitutable_guids.include?(conn.ea_guid)
         end
@@ -98,6 +93,22 @@ module Ea
         end
 
         private
+
+        def false_substitutability_xref?(xref)
+          return false unless xref.xref_type == "connector property" && xref.name == "CustomProperties"
+
+          description = xref.description.to_s
+          description.include?("isSubstitutable") && !true_substitutability_property?(description)
+        end
+
+        def true_substitutability_property?(description)
+          description.scan(/@PROP=(.*?)@ENDPROP;/m).any? do |match|
+            property = match.first
+            property.include?("@NAME=isSubstitutable@ENDNAME;") &&
+              property.include?("@TYPE=Boolean@ENDTYPE;") &&
+              property[/@VALU=(.*?)@ENDVALU;/m, 1] == "-1"
+          end
+        end
 
         def build_elements(diagram_row)
           objs = database.diagram_objects_for(diagram_row.diagram_id) || []

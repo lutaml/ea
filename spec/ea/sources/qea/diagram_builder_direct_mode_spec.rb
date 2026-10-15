@@ -4,6 +4,7 @@ require "spec_helper"
 
 RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/BlockLength
   include QeaRoutingHelpers
+  include QeaConstraintHelpers
 
   it "draws a direct line instead of replaying obsolete custom bends" do
     result = render_qea_route(path: "150:-250;450:-250;", style: "Mode=1;LWidth=2;")
@@ -52,6 +53,43 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
       )
 
       expect(result[:paths]).to eq([expected])
+    end
+  end
+  it "omits false annotations for explicitly true substitutability despite stale labels" do
+    property = substitutability_property("-1")
+    other = substitutability_property("0", name: "otherProperty")
+    [property, other + property, property + other].each do |description|
+      result = qea_constraint_result(description)
+
+      expect(result[:flag]).to be(false)
+      expect(result[:svg]).not_to include("{isSubstitutable=false}")
+    end
+  end
+
+  it "keeps false and unknown substitutability values on the legacy display path" do
+    ["", "0", "unknown", nil].each do |value|
+      result = qea_constraint_result(substitutability_property(value))
+
+      expect(result[:flag]).to be(true)
+      expect(result[:svg]).to include("{isSubstitutable=false}")
+    end
+  end
+
+  it "reads true only inside the matching Boolean property block" do
+    other = substitutability_property("-1", name: "otherProperty")
+    controls = [other + substitutability_property(""), substitutability_property("0") + other,
+                substitutability_property("-1", type: "String")]
+    controls.each do |description|
+      result = qea_constraint_result(description)
+
+      expect(result[:flag]).to be(true)
+      expect(result[:svg]).to include("{isSubstitutable=false}")
+    end
+    [{ xref_type: "element property" }, { name: "Other" }, { client: "other" }].each do |attributes|
+      result = qea_constraint_result(substitutability_property(""), **attributes)
+
+      expect(result[:flag]).to be(false)
+      expect(result[:svg]).not_to include("{isSubstitutable=false}")
     end
   end
 end
