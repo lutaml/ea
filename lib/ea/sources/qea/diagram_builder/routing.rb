@@ -69,10 +69,14 @@ module Ea
           # Source and target x on the facing sides' outer outlines, or nil
           # when the boxes are not horizontally separated.
           def facing_outline_xs(src, tgt)
-            if tgt.x + tgt.width < src.x
-              [src.x - 1, tgt.x + tgt.width + 1]
-            elsif src.x + src.width < tgt.x
-              [src.x + src.width + 1, tgt.x - 1]
+            source_left = src.x
+            source_right = source_left + src.width
+            target_left = tgt.x
+            target_right = target_left + tgt.width
+            if target_right < source_left
+              [source_left - 1, target_right + 1]
+            elsif source_right < target_left
+              [source_right + 1, target_left - 1]
             end
           end
 
