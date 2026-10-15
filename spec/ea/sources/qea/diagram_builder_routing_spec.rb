@@ -334,27 +334,33 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
   end
 
   it "collapses a zero-length computed terminal leg between facing horizontal ports" do
+    # t_diagramlinks 50/333: [source, target, target] duplicates the end point,
+    # which stops the outline clipping; the reference is one 2-point line.
     result = render_qea_route(connector_type: "Generalization", **computed_zero_leg)
 
-    puts "ZPOS #{result[:paths].inspect} | #{result[:markers].inspect}"
+    expect(result).to eq(paths: ["M 204 131 L 304 131"], markers: ["304 131 293 137 293 125"])
   end
 
   it "keeps other zero-leg inputs unchanged" do
+    duplicated = ["M 203 131 L 305 131 L 305 131"]
     cases = [
-      ["stored duplicate path", { path: "570:-111;570:-111;" }],
-      ["mode 2", { style: "Mode=2;LWidth=2;" }],
-      ["width 0", { style: "Mode=3;LWidth=0;" }],
-      ["tree V", { style: "Mode=3;LWidth=2;TREE=V;" }],
-      ["association", { connector_type: "Association" }],
-      ["aggregation", { connector_type: "Aggregation" }],
-      ["two-pixel leg", { geometry: "SX=84;SY=-1;EX=-171;EY=138;EDGE=2;" }]
+      ["stored duplicate path", { path: "570:-111;570:-111;" },
+       ["M 203 131 L 305 131 L 305 131 L 305 131"], []],
+      ["mode 2", { style: "Mode=2;LWidth=2;" }, duplicated, []],
+      ["width 0", { style: "Mode=3;LWidth=0;" }, duplicated, []],
+      ["tree V", { style: "Mode=3;LWidth=2;TREE=V;" }, duplicated, []],
+      ["association", { connector_type: "Association" }, duplicated, []],
+      ["aggregation", { connector_type: "Aggregation" }, duplicated,
+       ["203 131 213 126 223 131 213 136"]],
+      ["two-pixel leg", { geometry: "SX=84;SY=-1;EX=-171;EY=138;EDGE=2;" },
+       ["M 203 131 L 305 131 L 305 134"], ["305 134 299 123 311 123"]]
     ]
 
-    cases.each do |name, override|
+    cases.each do |name, override, paths, markers|
       input = computed_zero_leg.merge(override)
       result = render_qea_route(**{ connector_type: "Generalization" }.merge(input))
 
-      puts "ZCASE #{name} | #{result[:paths].inspect} | #{result[:markers].inspect}"
+      expect(result).to eq({ paths: paths, markers: markers }), name
     end
   end
 
