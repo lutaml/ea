@@ -264,12 +264,62 @@ RSpec.describe Ea::Svg::EaEmitter::Label::EndLabel do
       end
     end
 
+    it "keeps alignment-zero property stereotypes left-aligned with the role" do
+      records = [
+        { role: "location", anchor: [765, 821],
+          box: { "ox" => 17, "oy" => -27, "alignment" => 0 },
+          heading: [0, -100], style: { mode: "3", lwidth: "2" }, expected: [682, 788] },
+        { role: "tranFacilityIdAttribute", anchor: [801, 485],
+          box: { "ox" => -14, "oy" => 32, "alignment" => 0 },
+          heading: [-100, 0], style: { mode: "3", lwidth: "2", tree: "H" }, expected: [625, 510] }
+      ]
+      records.each do |record|
+        positions = upward_property_positions(record, heading: record[:heading], style: record[:style])
+
+        expect(positions["+#{record[:role]}"]).to eq(record[:expected])
+        expect(positions["«property»"]).to eq([record[:expected][0], record[:expected][1] + 12])
+      end
+    end
+
+    it "seats downward property roles on distinct direct layouts" do
+      records = [
+        { role: "interiorFurniture", anchor: [348, 508],
+          box: { "ox" => 42, "oy" => 12, "alignment" => 1 },
+          style: { mode: "3", lwidth: "2" }, expected: [244, 535] },
+        { role: "lod0MultiPoint", anchor: [581, 117],
+          box: { "ox" => 43, "oy" => 5, "alignment" => 1 },
+          style: { mode: "3", lwidth: "2" }, expected: [487, 137] },
+        { role: "threeDimensionalExtent", anchor: [303, 131],
+          box: { "ox" => 267, "oy" => 3, "alignment" => 1 },
+          style: { mode: "1", lwidth: "2" }, expected: [393, 149] }
+      ]
+      records.each do |record|
+        positions = upward_property_positions(record, heading: [0, 100], style: record[:style])
+
+        expect(positions["+#{record[:role]}"]).to eq(record[:expected])
+      end
+    end
+
+    it "preserves unsupported downward role regimes" do
+      [{ stereotype: nil }, { stereotype: "Type" }, { family: "Carlito" }, { size: 9 },
+       { box: traffic[:box].merge("alignment" => 0) },
+       { box: traffic[:box].merge("italic" => true) },
+       { style: { mode: "3", lwidth: "0" } },
+       { style: { mode: "3", lwidth: "2", tree: "V" } }].each do |options|
+        positions = upward_property_positions(
+          traffic, heading: [0, 100], style: { mode: "3", lwidth: "2" }, **options
+        )
+
+        expect(positions["+trafficVolumeAttribute"]).to eq([182, 434])
+      end
+    end
+
     it "preserves unproven presentation and routing regimes" do
       [{ stereotype: nil }, { stereotype: "Type" }, { family: "Carlito" },
+       { box: traffic[:box].merge("alignment" => 0), stereotype: nil },
        { size: 9 }, { heading: nil }, { heading: [0, 100] },
        { box: traffic[:box].merge("rotation" => 90) },
        { box: traffic[:box].merge("bold" => true) },
-       { box: traffic[:box].merge("alignment" => 0) },
        { style: { lwidth: "0" } }, { style: { lwidth: "2", tree: "OS" } }].each do |options|
         expect(upward_property_positions(traffic, **options)["+trafficVolumeAttribute"])
           .to eq([182, 434])

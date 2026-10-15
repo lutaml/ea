@@ -173,21 +173,31 @@ module Ea
             [x + SEAT_X_INSET, y - 7]
           end
 
-          # A centered property cluster on an upward or leftward source leg ends
-          # 60px left of the stored corner; the glyph width sets its start.
+          # Property-role clusters use a direction-specific right edge;
+          # alignment controls the stereotype line within that cluster.
           def source_property_seat(connector, direction, anchor, box, role)
-            return nil unless %i[up left].include?(direction) && centered_property_box?(box)
+            return nil unless %i[up left down].include?(direction) && property_role_box?(box, direction)
             return nil unless source_property_font?(connector, direction)
 
             width = Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
             return nil unless width
 
             x, y = seat_corner(anchor, box)
-            [x - 60 - width, y - (direction == :up ? 6 : 7)]
+            inset, baseline = property_role_offsets(direction)
+            [x - inset - width, y + baseline]
           end
 
-          def centered_property_box?(box)
-            box && box["alignment"] == 1 && default_presentation?(box)
+          def property_role_box?(box, direction)
+            alignments = direction == :down ? [1] : [0, 1]
+            box && alignments.include?(box["alignment"]) && default_presentation?(box)
+          end
+
+          def property_role_offsets(direction)
+            case direction
+            when :up then [60, -6]
+            when :left then [60, -7]
+            else [65, 15]
+            end
           end
 
           def source_property_font?(connector, direction)
@@ -197,12 +207,20 @@ module Ea
           end
 
           def source_property_route?(style, direction)
-            if direction == :left
-              return style[:mode] == "3" && %w[0 2].include?(style[:lwidth]) &&
-                     [nil, "H", "LV"].include?(style[:tree])
+            case direction
+            when :left then left_property_route?(style)
+            when :down then downward_property_route?(style)
+            else style[:lwidth] == "2" && style[:tree] != "OS"
             end
+          end
 
-            style[:lwidth] == "2" && style[:tree] != "OS"
+          def left_property_route?(style)
+            style[:mode] == "3" && %w[0 2].include?(style[:lwidth]) &&
+              [nil, "H", "LV"].include?(style[:tree])
+          end
+
+          def downward_property_route?(style)
+            %w[1 3].include?(style[:mode]) && style[:lwidth] == "2" && !style[:tree]
           end
 
           def directional_multiplicity(connector, direction, anchor, box, mult)
