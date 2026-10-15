@@ -15,6 +15,59 @@ RSpec.describe Ea::Fonts::Metrics do
       expect(described_class.text_length(nil, 7, family: "Carlito")).to be_nil
     end
 
+    it "measures published Cambria regular text at seven points" do
+      {
+        "+roleTwo" => 42,
+        "Operation B(int): void" => 96,
+        "elements: xs:double [12] {ordered}" => 153,
+        "XYScale = 999999999.99999988" => 148
+      }.each do |text, width|
+        expect(described_class.text_length(text, 7, family: "Cambria"))
+          .to eq(width)
+        expect(described_class.text_length(text, "7", family: "CAMBRIA",
+                                                      weight: 400, style: "normal"))
+          .to eq(width)
+      end
+    end
+
+    it "measures an enclosing Cambria stereotype pair without guessing glyph widths" do
+      {
+        "«property»" => 48,
+        "«ApplicationSchema»" => 93,
+        "«interface»" => 48,
+        "«Type»" => 32,
+        "«type»" => 29
+      }.each do |text, width|
+        expect(described_class.text_length(text, 7, family: "Cambria"))
+          .to eq(width)
+        expect(described_class.text_length(text, 7, family: "Cambria", weight: 0))
+          .to eq(width)
+      end
+    end
+
+    it "keeps unsupported Cambria sizes and styles on the fallback path" do
+      [6, 7.1, 9].each do |size|
+        expect(described_class.text_length("«property»", size,
+                                           family: "Cambria")).to be_nil
+      end
+      %w[700 bold 300 500].each do |weight|
+        expect(described_class.text_length("+roleTwo", 7, family: "Cambria",
+                                                          weight: weight)).to be_nil
+      end
+      %w[italic oblique].each do |style|
+        expect(described_class.text_length("+roleTwo", 7, family: "Cambria",
+                                                          style: style)).to be_nil
+      end
+    end
+
+    it "returns nil for unmeasured Cambria characters and empty text" do
+      [nil, "", "role/Two", "role_7", "日本", "«»", "«property",
+       "property»", "««property»»", "«property» «type»", "«signal» Signal A()"].each do |text|
+        expect(described_class.text_length(text, 7, family: "Cambria"))
+          .to be_nil
+      end
+    end
+
     it "quantizes each glyph advance at the GDI logical height" do
       # Carlito: H = round(pt * 10/7) - 7pt -> 10, 9pt -> 13; each
       # glyph advance is round(em * H) and the textLength is the

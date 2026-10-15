@@ -72,6 +72,26 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
     expect(out).to include("0..*")
   end
 
+  it "uses the configured label family for connector text" do
+    theme = Ea::Theme::Definition.new(id: "labels", font_family: "Carlito",
+                                      label_font_family: "Cambria", font_size: 7)
+    labels = described_class.new(diagram, model_index: document.index_by_id,
+                                          theme: theme)
+    text = Nokogiri::XML("<svg>#{labels.render}</svg>").css("text")
+      .find { |node| node.text == "+items" }
+
+    expect(text["style"]).to include("font-family:Cambria;")
+    expect(text["textLength"]).to eq("29")
+  end
+
+  it "uses an explicitly overridden global family for connector text" do
+    theme = Ea::Theme::Registry.default.with(font_family: "Helvetica")
+    labels = described_class.new(diagram, model_index: document.index_by_id,
+                                          theme: theme)
+
+    expect(labels.render).to include("font-family:Helvetica;")
+  end
+
   context "when association has no properties" do
     let(:relationship) do
       Ea::Model::Association.new(id: "r1", source_id: "x", target_id: "y")
@@ -165,6 +185,56 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
 
       expect(positions["0..1"]).to eq([595, 914])
       expect(positions["+trafficVolumeAttribute"]).to eq([561, 922])
+    end
+  end
+
+  describe "stored directions after endpoint clipping" do
+    include LabelHeadingHelpers
+
+    let(:heading_record) do
+      { points: [[493, 251], [493, 173]], anchors: [[450, 296], [453, 103]],
+        box: { "ox" => 24, "oy" => -21, "alignment" => 1 } }
+    end
+    let(:heading_connector) { build_heading_connector(heading_record) }
+    let(:heading_bounds) do
+      { "source" => Ea::Model::Bounds.new(x: 324, y: 251, width: 250, height: 88),
+        "target" => Ea::Model::Bounds.new(x: 335, y: 31, width: 248, height: 142) }
+    end
+
+    it "keeps an upward stored seat at the final slanted dock" do
+      positions = heading_positions(heading_connector, heading_bounds)
+
+      expect(positions["+trafficAreaStructureAttribute"]).to eq([285, 223])
+      expect(positions["«property»"]).to eq([326, 235])
+      expect(positions["0..1"]).to eq([463, 242])
+      expect(positions["+owner"]).to eq([456, 167])
+    end
+
+    it "keeps genuinely diagonal stored routes unchanged" do
+      heading_connector.waypoints.last.position.x = 515
+      positions = heading_positions(heading_connector, heading_bounds)
+
+      expect(positions["+trafficAreaStructureAttribute"]).to eq([474, 271])
+      expect(positions["0..1"]).to eq([460, 252])
+    end
+
+    it "keeps a downward final leg when the stored upward route is stale" do
+      heading_connector.target_anchor.y = 600
+      heading_bounds["target"] = Ea::Model::Bounds.new(x: 335, y: 500,
+                                                       width: 248, height: 142)
+      positions = heading_positions(heading_connector, heading_bounds)
+
+      expect(positions["+trafficAreaStructureAttribute"]).to eq([474, 361])
+      expect(positions["0..1"]).to eq([460, 342])
+    end
+
+    it "keeps the final cardinal direction when the stored route is diagonal" do
+      heading_connector.waypoints.last.position.x = 515
+      heading_connector.target_anchor.x = 450
+      positions = heading_positions(heading_connector, heading_bounds)
+
+      expect(positions["+trafficAreaStructureAttribute"]).to eq([285, 223])
+      expect(positions["0..1"]).to eq([463, 242])
     end
   end
 
