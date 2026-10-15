@@ -8,6 +8,53 @@ module Ea
         module Routing
           private
 
+          # Square routing keeps the stored orthogonal trunk, even when a
+          # shorter facing-edge route exists between the same boxes.
+          def stored_square_route(link_row, connector, source, target)
+            return nil unless stored_square_style?(link_row, connector)
+
+            corners = stored_square_corners(link_row)
+            square_corner_route(corners, source, target) if corners
+          end
+
+          def stored_square_style?(link_row, connector)
+            style = DiagramStyleParser.parse(link_row.style)
+            %w[Association Aggregation Generalization].include?(connector.connector_type) &&
+              style[:mode] == "3" && style[:tree] == "OS" && style[:lwidth] == "2"
+          end
+
+          def stored_square_corners(link_row)
+            return nil unless link_row.path.to_s.match?(/\A(?:-?\d+:-?\d+;)*-?\d+:-?\d+;?\z/)
+
+            corners = intermediate_waypoints(link_row)
+            corners if corners.each_cons(2).all? { |a, b| a[0] == b[0] || a[1] == b[1] }
+          end
+
+          def square_corner_route(corners, source, target)
+            first = square_corner_dock(corners.first, source)
+            last = square_corner_dock(corners.last, target)
+            return nil unless first && last
+
+            points = corners.dup
+            points.unshift(first) unless points.first == first
+            points.push(last) unless points.last == last
+            points if points.size >= 3
+          end
+
+          def square_corner_dock(corner, bounds)
+            x, y = corner
+            projected = [x.clamp(bounds.x, bounds.x + bounds.width),
+                         y.clamp(bounds.y, bounds.y + bounds.height)]
+            return nil if projected[0] != x && projected[1] != y
+
+            projected if rectangle_edge?(projected, bounds)
+          end
+
+          def rectangle_edge?(point, bounds)
+            [bounds.x, bounds.x + bounds.width].include?(point[0]) ||
+              [bounds.y, bounds.y + bounds.height].include?(point[1])
+          end
+
           # A valid lateral corner joins one vertical leg and one horizontal
           # leg. Keep it even when the boxes also admit a shorter direct route.
           def stored_lateral_route(link_row, connector, source, target)
