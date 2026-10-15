@@ -38,7 +38,8 @@ module Ea
       CAMBRIA_7_REGULAR_WIDTHS = JSON.parse(File.read(
                                               File.expand_path("cambria_7_regular_widths.json", __dir__)
                                             )).freeze
-      private_constant :CAMBRIA_7_REGULAR_WIDTHS
+      CAMBRIA_7_GUILLEMET_PAIR_WIDTH = 10
+      private_constant :CAMBRIA_7_REGULAR_WIDTHS, :CAMBRIA_7_GUILLEMET_PAIR_WIDTH
 
       # Advance used for codepoints missing from the tables.
       DEFAULT_ADVANCE = 0.25
@@ -104,13 +105,21 @@ module Ea
 
       def cambria_text_length(text, size_pt, weight, style)
         return nil unless size_pt.to_f.to_r == 7
-        return nil unless ["", "400", "normal"].include?(weight.to_s)
+        return nil unless ["", "0", "400", "normal"].include?(weight.to_s)
         return nil unless ["", "normal"].include?(style.to_s)
 
-        widths = text.each_char.map { |char| CAMBRIA_7_REGULAR_WIDTHS[char] }
-        widths.sum unless widths.include?(nil)
+        return cambria_ascii_length(text) unless text.start_with?("«") && text.end_with?("»")
+
+        inner_width = cambria_ascii_length(text[1...-1])
+        inner_width + CAMBRIA_7_GUILLEMET_PAIR_WIDTH if inner_width
       end
       private_class_method :cambria_text_length
+
+      def cambria_ascii_length(text)
+        widths = text.each_char.map { |char| CAMBRIA_7_REGULAR_WIDTHS[char] }
+        widths.sum unless widths.empty? || widths.include?(nil)
+      end
+      private_class_method :cambria_ascii_length
 
       # Families whose EA driver quantizes per-glyph advances
       # (fitted from published textLengths).

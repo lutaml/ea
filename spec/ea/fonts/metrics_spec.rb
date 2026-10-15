@@ -30,9 +30,24 @@ RSpec.describe Ea::Fonts::Metrics do
       end
     end
 
+    it "measures an enclosing Cambria stereotype pair without guessing glyph widths" do
+      {
+        "«property»" => 48,
+        "«ApplicationSchema»" => 93,
+        "«interface»" => 48,
+        "«Type»" => 32,
+        "«type»" => 29
+      }.each do |text, width|
+        expect(described_class.text_length(text, 7, family: "Cambria"))
+          .to eq(width)
+        expect(described_class.text_length(text, 7, family: "Cambria", weight: 0))
+          .to eq(width)
+      end
+    end
+
     it "keeps unsupported Cambria sizes and styles on the fallback path" do
       [6, 7.1, 9].each do |size|
-        expect(described_class.text_length("+roleTwo", size,
+        expect(described_class.text_length("«property»", size,
                                            family: "Cambria")).to be_nil
       end
       %w[700 bold 300 500].each do |weight|
@@ -46,7 +61,8 @@ RSpec.describe Ea::Fonts::Metrics do
     end
 
     it "returns nil for unmeasured Cambria characters and empty text" do
-      [nil, "", "role/Two", "role_7", "日本", "«property»"].each do |text|
+      [nil, "", "role/Two", "role_7", "日本", "«»", "«property",
+       "property»", "««property»»", "«property» «type»", "«signal» Signal A()"].each do |text|
         expect(described_class.text_length(text, 7, family: "Cambria"))
           .to be_nil
       end
