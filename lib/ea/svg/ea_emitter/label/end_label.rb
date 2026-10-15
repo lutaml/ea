@@ -21,6 +21,7 @@ module Ea
           PROPERTY_STEREOTYPE = "«Property»"
           SEAT_FONT_SIZE = 7
           SEAT_X_INSET = 3
+          SEAT_STEREOTYPE_GAP = 12
 
           attr_reader :canvas, :model_index, :document, :theme,
                       :font_family, :font_size, :font_unit
@@ -177,8 +178,11 @@ module Ea
           end
 
           def source_seat?(end_kind, heading)
-            end_kind == :source && heading &&
-              font_size == SEAT_FONT_SIZE && font_unit == "pt"
+            end_kind == :source && heading && seat_font?
+          end
+
+          def seat_font?
+            font_size == SEAT_FONT_SIZE && font_unit == "pt"
           end
 
           # Boxes with explicit string-keyed OX/OY (the QEA shape) that
@@ -204,7 +208,7 @@ module Ea
               texts = [text_at(x, y, role)]
               if stereo
                 stereo_x = x + stereotype_offset(role, stereo, text_box)
-                texts << text_at(stereo_x, y + property_y_offset, stereo)
+                texts << text_at(stereo_x, y + property_y_offset(text_box), stereo)
               end
               if mult && !mult.empty? && mult_pos
                 texts << text_at(*mult_pos, mult)
@@ -391,7 +395,13 @@ module Ea
             [anchor[0] + offset_x.to_i, anchor[1] - offset_y.to_i]
           end
 
-          def property_y_offset
+          # The stereotype line sits 12px below the role on 7pt labels
+          # with default presentation (735 of 735 reference clusters);
+          # other sizes and custom presentation keep size + 6.
+          def property_y_offset(text_box)
+            return SEAT_STEREOTYPE_GAP if seat_font? && text_box &&
+                                          default_presentation?(text_box)
+
             font_size + 6
           end
 
