@@ -19,8 +19,7 @@ module Ea
         # for those — only simple role names render.
         class EndLabel
           PROPERTY_STEREOTYPE = "«Property»"
-          ROLE_GAP_UP = 3
-          ROLE_GAP_UP_STEREOTYPED = 60
+          SEAT_FONT_SIZE = 7
           SEAT_X_INSET = 3
 
           attr_reader :canvas, :model_index, :document, :theme,
@@ -79,8 +78,7 @@ module Ea
             stereo = stereo.nil? || stereo.empty? ? nil : "«#{stereo}»"
             direction = leg_direction(end_kind, heading)
             if direction && !(tree && zero_offset?(text_box, mult_box))
-              text_pos = role_seat(direction, anchor, text_box, role, stereo) ||
-                         text_pos
+              text_pos = role_seat(direction, anchor, text_box, role) || text_pos
               mult_pos = mult_seat(direction, anchor, mult_box) || mult_pos
             end
 
@@ -119,19 +117,16 @@ module Ea
             end
           end
 
-          # Source ends whose first leg leaves straight up or straight
-          # right seat the stored boxes at the box's bottom-left corner:
-          # anchor + (OX, OY) with no sign flip, the baseline 6px
-          # (7px on a horizontal leg) above it. Role text is
-          # left-aligned 3px right of the corner when the leg goes
-          # right; when it goes up the role is right-aligned, ending
-          # 3px left of the corner (60px when a stereotype line
-          # follows). The multiplicity sits 3px right of the corner,
-          # above it on an upward leg and 15px below it on a rightward
-          # one. Other headings and the target end keep the plain
-          # offset.
+          # Stored source-end boxes on a 7pt label whose first leg
+          # leaves straight up or straight right are seated at the box
+          # corner, anchor + (OX, OY) with no sign flip, 3px to its
+          # right: the multiplicity 6px above it on an upward leg and
+          # 15px below it on a rightward one, the role 7px above it on
+          # a rightward one. Other sizes, headings, the target end,
+          # custom presentation and zero boxes keep the plain offset.
           def leg_direction(end_kind, heading)
             return nil unless end_kind == :source && heading
+            return nil unless font_size == SEAT_FONT_SIZE && font_unit == "pt"
 
             dx, dy = heading
             return :up if dx.zero? && dy.negative?
@@ -140,23 +135,31 @@ module Ea
             nil
           end
 
-          def role_seat(direction, anchor, box, role, stereo)
+          # Role text on a rightward leg is left-aligned at the corner,
+          # 7px above it. Upward legs keep the plain role offset.
+          def role_seat(direction, anchor, box, role)
+            return nil unless direction == :right
             return nil if box.nil? || role_empty?(role)
+            return nil unless default_presentation?(box)
 
             x, y = seat_corner(anchor, box)
-            return [x + SEAT_X_INSET, y - 7] if direction == :right
-
-            gap = stereo ? ROLE_GAP_UP_STEREOTYPED : ROLE_GAP_UP
-            width = TextRenderer.estimate_width(role, font_size,
-                                                family: font_family).round
-            [x - gap - width, y - 6]
+            [x + SEAT_X_INSET, y - 7]
           end
 
           def mult_seat(direction, anchor, box)
             return nil if box.nil? || stored_offsets_zero?(box)
+            return nil unless default_presentation?(box)
 
             x, y = seat_corner(anchor, box)
             [x + SEAT_X_INSET, direction == :right ? y + 15 : y - 6]
+          end
+
+          # Unrotated, unhidden, unstyled, left/center aligned boxes.
+          def default_presentation?(box)
+            box["rotation"].to_i.zero? && box["direction"].to_i.zero? &&
+              box["hidden"] != true && !box["bold"] && !box["italic"] &&
+              !box["underline"] && [nil, 0, 1].include?(box["alignment"]) &&
+              [nil, -1].include?(box["color"])
           end
 
           def seat_corner(anchor, box)
