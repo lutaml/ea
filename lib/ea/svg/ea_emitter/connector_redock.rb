@@ -106,7 +106,7 @@ module Ea
         def outline_connector?(connector, bounds)
           return true if %w[Generalization Aggregation].include?(connector.connector_type)
 
-          return false unless stored_association?(connector)
+          return false unless stored_association?(connector) || offset_free_association?(connector)
 
           # Diagonal Association rounding and tree docks keep their existing rules.
           pairs = clipped_pairs(bounds, [connector.source_anchor, connector.target_anchor])
@@ -121,6 +121,20 @@ module Ea
             %w[1 3].include?(style[:mode]) && !style[:tree]
         end
         private_class_method :stored_association?
+
+        def offset_free_association?(connector)
+          style = connector.style.to_h
+          connector.connector_type == "Association" && style[:mode] == "3" && !style[:tree] &&
+            %i[direct regenerated].none? { |key| style.key?(key) } && offset_free_anchors?(connector)
+        end
+        private_class_method :offset_free_association?
+
+        def offset_free_anchors?(connector)
+          !connector.has_geometry_offsets &&
+            [connector.source_port, connector.target_port].all?(&:nil?) &&
+            [connector.source_anchor, connector.target_anchor].all?
+        end
+        private_class_method :offset_free_anchors?
 
         def clipped_pairs(bounds, anchors)
           source, target = bounds
