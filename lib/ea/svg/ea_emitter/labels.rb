@@ -195,7 +195,7 @@ module Ea
         end
 
         def label_font_family
-          theme.font_family || DEFAULT_FAMILY
+          theme.label_font_family || DEFAULT_FAMILY
         end
 
         def label_font_size

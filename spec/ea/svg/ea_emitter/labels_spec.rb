@@ -72,6 +72,26 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
     expect(out).to include("0..*")
   end
 
+  it "uses the configured label family for connector text" do
+    theme = Ea::Theme::Definition.new(id: "labels", font_family: "Carlito",
+                                      label_font_family: "Cambria", font_size: 7)
+    labels = described_class.new(diagram, model_index: document.index_by_id,
+                                          theme: theme)
+    text = Nokogiri::XML("<svg>#{labels.render}</svg>").css("text")
+      .find { |node| node.text == "+items" }
+
+    expect(text["style"]).to include("font-family:Cambria;")
+    expect(text["textLength"]).to eq("29")
+  end
+
+  it "uses an explicitly overridden global family for connector text" do
+    theme = Ea::Theme::Registry.default.with(font_family: "Helvetica")
+    labels = described_class.new(diagram, model_index: document.index_by_id,
+                                          theme: theme)
+
+    expect(labels.render).to include("font-family:Helvetica;")
+  end
+
   context "when association has no properties" do
     let(:relationship) do
       Ea::Model::Association.new(id: "r1", source_id: "x", target_id: "y")
