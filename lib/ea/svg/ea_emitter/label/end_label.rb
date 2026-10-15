@@ -396,7 +396,7 @@ module Ea
           end
 
           # The stereotype line sits 12px below the role on 7pt labels
-          # with default presentation (735 of 735 reference clusters);
+          # with default presentation;
           # other sizes and custom presentation keep size + 6.
           def property_y_offset(text_box)
             return SEAT_STEREOTYPE_GAP if seat_font? && text_box &&

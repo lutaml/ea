@@ -3,7 +3,7 @@
 module Ea
   module Svg
     module EaEmitter
-      # Re-docks DIRECT (auto-routed straight, 2-waypoint) connectors
+      # Re-docks direct connectors and lateral tree target legs
       # against the DRAWN element outlines captured during the element
       # render pass. EA clips connector rays at drawn boxes — grown
       # classifier heights and autosized package bodies — never the
@@ -13,17 +13,15 @@ module Ea
       module ConnectorRedock
         module_function
 
-        # Returns replacement waypoint pairs [source_edge, target_edge]
+        # Returns replacement waypoint pairs for direct or lateral tree routes,
         # for the connector, or nil when the connector must keep its
         # parsed waypoints (not direct, not 2-point, unresolved ends,
         # self-loop, or no drawn bounds for either end).
         def pairs_for(connector, diagram, model_index, bounds_map)
           return nil unless bounds_map
-          return nil unless direct?(connector) || two_point?(connector)
-
           points = waypoint_pairs(connector)
-          return nil unless points.size == 2
-
+          lateral = lateral_tree?(connector, points)
+          return nil unless points.size == 2 || lateral
 
           rel = relationship_for(connector, model_index)
           return nil unless rel
@@ -35,6 +33,11 @@ module Ea
           target_bounds = bounds_map[target_ref]
           return nil unless source_bounds && target_bounds
           return nil if source_ref == target_ref
+
+          if lateral
+            target = lateral_target(points[1], target_bounds, connector.style[:tree])
+            return target && [points[0], points[1], target]
+          end
 
           anchors = [connector.source_anchor, connector.target_anchor]
           bounds = [source_bounds, target_bounds]
@@ -49,6 +52,49 @@ module Ea
           candidate = clipped_pairs(outline, anchors)
           forward_route?(original, candidate) ? candidate : original
         end
+
+        def lateral_tree?(connector, points)
+          style = connector.style.to_h
+          points.size == 3 && style[:mode] == "3" && style[:lwidth] == "2" &&
+            %w[LV LH].include?(style[:tree]) &&
+            %w[Generalization Aggregation].include?(connector.connector_type)
+        end
+        private_class_method :lateral_tree?
+
+        # The bend selects the near target edge even when the boxes overlap.
+        # Preserve the source leg and bend; only the final dock changes.
+        def lateral_target(bend, bounds, tree)
+          return nil unless bounds.width.positive? && bounds.height.positive?
+
+          tree == "LV" ? vertical_target(bend, bounds) : horizontal_target(bend, bounds)
+        end
+        private_class_method :lateral_target
+
+        def vertical_target(bend, bounds)
+          x, y = bend
+          return nil unless x.between?(bounds.x, bounds.x + bounds.width)
+
+          edge = facing_coordinate(y, bounds.y, bounds.height)
+          [x, edge] if edge
+        end
+        private_class_method :vertical_target
+
+        def horizontal_target(bend, bounds)
+          x, y = bend
+          return nil unless y.between?(bounds.y, bounds.y + bounds.height)
+
+          edge = facing_coordinate(x, bounds.x, bounds.width)
+          [edge, y] if edge
+        end
+        private_class_method :horizontal_target
+
+        def facing_coordinate(bend, start, extent)
+          return start if bend < start
+          return start + extent if bend > start + extent
+
+          nil
+        end
+        private_class_method :facing_coordinate
 
         def stroke_outline?(connector, bounds)
           connector.style.to_h[:lwidth] == "2" &&

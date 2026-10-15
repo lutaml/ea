@@ -6,6 +6,57 @@ require "nokogiri"
 RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do # rubocop:disable Metrics/BlockLength
   include ConnectorRedockHelpers
 
+  it "docks a lateral tree's final leg on the target edge facing its bend" do
+    [
+      ["LV", [[776, 1209], [1015, 1209], [1015, 1046]],
+       [820, 1046, 390, 139], "M 776 1209 L 1015 1209 L 1015 1185",
+       "1015 1185 1021 1196 1009 1196"],
+      ["LH", [[1021, 231], [1021, 161], [860, 222]],
+       [530, 100, 330, 122], "M 1021 231 L 1021 161 L 860 161",
+       "860 161 871 155 871 167"]
+    ].each do |tree, points, target, path, marker|
+      source = tree == "LV" ? [387, 1174, 389, 71] : [920, 231, 202, 101]
+      fixture = redock_fixture(points: points, source: source, target: target)
+      fixture[:diagram].connectors.first.style.merge!(tree: tree, mode: "3")
+
+      expect(redock_output(fixture)).to eq([[path], [marker]])
+    end
+    fixture = redock_fixture(type: "Aggregation", points: [[776, 1209], [1015, 1209], [1015, 1046]],
+                             source: [387, 1174, 389, 71], target: [820, 1046, 390, 139])
+    fixture[:diagram].connectors.first.style.merge!(tree: "LV", mode: "3")
+    expect(redock_output(fixture)).to eq(
+      [["M 776 1209 L 1015 1209 L 1015 1185"],
+       ["776 1209 786 1204 796 1209 786 1214"]]
+    )
+  end
+
+  it "keeps lateral docks outside the explicit style and valid projection" do
+    [
+      { tree: "V" }, { mode: "1" }, { lwidth: "1" },
+      { lwidth: "0" }, { lwidth: "3" }, { tree: nil },
+      { "tree" => "LV", "mode" => "3", "lwidth" => "2", tree: nil }
+    ].each do |change|
+      fixture = redock_fixture(points: [[50, 100], [20, 100], [20, 0]])
+      fixture[:diagram].connectors.first.style = { tree: "LV", mode: "3", lwidth: "2" }.merge(change)
+
+      expect(redock_output(fixture).first).to eq(["M 50 100 L 20 100 L 20 0"])
+    end
+    [
+      [[50, 100], [50, 100], [20, 0]],
+      [[50, 20], [20, 20], [20, 0]]
+    ].each do |points|
+      fixture = redock_fixture(points: points)
+      fixture[:diagram].connectors.first.style.merge!(tree: "LV", mode: "3")
+
+      expect(described_class.pairs_for(fixture[:diagram].connectors.first,
+                                      fixture[:diagram], fixture[:model_index],
+                                      fixture[:drawn_bounds])).to be_nil
+    end
+    fixture = redock_fixture(type: "Association", points: [[50, 100], [20, 100], [20, 0]])
+    fixture[:diagram].connectors.first.style.merge!(tree: "LV", mode: "3")
+    expect(redock_output(fixture).first.first).to eq("M 50 100 L 20 100 L 20 0")
+  end
+
   it "clips width-2 generalization and aggregation lines and markers against the stroke outline" do # rubocop:disable Metrics/BlockLength
     [
       [{}, "M 20 99 L 20 41", "20 41 26 52 14 52"],
