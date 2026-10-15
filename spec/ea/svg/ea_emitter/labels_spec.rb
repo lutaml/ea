@@ -104,6 +104,7 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
 
   describe "stored source-end label seats" do
     include LabelSeatHelpers
+    include LabelPresenceHelpers
 
     # Reference records of the pinned 220 corpus (20251010_current_plateau_v5.1.qea).
     # `shift` is the reference-minus-model translation from the diagram's
@@ -195,17 +196,95 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
       expect(source_texts(up_leg)["0..1"]).to eq([158 + 12, 341 + 15])
     end
 
-    it "keeps the target end's stored offsets" do
+    it "keeps the target end's stored offsets when it carries its own data" do
       boxes = up_leg[:label_boxes].merge(
         lrb: { "ox" => 15, "oy" => -4, "alignment" => 1 },
         lrt: { "ox" => 16, "oy" => -25, "alignment" => 1 }
       )
-      target = label_seat_positions(
-        **up_leg.slice(:waypoints, :role, :multiplicity),
-        label_boxes: boxes, stereotype: "property"
-      ).select { |text, _| text == "0..1" }.last
+      texts = label_presence_texts(
+        waypoints: up_leg[:waypoints], label_boxes: boxes,
+        ends: { source: { role: "consBaseAttribute", mult: "0..1" },
+                target: { role: "owner", mult: "1" } }
+      ).to_h
 
-      expect(target.last).to eq([520 + 15, 202 + 4])
+      expect(texts["1"]).to eq([520 + 15, 202 + 4])
+      expect(texts["+owner"]).to eq([520 + 16, 202 + 25])
+    end
+  end
+
+  describe "end-label ownership" do
+    include LabelPresenceHelpers
+
+    let(:source_boxes) do
+      { llt: { "ox" => 10, "oy" => -15 }, llb: { "ox" => 8, "oy" => 3 } }
+    end
+    let(:target_boxes) do
+      { lrt: { "ox" => 12, "oy" => -14 }, lrb: { "ox" => 9, "oy" => 4 } }
+    end
+    let(:source_data) { { role: "items", mult: "0..*", stereotype: "property" } }
+
+    def contents(texts)
+      texts.map(&:first)
+    end
+
+    it "draws one cluster when the data end is boxed and the other end is not" do
+      texts = label_presence_texts(ends: { source: source_data },
+                                   label_boxes: source_boxes)
+
+      expect(contents(texts)).to eq(["+items", "«property»", "0..*"])
+    end
+
+    it "draws one cluster at the boxed end for the mirrored target case" do
+      texts = label_presence_texts(
+        ends: { target: { role: "items", mult: "0..*" } },
+        label_boxes: target_boxes
+      )
+
+      expect(contents(texts)).to eq(["+items", "0..*"])
+    end
+
+    it "draws one cluster at the data end when only the other end is boxed" do
+      texts = label_presence_texts(ends: { source: source_data },
+                                   label_boxes: target_boxes)
+
+      expect(contents(texts)).to eq(["+items", "«property»", "0..*"])
+    end
+
+    it "draws one cluster when both ends are boxed and only one carries data" do
+      texts = label_presence_texts(
+        ends: { source: source_data },
+        label_boxes: source_boxes.merge(target_boxes)
+      )
+
+      expect(contents(texts)).to eq(["+items", "«property»", "0..*"])
+    end
+
+    it "draws a data-less end's own stereotype alone at its box" do
+      texts = label_presence_texts(
+        ends: { source: source_data,
+                target: { stereotype: "property" } },
+        label_boxes: source_boxes.merge(target_boxes)
+      )
+
+      expect(contents(texts)).to eq(["+items", "«property»", "0..*",
+                                     "«property»"])
+      expect(texts.last.last).to eq([300 + 12, 200 + 14])
+    end
+
+    it "keeps both default clusters when neither end is boxed" do
+      texts = label_presence_texts(ends: { source: source_data },
+                                   label_boxes: {})
+
+      expect(contents(texts).count("+items")).to eq(2)
+    end
+
+    it "keeps each end's own cluster when both carry data" do
+      texts = label_presence_texts(
+        ends: { source: source_data, target: { role: "owner", mult: "1" } },
+        label_boxes: source_boxes.merge(target_boxes)
+      )
+
+      expect(contents(texts)).to include("+items", "+owner", "0..*", "1")
     end
   end
 end
