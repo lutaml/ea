@@ -215,6 +215,40 @@ RSpec.describe Ea::Svg::EaEmitter::Label::EndLabel do
       expect(positions["0..1"]).to eq([194, 432])
     end
 
+    it "right-aligns plain upward roles at their stored corners" do
+      records = [
+        { role: "bldgUsecaseAttribute", anchor: [1727, 440],
+          box: { "ox" => -17, "oy" => -19, "alignment" => 1 }, expected: [1611, 415] },
+        { role: "squareUrbanPlanAttribute", anchor: [526, 566],
+          box: { "ox" => -10, "oy" => -2, "alignment" => 0 }, expected: [394, 558] },
+        { role: "roleThree", anchor: [384, 161],
+          box: { "ox" => -6, "oy" => -5, "alignment" => 0 }, expected: [326, 150] }
+      ]
+      records.each do |record|
+        positions = upward_property_positions(record, stereotype: "", style: { mode: "3", lwidth: "2" })
+        expect(positions["+#{record[:role]}"]).to eq(record[:expected])
+      end
+    end
+
+    it "preserves unmeasured fonts, styles and headings for plain roles" do
+      controls = [{ family: "Carlito" }, { size: 10 }, { unit: "px" }, { stereotype: "Type" },
+                  { box: traffic[:box].merge("bold" => true) },
+                  { box: traffic[:box].merge("rotation" => 90) },
+                  { box: traffic[:box].merge("alignment" => nil) },
+                  { style: { mode: "2", lwidth: "2" } },
+                  { style: { mode: "3", lwidth: "2", tree: "OS" } }, { heading: [1, -100] }]
+      controls.each do |options|
+        positions = upward_property_positions(
+          traffic, stereotype: "", style: { mode: "3", lwidth: "2" }, **options
+        )
+        expect(positions["+trafficVolumeAttribute"]).to eq([182, 434])
+      end
+      positions = upward_property_positions(
+        traffic.merge(role: "traffic☃"), stereotype: "", style: { mode: "3", lwidth: "2" }
+      )
+      expect(positions["+traffic☃"]).to eq([182, 434])
+    end
+
     it "seats the direct role at its published reference position" do
       positions = upward_property_positions(traffic)
 

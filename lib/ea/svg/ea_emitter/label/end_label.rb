@@ -87,6 +87,7 @@ module Ea
             direction = leg_direction(end_kind, heading)
             if direction && !(tree && zero_offset?(text_box, mult_box))
               text_pos = source_property_seat(connector, direction, anchor, text_box, role) ||
+                         plain_upward_seat(connector, direction, anchor, text_box, role) ||
                          role_seat(direction, anchor, text_box, role) || text_pos
               mult_pos = directional_multiplicity(connector, direction, anchor, mult_box, mult) ||
                          mult_seat(direction, anchor, mult_box) || mult_pos
@@ -183,6 +184,24 @@ module Ea
             x, y = seat_corner(anchor, box)
             inset, baseline = property_role_offsets(direction)
             [x - inset - width, y + baseline]
+          end
+
+          def plain_upward_seat(connector, direction, anchor, box, role)
+            return nil unless direction == :up && cambria_box?(box)
+            return nil unless [0, 1].include?(box["alignment"])
+            return nil unless connector_source_dest_stereotype(connector, :source).empty?
+            return nil unless plain_role_route?(connector.style.to_h)
+
+            width = Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
+            return nil unless width
+
+            x, y = seat_corner(anchor, box)
+            [x - SEAT_X_INSET - width, y - 6]
+          end
+
+          def plain_role_route?(style)
+            %w[1 3].include?(style[:mode]) && %w[0 2].include?(style[:lwidth]) &&
+              [nil, "V"].include?(style[:tree])
           end
 
           def property_role_box?(box, direction)
