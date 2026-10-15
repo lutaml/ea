@@ -157,8 +157,10 @@ module Ea
             font_size == SEAT_FONT_SIZE && font_unit == "pt"
           end
 
-          # Unrotated, unhidden, unstyled, left/center aligned boxes.
+          # Boxes with explicit string-keyed OX/OY (the QEA shape) that
+          # are unrotated, unhidden, unstyled and left/center aligned.
           def default_presentation?(box)
+            return false unless box["ox"] && box["oy"]
             return false unless [nil, 0, 1].include?(box["alignment"])
             return false unless [nil, -1].include?(box["color"])
 

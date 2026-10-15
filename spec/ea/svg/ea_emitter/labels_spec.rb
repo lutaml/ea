@@ -185,6 +185,21 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
       expect(source_texts(left)["0..1"]).to eq([158 + 15, 341 + 4])
     end
 
+    it "keeps the plain offsets for symbol-keyed and partial boxes" do
+      right = { waypoints: [[100, 200], [300, 200]], role: "items",
+                multiplicity: "0..*", stereotype: "property" }
+      symbols = label_seat_positions(
+        **right, label_boxes: { llt: { ox: 46, oy: -16 },
+                                llb: { ox: 8, oy: 3 } }
+      )
+      partial = label_seat_positions(
+        **right, label_boxes: { llt: { "ox" => 46 }, llb: { "oy" => 3 } }
+      )
+
+      expect(symbols.assoc("+items").last).to eq([146, 216])
+      expect(partial.assoc("+items").last).to eq([146, 200])
+    end
+
     it "keeps the zero-box multiplicity default" do
       up_leg[:label_boxes][:llb] = { "ox" => 0, "oy" => 0 }
 
