@@ -80,6 +80,7 @@ module Ea
 
           stored_src = end_boxes(boxes, :llt, :llb)
           stored_tgt = end_boxes(boxes, :lrt, :lrb)
+          stored_labels = !(stored_src.nil? && stored_tgt.nil?)
           src_tb, src_mb = stored_src || default_label_boxes(points, :source)
           tgt_tb, tgt_mb = stored_tgt || default_label_boxes(points, :target)
 
@@ -88,14 +89,12 @@ module Ea
                              anchor: source_pt, connector: connector,
                              end_kind: :source, tree: tree && tree[:source],
                              heading: stored_src && leg_heading(points),
-                             stored: { own: !stored_src.nil?,
-                                       opposite: !stored_tgt.nil? }).each { |t| texts << t }
+                             stored_labels: stored_labels).each { |t| texts << t }
           end_renderer.texts(text_box: tgt_tb,
                              mult_box: tgt_mb,
                              anchor: target_pt, connector: connector,
                              end_kind: :target, tree: tree && tree[:target],
-                             stored: { own: !stored_tgt.nil?,
-                                       opposite: !stored_src.nil? }).each { |t| texts << t }
+                             stored_labels: stored_labels).each { |t| texts << t }
           texts
         end
 

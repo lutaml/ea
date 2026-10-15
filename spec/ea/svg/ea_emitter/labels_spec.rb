@@ -223,15 +223,11 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
     end
     let(:source_data) { { role: "items", mult: "0..*", stereotype: "property" } }
 
-    def contents(texts)
-      texts.map(&:first)
-    end
-
     it "draws one cluster when the data end is boxed and the other end is not" do
       texts = label_presence_texts(ends: { source: source_data },
                                    label_boxes: source_boxes)
 
-      expect(contents(texts)).to eq(["+items", "«property»", "0..*"])
+      expect(label_presence_contents(texts)).to eq(["+items", "«property»", "0..*"])
     end
 
     it "draws one cluster at the boxed end for the mirrored target case" do
@@ -240,14 +236,14 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
         label_boxes: target_boxes
       )
 
-      expect(contents(texts)).to eq(["+items", "0..*"])
+      expect(label_presence_contents(texts)).to eq(["+items", "0..*"])
     end
 
     it "draws one cluster at the data end when only the other end is boxed" do
       texts = label_presence_texts(ends: { source: source_data },
                                    label_boxes: target_boxes)
 
-      expect(contents(texts)).to eq(["+items", "«property»", "0..*"])
+      expect(label_presence_contents(texts)).to eq(["+items", "«property»", "0..*"])
     end
 
     it "draws one cluster when both ends are boxed and only one carries data" do
@@ -256,7 +252,7 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
         label_boxes: source_boxes.merge(target_boxes)
       )
 
-      expect(contents(texts)).to eq(["+items", "«property»", "0..*"])
+      expect(label_presence_contents(texts)).to eq(["+items", "«property»", "0..*"])
     end
 
     it "draws a data-less end's own stereotype alone at its box" do
@@ -266,16 +262,52 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
         label_boxes: source_boxes.merge(target_boxes)
       )
 
-      expect(contents(texts)).to eq(["+items", "«property»", "0..*",
+      expect(label_presence_contents(texts)).to eq(["+items", "«property»", "0..*",
                                      "«property»"])
       expect(texts.last.last).to eq([300 + 12, 200 + 14])
+    end
+
+    it "draws a role-only end once, without multiplicity" do
+      texts = label_presence_texts(
+        ends: { source: { role: "items" } }, label_boxes: source_boxes
+      )
+
+      expect(label_presence_contents(texts)).to eq(["+items"])
+    end
+
+    it "draws a multiplicity-only end once" do
+      texts = label_presence_texts(
+        ends: { source: { mult: "0..*" } }, label_boxes: source_boxes
+      )
+
+      expect(label_presence_contents(texts)).to eq(["0..*"])
+    end
+
+    it "draws a qualified role's multiplicity once and no role text" do
+      texts = label_presence_texts(
+        ends: { source: { role: "pkg::items", mult: "0..*" } },
+        label_boxes: source_boxes
+      )
+
+      expect(label_presence_contents(texts)).to eq(["0..*"])
+    end
+
+    it "keeps a «Type» stereotype with its cluster and alone at a data-less end" do
+      texts = label_presence_texts(
+        ends: { source: source_data.merge(stereotype: "Type"),
+                target: { stereotype: "Type" } },
+        label_boxes: source_boxes.merge(target_boxes)
+      )
+
+      expect(label_presence_contents(texts))
+        .to eq(["+items", "«Type»", "0..*", "«Type»"])
     end
 
     it "keeps both default clusters when neither end is boxed" do
       texts = label_presence_texts(ends: { source: source_data },
                                    label_boxes: {})
 
-      expect(contents(texts).count("+items")).to eq(2)
+      expect(label_presence_contents(texts).count("+items")).to eq(2)
     end
 
     it "keeps each end's own cluster when both carry data" do
@@ -284,7 +316,7 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
         label_boxes: source_boxes.merge(target_boxes)
       )
 
-      expect(contents(texts)).to include("+items", "+owner", "0..*", "1")
+      expect(label_presence_contents(texts)).to include("+items", "+owner", "0..*", "1")
     end
   end
 end

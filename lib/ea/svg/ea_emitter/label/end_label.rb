@@ -44,13 +44,14 @@ module Ea
           #   connector  - the DiagramConnector (for relationship lookup)
           #   end_kind   - :source or :target
           #   heading    - [dx, dy] of the first leg leaving the anchor
-          #   stored     - { own:, opposite: } whether each end has stored
-          #                label boxes; nil keeps the legacy fallback
+          #   stored_labels - the connector has stored label boxes at
+          #                   either end; false keeps the opposite-end
+          #                   fallback
           def texts(text_box:, mult_box:, anchor:, connector:, end_kind:,
-                    tree: false, heading: nil, stored: nil)
+                    tree: false, heading: nil, stored_labels: false)
             from_property, role, mult = role_and_multiplicity(connector, end_kind)
             if role_empty?(role) && mult_empty?(mult)
-              if stored && (stored[:own] || stored[:opposite])
+              if stored_labels
                 return own_stereotype_only(text_box, anchor, connector,
                                            end_kind)
               end

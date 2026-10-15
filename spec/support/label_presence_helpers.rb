@@ -19,6 +19,10 @@ module LabelPresenceHelpers
     end
   end
 
+  def label_presence_contents(texts)
+    texts.map(&:first)
+  end
+
   def label_presence_document(ends, label_boxes, waypoints)
     source = ends.fetch(:source, {})
     target = ends.fetch(:target, {})
