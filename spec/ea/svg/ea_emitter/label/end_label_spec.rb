@@ -515,9 +515,79 @@ RSpec.describe Ea::Svg::EaEmitter::Label::EndLabel do
        { size: 9 }, { heading: nil }, { heading: [0, 100] },
        { box: traffic[:box].merge("rotation" => 90) },
        { box: traffic[:box].merge("bold" => true) },
-       { style: { lwidth: "0" } }, { style: { lwidth: "2", tree: "OS" } }].each do |options|
+       { style: { lwidth: "1" } }, { style: { lwidth: "2", tree: "OS" } }].each do |options|
         expect(upward_property_positions(traffic, **options)["+trafficVolumeAttribute"])
           .to eq([182, 434])
+      end
+    end
+
+    it "seats upward property roles on the plain width-0 route like the width-2 route" do
+      record = { role: "target", mult: "0..*", anchor: [347, 910],
+                 box: { "ox" => 0, "oy" => 0, "alignment" => 0 } }
+      positions = upward_property_positions(record, heading: [0, -1], style: { mode: "3", lwidth: "0" })
+
+      expect(positions["+target"]).to eq([256, 904])
+      expect(positions["«property»"]).to eq([256, 916])
+    end
+
+    it "moves a role cluster right until its left edge reaches x = 3" do
+      records = [
+        { role: "tunBaseAttribute", anchor: [120, 449], heading: [0, -60],
+          box: { "ox" => 0, "oy" => -20, "alignment" => 1 }, expected: [[3, 423], [19, 435]] },
+        { role: "bridBaseAttribute", anchor: [136, 299], heading: [0, -61],
+          box: { "ox" => 0, "oy" => -26, "alignment" => 1 }, expected: [[3, 267], [20, 279]] }
+      ]
+      records.each do |record|
+        positions = upward_property_positions(record, heading: record[:heading],
+                                                      style: { mode: "3", lwidth: "2", tree: "V" })
+
+        expect(positions["+#{record[:role]}"]).to eq(record[:expected][0])
+        expect(positions["«property»"]).to eq(record[:expected][1])
+      end
+    end
+
+    it "leaves a role cluster whose left edge is at or beyond x = 3 where it was" do
+      # anchor 3 + 60 + 79 puts the left edge at exactly 3; one less would clamp.
+      [[142, 3], [143, 4]].each do |anchor_x, expected_x|
+        positions = upward_property_positions(
+          { role: "tunBaseAttribute", anchor: [anchor_x, 449],
+            box: { "ox" => 0, "oy" => -20, "alignment" => 1 } },
+          heading: [0, -60], style: { mode: "3", lwidth: "2", tree: "V" }
+        )
+
+        expect(positions["+tunBaseAttribute"][0]).to eq(expected_x)
+      end
+    end
+
+    it "seats a target role whose leg arrives from the right at its stored corner" do
+      record = { role: "xalAddress", anchor: [876, 194], mult: nil,
+                 box: { "ox" => 16, "oy" => -1, "alignment" => 1 } }
+      positions = upward_property_positions(record, stereotype: "", end_kind: :target,
+                                                    heading: [1, 0], style: { mode: "3", lwidth: "0" })
+
+      expect(positions["+xalAddress"]).to eq([895, 186])
+    end
+
+    it "seats a target role whose leg runs down on the LV tree route" do
+      record = { role: "lod0MultiPoint", anchor: [195, 441], mult: "1",
+                 box: { "ox" => 0, "oy" => 0, "alignment" => 1 } }
+      positions = upward_property_positions(
+        record, stereotype: "", end_kind: :target, heading: [0, 86],
+                style: { mode: "3", lwidth: "2", tree: "LV" }
+      )
+
+      expect(positions["+lod0MultiPoint"]).to eq([115, 456])
+    end
+
+    it "keeps downward target roles off other tree routes and unproven widths" do
+      [{ mode: "3", lwidth: "2", tree: "V" }, { mode: "3", lwidth: "2" },
+       { mode: "3", lwidth: "1", tree: "LV" }].each do |style|
+        positions = upward_property_positions(
+          { role: "lod0MultiPoint", anchor: [195, 441], box: { "ox" => 0, "oy" => 0, "alignment" => 1 } },
+          stereotype: "", end_kind: :target, heading: [0, 86], style: style
+        )
+
+        expect(positions["+lod0MultiPoint"]).to eq([195, 441])
       end
     end
 
