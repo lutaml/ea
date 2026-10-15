@@ -328,6 +328,36 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     expect(result).to eq(paths: ["M 240 468 L 323 468"], markers: ["323 468 312 474 312 462"])
   end
 
+  let(:computed_zero_leg) do
+    { source: [300, 70, 168, 80], target: [570, 20, 343, 465], path: nil,
+      geometry: "SX=84;SY=-1;EX=-171;EY=141;EDGE=2;", style: "Mode=3;LWidth=2;" }
+  end
+
+  it "collapses a zero-length computed terminal leg between facing horizontal ports" do
+    result = render_qea_route(connector_type: "Generalization", **computed_zero_leg)
+
+    puts "ZPOS #{result[:paths].inspect} | #{result[:markers].inspect}"
+  end
+
+  it "keeps other zero-leg inputs unchanged" do
+    cases = [
+      ["stored duplicate path", { path: "570:-111;570:-111;" }],
+      ["mode 2", { style: "Mode=2;LWidth=2;" }],
+      ["width 0", { style: "Mode=3;LWidth=0;" }],
+      ["tree V", { style: "Mode=3;LWidth=2;TREE=V;" }],
+      ["association", { connector_type: "Association" }],
+      ["aggregation", { connector_type: "Aggregation" }],
+      ["two-pixel leg", { geometry: "SX=84;SY=-1;EX=-171;EY=138;EDGE=2;" }]
+    ]
+
+    cases.each do |name, override|
+      input = computed_zero_leg.merge(override)
+      result = render_qea_route(**{ connector_type: "Generalization" }.merge(input))
+
+      puts "ZCASE #{name} | #{result[:paths].inspect} | #{result[:markers].inspect}"
+    end
+  end
+
   it "keeps other computed and stored routes unchanged" do
     jogged = ["M 239 468 L 324 468 L 324 469"]
     jog_tip = ["324 469 318 458 330 458"]

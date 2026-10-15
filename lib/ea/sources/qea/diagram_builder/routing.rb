@@ -82,7 +82,7 @@ module Ea
 
           # A computed Mode 3 Generalization between horizontally disjoint
           # boxes whose two explicit ports sit on the facing sides one pixel
-          # apart in y (edge-port integer rounding) is one horizontal line.
+          # apart in y or less (edge-port integer rounding) is one horizontal line.
           # Stored Path jogs and every other shape keep their route.
           def collapse_computed_jog(model, link_row, diagram_row, geom)
             return model unless computed_jog_candidate?(model, link_row, geom)
@@ -113,7 +113,7 @@ module Ea
           end
 
           def facing_jog_ports?(from, to, src, tgt)
-            return false unless (from.y - to.y).abs == 1 && to.y.between?(tgt.y, tgt.y + tgt.height)
+            return false unless (from.y - to.y).abs <= 1 && to.y.between?(tgt.y, tgt.y + tgt.height)
 
             if src.x + src.width < tgt.x
               from.x == src.x + src.width && to.x == tgt.x
