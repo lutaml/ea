@@ -6,8 +6,9 @@ module QeaRoutingHelpers
                        target: [400, 100, 200, 100],
                        geometry: "SX=0;SY=0;EX=0;EY=0;EDGE=1;",
                        connector_type: "Generalization", xrefs: [], connector_attributes: {},
-                       object_styles: [nil, nil])
+                       object_styles: [nil, nil], target_placed: true)
     rows = Ea::Qea::Models
+    placements = [source, target].take(target_placed ? 2 : 1)
     database = build_test_database(
       objects: [
         rows::EaObject.new(ea_object_id: 1, object_type: "Class", name: "Child",
@@ -25,7 +26,7 @@ module QeaRoutingHelpers
         diagram_id: 1, package_id: 1, diagram_type: "Logical", name: "D",
         ea_guid: "diagram", cx: 800, cy: 600, styleex: "SuppressFOC=1;"
       )],
-      diagram_objects: [source, target].each_with_index.map do |(x, y, width, height), index|
+      diagram_objects: placements.each_with_index.map do |(x, y, width, height), index|
         rows::EaDiagramObject.new(
           diagram_id: 1, ea_object_id: index + 1, instance_id: index + 1,
           rectleft: x, rectright: x + width, recttop: -y, rectbottom: -y - height,

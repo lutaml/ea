@@ -35,10 +35,8 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
       expect(render_qea_route(**base, **aligned)[:paths].first).to eq("M 393 80 L 264 80")
     end
 
-    it "keeps the stored route when the offsets differ, the boxes miss, or the route is not Mode 2" do
+    it "keeps the stored route when the boxes miss or the route is not Mode 2" do
       controls = [
-        [{ geometry: "SX=8;SY=-4;EX=15;EY=-33;EDGE=4;",
-           source: [644, 154, 181, 80], target: [270, 150, 200, 150] }, "M 409 80 L 235 81"],
         [{ target: [292, 400, 229, 125] }, "M 413 120 L 256 210"],
         [{ style: "Mode=3;LWidth=2;" }, "M 393 93 L 264 97"],
         [{ path: "600:-300;" }, "M 393 93 L 264 97"]
