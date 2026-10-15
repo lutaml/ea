@@ -8,6 +8,68 @@ module Ea
         module Routing
           private
 
+          # A valid lateral corner joins one vertical leg and one horizontal
+          # leg. Keep it even when the boxes also admit a shorter direct route.
+          def stored_lateral_route(link_row, connector, source, target)
+            return nil unless %w[Aggregation Association].include?(connector.connector_type)
+
+            style = DiagramStyleParser.parse(link_row.style)
+            return nil unless stored_lateral_style?(style)
+
+            corner = stored_lateral_corner(link_row)
+            return nil unless corner
+
+            if style[:tree] == "LH"
+              horizontal_corner_route(corner, source, target)
+            else
+              vertical_corner_route(corner, source, target)
+            end
+          end
+
+          def stored_lateral_corner(link_row)
+            return nil unless link_row.path.to_s.match?(/\A-?\d+:-?\d+;?\z/)
+
+            intermediate_waypoints(link_row).first
+          end
+
+          def stored_lateral_style?(style)
+            style[:mode] == "3" && %w[0 2].include?(style[:lwidth]) && %w[LH LV].include?(style[:tree])
+          end
+
+          def horizontal_corner?(corner, source, target)
+            within_horizontal_span?(corner, source) && within_height?(corner[1], target) &&
+              !within_height?(corner[1], source) && !within_horizontal_span?(corner, target)
+          end
+
+          def horizontal_corner_route(corner, source, target)
+            return nil unless horizontal_corner?(corner, source, target)
+
+            x, y = corner
+
+            source_y = y < source.y ? source.y : source.y + source.height
+            target_x = x < target.x ? target.x : target.x + target.width
+            [[x, source_y], corner, [target_x, y]]
+          end
+
+          def vertical_corner?(corner, source, target)
+            within_height?(corner[1], source) && within_horizontal_span?(corner, target) &&
+              !within_horizontal_span?(corner, source) && !within_height?(corner[1], target)
+          end
+
+          def vertical_corner_route(corner, source, target)
+            return nil unless vertical_corner?(corner, source, target)
+
+            x, y = corner
+
+            source_x = x < source.x ? source.x : source.x + source.width
+            target_y = y < target.y ? target.y : target.y + target.height
+            [[source_x, y], corner, [x, target_y]]
+          end
+
+          def within_height?(height, bounds)
+            height.between?(bounds.y, bounds.y + bounds.height)
+          end
+
           # A lateral tree leaves the side edge before turning upward.
           # Keep that dock only when its first leg actually points outward.
           def lateral_source_exit?(points, link_row, bounds)

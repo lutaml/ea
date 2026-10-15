@@ -648,7 +648,8 @@ module Ea
           # EDGE=2 routes are excluded; they are already exact.
           src = bounds_from_rect(source_placement)
           tgt = bounds_from_rect(target_placement)
-          tree_route = horizontal_tree_route(points, link_row, connector, src, tgt)
+          tree_route = stored_lateral_route(link_row, connector, src, tgt) ||
+                       horizontal_tree_route(points, link_row, connector, src, tgt)
           if tree_route
             points = tree_route
           elsif %w[Association Aggregation].include?(connector.connector_type) &&
