@@ -137,8 +137,8 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
       ).each_with_object({}) { |(text, xy), seen| seen[text] ||= xy }
     end
 
-    def in_reference_space(xy, record)
-      [xy[0] + record[:shift][0], xy[1] + record[:shift][1]]
+    def in_reference_space(point, record)
+      [point[0] + record[:shift][0], point[1] + record[:shift][1]]
     end
 
     it "seats an upward leg's multiplicity at the reference position" do

@@ -125,8 +125,7 @@ module Ea
           # a rightward one. Other sizes, headings, the target end,
           # custom presentation and zero boxes keep the plain offset.
           def leg_direction(end_kind, heading)
-            return nil unless end_kind == :source && heading
-            return nil unless font_size == SEAT_FONT_SIZE && font_unit == "pt"
+            return nil unless end_kind == :source && heading && seat_font?
 
             dx, dy = heading
             return :up if dx.zero? && dy.negative?
@@ -154,12 +153,18 @@ module Ea
             [x + SEAT_X_INSET, direction == :right ? y + 15 : y - 6]
           end
 
+          def seat_font?
+            font_size == SEAT_FONT_SIZE && font_unit == "pt"
+          end
+
           # Unrotated, unhidden, unstyled, left/center aligned boxes.
           def default_presentation?(box)
+            return false unless [nil, 0, 1].include?(box["alignment"])
+            return false unless [nil, -1].include?(box["color"])
+
             box["rotation"].to_i.zero? && box["direction"].to_i.zero? &&
-              box["hidden"] != true && !box["bold"] && !box["italic"] &&
-              !box["underline"] && [nil, 0, 1].include?(box["alignment"]) &&
-              [nil, -1].include?(box["color"])
+              box.values_at("hidden", "bold", "italic", "underline")
+                 .none?
           end
 
           def seat_corner(anchor, box)
