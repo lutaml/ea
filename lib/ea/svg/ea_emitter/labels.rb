@@ -78,15 +78,16 @@ module Ea
           boxes = connector.label_boxes || {}
           tree = tree_shaped?(points)
 
-          src_tb, src_mb = end_boxes(boxes, :llt, :llb) ||
-                           default_label_boxes(points, :source)
+          stored_src = end_boxes(boxes, :llt, :llb)
+          src_tb, src_mb = stored_src || default_label_boxes(points, :source)
           tgt_tb, tgt_mb = end_boxes(boxes, :lrt, :lrb) ||
                            default_label_boxes(points, :target)
 
           texts = []
           end_renderer.texts(text_box: src_tb, mult_box: src_mb,
                              anchor: source_pt, connector: connector,
-                             end_kind: :source, tree: tree && tree[:source]).each { |t| texts << t }
+                             end_kind: :source, tree: tree && tree[:source],
+                             heading: stored_src && leg_heading(points)).each { |t| texts << t }
           end_renderer.texts(text_box: tgt_tb,
                              mult_box: tgt_mb,
                              anchor: target_pt, connector: connector,
@@ -103,6 +104,10 @@ module Ea
                            points[1][0] == points[2][0]
 
           { source: true, target: true }
+        end
+
+        def leg_heading(points)
+          [points[1][0] - points[0][0], points[1][1] - points[0][1]]
         end
 
         def end_boxes(boxes, text_key, mult_key)

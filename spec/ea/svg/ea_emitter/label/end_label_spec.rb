@@ -226,4 +226,91 @@ RSpec.describe Ea::Svg::EaEmitter::Label::EndLabel do
       include_examples "stored end-label alignment"
     end
   end
+
+  # Stored boxes of a source end whose first leg leaves up or right.
+  # Up-leg values are connector dc:176:861 of reference EAID_04EE9625
+  # (tunKeyValuePairAttribute, Aggregation, «property» source end).
+  describe "source-end leg seats" do
+    let(:association) do
+      Ea::Model::Association.new(
+        id: "r1", source_id: "c1", target_id: "c2",
+        source_role_name: "tunKeyValuePairAttribute",
+        source_multiplicity_raw: "0..*"
+      )
+    end
+    let(:connector) do
+      Ea::Model::DiagramConnector.new(id: "dc:176:861",
+                                      relationship_ref: association.id,
+                                      source_stereotype: stereotype)
+    end
+    let(:stereotype) { "property" }
+    let(:role) { "+tunKeyValuePairAttribute" }
+    let(:text_box) { { "ox" => 44, "oy" => -20 } }
+    let(:mult_box) { { "ox" => 12, "oy" => -1 } }
+
+    def seats(anchor:, heading:, end_kind: :source, text_box: self.text_box,
+              mult_box: self.mult_box)
+      texts = renderer.texts(text_box:, mult_box:, anchor:,
+                             connector:, end_kind:, heading:)
+      texts.to_h do |text|
+        node = Nokogiri::XML(text).at_css("text")
+        [node.text, [node["x"].to_f, node["y"].to_f]]
+      end
+    end
+
+    def role_width
+      Ea::Svg::EaEmitter::TextRenderer.estimate_width(
+        role, 7, family: "Carlito"
+      ).round
+    end
+
+    it "seats an upward leg's role right-aligned and its multiplicity above the corner" do
+      placed = seats(anchor: [1441, 466], heading: [0, -218])
+
+      expect(placed["0..*"]).to eq([1456, 459])
+      expect(placed[role][1]).to eq(440)
+      expect(placed[role][0] + role_width).to eq(1441 + 44 - 60)
+    end
+
+    it "ends the role 3px before the corner when no stereotype line follows" do
+      connector.source_stereotype = nil
+      placed = seats(anchor: [1441, 466], heading: [0, -218])
+
+      expect(placed[role][0] + role_width).to eq(1441 + 44 - 3)
+      expect(placed[role][1]).to eq(440)
+    end
+
+    it "seats a rightward leg's role and multiplicity beside the corner" do
+      placed = seats(anchor: [452, 255], heading: [283, 0],
+                     text_box: { "ox" => 46, "oy" => -16 },
+                     mult_box: { "ox" => 8, "oy" => 3 })
+
+      expect(placed[role]).to eq([501, 232])
+      expect(placed["0..*"]).to eq([463, 273])
+    end
+
+    [
+      ["a downward leg", { heading: [0, 40] }],
+      ["a leftward leg", { heading: [-40, 0] }],
+      ["a diagonal leg", { heading: [40, -40] }],
+      ["no known leg", { heading: nil }],
+      ["the target end", { heading: [0, -40], end_kind: :target }]
+    ].each do |name, options|
+      it "keeps the plain offset for #{name}" do
+        placed = seats(anchor: [100, 200], **options)
+
+        expect(placed[role][1]).to eq(200 + 20)
+        expect(placed[role][0]).to eq(100 + 44)
+        expect(placed["0..*"]).to eq([112, 201])
+      end
+    end
+
+    it "keeps the default multiplicity seat for a zero multiplicity box" do
+      placed = seats(anchor: [100, 200], heading: [0, -40],
+                     mult_box: { "ox" => 0, "oy" => 0 })
+
+      expect(placed["0..*"]).to eq([112, 215])
+      expect(placed[role][1]).to eq(200 - 20 - 6)
+    end
+  end
 end

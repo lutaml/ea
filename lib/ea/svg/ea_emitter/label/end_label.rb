@@ -19,6 +19,9 @@ module Ea
         # for those — only simple role names render.
         class EndLabel
           PROPERTY_STEREOTYPE = "«Property»"
+          ROLE_GAP_UP = 3
+          ROLE_GAP_UP_STEREOTYPED = 60
+          SEAT_X_INSET = 3
 
           attr_reader :canvas, :model_index, :document, :theme,
                       :font_family, :font_size, :font_unit
@@ -41,8 +44,9 @@ module Ea
           #   anchor     - [x, y] of the connector endpoint
           #   connector  - the DiagramConnector (for relationship lookup)
           #   end_kind   - :source or :target
+          #   heading    - [dx, dy] of the first leg leaving the anchor
           def texts(text_box:, mult_box:, anchor:, connector:, end_kind:,
-                    tree: false)
+                    tree: false, heading: nil)
             from_property, role, mult = role_and_multiplicity(connector, end_kind)
             if role_empty?(role) && mult_empty?(mult)
               other_from_prop, other_role, other_mult = role_and_multiplicity(connector,
@@ -73,6 +77,12 @@ module Ea
             # the end has none.
             stereo = connector_source_dest_stereotype(connector, end_kind)
             stereo = stereo.nil? || stereo.empty? ? nil : "«#{stereo}»"
+            direction = leg_direction(end_kind, heading)
+            if direction && !(tree && zero_offset?(text_box, mult_box))
+              text_pos = role_seat(direction, anchor, text_box, role, stereo) ||
+                         text_pos
+              mult_pos = mult_seat(direction, anchor, mult_box) || mult_pos
+            end
 
             build_texts(role:, mult:, standalone:,
                         text_pos:, mult_pos:, stereo:, text_box:)
@@ -107,6 +117,50 @@ module Ea
               [[anchor[0] + 7 - width, anchor[1] - 8],
                [anchor[0] + 8, anchor[1] - 8]]
             end
+          end
+
+          # Source ends whose first leg leaves straight up or straight
+          # right seat the stored boxes at the box's bottom-left corner:
+          # anchor + (OX, OY) with no sign flip, the baseline 6px
+          # (7px on a horizontal leg) above it. Role text is
+          # left-aligned 3px right of the corner when the leg goes
+          # right; when it goes up the role is right-aligned, ending
+          # 3px left of the corner (60px when a stereotype line
+          # follows). The multiplicity sits 3px right of the corner,
+          # above it on an upward leg and 15px below it on a rightward
+          # one. Other headings and the target end keep the plain
+          # offset.
+          def leg_direction(end_kind, heading)
+            return nil unless end_kind == :source && heading
+
+            dx, dy = heading
+            return :up if dx.zero? && dy.negative?
+            return :right if dy.zero? && dx.positive?
+
+            nil
+          end
+
+          def role_seat(direction, anchor, box, role, stereo)
+            return nil if box.nil? || role_empty?(role)
+
+            x, y = seat_corner(anchor, box)
+            return [x + SEAT_X_INSET, y - 7] if direction == :right
+
+            gap = stereo ? ROLE_GAP_UP_STEREOTYPED : ROLE_GAP_UP
+            width = TextRenderer.estimate_width(role, font_size,
+                                                family: font_family).round
+            [x - gap - width, y - 6]
+          end
+
+          def mult_seat(direction, anchor, box)
+            return nil if box.nil? || stored_offsets_zero?(box)
+
+            x, y = seat_corner(anchor, box)
+            [x + SEAT_X_INSET, direction == :right ? y + 15 : y - 6]
+          end
+
+          def seat_corner(anchor, box)
+            [anchor[0] + box["ox"].to_i, anchor[1] + box["oy"].to_i]
           end
 
           def build_texts(role:, mult:, standalone:, text_pos:, mult_pos:,
