@@ -471,6 +471,25 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
              markers: ["364 190 353 196 353 184"])
   end
 
+  it "docks an untyped Mode 3 Association corner on the outline of each leg's box" do
+    association = lateral_corner.merge(connector_type: "Association", style: "Mode=3;LWidth=2;")
+    cases = [
+      [association, "M 145 141 L 145 190 L 363 190"],
+      [association.merge(style: "Mode=3;LWidth=0;"), "M 145 140 L 145 190 L 364 190"],
+      [association.merge(source: [1121, 1514, 197, 80], target: [741, 963, 396, 261],
+                         path: "1219:-1093;"), "M 513 590 L 513 170 L 432 170"]
+    ]
+    cases.each do |input, path|
+      expect(render_qea_route(**input)[:paths].first).to eq(path), input.inspect
+    end
+  end
+
+  it "keeps untyped Mode 3 corners of other connector types on their old route" do
+    expect(render_qea_route(**lateral_corner.merge(style: "Mode=3;LWidth=2;")))
+      .to eq(paths: ["M 200 141 L 363 171"],
+             markers: ["200 141 210.74 137.89 219.67 144.62 208.93 147.73"])
+  end
+
   let(:square_corner) do
     { connector_type: "Association", source: [800, 515, 100, 162],
       target: [540, 740, 100, 80], path: "621:-627;",
@@ -504,7 +523,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
   end
 
   it "preserves custom diagonals, invalid corners and other square-routing styles" do # rubocop:disable Metrics/BlockLength
-    ["Mode=2;TREE=OS;LWidth=2;", "TREE=OS;LWidth=2;", "Mode=3;LWidth=2;",
+    ["Mode=2;TREE=OS;LWidth=2;", "TREE=OS;LWidth=2;",
      "Mode=3;TREE=OS;LWidth=0;", "Mode=3;TREE=OR;LWidth=2;"].each do |style|
       expect(render_qea_route(**square_corner.merge(style: style))[:paths].first)
         .to eq("M 295 121 L 116 152 L 35 305"), style

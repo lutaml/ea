@@ -204,15 +204,23 @@ module Ea
             return nil unless %w[Aggregation Association].include?(connector.connector_type)
 
             style = DiagramStyleParser.parse(link_row.style)
-            return nil unless stored_lateral_style?(style)
+            return nil unless stored_lateral_style?(style, connector)
 
             corner = stored_lateral_corner(link_row)
-            return nil unless corner
+            corner && lateral_corner_route(style, corner, source, target)
+          end
 
-            if style[:tree] == "LH"
-              horizontal_corner_route(corner, source, target)
+          # An untyped Mode 3 Association corner takes whichever leg
+          # orientation its position fits; width-2 docks sit on the 1px
+          # outer outline.
+          def lateral_corner_route(style, corner, source, target)
+            case style[:tree]
+            when "LH" then horizontal_corner_route(corner, source, target)
+            when "LV" then vertical_corner_route(corner, source, target)
             else
-              vertical_corner_route(corner, source, target)
+              outline = style[:lwidth] == "2" ? 1 : 0
+              horizontal_corner_route(corner, source, target, outline) ||
+                vertical_corner_route(corner, source, target, outline)
             end
           end
 
@@ -222,8 +230,11 @@ module Ea
             intermediate_waypoints(link_row).first
           end
 
-          def stored_lateral_style?(style)
-            style[:mode] == "3" && %w[0 2].include?(style[:lwidth]) && %w[LH LV].include?(style[:tree])
+          def stored_lateral_style?(style, connector)
+            return false unless style[:mode] == "3" && %w[0 2].include?(style[:lwidth])
+
+            %w[LH LV].include?(style[:tree]) ||
+              (style[:tree].nil? && connector.connector_type == "Association")
           end
 
           def horizontal_corner?(corner, source, target)
@@ -231,13 +242,13 @@ module Ea
               !within_height?(corner[1], source) && !within_horizontal_span?(corner, target)
           end
 
-          def horizontal_corner_route(corner, source, target)
+          def horizontal_corner_route(corner, source, target, outline = 0)
             return nil unless horizontal_corner?(corner, source, target)
 
             x, y = corner
 
-            source_y = y < source.y ? source.y : source.y + source.height
-            target_x = x < target.x ? target.x : target.x + target.width
+            source_y = y < source.y ? source.y - outline : source.y + source.height + outline
+            target_x = x < target.x ? target.x - outline : target.x + target.width + outline
             [[x, source_y], corner, [target_x, y]]
           end
 
@@ -246,13 +257,13 @@ module Ea
               !within_horizontal_span?(corner, source) && !within_height?(corner[1], target)
           end
 
-          def vertical_corner_route(corner, source, target)
+          def vertical_corner_route(corner, source, target, outline = 0)
             return nil unless vertical_corner?(corner, source, target)
 
             x, y = corner
 
-            source_x = x < source.x ? source.x : source.x + source.width
-            target_y = y < target.y ? target.y : target.y + target.height
+            source_x = x < source.x ? source.x - outline : source.x + source.width + outline
+            target_y = y < target.y ? target.y - outline : target.y + target.height + outline
             [[source_x, y], corner, [x, target_y]]
           end
 
