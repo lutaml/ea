@@ -683,6 +683,10 @@ module Ea
             end
           end
 
+          if intermediate.any? && !tree_route
+            points = level_entry_route(points, link_row, connector, src, tgt)
+          end
+
           points.map do |x, y|
             Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y))
           end
