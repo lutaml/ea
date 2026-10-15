@@ -660,7 +660,8 @@ module Ea
             # docked like a Generalization one.
             if connector.connector_type == "Aggregation" &&
                intermediate.any? && points.size >= 4 &&
-               generalization_outline_offset(link_row, points.size) == 1
+               (generalization_outline_offset(link_row, points.size) == 1 ||
+                flush_width_zero_tree?(link_row))
               redock_parent_above(points, link_row, source_placement,
                                   target_placement, strict: true)
             end

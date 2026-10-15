@@ -258,6 +258,54 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     end
   end
 
+  let(:flush_trunk) do
+    { source: [443, 240, 184, 70], target: [378, 49, 179, 70],
+      path: "534:-169;467:-169;", geometry: "SX=0;SY=0;EDGE=1;",
+      style: "Mode=3;LWidth=0;TREE=V;" }
+  end
+
+  it "docks width-0 vertical tree Aggregations on the box edges, keeping the trunk" do
+    records = [
+      flush_trunk,
+      { source: [382, 209, 110, 70], target: [287, 30, 110, 70],
+        path: "437:-150;342:-150;", geometry: "SX=0;SY=0;EX=0;EY=0;EDGE=1;",
+        style: "Mode=3;LWidth=0;TREE=V;" }
+    ]
+
+    records.each do |input|
+      result = render_qea_route(connector_type: "Aggregation", **input)
+
+      puts "POS #{result[:paths].inspect} | #{result[:markers].inspect}"
+    end
+  end
+
+  it "keeps other width-0 tree inputs on their existing routes" do
+    cases = [
+      ["width 1", { style: "Mode=3;LWidth=1;TREE=V;" }],
+      ["width 3", { style: "Mode=3;LWidth=3;TREE=V;" }],
+      ["no width", { style: "Mode=3;TREE=V;" }],
+      ["tree H", { style: "Mode=3;LWidth=0;TREE=H;" }],
+      ["no tree", { style: "Mode=3;LWidth=0;" }],
+      ["width 2", { style: "Mode=3;LWidth=2;TREE=V;" }],
+      ["association", { connector_type: "Association" }],
+      ["generalization", { connector_type: "Generalization" }],
+      ["bend left of source", { path: "420:-169;467:-169;" }],
+      ["bend right of target", { path: "534:-169;600:-169;" }],
+      ["bends differ in y", { path: "534:-169;467:-160;" }],
+      ["bends share x", { path: "534:-169;534:-160;" }],
+      ["three bends", { path: "534:-169;500:-169;467:-169;" }],
+      ["trunk at target edge", { path: "534:-119;467:-119;" }],
+      ["trunk at source edge", { path: "534:-240;467:-240;" }]
+    ]
+
+    cases.each do |name, override|
+      input = flush_trunk.merge(override)
+      result = render_qea_route(**{ connector_type: "Aggregation" }.merge(input))
+
+      puts "CASE #{name} | #{result[:paths].inspect} | #{result[:markers].inspect}"
+    end
+  end
+
   it "preserves marker tips and dimensions across adjacent-bend boundaries" do
     [
       [199, ["385 140 379 129 391 129"]],
