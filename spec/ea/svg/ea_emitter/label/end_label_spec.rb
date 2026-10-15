@@ -211,8 +211,12 @@ RSpec.describe Ea::Svg::EaEmitter::Label::EndLabel do
         expect(parsed.map { |text| text["textLength"].to_i }).to eq(
           [role_length, stereotype && 44, 16].compact
         )
+        # Default presentation sits 12px below the role on 7pt labels
+        # (reference clusters); custom alignment keeps size + 6.
+        stereotype_y = [2, "1", "unknown"].include?(alignment) ? 198 : 197
         expect(parsed.map { |text| [text["x"].to_f, text["y"].to_f] }).to eq(
-          [[110, 185], stereotype && [stereotype_x, 198], [130, 195]].compact
+          [[110, 185], stereotype && [stereotype_x, stereotype_y],
+           [130, 195]].compact
         )
       end
     end

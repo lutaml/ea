@@ -152,6 +152,21 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
       end
     end
 
+    it "seats the stereotype line at the reference gap on 7pt labels" do
+      texts = source_texts(right_legs[0])
+
+      # {84A9C65B} dc:154:1083: role y 240, «property» y 252 in the reference.
+      expect(in_reference_space(texts["«property»"], right_legs[0]).last)
+        .to eq(252)
+    end
+
+    it "keeps size + 6 below the role for other label sizes" do
+      texts = source_texts(right_legs[0], font_size: 9)
+
+      expect(texts["«property»"].last - texts["+ifcIntBuildingInstallationAttribute"].last)
+        .to eq(15)
+    end
+
     it "keeps the plain offsets for other label sizes" do
       texts = source_texts(up_leg, font_size: 9)
 

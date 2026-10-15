@@ -34,6 +34,50 @@ module Ea
             tree_bends_fit?(points[1], points[-2], src, tgt)
           end
 
+          # A width-2 Mode 3 horizontal tree keeps its stored vertical trunk
+          # and docks both ends on the facing sides' 1px outer outlines at
+          # the bend heights. Returns nil unless the trunk sits strictly
+          # inside the open gap and each bend lies inside its own box.
+          def horizontal_tree_route(points, link_row, connector, src, tgt)
+            return nil unless points.size == 4 && horizontal_tree_style?(link_row, connector)
+
+            first, last = points.values_at(1, 2)
+            src_x, tgt_x = facing_outline_xs(src, tgt)
+            return nil unless src_x && trunk_in_gap?(first, last, src_x, tgt_x)
+            return nil unless inside_height?(first[1], src) && inside_height?(last[1], tgt)
+
+            [[src_x, first[1]], first, last, [tgt_x, last[1]]]
+          end
+
+          def horizontal_tree_style?(link_row, connector)
+            style = DiagramStyleParser.parse(link_row.style)
+            %w[Generalization Aggregation].include?(connector.connector_type) &&
+              style[:tree] == "H" && style[:lwidth] == "2" && style[:mode] == "3"
+          end
+
+          def trunk_in_gap?(first, last, src_x, tgt_x)
+            first[0] == last[0] && first[1] != last[1] &&
+              first[0] > [src_x, tgt_x].min && first[0] < [src_x, tgt_x].max
+          end
+
+          def inside_height?(height, bounds)
+            height > bounds.y && height < bounds.y + bounds.height
+          end
+
+          # Source and target x on the facing sides' outer outlines, or nil
+          # when the boxes are not horizontally separated.
+          def facing_outline_xs(src, tgt)
+            source_left = src.x
+            source_right = source_left + src.width
+            target_left = tgt.x
+            target_right = target_left + tgt.width
+            if target_right < source_left
+              [source_left - 1, target_right + 1]
+            elsif source_right < target_left
+              [source_right + 1, target_left - 1]
+            end
+          end
+
           def tree_bends_fit?(first, last, source, target)
             first[0] != last[0] && first[1] == last[1] &&
               within_vertical_gap?(first[1], source, target) &&
