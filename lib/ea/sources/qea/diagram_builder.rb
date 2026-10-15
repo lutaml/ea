@@ -421,8 +421,12 @@ module Ea
             has_geometry_offsets: geometry_has_offsets?(link_row.geometry),
             is_substitutable: substitutable_connector?(connector)
           ), link_row, diagram_row, geom)
+          model = collapse_partial_port_jog(model, link_row, diagram_row)
           model = direct_empty_path_ray(model, link_row, diagram_row, geom, context)
-          correct_stored_ray_origins(model, link_row, diagram_row, geom, context)
+          model = mode2_overlap_ray(model, link_row, diagram_row, geom, context)
+          model = association_stored_ray(model, link_row, diagram_row, geom, context)
+          model = correct_stored_ray_origins(model, link_row, diagram_row, geom, context)
+          overlap_ray_origins(model, link_row, diagram_row, geom, context)
         end
 
         # Ray origin for one connector end: the element's center

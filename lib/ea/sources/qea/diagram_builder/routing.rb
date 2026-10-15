@@ -23,6 +23,56 @@ module Ea
             set_stored_ray_origins(model, source, target, geom)
           end
 
+          # A Mode 2 Generalization whose stored Path is a horizontal jog
+          # between vertically separated boxes that overlap in x is EA's
+          # auto-route: one vertical ray at the overlap midpoint plus SX.
+          # The stored jog is stale; the ray docks on both 1px outlines.
+          def mode2_overlap_ray(model, link_row, diagram_row, geom, context)
+            return model if context || !mode2_overlap_candidate?(model, link_row, geom)
+
+            source, target = stored_ray_boxes(link_row, diagram_row)
+            column = overlap_ray_coordinate(source.x, source.width, target.x, target.width, geom[:sx])
+            return model unless column && vertical_separation?(source, target)
+
+            set_overlap_ray(model, column, source, target)
+          end
+
+          def set_overlap_ray(model, column, source, target)
+            model.waypoints = overlap_ray_ends(column, source, target).map do |x, y|
+              Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y))
+            end
+            model.source_anchor, model.target_anchor = [source, target].map do |box|
+              Ea::Model::Point.new(x: column, y: box.y + box.height / 2)
+            end
+            model
+          end
+
+          def mode2_overlap_candidate?(model, link_row, geom)
+            model.connector_type == "Generalization" && model.has_geometry_offsets &&
+              mode2_overlap_style?(model.style.to_h, geom) && model.waypoints.size == 4 &&
+              horizontal_jog?(intermediate_waypoints(link_row))
+          end
+
+          def mode2_overlap_style?(style, geom)
+            style[:mode] == "2" && style[:lwidth] == "2" && !style[:tree] && geom[:edge] == 1 && geom[:sx]
+          end
+
+          def horizontal_jog?(corners)
+            corners.size == 2 && corners[0][1] == corners[1][1]
+          end
+
+          def vertical_separation?(source, target)
+            source.y + source.height < target.y || target.y + target.height < source.y
+          end
+
+          def overlap_ray_ends(column, source, target)
+            if target.y + target.height < source.y
+              [[column, source.y - 1], [column, target.y + target.height + 1]]
+            else
+              [[column, source.y + source.height + 1], [column, target.y - 1]]
+            end
+          end
+
           def empty_path_ray_gap?(source, target, geom)
             return false unless source.x + source.width < target.x
 
@@ -53,6 +103,134 @@ module Ea
             return model unless stored_ray_gap?(source, target, model.style[:mode], geom[:edge])
 
             set_stored_ray_origins(model, source, target, geom)
+          end
+
+          # An empty-Path Mode 3 Association with explicit offsets on both
+          # ends is the straight line between the two stored ray origins.
+          # Origins outside their own box are not a stored ray.
+          def association_stored_ray(model, link_row, diagram_row, geom, context)
+            return model if context
+            return model unless association_ray_candidate?(model, link_row)
+
+            source, target = stored_ray_boxes(link_row, diagram_row)
+            origins = association_ray_origins(source, target, geom)
+            return model unless origins
+
+            model.waypoints = [model.source_port, model.target_port].map do |point|
+              Ea::Model::Waypoint.new(position: point)
+            end
+            model.source_anchor, model.target_anchor = origins
+            model
+          end
+
+          def association_ray_origins(source, target, geom)
+            origins = [stored_ray_origin(source, geom[:sx], geom[:sy]),
+                       stored_ray_origin(target, geom[:ex], geom[:ey])]
+            inside = origins.zip([source, target]).all? { |o, b| inside_box?(o, b) }
+            origins if inside && sub_pixel_safe_origins?(origins, [source, target])
+          end
+
+          def association_ray_candidate?(model, link_row)
+            model.connector_type == "Association" && link_row.path.to_s.empty? &&
+              model.has_geometry_offsets && model.source_port && model.target_port &&
+              association_ray_style?(model.style.to_h)
+          end
+
+          def association_ray_style?(style)
+            style[:mode] == "3" && !style[:tree] && %w[0 2].include?(style[:lwidth]) &&
+              %i[direct regenerated].none? { |key| style.key?(key) }
+          end
+
+          # Origins are whole pixels while EA's box centers may sit on a
+          # half pixel. An origin on its border then clips differently
+          # unless the line is axis-aligned, which no rounding changes.
+          def sub_pixel_safe_origins?(origins, boxes)
+            first, last = origins
+            return false if first == last
+
+            axis_aligned = first.x == last.x || first.y == last.y
+            axis_aligned || origins.zip(boxes).none? { |point, box| on_border?(point, box) }
+          end
+
+          def on_border?(point, bounds)
+            [bounds.x, bounds.x + bounds.width].include?(point.x) ||
+              [bounds.y, bounds.y + bounds.height].include?(point.y)
+          end
+
+          def inside_box?(point, bounds)
+            point.x.between?(bounds.x, bounds.x + bounds.width) &&
+              point.y.between?(bounds.y, bounds.y + bounds.height)
+          end
+
+          # A Mode 2 Association with equal SX/EX (vertical EDGE 1/3) or
+          # equal SY/EY (horizontal EDGE 4) and no custom Path docks as a
+          # straight line through the middle of the boxes' overlap, moved
+          # by the shared stored offset. Stored SY counts upward.
+          def overlap_ray_origins(model, link_row, diagram_row, geom, context)
+            return model if context
+            return model unless overlap_ray_candidate?(model, link_row, geom)
+
+            source, target = stored_ray_boxes(link_row, diagram_row)
+            origins = overlap_origins(source, target, geom)
+            return model unless origins
+
+            model.source_anchor, model.target_anchor = origins.map do |ox, oy|
+              Ea::Model::Point.new(x: ox, y: oy)
+            end
+            model.style[:overlap_ray] = true
+            model
+          end
+
+          # Both ray origins share the overlap coordinate on the axis the
+          # offsets move and sit at each box's centre on the other axis.
+          def overlap_origins(source, target, geom)
+            along, across, offset = overlap_axes(geom)
+            coordinate = overlap_ray_coordinate(*box_span(source, along), *box_span(target, along), offset)
+            return nil unless coordinate && disjoint_span?(*box_span(source, across), *box_span(target, across))
+
+            [source, target].map do |box|
+              start, size = box_span(box, across)
+              centre = start + size / 2.0
+              geom[:edge] == 4 ? [centre, coordinate] : [coordinate, centre]
+            end
+          end
+
+          # [axis the offsets move, axis the boxes face, stored offset]
+          def overlap_axes(geom)
+            return [%i[y height], %i[x width], -geom[:sy]] if geom[:edge] == 4
+
+            [%i[x width], %i[y height], geom[:sx]]
+          end
+
+          def box_span(box, keys)
+            keys.map { |key| box.public_send(key) }
+          end
+
+          def overlap_ray_candidate?(model, link_row, geom)
+            model.connector_type == "Association" && model.style[:mode] == "2" &&
+              model.waypoints.size == 2 && link_row.path.to_s.empty? &&
+              model.has_geometry_offsets && uniform_overlap_offsets?(geom)
+          end
+
+          def uniform_overlap_offsets?(geom)
+            return false unless geom.values_at(:sx, :sy, :ex, :ey).all?
+
+            geom[:edge] == 4 ? geom[:sy] == geom[:ey] : [1, 3].include?(geom[:edge]) && geom[:sx] == geom[:ex]
+          end
+
+          # Floor of the overlap midpoint plus the shared offset; nil
+          # when the boxes do not overlap on this axis.
+          def overlap_ray_coordinate(start_a, size_a, start_b, size_b, offset)
+            low = [start_a, start_b].max
+            high = [start_a + size_a, start_b + size_b].min
+            return nil if low > high
+
+            coordinate = ((low + high) / 2.0 + offset).floor
+            coordinate if coordinate.between?(low, high)
+          end
+
+          def disjoint_span?(start_a, size_a, start_b, size_b)
+            start_a + size_a < start_b || start_b + size_b < start_a
           end
 
           def stored_ray_boxes(link_row, diagram_row)
@@ -134,7 +312,7 @@ module Ea
 
             case connector.connector_type
             when "Aggregation"
-              return if geometry_has_offsets?(link_row.geometry)
+              return unless style[:lwidth] == "0" || !geometry_has_offsets?(link_row.geometry)
 
               redock_child_below(points, bounds_from_rect(source_placement), bounds_from_rect(target_placement))
             when "Association"
@@ -334,14 +512,13 @@ module Ea
           # Keep a vertical tree trunk whose bends still fit both boxes
           # and the open gap; the closest facing edges need not share its x.
           def preserve_stored_tree?(points, link_row, connector, src, tgt)
-            return false unless connector.connector_type == "Aggregation" && points.size == 4
+            return false unless points.size == 4 && stored_tree_type?(points, link_row, connector)
 
             style = DiagramStyleParser.parse(link_row.style)
             return false unless style[:lwidth] == "2" || flush_width_zero_tree?(link_row)
-            return false unless style[:tree] == "V" ||
-                                (style[:mode] == "3" && style[:tree].nil?)
+            return false unless vertical_tree_style?(style)
 
-            tree_bends_fit?(points[1], points[-2], src, tgt)
+            tree_bends_fit?(points[1], points[-2], src, tgt, flush_width_zero_tree?(link_row))
           end
 
           # A width-2 Mode 3 horizontal tree keeps its stored vertical trunk
@@ -412,6 +589,38 @@ module Ea
             model
           end
 
+          # Same one-pixel collapse for a two-waypoint computed line when only
+          # the target carries an explicit port (the source end is the default
+          # edge midpoint): the left-hand end's y wins.
+          def collapse_partial_port_jog(model, link_row, diagram_row)
+            return model unless partial_port_jog_candidate?(model, link_row)
+
+            connection = database.find_connector(link_row.connectorid)
+            src, tgt = [connection.start_object_id, connection.end_object_id].map do |id|
+              placement = diagram_object_placement(diagram_row.diagram_id, id)
+              placement && bounds_from_rect(placement)
+            end
+            from, to = model.waypoints.map(&:position)
+            return model unless src && tgt && facing_jog_ports?(from, to, src, tgt)
+
+            level = [from, to].min_by(&:x).y
+            ends = [[from.x, level], [to.x, level]].map do |x, y|
+              Ea::Model::Point.new(x: x, y: y)
+            end
+            model.waypoints = ends.map { |point| Ea::Model::Waypoint.new(position: point) }
+            model.source_anchor = model.source_port = ends.first
+            model.target_anchor = model.target_port = ends.last
+            model
+          end
+
+          def partial_port_jog_candidate?(model, link_row)
+            style = model.style.to_h
+            model.connector_type == "Aggregation" &&
+              link_row.path.to_s.empty? && style[:mode] == "3" && style[:lwidth] == "2" &&
+              !style.key?(:tree) && model.source_port.nil? && model.target_port &&
+              model.waypoints.size == 2
+          end
+
           def computed_jog_candidate?(model, link_row, geom)
             style = model.style.to_h
             model.connector_type == "Generalization" && geom[:edge] == 2 &&
@@ -438,14 +647,32 @@ module Ea
             style[:mode] == "3" && style[:tree] == "V" && style[:lwidth] == "0"
           end
 
-          def tree_bends_fit?(first, last, source, target)
-            first[0] != last[0] && first[1] == last[1] &&
-              within_vertical_gap?(first[1], source, target) &&
+          def vertical_tree_style?(style)
+            style[:tree] == "V" || (style[:mode] == "3" && style[:tree].nil?)
+          end
+
+          def stored_tree_type?(points, link_row, connector)
+            connector.connector_type == "Aggregation" || flush_straight_association?(points, link_row, connector)
+          end
+
+          # A flush Association keeps only a straight trunk (one bend stored twice).
+          def flush_straight_association?(points, link_row, connector)
+            connector.connector_type == "Association" && points[1] == points[-2] &&
+              flush_width_zero_tree?(link_row)
+          end
+
+          # A flush trunk may also hang below its parent; a bend repeated at
+          # one x is a straight trunk with a single bend.
+          def tree_bends_fit?(first, last, source, target, flush)
+            first[1] == last[1] &&
+              within_vertical_gap?(first[1], source, target, flush) &&
               within_horizontal_span?(first, source) && within_horizontal_span?(last, target)
           end
 
-          def within_vertical_gap?(height, source, target)
-            height < source.y - 1 && height > target.y + target.height + 1
+          def within_vertical_gap?(height, source, target, flush)
+            return true if height < source.y - 1 && height > target.y + target.height + 1
+
+            flush && height > source.y + source.height + 1 && height < target.y - 1
           end
 
           def within_horizontal_span?(point, bounds)

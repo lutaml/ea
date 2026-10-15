@@ -348,8 +348,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
        ["M 204 131 L 305 131 L 305 131 L 305 131"], []],
       ["mode 2", { style: "Mode=2;LWidth=2;" }, duplicated, []],
       ["width 0", { style: "Mode=3;LWidth=0;" }, duplicated, []],
-      ["tree V", { style: "Mode=3;LWidth=2;TREE=V;" }, duplicated, []],
-      ["association", { connector_type: "Association" }, duplicated, []]
+      ["tree V", { style: "Mode=3;LWidth=2;TREE=V;" }, duplicated, []]
     ]
 
     cases.each do |name, override, paths, markers|
@@ -499,6 +498,40 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
              markers: ["200 141 210.74 137.89 219.67 144.62 208.93 147.73"])
   end
 
+  let(:offset_line) do
+    { connector_type: "Association", source: [546, 91, 180, 80],
+      target: [79, 33, 312, 465], path: "",
+      geometry: "SX=-89;SY=-6;EX=43;EY=129;EDGE=4;", style: "Mode=3;LWidth=2;" }
+  end
+
+  it "joins an empty-Path Association's stored ray origins and clips at each outline" do
+    cases = [
+      [offset_line, "M 501 143 L 348 143"],
+      [offset_line.merge(style: "Mode=3;LWidth=0;"), "M 502 143 L 347 143"],
+      [offset_line.merge(geometry: "SX=-89;SY=-6;EX=43;EY=130;EDGE=2;"), "M 502 143 L 347 142"]
+    ]
+    cases.each do |input, path|
+      expect(render_qea_route(**input)[:paths].first).to eq(path), input.inspect
+    end
+  end
+
+  it "keeps other types, styles and unusable origins on their existing route" do
+    controls = [
+      offset_line.merge(connector_type: "Aggregation"),
+      offset_line.merge(style: "Mode=3;LWidth=1;"),
+      offset_line.merge(style: "Mode=2;LWidth=2;"),
+      offset_line.merge(style: "Mode=3;TREE=V;LWidth=2;"),
+      offset_line.merge(path: "300:-120;"),
+      offset_line.merge(geometry: "SX=0;SY=0;EX=0;EY=0;EDGE=4;"),
+      offset_line.merge(geometry: "SX=-89;SY=-6;EX=0;EY=0;EDGE=4;"),
+      offset_line.merge(geometry: "SX=-89;SY=-6;EX=43;EY=300;EDGE=4;")
+    ]
+    expected = ["M 501 143 L 348 143", "M 502 146 L 347 288", "M 502 146 L 347 288",
+                "M 502 146 L 347 288", "M 502 146 L 347 288", "M 502 168 L 347 219",
+                "M 502 145 L 347 202", "M 502 146 L 274 505"]
+    expect(controls.map { |input| render_qea_route(**input)[:paths].first }).to eq(expected)
+  end
+
   let(:square_corner) do
     { connector_type: "Association", source: [800, 515, 100, 162],
       target: [540, 740, 100, 80], path: "621:-627;",
@@ -608,7 +641,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
   it "keeps custom paths, other modes, tree styles and missing ports on their original origins" do # rubocop:disable Metrics/BlockLength
     controls = [
       { style: "Mode=2;LWidth=2;" }, { style: "LWidth=2;" },
-      { style: "Mode=3;TREE=V;LWidth=2;" }, { connector_type: "Association" },
+      { style: "Mode=3;TREE=V;LWidth=2;" },
       { path: "1000:-700;" }, { path: "1000:-700;1100:-700;" }
     ]
     controls.each do |override|

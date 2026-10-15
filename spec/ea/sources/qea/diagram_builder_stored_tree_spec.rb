@@ -37,7 +37,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
       { style: "TREE=H;LWidth=2;" }, { style: "LWidth=2;" },
       { path: "900:-251;520:-251;" }, { path: "755:-251;900:-251;" },
       { path: "755:-251;520:-250;" }, { path: "755:-330;520:-330;" },
-      { path: "755:-202;520:-202;" }, { path: "690:-251;690:-251;" }
+      { path: "755:-202;520:-202;" }
     ]
     controls.each do |change|
       expect(render_qea_route(**input.merge(change))).to eq(
