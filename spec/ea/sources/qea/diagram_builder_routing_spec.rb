@@ -185,17 +185,28 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     end
   end
 
+  # Records of the pinned 220 corpus (20251010_current_plateau_v5.1.qea):
+  # t_diagramlinks 142/558, 177/558 and 176/787, Mode=3;LWidth=2 with no TREE.
+  let(:custom_trunk) do
+    { source: [632, 1038, 216, 241], target: [622, 23, 235, 176],
+      path: "794:-919;740:-919;", geometry: "SX=54;SY=-1;EX=2;EY=-88;EDGE=1;",
+      style: "Mode=3;LWidth=2;" }
+  end
+
   it "preserves a valid stored horizontal trunk of width-2 Mode 3 custom Aggregations" do
-    bent = "150:-250;450:-250;"
-    docked_tip = "85 239 80 229 85 219 90 229"
-    cases = [
-      [{ path: bent, style: "Mode=3;LWidth=2;" },
-       "M 85 239 L 85 190 L 385 190 L 385 141", docked_tip],
-      [{ path: "150:-298;450:-298;", style: "Mode=3;LWidth=2;" },
-       "M 85 239 L 85 238 L 385 238 L 385 141", docked_tip]
+    trunk = "M 207 1054 L 207 936 L 153 936 L 153 217"
+    records = [
+      [custom_trunk, trunk, "207 1054 202 1044 207 1034 212 1044"],
+      [custom_trunk.merge(source: [585, 1027, 216, 241], target: [575, 12, 235, 176],
+                          path: "747:-908;693:-908;"),
+       trunk, "207 1054 202 1044 207 1034 212 1044"],
+      [{ source: [529, 783, 216, 241], target: [572, 39, 235, 159],
+         path: "637:-249;689:-249;", geometry: "SX=0;SY=-4;EX=0;EY=0;EDGE=1;",
+         style: "Mode=3;LWidth=2;" },
+       "M 143 783 L 143 250 L 195 250 L 195 200", "143 783 138 773 143 763 148 773"]
     ]
 
-    cases.each do |input, path, tip|
+    records.each do |input, path, tip|
       result = render_qea_route(connector_type: "Aggregation", **input)
 
       expect(result).to eq({ paths: [path], markers: [tip] }),
@@ -204,29 +215,46 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
   end
 
   it "keeps other custom-line inputs on their existing routes" do
-    bent = "150:-250;450:-250;"
     cases = [
-      ["mode 2", { path: bent, style: "Mode=2;LWidth=2;" }],
-      ["no mode", { path: bent, style: "LWidth=2;" }],
-      ["width 1", { path: bent, style: "Mode=3;LWidth=1;" }],
-      ["width 3", { path: bent, style: "Mode=3;LWidth=3;" }],
-      ["no width", { path: bent, style: "Mode=3;" }],
-      ["tree H", { path: bent, style: "Mode=3;TREE=H;LWidth=2;" }],
-      ["association", { path: bent, style: "Mode=3;LWidth=2;", connector_type: "Association" }],
-      ["generalization", { path: bent, style: "Mode=3;LWidth=2;", connector_type: "Generalization" }],
-      ["bend left of source", { path: "50:-250;450:-250;", style: "Mode=3;LWidth=2;" }],
-      ["bend right of target", { path: "150:-250;650:-250;", style: "Mode=3;LWidth=2;" }],
-      ["bends differ in y", { path: "150:-250;450:-240;", style: "Mode=3;LWidth=2;" }],
-      ["bends share x", { path: "150:-250;150:-240;", style: "Mode=3;LWidth=2;" }],
-      ["three bends", { path: "150:-250;300:-250;450:-250;", style: "Mode=3;LWidth=2;" }],
-      ["trunk at target outline", { path: "150:-200;450:-200;", style: "Mode=3;LWidth=2;" }],
-      ["trunk at source outline", { path: "150:-299;450:-299;", style: "Mode=3;LWidth=2;" }]
+      ["mode 2", { style: "Mode=2;LWidth=2;" },
+       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+      ["no mode", { style: "LWidth=2;" },
+       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+      ["width 1", { style: "Mode=3;LWidth=1;" },
+       ["M 201 1055 L 162 216"], ["201 1055 195.54 1045.24 200.07 1035.02 205.53 1044.78"]],
+      ["width 3", { style: "Mode=3;LWidth=3;" },
+       ["M 201 1055 L 162 216"], ["201 1055 195.54 1045.24 200.07 1035.02 205.53 1044.78"]],
+      ["no width", { style: "Mode=3;" },
+       ["M 201 1055 L 162 216"], ["201 1055 195.54 1045.24 200.07 1035.02 205.53 1044.78"]],
+      ["tree H", { style: "Mode=3;TREE=H;LWidth=2;" },
+       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+      ["tree V", { style: "Mode=3;TREE=V;LWidth=2;" },
+       ["M 207 1054 L 207 936 L 153 936 L 153 217"], ["207 1054 202 1044 207 1034 212 1044"]],
+      ["association", { connector_type: "Association" },
+       ["M 201 1055 L 162 216", "M 168.69 230.71 L 162 216 L 156.7 231.26"], []],
+      ["generalization", { connector_type: "Generalization" },
+       ["M 207 1054 L 207 936 L 153 936 L 153 217"], ["153 217 159 228 147 228"]],
+      ["bend left of source", { path: "600:-919;740:-919;" },
+       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+      ["bend right of target", { path: "794:-919;900:-919;" },
+       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+      ["bends differ in y", { path: "794:-919;740:-900;" },
+       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+      ["bends share x", { path: "794:-919;794:-900;" },
+       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+      ["three bends", { path: "794:-919;770:-919;740:-919;" },
+       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+      ["trunk at target outline", { path: "794:-200;740:-200;" },
+       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+      ["trunk at source outline", { path: "794:-1037;740:-1037;" },
+       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]]
     ]
 
-    cases.each do |name, input|
-      result = render_qea_route(connector_type: "Aggregation", **input)
+    cases.each do |name, override, paths, markers|
+      input = custom_trunk.merge(override)
+      result = render_qea_route(**{ connector_type: "Aggregation" }.merge(input))
 
-      puts "CASE #{name} | #{result[:paths].inspect} | #{result[:markers].inspect}"
+      expect(result).to eq({ paths: paths, markers: markers }), name
     end
   end
 
