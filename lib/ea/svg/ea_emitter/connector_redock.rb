@@ -197,7 +197,6 @@ module Ea
                             bounds_map, divider_y_by_ref)
           return nil unless bounds_map && divider_y_by_ref
           return nil unless pairs.size == 2
-          return nil if explicit_horizontal_source_dock?(pairs, connector)
 
           rel = relationship_for(connector, model_index)
           return nil unless rel
@@ -210,11 +209,12 @@ module Ea
                       divider_y_by_ref[target_ref]]
           return nil unless bounds.all? && dividers.all?
 
-          adjusted = row_slot_pairs(pairs, bounds, dividers)
+          preserve_source = explicit_horizontal_source_dock?(pairs, connector)
+          adjusted = row_slot_pairs(pairs, bounds, dividers, preserve_source: preserve_source)
           if stroke_outline?(connector, bounds) &&
              pairs == pairs_for(connector, diagram, model_index, bounds_map)
             original = clipped_pairs(bounds, [connector.source_anchor, connector.target_anchor])
-            original_final = row_slot_pairs(original, bounds, dividers)
+            original_final = row_slot_pairs(original, bounds, dividers, preserve_source: preserve_source)
             adjusted = original_final if original != pairs && !forward_route?(original_final, adjusted)
           end
           adjusted == pairs ? nil : adjusted
@@ -245,8 +245,10 @@ module Ea
         end
         private_class_method :explicit_horizontal_ray_style?
 
-        def row_slot_pairs(pairs, bounds, dividers)
+        def row_slot_pairs(pairs, bounds, dividers, preserve_source: false)
           pairs.each_with_index.map do |(x, y), index|
+            next [x, y] if preserve_source && index.zero?
+
             row_slot?(x, y, bounds[index], dividers[index]) ? [x, y + ROW_SLOT_PITCH] : [x, y]
           end
         end

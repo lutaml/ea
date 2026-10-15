@@ -702,4 +702,19 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     expect([connector.source_anchor.x, connector.source_anchor.y]).to eq([1445, 596])
     expect([connector.target_anchor.x, connector.target_anchor.y]).to eq([810, 596])
   end
+
+  it "restores the target diamond when a generated terminal leg was empty" do
+    result = render_qea_route(
+      connector_type: "Aggregation", source: [560, 210, 110, 80],
+      target: [880, 210, 170, 80], path: nil, style: "Mode=3;LWidth=2;",
+      geometry: "EDGE=2;SX=6;SY=0;EX=1;EY=0;"
+    ) do |document|
+      association = document.relationships.first
+      association.source_aggregation = "none"
+      association.target_aggregation = "composite"
+    end
+
+    expect(result[:paths]).to eq(["M 146 80 L 354 80", "M 339 86 L 354 80 L 339 74"])
+    expect(result[:markers]).to eq(["354 80 344 85 334 80 344 75"])
+  end
 end

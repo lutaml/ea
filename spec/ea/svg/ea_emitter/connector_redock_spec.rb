@@ -296,6 +296,17 @@ RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do # rubocop:disable Metrics/
     )
   end
 
+  it "keeps target row seating when only the source port certifies its row" do
+    fixture = explicit_divider_fixture
+    fixture[:drawn_bounds]["t"].y = 387
+    fixture[:divider_y_by_ref]["t"] = 429
+
+    expect(described_class.row_slot_adjust(
+             [[354, 429], [509, 429]], fixture[:diagram].connectors.first, fixture[:diagram],
+             fixture[:model_index], fixture[:drawn_bounds], fixture[:divider_y_by_ref]
+           )).to eq([[354, 429], [509, 442]])
+  end
+
   it "keeps row-slot adjustment when the explicit horizontal dock is not established" do
     fixture = explicit_divider_fixture
     connector = fixture[:diagram].connectors.first
