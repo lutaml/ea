@@ -104,6 +104,27 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     end
   end
 
+  it "docks width-2 Mode 3 horizontal trees on the facing outlines, keeping the trunk" do
+    right = { source: [806, 511, 120, 80], target: [510, 560, 202, 101],
+              path: "762:-551;762:-610;", geometry: "SX=0;SY=0;EX=0;EY=0;EDGE=4;",
+              style: "Mode=3;TREE=H;LWidth=2;" }
+    left = right.merge(source: [510, 560, 202, 101], target: [806, 511, 120, 80],
+                       path: "762:-610;762:-551;",
+                       geometry: "SX=0;SY=0;EX=0;EY=0;EDGE=2;")
+    cases = [[right, "PATH_R", "TIP_R"], [left, "PATH_L", "TIP_L"]]
+
+    aggregate_failures do
+    cases.each do |input, path, tip|
+      %w[Generalization Aggregation].each do |type|
+        result = render_qea_route(connector_type: type, **input)
+
+        expect(result).to eq({ paths: [path], markers: [tip] }),
+                          "#{type} #{input[:geometry]}"
+      end
+    end
+    end
+  end
+
   it "preserves marker tips and dimensions across adjacent-bend boundaries" do
     [
       [199, ["385 140 379 129 391 129"]],
