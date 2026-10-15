@@ -102,6 +102,72 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
     end
   end
 
+  describe "labels on emitted two-point docks" do
+    include LabelAnchorHelpers
+
+    # {0016F797} dc:73:481: the stored endpoints have x=570,
+    # but the anchor ray clips the drawn boxes at x=651.
+    let(:docked_connector) do
+      Ea::Model::DiagramConnector.new(
+        id: "dock", relationship_ref: "a", connector_type: "Aggregation",
+        style: { mode: "1", lwidth: "2" },
+        source_anchor: Ea::Model::Point.new(x: 651, y: 1076),
+        target_anchor: Ea::Model::Point.new(x: 651, y: 711),
+        waypoints: [[570, 920], [570, 791]].map do |x, y|
+          Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y))
+        end,
+        label_boxes: { llb: { "ox" => 22, "oy" => 0, "alignment" => 1 },
+                       llt: { "ox" => -9, "oy" => -2, "alignment" => 1 } }
+      )
+    end
+    let(:drawn_bounds) do
+      { "source" => Ea::Model::Bounds.new(x: 470, y: 920, width: 396, height: 312),
+        "target" => Ea::Model::Bounds.new(x: 570, y: 711, width: 120, height: 80) }
+    end
+
+    it "anchors multiplicity at the emitted outer-stroke dock" do
+      positions = anchor_label_positions(docked_connector, bounds: drawn_bounds)
+
+      # Reference [216,426], translated from model by [-460,-487].
+      expect(positions["0..1"]).to eq([676, 913])
+      expect(positions["+trafficVolumeAttribute"]).to eq([642, 921])
+    end
+
+    it "follows the emitted header row-slot adjustment" do
+      docked_connector.source_anchor = Ea::Model::Point.new(x: 50, y: 50)
+      docked_connector.target_anchor = Ea::Model::Point.new(x: 250, y: 50)
+      bounds = {
+        "source" => Ea::Model::Bounds.new(x: 0, y: 0, width: 100, height: 100),
+        "target" => Ea::Model::Bounds.new(x: 200, y: 0, width: 100, height: 100)
+      }
+      positions = anchor_label_positions(
+        docked_connector, bounds: bounds, dividers: { "source" => 50, "target" => 50 }
+      )
+
+      expect(positions["0..1"]).to eq([126, 78])
+      expect(positions["+trafficVolumeAttribute"]).to eq([95, 54])
+    end
+
+    it "keeps parsed anchors when drawn bounds are unavailable or incomplete" do
+      [nil, drawn_bounds.slice("source")].each do |bounds|
+        positions = anchor_label_positions(docked_connector, bounds: bounds)
+
+        expect(positions["0..1"]).to eq([595, 914])
+        expect(positions["+trafficVolumeAttribute"]).to eq([561, 922])
+      end
+    end
+
+    it "keeps stored bent-route anchors even when drawn bounds differ" do
+      docked_connector.waypoints.insert(
+        1, Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: 570, y: 850))
+      )
+      positions = anchor_label_positions(docked_connector, bounds: drawn_bounds)
+
+      expect(positions["0..1"]).to eq([595, 914])
+      expect(positions["+trafficVolumeAttribute"]).to eq([561, 922])
+    end
+  end
+
   describe "stored source-end label seats" do
     include LabelSeatHelpers
     include LabelPresenceHelpers

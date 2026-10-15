@@ -83,7 +83,9 @@ module Ea
 
         def labels_layer
           Labels.new(diagram, canvas: canvas, model_index: model_index,
-                      theme: theme, document: document).render
+                              theme: theme, document: document,
+                              drawn_bounds: drawn_bounds,
+                              divider_y_by_ref: divider_y_by_ref).render
         end
 
         def ghost_labels_layer
