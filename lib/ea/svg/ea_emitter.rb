@@ -45,6 +45,9 @@ module Ea
       autoload :Document, "ea/svg/ea_emitter/document"
       autoload :Label, "ea/svg/ea_emitter/label"
       autoload :Compartment, "ea/svg/ea_emitter/compartment"
+      autoload :OrthogonalRay, "ea/svg/ea_emitter/orthogonal_ray"
+      private_constant :OrthogonalRay
+
       autoload :ConnectorRedock, "ea/svg/ea_emitter/connector_redock"
       autoload :RenderContext, "ea/svg/ea_emitter/render_context"
       autoload :VisibilitySymbol, "ea/svg/ea_emitter/visibility_symbol"

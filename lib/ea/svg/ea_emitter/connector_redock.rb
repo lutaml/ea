@@ -34,6 +34,9 @@ module Ea
           return nil unless source_bounds && target_bounds
           return nil if source_ref == target_ref
 
+          square = OrthogonalRay.pairs_for(connector, source_bounds, target_bounds)
+          return square if square
+
           if lateral
             target = lateral_target(points[1], target_bounds, connector.style[:tree])
             return target && [points[0], points[1], target]
@@ -56,6 +59,7 @@ module Ea
                                   width: box.width + 2, height: box.height + 2)
           end
           candidate = clipped_pairs(outline, anchors)
+          candidate[0] = external_source_point(connector, outline.first, anchors, candidate.first)
           expanded = forward_route?(original, candidate)
           pairs = expanded ? candidate : original
           target = expanded ? outline.last : target_bounds
@@ -79,6 +83,20 @@ module Ea
           [first, [last[0], first[1]], last]
         end
         private_class_method :auto_port_elbow_pairs
+
+        # An external saved ray can cross two source edges; retain its
+        # clockwise perimeter choice instead of the nearest crossing.
+        def external_source_point(connector, source, anchors, fallback)
+          style = connector.style.to_h
+          return fallback unless style[:stored_association_ray] == true && style[:lwidth] == "2"
+
+          first, last = anchors
+          return fallback if first.x.between?(source.x, source.x + source.width) &&
+                             first.y.between?(source.y, source.y + source.height)
+
+          anchor_exit(first, source, last, perimeter: true)
+        end
+        private_class_method :external_source_point
 
         # EDGE=1 explicitly seats an external source ray on the top edge;
         # its first contact can instead be the bottom when its origin is below.
@@ -290,10 +308,9 @@ module Ea
         end
         private_class_method :forward_route?
 
-        # Exit point of the anchor-to-anchor segment through a box's
-        # outline: smallest positive t whose crossing lies on the
-        # rectangle perimeter.
-        def anchor_exit(anchor, bounds, other)
+        # Interior rays use the nearest forward exit. External saved sources
+        # can request the first intersecting edge in clockwise perimeter order.
+        def anchor_exit(anchor, bounds, other, perimeter: false)
           ax, ay = anchor.x.to_f, anchor.y.to_f
           ox, oy = other.x.to_f, other.y.to_f
           dx, dy = ox - ax, oy - ay
@@ -314,11 +331,24 @@ module Ea
             x >= bounds.x - 0.01 && x <= bounds.x + bounds.width + 0.01 &&
               y >= bounds.y - 0.01 && y <= bounds.y + bounds.height + 0.01
           end
-          best = on_perimeter.min_by(&:first)
+          best = if perimeter
+                   on_perimeter.min_by { |_t, x, y| perimeter_order(x, y, bounds) }
+                 else
+                   on_perimeter.min_by(&:first)
+                 end
           # EA floors the dock coordinates (F851A657: 297.75 -> 297,
           # 433.7 -> 433) - a rounded-up dock is a visible miss.
           best ? [best[1].floor, best[2].floor] : [ax.floor, ay.floor]
         end
+
+        def perimeter_order(point_x, point_y, bounds)
+          return 0 if point_y == bounds.y
+          return 1 if point_x == bounds.x + bounds.width
+          return 2 if point_y == bounds.y + bounds.height
+
+          3
+        end
+        private_class_method :perimeter_order
 
         # EA never docks a horizontal connector line at the header
         # divider: endpoints landing on (box side edge, divider_y)
