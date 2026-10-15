@@ -75,11 +75,8 @@ module Ea
               text_pos, mult_pos = tree_positions(end_kind, anchor, role,
                                                   text_pos, mult_pos)
             elsif mult_box && stored_offsets_zero?(mult_box)
-              # A stored mult box with OX=0:OY=0 means "EA default":
-              # the multiplicity sits 12px right of and 15px below the
-              # endpoint anchor, regardless of line direction
-              # (87-sample corpus fit: dy = +15 constant, dx = +12
-              # dominant with a +3 minority).
+              # Start at the legacy default; measured directional seats
+              # below replace it for default Cambria labels.
               mult_pos = [anchor[0] + 12, anchor[1] + 15]
             end
             # The end's stored stereotype renders verbatim («Type» on
@@ -149,7 +146,8 @@ module Ea
           # right: the multiplicity 6px above it on an upward leg and
           # 15px below it on a rightward one, the role 7px above it on
           # a rightward one. Other sizes, headings, the target end,
-          # custom presentation keep their offsets; zero multiplicity boxes keep their default seat.
+          # custom presentation keep their offsets. Zero multiplicity boxes
+          # follow the direction for Cambria and keep the default otherwise.
           def leg_direction(end_kind, heading)
             return nil unless source_seat?(end_kind, heading)
 
@@ -240,7 +238,8 @@ module Ea
 
           def mult_seat(direction, anchor, box)
             return nil unless %i[up right].include?(direction)
-            return nil if box.nil? || stored_offsets_zero?(box)
+            return nil if box.nil?
+            return nil if stored_offsets_zero?(box) && !cambria_box?(box)
             return nil unless default_presentation?(box)
 
             x, y = seat_corner(anchor, box)
