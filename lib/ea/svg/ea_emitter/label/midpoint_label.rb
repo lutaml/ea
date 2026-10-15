@@ -96,11 +96,48 @@ module Ea
           LINE_PITCH = 13
 
           def label_position(connector, points)
+            name_seat = stored_name_position(connector, points)
+            return name_seat if name_seat
+
             return midpoint(points) unless default_substitutable_seat?(connector) &&
                                            upward_four_point_route?(points)
 
             source, bend = points
             [source[0] + 3, ((source[1] + bend[1]) / 2).floor - 1]
+          end
+
+          # At 7pt, a centered name's stored corner is 3px below its baseline.
+          def stored_name_position(connector, points)
+            box = stored_name_box(connector)
+            return nil unless box
+
+            width = Ea::Fonts::Metrics.text_length(midpoint_content(connector), font_size, family: font_family)
+            return nil unless width
+
+            x, y = midpoint(points)
+            offset_x, offset_y = box.values_at("ox", "oy").map(&:to_i)
+            [x + offset_x - (width / 2.0).floor, y + offset_y - 3]
+          end
+
+          def stored_name_box(connector)
+            return nil unless connector.is_a?(Ea::Model::DiagramConnector) && measured_name_font?
+            return nil if connector.is_substitutable || stereotype_label(connector)
+            return nil if midpoint_content(connector).include?(": ")
+
+            box = connector.label_boxes.to_h[:lmt]
+            box if default_name_box?(box)
+          end
+
+          def measured_name_font?
+            font_family.to_s.casecmp("Cambria").zero? && font_size == 7 && font_unit == "pt"
+          end
+
+          def default_name_box?(box)
+            return false unless box && box["alignment"] == 1
+            return false unless box.values_at("ox", "oy").all?
+            return false unless [nil, 0, 1].include?(box["direction"]) && [nil, -1].include?(box["color"])
+
+            box["rotation"].to_i.zero? && box.values_at("bold", "italic", "underline", "hidden").none?
           end
 
           def default_substitutable_seat?(connector)
