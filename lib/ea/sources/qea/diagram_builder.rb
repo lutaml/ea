@@ -11,8 +11,13 @@ module Ea
       # styles).
       class DiagramBuilder
         autoload :Routing, "ea/sources/qea/diagram_builder/routing"
+        autoload :AutoRouting, "ea/sources/qea/diagram_builder/auto_routing"
+        autoload :StoredSquarePorts, "ea/sources/qea/diagram_builder/stored_square_ports"
         include Routing
+        include AutoRouting
+        include StoredSquarePorts
         private_constant :Routing
+        private_constant :AutoRouting, :StoredSquarePorts
 
         attr_reader :database
 
@@ -436,8 +441,10 @@ module Ea
           model = mode2_overlap_ray(model, link_row, diagram_row, geom, context)
           model = association_stored_ray(model, link_row, diagram_row, geom, context)
           model = correct_stored_ray_origins(model, link_row, diagram_row, geom, context)
+          model = source_row_association_ray(model, link_row, diagram_row, geom, context)
           model = overlap_ray_origins(model, link_row, diagram_row, geom, context)
-          mark_default_square_ray(model, link_row, geom, context)
+          model = mark_default_square_ray(model, link_row, geom, context)
+          restore_stored_square_ports(model, link_row, diagram_row, geom, context)
         end
 
         # Ray origin for one connector end: the element's center

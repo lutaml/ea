@@ -566,17 +566,21 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     expect(render_qea_route(**input)[:paths].first).to eq("M 501 144 L 348 207")
   end
 
+  it "seats nonuniform Mode 2 offsets on the source row" do
+    input = offset_line.merge(style: "Mode=2;LWidth=2;")
+    expect(render_qea_route(**input)[:paths].first).to eq("M 501 144 L 348 144")
+  end
+
   it "keeps other types, styles and unusable origins on their existing route" do
     controls = [
       offset_line.merge(connector_type: "Aggregation"),
       offset_line.merge(style: "Mode=3;LWidth=1;"),
-      offset_line.merge(style: "Mode=2;LWidth=2;"),
       offset_line.merge(style: "Mode=3;TREE=V;LWidth=2;"),
       offset_line.merge(path: "300:-120;"),
       offset_line.merge(geometry: "SX=0;SY=0;EX=0;EY=0;EDGE=4;"),
       offset_line.merge(geometry: "SX=-89;SY=-6;EX=43;EY=300;EDGE=4;")
     ]
-    expected = ["M 501 143 L 348 143", "M 502 146 L 347 288", "M 502 146 L 347 288",
+    expected = ["M 501 143 L 348 143", "M 502 146 L 347 288",
                 "M 502 146 L 347 288", "M 502 146 L 347 288", "M 502 168 L 347 219",
                 "M 502 146 L 274 505"]
     expect(controls.map { |input| render_qea_route(**input)[:paths].first }).to eq(expected)
