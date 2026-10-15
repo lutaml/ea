@@ -113,7 +113,7 @@ module Ea
           end
 
           def facing_jog_ports?(from, to, src, tgt)
-            return false unless (from.y - to.y).abs <= 1 && to.y.between?(tgt.y, tgt.y + tgt.height)
+            return false unless (from.y - to.y).abs <= 1 && from.y.between?(tgt.y, tgt.y + tgt.height)
 
             if src.x + src.width < tgt.x
               from.x == src.x + src.width && to.x == tgt.x

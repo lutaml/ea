@@ -394,6 +394,16 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     end
   end
 
+  it "keeps a computed jog when the source height is outside the target span" do
+    result = render_qea_route(
+      source: [100, 100, 100, 100], target: [300, 150, 100, 100],
+      path: "", style: "Mode=3;LWidth=2;",
+      geometry: "SX=50;SY=1;EX=-50;EY=50;EDGE=2;"
+    )
+
+    expect(result[:paths]).to eq(["M 135 89 L 235 89 L 235 90"])
+  end
+
   it "preserves marker tips and dimensions across adjacent-bend boundaries" do
     [
       [199, ["385 140 379 129 391 129"]],
