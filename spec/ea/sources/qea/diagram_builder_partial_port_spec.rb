@@ -54,6 +54,17 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
     end
   end
 
+  it "uses partial stored ray origins for Associations as well as Aggregations" do
+    cases = [
+      [sloped[:right], ["M 255 433 L 437 434", "M 421.97 439.92 L 437 434 L 422.03 427.92"]],
+      [left_source, ["M 255 482 L 422 482", "M 407 488 L 422 482 L 407 476"]]
+    ]
+    cases.each do |input, paths|
+      expect(render_qea_route(**input.merge(connector_type: "Association")))
+        .to eq(paths: paths, markers: [])
+    end
+  end
+
   it "keeps other sloped partial-port inputs on their existing routes" do
     base = sloped[:right]
     base_route = [["M 184 387 L 437 110"],
@@ -65,8 +76,6 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
       ["width 0", { style: "Mode=3;LWidth=0;" }, ["M 184 388 L 438 109"],
        ["184 388 187.03 377.24 197.46 373.21 194.43 383.97"]],
       ["tree V", { style: "Mode=3;LWidth=2;TREE=V;" }, *base_route],
-      ["association", { connector_type: "Association" },
-       ["M 184 388 L 438 109", "M 432.34 124.13 L 438 109 L 423.47 116.05"], []],
       ["stored path", { path: "450:-445;" }, ["M 255 434 L 338 434 L 437 434"],
        ["255 434 265 429 275 434 265 439"]],
       ["source port too", { geometry: "EDGE=2;SX=40;SY=0;EX=-156;EY=-163;" },
@@ -128,8 +137,6 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
       ["width 0", { style: "Mode=3;LWidth=0;" }, ["M 254 482 L 423 482"],
        ["254 482 264 477 274 482 264 487"]],
       ["tree V", { style: "Mode=3;LWidth=2;TREE=V;" }, *slanted],
-      ["association", { connector_type: "Association" },
-       ["M 173 438 L 423 62", "M 419.69 77.81 L 423 62 L 409.7 71.17"], []],
       ["stored path", { path: "400:-457;" }, ["M 255 482 L 356 482 L 422 482"],
        ["255 482 265 477 275 482 265 487"]],
       ["steeper end", { geometry: "EDGE=2;EX=-156;EY=-200;" }, ["M 255 478 L 422 472"],

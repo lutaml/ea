@@ -100,30 +100,36 @@ module Ea
             return model unless stored_ray_candidate?(model, link_row, geom)
 
             source, target = stored_ray_boxes(link_row, diagram_row)
-            return model unless stored_ray_gap?(source, target, model.style[:mode], geom[:edge])
+            allowed = if normalized_port_anchors?(model)
+                        normalized_level_ray?(model, source, target, geom)
+                      else
+                        stored_ray_gap?(source, target, model.style[:mode], geom[:edge])
+                      end
+            return model unless allowed
 
             set_stored_ray_origins(model, source, target, geom)
           end
 
-          # An empty-Path Mode 3 Association with explicit offsets on both
-          # ends is the straight line between the two stored ray origins.
-          # Origins outside their own box are not a stored ray.
+          # An empty-Path Mode 3 Association follows the line between its
+          # stored endpoint origins; an omitted offset defaults to the center.
+          # The target origin must lie inside its own stroked outline.
           def association_stored_ray(model, link_row, diagram_row, geom, context)
             return model if context
             return model unless association_ray_candidate?(model, link_row)
 
             source, target = stored_ray_boxes(link_row, diagram_row)
-            origins = association_ray_origins(source, target, geom, model.style.to_h[:lwidth])
+            width = association_outline_width(model, link_row, diagram_row)
+            origins = association_ray_origins(source, target, geom, width)
             return model unless origins
 
-            model.waypoints = port_waypoints(model)
+            model.waypoints = port_waypoints(model, origins)
             model.source_anchor, model.target_anchor = origins
             model.style = model.style.to_h.merge(stored_association_ray: true, association_ray_outline: true)
             model
           end
 
-          def port_waypoints(model)
-            [model.source_port, model.target_port].map do |point|
+          def port_waypoints(model, origins)
+            [model.source_port || origins.first, model.target_port || origins.last].map do |point|
               Ea::Model::Waypoint.new(position: point)
             end
           end
@@ -135,10 +141,34 @@ module Ea
             origins = [stored_ray_origin(source, geom[:sx], geom[:sy]),
                        stored_ray_origin(target, geom[:ex], geom[:ey])]
             boxes = [source, target].map { |box| grown_bounds(box, outline) }
-            inside = origins.zip(boxes).all? { |o, b| inside_box?(o, b) }
-            return unless inside && origins.first != origins.last
+            return unless origins.first != origins.last && association_origin_pair?(origins, boxes, width)
 
             origins if width == "2" || sub_pixel_safe_origins?(origins, [source, target] + boxes)
+          end
+
+          # An external source origin is a virtual point on the saved ray.
+          # It is usable only when that segment actually crosses the source.
+          def association_origin_pair?(origins, boxes, width)
+            return false unless inside_box?(origins.last, boxes.last)
+            return true if inside_box?(origins.first, boxes.first)
+
+            width == "2" && segment_crosses_box?(origins.first, origins.last, boxes.first)
+          end
+
+          def segment_crosses_box?(first, last, box)
+            interval = [0.0, 1.0]
+            axes = [[first.x, last.x, box.x, box.x + box.width],
+                    [first.y, last.y, box.y, box.y + box.height]]
+            axes.all? do |origin, finish, low, high|
+              if origin == finish
+                origin.between?(low, high)
+              else
+                times = [(low - origin).to_f / (finish - origin),
+                         (high - origin).to_f / (finish - origin)].minmax
+                interval = [[interval.first, times.first].max, [interval.last, times.last].min]
+                interval.first <= interval.last
+              end
+            end
           end
 
           def grown_bounds(bounds, amount)
@@ -149,8 +179,21 @@ module Ea
 
           def association_ray_candidate?(model, link_row)
             model.connector_type == "Association" && link_row.path.to_s.empty? &&
-              model.has_geometry_offsets && model.source_port && model.target_port &&
-              association_ray_style?(model.style.to_h)
+              model.source_anchor && model.target_anchor &&
+              (model.source_port || model.target_port) && association_ray_style?(model.style.to_h)
+          end
+
+          # A thin connector still meets the outer stroke of explicitly
+          # bordered elements. Ambiguous placements must agree on that border.
+          def association_outline_width(model, link_row, diagram_row)
+            width = model.style[:lwidth]
+            return width if width == "2"
+
+            connector = database.find_connector(link_row.connectorid)
+            ids = [connector.start_object_id, connector.end_object_id]
+            placements = database.diagram_objects_for(diagram_row.diagram_id)
+            borders = placements.select { |placement| ids.include?(placement.ea_object_id) }
+            borders.all? { |placement| DiagramStyleParser.parse(placement.objectstyle)[:lwth] == "2" } ? "2" : width
           end
 
           def association_ray_style?(style)
@@ -263,7 +306,21 @@ module Ea
           def stored_ray_candidate?(model, link_row, geom)
             %w[Generalization Aggregation].include?(model.connector_type) &&
               model.waypoints.size == 2 && stored_ray_style?(model.style, link_row) &&
-              stored_ray_geometry?(model, geom) && !normalized_port_anchors?(model)
+              stored_ray_geometry?(model, geom)
+          end
+
+          # Boundary-port rounding can move a computed jog off a level saved
+          # ray. Equal stored origin rows specify the line before clipping.
+          def normalized_level_ray?(model, source, target, geom)
+            style = model.style.to_h
+            return false unless style[:mode] == "3" && style[:lwidth] == "2" &&
+                                horizontal_ray_gap?(source, target)
+
+            origins = [stored_ray_origin(source, geom[:sx], geom[:sy]),
+                       stored_ray_origin(target, geom[:ex], geom[:ey])]
+            boxes = [source, target].map { |box| grown_bounds(box, 1) }
+            origins.first.y == origins.last.y &&
+              origins.zip(boxes).all? { |origin, box| inside_box?(origin, box) }
           end
 
           def stored_ray_style?(style, link_row)
