@@ -19,6 +19,8 @@ module Ea
         # for those — only simple role names render.
         class EndLabel
           PROPERTY_STEREOTYPE = "«Property»"
+          SEAT_FONT_SIZE = 7
+          SEAT_X_INSET = 3
 
           attr_reader :canvas, :model_index, :document, :theme,
                       :font_family, :font_size, :font_unit
@@ -41,8 +43,9 @@ module Ea
           #   anchor     - [x, y] of the connector endpoint
           #   connector  - the DiagramConnector (for relationship lookup)
           #   end_kind   - :source or :target
+          #   heading    - [dx, dy] of the first leg leaving the anchor
           def texts(text_box:, mult_box:, anchor:, connector:, end_kind:,
-                    tree: false)
+                    tree: false, heading: nil)
             from_property, role, mult = role_and_multiplicity(connector, end_kind)
             if role_empty?(role) && mult_empty?(mult)
               other_from_prop, other_role, other_mult = role_and_multiplicity(connector,
@@ -73,6 +76,11 @@ module Ea
             # the end has none.
             stereo = connector_source_dest_stereotype(connector, end_kind)
             stereo = stereo.nil? || stereo.empty? ? nil : "«#{stereo}»"
+            direction = leg_direction(end_kind, heading)
+            if direction && !(tree && zero_offset?(text_box, mult_box))
+              text_pos = role_seat(direction, anchor, text_box, role) || text_pos
+              mult_pos = mult_seat(direction, anchor, mult_box) || mult_pos
+            end
 
             build_texts(role:, mult:, standalone:,
                         text_pos:, mult_pos:, stereo:, text_box:)
@@ -107,6 +115,63 @@ module Ea
               [[anchor[0] + 7 - width, anchor[1] - 8],
                [anchor[0] + 8, anchor[1] - 8]]
             end
+          end
+
+          # Stored source-end boxes on a 7pt label whose first leg
+          # leaves straight up or straight right are seated at the box
+          # corner, anchor + (OX, OY) with no sign flip, 3px to its
+          # right: the multiplicity 6px above it on an upward leg and
+          # 15px below it on a rightward one, the role 7px above it on
+          # a rightward one. Other sizes, headings, the target end,
+          # custom presentation keep their offsets; zero multiplicity boxes keep their default seat.
+          def leg_direction(end_kind, heading)
+            return nil unless source_seat?(end_kind, heading)
+
+            dx, dy = heading
+            return :up if dx.zero? && dy.negative?
+            return :right if dy.zero? && dx.positive?
+
+            nil
+          end
+
+          # Role text on a rightward leg is left-aligned at the corner,
+          # 7px above it. Upward legs keep the plain role offset.
+          def role_seat(direction, anchor, box, role)
+            return nil unless direction == :right
+            return nil if box.nil? || role_empty?(role)
+            return nil unless default_presentation?(box)
+
+            x, y = seat_corner(anchor, box)
+            [x + SEAT_X_INSET, y - 7]
+          end
+
+          def mult_seat(direction, anchor, box)
+            return nil if box.nil? || stored_offsets_zero?(box)
+            return nil unless default_presentation?(box)
+
+            x, y = seat_corner(anchor, box)
+            [x + SEAT_X_INSET, direction == :right ? y + 15 : y - 6]
+          end
+
+          def source_seat?(end_kind, heading)
+            end_kind == :source && heading &&
+              font_size == SEAT_FONT_SIZE && font_unit == "pt"
+          end
+
+          # Boxes with explicit string-keyed OX/OY (the QEA shape) that
+          # are unrotated, unhidden, unstyled and left/center aligned.
+          def default_presentation?(box)
+            return false unless box["ox"] && box["oy"]
+            return false unless [nil, 0, 1].include?(box["alignment"])
+            return false unless [nil, -1].include?(box["color"])
+
+            box["rotation"].to_i.zero? && box["direction"].to_i.zero? &&
+              box.values_at("hidden", "bold", "italic", "underline")
+                 .none?
+          end
+
+          def seat_corner(anchor, box)
+            [anchor[0] + box["ox"].to_i, anchor[1] + box["oy"].to_i]
           end
 
           def build_texts(role:, mult:, standalone:, text_pos:, mult_pos:,
