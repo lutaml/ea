@@ -294,6 +294,18 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
       expect(positions["0..1"]).to eq([463, 242])
     end
 
+    it "keeps diagonal offsets when an outside origin enters the source box" do
+      connector = build_heading_connector(
+        points: [[100, 50], [-100, 30]], anchors: [[150, 50], [-150, 30]],
+        box: heading_record[:box]
+      )
+      bounds = heading_bounds_for(source: [0, 0, 100, 100], target: [-200, 0, 100, 100])
+      positions = heading_positions(connector, bounds)
+
+      expect(positions["+trafficAreaStructureAttribute"]).to eq([125, 67])
+      expect(positions["0..1"]).to eq([111, 48])
+    end
+
     it "uses the known bottom face when the stored upward route is stale" do
       heading_connector.target_anchor.y = 600
       heading_bounds["target"] = Ea::Model::Bounds.new(x: 335, y: 500,

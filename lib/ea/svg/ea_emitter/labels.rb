@@ -121,7 +121,9 @@ module Ea
 
           box = source_dock_bounds(connector)
           face = box && dock_face_heading(points.first, box)
-          face || stored_upward_heading(connector, heading)
+          return face if face && face.zip(heading).any? { |axis, delta| (axis * delta).positive? }
+
+          stored_upward_heading(connector, heading)
         end
 
         def stored_upward_heading(connector, heading)
