@@ -345,7 +345,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     duplicated = ["M 203 131 L 305 131 L 305 131"]
     cases = [
       ["stored duplicate path", { path: "570:-111;570:-111;" },
-       ["M 203 131 L 305 131 L 305 131 L 305 131"], []],
+       ["M 204 131 L 305 131 L 305 131 L 305 131"], []],
       ["mode 2", { style: "Mode=2;LWidth=2;" }, duplicated, []],
       ["width 0", { style: "Mode=3;LWidth=0;" }, duplicated, []],
       ["tree V", { style: "Mode=3;LWidth=2;TREE=V;" }, duplicated, []],
@@ -365,7 +365,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     jog_tip = ["324 469 318 458 330 458"]
     cases = [
       ["stored 1px jog", { path: "1250:-780;1250:-781;" },
-       ["M 239 468 L 324 468 L 324 469 L 324 469"], []],
+       ["M 240 468 L 324 468 L 324 469 L 324 469"], []],
       ["mode 2", { style: "Mode=2;LWidth=2;" }, jogged, jog_tip],
       ["width 0", { style: "Mode=3;LWidth=0;" }, jogged, jog_tip],
       ["tree V", { style: "Mode=3;LWidth=2;TREE=V;" }, jogged, jog_tip],

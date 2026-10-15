@@ -140,11 +140,15 @@ module Ea
           def level_entry_point(bend, box)
             level_y = bend[1] > box.y && bend[1] < box.y + box.height
             level_x = bend[0] > box.x && bend[0] < box.x + box.width
-            if level_y && !level_x
+            if level_y && outside_span?(bend[0], box.x, box.width)
               [bend[0] < box.x ? box.x - 1 : box.x + box.width + 1, bend[1]]
-            elsif level_x && !level_y
+            elsif level_x && outside_span?(bend[1], box.y, box.height)
               [bend[0], bend[1] < box.y ? box.y - 1 : box.y + box.height + 1]
             end
+          end
+
+          def outside_span?(value, start, length)
+            value < start || value > start + length
           end
 
           # Square routing keeps the stored orthogonal trunk, even when a
