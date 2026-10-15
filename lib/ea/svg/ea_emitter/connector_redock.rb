@@ -60,8 +60,25 @@ module Ea
           pairs = expanded ? candidate : original
           target = expanded ? outline.last : target_bounds
           pairs = default_square_pairs(connector, points, source_bounds, target, pairs)
-          stored_top_pairs(connector, expanded ? outline.first : source_bounds, pairs)
+          source = expanded ? outline.first : source_bounds
+          pairs = stored_top_pairs(connector, source, pairs)
+          auto_port_elbow_pairs(connector, source, target, pairs)
         end
+
+        # Auto routing turns at the clipped target column when the source
+        # leaves a side edge and the target enters through its top or bottom.
+        def auto_port_elbow_pairs(connector, source, target, pairs)
+          return pairs unless connector.style.to_h[:auto_port_elbow] == true
+
+          first, last = pairs
+          return pairs unless on_side_edge?(first, source) &&
+                              [target.y, target.y + target.height].include?(last[1]) &&
+                              last[0].between?(target.x, target.x + target.width)
+          return pairs if first[0] == last[0] || first[1] == last[1]
+
+          [first, [last[0], first[1]], last]
+        end
+        private_class_method :auto_port_elbow_pairs
 
         # EDGE=1 explicitly seats an external source ray on the top edge;
         # its first contact can instead be the bottom when its origin is below.
