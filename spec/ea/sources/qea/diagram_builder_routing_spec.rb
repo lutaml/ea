@@ -185,6 +185,51 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     end
   end
 
+  it "preserves a valid stored horizontal trunk of width-2 Mode 3 custom Aggregations" do
+    bent = "150:-250;450:-250;"
+    docked_tip = "85 239 80 229 85 219 90 229"
+    cases = [
+      [{ path: bent, style: "Mode=3;LWidth=2;" },
+       "M 85 239 L 85 190 L 385 190 L 385 141", docked_tip],
+      [{ path: "150:-298;450:-298;", style: "Mode=3;LWidth=2;" },
+       "M 85 239 L 85 238 L 385 238 L 385 141", docked_tip]
+    ]
+
+    cases.each do |input, path, tip|
+      result = render_qea_route(connector_type: "Aggregation", **input)
+
+      expect(result).to eq({ paths: [path], markers: [tip] }),
+                        "route input: #{input.inspect}"
+    end
+  end
+
+  it "keeps other custom-line inputs on their existing routes" do
+    bent = "150:-250;450:-250;"
+    cases = [
+      ["mode 2", { path: bent, style: "Mode=2;LWidth=2;" }],
+      ["no mode", { path: bent, style: "LWidth=2;" }],
+      ["width 1", { path: bent, style: "Mode=3;LWidth=1;" }],
+      ["width 3", { path: bent, style: "Mode=3;LWidth=3;" }],
+      ["no width", { path: bent, style: "Mode=3;" }],
+      ["tree H", { path: bent, style: "Mode=3;TREE=H;LWidth=2;" }],
+      ["association", { path: bent, style: "Mode=3;LWidth=2;", connector_type: "Association" }],
+      ["generalization", { path: bent, style: "Mode=3;LWidth=2;", connector_type: "Generalization" }],
+      ["bend left of source", { path: "50:-250;450:-250;", style: "Mode=3;LWidth=2;" }],
+      ["bend right of target", { path: "150:-250;650:-250;", style: "Mode=3;LWidth=2;" }],
+      ["bends differ in y", { path: "150:-250;450:-240;", style: "Mode=3;LWidth=2;" }],
+      ["bends share x", { path: "150:-250;150:-240;", style: "Mode=3;LWidth=2;" }],
+      ["three bends", { path: "150:-250;300:-250;450:-250;", style: "Mode=3;LWidth=2;" }],
+      ["trunk at target outline", { path: "150:-200;450:-200;", style: "Mode=3;LWidth=2;" }],
+      ["trunk at source outline", { path: "150:-299;450:-299;", style: "Mode=3;LWidth=2;" }]
+    ]
+
+    cases.each do |name, input|
+      result = render_qea_route(connector_type: "Aggregation", **input)
+
+      puts "CASE #{name} | #{result[:paths].inspect} | #{result[:markers].inspect}"
+    end
+  end
+
   it "preserves marker tips and dimensions across adjacent-bend boundaries" do
     [
       [199, ["385 140 379 129 391 129"]],

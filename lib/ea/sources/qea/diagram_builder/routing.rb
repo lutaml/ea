@@ -29,7 +29,9 @@ module Ea
             return false unless connector.connector_type == "Aggregation" && points.size == 4
 
             style = DiagramStyleParser.parse(link_row.style)
-            return false unless style[:tree] == "V" && style[:lwidth] == "2"
+            return false unless style[:lwidth] == "2"
+            return false unless style[:tree] == "V" ||
+                                (style[:mode] == "3" && style[:tree].nil?)
 
             tree_bends_fit?(points[1], points[-2], src, tgt)
           end
