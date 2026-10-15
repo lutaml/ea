@@ -315,6 +315,49 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     end
   end
 
+  let(:computed_jog) do
+    { source: [961, 736, 204, 72], target: [1250, 352, 312, 465], path: nil,
+      geometry: "SX=103;SY=-8;EX=-156;EY=-196;EDGE=2;", style: "Mode=3;LWidth=2;" }
+  end
+
+  it "collapses a one-pixel computed jog between facing horizontal ports" do
+    # t_diagramlinks 98/1644 of the pinned 220: ports differ by one pixel in y
+    # and EA draws one horizontal line clipped at the outer outlines.
+    result = render_qea_route(connector_type: "Generalization", **computed_jog)
+
+    expect(result).to eq(paths: ["M 240 468 L 323 468"], markers: ["323 468 312 474 312 462"])
+  end
+
+  it "keeps other computed and stored routes unchanged" do
+    jogged = ["M 239 468 L 324 468 L 324 469"]
+    jog_tip = ["324 469 318 458 330 458"]
+    cases = [
+      ["stored 1px jog", { path: "1250:-780;1250:-781;" },
+       ["M 239 468 L 324 468 L 324 469 L 324 469"], []],
+      ["larger leg", { geometry: "SX=103;SY=-8;EX=-156;EY=-193;EDGE=2;" },
+       ["M 239 468 L 324 468 L 324 466"], ["324 466 330 477 318 477"]],
+      ["mode 2", { style: "Mode=2;LWidth=2;" }, jogged, jog_tip],
+      ["width 0", { style: "Mode=3;LWidth=0;" }, jogged, jog_tip],
+      ["tree V", { style: "Mode=3;LWidth=2;TREE=V;" }, jogged, jog_tip],
+      ["tree H", { style: "Mode=3;LWidth=2;TREE=H;" }, jogged, jog_tip],
+      ["association", { connector_type: "Association" },
+       [*jogged, "M 318 454 L 324 469 L 330 454"], []],
+      ["aggregation", { connector_type: "Aggregation" }, jogged,
+       ["239 468 249 463 259 468 249 473"]],
+      ["overlapping boxes", { target: [1100, 352, 312, 465] },
+       ["M 239 468 L 174 468 L 174 469"], ["174 469 168 458 180 458"]],
+      ["vertical ports", { geometry: "SX=0;SY=-8;EX=0;EY=-196;EDGE=1;" },
+       ["M 163 423 L 323 248"], ["323 248 320.01 260.17 311.15 252.07"]]
+    ]
+
+    cases.each do |name, override, paths, markers|
+      input = computed_jog.merge(override)
+      result = render_qea_route(**{ connector_type: "Generalization" }.merge(input))
+
+      expect(result).to eq({ paths: paths, markers: markers }), name
+    end
+  end
+
   it "preserves marker tips and dimensions across adjacent-bend boundaries" do
     [
       [199, ["385 140 379 129 391 129"]],
