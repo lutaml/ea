@@ -6,6 +6,40 @@ require "nokogiri"
 RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do # rubocop:disable Metrics/BlockLength
   include ConnectorRedockHelpers
 
+  it "clips a non-tree Association with stored geometry on the stroke outline" do
+    fixture = redock_fixture(type: "Association", source: [776, 1088, 179, 77],
+                             target: [753, 873, 226, 139],
+                             anchors: [[862, 1131], [862, 947]],
+                             points: [[842, 1088], [842, 1012]])
+    connector = fixture[:diagram].connectors.first
+    connector.has_geometry_offsets = true
+    connector.style.merge!(mode: "3")
+    connector.source_port = redock_point([842, 1088])
+    connector.target_port = redock_point([842, 1012])
+
+    expect(redock_output(fixture)).to eq(
+      [["M 862 1087 L 862 1013"], ["M 868 1028 L 862 1013 L 856 1028"]]
+    )
+    connector.direction = "Destination -> Source"
+    expect(redock_output(fixture).last).to eq(["M 856 1072 L 862 1087 L 868 1072"])
+  end
+
+  it "keeps Association tree and legacy geometry on their centerline docks" do
+    ["LV", "LH", "H", "V"].each do |tree|
+      fixture = redock_fixture(type: "Association", source: [115, 527, 161, 80],
+                               target: [122, 361, 146, 80],
+                               anchors: [[195, 567], [195, 401]],
+                               points: [[195, 527], [195, 441]])
+      connector = fixture[:diagram].connectors.first
+      connector.has_geometry_offsets = true
+      connector.style.merge!(tree: tree, mode: "3")
+
+      expect(redock_output(fixture).first).to eq(["M 195 527 L 195 441"])
+    end
+    fixture = redock_fixture(type: "Association")
+    expect(redock_output(fixture).first).to eq(["M 20 100 L 20 40"])
+  end
+
   it "docks a lateral tree's final leg on the target edge facing its bend" do
     [
       ["LV", [[776, 1209], [1015, 1209], [1015, 1046]],

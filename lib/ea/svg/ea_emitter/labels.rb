@@ -22,15 +22,18 @@ module Ea
         DEFAULT_FAMILY = "Yu Gothic UI"
         DEFAULT_SIZE = 13
 
-        attr_reader :diagram, :canvas, :model_index, :theme, :document
+        attr_reader :diagram, :canvas, :model_index, :theme, :document,
+                    :drawn_bounds, :divider_y_by_ref
 
         def initialize(diagram, canvas: nil, model_index: nil, theme: nil,
-                       document: nil)
+                       document: nil, drawn_bounds: nil, divider_y_by_ref: nil)
           @diagram = diagram
           @canvas = canvas
           @model_index = model_index
           @theme = theme || Ea::Theme::Registry.default
           @document = document
+          @drawn_bounds = drawn_bounds
+          @divider_y_by_ref = divider_y_by_ref
         end
 
         def render
@@ -51,7 +54,7 @@ module Ea
           # in t_connector.Name but renders only inside the Note box.
           return [] if connector.connector_type.to_s.casecmp("NoteLink").zero?
 
-          points = waypoint_pairs(connector)
+          points = label_points(connector)
           return [] if points.size < 2
 
           texts = []
@@ -168,6 +171,19 @@ module Ea
             font_size: label_font_size,
             font_unit: theme.font_size_unit
           )
+        end
+
+        # Two-point routes are clipped during emission, after their stored
+        # waypoints were parsed. End-label offsets follow the same final dock.
+        def label_points(connector)
+          points = waypoint_pairs(connector)
+          return points unless points.size == 2
+
+          points = ConnectorRedock.pairs_for(connector, diagram, model_index,
+                                             drawn_bounds) || points
+          ConnectorRedock.row_slot_adjust(points, connector, diagram,
+                                          model_index, drawn_bounds,
+                                          divider_y_by_ref) || points
         end
 
         def waypoint_pairs(connector)

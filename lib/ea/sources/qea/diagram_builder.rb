@@ -385,7 +385,7 @@ module Ea
           geom = parse_geometry_fields(link_row.geometry)
           context = ContextDiagramSupport.package_context(diagram_row) ||
                     ContextDiagramSupport.element_regenerate?(diagram_row)
-          Ea::Model::DiagramConnector.new(
+          collapse_computed_jog(Ea::Model::DiagramConnector.new(
             id: IdNormalizer.synthetic("dc", diagram_row.diagram_id,
                                        link_row.instance_id),
             diagram_id: IdNormalizer.from_guid(diagram_row.ea_guid),
@@ -409,7 +409,7 @@ module Ea
             ghost_labels: ghost_labels_for(connector, diagram_row, link_row),
             has_geometry_offsets: geometry_has_offsets?(link_row.geometry),
             is_substitutable: substitutable_connector?(connector)
-          )
+          ), link_row, diagram_row, geom)
         end
 
         # Ray origin for one connector end: the element's center
@@ -653,14 +653,16 @@ module Ea
             points = tree_route
           elsif %w[Association Aggregation].include?(connector.connector_type) &&
                 edge_out != 2
-            unless preserve_stored_tree?(points, link_row, connector, src, tgt)
+            stored_tree = preserve_stored_tree?(points, link_row, connector, src, tgt)
+            unless stored_tree
               points = facing_edge_route(points, src, tgt)
             end
             # A width-2 Aggregation that keeps its stored bends is
             # docked like a Generalization one.
             if connector.connector_type == "Aggregation" &&
                intermediate.any? && points.size >= 4 &&
-               generalization_outline_offset(link_row, points.size) == 1
+               (generalization_outline_offset(link_row, points.size) == 1 ||
+                (stored_tree && flush_width_zero_tree?(link_row)))
               redock_parent_above(points, link_row, source_placement,
                                   target_placement, strict: true)
             end

@@ -185,6 +185,225 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     end
   end
 
+  # Records of the pinned 220 corpus (20251010_current_plateau_v5.1.qea):
+  # t_diagramlinks 142/558, 177/558 and 176/787, Mode=3;LWidth=2 with no TREE.
+  let(:custom_trunk) do
+    { source: [632, 1038, 216, 241], target: [622, 23, 235, 176],
+      path: "794:-919;740:-919;", geometry: "SX=54;SY=-1;EX=2;EY=-88;EDGE=1;",
+      style: "Mode=3;LWidth=2;" }
+  end
+
+  it "preserves a valid stored horizontal trunk of width-2 Mode 3 custom Aggregations" do
+    trunk = "M 207 1054 L 207 936 L 153 936 L 153 217"
+    records = [
+      [custom_trunk, trunk, "207 1054 202 1044 207 1034 212 1044"],
+      [custom_trunk.merge(source: [585, 1027, 216, 241], target: [575, 12, 235, 176],
+                          path: "747:-908;693:-908;"),
+       trunk, "207 1054 202 1044 207 1034 212 1044"],
+      [{ source: [529, 783, 216, 241], target: [572, 39, 235, 159],
+         path: "637:-249;689:-249;", geometry: "SX=0;SY=-4;EX=0;EY=0;EDGE=1;",
+         style: "Mode=3;LWidth=2;" },
+       "M 143 783 L 143 250 L 195 250 L 195 200", "143 783 138 773 143 763 148 773"]
+    ]
+
+    records.each do |input, path, tip|
+      result = render_qea_route(connector_type: "Aggregation", **input)
+
+      expect(result).to eq({ paths: [path], markers: [tip] }),
+                        "route input: #{input.inspect}"
+    end
+  end
+
+  it "keeps other custom-line inputs on their existing routes" do
+    cases = [
+      ["mode 2", { style: "Mode=2;LWidth=2;" },
+       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+      ["no mode", { style: "LWidth=2;" },
+       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+      ["width 1", { style: "Mode=3;LWidth=1;" },
+       ["M 201 1055 L 162 216"], ["201 1055 195.54 1045.24 200.07 1035.02 205.53 1044.78"]],
+      ["width 3", { style: "Mode=3;LWidth=3;" },
+       ["M 201 1055 L 162 216"], ["201 1055 195.54 1045.24 200.07 1035.02 205.53 1044.78"]],
+      ["no width", { style: "Mode=3;" },
+       ["M 201 1055 L 162 216"], ["201 1055 195.54 1045.24 200.07 1035.02 205.53 1044.78"]],
+      ["tree H", { style: "Mode=3;TREE=H;LWidth=2;" },
+       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+      ["tree V", { style: "Mode=3;TREE=V;LWidth=2;" },
+       ["M 207 1054 L 207 936 L 153 936 L 153 217"], ["207 1054 202 1044 207 1034 212 1044"]],
+      ["association", { connector_type: "Association" },
+       ["M 201 1055 L 162 216", "M 168.69 230.71 L 162 216 L 156.7 231.26"], []],
+      ["generalization", { connector_type: "Generalization" },
+       ["M 207 1054 L 207 936 L 153 936 L 153 217"], ["153 217 159 228 147 228"]],
+      ["bend left of source", { path: "600:-919;740:-919;" },
+       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+      ["bend right of target", { path: "794:-919;900:-919;" },
+       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+      ["bends differ in y", { path: "794:-919;740:-900;" },
+       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+      ["bends share x", { path: "794:-919;794:-900;" },
+       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+      ["three bends", { path: "794:-919;770:-919;740:-919;" },
+       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+      ["trunk at target outline", { path: "794:-200;740:-200;" },
+       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+      ["trunk at source outline", { path: "794:-1037;740:-1037;" },
+       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]]
+    ]
+
+    cases.each do |name, override, paths, markers|
+      input = custom_trunk.merge(override)
+      result = render_qea_route(**{ connector_type: "Aggregation" }.merge(input))
+
+      expect(result).to eq({ paths: paths, markers: markers }), name
+    end
+  end
+
+  let(:flush_trunk) do
+    { source: [443, 240, 184, 70], target: [378, 49, 179, 70],
+      path: "534:-169;467:-169;", geometry: "SX=0;SY=0;EDGE=1;",
+      style: "Mode=3;LWidth=0;TREE=V;" }
+  end
+
+  it "docks width-0 vertical tree Aggregations on the box edges, keeping the trunk" do
+    # Records: t_diagramlinks 199/742 (plateau) and 20/59 (basic.qea).
+    records = [
+      [flush_trunk, "M 191 231 L 191 160 L 124 160 L 124 110", "191 231 186 221 191 211 196 221"],
+      [{ source: [382, 209, 110, 70], target: [287, 30, 110, 70],
+         path: "437:-150;342:-150;", geometry: "SX=0;SY=0;EX=0;EY=0;EDGE=1;",
+         style: "Mode=3;LWidth=0;TREE=V;" },
+       "M 185 219 L 185 160 L 90 160 L 90 110", "185 219 180 209 185 199 190 209"]
+    ]
+
+    records.each do |input, path, tip|
+      result = render_qea_route(connector_type: "Aggregation", **input)
+
+      expect(result).to eq({ paths: [path], markers: [tip] }),
+                        "route input: #{input.inspect}"
+    end
+  end
+
+  it "keeps other width-0 tree inputs on their existing routes" do
+    flattened = [["M 179 231 L 136 110"], ["179 231 170.94 223.25 172.3 212.15 180.36 219.9"]]
+    cases = [
+      ["mode 2", { style: "Mode=2;LWidth=0;TREE=V;" }, *flattened],
+      ["no mode", { style: "LWidth=0;TREE=V;" }, *flattened],
+      ["width 1", { style: "Mode=3;LWidth=1;TREE=V;" }, *flattened],
+      ["width 3", { style: "Mode=3;LWidth=3;TREE=V;" }, *flattened],
+      ["no width", { style: "Mode=3;TREE=V;" }, *flattened],
+      ["tree H", { style: "Mode=3;LWidth=0;TREE=H;" }, *flattened],
+      ["no tree", { style: "Mode=3;LWidth=0;" }, *flattened],
+      ["width 2", { style: "Mode=3;LWidth=2;TREE=V;" },
+       ["M 191 230 L 191 160 L 124 160 L 124 111"], ["191 230 186 220 191 210 196 220"]],
+      ["association", { connector_type: "Association" },
+       ["M 179 231 L 136 110", "M 146.68 122.12 L 136 110 L 135.37 126.14"], []],
+      ["generalization", { connector_type: "Generalization" },
+       ["M 191 231 L 191 160 L 124 160 L 124 110"], ["124 110 130 121 118 121"]],
+      ["bend left of source", { path: "420:-169;467:-169;" }, *flattened],
+      ["bend right of target", { path: "534:-169;600:-169;" }, *flattened],
+      ["bends differ in y", { path: "534:-169;467:-160;" }, *flattened],
+      ["bends share x", { path: "534:-169;534:-160;" }, *flattened],
+      ["three bends", { path: "534:-169;500:-169;467:-169;" }, *flattened],
+      ["trunk at target edge", { path: "534:-119;467:-119;" }, *flattened],
+      ["trunk at source edge", { path: "534:-240;467:-240;" }, *flattened]
+    ]
+
+    cases.each do |name, override, paths, markers|
+      input = flush_trunk.merge(override)
+      result = render_qea_route(**{ connector_type: "Aggregation" }.merge(input))
+
+      expect(result).to eq({ paths: paths, markers: markers }), name
+    end
+  end
+
+  let(:computed_jog) do
+    { source: [961, 736, 204, 72], target: [1250, 352, 312, 465], path: nil,
+      geometry: "SX=103;SY=-8;EX=-156;EY=-196;EDGE=2;", style: "Mode=3;LWidth=2;" }
+  end
+
+  it "collapses a one-pixel computed jog between facing horizontal ports" do
+    # t_diagramlinks 98/1644 of the pinned 220: ports differ by one pixel in y
+    # and EA draws one horizontal line clipped at the outer outlines.
+    result = render_qea_route(connector_type: "Generalization", **computed_jog)
+
+    expect(result).to eq(paths: ["M 240 468 L 323 468"], markers: ["323 468 312 474 312 462"])
+  end
+
+  let(:computed_zero_leg) do
+    { source: [300, 70, 168, 80], target: [570, 20, 343, 465], path: nil,
+      geometry: "SX=84;SY=-1;EX=-171;EY=141;EDGE=2;", style: "Mode=3;LWidth=2;" }
+  end
+
+  it "collapses a zero-length computed terminal leg between facing horizontal ports" do
+    # t_diagramlinks 50/333: [source, target, target] duplicates the end point,
+    # which stops the outline clipping; the reference is one 2-point line.
+    result = render_qea_route(connector_type: "Generalization", **computed_zero_leg)
+
+    expect(result).to eq(paths: ["M 204 131 L 304 131"], markers: ["304 131 293 137 293 125"])
+  end
+
+  it "keeps other zero-leg inputs unchanged" do
+    duplicated = ["M 203 131 L 305 131 L 305 131"]
+    cases = [
+      ["stored duplicate path", { path: "570:-111;570:-111;" },
+       ["M 203 131 L 305 131 L 305 131 L 305 131"], []],
+      ["mode 2", { style: "Mode=2;LWidth=2;" }, duplicated, []],
+      ["width 0", { style: "Mode=3;LWidth=0;" }, duplicated, []],
+      ["tree V", { style: "Mode=3;LWidth=2;TREE=V;" }, duplicated, []],
+      ["association", { connector_type: "Association" }, duplicated, []],
+      ["aggregation", { connector_type: "Aggregation" }, duplicated,
+       ["203 131 213 126 223 131 213 136"]],
+      ["two-pixel leg", { geometry: "SX=84;SY=-1;EX=-171;EY=138;EDGE=2;" },
+       ["M 203 131 L 305 131 L 305 134"], ["305 134 299 123 311 123"]]
+    ]
+
+    cases.each do |name, override, paths, markers|
+      input = computed_zero_leg.merge(override)
+      result = render_qea_route(**{ connector_type: "Generalization" }.merge(input))
+
+      expect(result).to eq({ paths: paths, markers: markers }), name
+    end
+  end
+
+  it "keeps other computed and stored routes unchanged" do
+    jogged = ["M 239 468 L 324 468 L 324 469"]
+    jog_tip = ["324 469 318 458 330 458"]
+    cases = [
+      ["stored 1px jog", { path: "1250:-780;1250:-781;" },
+       ["M 239 468 L 324 468 L 324 469 L 324 469"], []],
+      ["larger leg", { geometry: "SX=103;SY=-8;EX=-156;EY=-193;EDGE=2;" },
+       ["M 239 468 L 324 468 L 324 466"], ["324 466 330 477 318 477"]],
+      ["mode 2", { style: "Mode=2;LWidth=2;" }, jogged, jog_tip],
+      ["width 0", { style: "Mode=3;LWidth=0;" }, jogged, jog_tip],
+      ["tree V", { style: "Mode=3;LWidth=2;TREE=V;" }, jogged, jog_tip],
+      ["tree H", { style: "Mode=3;LWidth=2;TREE=H;" }, jogged, jog_tip],
+      ["association", { connector_type: "Association" },
+       [*jogged, "M 318 454 L 324 469 L 330 454"], []],
+      ["aggregation", { connector_type: "Aggregation" }, jogged,
+       ["239 468 249 463 259 468 249 473"]],
+      ["overlapping boxes", { target: [1100, 352, 312, 465] },
+       ["M 239 468 L 174 468 L 174 469"], ["174 469 168 458 180 458"]],
+      ["vertical ports", { geometry: "SX=0;SY=-8;EX=0;EY=-196;EDGE=1;" },
+       ["M 163 423 L 323 248"], ["323 248 320.01 260.17 311.15 252.07"]]
+    ]
+
+    cases.each do |name, override, paths, markers|
+      input = computed_jog.merge(override)
+      result = render_qea_route(**{ connector_type: "Generalization" }.merge(input))
+
+      expect(result).to eq({ paths: paths, markers: markers }), name
+    end
+  end
+
+  it "keeps a computed jog when the source height is outside the target span" do
+    result = render_qea_route(
+      source: [100, 100, 100, 100], target: [300, 150, 100, 100],
+      path: "", style: "Mode=3;LWidth=2;",
+      geometry: "SX=50;SY=1;EX=-50;EY=50;EDGE=2;"
+    )
+
+    expect(result[:paths]).to eq(["M 135 89 L 235 89 L 235 90"])
+  end
+
   it "preserves marker tips and dimensions across adjacent-bend boundaries" do
     [
       [199, ["385 140 379 129 391 129"]],
