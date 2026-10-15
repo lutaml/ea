@@ -277,4 +277,57 @@ RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do # rubocop:disable Metrics/
     after_geometry.zip(geometry).each { |after, before| expect(after).to equal(before) }
     expect(after_geometry.map(&:to_json)).to eq(before_geometry)
   end
+
+  let(:explicit_divider_fixture) do
+    fixture = redock_fixture(type: "Aggregation", source: [134, 387, 219, 88],
+                             target: [510, 35, 312, 465], anchors: [[352, 429], [510, 429]],
+                             points: [[353, 429], [510, 430]], dividers: { "s" => 429, "t" => 61 })
+    connector = fixture[:diagram].connectors.first
+    connector.style[:mode] = "3"
+    connector.has_geometry_offsets = true
+    connector.source_port = redock_point([353, 429])
+    connector.target_port = redock_point([510, 430])
+    fixture
+  end
+
+  it "keeps an explicit horizontal port at the source divider" do
+    expect(redock_output(explicit_divider_fixture)).to eq(
+      [["M 354 429 L 509 429"], ["354 429 364 424 374 429 364 434"]]
+    )
+  end
+
+  it "keeps target row seating when only the source port certifies its row" do
+    fixture = explicit_divider_fixture
+    fixture[:drawn_bounds]["t"].y = 387
+    fixture[:divider_y_by_ref]["t"] = 429
+
+    expect(described_class.row_slot_adjust(
+             [[354, 429], [509, 429]], fixture[:diagram].connectors.first, fixture[:diagram],
+             fixture[:model_index], fixture[:drawn_bounds], fixture[:divider_y_by_ref]
+           )).to eq([[354, 429], [509, 442]])
+  end
+
+  it "keeps row-slot adjustment when the explicit horizontal dock is not established" do
+    fixture = explicit_divider_fixture
+    connector = fixture[:diagram].connectors.first
+    changes = [
+      ->(item) { item.style[:mode] = "1" },
+      ->(item) { item.style[:tree] = "V" },
+      ->(item) { item.target_port = nil },
+      ->(item) { item.source_port.y = 430 },
+      ->(item) { item.target_anchor.y = 430 }
+    ]
+    changes.each do |change|
+      connector.style = { mode: "3", lwidth: "2" }
+      connector.source_port = redock_point([353, 429])
+      connector.target_port = redock_point([510, 430])
+      connector.target_anchor = redock_point([510, 429])
+      change.call(connector)
+
+      expect(described_class.row_slot_adjust(
+               [[354, 429], [509, 429]], connector, fixture[:diagram],
+               fixture[:model_index], fixture[:drawn_bounds], fixture[:divider_y_by_ref]
+             )).to eq([[354, 442], [509, 429]])
+    end
+  end
 end

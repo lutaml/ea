@@ -8,6 +8,41 @@ module Ea
         module Routing
           private
 
+          # An empty custom-line Path has no authored corner to preserve.
+          # Keep normalized port routes; replace only the computed EDGE2 jog.
+          def direct_empty_path_ray(model, link_row, diagram_row, geom, context)
+            return model if context
+            return model unless empty_path_ray_candidate?(model, link_row, geom)
+
+            source, target = stored_ray_boxes(link_row, diagram_row)
+            return model unless empty_path_ray_gap?(source, target, geom)
+
+            model.waypoints = [model.source_port, model.target_port].map do |point|
+              Ea::Model::Waypoint.new(position: point)
+            end
+            set_stored_ray_origins(model, source, target, geom)
+          end
+
+          def empty_path_ray_gap?(source, target, geom)
+            return false unless source.x + source.width < target.x
+
+            [stored_ray_origin(source, geom[:sx], geom[:sy]),
+             stored_ray_origin(target, geom[:ex], geom[:ey])].all? do |origin|
+              within_height?(origin.y, source) && within_height?(origin.y, target)
+            end
+          end
+
+          def empty_path_ray_candidate?(model, link_row, geom)
+            %w[Generalization Aggregation].include?(model.connector_type) &&
+              model.waypoints.size == 3 && empty_path_ray_style?(model.style, link_row, geom) &&
+              model.has_geometry_offsets && model.source_port && model.target_port
+          end
+
+          def empty_path_ray_style?(style, link_row, geom)
+            style[:mode] == "3" && style[:lwidth] == "2" && !style[:tree] &&
+              geom[:edge] == 2 && link_row.path.to_s.empty?
+          end
+
           # Stored SY/EY use mathematical Y; ray origins use screen Y.
           # Computed-jog origins are already normalized to their derived ports.
           def correct_stored_ray_origins(model, link_row, diagram_row, geom, context)

@@ -71,6 +71,56 @@ RSpec.describe Ea::Svg::EaEmitter::Label::MidpointLabel do
   it "returns nil for an association (handled by EndLabel)" do
     expect(renderer.stereotype_label(connector_for(association))).to be_nil
   end
+  context "with a stored centered relationship name" do
+    include MidpointNameHelpers
+
+    let(:horizontal_name) do
+      { name: "Link A", points: [[143, 36], [247, 36]],
+        box: { "ox" => 0, "oy" => 0, "alignment" => 1, "direction" => 0 } }
+    end
+
+    it "uses stored offsets and measured widths on horizontal and vertical routes" do
+      records = [horizontal_name.merge(expected: [182, 33]),
+                 horizontal_name.merge(points: [[100, 35], [225, 35]], expected: [149, 32]),
+                 { name: "Association B", points: [[72, 80], [72, 213]],
+                   box: { "ox" => -35, "oy" => 6, "alignment" => 1, "direction" => 1 }, expected: [9, 149] },
+                 { name: "Association B", points: [[67, 80], [67, 188]],
+                   box: { "ox" => -34, "oy" => 10, "alignment" => 1, "direction" => 1 }, expected: [5, 141] }]
+      records.each do |record|
+        node = named_midpoint_nodes(record).first
+
+        expect([node["x"].to_f, node["y"].to_f]).to eq(record[:expected])
+        expect(node.text).to eq(record[:name])
+      end
+    end
+
+    it "keeps midpoint positioning outside the measured font and default box" do
+      controls = [{ family: "Carlito" }, { size: 8 }, { unit: "px" }, { box: nil },
+                  { box: { "ox" => 0, "oy" => 0, "alignment" => 0 } },
+                  { box: horizontal_name[:box].merge("rotation" => 30) },
+                  { box: horizontal_name[:box].merge("bold" => true) },
+                  { box: horizontal_name[:box].merge("hidden" => true) },
+                  { box: horizontal_name[:box].merge("direction" => 2) },
+                  { box: horizontal_name[:box].merge("color" => 1) },
+                  { box: { "ox" => 0, "alignment" => 1 } },
+                  { box: { ox: 0, oy: 0, alignment: 1 } }, { substitutable: true }, { stereotype: "import" }]
+      controls.each do |options|
+        node = named_midpoint_nodes(horizontal_name, **options).first
+
+        expect([node["x"].to_f, node["y"].to_f]).to eq([195, 36])
+      end
+    end
+
+    it "keeps unmeasured glyphs and split names at their existing seats" do
+      unknown = named_midpoint_nodes(horizontal_name.merge(name: "Link ☃")).first
+      split = named_midpoint_nodes(horizontal_name.merge(name: "ownership: LA_Right"))
+
+      expect([unknown["x"].to_f, unknown["y"].to_f]).to eq([195, 36])
+      expect(split.map { |node| [node.text, node["x"].to_f, node["y"].to_f] })
+        .to eq([["ownership:", 195, 36], ["LA_Right", 195, 49]])
+    end
+  end
+
   context "with a stored substitutability label seat" do # rubocop:disable Metrics/BlockLength
     let(:generalization) do
       Ea::Model::Generalization.new(id: "gen1", specific_id: "c1", general_id: "c2",

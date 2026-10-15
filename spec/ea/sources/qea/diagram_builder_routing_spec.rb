@@ -349,11 +349,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
       ["mode 2", { style: "Mode=2;LWidth=2;" }, duplicated, []],
       ["width 0", { style: "Mode=3;LWidth=0;" }, duplicated, []],
       ["tree V", { style: "Mode=3;LWidth=2;TREE=V;" }, duplicated, []],
-      ["association", { connector_type: "Association" }, duplicated, []],
-      ["aggregation", { connector_type: "Aggregation" }, duplicated,
-       ["203 131 213 126 223 131 213 136"]],
-      ["two-pixel leg", { geometry: "SX=84;SY=-1;EX=-171;EY=138;EDGE=2;" },
-       ["M 203 131 L 305 131 L 305 134"], ["305 134 299 123 311 123"]]
+      ["association", { connector_type: "Association" }, duplicated, []]
     ]
 
     cases.each do |name, override, paths, markers|
@@ -370,16 +366,12 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     cases = [
       ["stored 1px jog", { path: "1250:-780;1250:-781;" },
        ["M 239 468 L 324 468 L 324 469 L 324 469"], []],
-      ["larger leg", { geometry: "SX=103;SY=-8;EX=-156;EY=-193;EDGE=2;" },
-       ["M 239 468 L 324 468 L 324 466"], ["324 466 330 477 318 477"]],
       ["mode 2", { style: "Mode=2;LWidth=2;" }, jogged, jog_tip],
       ["width 0", { style: "Mode=3;LWidth=0;" }, jogged, jog_tip],
       ["tree V", { style: "Mode=3;LWidth=2;TREE=V;" }, jogged, jog_tip],
       ["tree H", { style: "Mode=3;LWidth=2;TREE=H;" }, jogged, jog_tip],
       ["association", { connector_type: "Association" },
        [*jogged, "M 318 454 L 324 469 L 330 454"], []],
-      ["aggregation", { connector_type: "Aggregation" }, jogged,
-       ["239 468 249 463 259 468 249 473"]],
       ["overlapping boxes", { target: [1100, 352, 312, 465] },
        ["M 239 468 L 174 468 L 174 469"], ["174 469 168 458 180 458"]],
       ["vertical ports", { geometry: "SX=0;SY=-8;EX=0;EY=-196;EDGE=1;" },
@@ -635,5 +627,94 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     end
     expect([connector.source_anchor.x, connector.source_anchor.y]).to eq([151, 160])
     expect([connector.target_anchor.x, connector.target_anchor.y]).to eq([151, 360])
+  end
+
+  let(:empty_path_ray) do
+    { connector_type: "Aggregation", source: [857, 561, 219, 88],
+      target: [1250, 352, 312, 465], path: nil, style: "Mode=3;LWidth=2;",
+      geometry: "EDGE=2;EX=-156;EY=-9;SX=39;SY=12;" }
+  end
+
+  it "uses direct mathematical rays when an EDGE2 connector has no authored bends" do # rubocop:disable Metrics/BlockLength
+    cases = [
+      [empty_path_ray, "M 255 281 L 427 281"],
+      [empty_path_ray.merge(connector_type: "Generalization", source: [137, 95, 326, 1060],
+                            target: [554, 264, 312, 465],
+                            geometry: "EDGE=2;SX=159;SY=111;EX=-156;EY=-18;"),
+       "M 362 459 L 451 459"],
+      [empty_path_ray.merge(source: [134, 387, 219, 88], target: [510, 35, 312, 465],
+                            geometry: "EDGE=2;SX=109;SY=2;EX=-156;EY=-162;"),
+       "M 255 434 L 410 434"],
+      [empty_path_ray.merge(source: [560, 210, 110, 80], target: [880, 210, 170, 80],
+                            geometry: "EDGE=2;SX=6;SY=0;EX=1;EY=0;"),
+       "M 146 80 L 354 80"]
+    ]
+    cases.each do |input, path|
+      connector = nil
+      rendered = render_qea_route(**input) do |document|
+        connector = document.diagrams.first.connectors.first
+      end
+
+      expect(rendered[:paths]).to eq([path]), input.inspect
+      expect(connector.waypoints.size).to eq(2)
+      expect(rendered[:markers].size).to eq(1)
+    end
+  end
+
+  it "renders zero-length and sloped computed legs as direct rays" do
+    cases = [
+      [computed_zero_leg.merge(connector_type: "Aggregation"),
+       "M 204 131 L 304 131", "204 131 214 126 224 131 214 136"],
+      [computed_zero_leg.merge(geometry: "SX=84;SY=-1;EX=-171;EY=138;EDGE=2;"),
+       "M 204 131 L 304 133", "304 133 292.88 138.78 293.12 126.78"],
+      [computed_jog.merge(connector_type: "Aggregation"),
+       "M 240 468 L 323 468", "240 468 250 463 260 468 250 473"],
+      [computed_jog.merge(geometry: "SX=103;SY=-8;EX=-156;EY=-193;EDGE=2;"),
+       "M 240 468 L 323 465", "323 465 312.22 471.39 311.79 459.4"]
+    ]
+    cases.each do |input, path, marker|
+      expect(render_qea_route(**input)).to eq(paths: [path], markers: [marker])
+    end
+  end
+
+  it "preserves explicit derived ports while removing the unauthored corner" do
+    connector = nil
+    render_qea_route(**empty_path_ray) do |document|
+      connector = document.diagrams.first.connectors.first
+    end
+
+    expect([connector.source_port.x, connector.source_port.y]).to eq([1076, 571])
+    expect([connector.target_port.x, connector.target_port.y]).to eq([1250, 594])
+    expect(connector.waypoints.map { |point| [point.position.x, point.position.y] })
+      .to eq([[1076, 571], [1250, 594]])
+    expect([connector.source_anchor.x, connector.source_anchor.y]).to eq([1005, 593])
+    expect([connector.target_anchor.x, connector.target_anchor.y]).to eq([1250, 593])
+  end
+
+  it "preserves the computed route when EDGE2 faces away from the target" do
+    connector = nil
+    render_qea_route(**empty_path_ray.merge(source: [1250, 352, 312, 465],
+                                            target: [857, 561, 219, 88])) do |document|
+      connector = document.diagrams.first.connectors.first
+    end
+
+    expect(connector.waypoints.size).to eq(3)
+    expect([connector.source_anchor.x, connector.source_anchor.y]).to eq([1445, 596])
+    expect([connector.target_anchor.x, connector.target_anchor.y]).to eq([810, 596])
+  end
+
+  it "restores the target diamond when a generated terminal leg was empty" do
+    result = render_qea_route(
+      connector_type: "Aggregation", source: [560, 210, 110, 80],
+      target: [880, 210, 170, 80], path: nil, style: "Mode=3;LWidth=2;",
+      geometry: "EDGE=2;SX=6;SY=0;EX=1;EY=0;"
+    ) do |document|
+      association = document.relationships.first
+      association.source_aggregation = "none"
+      association.target_aggregation = "composite"
+    end
+
+    expect(result[:paths]).to eq(["M 146 80 L 354 80", "M 339 86 L 354 80 L 339 74"])
+    expect(result[:markers]).to eq(["354 80 344 85 334 80 344 75"])
   end
 end

@@ -209,18 +209,46 @@ module Ea
                       divider_y_by_ref[target_ref]]
           return nil unless bounds.all? && dividers.all?
 
-          adjusted = row_slot_pairs(pairs, bounds, dividers)
+          preserve_source = explicit_horizontal_source_dock?(pairs, connector)
+          adjusted = row_slot_pairs(pairs, bounds, dividers, preserve_source: preserve_source)
           if stroke_outline?(connector, bounds) &&
              pairs == pairs_for(connector, diagram, model_index, bounds_map)
             original = clipped_pairs(bounds, [connector.source_anchor, connector.target_anchor])
-            original_final = row_slot_pairs(original, bounds, dividers)
+            original_final = row_slot_pairs(original, bounds, dividers, preserve_source: preserve_source)
             adjusted = original_final if original != pairs && !forward_route?(original_final, adjusted)
           end
           adjusted == pairs ? nil : adjusted
         end
 
-        def row_slot_pairs(pairs, bounds, dividers)
+        # A supplied horizontal port already specifies its row. Moving it
+        # to the next compartment row would discard that explicit coordinate.
+        def explicit_horizontal_source_dock?(pairs, connector)
+          return false unless explicit_horizontal_ray?(connector)
+
+          connector.source_anchor.y == connector.target_anchor.y &&
+            connector.source_port.y == connector.source_anchor.y &&
+            pairs.first[1] == connector.source_port.y
+        end
+        private_class_method :explicit_horizontal_source_dock?
+
+        def explicit_horizontal_ray?(connector)
+          explicit_horizontal_ray_style?(connector) && connector.has_geometry_offsets &&
+            connector.source_port && connector.target_port &&
+            connector.source_anchor && connector.target_anchor
+        end
+        private_class_method :explicit_horizontal_ray?
+
+        def explicit_horizontal_ray_style?(connector)
+          style = connector.style.to_h
+          %w[Generalization Aggregation].include?(connector.connector_type) &&
+            style[:mode] == "3" && !style[:tree] && !style[:direct] && !style[:regenerated]
+        end
+        private_class_method :explicit_horizontal_ray_style?
+
+        def row_slot_pairs(pairs, bounds, dividers, preserve_source: false)
           pairs.each_with_index.map do |(x, y), index|
+            next [x, y] if preserve_source && index.zero?
+
             row_slot?(x, y, bounds[index], dividers[index]) ? [x, y + ROW_SLOT_PITCH] : [x, y]
           end
         end

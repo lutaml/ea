@@ -86,12 +86,14 @@ module Ea
             stereo = stereo.nil? || stereo.empty? ? nil : "«#{stereo}»"
             direction = leg_direction(end_kind, heading)
             if direction && !(tree && zero_offset?(text_box, mult_box))
-              text_pos = source_property_seat(connector, direction, anchor, text_box, role) ||
+              text_pos = plain_vertical_role(connector, direction, anchor, text_box, role) ||
+                         source_property_seat(connector, direction, anchor, text_box, role) ||
                          plain_upward_seat(connector, direction, anchor, text_box, role) ||
                          role_seat(direction, anchor, text_box, role) || text_pos
               mult_pos = directional_multiplicity(connector, direction, anchor, mult_box, mult) ||
                          mult_seat(direction, anchor, mult_box) || mult_pos
             elsif end_kind == :target && !(tree && zero_offset?(text_box, mult_box))
+              text_pos = target_upward_role(connector, heading, anchor, text_box, role) || text_pos
               mult_pos = target_multiplicity_seat(heading, anchor, mult_box) || mult_pos
             end
 
@@ -199,6 +201,36 @@ module Ea
 
             x, y = seat_corner(anchor, box)
             [x - SEAT_X_INSET - width, y - 6]
+          end
+
+          def target_upward_role(connector, heading, anchor, box, role)
+            return nil unless heading && heading[0].zero? && heading[1].negative?
+
+            plain_vertical_role(connector, :target_up, anchor, box, role)
+          end
+
+          def plain_vertical_role(connector, direction, anchor, box, role)
+            return nil unless %i[down target_up].include?(direction) && plain_vertical_box?(box)
+
+            end_kind = direction == :down ? :source : :target
+            return nil unless plain_vertical_connector?(connector, end_kind)
+
+            width = Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
+            return nil unless width
+
+            x, y = seat_corner(anchor, box)
+            [x - width - 8, y + (end_kind == :source ? 15 : -7)]
+          end
+
+          def plain_vertical_box?(box)
+            seat_font? && cambria_box?(box) && [0, 1].include?(box["alignment"])
+          end
+
+          def plain_vertical_connector?(connector, end_kind)
+            style = connector.style.to_h
+            connector.connector_type == "Association" &&
+              connector_source_dest_stereotype(connector, end_kind).empty? &&
+              style[:mode] == "3" && style[:lwidth] == "0" && !style[:tree]
           end
 
           def plain_role_route?(style)
