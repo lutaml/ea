@@ -197,6 +197,7 @@ module Ea
                             bounds_map, divider_y_by_ref)
           return nil unless bounds_map && divider_y_by_ref
           return nil unless pairs.size == 2
+          return nil if explicit_horizontal_source_dock?(pairs, connector)
 
           rel = relationship_for(connector, model_index)
           return nil unless rel
@@ -218,6 +219,31 @@ module Ea
           end
           adjusted == pairs ? nil : adjusted
         end
+
+        # A supplied horizontal port already specifies its row. Moving it
+        # to the next compartment row would discard that explicit coordinate.
+        def explicit_horizontal_source_dock?(pairs, connector)
+          return false unless explicit_horizontal_ray?(connector)
+
+          connector.source_anchor.y == connector.target_anchor.y &&
+            connector.source_port.y == connector.source_anchor.y &&
+            pairs.first[1] == connector.source_port.y
+        end
+        private_class_method :explicit_horizontal_source_dock?
+
+        def explicit_horizontal_ray?(connector)
+          explicit_horizontal_ray_style?(connector) && connector.has_geometry_offsets &&
+            connector.source_port && connector.target_port &&
+            connector.source_anchor && connector.target_anchor
+        end
+        private_class_method :explicit_horizontal_ray?
+
+        def explicit_horizontal_ray_style?(connector)
+          style = connector.style.to_h
+          %w[Generalization Aggregation].include?(connector.connector_type) &&
+            style[:mode] == "3" && !style[:tree] && !style[:direct] && !style[:regenerated]
+        end
+        private_class_method :explicit_horizontal_ray_style?
 
         def row_slot_pairs(pairs, bounds, dividers)
           pairs.each_with_index.map do |(x, y), index|

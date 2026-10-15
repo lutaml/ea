@@ -410,6 +410,7 @@ module Ea
             has_geometry_offsets: geometry_has_offsets?(link_row.geometry),
             is_substitutable: substitutable_connector?(connector)
           ), link_row, diagram_row, geom)
+          model = direct_empty_path_ray(model, link_row, diagram_row, geom, context)
           correct_stored_ray_origins(model, link_row, diagram_row, geom, context)
         end
 
