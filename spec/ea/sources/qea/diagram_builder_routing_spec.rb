@@ -561,6 +561,11 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     expect(controls.map { |input| render_qea_route(**input)[:paths].first }).to eq(expected)
   end
 
+  it "uses the target center when its stored offsets are zero" do
+    input = offset_line.merge(geometry: "SX=-89;SY=-6;EX=0;EY=0;EDGE=4;")
+    expect(render_qea_route(**input)[:paths].first).to eq("M 501 144 L 348 207")
+  end
+
   it "keeps other types, styles and unusable origins on their existing route" do
     controls = [
       offset_line.merge(connector_type: "Aggregation"),
@@ -569,12 +574,11 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
       offset_line.merge(style: "Mode=3;TREE=V;LWidth=2;"),
       offset_line.merge(path: "300:-120;"),
       offset_line.merge(geometry: "SX=0;SY=0;EX=0;EY=0;EDGE=4;"),
-      offset_line.merge(geometry: "SX=-89;SY=-6;EX=0;EY=0;EDGE=4;"),
       offset_line.merge(geometry: "SX=-89;SY=-6;EX=43;EY=300;EDGE=4;")
     ]
     expected = ["M 501 143 L 348 143", "M 502 146 L 347 288", "M 502 146 L 347 288",
                 "M 502 146 L 347 288", "M 502 146 L 347 288", "M 502 168 L 347 219",
-                "M 502 145 L 347 202", "M 502 146 L 274 505"]
+                "M 502 146 L 274 505"]
     expect(controls.map { |input| render_qea_route(**input)[:paths].first }).to eq(expected)
   end
 
@@ -706,14 +710,14 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
       .to eq([[982, 532], [812, 532]])
   end
 
-  it "keeps normalized computed-jog anchors at their derived ports" do
+  it "preserves computed ports while restoring a level stored ray" do
     connector = nil
     result = render_qea_route(connector_type: "Generalization", **computed_jog) do |document|
       connector = document.diagrams.first.connectors.first
     end
 
     expect(result[:paths]).to eq(["M 240 468 L 323 468"])
-    expect([connector.source_anchor.x, connector.source_anchor.y]).to eq([1165, 780])
+    expect([connector.source_anchor.x, connector.source_anchor.y]).to eq([1166, 780])
     expect([connector.target_anchor.x, connector.target_anchor.y]).to eq([1250, 780])
     expect([connector.source_port.x, connector.source_port.y]).to eq([1165, 780])
     expect([connector.target_port.x, connector.target_port.y]).to eq([1250, 780])
