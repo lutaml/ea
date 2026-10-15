@@ -125,7 +125,7 @@ module Ea
           # a rightward one. Other sizes, headings, the target end,
           # custom presentation keep their offsets; zero multiplicity boxes keep their default seat.
           def leg_direction(end_kind, heading)
-            return nil unless end_kind == :source && heading && seat_font?
+            return nil unless source_seat?(end_kind, heading)
 
             dx, dy = heading
             return :up if dx.zero? && dy.negative?
@@ -153,8 +153,9 @@ module Ea
             [x + SEAT_X_INSET, direction == :right ? y + 15 : y - 6]
           end
 
-          def seat_font?
-            font_size == SEAT_FONT_SIZE && font_unit == "pt"
+          def source_seat?(end_kind, heading)
+            end_kind == :source && heading &&
+              font_size == SEAT_FONT_SIZE && font_unit == "pt"
           end
 
           # Boxes with explicit string-keyed OX/OY (the QEA shape) that
