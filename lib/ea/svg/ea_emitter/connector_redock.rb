@@ -42,7 +42,7 @@ module Ea
           anchors = [connector.source_anchor, connector.target_anchor]
           bounds = [source_bounds, target_bounds]
           original = clipped_pairs(bounds, anchors)
-          return original unless stroke_outline?(connector, bounds)
+          return original unless stroke_outline?(connector, bounds) || overlap_ray?(connector)
 
           # EA docks these markers on the outer edge of the 2px box stroke.
           outline = bounds.map do |box|
@@ -102,6 +102,14 @@ module Ea
             outline_connector?(connector, bounds)
         end
         private_class_method :stroke_outline?
+
+        # The QEA builder marks the Mode 2 Association overlap rays it
+        # produced; EA docks them on the outer stroke edge whatever the
+        # line width. Naturally aligned centres keep the legacy docking.
+        def overlap_ray?(connector)
+          connector.connector_type == "Association" && connector.style.to_h[:overlap_ray] == true
+        end
+        private_class_method :overlap_ray?
 
         def outline_connector?(connector, bounds)
           return true if %w[Generalization Aggregation].include?(connector.connector_type)
@@ -197,6 +205,7 @@ module Ea
                             bounds_map, divider_y_by_ref)
           return nil unless bounds_map && divider_y_by_ref
           return nil unless pairs.size == 2
+          return nil if explicit_association_ray?(pairs, connector)
 
           rel = relationship_for(connector, model_index)
           return nil unless rel
@@ -231,16 +240,28 @@ module Ea
         end
         private_class_method :explicit_horizontal_source_dock?
 
-        def explicit_horizontal_ray?(connector)
-          explicit_horizontal_ray_style?(connector) && connector.has_geometry_offsets &&
+        # A stored Association ray whose source port certifies the shared
+        # anchor row is one explicit horizontal line: EA seats neither end
+        # in a compartment row, unlike Generalization/Aggregation targets.
+        def explicit_association_ray?(pairs, connector)
+          return false unless explicit_horizontal_ray?(connector, %w[Association])
+
+          connector.source_anchor.y == connector.target_anchor.y &&
+            connector.source_port.y == connector.source_anchor.y &&
+            pairs.first[1] == pairs.last[1]
+        end
+        private_class_method :explicit_association_ray?
+
+        def explicit_horizontal_ray?(connector, types = %w[Generalization Aggregation])
+          explicit_horizontal_ray_style?(connector, types) && connector.has_geometry_offsets &&
             connector.source_port && connector.target_port &&
             connector.source_anchor && connector.target_anchor
         end
         private_class_method :explicit_horizontal_ray?
 
-        def explicit_horizontal_ray_style?(connector)
+        def explicit_horizontal_ray_style?(connector, types)
           style = connector.style.to_h
-          %w[Generalization Aggregation].include?(connector.connector_type) &&
+          types.include?(connector.connector_type) &&
             style[:mode] == "3" && !style[:tree] && !style[:direct] && !style[:regenerated]
         end
         private_class_method :explicit_horizontal_ray_style?

@@ -18,13 +18,15 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     expect(result[:paths]).to eq(["M 85 239 L 85 190 L 85 141"])
   end
 
-  it "docks a child below its parent on the facing edges at the adjacent bends" do
-    result = render_qea_route(
-      connector_type: "Aggregation", path: "175:-250;450:-250;",
-      geometry: "EDGE=1;", style: "TREE=V;LWidth=2;", **parent_below
-    )
+  it "docks child-below trees with flush or offset-free width-two strokes" do
+    ["0", "2"].each do |width|
+      result = render_qea_route(
+        connector_type: "Aggregation", path: "175:-250;450:-250;",
+        geometry: "EDGE=1;", style: "TREE=V;LWidth=#{width};", **parent_below
+      )
 
-    expect(result[:paths]).to eq(["M 60 140 L 60 190 L 335 190 L 335 240"])
+      expect(result[:paths]).to eq(["M 60 140 L 60 190 L 335 190 L 335 240"])
+    end
   end
 
   it "leaves other tree styles on their existing route" do
