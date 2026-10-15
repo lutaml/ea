@@ -385,7 +385,7 @@ module Ea
           geom = parse_geometry_fields(link_row.geometry)
           context = ContextDiagramSupport.package_context(diagram_row) ||
                     ContextDiagramSupport.element_regenerate?(diagram_row)
-          collapse_computed_jog(Ea::Model::DiagramConnector.new(
+          model = collapse_computed_jog(Ea::Model::DiagramConnector.new(
             id: IdNormalizer.synthetic("dc", diagram_row.diagram_id,
                                        link_row.instance_id),
             diagram_id: IdNormalizer.from_guid(diagram_row.ea_guid),
@@ -410,6 +410,7 @@ module Ea
             has_geometry_offsets: geometry_has_offsets?(link_row.geometry),
             is_substitutable: substitutable_connector?(connector)
           ), link_row, diagram_row, geom)
+          correct_stored_ray_origins(model, link_row, diagram_row, geom, context)
         end
 
         # Ray origin for one connector end: the element's center

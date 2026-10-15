@@ -530,4 +530,110 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     expect(render_qea_route(**square_corner.merge(style: "Mode=1;TREE=OS;LWidth=2;"))[:paths].first)
       .to eq("M 295 156 L 135 269")
   end
+
+  let(:stored_ray) do
+    { connector_type: "Aggregation", source: [982, 532, 219, 88],
+      target: [600, 520, 212, 125], path: nil,
+      geometry: "EDGE=4;SX=0;SY=24;EX=0;EY=30;", style: "Mode=3;LWidth=2;" }
+  end
+
+  it "mirrors stored mathematical Y offsets for direct ray origins" do # rubocop:disable Metrics/BlockLength
+    cases = [
+      [stored_ray, "M 416 72 L 248 72", [416, 72]],
+      [stored_ray.merge(connector_type: "Generalization", source: [781, 64, 202, 101],
+                        target: [327, 8, 387, 193],
+                        geometry: "SX=-81;SY=-17;EX=-4;EY=-26;EDGE=4;"),
+       "M 488 162 L 423 162", [423, 162]],
+      [stored_ray.merge(connector_type: "Generalization", source: [489, 741, 357, 98],
+                        target: [510, 621, 336, 88], path: "709:-432;645:-432;",
+                        geometry: "SX=0;SY=49;EX=-8;EY=6;EDGE=1;", style: "Mode=1;LWidth=2;"),
+       "M 213 159 L 214 129", [214, 129]]
+    ]
+    cases.each do |input, path, tip|
+      rendered = render_qea_route(**input)
+
+      expect(rendered[:paths]).to eq([path]), input.inspect
+      expect(rendered[:markers].size).to eq(1)
+      expect(rendered[:markers].first.split.map(&:to_f).take(2)).to eq(tip)
+    end
+  end
+
+  it "preserves stored ports and waypoints while correcting ray origins" do
+    connector = nil
+    render_qea_route(**stored_ray) do |document|
+      connector = document.diagrams.first.connectors.first
+    end
+
+    expect([connector.source_anchor.x, connector.source_anchor.y]).to eq([1091, 552])
+    expect([connector.target_anchor.x, connector.target_anchor.y]).to eq([706, 552])
+    expect([connector.source_port.x, connector.source_port.y]).to eq([1092, 532])
+    expect([connector.target_port.x, connector.target_port.y]).to eq([706, 520])
+    expect(connector.waypoints.map { |point| [point.position.x, point.position.y] })
+      .to eq([[982, 532], [812, 532]])
+  end
+
+  it "keeps normalized computed-jog anchors at their derived ports" do
+    connector = nil
+    result = render_qea_route(connector_type: "Generalization", **computed_jog) do |document|
+      connector = document.diagrams.first.connectors.first
+    end
+
+    expect(result[:paths]).to eq(["M 240 468 L 323 468"])
+    expect([connector.source_anchor.x, connector.source_anchor.y]).to eq([1165, 780])
+    expect([connector.target_anchor.x, connector.target_anchor.y]).to eq([1250, 780])
+    expect([connector.source_port.x, connector.source_port.y]).to eq([1165, 780])
+    expect([connector.target_port.x, connector.target_port.y]).to eq([1250, 780])
+  end
+
+  it "keeps custom paths, other modes, tree styles and missing ports on their original origins" do # rubocop:disable Metrics/BlockLength
+    controls = [
+      { style: "Mode=2;LWidth=2;" }, { style: "LWidth=2;" },
+      { style: "Mode=3;TREE=V;LWidth=2;" }, { connector_type: "Association" },
+      { path: "1000:-700;" }, { path: "1000:-700;1100:-700;" }
+    ]
+    controls.each do |override|
+      connector = nil
+      render_qea_route(**stored_ray.merge(override)) do |document|
+        connector = document.diagrams.first.connectors.first
+      end
+
+      expect([connector.source_anchor.x, connector.source_anchor.y]).to eq([1091, 600]), override.inspect
+      expect([connector.target_anchor.x, connector.target_anchor.y]).to eq([706, 612]), override.inspect
+    end
+    connector = nil
+    render_qea_route(**stored_ray.merge(geometry: "EDGE=4;SX=0;SY=24;")) do |document|
+      connector = document.diagrams.first.connectors.first
+    end
+    expect([connector.source_anchor.x, connector.source_anchor.y]).to eq([1091, 600])
+    expect([connector.target_anchor.x, connector.target_anchor.y]).to eq([706, 582])
+    expect(connector.target_port).to be_nil
+  end
+
+  it "keeps ray origins when the boxes overlap" do
+    connector = nil
+    render_qea_route(**stored_ray.merge(target: [1000, 532, 212, 125])) do |document|
+      connector = document.diagrams.first.connectors.first
+    end
+
+    expect([connector.source_anchor.x, connector.source_anchor.y]).to eq([1091, 600])
+    expect([connector.target_anchor.x, connector.target_anchor.y]).to eq([1106, 624])
+  end
+
+  it "keeps origins when the stored edge faces away from the other box" do
+    connector = nil
+    render_qea_route(**stored_ray.merge(source: [600, 520, 212, 125],
+                                        target: [982, 532, 219, 88])) do |document|
+      connector = document.diagrams.first.connectors.first
+    end
+    expect([connector.source_anchor.x, connector.source_anchor.y]).to eq([706, 606])
+    expect([connector.target_anchor.x, connector.target_anchor.y]).to eq([1091, 606])
+
+    render_qea_route(**stored_ray.merge(source: [100, 100, 100, 80],
+                                        target: [100, 300, 100, 80],
+                                        geometry: "EDGE=1;SX=1;SY=20;EX=1;EY=20;")) do |document|
+      connector = document.diagrams.first.connectors.first
+    end
+    expect([connector.source_anchor.x, connector.source_anchor.y]).to eq([151, 160])
+    expect([connector.target_anchor.x, connector.target_anchor.y]).to eq([151, 360])
+  end
 end
