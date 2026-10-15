@@ -79,7 +79,7 @@ module Ea
           # Width-0 vertical trees dock on the box edges themselves (no outline).
           def flush_width_zero_tree?(link_row)
             style = DiagramStyleParser.parse(link_row.style)
-            style[:tree] == "V" && style[:lwidth] == "0"
+            style[:mode] == "3" && style[:tree] == "V" && style[:lwidth] == "0"
           end
 
           def tree_bends_fit?(first, last, source, target)

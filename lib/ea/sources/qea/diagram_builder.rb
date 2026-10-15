@@ -653,7 +653,8 @@ module Ea
             points = tree_route
           elsif %w[Association Aggregation].include?(connector.connector_type) &&
                 edge_out != 2
-            unless preserve_stored_tree?(points, link_row, connector, src, tgt)
+            stored_tree = preserve_stored_tree?(points, link_row, connector, src, tgt)
+            unless stored_tree
               points = facing_edge_route(points, src, tgt)
             end
             # A width-2 Aggregation that keeps its stored bends is
@@ -661,7 +662,7 @@ module Ea
             if connector.connector_type == "Aggregation" &&
                intermediate.any? && points.size >= 4 &&
                (generalization_outline_offset(link_row, points.size) == 1 ||
-                flush_width_zero_tree?(link_row))
+                (stored_tree && flush_width_zero_tree?(link_row)))
               redock_parent_above(points, link_row, source_placement,
                                   target_placement, strict: true)
             end

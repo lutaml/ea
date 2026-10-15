@@ -98,10 +98,29 @@ module Ea
 
         def stroke_outline?(connector, bounds)
           connector.style.to_h[:lwidth] == "2" &&
-            %w[Generalization Aggregation].include?(connector.connector_type) &&
-            bounds.all? { |box| box.width.positive? && box.height.positive? }
+            bounds.all? { |box| box.width.positive? && box.height.positive? } &&
+            outline_connector?(connector, bounds)
         end
         private_class_method :stroke_outline?
+
+        def outline_connector?(connector, bounds)
+          return true if %w[Generalization Aggregation].include?(connector.connector_type)
+
+          return false unless stored_association?(connector)
+
+          # Diagonal Association rounding and tree docks keep their existing rules.
+          pairs = clipped_pairs(bounds, [connector.source_anchor, connector.target_anchor])
+          pairs.first.zip(pairs.last).any? { |first, last| first == last }
+        end
+        private_class_method :outline_connector?
+
+        def stored_association?(connector)
+          style = connector.style.to_h
+          connector.connector_type == "Association" && connector.has_geometry_offsets &&
+            connector.source_port && connector.target_port &&
+            %w[1 3].include?(style[:mode]) && !style[:tree]
+        end
+        private_class_method :stored_association?
 
         def clipped_pairs(bounds, anchors)
           source, target = bounds

@@ -285,6 +285,8 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
   it "keeps other width-0 tree inputs on their existing routes" do
     flattened = [["M 179 231 L 136 110"], ["179 231 170.94 223.25 172.3 212.15 180.36 219.9"]]
     cases = [
+      ["mode 2", { style: "Mode=2;LWidth=0;TREE=V;" }, *flattened],
+      ["no mode", { style: "LWidth=0;TREE=V;" }, *flattened],
       ["width 1", { style: "Mode=3;LWidth=1;TREE=V;" }, *flattened],
       ["width 3", { style: "Mode=3;LWidth=3;TREE=V;" }, *flattened],
       ["no width", { style: "Mode=3;TREE=V;" }, *flattened],
