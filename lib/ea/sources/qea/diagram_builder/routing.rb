@@ -39,23 +39,28 @@ module Ea
           # the bend heights. Returns nil unless the trunk sits strictly
           # inside the open gap and each bend lies inside its own box.
           def horizontal_tree_route(points, link_row, connector, src, tgt)
-            return nil unless points.size == 4 &&
-                              %w[Generalization Aggregation].include?(connector.connector_type)
+            return nil unless points.size == 4 && horizontal_tree_style?(link_row, connector)
 
-            style = DiagramStyleParser.parse(link_row.style)
-            return nil unless style[:tree] == "H" && style[:lwidth] == "2" && style[:mode] == "3"
-
-            first, last = points[1], points[2]
-            return nil unless first[0] == last[0] && first[1] != last[1]
-            return nil unless inside_vertical_span?(first[1], src) && inside_vertical_span?(last[1], tgt)
-
+            first, last = points.values_at(1, 2)
             src_x, tgt_x = facing_outline_xs(src, tgt)
-            return nil unless src_x && first[0] > [src_x, tgt_x].min && first[0] < [src_x, tgt_x].max
+            return nil unless src_x && trunk_in_gap?(first, last, src_x, tgt_x)
+            return nil unless inside_height?(first[1], src) && inside_height?(last[1], tgt)
 
             [[src_x, first[1]], first, last, [tgt_x, last[1]]]
           end
 
-          def inside_vertical_span?(height, bounds)
+          def horizontal_tree_style?(link_row, connector)
+            style = DiagramStyleParser.parse(link_row.style)
+            %w[Generalization Aggregation].include?(connector.connector_type) &&
+              style[:tree] == "H" && style[:lwidth] == "2" && style[:mode] == "3"
+          end
+
+          def trunk_in_gap?(first, last, src_x, tgt_x)
+            first[0] == last[0] && first[1] != last[1] &&
+              first[0] > [src_x, tgt_x].min && first[0] < [src_x, tgt_x].max
+          end
+
+          def inside_height?(height, bounds)
             height > bounds.y && height < bounds.y + bounds.height
           end
 
