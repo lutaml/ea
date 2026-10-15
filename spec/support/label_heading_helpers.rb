@@ -47,4 +47,12 @@ module LabelHeadingHelpers
       [node.text, [node["x"].to_f, node["y"].to_f]]
     end
   end
+
+  def clipped_target_connector(stored_target_y)
+    build_heading_connector(
+      points: [[984, 188], [876, stored_target_y]],
+      anchors: [[1044, 190], [788, 194]],
+      box: { "ox" => 5, "oy" => 7, "alignment" => 1 }
+    )
+  end
 end

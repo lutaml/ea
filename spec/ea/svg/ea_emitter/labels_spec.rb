@@ -331,14 +331,6 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
           "target" => Ea::Model::Bounds.new(x: 700, y: 144, width: 176, height: 100) }
       end
 
-      def clipped_target_connector(stored_target_y)
-        build_heading_connector(
-          points: [[984, 188], [876, stored_target_y]],
-          anchors: [[1044, 190], [788, 194]],
-          box: { "ox" => 5, "oy" => 7, "alignment" => 1 }
-        )
-      end
-
       it "seats the target role at the stored cardinal leg's corner" do
         positions = heading_positions(clipped_target_connector(188), target_bounds)
 
