@@ -167,6 +167,137 @@ RSpec.describe Ea::Svg::EaEmitter::Label::EndLabel do
     expect(out.join).to include("+things")
   end
 
+  describe "stored directional source seats" do
+    include LabelUpwardPropertyHelpers
+
+    let(:traffic) do
+      { role: "trafficVolumeAttribute", anchor: [191, 432],
+        box: { "ox" => -9, "oy" => -2, "alignment" => 1 } }
+    end
+
+    it "seats the direct role at its published reference position" do
+      positions = upward_property_positions(traffic)
+
+      expect(positions["+trafficVolumeAttribute"]).to eq([20, 424])
+      expect(positions["«property»"]).to eq([47, 436])
+    end
+
+    it "seats held-out roles on different stored tree layouts" do
+      records = [
+        { role: "consBaseAttribute", anchor: [161, 343],
+          box: { "ox" => 16, "oy" => -25, "alignment" => 1 }, expected: [34, 312] },
+        { role: "tunFunctionalAttribute", anchor: [1242, 297],
+          box: { "ox" => 161, "oy" => -15, "alignment" => 1 }, expected: [1238, 276] }
+      ]
+      records.each do |record|
+        expect(upward_property_positions(record)["+#{record[:role]}"]).to eq(record[:expected])
+      end
+    end
+
+    it "seats leftward property roles without moving their multiplicity" do
+      records = [
+        { role: "auxiliaryTrafficArea", anchor: [723, 470],
+          box: { "ox" => 0, "oy" => 0, "alignment" => 1 }, expected: [570, 463] },
+        { role: "cityObjectMember", anchor: [349, 280],
+          box: { "ox" => 1, "oy" => 0, "alignment" => 1 }, expected: [207, 273] },
+        { role: "reliefComponent", anchor: [425, 332],
+          box: { "ox" => 0, "oy" => 0, "alignment" => 1 }, expected: [286, 325] }
+      ]
+      records.each do |record|
+        positions = upward_property_positions(record, heading: [-100, 0], style: { mode: "3", lwidth: "0" })
+
+        expect(positions["+#{record[:role]}"]).to eq(record[:expected])
+        expect(positions["0..1"]).to eq([record[:anchor][0] + record[:box]["ox"], record[:anchor][1]])
+      end
+    end
+
+    it "seats leftward multiplicity from zero and explicit stored offsets" do
+      records = [
+        { role: "auxiliaryTrafficArea", anchor: [723, 470], mult: "0..*",
+          box: { "ox" => 0, "oy" => 0, "alignment" => 1 },
+          mult_box: { "ox" => 0, "oy" => 0, "alignment" => 1 },
+          style: { mode: "3", lwidth: "0" }, expected: [706, 485] },
+        { role: "tranFacilityIdAttribute", anchor: [801, 485], mult: "0..1",
+          box: { "ox" => 0, "oy" => 0, "alignment" => 1 },
+          mult_box: { "ox" => -22, "oy" => -24, "alignment" => 0 },
+          style: { mode: "3", lwidth: "2", tree: "H" }, expected: [760, 476] }
+      ]
+      records.each do |record|
+        positions = upward_property_positions(
+          record, heading: [-100, 0], style: record[:style], mult_box: record[:mult_box]
+        )
+
+        expect(positions[record[:mult]]).to eq(record[:expected])
+      end
+    end
+
+    it "seats downward multiplicities with property and plain association roles" do
+      records = [
+        { role: "interiorFurniture", anchor: [348, 508], mult: "0..*",
+          box: { "ox" => 0, "oy" => 0, "alignment" => 1 },
+          mult_box: { "ox" => 0, "oy" => 0, "alignment" => 1 }, expected: [356, 523] },
+        { role: "interiorFurniture", anchor: [156, 610], mult: "0..*",
+          box: { "ox" => 0, "oy" => 0, "alignment" => 1 },
+          mult_box: { "ox" => 12, "oy" => -1, "alignment" => 1 }, expected: [176, 624] },
+        { role: "role a", anchor: [72, 80], mult: "0..1", stereotype: nil,
+          box: { "ox" => 0, "oy" => 0, "alignment" => 1 },
+          mult_box: { "ox" => 0, "oy" => 2, "alignment" => 1 }, expected: [80, 97] }
+      ]
+      records.each do |record|
+        positions = upward_property_positions(
+          record, heading: [0, 100], mult_box: record[:mult_box],
+                  stereotype: record.fetch(:stereotype, "property")
+        )
+
+        expect(positions[record[:mult]]).to eq(record[:expected])
+        expect(positions["+#{record[:role]}"]).to eq(record[:anchor])
+      end
+    end
+
+    it "preserves custom fonts and presentation for directional multiplicities" do
+      [{ family: "Carlito" }, { size: 9 }, { mult_box: { "ox" => 4, "oy" => 5, "rotation" => 90 } }].each do |options|
+        positions = upward_property_positions(
+          traffic, heading: [0, 100], mult_box: { "ox" => 4, "oy" => 5 }, **options
+        )
+
+        expect(positions["0..1"]).to eq([195, 427])
+      end
+    end
+
+    it "preserves unproven presentation and routing regimes" do
+      [{ stereotype: nil }, { stereotype: "Type" }, { family: "Carlito" },
+       { size: 9 }, { heading: nil }, { heading: [0, 100] },
+       { box: traffic[:box].merge("rotation" => 90) },
+       { box: traffic[:box].merge("bold" => true) },
+       { box: traffic[:box].merge("alignment" => 0) },
+       { style: { lwidth: "0" } }, { style: { lwidth: "2", tree: "OS" } }].each do |options|
+        expect(upward_property_positions(traffic, **options)["+trafficVolumeAttribute"])
+          .to eq([182, 434])
+      end
+    end
+
+    it "preserves the existing rightward role seat" do
+      expect(upward_property_positions(traffic, heading: [100, 0])["+trafficVolumeAttribute"])
+        .to eq([185, 423])
+    end
+
+    it "preserves unproven leftward styles and non-property roles" do
+      [{ style: { mode: "1", lwidth: "2" } }, { style: { mode: "3", lwidth: "0", tree: "V" } },
+       { style: { lwidth: "0" }, stereotype: nil }].each do |options|
+        positions = upward_property_positions(traffic, heading: [-100, 0], **options)
+
+        expect(positions["+trafficVolumeAttribute"]).to eq([182, 434])
+        expect(positions["0..1"]).to eq([182, 434])
+      end
+    end
+
+    it "preserves unboxed roles and unsupported measured glyphs" do
+      expect(upward_property_positions(traffic, box: nil)).not_to have_key("+trafficVolumeAttribute")
+      traffic[:role] = "traffic☃"
+      expect(upward_property_positions(traffic)["+traffic☃"]).to eq([182, 434])
+    end
+  end
+
   shared_context "stored end-label geometry" do
     let(:association) do
       Ea::Model::Association.new(

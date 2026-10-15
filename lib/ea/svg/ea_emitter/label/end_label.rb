@@ -89,8 +89,10 @@ module Ea
             stereo = stereo.nil? || stereo.empty? ? nil : "«#{stereo}»"
             direction = leg_direction(end_kind, heading)
             if direction && !(tree && zero_offset?(text_box, mult_box))
-              text_pos = role_seat(direction, anchor, text_box, role) || text_pos
-              mult_pos = mult_seat(direction, anchor, mult_box) || mult_pos
+              text_pos = source_property_seat(connector, direction, anchor, text_box, role) ||
+                         role_seat(direction, anchor, text_box, role) || text_pos
+              mult_pos = directional_multiplicity(connector, direction, anchor, mult_box, mult) ||
+                         mult_seat(direction, anchor, mult_box) || mult_pos
             end
 
             build_texts(role:, mult:, standalone:,
@@ -154,12 +156,14 @@ module Ea
             dx, dy = heading
             return :up if dx.zero? && dy.negative?
             return :right if dy.zero? && dx.positive?
+            return :left if dy.zero? && dx.negative?
+            return :down if dx.zero? && dy.positive?
 
             nil
           end
 
           # Role text on a rightward leg is left-aligned at the corner,
-          # 7px above it. Upward legs keep the plain role offset.
+          # 7px above it.
           def role_seat(direction, anchor, box, role)
             return nil unless direction == :right
             return nil if box.nil? || role_empty?(role)
@@ -169,7 +173,55 @@ module Ea
             [x + SEAT_X_INSET, y - 7]
           end
 
+          # A centered property cluster on an upward or leftward source leg ends
+          # 60px left of the stored corner; the glyph width sets its start.
+          def source_property_seat(connector, direction, anchor, box, role)
+            return nil unless %i[up left].include?(direction) && centered_property_box?(box)
+            return nil unless source_property_font?(connector, direction)
+
+            width = Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
+            return nil unless width
+
+            x, y = seat_corner(anchor, box)
+            [x - 60 - width, y - (direction == :up ? 6 : 7)]
+          end
+
+          def centered_property_box?(box)
+            box && box["alignment"] == 1 && default_presentation?(box)
+          end
+
+          def source_property_font?(connector, direction)
+            font_family.to_s.casecmp("Cambria").zero? &&
+              property_label?(connector, :source) &&
+              source_property_route?(connector.style.to_h, direction)
+          end
+
+          def source_property_route?(style, direction)
+            if direction == :left
+              return style[:mode] == "3" && %w[0 2].include?(style[:lwidth]) &&
+                     [nil, "H", "LV"].include?(style[:tree])
+            end
+
+            style[:lwidth] == "2" && style[:tree] != "OS"
+          end
+
+          def directional_multiplicity(connector, direction, anchor, box, mult)
+            return nil unless cambria_box?(box)
+
+            x, y = seat_corner(anchor, box)
+            return [x + 8, y + 15] if direction == :down
+            return nil unless direction == :left && source_property_font?(connector, direction)
+
+            width = Ea::Fonts::Metrics.text_length(mult, font_size, family: font_family)
+            [x - width - 3, y + 15] if width
+          end
+
+          def cambria_box?(box)
+            box && default_presentation?(box) && font_family.to_s.casecmp("Cambria").zero?
+          end
+
           def mult_seat(direction, anchor, box)
+            return nil unless %i[up right].include?(direction)
             return nil if box.nil? || stored_offsets_zero?(box)
             return nil unless default_presentation?(box)
 
