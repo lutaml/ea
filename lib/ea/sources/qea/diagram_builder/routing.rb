@@ -200,11 +200,13 @@ module Ea
 
           # A valid lateral corner joins one vertical leg and one horizontal
           # leg. Keep it even when the boxes also admit a shorter direct route.
-          def stored_lateral_route(link_row, connector, source, target)
+          # ported: both ends carry explicit SX/SY and EX/EY offsets. An
+          # untyped corner without them may be an authored diagonal.
+          def stored_lateral_route(link_row, connector, source, target, ported: false)
             return nil unless %w[Aggregation Association].include?(connector.connector_type)
 
             style = DiagramStyleParser.parse(link_row.style)
-            return nil unless stored_lateral_style?(style, connector)
+            return nil unless stored_lateral_style?(style, connector, ported)
 
             corner = stored_lateral_corner(link_row)
             corner && lateral_corner_route(style, corner, source, target)
@@ -230,11 +232,11 @@ module Ea
             intermediate_waypoints(link_row).first
           end
 
-          def stored_lateral_style?(style, connector)
+          def stored_lateral_style?(style, connector, ported)
             return false unless style[:mode] == "3" && %w[0 2].include?(style[:lwidth])
 
             %w[LH LV].include?(style[:tree]) ||
-              (style[:tree].nil? && connector.connector_type == "Association")
+              (style[:tree].nil? && ported && connector.connector_type == "Association")
           end
 
           def horizontal_corner?(corner, source, target)

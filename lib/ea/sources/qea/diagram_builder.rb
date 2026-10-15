@@ -662,7 +662,8 @@ module Ea
           src = bounds_from_rect(source_placement)
           tgt = bounds_from_rect(target_placement)
           tree_route = stored_square_route(link_row, connector, src, tgt) ||
-                       stored_lateral_route(link_row, connector, src, tgt) ||
+                       stored_lateral_route(link_row, connector, src, tgt,
+                                            ported: source_port && target_port) ||
                        horizontal_tree_route(points, link_row, connector, src, tgt)
           if tree_route
             points = tree_route
