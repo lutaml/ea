@@ -4,7 +4,7 @@ module Ea
   module Sources
     module Qea
       class DiagramBuilder
-        # Source-led routes for auto-routed associations with unequal end offsets.
+        # Stored mathematical docking for auto-routed associations.
         module AutoRouting
           private
 
@@ -20,6 +20,53 @@ module Ea
             model.waypoints = origins.map { |point| Ea::Model::Waypoint.new(position: point) }
             model.style[:overlap_ray] = true
             model
+          end
+
+          # When the shared row misses the target, retain the physical ports
+          # and let the emitter clip their ray before inserting the elbow.
+          def auto_port_elbow(model, link_row, diagram_row, geom, context)
+            return model if context || !auto_port_elbow_candidate?(model, link_row, geom)
+
+            source, target = stored_ray_boxes(link_row, diagram_row)
+            origins = [stored_ray_origin(source, geom[:sx], geom[:sy]),
+                       stored_ray_origin(target, geom[:ex], geom[:ey])]
+            return model unless auto_port_elbow_origins?(source, target, origins, geom)
+
+            apply_auto_port_elbow(model, origins)
+          end
+
+          def apply_auto_port_elbow(model, origins)
+            model.source_anchor, model.target_anchor = origins
+            model.waypoints = origins.map { |point| Ea::Model::Waypoint.new(position: point) }
+            model.style = model.style.to_h.merge(association_ray_outline: true, auto_port_elbow: true)
+            model
+          end
+
+          def auto_port_elbow_candidate?(model, link_row, geom)
+            auto_port_elbow_model?(model) && link_row.path.to_s.empty? &&
+              source_row_style?(model.style.to_h) && uniform_overlap_offsets?(geom) && geom[:edge] == 4
+          end
+
+          def auto_port_elbow_model?(model)
+            model.connector_type == "Association" && model.has_geometry_offsets &&
+              model.source_anchor && model.target_anchor && model.waypoints.size == 2
+          end
+
+          def auto_port_elbow_origins?(source, target, origins, geom)
+            return false if overlap_origins(source, target, geom)
+            return false unless source_row_faces_target?(source, target, geom[:edge])
+            return false unless origins.first.x == source.x - 1
+            return false if within_height?(origins.first.y, target)
+            return false unless crosses_target_horizontal_edge?(origins, target)
+
+            [source, target].zip(origins).all? { |box, origin| inside_box?(origin, grown_bounds(box, 1)) }
+          end
+
+          def crosses_target_horizontal_edge?(origins, target)
+            outline = grown_bounds(target, 1)
+            edge = Ea::Model::Bounds.new(x: outline.x, width: outline.width, height: 0,
+                                         y: origins.first.y < outline.y ? outline.y : outline.y + outline.height)
+            segment_crosses_box?(*origins, edge)
           end
 
           def source_row_origins(source, target, geom)
