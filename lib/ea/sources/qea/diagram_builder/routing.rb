@@ -113,21 +113,38 @@ module Ea
             return model unless association_ray_candidate?(model, link_row)
 
             source, target = stored_ray_boxes(link_row, diagram_row)
-            origins = association_ray_origins(source, target, geom)
+            origins = association_ray_origins(source, target, geom, model.style.to_h[:lwidth])
             return model unless origins
 
-            model.waypoints = [model.source_port, model.target_port].map do |point|
-              Ea::Model::Waypoint.new(position: point)
-            end
+            model.waypoints = port_waypoints(model)
             model.source_anchor, model.target_anchor = origins
+            model.style = model.style.to_h.merge(stored_association_ray: true, association_ray_outline: true)
             model
           end
 
-          def association_ray_origins(source, target, geom)
+          def port_waypoints(model)
+            [model.source_port, model.target_port].map do |point|
+              Ea::Model::Waypoint.new(position: point)
+            end
+          end
+
+          # Width-2 boxes also own their 1px outer stroke, so a stored
+          # origin on that outline is still inside its box.
+          def association_ray_origins(source, target, geom, width)
+            outline = width == "2" ? 1 : 0
             origins = [stored_ray_origin(source, geom[:sx], geom[:sy]),
                        stored_ray_origin(target, geom[:ex], geom[:ey])]
-            inside = origins.zip([source, target]).all? { |o, b| inside_box?(o, b) }
-            origins if inside && sub_pixel_safe_origins?(origins, [source, target])
+            boxes = [source, target].map { |box| grown_bounds(box, outline) }
+            inside = origins.zip(boxes).all? { |o, b| inside_box?(o, b) }
+            return unless inside && origins.first != origins.last
+
+            origins if width == "2" || sub_pixel_safe_origins?(origins, [source, target] + boxes)
+          end
+
+          def grown_bounds(bounds, amount)
+            Ea::Model::Bounds.new(x: bounds.x - amount, y: bounds.y - amount,
+                                  width: bounds.width + 2 * amount,
+                                  height: bounds.height + 2 * amount)
           end
 
           def association_ray_candidate?(model, link_row)
@@ -141,15 +158,13 @@ module Ea
               %i[direct regenerated].none? { |key| style.key?(key) }
           end
 
-          # Origins are whole pixels while EA's box centers may sit on a
-          # half pixel. An origin on its border then clips differently
+          # Width-0 origins are whole pixels while EA's box centers may sit
+          # on a half pixel. An origin on its border then clips differently
           # unless the line is axis-aligned, which no rounding changes.
           def sub_pixel_safe_origins?(origins, boxes)
             first, last = origins
-            return false if first == last
-
             axis_aligned = first.x == last.x || first.y == last.y
-            axis_aligned || origins.zip(boxes).none? { |point, box| on_border?(point, box) }
+            axis_aligned || origins.none? { |point| boxes.any? { |box| on_border?(point, box) } }
           end
 
           def on_border?(point, bounds)
@@ -352,6 +367,14 @@ module Ea
             route
           end
 
+          # One stored corner that is level with both boxes already is the
+          # route (vertical leg out of the source, horizontal leg into the
+          # target); flattening it to the facing edges would lose it.
+          def level_corner_route?(points, link_row, connector, src, tgt)
+            points.size == 3 && level_entry_style?(link_row, connector) &&
+              !level_entry_point(points[1], src).nil? && !level_entry_point(points[1], tgt).nil?
+          end
+
           def level_entry_style?(link_row, connector)
             style = DiagramStyleParser.parse(link_row.style)
             %w[Generalization Aggregation].include?(connector.connector_type) &&
@@ -419,6 +442,62 @@ module Ea
               [bounds.y, bounds.y + bounds.height].include?(point[1])
           end
 
+          # A width-2 Mode 3 Aggregation without a tree style keeps an authored
+          # orthogonal stair-step of three or more corners. Each end docks on
+          # the 1px outline its adjacent leg points at, from the corner's own
+          # coordinate; any end that cannot do so leaves the route unchanged.
+          def stored_stair_route(link_row, connector, source, target)
+            return nil unless stair_style?(link_row, connector)
+
+            corners = stored_square_corners(link_row)
+            return nil unless corners && corners.size >= 3 && alternating_legs?(corners)
+
+            first = outline_dock(corners[0], corners[1], source)
+            last = outline_dock(corners[-1], corners[-2], target)
+            [first, *corners, last] if first && last
+          end
+
+          def stair_style?(link_row, connector)
+            style = DiagramStyleParser.parse(link_row.style)
+            connector.connector_type == "Aggregation" && style[:mode] == "3" &&
+              style[:lwidth] == "2" && !style.key?(:tree)
+          end
+
+          # Every leg is non-zero and runs along the opposite axis of the last.
+          def alternating_legs?(corners)
+            axes = corners.each_cons(2).map { |from, to| leg_axis(from, to) }
+            axes.none?(&:nil?) && axes.each_cons(2).all? { |a, b| a != b }
+          end
+
+          def leg_axis(from, to)
+            return :vertical if from[0] == to[0] && from[1] != to[1]
+
+            :horizontal if from[1] == to[1] && from[0] != to[0]
+          end
+
+          # The dock runs perpendicular to the corner's own leg.
+          def outline_dock(corner, neighbour, box)
+            if corner[1] == neighbour[1]
+              vertical_outline_dock(corner, box)
+            else
+              horizontal_outline_dock(corner, box)
+            end
+          end
+
+          def vertical_outline_dock(corner, box)
+            x, y = corner
+            return nil unless x.between?(box.x, box.x + box.width) && !within_height?(y, box)
+
+            [x, y < box.y ? box.y - 1 : box.y + box.height + 1]
+          end
+
+          def horizontal_outline_dock(corner, box)
+            x, y = corner
+            return nil unless within_height?(y, box) && !x.between?(box.x, box.x + box.width)
+
+            [x < box.x ? box.x - 1 : box.x + box.width + 1, y]
+          end
+
           # A valid lateral corner joins one vertical leg and one horizontal
           # leg. Keep it even when the boxes also admit a shorter direct route.
           # ported: both ends carry explicit SX/SY and EX/EY offsets. An
@@ -431,6 +510,66 @@ module Ea
 
             corner = stored_lateral_corner(link_row)
             corner && lateral_corner_route(style, corner, source, target)
+          end
+
+          # A horizontal lateral tree with no usable stored corner leaves
+          # the source's top or bottom edge at its center x, turns at the
+          # target's center y and enters the target's facing side edge.
+          # When that y lies inside the source's height the route is one
+          # horizontal line between the facing side edges. Every dock is
+          # flush on its box edge.
+          def derived_lateral_route(link_row, connector, source, target)
+            style = DiagramStyleParser.parse(link_row.style)
+            return nil unless style[:mode] == "3" && style[:tree] == "LH" &&
+                              derived_lateral_path?(connector.connector_type, link_row.path.to_s)
+
+            x = source.x + source.width / 2
+            y = target.y + target.height / 2
+            edge = lateral_target_edge(x, target)
+            return nil unless edge
+
+            if within_height?(y, source)
+              side = target.x > x ? source.x + source.width : source.x
+              [[side, y], [edge, y]] if ((edge - side) * (edge - x)).positive?
+            else
+              [[x, y < source.y ? source.y : source.y + source.height], [x, y], [edge, y]]
+            end
+          end
+
+          # An Association may carry one stored corner that no valid lateral
+          # route accepted; a Generalization derives only from an empty Path.
+          def derived_lateral_path?(connector_type, path)
+            case connector_type
+            when "Association" then path.match?(/\A(?:-?\d+:-?\d+;?)?\z/)
+            when "Generalization" then path.empty?
+            else false
+            end
+          end
+
+          # A derived level line docks flush at its own two ends; anchoring
+          # the ray there keeps the emitter's clip from moving them.
+          def pin_derived_lateral_line(model, link_row, diagram_row, context)
+            style = model.style.to_h
+            return model if context || model.waypoints.size != 2 ||
+                            style[:mode] != "3" || style[:tree] != "LH"
+
+            source, target = stored_ray_boxes(link_row, diagram_row)
+            connector = database.find_connector(link_row.connectorid)
+            line = connector && derived_lateral_route(link_row, connector, source, target)
+            return model unless line && line.size == 2 &&
+                                line == model.waypoints.map { |wp| [wp.position.x, wp.position.y] }
+
+            model.source_anchor, model.target_anchor = line.map { |x, y| Ea::Model::Point.new(x: x, y: y) }
+            model.style = style.merge(derived_lateral_line: true)
+            model
+          end
+
+          # The target side edge a vertical leg at x faces, or nil when x
+          # lies within the target's span.
+          def lateral_target_edge(x_position, target)
+            return target.x if x_position < target.x
+
+            target.x + target.width if x_position > target.x + target.width
           end
 
           # An untyped Mode 3 Association corner takes whichever leg
@@ -613,12 +752,44 @@ module Ea
             model
           end
 
+          # A two-waypoint Mode 3 Aggregation with only a target port draws the
+          # line from the source center to the target's stored ray origin
+          # (center + EX, center - EY), clipped at the outlines; the boundary
+          # port is only the derived crossing of that origin's ray.
+          def correct_partial_port_origins(model, link_row, diagram_row, geom, context)
+            return model if context || !partial_port_origin_candidate?(model, link_row)
+
+            source, target = stored_ray_boxes(link_row, diagram_row)
+            return model unless horizontal_ray_gap?(source, target)
+
+            model.source_anchor = stored_ray_origin(source, 0, 0)
+            model.target_anchor = stored_ray_origin(target, geom[:ex], geom[:ey])
+            model
+          end
+
+          def partial_port_origin_candidate?(model, link_row)
+            style = model.style.to_h
+            model.connector_type == "Aggregation" && model.waypoints.size == 2 &&
+              link_row.path.to_s.empty? && style[:mode] == "3" && style[:lwidth] == "2" &&
+              !style.key?(:tree) &&
+              model.source_port.nil? && model.target_port
+          end
+
           def partial_port_jog_candidate?(model, link_row)
             style = model.style.to_h
             model.connector_type == "Aggregation" &&
-              link_row.path.to_s.empty? && style[:mode] == "3" && style[:lwidth] == "2" &&
-              !style.key?(:tree) && model.source_port.nil? && model.target_port &&
-              model.waypoints.size == 2
+              link_row.path.to_s.empty? && style[:mode] == "3" &&
+              !style.key?(:tree) && model.waypoints.size == 2 &&
+              explicit_port_side?(model, style[:lwidth])
+          end
+
+          # Width 2 keeps the evidenced target-only port; width 0 accepts a
+          # single explicit port at either end.
+          def explicit_port_side?(model, width)
+            ports = [model.source_port, model.target_port]
+            return model.source_port.nil? && !model.target_port.nil? if width == "2"
+
+            width == "0" && ports.compact.size == 1
           end
 
           def computed_jog_candidate?(model, link_row, geom)

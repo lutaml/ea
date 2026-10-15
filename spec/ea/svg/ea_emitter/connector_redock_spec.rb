@@ -333,6 +333,21 @@ RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do # rubocop:disable Metrics/
            )).to eq([[354, 442], [509, 442]])
   end
 
+  it "keeps a produced stored Association ray out of row seating although its port is another row" do
+    fixture = explicit_divider_fixture
+    connector = fixture[:diagram].connectors.first
+    connector.connector_type = "Association"
+    connector.source_port.y = 450
+    connector.style[:stored_association_ray] = true
+    fixture[:drawn_bounds]["t"].y = 387
+    fixture[:divider_y_by_ref]["t"] = 429
+
+    expect(described_class.row_slot_adjust(
+             [[354, 429], [509, 429]], connector, fixture[:diagram],
+             fixture[:model_index], fixture[:drawn_bounds], fixture[:divider_y_by_ref]
+           )).to be_nil
+  end
+
   it "keeps row-slot adjustment when the explicit horizontal dock is not established" do
     fixture = explicit_divider_fixture
     connector = fixture[:diagram].connectors.first
@@ -354,6 +369,18 @@ RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do # rubocop:disable Metrics/
                [[354, 429], [509, 429]], connector, fixture[:diagram],
                fixture[:model_index], fixture[:drawn_bounds], fixture[:divider_y_by_ref]
              )).to eq([[354, 442], [509, 429]])
+    end
+  end
+
+  context "with a horizontal lateral tree pinned on its facing side edges" do
+    it "keeps a producer-derived line flush" do
+      expect(lateral_output("Generalization", true).first).to eq(["M 100 40 L 200 40"])
+      expect(lateral_output("Association", true).first).to eq(["M 100 40 L 200 40"])
+    end
+
+    it "keeps the legacy outline for a naturally pinned model without the producer flag" do
+      expect(lateral_output("Aggregation", false).first).to eq(["M 101 40 L 199 40"])
+      expect(lateral_output("Generalization", false).first).to eq(["M 101 40 L 199 40"])
     end
   end
 end

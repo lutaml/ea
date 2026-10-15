@@ -369,8 +369,6 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
       ["width 0", { style: "Mode=3;LWidth=0;" }, jogged, jog_tip],
       ["tree V", { style: "Mode=3;LWidth=2;TREE=V;" }, jogged, jog_tip],
       ["tree H", { style: "Mode=3;LWidth=2;TREE=H;" }, jogged, jog_tip],
-      ["association", { connector_type: "Association" },
-       [*jogged, "M 318 454 L 324 469 L 330 454"], []],
       ["overlapping boxes", { target: [1100, 352, 312, 465] },
        ["M 239 468 L 174 468 L 174 469"], ["174 469 168 458 180 458"]],
       ["vertical ports", { geometry: "SX=0;SY=-8;EX=0;EY=-196;EDGE=1;" },
@@ -450,7 +448,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     controls = [
       { style: "Mode=1;TREE=LH;LWidth=2;" },
       { style: "Mode=2;TREE=LH;LWidth=2;" },
-      { style: "TREE=LH;LWidth=2;" }, { style: "Mode=3;LWidth=2;" },
+      { style: "TREE=LH;LWidth=2;" },
       { path: "291:-610;300:-610;" }, { path: "291:-500;" },
       { path: "180:-610;" }, { path: "291:-662;" },
       { path: "600:-610;" }, { path: "" }, { path: "291:-610;garbage" },
@@ -492,10 +490,10 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
       .to eq(["M 255 124 L 364 158", "M 195 140 L 364 171"])
   end
 
-  it "keeps untyped Mode 3 corners of other connector types on their old route" do
+  it "keeps an untyped Aggregation corner when it fits both boxes" do
     expect(render_qea_route(**lateral_corner.merge(style: "Mode=3;LWidth=2;")))
-      .to eq(paths: ["M 200 141 L 363 171"],
-             markers: ["200 141 210.74 137.89 219.67 144.62 208.93 147.73"])
+      .to eq(paths: ["M 145 141 L 145 190 L 363 190"],
+             markers: ["145 141 150 151 145 161 140 151"])
   end
 
   let(:offset_line) do
@@ -508,11 +506,59 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     cases = [
       [offset_line, "M 501 143 L 348 143"],
       [offset_line.merge(style: "Mode=3;LWidth=0;"), "M 502 143 L 347 143"],
-      [offset_line.merge(geometry: "SX=-89;SY=-6;EX=43;EY=130;EDGE=2;"), "M 502 143 L 347 142"]
+      [offset_line.merge(geometry: "SX=-89;SY=-6;EX=43;EY=130;EDGE=2;"), "M 501 143 L 348 142"],
+      [offset_line.merge(geometry: "SX=-89;SY=-6;EX=43;EY=130;EDGE=2;", style: "Mode=3;LWidth=0;"),
+       "M 502 143 L 347 142"]
     ]
     cases.each do |input, path|
       expect(render_qea_route(**input)[:paths].first).to eq(path), input.inspect
     end
+  end
+
+  it "accepts a width-2 stored origin on its own box's 1px outer stroke only" do
+    outline = offset_line.merge(geometry: "SX=-89;SY=-6;EX=157;EY=128;EDGE=4;")
+    cases = [
+      outline, outline.merge(style: "Mode=3;LWidth=0;"),
+      outline.merge(geometry: "SX=-89;SY=-6;EX=158;EY=128;EDGE=4;"),
+      outline.merge(geometry: "SX=-89;SY=-6;EX=157;EY=129;EDGE=4;")
+    ]
+    expect(cases.map { |input| render_qea_route(**input)[:paths].first })
+      .to eq(["M 501 144 L 348 144", "M 502 146 L 348 400",
+              "M 502 146 L 349 400", "M 501 143 L 348 143"])
+  end
+
+  it "marks only produced stored Association rays for the emitter" do
+    flags = [offset_line, offset_line.merge(connector_type: "Aggregation"),
+             offset_line.merge(style: "Mode=3;LWidth=1;"),
+             offset_line.merge(path: "300:-120;")].map do |input|
+      connector = nil
+      render_qea_route(**input) { |document| connector = document.diagrams.first.connectors.first }
+      connector.style[:stored_association_ray]
+    end
+
+    expect(flags).to eq([true, nil, nil, nil])
+  end
+
+  let(:border_ray) do
+    { connector_type: "Association", source: [301, 528, 100, 77],
+      target: [295, 394, 136, 77], path: "",
+      geometry: "SX=2;SY=38;EX=-11;EY=-39;EDGE=1;", style: "Mode=3;LWidth=2;" }
+  end
+
+  it "docks a width-2 stored ray with both origins on their borders on the outer stroke" do
+    expect(render_qea_route(**border_ray)[:paths].first).to eq("M 92 173 L 92 118")
+  end
+
+  it "keeps width-0 border origins and unmarked diagonals on their existing route" do
+    controls = [
+      border_ray.merge(style: "Mode=3;LWidth=0;"),
+      border_ray.merge(path: "300:-120;"),
+      border_ray.merge(geometry: "EDGE=1;"),
+      border_ray.merge(style: "Mode=2;LWidth=2;")
+    ]
+    expected = ["M 92 174 L 92 40", "M 93 174 L 40 -234 L 92 117",
+                "M 94 174 L 99 117", "M 92 174 L 92 40"]
+    expect(controls.map { |input| render_qea_route(**input)[:paths].first }).to eq(expected)
   end
 
   it "keeps other types, styles and unusable origins on their existing route" do
@@ -582,6 +628,41 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     end
     expect(render_qea_route(**square_corner.merge(style: "Mode=1;TREE=OS;LWidth=2;"))[:paths].first)
       .to eq("M 295 156 L 135 269")
+  end
+
+  let(:derived_lateral) do
+    { connector_type: "Association", source: [141, 689, 100, 80], target: [370, 676, 269, 200],
+      path: "", geometry: "EDGE=4;SX=49;SY=17;EX=0;EY=0;", style: "Mode=3;TREE=LH;LWidth=2;" }
+  end
+  let(:level_lateral) do
+    { connector_type: "Generalization", source: [22, 210, 196, 80], target: [330, 10, 287, 465],
+      path: "", geometry: "SX=0;SY=0;EX=-11;EY=3;EDGE=2;", style: "Mode=3;TREE=LH;LWidth=2;" }
+  end
+
+  it "derives the lateral corner from the source center x and target center y without a stored corner" do
+    {
+      "empty Path" => [derived_lateral, "M 85 133 L 85 140 L 264 140"],
+      "rejected stored corner" => [derived_lateral.merge(path: "928:-725;"), "M 85 133 L 85 140 L 264 140"],
+      "level Generalization" => [level_lateral, "M 231 272 L 343 272"],
+      "level width-0 Association" => [level_lateral.merge(connector_type: "Association",
+                                                          style: "Mode=3;TREE=LH;LWidth=0;"),
+                                      "M 231 272 L 343 272"]
+    }.each do |name, (input, path)|
+      expect(render_qea_route(**input)[:paths].first).to eq(path), name
+    end
+  end
+
+  it "keeps other lateral inputs on their existing routes" do
+    {
+      "Aggregation" => [derived_lateral.merge(connector_type: "Aggregation"), "M 136 110 L 263 124"],
+      "Generalization corner" => [level_lateral.merge(path: "500:-100;"), "M 231 130 L 513 130 L 513 40"],
+      "LV" => [derived_lateral.merge(style: "Mode=3;TREE=LV;LWidth=2;"), "M 135 110 L 264 124"],
+      "Mode 2" => [derived_lateral.merge(style: "Mode=2;TREE=LH;LWidth=2;"), "M 135 110 L 264 124"],
+      "source center inside target span" => [derived_lateral.merge(target: [170, 676, 269, 200]),
+                                             "M 135 110 L 64 77"]
+    }.each do |name, (input, path)|
+      expect(render_qea_route(**input)[:paths].first).to eq(path), name
+    end
   end
 
   let(:stored_ray) do
