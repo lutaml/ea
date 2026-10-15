@@ -345,7 +345,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     duplicated = ["M 203 131 L 305 131 L 305 131"]
     cases = [
       ["stored duplicate path", { path: "570:-111;570:-111;" },
-       ["M 203 131 L 305 131 L 305 131 L 305 131"], []],
+       ["M 204 131 L 305 131 L 305 131 L 305 131"], []],
       ["mode 2", { style: "Mode=2;LWidth=2;" }, duplicated, []],
       ["width 0", { style: "Mode=3;LWidth=0;" }, duplicated, []],
       ["tree V", { style: "Mode=3;LWidth=2;TREE=V;" }, duplicated, []],
@@ -365,7 +365,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     jog_tip = ["324 469 318 458 330 458"]
     cases = [
       ["stored 1px jog", { path: "1250:-780;1250:-781;" },
-       ["M 239 468 L 324 468 L 324 469 L 324 469"], []],
+       ["M 240 468 L 324 468 L 324 469 L 324 469"], []],
       ["mode 2", { style: "Mode=2;LWidth=2;" }, jogged, jog_tip],
       ["width 0", { style: "Mode=3;LWidth=0;" }, jogged, jog_tip],
       ["tree V", { style: "Mode=3;LWidth=2;TREE=V;" }, jogged, jog_tip],
@@ -469,6 +469,34 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     expect(render_qea_route(**lateral_corner.merge(connector_type: "Generalization")))
       .to eq(paths: ["M 147 40 L 145 190 L 364 190"],
              markers: ["364 190 353 196 353 184"])
+  end
+
+  it "docks an untyped Mode 3 Association corner on the outline of each leg's box" do
+    association = lateral_corner.merge(connector_type: "Association", style: "Mode=3;LWidth=2;",
+                                       geometry: "SX=2;SY=41;EX=3;EY=-20;EDGE=3;")
+    cases = [
+      [association, "M 145 141 L 145 190 L 363 190"],
+      [association.merge(style: "Mode=3;LWidth=0;"), "M 145 140 L 145 190 L 364 190"],
+      [association.merge(source: [1121, 1514, 197, 80], target: [741, 963, 396, 261],
+                         path: "1219:-1093;"), "M 513 590 L 513 170 L 432 170"]
+    ]
+    cases.each do |input, path|
+      expect(render_qea_route(**input)[:paths].first).to eq(path), input.inspect
+    end
+  end
+
+  it "keeps an untyped Association corner without stored port offsets on its authored route" do
+    zero = lateral_corner.merge(connector_type: "Association", style: "Mode=3;LWidth=2;",
+                                geometry: "SX=0;SY=0;EX=0;EY=0;EDGE=3;")
+    one_end = zero.merge(geometry: "SX=2;SY=41;EX=0;EY=0;EDGE=3;")
+    expect([zero, one_end].map { |input| render_qea_route(**input)[:paths].first })
+      .to eq(["M 255 124 L 364 158", "M 195 140 L 364 171"])
+  end
+
+  it "keeps untyped Mode 3 corners of other connector types on their old route" do
+    expect(render_qea_route(**lateral_corner.merge(style: "Mode=3;LWidth=2;")))
+      .to eq(paths: ["M 200 141 L 363 171"],
+             markers: ["200 141 210.74 137.89 219.67 144.62 208.93 147.73"])
   end
 
   let(:square_corner) do

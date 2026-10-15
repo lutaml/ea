@@ -97,7 +97,7 @@ module Ea
                              mult_box: tgt_mb,
                              anchor: target_pt, connector: connector,
                              end_kind: :target, tree: tree && tree[:target],
-                             heading: stored_tgt && leg_heading(points.reverse),
+                             heading: stored_tgt && target_heading(connector, points),
                              stored_labels: stored_labels).each { |t| texts << t }
           texts
         end
@@ -124,6 +124,19 @@ module Ea
           return face if face && face.zip(heading).any? { |axis, delta| (axis * delta).positive? }
 
           stored_upward_heading(connector, heading)
+        end
+
+        # A target dock that clips an axis-aligned stored leg into a slight
+        # diagonal keeps the stored leg's direction.
+        def target_heading(connector, points)
+          heading = leg_heading(points.reverse)
+          return heading unless points.size == 2 && heading.none?(&:zero?)
+
+          stored = waypoint_pairs(connector)
+          return heading unless stored.size == 2
+
+          original = leg_heading(stored.reverse)
+          original.any?(&:zero?) ? original : heading
         end
 
         def stored_upward_heading(connector, heading)

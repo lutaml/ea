@@ -115,6 +115,85 @@ module Ea
                                  y: bounds.y + bounds.height / 2 - y_offset.to_i)
           end
 
+          # A vertical tree stores its trunk bend twice when the parent sits
+          # directly above; EA draws that as one bend.
+          def drop_zero_length_tree_segments(points, link_row)
+            return points unless points.size == 4 && points[1] == points[2] &&
+                                 DiagramStyleParser.parse(link_row.style)[:tree] == "V"
+
+            points.values_at(0, 1, 3)
+          end
+
+          # A stored vertical tree trunk docks both ends on the box edges that
+          # face its bends, at the adjacent bend's x: Aggregations without
+          # geometry offsets whose child sits below, and flush Associations
+          # whose parent sits above. Other shapes keep their stored docks.
+          def redock_vertical_tree_trunk(points, link_row, connector, source_placement, target_placement)
+            style = DiagramStyleParser.parse(link_row.style)
+            return unless points.size == 4 && style[:tree] == "V"
+
+            case connector.connector_type
+            when "Aggregation"
+              return if geometry_has_offsets?(link_row.geometry)
+
+              redock_child_below(points, bounds_from_rect(source_placement), bounds_from_rect(target_placement))
+            when "Association"
+              return unless style[:lwidth] == "0"
+
+              redock_parent_above(points, link_row, source_placement, target_placement, strict: true)
+            end
+          end
+
+          def redock_child_below(points, src_b, tgt_b)
+            first_bend, last_bend = points.values_at(1, -2)
+            source_y = src_b.y + src_b.height
+            return points unless source_y <= tgt_b.y && first_bend[1] > source_y && last_bend[1] < tgt_b.y
+
+            points[0] = [clamp_to_span(first_bend[0], src_b), source_y]
+            points[-1] = [clamp_to_span(last_bend[0], tgt_b), tgt_b.y]
+            points
+          end
+
+          def clamp_to_span(position, bounds)
+            position.clamp(bounds.x, bounds.x + bounds.width)
+          end
+
+          # A stored-Path Mode 3 width-2 end whose adjacent bend lies level
+          # with its box (inside the box's span on one axis, outside on the
+          # other) enters the box orthogonally on the outer outline at that
+          # bend's coordinate. Bends that are not level keep the port and
+          # every authored corner stays.
+          def level_entry_route(points, link_row, connector, src, tgt)
+            return points unless points.size >= 3 && level_entry_style?(link_row, connector)
+
+            route = points.dup
+            first = level_entry_point(route[1], src)
+            last = level_entry_point(route[-2], tgt)
+            route[0] = first if first
+            route[-1] = last if last
+            route
+          end
+
+          def level_entry_style?(link_row, connector)
+            style = DiagramStyleParser.parse(link_row.style)
+            %w[Generalization Aggregation].include?(connector.connector_type) &&
+              style[:mode] == "3" && style[:lwidth] == "2" && !style.key?(:tree)
+          end
+
+          def level_entry_point(bend, box)
+            level_y = bend[1] > box.y && bend[1] < box.y + box.height
+            level_x = bend[0] > box.x && bend[0] < box.x + box.width
+            if level_y && outside_span?(bend[0], box.x, box.width)
+              [bend[0] < box.x ? box.x - 1 : box.x + box.width + 1, bend[1]]
+            elsif level_x && outside_span?(bend[1], box.y, box.height)
+              [bend[0], bend[1] < box.y ? box.y - 1 : box.y + box.height + 1]
+            end
+          end
+
+          def outside_span?(value, start, length)
+            value < start || value > start + length
+          end
+
           # Square routing keeps the stored orthogonal trunk, even when a
           # shorter facing-edge route exists between the same boxes.
           def stored_square_route(link_row, connector, source, target)
@@ -164,19 +243,29 @@ module Ea
 
           # A valid lateral corner joins one vertical leg and one horizontal
           # leg. Keep it even when the boxes also admit a shorter direct route.
-          def stored_lateral_route(link_row, connector, source, target)
+          # ported: both ends carry explicit SX/SY and EX/EY offsets. An
+          # untyped corner without them may be an authored diagonal.
+          def stored_lateral_route(link_row, connector, source, target, ported: false)
             return nil unless %w[Aggregation Association].include?(connector.connector_type)
 
             style = DiagramStyleParser.parse(link_row.style)
-            return nil unless stored_lateral_style?(style)
+            return nil unless stored_lateral_style?(style, connector, ported)
 
             corner = stored_lateral_corner(link_row)
-            return nil unless corner
+            corner && lateral_corner_route(style, corner, source, target)
+          end
 
-            if style[:tree] == "LH"
-              horizontal_corner_route(corner, source, target)
+          # An untyped Mode 3 Association corner takes whichever leg
+          # orientation its position fits; width-2 docks sit on the 1px
+          # outer outline.
+          def lateral_corner_route(style, corner, source, target)
+            case style[:tree]
+            when "LH" then horizontal_corner_route(corner, source, target)
+            when "LV" then vertical_corner_route(corner, source, target)
             else
-              vertical_corner_route(corner, source, target)
+              outline = style[:lwidth] == "2" ? 1 : 0
+              horizontal_corner_route(corner, source, target, outline) ||
+                vertical_corner_route(corner, source, target, outline)
             end
           end
 
@@ -186,8 +275,11 @@ module Ea
             intermediate_waypoints(link_row).first
           end
 
-          def stored_lateral_style?(style)
-            style[:mode] == "3" && %w[0 2].include?(style[:lwidth]) && %w[LH LV].include?(style[:tree])
+          def stored_lateral_style?(style, connector, ported)
+            return false unless style[:mode] == "3" && %w[0 2].include?(style[:lwidth])
+
+            %w[LH LV].include?(style[:tree]) ||
+              (style[:tree].nil? && ported && connector.connector_type == "Association")
           end
 
           def horizontal_corner?(corner, source, target)
@@ -195,13 +287,13 @@ module Ea
               !within_height?(corner[1], source) && !within_horizontal_span?(corner, target)
           end
 
-          def horizontal_corner_route(corner, source, target)
+          def horizontal_corner_route(corner, source, target, outline = 0)
             return nil unless horizontal_corner?(corner, source, target)
 
             x, y = corner
 
-            source_y = y < source.y ? source.y : source.y + source.height
-            target_x = x < target.x ? target.x : target.x + target.width
+            source_y = y < source.y ? source.y - outline : source.y + source.height + outline
+            target_x = x < target.x ? target.x - outline : target.x + target.width + outline
             [[x, source_y], corner, [target_x, y]]
           end
 
@@ -210,13 +302,13 @@ module Ea
               !within_horizontal_span?(corner, source) && !within_height?(corner[1], target)
           end
 
-          def vertical_corner_route(corner, source, target)
+          def vertical_corner_route(corner, source, target, outline = 0)
             return nil unless vertical_corner?(corner, source, target)
 
             x, y = corner
 
-            source_x = x < source.x ? source.x : source.x + source.width
-            target_y = y < target.y ? target.y : target.y + target.height
+            source_x = x < source.x ? source.x - outline : source.x + source.width + outline
+            target_y = y < target.y ? target.y - outline : target.y + target.height + outline
             [[source_x, y], corner, [x, target_y]]
           end
 

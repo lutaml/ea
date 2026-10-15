@@ -662,7 +662,8 @@ module Ea
           src = bounds_from_rect(source_placement)
           tgt = bounds_from_rect(target_placement)
           tree_route = stored_square_route(link_row, connector, src, tgt) ||
-                       stored_lateral_route(link_row, connector, src, tgt) ||
+                       stored_lateral_route(link_row, connector, src, tgt,
+                                            ported: source_port && target_port) ||
                        horizontal_tree_route(points, link_row, connector, src, tgt)
           if tree_route
             points = tree_route
@@ -681,8 +682,15 @@ module Ea
               redock_parent_above(points, link_row, source_placement,
                                   target_placement, strict: true)
             end
+            if intermediate.any?
+              redock_vertical_tree_trunk(points, link_row, connector, source_placement, target_placement)
+            end
           end
 
+          if intermediate.any? && !tree_route
+            points = level_entry_route(points, link_row, connector, src, tgt)
+          end
+          points = drop_zero_length_tree_segments(points, link_row)
           points.map do |x, y|
             Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y))
           end

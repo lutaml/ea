@@ -22,6 +22,10 @@ module Ea
           SEAT_FONT_SIZE = 7
           SEAT_X_INSET = 3
           SEAT_STEREOTYPE_GAP = 12
+          # EA keeps an upward property seat's left edge at diagram x >= 3;
+          # the stereotype line moves with the role. Measured only for the
+          # default Cambria 7pt boxed cluster.
+          MIN_ROLE_X = 3
 
           attr_reader :canvas, :model_index, :document, :theme,
                       :font_family, :font_size, :font_unit
@@ -93,7 +97,8 @@ module Ea
               mult_pos = directional_multiplicity(connector, direction, anchor, mult_box, mult) ||
                          mult_seat(direction, anchor, mult_box) || mult_pos
             elsif end_kind == :target && !(tree && zero_offset?(text_box, mult_box))
-              text_pos = target_upward_role(connector, heading, anchor, text_box, role) || text_pos
+              text_pos = target_vertical_role(connector, heading, anchor, text_box, role) ||
+                         target_rightward_role(heading, anchor, text_box, role) || text_pos
               mult_pos = target_multiplicity_seat(heading, anchor, mult_box) || mult_pos
             end
 
@@ -187,7 +192,9 @@ module Ea
 
             x, y = seat_corner(anchor, box)
             inset, baseline = property_role_offsets(direction)
-            [x - inset - width, y + baseline]
+            left = x - inset - width
+            left = [left, MIN_ROLE_X].max if direction == :up
+            [left, y + baseline]
           end
 
           def plain_upward_seat(connector, direction, anchor, box, role)
@@ -203,34 +210,59 @@ module Ea
             [x - SEAT_X_INSET - width, y - 6]
           end
 
-          def target_upward_role(connector, heading, anchor, box, role)
-            return nil unless heading && heading[0].zero? && heading[1].negative?
+          def target_vertical_role(connector, heading, anchor, box, role)
+            return nil unless heading && heading[0].zero? && !heading[1].zero?
 
-            plain_vertical_role(connector, :target_up, anchor, box, role)
+            direction = heading[1].negative? ? :target_up : :target_down
+            plain_vertical_role(connector, direction, anchor, box, role)
+          end
+
+          # A target whose leg arrives from the right seats its role like a
+          # source whose leg leaves to the right.
+          def target_rightward_role(heading, anchor, box, role)
+            return nil unless heading && heading[1].zero? && heading[0].positive?
+            return nil unless seat_font? && cambria_box?(box) && !role_empty?(role)
+
+            x, y = seat_corner(anchor, box)
+            [x + SEAT_X_INSET, y - 7]
           end
 
           def plain_vertical_role(connector, direction, anchor, box, role)
-            return nil unless %i[down target_up].include?(direction) && plain_vertical_box?(box)
+            return nil unless %i[down target_up target_down].include?(direction) &&
+                              plain_vertical_box?(box)
 
             end_kind = direction == :down ? :source : :target
-            return nil unless plain_vertical_connector?(connector, end_kind)
+            return nil unless plain_vertical_connector?(connector, end_kind, direction)
 
             width = Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
             return nil unless width
 
             x, y = seat_corner(anchor, box)
-            [x - width - 8, y + (end_kind == :source ? 15 : -7)]
+            [x - width - 8, y + (direction == :target_up ? -7 : 15)]
           end
 
           def plain_vertical_box?(box)
             seat_font? && cambria_box?(box) && [0, 1].include?(box["alignment"])
           end
 
-          def plain_vertical_connector?(connector, end_kind)
-            style = connector.style.to_h
-            connector.connector_type == "Association" &&
-              connector_source_dest_stereotype(connector, end_kind).empty? &&
-              style[:mode] == "3" && style[:lwidth] == "0" && !style[:tree]
+          # A target leg that runs down seats only on the "LV" tree route
+          # with line width 2; every other vertical seat needs the plain
+          # width-0 route.
+          def plain_vertical_connector?(connector, end_kind, direction)
+            return false unless connector.connector_type == "Association" &&
+                                connector_source_dest_stereotype(connector, end_kind).empty?
+
+            plain_vertical_style?(connector.style.to_h, direction)
+          end
+
+          def plain_vertical_style?(style, direction)
+            return false unless style[:mode] == "3"
+
+            if direction == :target_down
+              style[:lwidth] == "2" && style[:tree] == "LV"
+            else
+              style[:lwidth] == "0" && !style[:tree]
+            end
           end
 
           def plain_role_route?(style)
@@ -261,7 +293,7 @@ module Ea
             case direction
             when :left then left_property_route?(style)
             when :down then downward_property_route?(style)
-            else style[:lwidth] == "2" && style[:tree] != "OS"
+            else %w[0 2].include?(style[:lwidth]) && style[:tree] != "OS"
             end
           end
 
