@@ -262,9 +262,19 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
         label_boxes: source_boxes.merge(target_boxes)
       )
 
-      expect(label_presence_contents(texts)).to eq(["+items", "«property»", "0..*",
-                                     "«property»"])
+      expect(label_presence_contents(texts))
+        .to eq(["+items", "«property»", "0..*", "«property»"])
       expect(texts.last.last).to eq([300 + 12, 200 + 14])
+    end
+
+    it "draws nothing for stereotypes when no end carries data" do
+      texts = label_presence_texts(
+        ends: { source: { stereotype: "property" },
+                target: { stereotype: "property" } },
+        label_boxes: source_boxes.merge(target_boxes)
+      )
+
+      expect(texts).to eq([])
     end
 
     it "draws a role-only end once, without multiplicity" do
