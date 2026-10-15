@@ -65,7 +65,8 @@ module Ea
                                     text_y_offset: 12, line_height: 13).freeze
 
       def initialize(id:, name: nil, font_family: nil, font_size: nil,
-                     label_font_family: nil,
+                     label_font_family: nil, label_font_size: nil,
+                     label_font_size_unit: nil,
                      font_size_unit: "pt", text_weight_normal: 400,
                      text_weight_bold: 700,
                      element_font_size: 9, element_font_unit: "pt",
@@ -83,6 +84,8 @@ module Ea
         @name = name
         @font_family = font_family
         @label_font_family = label_font_family
+        @label_font_size = label_font_size
+        @label_font_size_unit = label_font_size_unit
         @font_size = font_size
         @font_size_unit = font_size_unit
         @text_weight_normal = text_weight_normal
@@ -125,8 +128,18 @@ module Ea
         @label_font_family || font_family
       end
 
+      def label_font_size
+        @label_font_size || font_size
+      end
+
+      def label_font_size_unit
+        @label_font_size_unit || font_size_unit
+      end
+
       def with(**overrides)
-        overrides[:label_font_family] = nil if overrides.key?(:font_family) && !overrides.key?(:label_font_family)
+        clear_label_override(overrides, :font_family, :label_font_family)
+        clear_label_override(overrides, :font_size, :label_font_size)
+        clear_label_override(overrides, :font_size_unit, :label_font_size_unit)
         Definition.new(**to_h.merge(overrides))
       end
 
@@ -159,6 +172,8 @@ module Ea
           font_family: font_family, font_size: font_size,
           font_size_unit: font_size_unit,
           label_font_family: @label_font_family,
+          label_font_size: @label_font_size,
+          label_font_size_unit: @label_font_size_unit,
           text_weight_normal: text_weight_normal,
           text_weight_bold: text_weight_bold,
           element_font_size: element_font_size,
@@ -178,6 +193,12 @@ module Ea
           attribute_spec: attribute_spec, markers: markers,
           package: package, note: note, fills: fills
         }
+      end
+
+      private
+
+      def clear_label_override(overrides, global_key, label_key)
+        overrides[label_key] = nil if overrides.key?(global_key) && !overrides.key?(label_key)
       end
     end
   end

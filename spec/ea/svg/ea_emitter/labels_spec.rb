@@ -122,6 +122,30 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
     end
   end
 
+  describe "label-specific typography" do
+    it "uses theme39 Cambria7pt for both end and midpoint labels" do
+      relationship.name = "association name"
+      diagram.style_ex = "Theme=:39;"
+      labels = described_class.new(diagram, model_index: document.index_by_id, theme: diagram.theme)
+      nodes = Nokogiri::XML("<svg>#{labels.render}</svg>").css("text")
+
+      expect(nodes.map(&:text)).to include("+items", "association name")
+      expect(nodes.map { |node| node["style"] }.uniq).to all(include("font-family:Cambria;", "font-size:7pt;"))
+    end
+
+    it "preserves default, unknown and custom global font fallbacks" do
+      themes = [Ea::Theme::Registry.default, Ea::Theme::Registry.lookup("unknown-label-theme"),
+                Ea::Theme::Definition.new(id: "custom-labels", font_family: "Arial",
+                                          font_size: 11, font_size_unit: "px")]
+      expected = [["Yu Gothic UI", "13px"], ["Yu Gothic UI", "13px"], ["Arial", "11px"]]
+      themes.zip(expected).each do |theme, (family, size)|
+        svg = described_class.new(diagram, model_index: document.index_by_id, theme: theme).render
+
+        expect(svg).to include("font-family:#{family};", "font-size:#{size};")
+      end
+    end
+  end
+
   describe "labels on emitted two-point docks" do
     include LabelAnchorHelpers
 

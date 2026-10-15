@@ -10,7 +10,7 @@ module Ea
     #   name: EA White Theme
     #   font: { family: Carlito, size: 7, unit: pt, weight_normal: 400, ... }
     #   element_font: { size: 9, unit: pt }
-    #   label_font: { family: Cambria }
+    #   label_font: { family: Cambria, size: 7, unit: pt }
     #   colors: { text: "#000000", attribute_text: "#66413F", ... }
     #   strokes: { element_border: 2, connector_line: 2, ... }
     #   text_metrics: { width_factor: 0.65 }
@@ -56,6 +56,8 @@ module Ea
             name: data["name"],
             font_family: font["family"],
             label_font_family: label_font["family"],
+            label_font_size: label_font["size"],
+            label_font_size_unit: label_font["unit"],
             font_size: font["size"],
             font_size_unit: font["unit"] || "pt",
             text_weight_normal: font["weight_normal"] || 400,

@@ -172,7 +172,7 @@ module Ea
             theme: theme,
             font_family: label_font_family,
             font_size: label_font_size,
-            font_unit: theme.font_size_unit
+            font_unit: theme.label_font_size_unit
           )
         end
 
@@ -182,7 +182,7 @@ module Ea
             model_index: model_index,
             font_family: label_font_family,
             font_size: label_font_size,
-            font_unit: theme.font_size_unit
+            font_unit: theme.label_font_size_unit
           )
         end
 
@@ -212,7 +212,7 @@ module Ea
         end
 
         def label_font_size
-          theme.font_size || DEFAULT_SIZE
+          theme.label_font_size || DEFAULT_SIZE
         end
       end
     end
