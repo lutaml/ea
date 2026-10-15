@@ -65,6 +65,7 @@ module Ea
                                     text_y_offset: 12, line_height: 13).freeze
 
       def initialize(id:, name: nil, font_family: nil, font_size: nil,
+                     label_font_family: nil,
                      font_size_unit: "pt", text_weight_normal: 400,
                      text_weight_bold: 700,
                      element_font_size: 9, element_font_unit: "pt",
@@ -81,6 +82,7 @@ module Ea
         @id = id.to_s
         @name = name
         @font_family = font_family
+        @label_font_family = label_font_family
         @font_size = font_size
         @font_size_unit = font_size_unit
         @text_weight_normal = text_weight_normal
@@ -119,7 +121,12 @@ module Ea
         fills[classifier.class.name]
       end
 
+      def label_font_family
+        @label_font_family || font_family
+      end
+
       def with(**overrides)
+        overrides[:label_font_family] = nil if overrides.key?(:font_family) && !overrides.key?(:label_font_family)
         Definition.new(**to_h.merge(overrides))
       end
 
@@ -151,6 +158,7 @@ module Ea
           id: id, name: name,
           font_family: font_family, font_size: font_size,
           font_size_unit: font_size_unit,
+          label_font_family: @label_font_family,
           text_weight_normal: text_weight_normal,
           text_weight_bold: text_weight_bold,
           element_font_size: element_font_size,

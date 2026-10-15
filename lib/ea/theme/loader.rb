@@ -10,6 +10,7 @@ module Ea
     #   name: EA White Theme
     #   font: { family: Carlito, size: 7, unit: pt, weight_normal: 400, ... }
     #   element_font: { size: 9, unit: pt }
+    #   label_font: { family: Cambria }
     #   colors: { text: "#000000", attribute_text: "#66413F", ... }
     #   strokes: { element_border: 2, connector_line: 2, ... }
     #   text_metrics: { width_factor: 0.65 }
@@ -38,6 +39,7 @@ module Ea
         def from_hash(data)
           font = data["font"] || {}
           elem_font = data["element_font"] || {}
+          label_font = data["label_font"] || {}
           colors = data["colors"] || {}
           strokes = data["strokes"] || {}
           text_metrics = data["text_metrics"] || {}
@@ -53,6 +55,7 @@ module Ea
             id: data["id"],
             name: data["name"],
             font_family: font["family"],
+            label_font_family: label_font["family"],
             font_size: font["size"],
             font_size_unit: font["unit"] || "pt",
             text_weight_normal: font["weight_normal"] || 400,

@@ -10,6 +10,9 @@ font:
   weight_normal: 400
   weight_bold: 700
 
+label_font:
+  family: Cambria
+
 # Element-level font (distinct from diagram-level frame font).
 # EA renders classifier compartments at this size regardless of
 # the diagram-level font.size.
