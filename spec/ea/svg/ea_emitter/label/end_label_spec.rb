@@ -230,6 +230,87 @@ RSpec.describe Ea::Svg::EaEmitter::Label::EndLabel do
       end
     end
 
+    it "right-aligns plain downward source roles independently of their multiplicity" do
+      records = [
+        { role: "role a", mult: "0..1", anchor: [72, 80],
+          box: { "ox" => -1, "oy" => 2, "alignment" => 1 }, expected: [33, 97] },
+        { role: "role c", mult: "0..*", anchor: [67, 80],
+          box: { "ox" => -3, "oy" => 3, "alignment" => 1 }, expected: [27, 98] }
+      ]
+      records.each do |record|
+        positions = upward_property_positions(
+          record, stereotype: "", heading: [0, 100], style: { mode: "3", lwidth: "0" },
+                  mult_box: { "ox" => 0, "oy" => 0 }
+        )
+
+        expect(positions["+#{record[:role]}"]).to eq(record[:expected])
+        expect(positions[record[:mult]]).to eq([record[:anchor][0] + 8, record[:anchor][1] + 15])
+        expect(positions.keys).not_to include("«property»")
+      end
+    end
+
+    it "right-aligns plain upward target roles while preserving their cardinality" do
+      records = [
+        { role: "role c", mult: "0..*", anchor: [72, 213],
+          box: { "ox" => 0, "oy" => 0, "alignment" => 1 }, expected: [35, 206] },
+        { role: "role d", mult: "0..*", anchor: [67, 188],
+          box: { "ox" => -1, "oy" => 0, "alignment" => 1 }, expected: [27, 181] },
+        { role: "target", mult: "1", anchor: [310, 800],
+          box: { "ox" => 0, "oy" => 0, "alignment" => 0 }, expected: [271, 793] }
+      ]
+      records.each do |record|
+        positions = upward_property_positions(
+          record, stereotype: "", end_kind: :target,
+                  heading: [0, -100], style: { mode: "3", lwidth: "0" }, mult_box: { "ox" => 0, "oy" => 0 }
+        )
+
+        expect(positions["+#{record[:role]}"]).to eq(record[:expected])
+        expect(positions[record[:mult]]).to eq([record[:anchor][0] + 8, record[:anchor][1] - 7])
+      end
+    end
+
+    it "keeps unproven plain vertical role regimes unchanged" do
+      controls = [{ family: "Carlito" }, { size: 9 }, { unit: "px" },
+                  { type: "Aggregation" }, { style: { mode: "2", lwidth: "0" } },
+                  { style: { mode: "3", lwidth: "2" } },
+                  { style: { mode: "3", lwidth: "0", tree: "V" } },
+                  { box: traffic[:box].merge("alignment" => nil) },
+                  { box: traffic[:box].merge("rotation" => 90) },
+                  { box: traffic[:box].merge("italic" => true) },
+                  { box: traffic[:box].transform_keys(&:to_sym) }, { box: nil }]
+      controls.each do |options|
+        positions = upward_property_positions(
+          traffic, stereotype: "", style: { mode: "3", lwidth: "0" }, heading: [0, 100], **options
+        )
+        expected = options[:box].nil? && options.key?(:box) ? nil : [182, 434]
+        expect(positions["+trafficVolumeAttribute"]).to eq(expected)
+      end
+      %i[source target].each do |end_kind|
+        positions = upward_property_positions(
+          traffic, end_kind: end_kind, stereotype: "Type", target_stereotype: "Type",
+                   heading: [0, end_kind == :source ? 100 : -100], style: { mode: "3", lwidth: "0" }
+        )
+        expect(positions["+trafficVolumeAttribute"]).to eq([182, 434])
+        expect(positions.keys).to include("«Type»")
+      end
+    end
+
+    it "keeps nonvertical, opposite-facing and unmeasured glyph role seats" do
+      [[:source, [1, 100]], [:source, nil], [:target, [1, -100]],
+       [:target, [0, 100]], [:target, nil]].each do |end_kind, heading|
+        positions = upward_property_positions(
+          traffic, stereotype: "", end_kind: end_kind,
+                   style: { mode: "3", lwidth: "0" }, heading: heading
+        )
+        expect(positions["+trafficVolumeAttribute"]).to eq([182, 434])
+      end
+      positions = upward_property_positions(
+        traffic.merge(role: "traffic☃"), stereotype: "", heading: [0, 100],
+                                         style: { mode: "3", lwidth: "0" }
+      )
+      expect(positions["+traffic☃"]).to eq([182, 434])
+    end
+
     it "preserves unmeasured fonts, styles and headings for plain roles" do
       controls = [{ family: "Carlito" }, { size: 10 }, { unit: "px" }, { stereotype: "Type" },
                   { box: traffic[:box].merge("bold" => true) },
