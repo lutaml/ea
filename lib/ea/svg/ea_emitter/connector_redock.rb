@@ -46,7 +46,8 @@ module Ea
           original = clipped_pairs(bounds, anchors)
           unless stroke_outline?(connector, bounds) || overlap_ray?(connector) ||
                  bordered_outline?(connector, diagram, [source_ref, target_ref], bounds)
-            return original
+            pairs = default_square_pairs(connector, points, source_bounds, target_bounds, original)
+            return stored_top_pairs(connector, source_bounds, pairs)
           end
 
           # EA docks these markers on the outer edge of the 2px box stroke.
@@ -55,8 +56,47 @@ module Ea
                                   width: box.width + 2, height: box.height + 2)
           end
           candidate = clipped_pairs(outline, anchors)
-          forward_route?(original, candidate) ? candidate : original
+          expanded = forward_route?(original, candidate)
+          pairs = expanded ? candidate : original
+          target = expanded ? outline.last : target_bounds
+          pairs = default_square_pairs(connector, points, source_bounds, target, pairs)
+          stored_top_pairs(connector, expanded ? outline.first : source_bounds, pairs)
         end
+
+        # EDGE=1 explicitly seats an external source ray on the top edge;
+        # its first contact can instead be the bottom when its origin is below.
+        def stored_top_pairs(connector, source, pairs)
+          return pairs unless connector.connector_type == "Association" &&
+                              connector.style.to_h[:stored_top_dock] == true
+
+          first = connector.source_anchor
+          last = connector.target_anchor
+          return pairs unless first && last && first.y != last.y
+
+          ratio = (source.y - first.y).to_f / (last.y - first.y)
+          x_position = first.x + ratio * (last.x - first.x)
+          return pairs unless ratio.between?(0, 1) &&
+                              x_position.between?(source.x, source.x + source.width)
+
+          proposed = [[x_position.floor, source.y], pairs.last]
+          forward_route?(pairs, proposed) ? proposed : pairs
+        end
+        private_class_method :stored_top_pairs
+
+        # A square ray with an omitted source offset keeps its chosen side
+        # edge and projects that end to the clipped target's horizontal row.
+        def default_square_pairs(connector, points, source, target, pairs)
+          return pairs unless connector.style.to_h[:default_square_ray] == true
+          return pairs unless points.first[1] == points.last[1] &&
+                              on_side_edge?(points.first, source) && on_side_edge?(pairs.last, target)
+
+          first = [points.first[0], pairs.last[1]]
+          return pairs unless on_side_edge?(first, source)
+
+          proposed = [first, pairs.last]
+          forward_route?(points, proposed) ? proposed : pairs
+        end
+        private_class_method :default_square_pairs
 
         # A horizontal lateral tree the QEA builder derived as one level
         # line (internal style flag) keeps it between the facing side edges.

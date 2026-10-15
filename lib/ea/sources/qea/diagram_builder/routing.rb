@@ -23,6 +23,16 @@ module Ea
             set_stored_ray_origins(model, source, target, geom)
           end
 
+          def mark_default_square_ray(model, link_row, geom, context)
+            style = model.style.to_h
+            return model if context || !link_row.path.to_s.empty? || model.waypoints.size != 2
+            return model unless style[:mode] == "3" && style[:tree] == "OS" && style[:lwidth] == "2"
+            return model unless geom[:sx].nil? && geom[:sy].nil? && [geom[:ex], geom[:ey]] == [0, 0]
+
+            model.style = style.merge(default_square_ray: true)
+            model
+          end
+
           # A Mode 2 Generalization whose stored Path is a horizontal jog
           # between vertically separated boxes that overlap in x is EA's
           # auto-route: one vertical ray at the overlap midpoint plus SX.
@@ -125,6 +135,9 @@ module Ea
             model.waypoints = port_waypoints(model, origins)
             model.source_anchor, model.target_anchor = origins
             model.style = model.style.to_h.merge(stored_association_ray: true, association_ray_outline: true)
+            if geom[:edge] == 1 && !inside_box?(origins.first, grown_bounds(source, width == "2" ? 1 : 0))
+              model.style[:stored_top_dock] = true
+            end
             model
           end
 
@@ -141,18 +154,23 @@ module Ea
             origins = [stored_ray_origin(source, geom[:sx], geom[:sy]),
                        stored_ray_origin(target, geom[:ex], geom[:ey])]
             boxes = [source, target].map { |box| grown_bounds(box, outline) }
-            return unless origins.first != origins.last && association_origin_pair?(origins, boxes, width)
+            return unless origins.first != origins.last && association_origin_pair?(origins, boxes, width, geom[:edge])
 
             origins if width == "2" || sub_pixel_safe_origins?(origins, [source, target] + boxes)
           end
 
           # An external source origin is a virtual point on the saved ray.
           # It is usable only when that segment actually crosses the source.
-          def association_origin_pair?(origins, boxes, width)
+          def association_origin_pair?(origins, boxes, width, edge)
             return false unless inside_box?(origins.last, boxes.last)
             return true if inside_box?(origins.first, boxes.first)
 
-            width == "2" && segment_crosses_box?(origins.first, origins.last, boxes.first)
+            return segment_crosses_box?(origins.first, origins.last, boxes.first) if width == "2"
+            return false unless edge == 1
+
+            source = boxes.first
+            top = Ea::Model::Bounds.new(x: source.x, y: source.y, width: source.width, height: 0)
+            segment_crosses_box?(origins.first, origins.last, top)
           end
 
           def segment_crosses_box?(first, last, box)
