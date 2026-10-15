@@ -29,8 +29,16 @@ module Ea
         "calibri" => "Carlito",
         "carlito" => "Carlito",
         "arial" => "Arial",
-        "arial narrow" => "Arial Narrow"
+        "arial narrow" => "Arial Narrow",
+        "cambria" => "Cambria"
       }.freeze
+
+      # Cambria measurements are in SVG units at 7pt, not em advances.
+      # Unmeasured characters and other sizes/styles must use the fallback.
+      CAMBRIA_7_REGULAR_WIDTHS = JSON.parse(File.read(
+                                              File.expand_path("cambria_7_regular_widths.json", __dir__)
+                                            )).freeze
+      private_constant :CAMBRIA_7_REGULAR_WIDTHS
 
       # Advance used for codepoints missing from the tables.
       DEFAULT_ADVANCE = 0.25
@@ -64,6 +72,12 @@ module Ea
         return nil unless supported_family?(family)
         return nil if text.nil? || text.empty?
 
+        return cambria_text_length(text, size_pt, weight, style) if resolve_family(family) == "Cambria"
+
+        advance_text_length(text, size_pt, family, weight, style)
+      end
+
+      def advance_text_length(text, size_pt, family, weight, style)
         resolved = resolve_family(family)
         if GDI_HEIGHT_FAMILIES.include?(resolved)
           height = (size_pt.to_f * 10 / 7).round
@@ -85,6 +99,18 @@ module Ea
         (_latin * size_pt.to_f * factor_for(family, size_pt, weight, style) +
          cjk_count * CJK_ADVANCE * size_pt.to_f).round(3)
       end
+
+      private_class_method :advance_text_length
+
+      def cambria_text_length(text, size_pt, weight, style)
+        return nil unless size_pt.to_f.to_r == 7
+        return nil unless ["", "400", "normal"].include?(weight.to_s)
+        return nil unless ["", "normal"].include?(style.to_s)
+
+        widths = text.each_char.map { |char| CAMBRIA_7_REGULAR_WIDTHS[char] }
+        widths.sum unless widths.include?(nil)
+      end
+      private_class_method :cambria_text_length
 
       # Families whose EA driver quantizes per-glyph advances
       # (fitted from published textLengths).
