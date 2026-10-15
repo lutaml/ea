@@ -218,6 +218,16 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
       expect(positions["0..1"]).to eq([460, 252])
     end
 
+    it "keeps a downward final leg when the stored upward route is stale" do
+      heading_connector.target_anchor.y = 600
+      heading_bounds["target"] = Ea::Model::Bounds.new(x: 335, y: 500,
+                                                       width: 248, height: 142)
+      positions = heading_positions(heading_connector, heading_bounds)
+
+      expect(positions["+trafficAreaStructureAttribute"]).to eq([474, 361])
+      expect(positions["0..1"]).to eq([460, 342])
+    end
+
     it "keeps the final cardinal direction when the stored route is diagonal" do
       heading_connector.waypoints.last.position.x = 515
       heading_connector.target_anchor.x = 450

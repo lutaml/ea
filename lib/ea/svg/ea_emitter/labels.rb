@@ -116,7 +116,7 @@ module Ea
         # while the label position follows the final emitted endpoint.
         def source_heading(connector, points)
           heading = leg_heading(points)
-          return heading unless points.size == 2 && heading.none?(&:zero?)
+          return heading unless points.size == 2 && heading[0].nonzero? && heading[1].negative?
 
           stored = waypoint_pairs(connector)
           return heading unless stored.size == 2
