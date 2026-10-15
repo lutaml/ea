@@ -97,6 +97,7 @@ module Ea
                              mult_box: tgt_mb,
                              anchor: target_pt, connector: connector,
                              end_kind: :target, tree: tree && tree[:target],
+                             heading: stored_tgt && leg_heading(points.reverse),
                              stored_labels: stored_labels).each { |t| texts << t }
           texts
         end
