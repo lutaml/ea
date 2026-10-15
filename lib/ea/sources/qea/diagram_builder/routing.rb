@@ -80,6 +80,50 @@ module Ea
             end
           end
 
+          # A computed Mode 3 Generalization between horizontally disjoint
+          # boxes whose two explicit ports sit on the facing sides one pixel
+          # apart in y (edge-port integer rounding) is one horizontal line.
+          # Stored Path jogs and every other shape keep their route.
+          def collapse_computed_jog(model, link_row, diagram_row, geom)
+            return model unless computed_jog_candidate?(model, link_row, geom)
+
+            connection = database.find_connector(link_row.connectorid)
+            src, tgt = [connection.start_object_id, connection.end_object_id].map do |id|
+              placement = diagram_object_placement(diagram_row.diagram_id, id)
+              placement && bounds_from_rect(placement)
+            end
+            return model unless src && tgt && facing_jog_ports?(model.source_port, model.target_port, src, tgt)
+
+            ends = [[model.source_port.x, model.source_port.y],
+                    [model.target_port.x, model.source_port.y]].map do |x, y|
+              Ea::Model::Point.new(x: x, y: y)
+            end
+            model.waypoints = ends.map { |point| Ea::Model::Waypoint.new(position: point) }
+            model.source_anchor = model.source_port = ends.first
+            model.target_anchor = model.target_port = ends.last
+            model
+          end
+
+          def computed_jog_candidate?(model, link_row, geom)
+            style = model.style.to_h
+            model.connector_type == "Generalization" && geom[:edge] == 2 &&
+              link_row.path.to_s.empty? && style[:mode] == "3" && style[:lwidth] == "2" &&
+              !style.key?(:tree) && model.source_port && model.target_port &&
+              model.waypoints.size == 3
+          end
+
+          def facing_jog_ports?(from, to, src, tgt)
+            return false unless (from.y - to.y).abs == 1 && to.y.between?(tgt.y, tgt.y + tgt.height)
+
+            if src.x + src.width < tgt.x
+              from.x == src.x + src.width && to.x == tgt.x
+            elsif tgt.x + tgt.width < src.x
+              from.x == src.x && to.x == tgt.x + tgt.width
+            else
+              false
+            end
+          end
+
           # Width-0 vertical trees dock on the box edges themselves (no outline).
           def flush_width_zero_tree?(link_row)
             style = DiagramStyleParser.parse(link_row.style)
