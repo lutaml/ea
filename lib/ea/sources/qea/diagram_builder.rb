@@ -646,10 +646,13 @@ module Ea
           # Between DISJOINT boxes, a stored route that does not dock the
           # closest facing edge pair is redrawn straight between them.
           # EDGE=2 routes are excluded; they are already exact.
-          if %w[Association Aggregation].include?(connector.connector_type) &&
-             edge_out != 2
-            src = bounds_from_rect(source_placement)
-            tgt = bounds_from_rect(target_placement)
+          src = bounds_from_rect(source_placement)
+          tgt = bounds_from_rect(target_placement)
+          tree_route = horizontal_tree_route(points, link_row, connector, src, tgt)
+          if tree_route
+            points = tree_route
+          elsif %w[Association Aggregation].include?(connector.connector_type) &&
+                edge_out != 2
             unless preserve_stored_tree?(points, link_row, connector, src, tgt)
               points = facing_edge_route(points, src, tgt)
             end
