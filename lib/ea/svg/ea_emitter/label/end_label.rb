@@ -123,7 +123,7 @@ module Ea
           # right: the multiplicity 6px above it on an upward leg and
           # 15px below it on a rightward one, the role 7px above it on
           # a rightward one. Other sizes, headings, the target end,
-          # custom presentation and zero boxes keep the plain offset.
+          # custom presentation keep their offsets; zero multiplicity boxes keep their default seat.
           def leg_direction(end_kind, heading)
             return nil unless end_kind == :source && heading && seat_font?
 

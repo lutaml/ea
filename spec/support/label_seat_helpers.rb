@@ -49,4 +49,15 @@ module LabelSeatHelpers
                                         connectors: [connector])]
     )
   end
+
+  def source_texts(record, **overrides)
+    label_seat_positions(
+      **record.slice(:waypoints, :label_boxes, :role, :multiplicity),
+      stereotype: "property", **overrides
+    ).each_with_object({}) { |(text, xy), seen| seen[text] ||= xy }
+  end
+
+  def in_reference_space(point, record)
+    [point[0] + record[:shift][0], point[1] + record[:shift][1]]
+  end
 end
