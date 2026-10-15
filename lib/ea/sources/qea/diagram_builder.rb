@@ -682,12 +682,15 @@ module Ea
               redock_parent_above(points, link_row, source_placement,
                                   target_placement, strict: true)
             end
+            if intermediate.any?
+              redock_vertical_tree_trunk(points, link_row, connector, source_placement, target_placement)
+            end
           end
 
           if intermediate.any? && !tree_route
             points = level_entry_route(points, link_row, connector, src, tgt)
           end
-
+          points = drop_zero_length_tree_segments(points, link_row)
           points.map do |x, y|
             Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y))
           end

@@ -115,6 +115,49 @@ module Ea
                                  y: bounds.y + bounds.height / 2 - y_offset.to_i)
           end
 
+          # A vertical tree stores its trunk bend twice when the parent sits
+          # directly above; EA draws that as one bend.
+          def drop_zero_length_tree_segments(points, link_row)
+            return points unless points.size == 4 && points[1] == points[2] &&
+                                 DiagramStyleParser.parse(link_row.style)[:tree] == "V"
+
+            points.values_at(0, 1, 3)
+          end
+
+          # A stored vertical tree trunk docks both ends on the box edges that
+          # face its bends, at the adjacent bend's x: Aggregations without
+          # geometry offsets whose child sits below, and flush Associations
+          # whose parent sits above. Other shapes keep their stored docks.
+          def redock_vertical_tree_trunk(points, link_row, connector, source_placement, target_placement)
+            style = DiagramStyleParser.parse(link_row.style)
+            return unless points.size == 4 && style[:tree] == "V"
+
+            case connector.connector_type
+            when "Aggregation"
+              return if geometry_has_offsets?(link_row.geometry)
+
+              redock_child_below(points, bounds_from_rect(source_placement), bounds_from_rect(target_placement))
+            when "Association"
+              return unless style[:lwidth] == "0"
+
+              redock_parent_above(points, link_row, source_placement, target_placement, strict: true)
+            end
+          end
+
+          def redock_child_below(points, src_b, tgt_b)
+            first_bend, last_bend = points.values_at(1, -2)
+            source_y = src_b.y + src_b.height
+            return points unless source_y <= tgt_b.y && first_bend[1] > source_y && last_bend[1] < tgt_b.y
+
+            points[0] = [clamp_to_span(first_bend[0], src_b), source_y]
+            points[-1] = [clamp_to_span(last_bend[0], tgt_b), tgt_b.y]
+            points
+          end
+
+          def clamp_to_span(position, bounds)
+            position.clamp(bounds.x, bounds.x + bounds.width)
+          end
+
           # A stored-Path Mode 3 width-2 end whose adjacent bend lies level
           # with its box (inside the box's span on one axis, outside on the
           # other) enters the box orthogonally on the outer outline at that
