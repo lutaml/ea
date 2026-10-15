@@ -8,6 +8,21 @@ module Ea
         module Routing
           private
 
+          # A lateral tree leaves the side edge before turning upward.
+          # Keep that dock only when its first leg actually points outward.
+          def lateral_source_exit?(points, link_row, bounds)
+            return false unless points.size == 3 && DiagramStyleParser.parse(link_row.style)[:tree] == "LV"
+
+            anchor, bend = points.take(2)
+            anchor[1] == bend[1] && outward_side_exit?(anchor[0], bend[0], bounds)
+          end
+
+          def outward_side_exit?(anchor_x, bend_x, bounds)
+            left = bounds.x
+            right = left + bounds.width
+            (anchor_x == left && bend_x < left) || (anchor_x == right && bend_x > right)
+          end
+
           # Keep a vertical tree trunk whose bends still fit both boxes
           # and the open gap; the closest facing edges need not share its x.
           def preserve_stored_tree?(points, link_row, connector, src, tgt)
