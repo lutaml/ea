@@ -225,6 +225,58 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
         "target" => Ea::Model::Bounds.new(x: 335, y: 31, width: 248, height: 142) }
     end
 
+    it "seats complete reference clusters at their actual source exit faces" do
+      path = File.expand_path("../../../support/label_dock_faces.json", __dir__)
+      JSON.parse(File.read(path), symbolize_names: true).each do |record|
+        positions = heading_positions(
+          build_heading_connector(record), heading_bounds_for(record), role: record[:role], mult: record[:mult]
+        )
+        expect(positions["+#{record[:role]}"]).to eq(record[:expected][0]), record[:case]
+        expect(positions["«property»"]).to eq(record[:expected][1]), record[:case]
+        expect(positions[record[:mult]]).to eq(record[:expected][2]), record[:case]
+      end
+    end
+
+    it "keeps diagonal labels when either drawn endpoint is unresolved" do
+      heading_connector.waypoints.last.position.x = 515
+      [nil, heading_bounds.slice("source"), heading_bounds.slice("target")].each do |bounds|
+        positions = heading_positions(heading_connector, bounds)
+
+        expect(positions["+trafficAreaStructureAttribute"]).to eq([517, 272])
+        expect(positions["0..1"]).to eq([503, 253])
+      end
+    end
+
+    it "keeps manual bent routes on their stored diagonal heading" do
+      heading_connector.waypoints.last.position.x = 515
+      heading_connector.waypoints << Ea::Model::Waypoint.new(position: heading_point([515, 100]))
+      positions = heading_positions(heading_connector, heading_bounds)
+
+      expect(positions["+trafficAreaStructureAttribute"]).to eq([517, 272])
+      expect(positions["0..1"]).to eq([503, 253])
+    end
+
+    it "keeps diagonal corner docks ambiguous on logical and outer edges" do
+      heading_connector.waypoints = [[100, 100], [200, 200]].map do |x, y|
+        Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y))
+      end
+      heading_connector.source_anchor = heading_point([50, 50])
+      heading_connector.target_anchor = heading_point([250, 250])
+      bounds = heading_bounds_for(source: [0, 0, 100, 100], target: [200, 200, 100, 100])
+      { "0" => [[124, 121], [110, 102]], "2" => [[125, 122], [111, 103]] }.each do |width, expected|
+        heading_connector.style[:lwidth] = width
+        positions = heading_positions(heading_connector, bounds)
+
+        expect(positions["+trafficAreaStructureAttribute"]).to eq(expected[0])
+        expect(positions["0..1"]).to eq(expected[1])
+      end
+      heading_connector.waypoints.last.position = heading_point([100, 0])
+      positions = heading_positions(heading_connector, bounds)
+
+      expect(positions["+trafficAreaStructureAttribute"]).to eq([125, 122])
+      expect(positions["0..1"]).to eq([111, 103])
+    end
+
     it "keeps an upward stored seat at the final slanted dock" do
       positions = heading_positions(heading_connector, heading_bounds)
 
@@ -234,22 +286,22 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
       expect(positions["+owner"]).to eq([456, 167])
     end
 
-    it "keeps genuinely diagonal stored routes unchanged" do
+    it "uses the known top face for a diagonal stored route" do
       heading_connector.waypoints.last.position.x = 515
       positions = heading_positions(heading_connector, heading_bounds)
 
-      expect(positions["+trafficAreaStructureAttribute"]).to eq([474, 271])
-      expect(positions["0..1"]).to eq([460, 252])
+      expect(positions["+trafficAreaStructureAttribute"]).to eq([285, 223])
+      expect(positions["0..1"]).to eq([463, 242])
     end
 
-    it "keeps a downward final leg when the stored upward route is stale" do
+    it "uses the known bottom face when the stored upward route is stale" do
       heading_connector.target_anchor.y = 600
       heading_bounds["target"] = Ea::Model::Bounds.new(x: 335, y: 500,
                                                        width: 248, height: 142)
       positions = heading_positions(heading_connector, heading_bounds)
 
-      expect(positions["+trafficAreaStructureAttribute"]).to eq([474, 361])
-      expect(positions["0..1"]).to eq([460, 342])
+      expect(positions["+trafficAreaStructureAttribute"]).to eq([280, 334])
+      expect(positions["0..1"]).to eq([468, 353])
     end
 
     it "keeps the final cardinal direction when the stored route is diagonal" do

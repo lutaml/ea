@@ -1,0 +1,74 @@
+[
+  {
+    "case": "dc:148:1020",
+    "role": "outerTunnelInstallation",
+    "mult": "0..*",
+    "points": [[1037, 332], [1041, 460]],
+    "anchors": [[1037, 231], [1039, 599]],
+    "source": [920, 231, 202, 101],
+    "target": [850, 460, 235, 140],
+    "box": {"ox": 249, "oy": 3, "alignment": 1},
+    "mult_box": {"ox": 7, "oy": 0, "alignment": 1},
+    "expected": [[1111, 351], [1142, 363], [1052, 348]]
+  },
+  {
+    "case": "dc:181:1510",
+    "role": "trackAttribute",
+    "mult": "0..1",
+    "points": [[370, 463], [392, 379]],
+    "anchors": [[395, 558], [392, 300]],
+    "source": [280, 463, 237, 173],
+    "target": [325, 299, 120, 80],
+    "box": {"ox": 37, "oy": -23, "alignment": 1},
+    "mult_box": {"ox": 11, "oy": -19, "alignment": 1},
+    "expected": [[305, 433], [314, 445], [407, 437]]
+  },
+  {
+    "case": "dc:54:375",
+    "role": "districtDevelopmentPlan",
+    "mult": "0..*",
+    "points": [[1119, 1046], [1124, 692]],
+    "anchors": [[1120, 1185], [1123, 572]],
+    "source": [820, 1046, 390, 139],
+    "target": [903, 572, 255, 120],
+    "box": {"ox": 150, "oy": -68, "alignment": 1},
+    "mult_box": {"ox": 35, "oy": -32, "alignment": 1},
+    "expected": [[1096, 971], [1129, 983], [1158, 1007]]
+  },
+  {
+    "case": "dc:72:1788",
+    "role": "tranKeyValuePairAttribute",
+    "mult": "0..*",
+    "points": [[822, 709], [632, 709]],
+    "anchors": [[931, 709], [526, 713]],
+    "source": [822, 665, 219, 88],
+    "target": [420, 651, 212, 125],
+    "box": {"ox": 63, "oy": -68, "alignment": 1},
+    "mult_box": {"ox": 0, "oy": 0, "alignment": 1},
+    "expected": [[703, 635], [740, 647], [804, 725]]
+  },
+  {
+    "case": "dc:124:1645",
+    "role": "keyValuePairAttribute",
+    "mult": "0..*",
+    "points": [[657, 565], [1121, 561]],
+    "anchors": [[547, 565], [965, 561]],
+    "source": [438, 521, 219, 88],
+    "target": [809, 329, 312, 465],
+    "box": {"ox": 1, "oy": 55, "alignment": 0},
+    "mult_box": {"ox": 0, "oy": 0, "alignment": 0},
+    "expected": [[662, 611], [662, 623], [661, 578]]
+  },
+  {
+    "case": "dc:47:309",
+    "role": "sewerSystemsAttribute",
+    "mult": "0..1",
+    "points": [[164, 499], [267, 417]],
+    "anchors": [[264, 565], [266, 353]],
+    "source": [138, 499, 271, 122],
+    "target": [210, 340, 110, 77],
+    "box": {"ox": 51, "oy": -35, "alignment": 1},
+    "mult_box": {"ox": 31, "oy": -1, "alignment": 1},
+    "expected": [[151, 457], [179, 469], [298, 491]]
+  }
+]
