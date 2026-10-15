@@ -44,12 +44,22 @@ module Ea
           #   connector  - the DiagramConnector (for relationship lookup)
           #   end_kind   - :source or :target
           #   heading    - [dx, dy] of the first leg leaving the anchor
+          #   stored_labels - the connector has stored label boxes at
+          #                   either end; false keeps the opposite-end
+          #                   fallback
           def texts(text_box:, mult_box:, anchor:, connector:, end_kind:,
-                    tree: false, heading: nil)
+                    tree: false, heading: nil, stored_labels: false)
             from_property, role, mult = role_and_multiplicity(connector, end_kind)
             if role_empty?(role) && mult_empty?(mult)
               other_from_prop, other_role, other_mult = role_and_multiplicity(connector,
                                                               opposite(end_kind))
+              if stored_labels
+                return [] if role_empty?(other_role) && mult_empty?(other_mult)
+
+                return own_stereotype_only(text_box, anchor, connector,
+                                           end_kind)
+              end
+
               role = other_role if role_empty?(role)
               mult ||= other_mult
               from_property ||= other_from_prop
@@ -87,6 +97,19 @@ module Ea
           end
 
           private
+
+          # With stored boxes on the connector, an end that carries no
+          # data of its own draws only its own stereotype; the data end
+          # draws the role and multiplicity; with no data anywhere nothing
+          # is drawn. Connectors with no stored box keep the opposite-end
+          # fallback.
+          def own_stereotype_only(text_box, anchor, connector, end_kind)
+            stereo = connector_source_dest_stereotype(connector, end_kind)
+            pos = position_at(text_box, anchor)
+            return [] if stereo.nil? || stereo.empty? || pos.nil?
+
+            [text_at(pos[0], pos[1], "«#{stereo}»")]
+          end
 
           # EA's tree-route label clusters (hand-verified against the
           # EA-published reference, SY 8542 with canvas=(0,0)):

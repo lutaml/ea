@@ -79,19 +79,22 @@ module Ea
           tree = tree_shaped?(points)
 
           stored_src = end_boxes(boxes, :llt, :llb)
+          stored_tgt = end_boxes(boxes, :lrt, :lrb)
+          stored_labels = !(stored_src.nil? && stored_tgt.nil?)
           src_tb, src_mb = stored_src || default_label_boxes(points, :source)
-          tgt_tb, tgt_mb = end_boxes(boxes, :lrt, :lrb) ||
-                           default_label_boxes(points, :target)
+          tgt_tb, tgt_mb = stored_tgt || default_label_boxes(points, :target)
 
           texts = []
           end_renderer.texts(text_box: src_tb, mult_box: src_mb,
                              anchor: source_pt, connector: connector,
                              end_kind: :source, tree: tree && tree[:source],
-                             heading: stored_src && leg_heading(points)).each { |t| texts << t }
+                             heading: stored_src && leg_heading(points),
+                             stored_labels: stored_labels).each { |t| texts << t }
           end_renderer.texts(text_box: tgt_tb,
                              mult_box: tgt_mb,
                              anchor: target_pt, connector: connector,
-                             end_kind: :target, tree: tree && tree[:target]).each { |t| texts << t }
+                             end_kind: :target, tree: tree && tree[:target],
+                             stored_labels: stored_labels).each { |t| texts << t }
           texts
         end
 
