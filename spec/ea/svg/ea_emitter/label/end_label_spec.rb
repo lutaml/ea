@@ -175,6 +175,80 @@ RSpec.describe Ea::Svg::EaEmitter::Label::EndLabel do
         box: { "ox" => -9, "oy" => -2, "alignment" => 1 } }
     end
 
+    it "seats zero-offset multiplicities in their actual source directions" do
+      records = [
+        { role: "frnDataQualityAttribute", mult: "1", anchor: [238, 215], heading: [0, -45],
+          style: { mode: "3", lwidth: "2", tree: "V" }, expected: [241, 209] },
+        { role: "trafficArea", mult: "0..*", anchor: [258, 470], heading: [133, 0],
+          style: { mode: "3", lwidth: "0" }, expected: [261, 485] }
+      ]
+      records.each do |record|
+        positions = upward_property_positions(
+          record.merge(box: traffic[:box]),
+          heading: record[:heading], style: record[:style],
+          mult_box: { "ox" => 0, "oy" => 0, "alignment" => 1 }
+        )
+        expect(positions[record[:mult]]).to eq(record[:expected])
+      end
+    end
+
+    it "keeps zero-box defaults outside the measured font and presentation" do
+      controls = [{ family: "Carlito" }, { size: 10 }, { unit: "px" },
+                  { mult_box: { "ox" => 0, "oy" => 0, "bold" => true } },
+                  { mult_box: { "ox" => 0, "oy" => 0, "rotation" => 90 } },
+                  { heading: [1, -100] }]
+      controls.each do |options|
+        positions = upward_property_positions(
+          traffic, mult_box: { "ox" => 0, "oy" => 0 }, **options
+        )
+        expect(positions["0..1"]).to eq([203, 447])
+      end
+    end
+
+    it "keeps the source default on a perfect L with both boxes zero" do
+      positions = upward_property_positions(
+        traffic,
+        box: { "ox" => 0, "oy" => 0 }, mult_box: { "ox" => 0, "oy" => 0 },
+        heading: [100, 0], tree: true
+      )
+
+      expect(positions["0..1"]).to eq([194, 432])
+    end
+
+    it "right-aligns plain upward roles at their stored corners" do
+      records = [
+        { role: "bldgUsecaseAttribute", anchor: [1727, 440],
+          box: { "ox" => -17, "oy" => -19, "alignment" => 1 }, expected: [1611, 415] },
+        { role: "squareUrbanPlanAttribute", anchor: [526, 566],
+          box: { "ox" => -10, "oy" => -2, "alignment" => 0 }, expected: [394, 558] },
+        { role: "roleThree", anchor: [384, 161],
+          box: { "ox" => -6, "oy" => -5, "alignment" => 0 }, expected: [326, 150] }
+      ]
+      records.each do |record|
+        positions = upward_property_positions(record, stereotype: "", style: { mode: "3", lwidth: "2" })
+        expect(positions["+#{record[:role]}"]).to eq(record[:expected])
+      end
+    end
+
+    it "preserves unmeasured fonts, styles and headings for plain roles" do
+      controls = [{ family: "Carlito" }, { size: 10 }, { unit: "px" }, { stereotype: "Type" },
+                  { box: traffic[:box].merge("bold" => true) },
+                  { box: traffic[:box].merge("rotation" => 90) },
+                  { box: traffic[:box].merge("alignment" => nil) },
+                  { style: { mode: "2", lwidth: "2" } },
+                  { style: { mode: "3", lwidth: "2", tree: "OS" } }, { heading: [1, -100] }]
+      controls.each do |options|
+        positions = upward_property_positions(
+          traffic, stereotype: "", style: { mode: "3", lwidth: "2" }, **options
+        )
+        expect(positions["+trafficVolumeAttribute"]).to eq([182, 434])
+      end
+      positions = upward_property_positions(
+        traffic.merge(role: "traffic☃"), stereotype: "", style: { mode: "3", lwidth: "2" }
+      )
+      expect(positions["+traffic☃"]).to eq([182, 434])
+    end
+
     it "seats the direct role at its published reference position" do
       positions = upward_property_positions(traffic)
 

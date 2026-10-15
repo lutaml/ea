@@ -420,4 +420,114 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
       expect(result[:markers]).to eq(expected), "bend: #{bend}"
     end
   end
+
+  let(:lateral_corner) do
+    { connector_type: "Aggregation", source: [181, 460, 220, 100],
+      target: [510, 560, 202, 101], path: "291:-610;",
+      geometry: "SX=2;SY=41;EX=0;EY=0;EDGE=3;",
+      style: "Mode=3;TREE=LH;LWidth=2;" }
+  end
+
+  it "retains stored lateral corners and docks each leg on its own box" do # rubocop:disable Metrics/BlockLength
+    cases = [
+      [lateral_corner, "M 145 140 L 145 190 L 364 190",
+       ["145 140 150 150 145 160 140 150"]],
+      [lateral_corner.merge(source: [1121, 1514, 197, 80],
+                            target: [741, 963, 396, 261], path: "1219:-1093;",
+                            geometry: "SX=0;SY=0;EX=0;EY=0;EDGE=1;"),
+       "M 513 591 L 513 170 L 431 170", ["513 591 508 581 513 571 518 581"]],
+      [{ connector_type: "Aggregation", source: [291, 486, 110, 70],
+         target: [206, 208, 110, 70], path: "261:-521;",
+         geometry: "SX=0;SY=0;EX=0;EY=0;EDGE=4;", style: "Mode=3;TREE=LV;LWidth=0;" },
+       "M 120 353 L 90 353 L 90 110", ["120 353 110 358 100 353 110 348"]],
+      [{ connector_type: "Association", source: [1303, 883, 268, 88],
+         target: [1073, 1014, 167, 80], path: "1437:-1054;",
+         geometry: "SX=37;SY=0;EX=0;EY=0;EDGE=3;", style: "Mode=3;TREE=LH;LWidth=2;" },
+       "M 399 128 L 399 211 L 202 211", []]
+    ]
+    cases.each do |input, path, markers|
+      rendered = render_qea_route(**input)
+
+      expect(rendered[:paths].first).to eq(path), input.inspect
+      expect(rendered[:markers]).to eq(markers), input.inspect
+    end
+  end
+
+  it "preserves other modes, styles, types and invalid lateral corners" do # rubocop:disable Metrics/BlockLength
+    path = "M 200 141 L 363 171"
+    markers = ["200 141 210.74 137.89 219.67 144.62 208.93 147.73"]
+    controls = [
+      { style: "Mode=1;TREE=LH;LWidth=2;" },
+      { style: "Mode=2;TREE=LH;LWidth=2;" },
+      { style: "TREE=LH;LWidth=2;" }, { style: "Mode=3;LWidth=2;" },
+      { path: "291:-610;300:-610;" }, { path: "291:-500;" },
+      { path: "180:-610;" }, { path: "291:-662;" },
+      { path: "600:-610;" }, { path: "" }, { path: "291:-610;garbage" },
+      { style: "Mode=3;TREE=H;LWidth=2;" }
+    ]
+    controls.each do |override|
+      expect(render_qea_route(**lateral_corner.merge(override)))
+        .to eq(paths: [path], markers: markers), override.inspect
+    end
+    ["Mode=3;TREE=LH;LWidth=1;", "Mode=3;TREE=LH;"].each do |style|
+      expect(render_qea_route(**lateral_corner.merge(style: style)))
+        .to eq(paths: ["M 195 140 L 364 171"],
+               markers: ["195 140 205.74 136.89 214.67 143.61 203.93 146.72"])
+    end
+    expect(render_qea_route(**lateral_corner.merge(connector_type: "Generalization")))
+      .to eq(paths: ["M 147 40 L 145 190 L 364 190"],
+             markers: ["364 190 353 196 353 184"])
+  end
+
+  let(:square_corner) do
+    { connector_type: "Association", source: [800, 515, 100, 162],
+      target: [540, 740, 100, 80], path: "621:-627;",
+      geometry: "SX=0;SY=0;EX=0;EY=0;EDGE=4;", style: "Mode=3;TREE=OS;LWidth=2;" }
+  end
+
+  it "retains square-routing bends and projects endpoints onto their own edges" do # rubocop:disable Metrics/BlockLength
+    cases = [
+      [square_corner, "M 295 152 L 116 152 L 116 265", []],
+      [square_corner.merge(path: "621:-627;621:-627;"),
+       "M 295 152 L 116 152 L 116 152 L 116 265", []],
+      [square_corner.merge(source: [701, 380, 100, 80], target: [306, 231, 203, 125],
+                           path: "663:-404;663:-265;"),
+       "M 430 213 L 392 213 L 392 74 L 238 74", []],
+      [square_corner.merge(connector_type: "Generalization", source: [311, 1135, 120, 80],
+                           target: [611, 64, 330, 122], path: "161:-1167;161:-123;"),
+       "M 35 1143 L -115 1143 L -115 99 L 335 99", ["335 99 324 105 324 93"]],
+      [square_corner.merge(connector_type: "Aggregation", source: [1290, 1200, 220, 104],
+                           target: [945, 569, 365, 240], path: "1394:-646;"),
+       "M 484 671 L 484 117 L 400 117", ["484 671 479 661 484 651 489 661"]],
+      [square_corner.merge(source: [710, 820, 127, 110], target: [400, 591, 203, 121],
+                           path: "748:-956;291:-956;291:-683;400:-683;"),
+       "M 383 379 L 383 405 L -74 405 L -74 132 L 35 132", []]
+    ]
+    cases.each do |input, path, markers|
+      rendered = render_qea_route(**input)
+
+      expect(rendered[:paths].first).to eq(path), input.inspect
+      expect(rendered[:markers]).to eq(markers), input.inspect
+    end
+  end
+
+  it "preserves custom diagonals, invalid corners and other square-routing styles" do # rubocop:disable Metrics/BlockLength
+    ["Mode=2;TREE=OS;LWidth=2;", "TREE=OS;LWidth=2;", "Mode=3;LWidth=2;",
+     "Mode=3;TREE=OS;LWidth=0;", "Mode=3;TREE=OR;LWidth=2;"].each do |style|
+      expect(render_qea_route(**square_corner.merge(style: style))[:paths].first)
+        .to eq("M 295 121 L 116 152 L 35 305"), style
+    end
+    {
+      "621:-627;620:-650;" => "M 295 121 L 116 152 L 115 175 L 35 305",
+      "850:-600;" => "M 295 121 L 345 125 L 35 305",
+      "400:-100;" => "M 295 121 L -105 -375 L 35 305",
+      "621:-627;garbage" => "M 295 121 L 116 152 L 35 305",
+      "" => "M 295 156 L 135 269"
+    }.each do |path, expected|
+      expect(render_qea_route(**square_corner.merge(path: path))[:paths].first)
+        .to eq(expected), path
+    end
+    expect(render_qea_route(**square_corner.merge(style: "Mode=1;TREE=OS;LWidth=2;"))[:paths].first)
+      .to eq("M 295 156 L 135 269")
+  end
 end
