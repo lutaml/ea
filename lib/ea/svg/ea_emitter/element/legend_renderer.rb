@@ -169,7 +169,11 @@ module Ea
           end
 
           def title_font_size
-            legend.heading_size || Ea::Model::Legend::DEFAULT_HEADING_SIZE
+            return Ea::Model::Legend::DEFAULT_HEADING_SIZE unless legend.heading_size
+
+            # HEADINGSIZE is stored in pixels; SVG legend text uses points.
+            points = legend.heading_size * 72.0 / 96
+            points == points.to_i ? points.to_i : points
           end
 
           def item_font_size
