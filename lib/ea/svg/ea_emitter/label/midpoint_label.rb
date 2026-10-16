@@ -96,8 +96,8 @@ module Ea
           LINE_PITCH = 13
 
           def label_position(connector, points)
-            name_seat = stored_name_position(connector, points)
-            return name_seat if name_seat
+            stored_seat = stored_stereotype_position(connector, points) || stored_name_position(connector, points)
+            return stored_seat if stored_seat
 
             return midpoint(points) unless default_substitutable_seat?(connector) &&
                                            upward_four_point_route?(points)
@@ -106,9 +106,23 @@ module Ea
             [source[0] + 3, ((source[1] + bend[1]) / 2).floor - 1]
           end
 
+          # LMB is the row below the midpoint; LMT carries the name above it.
+          def stored_stereotype_position(connector, points)
+            return nil unless connector.is_a?(Ea::Model::DiagramConnector) && measured_name_font?
+            return nil unless stereotype_label(connector)
+
+            box = connector.label_boxes.to_h[:lmb]
+            return nil unless default_name_box?(box) && box["cy"] == 18
+
+            stored_position(connector, points, box, LINE_PITCH)
+          end
+
           # At 7pt, a centered name's stored corner is 3px below its baseline.
           def stored_name_position(connector, points)
-            box = stored_name_box(connector)
+            stored_position(connector, points, stored_name_box(connector), -3)
+          end
+
+          def stored_position(connector, points, box, baseline)
             return nil unless box
 
             width = Ea::Fonts::Metrics.text_length(midpoint_content(connector), font_size, family: font_family)
@@ -116,7 +130,7 @@ module Ea
 
             x, y = midpoint(points)
             offset_x, offset_y = box.values_at("ox", "oy").map(&:to_i)
-            [x + offset_x - (width / 2.0).floor, y + offset_y - 3]
+            [x + offset_x - (width / 2.0).floor, y + offset_y + baseline]
           end
 
           def stored_name_box(connector)
