@@ -72,6 +72,10 @@ module Ea
             # EA uses the attribute row point-size increment for literal names.
             offset = context.theme.attribute_spec.content_x_offset || 26
             offset += 2 * (context.size - 7) if context.size_unit == "pt"
+            if Ea::Fonts::Metrics.compact_compartment_font?(context.size,
+                                                            family: context.family, unit: context.size_unit)
+              offset -= 1
+            end
             TextRenderer.new(
               content: content,
               x: context.bounds.x + offset,

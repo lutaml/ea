@@ -9,7 +9,7 @@ module Ea
         # (verified against plateau reference SVGs):
         #
         #   ┌──────────────────────────────┐
-        #   │            凡例              │  ← title baseline 19px below top
+        #   │            凡例              │  ← title baseline 20px below top
         #   │  ┌──┐                        │
         #   │  └──┘  GMLに定義されたクラス  │  ← item 0 (icon top + 30px)
         #   │  ┌──┐                        │
@@ -24,8 +24,8 @@ module Ea
         class LegendRenderer
           CONTAINER_RX = 3
           ICON_SIZE = 17
-          TITLE_Y_OFFSET = 22
-          FIRST_ITEM_Y_OFFSET = 33
+          TITLE_Y_OFFSET = 20
+          FIRST_ITEM_Y_OFFSET = 30
           ITEM_SPACING = 19
           ICON_X_OFFSET = 10
           ICON_LABEL_GAP = 22
