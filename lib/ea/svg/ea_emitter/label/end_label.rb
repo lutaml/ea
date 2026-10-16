@@ -321,8 +321,9 @@ module Ea
           end
 
           def left_property_route?(style)
-            style[:mode] == "3" && %w[0 2].include?(style[:lwidth]) &&
-              [nil, "H", "LV"].include?(style[:tree])
+            downward_property_route?(style) ||
+              (style[:mode] == "3" && %w[0 2].include?(style[:lwidth]) &&
+                [nil, "H", "LV"].include?(style[:tree]))
           end
 
           def downward_property_route?(style)
