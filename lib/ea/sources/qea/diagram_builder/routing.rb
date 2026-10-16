@@ -594,6 +594,8 @@ module Ea
           # flush on its box edge.
           def derived_lateral_route(link_row, connector, source, target)
             style = DiagramStyleParser.parse(link_row.style)
+            return derived_vertical_lateral_route(style, link_row, connector, source, target) if style[:tree] == "LV"
+
             return nil unless style[:mode] == "3" && style[:tree] == "LH" &&
                               derived_lateral_path?(connector.connector_type, link_row.path.to_s)
 

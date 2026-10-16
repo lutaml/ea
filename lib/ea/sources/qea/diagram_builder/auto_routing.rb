@@ -8,6 +8,17 @@ module Ea
         module AutoRouting
           private
 
+          # An empty flush LV tree uses the target's center x and source's
+          # center y for its corner, the transposed LH construction. Keep
+          # authored corners and other connector styles on their existing path.
+          def derived_vertical_lateral_route(style, link_row, connector, source, target)
+            return nil unless style[:mode] == "3" && style[:lwidth] == "0" &&
+                              connector.connector_type == "Association" && link_row.path.to_s.empty?
+
+            corner = [target.x + target.width / 2, source.y + source.height / 2]
+            vertical_corner_route(corner, source, target)
+          end
+
           # Without an authored Path, a direct Association can still store
           # aligned mathematical origins rather than screen-space ports.
           def stored_association_path?(model, link_row, source, target, geom)
