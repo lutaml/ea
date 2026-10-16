@@ -389,6 +389,7 @@ module Ea
           dividers = [divider_y_by_ref[source_ref],
                       divider_y_by_ref[target_ref]]
           return nil unless bounds.all? && dividers.all?
+          return nil if flush_lateral_line?(connector, pairs, *bounds)
 
           preserve_source = explicit_horizontal_source_dock?(pairs, connector)
           adjusted = row_slot_pairs(pairs, bounds, dividers, preserve_source: preserve_source)
