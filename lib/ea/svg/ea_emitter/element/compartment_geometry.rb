@@ -152,9 +152,8 @@ module Ea
           end
 
           # EA draws a single divider under the header and seats
-          # enumeration literals directly after it (+14 at 7pt),
-          # exactly like attribute rows - no second divider and no
-          # "literals" header. Verified against EA-published SVGs.
+          # the enumeration caption directly after it (+14 at 7pt),
+          # followed by the literal rows without a second divider.
           def enum_literal_first_y
             return nil unless divider_y
 
