@@ -11,12 +11,9 @@ module Ea
           # - Foreign elements (owning package ≠ the diagram's package,
           #   gated on t_diagram.ShowForeign) render the qualified
           #   name "OwningPackage::Name".
-          # - Qualified-name wrap: when the combined integer
-          #   textLength exceeds the element bounds width, EA splits
-          #   "pkg::Class" across two lines ("pkg::" then "Class"),
-          #   each centered independently. Corpus-verified: every
-          #   wrapped header overflows its box and every single-line
-          #   header fits (tightest observed slack 6px).
+          # - Qualified names wrap after their colon separator when
+          #   the measured name reaches the box width minus 6px.
+          #   Each resulting line retains its separator and is centered.
           #
           # InstanceSpecification returns [] (InstanceSpec provider
           # already emitted the full label).
@@ -42,9 +39,8 @@ module Ea
                 return [[name, weight]]
               end
 
-              if name.include?("::")
-                qualifier, base = name.split("::", 2)
-                [["#{qualifier}::", weight], [base, weight]]
+              if (qualified = name.match(/\A(.+?:{1,2})([^:\s].*)\z/))
+                [[qualified[1], weight], [qualified[2], weight]]
               else
                 HeaderLinePipeline.wrap_words(name, context, weight).map do |line|
                   [line, weight]
@@ -59,11 +55,10 @@ module Ea
                 family: context.family, weight: "700", style: font_style,
                 logical_height: context.logical_height
               ).round
-              # Same usable width as wrap_words: box width - 6.
-              # EA wraps "Content information::MD_FeatureCatalogue-
-              # Description" (parts 86 + 137 + space 4 = 227) inside
-              # a 230px box (F851A657).
-              len > context.bounds_width.to_i - 6
+              # Qualified classifier names also wrap at the exact boundary;
+              # ordinary word wrapping keeps the shared pipeline threshold.
+              usable = context.bounds_width.to_i - 6
+              name.match?(/:{1,2}[^:\s]/) ? len >= usable : len > usable
             end
 
             # EA renders the plain classifier name in element headers;
