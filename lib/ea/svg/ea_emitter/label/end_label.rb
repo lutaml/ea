@@ -107,6 +107,10 @@ module Ea
                          target_horizontal_multiplicity(heading, anchor, mult_box, mult) || mult_pos
             end
 
+            if end_kind == :source
+              text_pos = source_top_property_role(connector, heading, anchor, text_box, role) || text_pos
+            end
+
             build_texts(role:, mult:, standalone:,
                         text_pos:, mult_pos:, stereo:, text_box:)
           end
@@ -200,6 +204,25 @@ module Ea
             left = property_role_x(direction, x, inset + width)
             left = [left, MIN_ROLE_X].max if direction == :up
             [left, y + baseline]
+          end
+
+          # EDGE=1 certifies the top dock independently of the clipped ray's
+          # heading. An absent source box uses the upward Property seat.
+          def source_top_property_role(connector, heading, anchor, box, role)
+            return nil unless source_seat?(:source, heading) && heading[0].negative? && heading[1].positive?
+            return nil unless zero_source_property_box?(box)
+
+            return nil unless source_top_property_route?(connector.style.to_h)
+
+            source_property_seat(connector, :up, anchor, box, role)
+          end
+
+          def zero_source_property_box?(box)
+            box && box["alignment"]&.zero? && stored_offsets_zero?(box)
+          end
+
+          def source_top_property_route?(style)
+            style[:stored_top_dock] == true && style.values_at(:mode, :lwidth, :tree) == ["3", "2", nil]
           end
 
           def property_role_x(direction, origin, offset)
