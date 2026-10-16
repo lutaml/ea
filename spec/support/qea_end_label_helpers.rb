@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module QeaEndLabelHelpers
-  LABEL_BOX = "CX=19:CY=16:OX=%<ox>d:OY=%<oy>d:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=0:DIR=0:ROT=0"
+  LABEL_BOX = "CX=19:CY=16:OX=%<ox>d:OY=%<oy>d:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=%<alignment>d:DIR=0:ROT=0"
 
   # Renders one Association whose source end carries `member` / `0..*` and a
   # property stereotype, through the public QEA adapter. `boxes` holds the
@@ -21,13 +21,24 @@ module QeaEndLabelHelpers
   end
 
   def qea_end_label_result(xml, mult)
-    points = xml.css("path").map { |node| node["d"] }.first.scan(/-?\d+(?:\.\d+)?/).map(&:to_f).each_slice(2).to_a
+    points = qea_end_path_points(xml)
     node = xml.css("text").find { |text| text.text == mult }
-    { first: points.first, last: points.last, mult: node && [node["x"].to_f, node["y"].to_f] }
+    { first: points.first, last: points.last, mult: node && [node["x"].to_f, node["y"].to_f],
+      texts: qea_label_text_positions(xml) }
   end
 
-  def qea_end_label_geometry(boxes)
-    labels = boxes.map { |name, offsets| "#{name}=#{format(LABEL_BOX, ox: offsets[0], oy: offsets[1])}" }
+  def qea_end_path_points(xml)
+    xml.at_css("path")["d"].scan(/-?\d+(?:\.\d+)?/).map(&:to_f).each_slice(2).to_a
+  end
+
+  def qea_label_text_positions(xml)
+    xml.css("text").map { |text| { text: text.text, x: text["x"].to_f, y: text["y"].to_f } }
+  end
+
+  def qea_end_label_geometry(boxes, alignment: 0)
+    labels = boxes.map do |name, offsets|
+      "#{name}=#{format(LABEL_BOX, ox: offsets[0], oy: offsets[1], alignment: alignment)}"
+    end
     "SX=0;SY=0;EX=0;EY=0;EDGE=1;$#{labels.join(";")};"
   end
 
@@ -44,7 +55,10 @@ module QeaEndLabelHelpers
                                      ea_guid: "diagram", cx: 900, cy: 600,
                                      styleex: "Theme=:119;SuppressFOC=1;")],
       diagram_objects: qea_end_label_placements(rows, source, target),
-      diagram_links: [rows::EaDiagramLink.new(diagramid: 1, connectorid: 1, geometry: qea_end_label_geometry(boxes),
+      diagram_links: [rows::EaDiagramLink.new(diagramid: 1, connectorid: 1,
+                                              geometry: qea_end_label_geometry(
+                                                boxes, alignment: ends.fetch(:alignment, 0)
+                                              ),
                                               style: ends.fetch(:style, "Mode=3;LWidth=2;"), path: path,
                                               hidden: 0, instance_id: 1)]
     }
@@ -52,9 +66,11 @@ module QeaEndLabelHelpers
 
   def qea_end_label_connector(rows, ends)
     end_attributes = if ends[:end] == :target
-                       { destrole: "member", destcard: ends.fetch(:mult), deststereotype: "property" }
+                       { destrole: ends.fetch(:role, "member"), destcard: ends.fetch(:mult),
+                         deststereotype: ends.fetch(:stereotype, "property") }
                      else
-                       { sourcerole: "member", sourcecard: ends.fetch(:mult), sourcestereotype: "property" }
+                       { sourcerole: ends.fetch(:role, "member"), sourcecard: ends.fetch(:mult),
+                         sourcestereotype: ends.fetch(:stereotype, "property") }
                      end
     rows::EaConnector.new(connector_id: 1, connector_type: "Association", start_object_id: 1, end_object_id: 2,
                           direction: "Source -> Destination", ea_guid: "relationship", **end_attributes)

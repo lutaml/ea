@@ -99,9 +99,10 @@ module Ea
                          horizontal_tree_multiplicity(connector, direction, anchor, mult_box, mult) ||
                          mult_seat(direction, anchor, mult_box) || mult_pos
             elsif end_kind == :target && !(tree && zero_offset?(text_box, mult_box))
-              text_pos = target_vertical_role(connector, heading, anchor, text_box, role) ||
+              text_pos = target_property_role(connector, heading, anchor, text_box, role) ||
+                         target_vertical_role(connector, heading, anchor, text_box, role) ||
                          target_rightward_role(heading, anchor, text_box, role) || text_pos
-              mult_pos = target_multiplicity_seat(heading, anchor, mult_box) ||
+              mult_pos = target_multiplicity_seat(connector, heading, anchor, mult_box) ||
                          target_horizontal_multiplicity(heading, anchor, mult_box, mult) || mult_pos
             end
 
@@ -211,6 +212,25 @@ module Ea
 
             x, y = seat_corner(anchor, box)
             [x - SEAT_X_INSET - width, y - 6]
+          end
+
+          # An upward target uses the downward property's right edge and
+          # the upward target baseline, both relative to its stored corner.
+          def target_property_role(connector, heading, anchor, box, role)
+            return nil unless upward_target_property?(connector, heading)
+            return nil unless plain_vertical_box?(box) && box["alignment"] == 1
+
+            width = Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
+            return nil unless width
+
+            x, y = seat_corner(anchor, box)
+            inset, = property_role_offsets(:down)
+            [x - inset - width, y - 7]
+          end
+
+          def upward_target_property?(connector, heading)
+            heading && heading[0].zero? && heading[1].negative? &&
+              property_label?(connector, :target) && downward_property_route?(connector.style.to_h)
           end
 
           def target_vertical_role(connector, heading, anchor, box, role)
@@ -350,12 +370,19 @@ module Ea
             mult_seat(:right, anchor, box)
           end
 
-          def target_multiplicity_seat(heading, anchor, box)
+          def target_multiplicity_seat(connector, heading, anchor, box)
             return nil unless seat_font?
             return nil unless heading && heading[0].zero? && heading[1].negative?
-            return nil unless cambria_box?(box) && stored_offsets_zero?(box)
+            return nil unless target_multiplicity_box?(connector, box)
 
-            [anchor[0] + 8, anchor[1] - 7]
+            x, y = seat_corner(anchor, box)
+            [x + 8, y - 7]
+          end
+
+          def target_multiplicity_box?(connector, box)
+            # Property targets seat at the stored corner; plain moved labels
+            # retain their explicit offsets.
+            cambria_box?(box) && (stored_offsets_zero?(box) || property_label?(connector, :target))
           end
 
           def cambria_box?(box)
