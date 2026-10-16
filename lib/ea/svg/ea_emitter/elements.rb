@@ -452,7 +452,7 @@ module Ea
         def tagged_values_for(classifier)
           return [] unless classifier.is_a?(Ea::Model::Classifier)
 
-          classifier.tagged_values || []
+          (classifier.tagged_values || []).reject { |tag| tag.value.nil? || tag.value.empty? }
         end
 
         # Real OCL constraints render trailing, after the content
