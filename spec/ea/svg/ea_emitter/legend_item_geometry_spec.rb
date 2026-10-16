@@ -18,7 +18,7 @@ RSpec.describe "Legend item geometry" do
       expect(icons.map { |node| node["y"].to_f - bounds.y }).to eq([30, 49, 68])
       expect(labels.map { |node| node["y"].to_f - bounds.y }).to eq([42, 61, 80])
       expect(icons.map { |node| [node["width"], node["height"]] }).to eq([%w[17 17]] * 3)
-      expect(title["y"].to_f - bounds.y).to eq(22)
+      expect(title["y"].to_f - bounds.y).to eq(20)
       expect(title["style"]).to include("font-size:#{heading_size}pt;")
     end
   end

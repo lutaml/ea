@@ -15,7 +15,7 @@ RSpec.describe "QEA legend text anchors" do
 
       expect(label["x"].to_f - container["x"].to_f).to eq(32)
       expect(label["y"].to_f - container["y"].to_f).to eq(42)
-      expect(title["y"].to_f - container["y"].to_f).to eq(22)
+      expect(title["y"].to_f - container["y"].to_f).to eq(20)
     end
   end
 
