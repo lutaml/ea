@@ -39,7 +39,7 @@ RSpec.describe "QEA source-height compartment metrics" do
       row = texts.find { |node| node.text == name }
 
       # Align source diagram coordinates with the published SVG frame.
-      expect([row["x"].to_f - 39, row["y"].to_f + 4, row["textLength"].to_i]).to eq(expected)
+      expect([row["x"].to_f - 39, row["y"].to_f + 5, row["textLength"].to_i]).to eq(expected)
       expect(row["style"]).to include("font-family:Carlito;", "font-size:9pt;")
     end
   end

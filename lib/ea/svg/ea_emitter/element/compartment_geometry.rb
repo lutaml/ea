@@ -72,8 +72,19 @@ module Ea
           end
           private :line_height
 
+          # A source font can export at the same point size with a smaller
+          # logical cell. Seat its first baseline using the same height delta
+          # as its row pitch, without changing compact-font spacing.
+          def source_baseline_adjustment
+            nominal_height = Ea::Fonts::Metrics.compartment_line_height(
+              size, family: @family, unit: @size_unit, offset: 0
+            )
+            line_height(0) - nominal_height
+          end
+          private :source_baseline_adjustment
+
           def header_first_y
-            bounds.y + size + (header_top_padding || 12)
+            bounds.y + size + (header_top_padding || 12) + source_baseline_adjustment
           end
 
           # Y of the divider line between header and the rest.
@@ -113,7 +124,7 @@ module Ea
           end
 
           def raw_attr_first_y
-            return bounds.y + size + (header_top_padding || 12) + 12 unless divider_y
+            return header_first_y + 12 unless divider_y
 
             divider_y + line_height((attr_first_offset || 7) - 1) + 1
           end
