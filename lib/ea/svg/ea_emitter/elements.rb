@@ -144,7 +144,10 @@ module Ea
                        end
           op_lines = if is_classifier && show_operations? &&
                         (operations_visible?(element) || regenerated_context?)
-                        Element::OperationRenderer.lines_for(classifier)
+                        Element::OperationRenderer.lines_for(
+                          classifier,
+                          parameter_detail: display_config.operation_parameter_detail
+                        )
                       else
                         []
                       end
@@ -440,12 +443,10 @@ module Ea
           classifier.literals || []
         end
 
-        # The "literals" caption occupies a row slot when any
-        # literal carries a stored code value.
+        # A populated literal compartment includes its caption row.
         def enum_row_count_for(classifier)
           literals = enum_literals_for(classifier)
-          caption = literals.any? { |l| !l.value.to_s.empty? && l.value.to_s != l.name.to_s }
-          literals.size + (caption ? 1 : 0)
+          literals.empty? ? 0 : literals.size + 1
         end
 
         def tagged_values_for(classifier)

@@ -6,13 +6,11 @@ module Ea
       module Compartment
         # Enumeration literal compartment: divider line + "literals"
         # italic header + each literal name. Skipped when the
-        # classifier has no literals or the geometry cannot fit them.
+        # classifier has no literals or no content geometry.
         module EnumLiterals
           module_function
 
-          # EA: literal rows sit directly under the header divider,
-          # 13px apart at 7pt (attr rows use 14), first row at
-          # divider + 14. No compartment divider, no header label.
+          # Caption and literal rows share the same baseline spacing.
           LITERAL_LINE_OFFSET = 6
 
           def render(context)
@@ -29,44 +27,14 @@ module Ea
             )
             text_blocks = []
             row_y = context.geometry.enum_literal_first_y
-            # EA renders a centered italic "literals" caption above
-            # the rows when the literals carry stored code values
-            # (t_attribute.Default); bare literal lists render the
-            # rows directly. Corpus-verified (PT_TypeOfSA:
-            # "literals" caption + "ServingParcel = SP" rows;
-            # CV_SequenceType: bare rows, no caption).
-            if caption?(context)
-              text_blocks << caption_text(context, row_y)
-              row_y += line_h
-            end
+            text_blocks << caption_text(context, row_y)
+            row_y += line_h
             context.enum_literals.each_with_index do |literal, idx|
               y = row_y + (idx * line_h)
               text_blocks << visibility_placeholder(context, y)
               text_blocks << literal_name_text(context, literal, y)
             end
             wrap_group(text_blocks, context.theme.text_color)
-          end
-
-          def caption?(context)
-            values_caption?(context) || grown?(context)
-          end
-
-          # EA draws the 'literals' caption on every enum box it
-          # re-lays (grown height) - corpus 8/8 grown=caption. Boxes
-          # keeping stored size keep their stored caption state,
-          # captured by the stored literal values.
-          def grown?(context)
-            stored = context.element&.bounds
-            return false unless stored
-
-            context.bounds.height > stored.height + 4
-          end
-
-          def values_caption?(context)
-            context.enum_literals.any? do |l|
-              value = l.value.to_s
-              !value.empty? && value != l.name.to_s
-            end
           end
 
           def caption_text(context, y)
@@ -101,9 +69,12 @@ module Ea
 
           def literal_name_text(context, literal, y)
             content = literal_display(literal)
+            # EA uses the attribute row point-size increment for literal names.
+            offset = context.theme.attribute_spec.content_x_offset || 26
+            offset += 2 * (context.size - 7) if context.size_unit == "pt"
             TextRenderer.new(
               content: content,
-              x: context.bounds.x + (context.theme.attribute_spec.content_x_offset || 26),
+              x: context.bounds.x + offset,
               y: y,
               family: context.family, size: context.size,
               size_unit: context.size_unit, logical_height: context.logical_height,
