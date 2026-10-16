@@ -14,8 +14,7 @@ module Ea
               Element::LegendRenderer.render(
                 context.bounds,
                 legend: context.model_element.legend,
-                family: context.family,
-                canvas: context.canvas
+                family: context.family
               )
             elsif context.model_element.is_a?(Ea::Model::Package) ||
                   context.model_element.is_a?(Ea::Model::Note)
