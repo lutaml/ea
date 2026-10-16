@@ -135,7 +135,8 @@ module Ea
                             classifier.properties.to_a.any? { |pr| !pr.association_id }))
                          Element::AttributeRenderer.lines_for(
                            classifier, lookup: attribute_lookup,
-                           exclude_association_ids: drawn_association_ids
+                                       exclude_association_ids: drawn_association_ids,
+                                       stored_order: element.style&.fetch(:stored_attribute_order, false)
                          )
                        else
                          []

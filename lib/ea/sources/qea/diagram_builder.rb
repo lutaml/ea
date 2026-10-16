@@ -123,6 +123,7 @@ module Ea
         def build_element(obj_row, diagram_row)
           @current_obj_row = obj_row
           style_hash = DiagramStyleParser.parse(obj_row.objectstyle)
+          style_hash[:stored_attribute_order] = true
           Ea::Model::DiagramElement.new(
             id: IdNormalizer.synthetic("de", diagram_row.diagram_id,
                                        obj_row.instance_id),

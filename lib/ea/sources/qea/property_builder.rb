@@ -16,7 +16,8 @@ module Ea
 
         def build_all_for(owner_object)
           attrs = database.attributes_for_object(owner_object.ea_object_id) || []
-          attrs.map { |row| build_one(row, owner_object) }
+          attrs.each_with_index.sort_by { |row, index| attribute_sort_key(row, index) }
+               .map { |row, _index| build_one(row, owner_object) }
         end
 
         def build_one(row, owner_object)
@@ -47,6 +48,15 @@ module Ea
         end
 
         private
+
+        # Equal explicit Pos values use name order in EA's published diagrams.
+        # Missing positions retain source order before the explicit zero cohort.
+        def attribute_sort_key(row, index)
+          return [row.sort_position, 0, "", "", index] if row.pos.nil?
+
+          name = row.name.to_s
+          [row.sort_position, 1, name.downcase, name, index]
+        end
 
         # EA stores some bounds as literal text ("n"); those render
         # verbatim in attribute lines while computed-unbounded bounds
