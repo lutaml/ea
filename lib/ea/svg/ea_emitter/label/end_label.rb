@@ -247,12 +247,15 @@ module Ea
           def source_bottom_dock?(connector, heading, box)
             source_seat?(:source, heading) && heading[0].zero? && heading[1].positive? &&
               zero_source_property_box?(box) && default_presentation?(box) &&
-              source_bottom_property_route?(connector.style.to_h) &&
-              source_property_font?(connector, :down)
+              source_bottom_property_route?(connector.style.to_h) && source_property_cambria?(connector)
           end
 
+          # A downward leg on the horizontal lateral tree seats an absent
+          # box like the up leg already does on the same route.
           def source_bottom_property_route?(style)
-            style[:stored_association_ray] == true && style.values_at(:mode, :lwidth, :tree) == ["3", "2", nil]
+            return false unless style.values_at(:mode, :lwidth) == %w[3 2]
+
+            style[:tree] == "LH" || (style[:stored_association_ray] == true && style[:tree].nil?)
           end
 
           def plain_upward_seat(connector, direction, anchor, box, role)
@@ -386,9 +389,12 @@ module Ea
           end
 
           def source_property_font?(connector, direction)
-            font_family.to_s.casecmp("Cambria").zero? &&
-              property_label?(connector, :source) &&
+            source_property_cambria?(connector) &&
               source_property_route?(connector.style.to_h, direction)
+          end
+
+          def source_property_cambria?(connector)
+            font_family.to_s.casecmp("Cambria").zero? && property_label?(connector, :source)
           end
 
           def source_property_route?(style, direction)
