@@ -10,7 +10,16 @@ module Ea
           private
 
           def restore_stored_square_ports(model, link_row, diagram_row, geom, context)
-            return model if context || !stored_square_port_style?(model, link_row, geom)
+            return model if context
+
+            model = mark_orthogonal_origin_ray(model, link_row, diagram_row, geom)
+            return model if model.style.to_h[:orthogonal_origin_ray] == true
+
+            restore_global_square_ports(model, link_row, diagram_row, geom)
+          end
+
+          def restore_global_square_ports(model, link_row, diagram_row, geom)
+            return model unless stored_square_port_style?(model, link_row, geom)
 
             connector = database.find_connector(link_row.connectorid)
             points = stored_square_port_coordinates(connector)
@@ -23,6 +32,50 @@ module Ea
             model.source_anchor, model.target_anchor = ends
             model.waypoints = ends.map { |point| Ea::Model::Waypoint.new(position: point) }
             model
+          end
+
+          # A square route with no stored bends uses the original mathematical
+          # ray to choose its orthogonal dock axis at render time.
+          def mark_orthogonal_origin_ray(model, link_row, diagram_row, geom)
+            return model unless orthogonal_origin_style?(model, link_row, geom)
+
+            origins = orthogonal_math_origins(link_row, diagram_row, geom)
+            return model unless origins
+
+            model.source_anchor, model.target_anchor = origins
+            model.waypoints = origins.map { |point| Ea::Model::Waypoint.new(position: point) }
+            model.style = model.style.to_h.merge(orthogonal_origin_ray: true)
+            model
+          end
+
+          def orthogonal_math_origins(link_row, diagram_row, geom)
+            connector = database.find_connector(link_row.connectorid)
+            boxes = stored_square_port_boxes(connector, diagram_row)
+            return unless boxes && orthogonal_box_gap?(*boxes)
+
+            offsets = [[geom[:sx], geom[:sy]], [geom[:ex], geom[:ey]]]
+            origins = boxes.zip(offsets).map { |box, offset| stored_ray_origin(box, *offset) }
+            origins if orthogonal_origins_inside?(origins, boxes)
+          end
+
+          def orthogonal_origins_inside?(origins, boxes)
+            origins.zip(boxes).all? { |point, box| origin_inside_outline?(point, box) }
+          end
+
+          def orthogonal_origin_style?(model, link_row, geom)
+            %w[Association Generalization].include?(model.connector_type) && link_row.path.to_s.empty? &&
+              model.style.to_h.values_at(:mode, :tree, :lwidth) == %w[3 OS 2] &&
+              %i[sx sy ex ey].all? { |key| !geom[key].nil? }
+          end
+
+          def orthogonal_box_gap?(source, target)
+            [source, target].all? { |box| box.width.positive? && box.height.positive? } &&
+              (horizontal_ray_gap?(source, target) ^ vertical_ray_gap?(source, target))
+          end
+
+          def origin_inside_outline?(point, box)
+            point.x.between?(box.x - 1, box.x + box.width + 1) &&
+              point.y.between?(box.y - 1, box.y + box.height + 1)
           end
 
           def stored_square_port_style?(model, link_row, geom)
