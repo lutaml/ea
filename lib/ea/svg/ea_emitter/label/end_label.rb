@@ -100,10 +100,16 @@ module Ea
                          mult_seat(direction, anchor, mult_box) || mult_pos
             elsif end_kind == :target && !(tree && zero_offset?(text_box, mult_box))
               text_pos = target_property_role(connector, heading, anchor, text_box, role) ||
+                         target_diagonal_property_role(connector, heading, anchor, text_box, role) ||
                          target_vertical_role(connector, heading, anchor, text_box, role) ||
                          target_rightward_role(heading, anchor, text_box, role) || text_pos
               mult_pos = target_multiplicity_seat(connector, heading, anchor, mult_box) ||
                          target_horizontal_multiplicity(heading, anchor, mult_box, mult) || mult_pos
+            end
+
+            if end_kind == :source
+              text_pos = source_top_property_role(connector, heading, anchor, text_box, role) ||
+                         source_bottom_property_role(connector, heading, anchor, text_box, role) || text_pos
             end
 
             build_texts(role:, mult:, standalone:,
@@ -185,10 +191,10 @@ module Ea
             [x + SEAT_X_INSET, y - 7]
           end
 
-          # Property-role clusters use a direction-specific right edge;
+          # Property-role clusters use a direction-specific horizontal seat;
           # alignment controls the stereotype line within that cluster.
           def source_property_seat(connector, direction, anchor, box, role)
-            return nil unless %i[up left down].include?(direction) && property_role_box?(box, direction)
+            return nil unless %i[up left right down].include?(direction) && property_role_box?(box, direction)
             return nil unless source_property_font?(connector, direction)
 
             width = Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
@@ -196,9 +202,57 @@ module Ea
 
             x, y = seat_corner(anchor, box)
             inset, baseline = property_role_offsets(direction)
-            left = x - inset - width
+            left = property_role_x(direction, x, inset + width)
             left = [left, MIN_ROLE_X].max if direction == :up
             [left, y + baseline]
+          end
+
+          def property_role_x(direction, origin, offset)
+            direction == :right ? origin + offset : origin - offset
+          end
+
+          # EDGE=1 certifies the top dock independently of the clipped ray's
+          # heading. An absent source box uses the upward Property seat.
+          def source_top_property_role(connector, heading, anchor, box, role)
+            return nil unless source_seat?(:source, heading) && heading[0].negative? && heading[1].positive?
+            return nil unless zero_source_property_box?(box)
+
+            return nil unless source_top_property_route?(connector.style.to_h)
+
+            source_property_seat(connector, :up, anchor, box, role)
+          end
+
+          def zero_source_property_box?(box)
+            box && box["alignment"]&.zero? && stored_offsets_zero?(box)
+          end
+
+          def source_top_property_route?(style)
+            style[:stored_top_dock] == true && style.values_at(:mode, :lwidth, :tree) == ["3", "2", nil]
+          end
+
+          # A saved external ray that first meets the source's bottom face
+          # seats an absent source Property role like the downward Property
+          # seat. The caller reports that face as a downward heading.
+          def source_bottom_property_role(connector, heading, anchor, box, role)
+            return nil unless source_bottom_dock?(connector, heading, box)
+
+            width = Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
+            return nil unless width
+
+            x, y = seat_corner(anchor, box)
+            inset, baseline = property_role_offsets(:down)
+            [x - inset - width, y + baseline]
+          end
+
+          def source_bottom_dock?(connector, heading, box)
+            source_seat?(:source, heading) && heading[0].zero? && heading[1].positive? &&
+              zero_source_property_box?(box) && default_presentation?(box) &&
+              source_bottom_property_route?(connector.style.to_h) &&
+              source_property_font?(connector, :down)
+          end
+
+          def source_bottom_property_route?(style)
+            style[:stored_association_ray] == true && style.values_at(:mode, :lwidth, :tree) == ["3", "2", nil]
           end
 
           def plain_upward_seat(connector, direction, anchor, box, role)
@@ -231,6 +285,31 @@ module Ea
           def upward_target_property?(connector, heading)
             heading && heading[0].zero? && heading[1].negative? &&
               property_label?(connector, :target) && downward_property_route?(connector.style.to_h)
+          end
+
+          # Zero-offset diagonal labels use the dominant leg's Property
+          # right edge. Moved boxes keep their explicit placement.
+          def target_diagonal_property_role(connector, heading, anchor, box, role)
+            return nil unless diagonal_property_box?(connector, box)
+
+            inset = diagonal_property_inset(heading)
+            width = Ea::Fonts::Metrics.text_length(role, font_size, family: font_family) if inset
+            [anchor[0] - inset - width, anchor[1] - 7] if width
+          end
+
+          def diagonal_property_box?(connector, box)
+            plain_vertical_box?(box) && box["alignment"] == 1 && stored_offsets_zero?(box) &&
+              property_label?(connector, :target) &&
+              connector.style.to_h.values_at(:mode, :lwidth, :tree) == ["3", "0", nil]
+          end
+
+          def diagonal_property_inset(heading)
+            return nil unless heading && !heading.include?(0)
+
+            dx, dy = heading
+            return property_role_offsets(:left).first if dx.negative? && dx.abs > dy.abs
+
+            property_role_offsets(:down).first if dy.negative? && dy.abs > dx.abs
           end
 
           def target_vertical_role(connector, heading, anchor, box, role)
@@ -301,7 +380,7 @@ module Ea
           def property_role_offsets(direction)
             case direction
             when :up then [60, -6]
-            when :left then [60, -7]
+            when :left, :right then [60, -7]
             else [65, 15]
             end
           end
@@ -315,14 +394,16 @@ module Ea
           def source_property_route?(style, direction)
             case direction
             when :left then left_property_route?(style)
+            when :right then style.values_at(:mode, :lwidth, :tree) == %w[3 2 H]
             when :down then downward_property_route?(style)
             else %w[0 2].include?(style[:lwidth]) && style[:tree] != "OS"
             end
           end
 
           def left_property_route?(style)
-            style[:mode] == "3" && %w[0 2].include?(style[:lwidth]) &&
-              [nil, "H", "LV"].include?(style[:tree])
+            downward_property_route?(style) ||
+              (style[:mode] == "3" && %w[0 2].include?(style[:lwidth]) &&
+                [nil, "H", "LV"].include?(style[:tree]))
           end
 
           def downward_property_route?(style)

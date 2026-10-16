@@ -706,7 +706,7 @@ RSpec.describe Ea::Svg::EaEmitter::Label::EndLabel do
     end
 
     it "preserves unproven leftward styles and non-property roles" do
-      [{ style: { mode: "1", lwidth: "2" } }, { style: { mode: "3", lwidth: "0", tree: "V" } },
+      [{ style: { mode: "1", lwidth: "0" } }, { style: { mode: "3", lwidth: "0", tree: "V" } },
        { style: { lwidth: "0" }, stereotype: nil }].each do |options|
         positions = upward_property_positions(traffic, heading: [-100, 0], **options)
 
