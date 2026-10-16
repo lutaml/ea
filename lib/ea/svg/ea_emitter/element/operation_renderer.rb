@@ -16,10 +16,12 @@ module Ea
           VISIBILITY_X_OFFSET = 5
           CONTENT_X_OFFSET = 22
 
-          def self.render(operations, bounds:, first_y:, family:, size:)
+          def self.render(operations, bounds:, first_y:, family:, size:, size_unit: "px", logical_height: nil)
             # EA's op rows pitch 13 (size + 6), same as attribute
             # rows (6D4C665D: ops 541..658 step 13).
-            line_h = size + 6
+            line_h = Ea::Fonts::Metrics.compartment_line_height(
+              size, family: family, unit: size_unit, logical_height: logical_height
+            )
             text_blocks = []
             has_receptions = operations.any?(&:is_reception)
             if has_receptions
@@ -27,7 +29,7 @@ module Ea
                 content: "receptions",
                 x: bounds.x + (bounds.width / 2.0) - (8 * size * 0.65) / 2,
                 y: first_y,
-                family: family, size: size,
+                family: family, size: size, size_unit: size_unit, logical_height: logical_height,
                 style: "italic", fill: "#000000"
               ).to_svg
             end
@@ -36,9 +38,9 @@ module Ea
             ops.each_with_index do |op, idx|
               y = first_y + ((idx + offset) * line_h)
               text_blocks << build_text(bounds.x + VISIBILITY_X_OFFSET, y,
-                                         visibility_prefix(op), family, size)
+                                        visibility_prefix(op), family, size, size_unit, logical_height: logical_height)
               text_blocks << build_text(bounds.x + AttributeRenderer.content_x_offset(size), y,
-                                         operation_text(op), family, size)
+                                        operation_text(op), family, size, size_unit, logical_height: logical_height)
             end
             %(<g style="#{Style::TEXT_GROUP}">\n#{text_blocks.join("\n")}\n</g>)
           end
@@ -90,9 +92,10 @@ module Ea
           end
           private_class_method :reception_params
 
-          def self.build_text(x, y, content, family, size)
+          def self.build_text(x, y, content, family, size, size_unit, logical_height: nil)
             TextRenderer.new(content: content, x: x, y: y,
-                              family: family, size: size).to_svg
+                             family: family, size: size, size_unit: size_unit,
+                             logical_height: logical_height).to_svg
           end
           private_class_method :build_text
         end

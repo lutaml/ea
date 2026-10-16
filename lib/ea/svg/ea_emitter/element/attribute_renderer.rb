@@ -47,12 +47,14 @@ module Ea
           end
 
           def self.render(lines, bounds:, first_y:, family:,
-                          size:, size_unit: DEFAULT_FONT_UNIT,
+                          size:, size_unit: DEFAULT_FONT_UNIT, logical_height: nil,
                           fill: "#000000",
                           visibility_x_offset: DEFAULT_VISIBILITY_X_OFFSET,
                           content_x_offset: nil)
 
-            line_h = size + ROW_LINE_OFFSET
+            line_h = Ea::Fonts::Metrics.compartment_line_height(
+              size, family: family, unit: size_unit, offset: ROW_LINE_OFFSET, logical_height: logical_height
+            )
             offsets = group_lead_offsets(lines)
             text_blocks = []
             lines.each_with_index do |line, idx|
@@ -60,15 +62,27 @@ module Ea
               visibility, rest = split_visibility(line)
               if visibility
                 unless visibility.strip.empty?
-                  text_blocks << build_text(bounds.x + visibility_x_offset, y, visibility, family, size, size_unit, fill)
+                  text_blocks << build_text(
+                    bounds.x + visibility_x_offset, y, visibility, family, size, size_unit, fill,
+                    logical_height: logical_height
+                  )
                 end
                 offset = (content_x_offset || DEFAULT_CONTENT_X_OFFSET) +
                          2 * (size - 7)
-                text_blocks << build_text(bounds.x + offset, y, rest, family, size, size_unit, fill)
+                offset -= 1 if Ea::Fonts::Metrics.compact_compartment_font?(size, family: family, unit: size_unit)
+                text_blocks << build_text(
+                  bounds.x + offset, y, rest, family, size, size_unit, fill, logical_height: logical_height
+                )
               elsif line.strip.start_with?("«")
-                text_blocks << build_text(bounds.x + STEREOTYPE_HEADER_X_OFFSET, y, line.strip, family, size, size_unit, fill)
+                text_blocks << build_text(
+                  bounds.x + STEREOTYPE_HEADER_X_OFFSET, y, line.strip, family, size, size_unit, fill,
+                  logical_height: logical_height
+                )
               else
-                text_blocks << build_text(bounds.x + visibility_x_offset, y, line.strip, family, size, size_unit, fill)
+                text_blocks << build_text(
+                  bounds.x + visibility_x_offset, y, line.strip, family, size, size_unit, fill,
+                  logical_height: logical_height
+                )
               end
             end
             group_style = "stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#{fill};fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00"
@@ -149,9 +163,11 @@ module Ea
           end
           private_class_method :split_visibility
 
-          def self.build_text(x, y, content, family, size, size_unit = DEFAULT_FONT_UNIT, fill = "#000000")
+          def self.build_text(x, y, content, family, size, size_unit = DEFAULT_FONT_UNIT,
+                              fill = "#000000", logical_height: nil)
             TextRenderer.new(content: content, x: x, y: y,
-                              family: family, size: size, size_unit: size_unit, fill: fill).to_svg
+                             family: family, size: size, size_unit: size_unit,
+                             logical_height: logical_height, fill: fill).to_svg
           end
           private_class_method :build_text
 

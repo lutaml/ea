@@ -29,7 +29,7 @@ module Ea
       attr_reader :id, :name,
                   :font_family, :font_size, :font_size_unit,
                   :text_weight_normal, :text_weight_bold,
-                  :element_font_size, :element_font_unit,
+                  :element_font_family, :element_font_size, :element_font_unit,
                   :text_color, :attribute_text_color, :method_text_color,
                   :border_color, :fill_color, :background_color,
                   :stroke_in_text_color,
@@ -69,7 +69,7 @@ module Ea
                      label_font_size_unit: nil,
                      font_size_unit: "pt", text_weight_normal: 400,
                      text_weight_bold: 700,
-                     element_font_size: 9, element_font_unit: "pt",
+                     element_font_family: nil, element_font_size: 9, element_font_unit: "pt",
                      text_color: "#000000", attribute_text_color: nil,
                      method_text_color: nil, border_color: "#000000",
                      fill_color: "#FFFFFF", background_color: "#FFFFFF",
@@ -90,6 +90,7 @@ module Ea
         @font_size_unit = font_size_unit
         @text_weight_normal = text_weight_normal
         @text_weight_bold = text_weight_bold
+        @element_font_family = element_font_family
         @element_font_size = element_font_size
         @element_font_unit = element_font_unit
         @text_color = text_color
@@ -138,6 +139,7 @@ module Ea
 
       def with(**overrides)
         clear_label_override(overrides, :font_family, :label_font_family)
+        clear_label_override(overrides, :font_family, :element_font_family)
         clear_label_override(overrides, :font_size, :label_font_size)
         clear_label_override(overrides, :font_size_unit, :label_font_size_unit)
         Definition.new(**to_h.merge(overrides))
@@ -176,6 +178,7 @@ module Ea
           label_font_size_unit: @label_font_size_unit,
           text_weight_normal: text_weight_normal,
           text_weight_bold: text_weight_bold,
+          element_font_family: element_font_family,
           element_font_size: element_font_size,
           element_font_unit: element_font_unit,
           text_color: text_color,

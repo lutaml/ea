@@ -14,7 +14,7 @@ module Ea
       class RenderContext < Struct.new(
         :element, :bounds, :model_element, :classifier,
         :fill, :stroke, :stroke_width, :text_fill,
-        :family, :size, :size_unit,
+        :family, :size, :size_unit, :logical_height,
         :header_lines, :attr_lines, :op_lines,
         :enum_literals, :tagged_values, :constraints, :marker_lines,
         :package_content_lines,

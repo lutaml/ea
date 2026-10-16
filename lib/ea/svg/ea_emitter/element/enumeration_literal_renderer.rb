@@ -16,19 +16,22 @@ module Ea
           # EA lists literals alphabetically (case-insensitive) and
           # spaces rows at the same 13px pitch as attributes at 7pt
           # (size + 6) — corpus-verified against EA-published SVGs.
-          def self.render(literals, bounds:, first_y:, family:, size:)
-            line_h = size + 6
+          def self.render(literals, bounds:, first_y:, family:, size:, size_unit: "px", logical_height: nil)
+            line_h = Ea::Fonts::Metrics.compartment_line_height(
+              size, family: family, unit: size_unit, logical_height: logical_height
+            )
             sorted = literals.sort_by { |l| [l.name.to_s.downcase, l.name.to_s] }
             text_blocks = sorted.each_with_index.map do |literal, idx|
               y = first_y + (idx * line_h)
-              build_text(bounds.x + 5, y, literal.name.to_s, family, size)
+              build_text(bounds.x + 5, y, literal.name.to_s, family, size, size_unit, logical_height: logical_height)
             end
             %(<g style="#{Style::TEXT_GROUP}">\n#{text_blocks.join("\n")}\n</g>)
           end
 
-          def self.build_text(x, y, content, family, size)
+          def self.build_text(x, y, content, family, size, size_unit, logical_height: nil)
             TextRenderer.new(content: content, x: x, y: y,
-                              family: family, size: size).to_svg
+                             family: family, size: size, size_unit: size_unit,
+                             logical_height: logical_height).to_svg
           end
           private_class_method :build_text
         end

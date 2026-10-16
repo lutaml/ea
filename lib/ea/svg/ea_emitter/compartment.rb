@@ -12,6 +12,7 @@ module Ea
       module Compartment
         autoload :Shape, "ea/svg/ea_emitter/compartment/shape"
         autoload :NoteBody, "ea/svg/ea_emitter/compartment/note_body"
+        autoload :NoteHtml, "ea/svg/ea_emitter/compartment/note_html"
         autoload :Header, "ea/svg/ea_emitter/compartment/header"
         autoload :HeaderDivider, "ea/svg/ea_emitter/compartment/header_divider"
         autoload :StereotypeIcon, "ea/svg/ea_emitter/compartment/stereotype_icon"

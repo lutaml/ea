@@ -115,9 +115,11 @@ module Ea
                       else
                         stored_ray_gap?(source, target, model.style[:mode], geom[:edge])
                       end
-            return model unless allowed
+            return model unless allowed && stored_association_path?(model, link_row, source, target, geom)
 
             set_stored_ray_origins(model, source, target, geom)
+            model.style[:association_ray_outline] = true if model.connector_type == "Association"
+            model
           end
 
           # An empty-Path Mode 3 Association follows the line between its
@@ -125,6 +127,7 @@ module Ea
           # The target origin must lie inside its own stroked outline.
           def association_stored_ray(model, link_row, diagram_row, geom, context)
             return model if context
+            return stored_diagonal_corner(model, link_row, diagram_row, geom) unless link_row.path.to_s.empty?
             return model unless association_ray_candidate?(model, link_row)
 
             source, target = stored_ray_boxes(link_row, diagram_row)
@@ -139,6 +142,47 @@ module Ea
               model.style[:stored_top_dock] = true
             end
             model
+          end
+
+          # A single authored bend joins the stored mathematical origins.
+          # Clip each leg independently; a facing-edge shortcut loses the bend.
+          def stored_diagonal_corner(model, link_row, diagram_row, geom)
+            return model unless model.connector_type == "Association" && association_ray_style?(model.style.to_h) &&
+                                model.style[:lwidth] == "2" && geom.values_at(:sx, :sy, :ex, :ey).all?
+
+            corners = intermediate_waypoints(link_row)
+            return model unless corners.size == 1
+
+            boxes = stored_ray_boxes(link_row, diagram_row)
+            origins = [stored_ray_origin(boxes[0], geom[:sx], geom[:sy]),
+                       stored_ray_origin(boxes[1], geom[:ex], geom[:ey])]
+            bend = Ea::Model::Point.new(x: corners[0][0], y: corners[0][1])
+            left, right = boxes.sort_by(&:x)
+            return model unless bend.x.between?(left.x + left.width + 1, right.x - 1) &&
+                                boxes.all? { |box| bend.y.between?(box.y, box.y + box.height) }
+
+            outlines = boxes.map { |box| grown_bounds(box, 1) }
+            return model unless origins.zip(outlines).all? { |origin, box| inside_box?(origin, box) }
+            return model if outlines.any? { |box| inside_box?(bend, box) }
+            return model unless origins.all? { |origin| origin.x != bend.x && origin.y != bend.y }
+
+            ends = origins.zip(outlines).map { |origin, box| diagonal_corner_exit(origin, bend, box) }
+            return model unless ends.all?
+
+            model.waypoints = [ends[0], bend, ends[1]].map { |point| Ea::Model::Waypoint.new(position: point) }
+            model.source_anchor, model.target_anchor = origins
+            model
+          end
+
+          def diagonal_corner_exit(origin, bend, box)
+            dx = bend.x - origin.x
+            dy = bend.y - origin.y
+            times = [(dx.positive? ? box.x + box.width - origin.x : box.x - origin.x).to_f / dx,
+                     (dy.positive? ? box.y + box.height - origin.y : box.y - origin.y).to_f / dy]
+            time = times.select { |value| value.between?(0, 1) }.min
+            return unless time
+
+            Ea::Model::Point.new(x: (origin.x + time * dx).floor, y: (origin.y + time * dy).floor)
           end
 
           def port_waypoints(model, origins)
@@ -198,7 +242,15 @@ module Ea
           def association_ray_candidate?(model, link_row)
             model.connector_type == "Association" && link_row.path.to_s.empty? &&
               model.source_anchor && model.target_anchor &&
-              (model.source_port || model.target_port) && association_ray_style?(model.style.to_h)
+              (model.source_port || model.target_port || aligned_default_origins?(model)) &&
+              association_ray_style?(model.style.to_h)
+          end
+
+          # Zero offsets omit ports, but an explicitly stored axis-aligned
+          # width-2 ray still uses the logical centers and stroked outlines.
+          def aligned_default_origins?(model)
+            model.has_geometry_offsets && model.style[:lwidth] == "2" &&
+              (model.source_anchor.x == model.target_anchor.x || model.source_anchor.y == model.target_anchor.y)
           end
 
           # A thin connector still meets the outer stroke of explicitly
@@ -238,73 +290,6 @@ module Ea
               point.y.between?(bounds.y, bounds.y + bounds.height)
           end
 
-          # A Mode 2 Association with equal SX/EX (vertical EDGE 1/3) or
-          # equal SY/EY (horizontal EDGE 4) and no custom Path docks as a
-          # straight line through the middle of the boxes' overlap, moved
-          # by the shared stored offset. Stored SY counts upward.
-          def overlap_ray_origins(model, link_row, diagram_row, geom, context)
-            return model if context
-            return model unless overlap_ray_candidate?(model, link_row, geom)
-
-            source, target = stored_ray_boxes(link_row, diagram_row)
-            origins = overlap_origins(source, target, geom)
-            return model unless origins
-
-            model.source_anchor, model.target_anchor = origins.map do |ox, oy|
-              Ea::Model::Point.new(x: ox, y: oy)
-            end
-            model.style[:overlap_ray] = true
-            model
-          end
-
-          # Both ray origins share the overlap coordinate on the axis the
-          # offsets move and sit at each box's centre on the other axis.
-          def overlap_origins(source, target, geom)
-            along, across, offset = overlap_axes(geom)
-            coordinate = overlap_ray_coordinate(*box_span(source, along), *box_span(target, along), offset)
-            return nil unless coordinate && disjoint_span?(*box_span(source, across), *box_span(target, across))
-
-            [source, target].map do |box|
-              start, size = box_span(box, across)
-              centre = start + size / 2.0
-              geom[:edge] == 4 ? [centre, coordinate] : [coordinate, centre]
-            end
-          end
-
-          # [axis the offsets move, axis the boxes face, stored offset]
-          def overlap_axes(geom)
-            return [%i[y height], %i[x width], -geom[:sy]] if geom[:edge] == 4
-
-            [%i[x width], %i[y height], geom[:sx]]
-          end
-
-          def box_span(box, keys)
-            keys.map { |key| box.public_send(key) }
-          end
-
-          def overlap_ray_candidate?(model, link_row, geom)
-            model.connector_type == "Association" && model.style[:mode] == "2" &&
-              model.waypoints.size == 2 && link_row.path.to_s.empty? &&
-              model.has_geometry_offsets && uniform_overlap_offsets?(geom)
-          end
-
-          def uniform_overlap_offsets?(geom)
-            return false unless geom.values_at(:sx, :sy, :ex, :ey).all?
-
-            geom[:edge] == 4 ? geom[:sy] == geom[:ey] : [1, 3].include?(geom[:edge]) && geom[:sx] == geom[:ex]
-          end
-
-          # Floor of the overlap midpoint plus the shared offset; nil
-          # when the boxes do not overlap on this axis.
-          def overlap_ray_coordinate(start_a, size_a, start_b, size_b, offset)
-            low = [start_a, start_b].max
-            high = [start_a + size_a, start_b + size_b].min
-            return nil if low > high
-
-            coordinate = ((low + high) / 2.0 + offset).floor
-            coordinate if coordinate.between?(low, high)
-          end
-
           def disjoint_span?(start_a, size_a, start_b, size_b)
             start_a + size_a < start_b || start_b + size_b < start_a
           end
@@ -322,9 +307,15 @@ module Ea
           end
 
           def stored_ray_candidate?(model, link_row, geom)
-            %w[Generalization Aggregation].include?(model.connector_type) &&
+            stored_ray_type?(model) &&
               model.waypoints.size == 2 && stored_ray_style?(model.style, link_row) &&
               stored_ray_geometry?(model, geom)
+          end
+
+          def stored_ray_type?(model)
+            %w[Generalization Aggregation].include?(model.connector_type) ||
+              (model.connector_type == "Association" && model.style[:mode] == "1" &&
+                model.style[:lwidth] == "2")
           end
 
           # Boundary-port rounding can move a computed jog off a level saved
@@ -408,6 +399,7 @@ module Ea
             when "Association"
               return unless style[:lwidth] == "0"
 
+              redock_child_below(points, bounds_from_rect(source_placement), bounds_from_rect(target_placement))
               redock_parent_above(points, link_row, source_placement, target_placement, strict: true)
             end
           end
@@ -517,15 +509,18 @@ module Ea
               [bounds.y, bounds.y + bounds.height].include?(point[1])
           end
 
-          # A width-2 Mode 3 Aggregation without a tree style keeps an authored
-          # orthogonal stair-step of three or more corners. Each end docks on
+          # A width-2 Mode 3 route without a tree style keeps authored orthogonal
+          # bends: two corners for Associations, three or more for Aggregations.
+          # Each end docks on
           # the 1px outline its adjacent leg points at, from the corner's own
           # coordinate; any end that cannot do so leaves the route unchanged.
           def stored_stair_route(link_row, connector, source, target)
             return nil unless stair_style?(link_row, connector)
 
             corners = stored_square_corners(link_row)
-            return nil unless corners && corners.size >= 3 && alternating_legs?(corners)
+            unless corners && stair_corner_count?(corners, connector.connector_type) && alternating_legs?(corners)
+              return nil
+            end
 
             first = outline_dock(corners[0], corners[1], source)
             last = outline_dock(corners[-1], corners[-2], target)
@@ -534,8 +529,12 @@ module Ea
 
           def stair_style?(link_row, connector)
             style = DiagramStyleParser.parse(link_row.style)
-            connector.connector_type == "Aggregation" && style[:mode] == "3" &&
+            %w[Aggregation Association].include?(connector.connector_type) && style[:mode] == "3" &&
               style[:lwidth] == "2" && !style.key?(:tree)
+          end
+
+          def stair_corner_count?(corners, connector_type)
+            connector_type == "Association" ? corners.size == 2 : corners.size >= 3
           end
 
           # Every leg is non-zero and runs along the opposite axis of the last.
@@ -595,6 +594,8 @@ module Ea
           # flush on its box edge.
           def derived_lateral_route(link_row, connector, source, target)
             style = DiagramStyleParser.parse(link_row.style)
+            return derived_vertical_lateral_route(style, link_row, connector, source, target) if style[:tree] == "LV"
+
             return nil unless style[:mode] == "3" && style[:tree] == "LH" &&
                               derived_lateral_path?(connector.connector_type, link_row.path.to_s)
 
@@ -726,7 +727,7 @@ module Ea
           # Keep a vertical tree trunk whose bends still fit both boxes
           # and the open gap; the closest facing edges need not share its x.
           def preserve_stored_tree?(points, link_row, connector, src, tgt)
-            return false unless points.size == 4 && stored_tree_type?(points, link_row, connector)
+            return false unless points.size == 4 && stored_tree_type?(points, link_row, connector, src, tgt)
 
             style = DiagramStyleParser.parse(link_row.style)
             return false unless style[:lwidth] == "2" || flush_width_zero_tree?(link_row)
@@ -897,14 +898,13 @@ module Ea
             style[:tree] == "V" || (style[:mode] == "3" && style[:tree].nil?)
           end
 
-          def stored_tree_type?(points, link_row, connector)
-            connector.connector_type == "Aggregation" || flush_straight_association?(points, link_row, connector)
-          end
+          def stored_tree_type?(points, link_row, connector, source, target)
+            return true if connector.connector_type == "Aggregation"
+            return false unless connector.connector_type == "Association" && flush_width_zero_tree?(link_row)
 
-          # A flush Association keeps only a straight trunk (one bend stored twice).
-          def flush_straight_association?(points, link_row, connector)
-            connector.connector_type == "Association" && points[1] == points[-2] &&
-              flush_width_zero_tree?(link_row)
+            # Distinct thin bends are supported when the source sits above
+            # the target; the established reverse case keeps straight trunks.
+            points[1] == points[-2] || source.y + source.height < target.y
           end
 
           # A flush trunk may also hang below its parent; a bend repeated at

@@ -426,6 +426,68 @@ RSpec.describe Ea::Svg::EaEmitter::Label::EndLabel do
       end
     end
 
+    it "seats leftward property multiplicity on every route style, not only the role-seat styles" do
+      records = [
+        { anchor: [800, 544], mult: "0..*", style: { mode: "3", lwidth: "2", tree: "OS" }, expected: [783, 559] },
+        { anchor: [649, 270], mult: "0..1", style: { mode: "2", lwidth: "2" }, expected: [630, 285] },
+        { anchor: [763, 564], mult: "0..1", style: { mode: "1", lwidth: "2" }, expected: [744, 579] }
+      ]
+      records.each do |record|
+        box = { "ox" => 0, "oy" => 0, "alignment" => 0 }
+        positions = upward_property_positions(
+          record.merge(role: "member", box: box), heading: [-100, 0], style: record[:style], mult_box: box
+        )
+
+        expect(positions[record[:mult]]).to eq(record[:expected])
+      end
+    end
+
+    it "seats leftward multiplicity on ends without a property stereotype from stored offsets" do
+      records = [
+        { anchor: [359, 135], mult: "0..*", box: { "ox" => -5, "oy" => 0, "alignment" => 1 }, expected: [337, 150] },
+        { anchor: [417, 144], mult: "0..*", box: { "ox" => -8, "oy" => 4, "alignment" => 0 }, expected: [392, 163] }
+      ]
+      records.each do |record|
+        positions = upward_property_positions(
+          record.merge(role: "member"), heading: [-100, 0], style: { mode: "3", lwidth: "0" },
+                                        mult_box: record[:box], stereotype: nil
+        )
+
+        expect(positions["0..*"]).to eq(record[:expected])
+      end
+    end
+
+    it "seats leftward tree-route multiplicity like other leftward sources and keeps rightward tree defaults" do
+      box = { "ox" => 0, "oy" => 0, "alignment" => 1 }
+      record = { role: "member", anchor: [291, 521], mult: "0..*", box: box }
+      style = { mode: "3", lwidth: "0", tree: "LV" }
+      left = upward_property_positions(record, heading: [-30, 0], style: style, mult_box: box, tree: true)
+      right = upward_property_positions(record, heading: [30, 0], style: style, mult_box: box, tree: true)
+
+      expect(left["0..*"]).to eq([274, 536])
+      expect(right["0..*"]).to eq([294, 521])
+    end
+
+    it "keeps the tree target multiplicity default whichever way its leg runs" do
+      box = { "ox" => 0, "oy" => 0, "alignment" => 1 }
+      record = { role: "member", anchor: [291, 521], mult: "0..*", box: box }
+      [[-30, 0], [30, 0]].each do |heading|
+        positions = upward_property_positions(record, heading: heading, end_kind: :target, style: { tree: "LV" },
+                                                      mult_box: box, tree: true)
+
+        expect(positions["0..*"]).to eq([299, 513])
+      end
+    end
+
+    it "keeps the zero-box default for leftward multiplicity on other fonts" do
+      box = { "ox" => 0, "oy" => 0, "alignment" => 0 }
+      record = { role: "member", anchor: [649, 270], mult: "0..1", box: box }
+      positions = upward_property_positions(record, heading: [-100, 0], style: { mode: "2", lwidth: "2" },
+                                                    mult_box: box, family: "Carlito")
+
+      expect(positions["0..1"]).to eq([661, 285])
+    end
+
     it "seats downward multiplicities with property and plain association roles" do
       records = [
         { role: "interiorFurniture", anchor: [348, 508], mult: "0..*",

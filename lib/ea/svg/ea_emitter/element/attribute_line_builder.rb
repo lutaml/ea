@@ -48,6 +48,7 @@ module Ea
             parts << ": #{type_str}" unless type_str.empty?
             mult = multiplicity
             parts << " #{mult}" unless mult.empty?
+            parts << " {ordered}" if property.is_ordered
             parts << " = #{property.default_value}" if property.default_value && !property.default_value.to_s.empty?
             parts.join.rstrip
           end
@@ -100,18 +101,19 @@ module Ea
           def multiplicity
             lower = property.multiplicity_lower
             upper = property.multiplicity_upper
-            if lower == 1 && upper == 1
-              raw = property.multiplicity_lower_raw
-              # Literal text bounds EA displays verbatim ('elements:
-              # Character [size]' - stored bounds 'size'/'size' parse
-              # to the 1..1 default).
-              return "[#{raw}]" if raw && raw == property.multiplicity_upper_raw
-
-              return ""
-            end
+            return default_multiplicity if lower == 1 && upper == 1
             return "" if lower.nil? && upper.nil?
+            return "[#{lower}]" if lower == upper && upper != -1
 
             "[#{lower || 0}..#{bound_text(upper)}]"
+          end
+
+          # Literal text bounds EA displays verbatim ('elements:
+          # Character [size]' - stored bounds 'size'/'size' parse
+          # to the 1..1 default).
+          def default_multiplicity
+            raw = property.multiplicity_lower_raw
+            raw && raw == property.multiplicity_upper_raw ? "[#{raw}]" : ""
           end
 
           def bound_text(value)

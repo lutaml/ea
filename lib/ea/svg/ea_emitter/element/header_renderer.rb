@@ -12,17 +12,20 @@ module Ea
         # x= is the start position, not the center).
         class HeaderRenderer
           def self.render(lines, bounds:, first_y:, family:,
-                          size:, size_unit: "pt",
+                          size:, size_unit: "pt", logical_height: nil,
                           fill: "#000000", weight_normal: 400, weight_bold: 700,
                           stroke_in_text: "#000000", width_factor: 0.612,
                           line_offset: 6)
-            line_h = size + line_offset
+            logical_height = nil unless size_unit == "pt"
+            line_h = Ea::Fonts::Metrics.compartment_line_height(
+              size, family: family, unit: size_unit, offset: line_offset, logical_height: logical_height
+            )
             text_blocks = lines.each_with_index.map do |(text, style), idx|
               weight = case style
                        when :bold, :bold_italic then weight_bold
                        else weight_normal
                        end
-              font_style = (style == :italic || style == :bold_italic) ? "italic" : "normal"
+              font_style = %i[italic italic_tight bold_italic].include?(style) ? "italic" : "normal"
               # EA spaces the line AFTER a right-aligned ghost 3px
               # wider than the pitch. Interfaces use a tighter +3
               # (936AA434/Surface: ghost 100, «interface» 116).
@@ -33,23 +36,22 @@ module Ea
                             end
               y = first_y + (idx * line_h) +
                   (idx >= 1 && ghost_shift.positive? ? ghost_shift : 0)
-              x = if style == :italic
-                    # EA right-aligns the off-canvas parent ghost at
-                    # the box's right edge by its integer textLength.
-                    bounds.x + bounds.width -
+              x = if %i[italic italic_tight].include?(style)
+                    # Parent ghosts end 3px inside the box's right edge.
+                    bounds.x + bounds.width - 3 -
                       Ea::Svg::EaEmitter::TextRenderer.estimate_width(
                         text, size, width_factor,
-                        family: family, weight: weight, style: font_style
+                        family: family, weight: weight, style: font_style, logical_height: logical_height
                       ).round
                   else
                     center_x_for(text, bounds, size, width_factor,
                                  family: family, weight: weight,
-                                 style: font_style)
+                                 style: font_style, logical_height: logical_height)
                   end
               TextRenderer.new(
                 content: text,
                 x: x, y: y,
-                family: family, size: size, size_unit: size_unit,
+                family: family, size: size, size_unit: size_unit, logical_height: logical_height,
                 weight: weight, style: font_style, fill: fill,
                 stroke_in_text: stroke_in_text, width_factor: width_factor
               ).to_svg
@@ -60,9 +62,9 @@ module Ea
           # EA centers text by its INTEGER textLength and floors the
           # resulting x (verified exact against EA-published SVGs).
           def self.center_x_for(text, bounds, size, width_factor,
-                                family: nil, weight: nil, style: nil)
+                                family: nil, weight: nil, style: nil, logical_height: nil)
             len = Ea::Svg::EaEmitter::TextRenderer.estimate_width(
-              text, size, width_factor, family: family, weight: weight, style: style
+              text, size, width_factor, family: family, weight: weight, style: style, logical_height: logical_height
             ).round
             (bounds.x + (bounds.width - len) / 2.0).floor
           end

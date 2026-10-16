@@ -53,10 +53,10 @@ module Ea
             return stored_top_pairs(connector, source_bounds, pairs)
           end
 
-          # EA docks these markers on the outer edge of the 2px box stroke.
-          outline = bounds.map do |box|
-            Ea::Model::Bounds.new(x: box.x - 1, y: box.y - 1,
-                                  width: box.width + 2, height: box.height + 2)
+          refs = [source_ref, target_ref]
+          duids = connector.style.to_h.values_at(:soid, :eoid)
+          outline = bounds.each_with_index.map do |box, index|
+            outline_bounds(box, diagram, refs[index], duids[index])
           end
           candidate = clipped_pairs(outline, anchors)
           candidate[0] = external_source_point(connector, outline.first, anchors, candidate.first)
@@ -231,19 +231,34 @@ module Ea
           return false unless bounds.all? { |box| box.width.positive? && box.height.positive? }
 
           ends = [[refs.first, style[:soid]], [refs.last, style[:eoid]]]
-          ends.all? { |ref, duid| border_two?(diagram, ref, duid) }
+          ends.all? { |ref, duid| border_width?(diagram, ref, duid, 2) }
         end
         private_class_method :bordered_outline?
 
         # Every placement of the element (the DUID-matched one when the
-        # connector names it) must declare a border width of 2.
-        def border_two?(diagram, ref, duid)
+        # connector names it) must declare the same border width.
+        def border_width?(diagram, ref, duid, width)
+          placed = end_placements(diagram, ref, duid)
+          placed.any? && placed.all? { |el| el.line_width == width || el.style.to_h[:lwth] == width.to_s }
+        end
+        private_class_method :border_width?
+
+        # Explicit zero-width borders keep that end on the geometric edge;
+        # absent or inherited widths retain the default outer-stroke docking.
+        def outline_bounds(box, diagram, ref, duid)
+          return box if border_width?(diagram, ref, duid, 0)
+
+          Ea::Model::Bounds.new(x: box.x - 1, y: box.y - 1,
+                                width: box.width + 2, height: box.height + 2)
+        end
+        private_class_method :outline_bounds
+
+        def end_placements(diagram, ref, duid)
           placed = Array(diagram&.elements).select { |el| el.model_element_ref == ref }
           named = placed.select { |el| duid && el.duid.to_s.casecmp?(duid.to_s) }
-          placed = named unless named.empty?
-          placed.any? && placed.all? { |el| el.line_width == 2 || el.style.to_h[:lwth] == "2" }
+          named.empty? ? placed : named
         end
-        private_class_method :border_two?
+        private_class_method :end_placements
 
         def outline_connector?(connector, bounds)
           return true if default_model_connector?(connector)
@@ -397,12 +412,13 @@ module Ea
         end
         private_class_method :explicit_horizontal_source_dock?
 
-        # A stored Association ray whose source port certifies the shared
-        # anchor row is one explicit horizontal line: EA seats neither end
-        # in a compartment row, unlike Generalization/Aggregation targets.
+        # The QEA producer certifies stored Association rays from their
+        # endpoint origins. Keep the clipped ray even when a diagonal end
+        # coincides with a header divider. Other callers need a certified
+        # horizontal port before bypassing compartment row seating.
         def explicit_association_ray?(pairs, connector)
           produced = connector.style.to_h[:stored_association_ray] == true
-          return true if produced && pairs.first[1] == pairs.last[1]
+          return true if produced
 
           certified_association_ray?(pairs, connector)
         end

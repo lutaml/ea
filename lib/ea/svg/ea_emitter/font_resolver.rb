@@ -41,9 +41,8 @@ module Ea
                  DEFAULT_MARKER_FAMILIES.include?(explicit)
             return explicit
           end
-          return theme.font_family if theme.themed? && theme.font_family
 
-          diagram_default_family || DEFAULT_FONT_FAMILY
+          theme_family_for(explicit) || diagram_default_family || DEFAULT_FONT_FAMILY
         end
 
         def size_for(element)
@@ -58,8 +57,12 @@ module Ea
           DEFAULT_ELEMENT_FONT_SIZE
         end
 
-        def size_unit_for(_element)
-          theme.font_size_unit || "pt"
+        def size_unit_for(element)
+          element&.font_size_unit || theme.font_size_unit || "pt"
+        end
+
+        def logical_height_for(element)
+          element&.font_logical_height if size_unit_for(element) == "pt"
         end
 
         def weight_for(element)
@@ -72,6 +75,13 @@ module Ea
         end
 
         private
+
+        def theme_family_for(explicit)
+          return unless theme.themed?
+          return theme.font_family if DEFAULT_MARKER_FAMILIES.include?(explicit)
+
+          theme.element_font_family || theme.font_family
+        end
 
         # EA's app-default font depends on the system locale:
         # Japanese Windows → "Yu Gothic UI" 13, English Windows →

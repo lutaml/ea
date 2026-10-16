@@ -13,11 +13,13 @@ module Ea
         autoload :Routing, "ea/sources/qea/diagram_builder/routing"
         autoload :AutoRouting, "ea/sources/qea/diagram_builder/auto_routing"
         autoload :StoredSquarePorts, "ea/sources/qea/diagram_builder/stored_square_ports"
+        autoload :FontSettings, "ea/sources/qea/diagram_builder/font_settings"
         include Routing
         include AutoRouting
         include StoredSquarePorts
+        include FontSettings
         private_constant :Routing
-        private_constant :AutoRouting, :StoredSquarePorts
+        private_constant :AutoRouting, :StoredSquarePorts, :FontSettings
 
         attr_reader :database
 
@@ -124,6 +126,7 @@ module Ea
           @current_obj_row = obj_row
           style_hash = DiagramStyleParser.parse(obj_row.objectstyle)
           style_hash[:stored_attribute_order] = true
+          font_style = effective_font_style(obj_row, style_hash)
           Ea::Model::DiagramElement.new(
             id: IdNormalizer.synthetic("de", diagram_row.diagram_id,
                                        obj_row.instance_id),
@@ -131,8 +134,10 @@ module Ea
             model_element_ref: ref_for_object(obj_row),
             bounds: bounds_from_rect(obj_row),
             style: style_hash,
-            font_family: presence(style_hash[:font]),
-            font_size: font_size_from(style_hash),
+            font_family: presence(font_style[:font]),
+            font_size: font_size_from(font_style),
+            font_size_unit: "pt",
+            font_logical_height: font_logical_height_from(font_style),
             font_bold: truthy?(style_hash[:bold]),
             font_italic: truthy?(style_hash[:italic]),
             font_underline: truthy?(style_hash[:ul]),
@@ -143,33 +148,6 @@ module Ea
 
         def truthy?(raw)
           raw == "1" || raw == "-1"
-        end
-
-        def presence(value)
-          value.nil? || value.to_s.empty? ? nil : value
-        end
-
-        # EA stores the element font size in tenths of a point and
-        # renders it through GDI's double rounding: pixel height =
-        # floor(tenths * 96 / 720), then point size =
-        # floor(pixels * 72 / 96). 70 -> 9px -> 6pt (F3660305 Text),
-        # 80 -> 10px -> 7pt, 90 -> 12px -> 9pt (4EBDE645's PI_*
-        # classes), 100 -> 13px -> 9pt (0D31AED1's all-100 elements
-        # publish 321 texts at 9pt), 120 -> 16px -> 12pt
-        # (412BC89E's Boundary title), 140 -> 18px -> 13pt.
-        # fontsz=0 ("use default", written back by the font dialog)
-        # renders at the 7pt theme size.
-        USE_DEFAULT_FONTSZ = [0].freeze
-        GDI_DPI = 96
-
-        def font_size_from(style_hash)
-          raw = style_hash[:fontsz]
-          return nil if raw.nil? || raw.to_s.empty?
-
-          return nil if USE_DEFAULT_FONTSZ.include?(raw.to_i)
-
-          pixels = (raw.to_f * GDI_DPI / 720).floor
-          (pixels * 72.0 / GDI_DPI).floor
         end
 
         def build_connectors(diagram_row)

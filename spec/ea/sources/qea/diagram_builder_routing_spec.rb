@@ -214,7 +214,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     end
   end
 
-  it "keeps other custom-line inputs on their existing routes" do
+  it "respects connector types and routing styles for custom lines" do
     cases = [
       ["mode 2", { style: "Mode=2;LWidth=2;" },
        ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
@@ -231,7 +231,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
       ["tree V", { style: "Mode=3;TREE=V;LWidth=2;" },
        ["M 207 1054 L 207 936 L 153 936 L 153 217"], ["207 1054 202 1044 207 1034 212 1044"]],
       ["association", { connector_type: "Association" },
-       ["M 201 1055 L 162 216", "M 168.69 230.71 L 162 216 L 156.7 231.26"], []],
+       ["M 207 1054 L 207 936 L 153 936 L 153 217", "M 159 232 L 153 217 L 147 232"], []],
       ["generalization", { connector_type: "Generalization" },
        ["M 207 1054 L 207 936 L 153 936 L 153 217"], ["153 217 159 228 147 228"]],
       ["bend left of source", { path: "600:-919;740:-919;" },

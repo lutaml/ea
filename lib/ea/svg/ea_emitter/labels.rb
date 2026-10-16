@@ -84,22 +84,30 @@ module Ea
           stored_src = end_boxes(boxes, :llt, :llb)
           stored_tgt = end_boxes(boxes, :lrt, :lrb)
           stored_labels = !(stored_src.nil? && stored_tgt.nil?)
-          src_tb, src_mb = stored_src || default_label_boxes(points, :source)
-          tgt_tb, tgt_mb = stored_tgt || default_label_boxes(points, :target)
+          src_tb, src_mb = stored_src || unstored_label_boxes(points, :source, stored_labels)
+          tgt_tb, tgt_mb = stored_tgt || unstored_label_boxes(points, :target, stored_labels)
 
           texts = []
           end_renderer.texts(text_box: src_tb, mult_box: src_mb,
                              anchor: source_pt, connector: connector,
                              end_kind: :source, tree: tree && tree[:source],
-                             heading: stored_src && source_heading(connector, points),
+                             heading: (stored_src || stored_labels) && source_heading(connector, points),
                              stored_labels: stored_labels).each { |t| texts << t }
           end_renderer.texts(text_box: tgt_tb,
                              mult_box: tgt_mb,
                              anchor: target_pt, connector: connector,
                              end_kind: :target, tree: tree && tree[:target],
-                             heading: stored_tgt && target_heading(connector, points),
+                             heading: (stored_tgt || stored_labels) && target_heading(connector, points),
                              stored_labels: stored_labels).each { |t| texts << t }
           texts
+        end
+
+        # A connector that stores label boxes for only one end seats the
+        # other end's labels at its anchor, like a stored zero offset.
+        def unstored_label_boxes(points, end_kind, stored_labels)
+          return default_label_boxes(points, end_kind) unless stored_labels
+
+          [{ "ox" => 0, "oy" => 0, "alignment" => 0 }, { "ox" => 0, "oy" => 0, "alignment" => 0 }]
         end
 
         # EA tree routes are a perfect L: source-exit horizontal into

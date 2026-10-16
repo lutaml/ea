@@ -56,7 +56,8 @@ module Ea
               font_style = weight == :bold_italic ? "italic" : "normal"
               len = TextRenderer.estimate_width(
                 name, context.font_size || 9, nil,
-                family: context.family, weight: "700", style: font_style
+                family: context.family, weight: "700", style: font_style,
+                logical_height: context.logical_height
               ).round
               # Same usable width as wrap_words: box width - 6.
               # EA wraps "Content information::MD_FeatureCatalogue-

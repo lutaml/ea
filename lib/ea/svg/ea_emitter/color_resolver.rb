@@ -7,11 +7,10 @@ module Ea
       #
       # Theme :119 applies:
       #   - Border color (#9A8484) for element strokes
-      #   - Attribute color (#66413F) for attribute text
       #   - Method color for operation text
       # Theme :119 does NOT apply:
       #   - Per-type fill colors (elements use default #FFFFFF)
-      #   - Text color (#000000 black for non-attribute text)
+      #   - Attribute text color (inherits the black text color)
       #
       # Precedence chain for fill:
       #   1. Element's BCol int (when present and not sentinel)

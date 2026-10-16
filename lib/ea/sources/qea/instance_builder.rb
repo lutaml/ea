@@ -34,6 +34,7 @@ module Ea
           Ea::Model::InstanceSpecification.new(
             id: IdNormalizer.from_guid(row.ea_guid),
             name: row.name.to_s,
+            role_name: row.alias,
             classifier_id: classifier_id_for(row),
             classifier_name: classifier_name_for(row),
             stereotype: row.stereotype.to_s,

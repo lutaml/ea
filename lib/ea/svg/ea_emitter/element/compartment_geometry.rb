@@ -40,10 +40,14 @@ module Ea
                           attr_line_offset: 6,
                           attr_first_offset: 7,
                           attr_group_lead: 0,
+                         family: nil, size_unit: "pt", logical_height: nil,
                           header_ghost: false,
                           header_ghost_tight: false)
             @bounds = bounds
             @size = size
+            @family = family
+            @size_unit = size_unit
+            @logical_height = logical_height
             @header_lines_count = header_lines_count
             @attr_lines_count = attr_lines_count
             @op_lines_count = op_lines_count
@@ -60,6 +64,13 @@ module Ea
             @header_ghost = header_ghost
             @header_ghost_tight = header_ghost_tight
           end
+
+          def line_height(offset)
+            Ea::Fonts::Metrics.compartment_line_height(
+              size, family: @family, unit: @size_unit, offset: offset, logical_height: @logical_height
+            )
+          end
+          private :line_height
 
           def header_first_y
             bounds.y + size + (header_top_padding || 12)
@@ -81,9 +92,9 @@ module Ea
             ghost_shift = header_ghost ? (header_ghost_tight ? 3 : 6) : 0
 
             header_first_y +
-              ([header_lines_count, 1].max - 1) * (size + (header_line_offset || 6)) +
+              ([header_lines_count, 1].max - 1) * line_height(header_line_offset || 6) +
               ghost_shift +
-              (marker_count.to_i * (size + 6)) +
+              (marker_count.to_i * line_height(6)) +
               (divider_offset || 8)
           end
 
@@ -104,13 +115,13 @@ module Ea
           def raw_attr_first_y
             return bounds.y + size + (header_top_padding || 12) + 12 unless divider_y
 
-            divider_y + size + (attr_first_offset || 7)
+            divider_y + line_height((attr_first_offset || 7) - 1) + 1
           end
 
           def attr_bottom_y
             return attr_first_y unless attr_lines_count&.positive?
 
-            attr_first_y + (attr_lines_count - 1) * (size + (attr_line_offset || 6)) +
+            attr_first_y + (attr_lines_count - 1) * line_height(attr_line_offset || 6) +
               @attr_group_lead.to_i
           end
 
@@ -137,7 +148,7 @@ module Ea
           def op_bottom_y
             return op_divider_y unless op_lines_count&.positive?
 
-            op_first_y + (op_lines_count - 1) * (size + 6)
+            op_first_y + (op_lines_count - 1) * line_height(6)
           end
 
           # EA draws a single divider under the header and seats
@@ -147,7 +158,7 @@ module Ea
           def enum_literal_first_y
             return nil unless divider_y
 
-            divider_y + size + (attr_first_offset || 7)
+            divider_y + line_height((attr_first_offset || 7) - 1) + 1
           end
 
           # OCL constraints follow the regular content with a divider and caption.
@@ -199,7 +210,7 @@ module Ea
           def enum_literals_bottom_y
             return nil unless enum_literal_first_y
 
-            enum_literal_first_y + ([enum_literals_count, 1].max - 1) * (size + 6)
+            enum_literal_first_y + ([enum_literals_count, 1].max - 1) * line_height(6)
           end
         end
       end
