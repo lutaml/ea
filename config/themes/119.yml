@@ -34,7 +34,7 @@ colors:
 
 # Stroke widths.
 strokes:
-  element_border: 2
+  element_border: 1
   connector_line: 2
   divider: 2
   marker: 2

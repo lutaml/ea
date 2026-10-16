@@ -144,8 +144,21 @@ module Ea
             font_italic: truthy?(style_hash[:italic]),
             font_underline: truthy?(style_hash[:ul]),
             show_tagged_values: truthy?(style_hash[:tag]),
+            line_width: effective_line_width(obj_row, style_hash),
             background_color: style_hash[:bcol]&.to_i
           )
+        end
+
+        # Negative widths inherit the saved object border, then the diagram theme.
+        def effective_line_width(obj_row, style)
+          object = database.find_object(obj_row.ea_object_id)
+          [style[:lwth], object&.borderwidth].each do |raw|
+            next if raw.nil? || raw.to_s.empty?
+
+            width = raw.to_i
+            return width if width >= 0
+          end
+          nil
         end
 
         def truthy?(raw)

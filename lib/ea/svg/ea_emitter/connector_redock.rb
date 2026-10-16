@@ -215,7 +215,7 @@ module Ea
         private_class_method :overlap_ray?
 
         # The QEA builder flags a model relationship drawn without any
-        # diagram link row; EA strokes it at the 2px box outline.
+        # diagram link row; its docks follow the resolved element borders.
         def default_model_connector?(connector)
           connector.style.to_h[:phantom_outline] == true && !connector.has_geometry_offsets &&
             %w[Aggregation Association].include?(connector.connector_type)
@@ -243,15 +243,31 @@ module Ea
         end
         private_class_method :border_width?
 
-        # Explicit zero-width borders keep that end on the geometric edge;
-        # absent or inherited widths retain the default outer-stroke docking.
+        # EA seats docks on whole pixels; a 1px border keeps the geometric edge.
         def outline_bounds(box, diagram, ref, duid)
-          return box if border_width?(diagram, ref, duid, 0)
-
-          Ea::Model::Bounds.new(x: box.x - 1, y: box.y - 1,
-                                width: box.width + 2, height: box.height + 2)
+          inset = (outline_width(diagram, ref, duid) / 2.0).floor
+          Ea::Model::Bounds.new(x: box.x - inset, y: box.y - inset,
+                                width: box.width + 2 * inset, height: box.height + 2 * inset)
         end
         private_class_method :outline_bounds
+
+        def outline_width(diagram, ref, duid)
+          widths = end_placements(diagram, ref, duid).map do |element|
+            effective_border_width(element, diagram)
+          end.uniq
+          widths.size == 1 ? widths.first : diagram.theme.stroke_width
+        end
+        private_class_method :outline_width
+
+        def effective_border_width(element, diagram)
+          return element.line_width if element.line_width && element.line_width >= 0
+
+          raw = element.style.to_h[:lwth]
+          return raw.to_i if raw && raw.to_i >= 0
+
+          diagram.theme.stroke_width
+        end
+        private_class_method :effective_border_width
 
         def end_placements(diagram, ref, duid)
           placed = Array(diagram&.elements).select { |el| el.model_element_ref == ref }
