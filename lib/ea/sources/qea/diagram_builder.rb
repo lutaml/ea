@@ -126,6 +126,8 @@ module Ea
           @current_obj_row = obj_row
           style_hash = DiagramStyleParser.parse(obj_row.objectstyle)
           style_hash[:stored_attribute_order] = true
+          fqname = stereotype_fqname_for(obj_row)
+          style_hash[:stereotype_fqname] = fqname if fqname
           font_style = effective_font_style(obj_row, style_hash)
           Ea::Model::DiagramElement.new(
             id: IdNormalizer.synthetic("de", diagram_row.diagram_id,
@@ -148,6 +150,19 @@ module Ea
 
         def truthy?(raw)
           raw == "1" || raw == "-1"
+        end
+
+        def stereotype_fqname_for(placement)
+          object = database.find_object(placement.ea_object_id)
+          return nil unless object
+
+          database.xrefs_for_client(object.ea_guid).each do |xref|
+            application = Xref::Parser.parse(xref.description).stereotype
+            next unless application && application.name == object.stereotype
+
+            return application.fqname
+          end
+          nil
         end
 
         def build_connectors(diagram_row)

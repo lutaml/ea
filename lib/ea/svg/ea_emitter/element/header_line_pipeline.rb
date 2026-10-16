@@ -23,6 +23,7 @@ module Ea
                                :off_canvas_parent_name,
                                :foreign_package_name,
                                :suppress_stereotypes,
+                               :stereotype_fqname,
                                keyword_init: true)
 
           PROVIDERS = [

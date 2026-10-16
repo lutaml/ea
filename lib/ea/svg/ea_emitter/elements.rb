@@ -166,10 +166,12 @@ module Ea
               )
             end
           end
+          stereotype_fqname = element.style&.fetch(:stereotype_fqname, nil)
           header_lines = classifier ? Element::HeaderLines.for(classifier,
                                                                 diagram_package_id: diagram.package_id,
                                                                 visually_nested: visually_nested?(element),
                                                                 umldi_keyword: element.umldi_keyword,
+                                                                stereotype_fqname: stereotype_fqname,
                                                                 bounds_width: bounds.width,
                                                                 font_size: size, logical_height: logical_height,
                                                                 family: family,
