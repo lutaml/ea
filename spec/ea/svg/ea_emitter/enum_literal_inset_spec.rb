@@ -48,7 +48,21 @@ RSpec.describe "Enumeration literal theme and unit controls" do
     expect(enum_literal_node(size: 9, offset: 31, unit: "px")["x"].to_f).to eq(131)
   end
 
-  it "preserves the existing 7pt Cambria inset" do
-    expect(enum_literal_node(size: 7, offset: 22, family: "Cambria")["x"].to_f).to eq(122)
+  it "uses the compact attribute inset for 7pt Cambria literal names" do
+    expect(enum_literal_node(size: 7, offset: 22, family: "Cambria")["x"].to_f).to eq(121)
+  end
+end
+
+RSpec.describe "Enumeration literal compact-inset boundaries" do
+  include EnumInsetHelpers
+
+  it "preserves the configured inset outside compact Cambria point fonts" do
+    [[7, "px", "Cambria", 122], [9, "pt", "Cambria", 126],
+     [7, "pt", "Carlito", 122], [7, "pt", "Calibri", 122]].each do |size, unit, family, expected|
+      node = enum_literal_node(size: size, offset: 22, unit: unit, family: family)
+
+      expect(node["x"].to_f).to eq(expected)
+      expect(node["y"].to_f).to eq(60)
+    end
   end
 end
