@@ -38,3 +38,20 @@ RSpec.describe "QEA end-label geometry through the public adapter" do
     expect(result[:mult]).to eq([result[:last][0] + 8, result[:last][1] - 7])
   end
 end
+
+RSpec.describe "QEA upward target property labels through the public adapter" do
+  include TestDatabaseHelper
+  include QeaEndLabelHelpers
+
+  it "seats an upward target property role and stereotype from the stored box" do
+    result = render_qea_end_labels(path: "200:-200;200:-300;",
+                                   boxes: { "LRT" => [63, -31], "LRB" => [4, -28] },
+                                   source: [100, 100, 200, 100], target: [100, 300, 200, 100],
+                                   role: "referencePoint", mult: "1", end: :target, alignment: 1)
+    role = result[:texts].find { |text| text[:text] == "+referencePoint" }
+    stereotype = result[:texts].find { |text| text[:text] == "«property»" }
+
+    expect([role[:x], role[:y]]).to eq([result[:last][0] + 63 - 70 - 65, result[:last][1] - 31 - 7])
+    expect([stereotype[:x], stereotype[:y]]).to eq([role[:x] + 11, role[:y] + 12])
+  end
+end

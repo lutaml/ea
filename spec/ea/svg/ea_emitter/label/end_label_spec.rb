@@ -645,6 +645,38 @@ RSpec.describe Ea::Svg::EaEmitter::Label::EndLabel do
       expect(positions["+xalAddress"]).to eq([895, 186])
     end
 
+    it "seats upward target property roles at their stored corners" do
+      records = [
+        { role: "referencePoint", anchor: [813, 700],
+          box: { "ox" => 63, "oy" => -31, "alignment" => 1 }, expected: [741, 662] },
+        { role: "relativeGMLGeometry", anchor: [620, 700],
+          box: { "ox" => 60, "oy" => -22, "alignment" => 1 }, expected: [516, 671] }
+      ]
+      records.each do |record|
+        positions = upward_property_positions(record, end_kind: :target, target_stereotype: "property",
+                                                      style: { mode: "3", lwidth: "2" })
+
+        expect(positions["+#{record[:role]}"]).to eq(record[:expected])
+        expect(positions["«property»"][1]).to eq(record[:expected][1] + 12)
+      end
+    end
+
+    it "preserves unsupported upward target property presentations" do
+      record = { role: "referencePoint", anchor: [813, 700],
+                 box: { "ox" => 63, "oy" => -31, "alignment" => 1 } }
+      controls = [{ family: "Carlito" }, { size: 9 }, { unit: "px" },
+                  { target_stereotype: "Type" }, { heading: [1, -100] }, { heading: [0, 100] },
+                  { style: { mode: "3", lwidth: "2", tree: "OS" } },
+                  { box: record[:box].merge("bold" => true) },
+                  { box: record[:box].merge("alignment" => 0) }]
+      controls.each do |options|
+        positions = upward_property_positions(record, end_kind: :target, target_stereotype: "property",
+                                                      style: { mode: "3", lwidth: "2" }, **options)
+
+        expect(positions["+referencePoint"]).to eq([876, 731])
+      end
+    end
+
     it "seats a target role whose leg runs down on the LV tree route" do
       record = { role: "lod0MultiPoint", anchor: [195, 441], mult: "1",
                  box: { "ox" => 0, "oy" => 0, "alignment" => 1 } }
