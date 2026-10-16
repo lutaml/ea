@@ -28,7 +28,8 @@ module Ea
               bounds: context.bounds,
               first_y: context.geometry.op_first_y,
               family: context.family, size: context.size,
-              size_unit: context.size_unit, logical_height: context.logical_height
+              size_unit: context.size_unit, logical_height: context.logical_height,
+              parameter_detail: context.diagram&.display_config&.operation_parameter_detail
             )
             parts.join("\n")
           end

@@ -16,7 +16,8 @@ module Ea
           VISIBILITY_X_OFFSET = 5
           CONTENT_X_OFFSET = 22
 
-          def self.render(operations, bounds:, first_y:, family:, size:, size_unit: "px", logical_height: nil)
+          def self.render(operations, bounds:, first_y:, family:, size:, size_unit: "px",
+                          logical_height: nil, parameter_detail: nil)
             # EA's op rows pitch 13 (size + 6), same as attribute
             # rows (6D4C665D: ops 541..658 step 13).
             line_h = Ea::Fonts::Metrics.compartment_line_height(
@@ -39,14 +40,15 @@ module Ea
               y = first_y + ((idx + offset) * line_h)
               text_blocks << build_text(bounds.x + VISIBILITY_X_OFFSET, y,
                                         visibility_prefix(op), family, size, size_unit, logical_height: logical_height)
+              text = operation_text(op, parameter_detail: parameter_detail)
               text_blocks << build_text(bounds.x + AttributeRenderer.content_x_offset(size), y,
-                                        operation_text(op), family, size, size_unit, logical_height: logical_height)
+                                        text, family, size, size_unit, logical_height: logical_height)
             end
             %(<g style="#{Style::TEXT_GROUP}">\n#{text_blocks.join("\n")}\n</g>)
           end
 
           # Builds display lines for a classifier's operations.
-          def self.lines_for(classifier)
+          def self.lines_for(classifier, parameter_detail: nil)
             ops = classifier.operations
             return [] unless ops&.any?
 
@@ -54,7 +56,7 @@ module Ea
               visibility = visibility_prefix(op).strip
               params = (op.parameters || []).map do |p|
                 type = namespace_double_colon(p.type_name)
-                p.direction == "inout" ? "#{type}*" : "#{p.name}: #{type}"
+                parameter_text(p, type, parameter_detail)
               end.join(", ")
               return_type = namespace_double_colon(op.return_type_name)
               "#{visibility} #{op.name}(#{params}): #{return_type}".strip
@@ -66,9 +68,9 @@ module Ea
           end
           private_class_method :visibility_prefix
 
-          def self.operation_text(operation)
+          def self.operation_text(operation, parameter_detail: nil)
             prefix = operation.is_reception ? "«signal» " : ""
-            text = "#{prefix}#{operation.name}(#{reception_params(operation)})"
+            text = "#{prefix}#{operation.name}(#{reception_params(operation, parameter_detail)})"
             return text unless operation.return_type_name && !operation.is_reception
 
             "#{text}: #{operation.return_type_name}"
@@ -82,11 +84,19 @@ module Ea
           end
           private_class_method :namespace_double_colon
 
-          def self.reception_params(operation)
+          def self.parameter_text(param, type, parameter_detail)
+            return "#{type}*" if param.direction == "inout"
+            return type if parameter_detail == :type_only
+
+            "#{param.name}: #{type}"
+          end
+          private_class_method :parameter_text
+
+          def self.reception_params(operation, parameter_detail)
             params = (operation.parameters || []).filter_map { |p|
               next nil if p.type_name.to_s.empty?
 
-              p.direction == "inout" ? "#{p.type_name}*" : "#{p.name}: #{p.type_name}"
+              parameter_text(p, p.type_name, parameter_detail)
             }.join(", ")
             params
           end

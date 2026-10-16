@@ -101,6 +101,11 @@ module Ea
         style_flags["OpParams"] != "0"
       end
 
+      # Type-only parameter detail is stored as OpParams=1.
+      def operation_parameter_detail
+        :type_only if style_flags["OpParams"] == "1"
+      end
+
       # Element Alias instead of Name in the header. Defaults to false
       # — most diagrams show the Name.
       def use_alias?
