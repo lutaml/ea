@@ -25,7 +25,7 @@ module Ea
           CONTAINER_RX = 3
           ICON_SIZE = 17
           TITLE_Y_OFFSET = 22
-          FIRST_ITEM_Y_OFFSET = 33
+          FIRST_ITEM_Y_OFFSET = 30
           ITEM_SPACING = 19
           ICON_X_OFFSET = 10
           ICON_LABEL_GAP = 22

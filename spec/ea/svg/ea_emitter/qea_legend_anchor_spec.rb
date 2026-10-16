@@ -14,7 +14,7 @@ RSpec.describe "QEA legend text anchors" do
       title = xml.css("text").find { |text| text.text == "Legend" }
 
       expect(label["x"].to_f - container["x"].to_f).to eq(32)
-      expect(label["y"].to_f - container["y"].to_f).to eq(45)
+      expect(label["y"].to_f - container["y"].to_f).to eq(42)
       expect(title["y"].to_f - container["y"].to_f).to eq(22)
     end
   end
@@ -27,7 +27,7 @@ RSpec.describe "QEA legend text anchors" do
     expect([container["width"], container["height"]]).to eq(%w[186 95])
     expect([icon["width"], icon["height"]]).to eq(%w[17 17])
     expect(icon["x"].to_f - container["x"].to_f).to eq(10)
-    expect(icon["y"].to_f - container["y"].to_f).to eq(33)
+    expect(icon["y"].to_f - container["y"].to_f).to eq(30)
     expect(icon.parent["style"]).to include("fill:#CCFFCC")
   end
 end
