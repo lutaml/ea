@@ -20,7 +20,7 @@ RSpec.describe Ea::Svg::EaEmitter::Marker::Registry do
   let(:before_target) { [0, 0] }
   let(:after_source) { [100, 0] }
 
-  def specs(connector_type, direction = "Source -> Destination")
+  def specs(connector_type, direction = "Source -> Destination", relationship: nil)
     connector = Ea::Model::DiagramConnector.new(
       id: "dc",
       connector_type: connector_type,
@@ -31,17 +31,69 @@ RSpec.describe Ea::Svg::EaEmitter::Marker::Registry do
       ]
     )
     described_class.specs_for(connector, connector_type,
-                              [0, 0], [100, 0], [0, 0], [100, 0])
+                              [0, 0], [100, 0], [0, 0], [100, 0],
+                              relationship: relationship)
   end
 
-  it "dispatches Aggregation to Diamond only for forward direction" do
+  it "keeps source-owned aggregations arrowless" do
     out = specs("Aggregation")
     expect(out.map(&:shape)).to eq(%i[diamond])
+    expect(out.map(&:anchor)).to eq([[0, 0]])
   end
 
-  it "dispatches Aggregation to Diamond + arrow for reverse direction" do
+  it "places reverse aggregation arrows at source while retaining target diamond" do
     out = specs("Aggregation", "Destination -> Source")
     expect(out.map(&:shape)).to eq(%i[diamond arrow])
+    expect(out.map(&:anchor)).to eq([[100, 0], [0, 0]])
+  end
+
+  it "preserves target-owned diamonds when direction points to source" do
+    relationship = Ea::Model::Association.new(
+      id: "rel", source_id: "source", target_id: "target",
+      source_aggregation: "none", target_aggregation: "composite"
+    )
+    out = specs("Aggregation", "Destination -> Source",
+                relationship: relationship)
+    expect(out.map(&:shape)).to eq(%i[diamond arrow])
+    expect(out.map(&:anchor)).to eq([[100, 0], [0, 0]])
+  end
+
+  it "keeps source-owned reverse aggregations arrowless" do
+    relationship = Ea::Model::Association.new(
+      id: "rel", source_id: "source", target_id: "target",
+      source_aggregation: "composite", target_aggregation: "none"
+    )
+    out = specs("Aggregation", "Destination -> Source",
+                relationship: relationship)
+    expect(out.map(&:shape)).to eq(%i[diamond])
+    expect(out.map(&:anchor)).to eq([[0, 0]])
+  end
+
+  it "keeps source-owned compositions arrowless" do
+    out = specs("Composition", "Source -> Destination")
+    expect(out.map(&:shape)).to eq(%i[diamond])
+    expect(out.map(&:anchor)).to eq([[0, 0]])
+  end
+
+  it "preserves the target arrow for bidirectional aggregation" do
+    relationship = Ea::Model::Association.new(
+      id: "rel", source_id: "source", target_id: "target",
+      source_aggregation: "none", target_aggregation: "composite"
+    )
+    out = specs("Aggregation", "Bi-Directional",
+                relationship: relationship)
+    expect(out.map(&:shape)).to eq(%i[diamond arrow])
+    expect(out.map(&:anchor)).to eq([[100, 0], [100, 0]])
+  end
+
+  it "preserves the target arrow for unspecified aggregation direction" do
+    relationship = Ea::Model::Association.new(
+      id: "rel", source_id: "source", target_id: "target",
+      source_aggregation: "none", target_aggregation: "composite"
+    )
+    out = specs("Aggregation", "Unspecified", relationship: relationship)
+    expect(out.map(&:shape)).to eq(%i[diamond arrow])
+    expect(out.map(&:anchor)).to eq([[100, 0], [100, 0]])
   end
 
   it "dispatches Generalization to OpenTriangle" do
