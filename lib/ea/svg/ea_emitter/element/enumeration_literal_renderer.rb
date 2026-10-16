@@ -17,7 +17,7 @@ module Ea
           # spaces rows at the same 13px pitch as attributes at 7pt
           # (size + 6) — corpus-verified against EA-published SVGs.
           def self.render(literals, bounds:, first_y:, family:, size:)
-            line_h = size + 6
+            line_h = Ea::Fonts::Metrics.compartment_line_height(size, family: family)
             sorted = literals.sort_by { |l| [l.name.to_s.downcase, l.name.to_s] }
             text_blocks = sorted.each_with_index.map do |literal, idx|
               y = first_y + (idx * line_h)

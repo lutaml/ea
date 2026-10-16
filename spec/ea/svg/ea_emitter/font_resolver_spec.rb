@@ -47,6 +47,17 @@ RSpec.describe Ea::Svg::EaEmitter::FontResolver do
     end
   end
 
+  describe "#size_unit_for" do
+    it "preserves pixel defaults when the source has no explicit unit" do
+      expect(resolver.size_unit_for(element_with_font)).to eq("px")
+    end
+
+    it "honors an explicit source unit before the theme default" do
+      element_with_font.font_size_unit = "pt"
+      expect(resolver.size_unit_for(element_with_font)).to eq("pt")
+    end
+  end
+
   describe "#weight_for" do
     it "returns 700 when bold" do
       element_with_font.font_bold = true
@@ -73,8 +84,8 @@ RSpec.describe Ea::Svg::EaEmitter::FontResolver do
     let(:theme) { Ea::Theme::Registry.lookup("119") }
     let(:resolver) { described_class.new(diagram, theme: theme) }
 
-    it "uses Carlito from theme when element has no font" do
-      expect(resolver.family_for(element_without_font)).to eq("Carlito")
+    it "uses the element font from theme when element has no font" do
+      expect(resolver.family_for(element_without_font)).to eq("Cambria")
     end
 
     it "uses the theme default size regardless of other elements" do

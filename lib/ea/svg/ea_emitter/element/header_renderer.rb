@@ -16,7 +16,9 @@ module Ea
                           fill: "#000000", weight_normal: 400, weight_bold: 700,
                           stroke_in_text: "#000000", width_factor: 0.612,
                           line_offset: 6)
-            line_h = size + line_offset
+            line_h = Ea::Fonts::Metrics.compartment_line_height(
+              size, family: family, unit: size_unit, offset: line_offset
+            )
             text_blocks = lines.each_with_index.map do |(text, style), idx|
               weight = case style
                        when :bold, :bold_italic then weight_bold

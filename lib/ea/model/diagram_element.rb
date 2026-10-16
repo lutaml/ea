@@ -22,6 +22,7 @@ module Ea
       attribute :line_width, :integer
       attribute :font_family, :string
       attribute :font_size, :integer
+      attribute :font_size_unit, :string # source font size unit, before theme fallback
       attribute :font_bold, :boolean
       attribute :font_italic, :boolean
       attribute :font_underline, :boolean
@@ -53,6 +54,7 @@ module Ea
         map "lineWidth", to: :line_width
         map "fontFamily", to: :font_family
         map "fontSize", to: :font_size
+        map "fontSizeUnit", to: :font_size_unit
         map "fontBold", to: :font_bold, render_default: true
         map "fontItalic", to: :font_italic, render_default: true
         map "fontUnderline", to: :font_underline, render_default: true

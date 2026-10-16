@@ -118,6 +118,8 @@ module Ea
             return model unless allowed
 
             set_stored_ray_origins(model, source, target, geom)
+            model.style[:association_ray_outline] = true if model.connector_type == "Association"
+            model
           end
 
           # An empty-Path Mode 3 Association follows the line between its
@@ -238,73 +240,6 @@ module Ea
               point.y.between?(bounds.y, bounds.y + bounds.height)
           end
 
-          # A Mode 2 Association with equal SX/EX (vertical EDGE 1/3) or
-          # equal SY/EY (horizontal EDGE 4) and no custom Path docks as a
-          # straight line through the middle of the boxes' overlap, moved
-          # by the shared stored offset. Stored SY counts upward.
-          def overlap_ray_origins(model, link_row, diagram_row, geom, context)
-            return model if context
-            return model unless overlap_ray_candidate?(model, link_row, geom)
-
-            source, target = stored_ray_boxes(link_row, diagram_row)
-            origins = overlap_origins(source, target, geom)
-            return model unless origins
-
-            model.source_anchor, model.target_anchor = origins.map do |ox, oy|
-              Ea::Model::Point.new(x: ox, y: oy)
-            end
-            model.style[:overlap_ray] = true
-            model
-          end
-
-          # Both ray origins share the overlap coordinate on the axis the
-          # offsets move and sit at each box's centre on the other axis.
-          def overlap_origins(source, target, geom)
-            along, across, offset = overlap_axes(geom)
-            coordinate = overlap_ray_coordinate(*box_span(source, along), *box_span(target, along), offset)
-            return nil unless coordinate && disjoint_span?(*box_span(source, across), *box_span(target, across))
-
-            [source, target].map do |box|
-              start, size = box_span(box, across)
-              centre = start + size / 2.0
-              geom[:edge] == 4 ? [centre, coordinate] : [coordinate, centre]
-            end
-          end
-
-          # [axis the offsets move, axis the boxes face, stored offset]
-          def overlap_axes(geom)
-            return [%i[y height], %i[x width], -geom[:sy]] if geom[:edge] == 4
-
-            [%i[x width], %i[y height], geom[:sx]]
-          end
-
-          def box_span(box, keys)
-            keys.map { |key| box.public_send(key) }
-          end
-
-          def overlap_ray_candidate?(model, link_row, geom)
-            model.connector_type == "Association" && model.style[:mode] == "2" &&
-              model.waypoints.size == 2 && link_row.path.to_s.empty? &&
-              model.has_geometry_offsets && uniform_overlap_offsets?(geom)
-          end
-
-          def uniform_overlap_offsets?(geom)
-            return false unless geom.values_at(:sx, :sy, :ex, :ey).all?
-
-            geom[:edge] == 4 ? geom[:sy] == geom[:ey] : [1, 3].include?(geom[:edge]) && geom[:sx] == geom[:ex]
-          end
-
-          # Floor of the overlap midpoint plus the shared offset; nil
-          # when the boxes do not overlap on this axis.
-          def overlap_ray_coordinate(start_a, size_a, start_b, size_b, offset)
-            low = [start_a, start_b].max
-            high = [start_a + size_a, start_b + size_b].min
-            return nil if low > high
-
-            coordinate = ((low + high) / 2.0 + offset).floor
-            coordinate if coordinate.between?(low, high)
-          end
-
           def disjoint_span?(start_a, size_a, start_b, size_b)
             start_a + size_a < start_b || start_b + size_b < start_a
           end
@@ -322,9 +257,15 @@ module Ea
           end
 
           def stored_ray_candidate?(model, link_row, geom)
-            %w[Generalization Aggregation].include?(model.connector_type) &&
+            stored_ray_type?(model, link_row) &&
               model.waypoints.size == 2 && stored_ray_style?(model.style, link_row) &&
               stored_ray_geometry?(model, geom)
+          end
+
+          def stored_ray_type?(model, link_row)
+            %w[Generalization Aggregation].include?(model.connector_type) ||
+              (model.connector_type == "Association" && model.style[:mode] == "1" &&
+                model.style[:lwidth] == "2" && !link_row.path.to_s.empty?)
           end
 
           # Boundary-port rounding can move a computed jog off a level saved
@@ -517,15 +458,18 @@ module Ea
               [bounds.y, bounds.y + bounds.height].include?(point[1])
           end
 
-          # A width-2 Mode 3 Aggregation without a tree style keeps an authored
-          # orthogonal stair-step of three or more corners. Each end docks on
+          # A width-2 Mode 3 route without a tree style keeps authored orthogonal
+          # bends: two corners for Associations, three or more for Aggregations.
+          # Each end docks on
           # the 1px outline its adjacent leg points at, from the corner's own
           # coordinate; any end that cannot do so leaves the route unchanged.
           def stored_stair_route(link_row, connector, source, target)
             return nil unless stair_style?(link_row, connector)
 
             corners = stored_square_corners(link_row)
-            return nil unless corners && corners.size >= 3 && alternating_legs?(corners)
+            unless corners && stair_corner_count?(corners, connector.connector_type) && alternating_legs?(corners)
+              return nil
+            end
 
             first = outline_dock(corners[0], corners[1], source)
             last = outline_dock(corners[-1], corners[-2], target)
@@ -534,8 +478,12 @@ module Ea
 
           def stair_style?(link_row, connector)
             style = DiagramStyleParser.parse(link_row.style)
-            connector.connector_type == "Aggregation" && style[:mode] == "3" &&
+            %w[Aggregation Association].include?(connector.connector_type) && style[:mode] == "3" &&
               style[:lwidth] == "2" && !style.key?(:tree)
+          end
+
+          def stair_corner_count?(corners, connector_type)
+            connector_type == "Association" ? corners.size == 2 : corners.size >= 3
           end
 
           # Every leg is non-zero and runs along the opposite axis of the last.

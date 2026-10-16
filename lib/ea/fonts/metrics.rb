@@ -60,6 +60,19 @@ module Ea
 
       module_function
 
+      # EA's Cambria 7pt compartment rows use a 12px cell; Carlito
+      # uses 13px. Keep unmeasured sizes and pixel fonts on their
+      # configured spacing.
+      def compartment_line_height(size, family:, unit: "pt", offset: 6)
+        return size + offset - 1 if compact_compartment_font?(size, family: family, unit: unit)
+
+        size + offset
+      end
+
+      def compact_compartment_font?(size, family:, unit: "pt")
+        family.to_s.casecmp("Cambria").zero? && size == 7 && unit == "pt"
+      end
+
       # Width of `text` in EA's exported SVG units for the given pt
       # size, or nil when the family is not metric-compatible.
       #

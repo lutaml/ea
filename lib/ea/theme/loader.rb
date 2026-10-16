@@ -11,7 +11,7 @@ module Ea
     #   font: { family: Carlito, size: 7, unit: pt, weight_normal: 400, ... }
     #   element_font: { size: 9, unit: pt }
     #   label_font: { family: Cambria, size: 7, unit: pt }
-    #   colors: { text: "#000000", attribute_text: "#66413F", ... }
+    #   colors: { text: "#000000", attribute_text: "#336699", ... }
     #   strokes: { element_border: 2, connector_line: 2, ... }
     #   text_metrics: { width_factor: 0.65 }
     #   canvas: { inset_left: 35, inset_right: 50, ... }
@@ -62,10 +62,11 @@ module Ea
             font_size_unit: font["unit"] || "pt",
             text_weight_normal: font["weight_normal"] || 400,
             text_weight_bold: font["weight_bold"] || 700,
+            element_font_family: elem_font["family"],
             element_font_size: elem_font["size"] || 9,
             element_font_unit: elem_font["unit"] || "pt",
             text_color: colors["text"] || "#000000",
-            attribute_text_color: colors["attribute_text"],
+            attribute_text_color: colors["attribute_text"] || colors["text"] || "#000000",
             method_text_color: colors["method_text"],
             border_color: colors["border"] || "#000000",
             fill_color: colors["fill"] || "#FFFFFF",

@@ -8,12 +8,95 @@ module Ea
         module AutoRouting
           private
 
+          # A Mode 2 Association with equal SX/EX (vertical EDGE 1/3) or
+          # equal SY/EY (horizontal EDGE 2/4) and no custom Path docks as a
+          # straight line through the middle of the boxes' overlap, moved
+          # by the shared stored offset. Stored SY counts upward.
+          def overlap_ray_origins(model, link_row, diagram_row, geom, context)
+            return model if context
+            return model unless overlap_ray_candidate?(model, link_row, geom)
+
+            source, target = stored_ray_boxes(link_row, diagram_row)
+            origins = overlap_origins(source, target, geom)
+            return model unless origins && overlap_correction?(source, target, geom)
+
+            model.source_anchor, model.target_anchor = origins.map do |ox, oy|
+              Ea::Model::Point.new(x: ox, y: oy)
+            end
+            if model.waypoints.size == 3
+              model.waypoints = port_waypoints(model, [model.source_anchor, model.target_anchor])
+            end
+            model.style[:overlap_ray] = true
+            model
+          end
+
+          # Aligned, zero-offset EDGE 2 routes already have their legacy docks.
+          def overlap_correction?(source, target, geom)
+            geom[:edge] != 2 || !geom[:sy].zero? ||
+              source.y * 2 + source.height != target.y * 2 + target.height
+          end
+
+          # Both ray origins share the overlap coordinate on the axis the
+          # offsets move and sit at each box's centre on the other axis.
+          def overlap_origins(source, target, geom)
+            along, across, offset = overlap_axes(geom)
+            coordinate = overlap_ray_coordinate(*box_span(source, along), *box_span(target, along), offset)
+            return nil unless coordinate && disjoint_span?(*box_span(source, across), *box_span(target, across))
+
+            [source, target].map do |box|
+              start, size = box_span(box, across)
+              centre = start + size / 2.0
+              [2, 4].include?(geom[:edge]) ? [centre, coordinate] : [coordinate, centre]
+            end
+          end
+
+          # [axis the offsets move, axis the boxes face, stored offset]
+          def overlap_axes(geom)
+            return [%i[y height], %i[x width], -geom[:sy]] if [2, 4].include?(geom[:edge])
+
+            [%i[x width], %i[y height], geom[:sx]]
+          end
+
+          def box_span(box, keys)
+            keys.map { |key| box.public_send(key) }
+          end
+
+          def overlap_ray_candidate?(model, link_row, geom)
+            model.connector_type == "Association" && model.style[:mode] == "2" &&
+              [2, 3].include?(model.waypoints.size) && link_row.path.to_s.empty? && !model.style[:tree] &&
+              model.has_geometry_offsets && uniform_overlap_offsets?(geom)
+          end
+
+          def uniform_overlap_offsets?(geom)
+            return false unless geom.values_at(:sx, :sy, :ex, :ey).all?
+
+            if [2, 4].include?(geom[:edge])
+              geom[:sy] == geom[:ey]
+            else
+              [1, 3].include?(geom[:edge]) && geom[:sx] == geom[:ex]
+            end
+          end
+
+          # Floor of the overlap midpoint plus the shared offset; nil
+          # when the boxes do not overlap on this axis.
+          def overlap_ray_coordinate(start_a, size_a, start_b, size_b, offset)
+            low = [start_a, start_b].max
+            high = [start_a + size_a, start_b + size_b].min
+            return nil if low > high
+
+            coordinate = ((low + high) / 2.0 + offset).floor
+            coordinate if coordinate.between?(low, high)
+          end
+
           # Nonuniform horizontal offsets seat the route at the source row.
           # Uniform offsets retain the shared-overlap routing contract.
           def source_row_association_ray(model, link_row, diagram_row, geom, context)
-            return model if context || !source_row_association?(model, link_row, geom)
+            return model if context || !source_row_association?(model, geom)
 
-            origins = source_row_origins(*stored_ray_boxes(link_row, diagram_row), geom)
+            source, target = stored_ray_boxes(link_row, diagram_row)
+            return model unless source_row_path?(link_row, source, target)
+
+            origins = source_row_origins(source, target, geom)
             return model unless origins
 
             model.source_anchor, model.target_anchor = origins
@@ -90,11 +173,22 @@ module Ea
             end
           end
 
-          def source_row_association?(model, link_row, geom)
+          def source_row_association?(model, geom)
             model.connector_type == "Association" && model.has_geometry_offsets &&
               model.source_anchor && model.target_anchor &&
-              link_row.path.to_s.empty? && source_row_style?(model.style.to_h) &&
+              source_row_style?(model.style.to_h) &&
               source_row_offsets?(geom)
+          end
+
+          def source_row_path?(link_row, source, target)
+            link_row.path.to_s.empty? || stale_horizontal_jog?(link_row, source, target)
+          end
+
+          # A horizontal saved jog outside both boxes is stale auto-routing.
+          # A corner that still lies beside either box remains authored.
+          def stale_horizontal_jog?(link_row, source, target)
+            corners = intermediate_waypoints(link_row)
+            horizontal_jog?(corners) && [source, target].none? { |box| within_height?(corners.first[1], box) }
           end
 
           def source_row_style?(style)

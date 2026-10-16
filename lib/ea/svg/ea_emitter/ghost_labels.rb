@@ -42,8 +42,11 @@ module Ea
 
         private
 
+        # EA does not draw a connector whose other end is missing from
+        # the diagram, so it has no waypoints and no ghost label either.
         def visible_connectors
           (diagram.connectors || []).select(&:renderable?)
+                                    .reject { |connector| connector.waypoints.empty? }
         end
 
         def text_for(ghost)

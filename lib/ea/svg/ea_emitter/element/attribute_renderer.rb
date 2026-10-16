@@ -52,7 +52,9 @@ module Ea
                           visibility_x_offset: DEFAULT_VISIBILITY_X_OFFSET,
                           content_x_offset: nil)
 
-            line_h = size + ROW_LINE_OFFSET
+            line_h = Ea::Fonts::Metrics.compartment_line_height(
+              size, family: family, unit: size_unit, offset: ROW_LINE_OFFSET
+            )
             offsets = group_lead_offsets(lines)
             text_blocks = []
             lines.each_with_index do |line, idx|
@@ -64,6 +66,7 @@ module Ea
                 end
                 offset = (content_x_offset || DEFAULT_CONTENT_X_OFFSET) +
                          2 * (size - 7)
+                offset -= 1 if Ea::Fonts::Metrics.compact_compartment_font?(size, family: family, unit: size_unit)
                 text_blocks << build_text(bounds.x + offset, y, rest, family, size, size_unit, fill)
               elsif line.strip.start_with?("«")
                 text_blocks << build_text(bounds.x + STEREOTYPE_HEADER_X_OFFSET, y, line.strip, family, size, size_unit, fill)

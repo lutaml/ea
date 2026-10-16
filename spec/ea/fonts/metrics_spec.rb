@@ -4,6 +4,16 @@ require "spec_helper"
 require "ea/fonts/metrics"
 
 RSpec.describe Ea::Fonts::Metrics do
+  describe ".compartment_line_height" do
+    it "uses the measured Cambria point cell and preserves other font settings" do
+      expect(described_class.compartment_line_height(7, family: "Cambria")).to eq(12)
+      expect(described_class.compartment_line_height(7, family: "CAMBRIA", offset: 10)).to eq(16)
+      expect(described_class.compartment_line_height(7, family: "Carlito")).to eq(13)
+      expect(described_class.compartment_line_height(9, family: "Cambria")).to eq(15)
+      expect(described_class.compartment_line_height(7, family: "Cambria", unit: "px")).to eq(13)
+    end
+  end
+
   describe ".text_length" do
     it "returns nil for unsupported families" do
       expect(described_class.text_length("X", 7, family: "Comic Sans")).to be_nil

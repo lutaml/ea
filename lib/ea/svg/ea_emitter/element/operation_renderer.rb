@@ -19,7 +19,7 @@ module Ea
           def self.render(operations, bounds:, first_y:, family:, size:)
             # EA's op rows pitch 13 (size + 6), same as attribute
             # rows (6D4C665D: ops 541..658 step 13).
-            line_h = size + 6
+            line_h = Ea::Fonts::Metrics.compartment_line_height(size, family: family)
             text_blocks = []
             has_receptions = operations.any?(&:is_reception)
             if has_receptions

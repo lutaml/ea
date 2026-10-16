@@ -17,14 +17,15 @@ label_font:
 # EA renders classifier compartments at this size regardless of
 # the diagram-level font.size.
 element_font:
+  family: Cambria
   size: 9
   unit: pt
 
 # Colors (decoded from EA's BGR integer encoding).
-# AttrColor=4145510→#66413F, ElemLineColor=8684698→#9A8484.
+# ElemLineColor=8684698→#9A8484. Attribute rows inherit `text`: EA's
+# exported SVGs draw them black, and QEA stores no attribute color.
 colors:
   text: "#000000"
-  attribute_text: "#66413F"
   method_text: "#335C5D"
   border: "#9A8484"
   fill: "#FFFFFF"

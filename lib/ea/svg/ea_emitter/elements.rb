@@ -174,7 +174,7 @@ module Ea
                                                                 suppress_stereotypes: suppress_stereotypes?) : []
           geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
                                            tagged_values_for(classifier).size,
-                                           header_lines, classifier: classifier,
+                                          header_lines, classifier: classifier, family: family, size_unit: size_unit,
                                            constraints_count: constraints_for(classifier).size,
                                            marker_count: marker_lines_for(classifier, element).size,
                                            enum_literals_count: enum_row_count_for(classifier),
@@ -197,7 +197,7 @@ module Ea
             attr_lines = []
             geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
                                              tagged_values_for(classifier).size,
-                                             header_lines, classifier: classifier,
+                                            header_lines, classifier: classifier, family: family, size_unit: size_unit,
                                              constraints_count: constraints_for(classifier).size,
                                            marker_count: marker_lines_for(classifier, element).size,
                                            enum_literals_count: enum_row_count_for(classifier),
@@ -217,7 +217,7 @@ module Ea
             )
             geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
                                              tagged_values_for(classifier).size,
-                                             header_lines, classifier: classifier,
+                                            header_lines, classifier: classifier, family: family, size_unit: size_unit,
                                              constraints_count: constraints_for(classifier).size,
                                            marker_count: marker_lines_for(classifier, element).size,
                                            enum_literals_count: enum_row_count_for(classifier),
@@ -227,7 +227,7 @@ module Ea
             op_lines = []
             geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
                                              tagged_values_for(classifier).size,
-                                             header_lines, classifier: classifier,
+                                            header_lines, classifier: classifier, family: family, size_unit: size_unit,
                                              constraints_count: constraints_for(classifier).size,
                                            marker_count: marker_lines_for(classifier, element).size,
                                            enum_literals_count: enum_row_count_for(classifier),
@@ -301,8 +301,8 @@ module Ea
                                  tagged_count, header_lines, classifier: nil,
                                  constraints_count: 0, marker_count: 0,
                                  enum_literals_count: 0,
-                                 attr_group_lead: 0)
-          CompartmentGeometry.new(bounds: bounds, size: size,
+                                 attr_group_lead: 0, family: nil, size_unit: "pt")
+          CompartmentGeometry.new(bounds: bounds, size: size, family: family, size_unit: size_unit,
                                    header_ghost: header_lines.any? &&
                                                   %i[italic italic_tight].include?(header_lines.first.last),
                                    header_ghost_tight: header_lines.any? &&

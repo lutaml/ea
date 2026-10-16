@@ -23,7 +23,10 @@ module Ea
           end
 
           def render_literals_block(context)
-            line_h = context.size + LITERAL_LINE_OFFSET
+            line_h = Ea::Fonts::Metrics.compartment_line_height(
+              context.size, family: context.family, unit: context.size_unit,
+                            offset: LITERAL_LINE_OFFSET
+            )
             text_blocks = []
             row_y = context.geometry.enum_literal_first_y
             # EA renders a centered italic "literals" caption above

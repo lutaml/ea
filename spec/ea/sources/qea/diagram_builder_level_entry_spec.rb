@@ -87,7 +87,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
     end
   end
 
-  it "keeps other stored-path inputs on their existing routes" do
+  it "respects connector types and routing styles for stored paths" do
     base = records[:generalization]
     kept = [["M 35 991 L -39 1031 L -39 91 L 285 162"],
             ["285 162 272.97 165.51 275.54 153.78"]]
@@ -98,7 +98,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
       ["width 0", { style: "Mode=3;LWidth=0;" }, *kept],
       ["width 1", { style: "Mode=3;LWidth=1;" }, *kept],
       ["association", { connector_type: "Association" },
-       ["M 35 1031 L -39 1031 L -39 91 L 285 92", "M 269.98 97.95 L 285 92 L 270.02 85.95"], []],
+       ["M 34 1031 L -39 1031 L -39 91 L 284 91", "M 269 97 L 284 91 L 269 85"], []],
       ["source bend not level", { path: "206:-1000;206:-151;" },
        ["M 35 990 L -39 940 L -39 91 L 284 91"], ["284 91 273 97 273 85"]],
       ["source bend inside box", { path: "320:-1091;206:-151;" },
