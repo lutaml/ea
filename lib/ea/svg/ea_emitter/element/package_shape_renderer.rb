@@ -29,7 +29,7 @@ module Ea
           TAB_LABEL_PADDING = 10
           TAB_LABEL_X_OFFSET = 5
           TAB_LABEL_Y_OFFSET = 13
-          TAB_LINE_OFFSET = 13
+          TAB_TEXT_PADDING = 6
           DEFAULT_TAB_WIDTH = 105
           # EA autosizes the TAB: max(text width + 15, 105). The BODY
           # width = max(stored rect, tab + 15): user-widened packages
@@ -116,21 +116,30 @@ module Ea
             bounds.x + TAB_LABEL_X_OFFSET
           end
 
-          # Stereotype line baseline: 13px below the tab top.
           def stereotype_y
-            tab_top_y + TAB_LABEL_Y_OFFSET
+            tab_top_y + first_baseline_offset
           end
 
-          # Name baseline when stereotype is also rendered: 26px below
-          # the tab top (one line below the stereotype).
           def name_y
-            tab_top_y + TAB_LABEL_Y_OFFSET + TAB_LINE_OFFSET
+            stereotype_y + tab_line_height
           end
 
-          # Name baseline when only the name renders (no stereotype):
-          # 13px below the tab top.
           def name_y_single
-            tab_top_y + TAB_LABEL_Y_OFFSET
+            stereotype_y
+          end
+
+          # Package tabs use the same font-size-plus-padding anchor as
+          # classifier headers, with a smaller top inset.
+          def first_baseline_offset
+            size_unit == "pt" ? size + TAB_TEXT_PADDING : TAB_LABEL_Y_OFFSET
+          end
+
+          def tab_line_height
+            return TAB_LABEL_Y_OFFSET unless size_unit == "pt"
+
+            Ea::Fonts::Metrics.compartment_line_height(
+              size, family: family, unit: size_unit, offset: TAB_TEXT_PADDING
+            )
           end
 
           # Tab occupies the top of the stored rect.
