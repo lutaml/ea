@@ -102,7 +102,9 @@ module Ea
         end
 
         def element_families
-          (diagram.elements || []).map(&:font_family).compact
+          (diagram.elements || []).map(&:font_family).compact.reject do |family|
+            family.empty? || DEFAULT_MARKER_FAMILIES.include?(family)
+          end
         end
 
         def tally_values(values)
