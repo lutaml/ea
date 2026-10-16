@@ -273,7 +273,7 @@ module Ea
             classifier: classifier,
             fill: resolve_fill(element, classifier),
             stroke: resolve_stroke,
-            stroke_width: resolve_stroke_width,
+            stroke_width: resolve_stroke_width(element),
             text_fill: theme.text_color,
             family: family, size: size, size_unit: size_unit, logical_height: logical_height,
             header_lines: header_lines,
@@ -670,7 +670,9 @@ module Ea
           color_resolver.stroke_for(nil)
         end
 
-        def resolve_stroke_width
+        def resolve_stroke_width(element)
+          return element.line_width if element.line_width && element.line_width >= 0
+
           theme.themed? ? theme.stroke_width : DEFAULT_STROKE_WIDTH
         end
 

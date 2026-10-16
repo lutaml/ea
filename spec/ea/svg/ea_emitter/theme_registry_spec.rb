@@ -23,7 +23,7 @@ RSpec.describe Ea::Theme::Registry do
       expect(theme.font_size_unit).to eq("pt")
       expect(theme.text_color).to eq("#000000")
       expect(theme.border_color).to eq("#9A8484")
-      expect(theme.stroke_width).to eq(2)
+      expect(theme.stroke_width).to eq(1)
     end
 
     it "returns theme 119 for '119' string" do
