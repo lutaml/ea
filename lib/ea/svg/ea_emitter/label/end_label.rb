@@ -186,10 +186,10 @@ module Ea
             [x + SEAT_X_INSET, y - 7]
           end
 
-          # Property-role clusters use a direction-specific right edge;
+          # Property-role clusters use a direction-specific horizontal seat;
           # alignment controls the stereotype line within that cluster.
           def source_property_seat(connector, direction, anchor, box, role)
-            return nil unless %i[up left down].include?(direction) && property_role_box?(box, direction)
+            return nil unless %i[up left right down].include?(direction) && property_role_box?(box, direction)
             return nil unless source_property_font?(connector, direction)
 
             width = Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
@@ -197,9 +197,13 @@ module Ea
 
             x, y = seat_corner(anchor, box)
             inset, baseline = property_role_offsets(direction)
-            left = x - inset - width
+            left = property_role_x(direction, x, inset + width)
             left = [left, MIN_ROLE_X].max if direction == :up
             [left, y + baseline]
+          end
+
+          def property_role_x(direction, origin, offset)
+            direction == :right ? origin + offset : origin - offset
           end
 
           def plain_upward_seat(connector, direction, anchor, box, role)
@@ -327,7 +331,7 @@ module Ea
           def property_role_offsets(direction)
             case direction
             when :up then [60, -6]
-            when :left then [60, -7]
+            when :left, :right then [60, -7]
             else [65, 15]
             end
           end
@@ -341,6 +345,7 @@ module Ea
           def source_property_route?(style, direction)
             case direction
             when :left then left_property_route?(style)
+            when :right then style.values_at(:mode, :lwidth, :tree) == %w[3 2 H]
             when :down then downward_property_route?(style)
             else %w[0 2].include?(style[:lwidth]) && style[:tree] != "OS"
             end
