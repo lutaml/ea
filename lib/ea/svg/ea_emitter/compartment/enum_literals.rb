@@ -69,9 +69,12 @@ module Ea
 
           def literal_name_text(context, literal, y)
             content = literal_display(literal)
+            # EA uses the attribute row point-size increment for literal names.
+            offset = context.theme.attribute_spec.content_x_offset || 26
+            offset += 2 * (context.size - 7) if context.size_unit == "pt"
             TextRenderer.new(
               content: content,
-              x: context.bounds.x + (context.theme.attribute_spec.content_x_offset || 26),
+              x: context.bounds.x + offset,
               y: y,
               family: context.family, size: context.size,
               size_unit: context.size_unit, logical_height: context.logical_height,
