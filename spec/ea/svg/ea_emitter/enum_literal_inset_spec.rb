@@ -15,11 +15,15 @@ RSpec.describe "QEA enumeration literal insets" do
     expect(literals.map { |node| node["x"].to_f }).to eq([1157, 1157])
   end
 
-  it "preserves the public fixture's 7pt literal positions" do
+  it "preserves explicit Calibri 7pt literal positions in the public fixture" do
     document = Ea::Sources::Qea::Adapter.from_path("examples/qea/test.qea")
+    diagram = document.diagrams.find { |entry| entry.id.include?("B58D1A53") }
+    # These coordinates exercise Calibri insets and row pitch, not font fallback.
+    diagram.elements.each { |element| element.font_family = "Calibri" }
     nodes = qea_text_nodes(document, "B58D1A53")
     literals = nodes.select { |node| %w[val1 val2].include?(node.text) }
 
+    expect(literals.map { |node| node["style"] }).to all(include("font-family:Calibri;", "font-size:7pt;"))
     expect(literals.map { |node| node["x"].to_f }).to eq([306, 306])
     expect(literals.map { |node| node["y"].to_f }).to eq([405, 418])
   end
