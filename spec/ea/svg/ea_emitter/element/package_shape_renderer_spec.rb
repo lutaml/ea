@@ -2,6 +2,7 @@
 
 require "spec_helper"
 require "ea"
+require "nokogiri"
 require "ea/svg/ea_emitter/element/package_shape_renderer"
 
 RSpec.describe Ea::Svg::EaEmitter::Element::PackageShapeRenderer do
@@ -58,5 +59,40 @@ RSpec.describe Ea::Svg::EaEmitter::Element::PackageShapeRenderer do
       # Width = 140-35 = 105.
       expect(svg).to include("140")
     end
+  end
+
+  it "uses the font size for the first baseline and family metrics for subsequent lines" do
+    records = [
+      ["Carlito", 9, "pt", [75, 90]],
+      ["Cambria", 7, "pt", [73, 85]],
+      ["Carlito", 7, "pt", [73, 86]],
+      ["Carlito", 9, "px", [73, 86]]
+    ]
+    records.each do |family, size, unit, expected|
+      svg = described_class.render(
+        bounds, fill: "#FAF3F0", stroke: "#9A8484", stroke_width: 2,
+                label: "Schema", stereotype: "applicationSchema",
+                family: family, size: size, size_unit: unit
+      )
+      texts = Nokogiri::XML(svg).css("text")
+
+      expect(texts.map { |text| text["y"].to_f }).to eq(expected)
+      expect(texts.map(&:text)).to eq(["«applicationSchema»", "Schema"])
+      expect(texts.map { |text| text["x"] }).to eq(["40.00", "40.00"])
+    end
+  end
+
+  it "preserves the single-line Cambria anchor and package polygons" do
+    svg = described_class.render(
+      bounds, fill: "#FAF3F0", stroke: "#9A8484", stroke_width: 2,
+              label: "Schema", family: "Cambria", size: 7
+    )
+    nodes = Nokogiri::XML(svg)
+
+    expect(nodes.css("text").map { |text| [text["x"], text["y"]] })
+      .to eq([["40.00", "73.00"]])
+    expect(nodes.css("polygon").map { |polygon| polygon["points"] })
+      .to eq(["35 80 169 80 169 234 35 234 35 80",
+              "35 60 140 60 140 80 35 80 35 60"])
   end
 end
