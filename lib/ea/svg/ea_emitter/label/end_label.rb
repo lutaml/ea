@@ -100,6 +100,7 @@ module Ea
                          mult_seat(direction, anchor, mult_box) || mult_pos
             elsif end_kind == :target && !(tree && zero_offset?(text_box, mult_box))
               text_pos = target_property_role(connector, heading, anchor, text_box, role) ||
+                         target_diagonal_property_role(connector, heading, anchor, text_box, role) ||
                          target_vertical_role(connector, heading, anchor, text_box, role) ||
                          target_rightward_role(heading, anchor, text_box, role) || text_pos
               mult_pos = target_multiplicity_seat(connector, heading, anchor, mult_box) ||
@@ -231,6 +232,31 @@ module Ea
           def upward_target_property?(connector, heading)
             heading && heading[0].zero? && heading[1].negative? &&
               property_label?(connector, :target) && downward_property_route?(connector.style.to_h)
+          end
+
+          # Zero-offset diagonal labels use the dominant leg's Property
+          # right edge. Moved boxes keep their explicit placement.
+          def target_diagonal_property_role(connector, heading, anchor, box, role)
+            return nil unless diagonal_property_box?(connector, box)
+
+            inset = diagonal_property_inset(heading)
+            width = Ea::Fonts::Metrics.text_length(role, font_size, family: font_family) if inset
+            [anchor[0] - inset - width, anchor[1] - 7] if width
+          end
+
+          def diagonal_property_box?(connector, box)
+            plain_vertical_box?(box) && box["alignment"] == 1 && stored_offsets_zero?(box) &&
+              property_label?(connector, :target) &&
+              connector.style.to_h.values_at(:mode, :lwidth, :tree) == ["3", "0", nil]
+          end
+
+          def diagonal_property_inset(heading)
+            return nil unless heading && !heading.include?(0)
+
+            dx, dy = heading
+            return property_role_offsets(:left).first if dx.negative? && dx.abs > dy.abs
+
+            property_role_offsets(:down).first if dy.negative? && dy.abs > dx.abs
           end
 
           def target_vertical_role(connector, heading, anchor, box, role)
