@@ -22,7 +22,7 @@ module Ea
               # render zero «...» lines, classes included).
               return [] if context.suppress_stereotypes
 
-              labels = label_for(classifier, context.umldi_keyword)
+              labels = label_for(classifier, context.umldi_keyword, context.stereotype_fqname)
               return [] if labels.empty?
 
               labels.map { |l| [l, :normal] }
@@ -30,10 +30,10 @@ module Ea
 
             # @return [Array<String>] «name» labels (EA renders one
             # line per applied stereotype)
-            def self.label_for(classifier, umldi_keyword)
+            def self.label_for(classifier, umldi_keyword, stereotype_fqname = nil)
               return ["«#{umldi_keyword}»"] if umldi_keyword && !umldi_keyword.empty?
 
-              explicit = explicit_stereotype(classifier)
+              explicit = explicit_stereotype(classifier, stereotype_fqname)
               return explicit if explicit
 
               case classifier
@@ -45,21 +45,21 @@ module Ea
               end
             end
 
-            def self.explicit_stereotype(classifier)
+            def self.explicit_stereotype(classifier, stereotype_fqname = nil)
               return nil unless classifier.is_a?(Ea::Model::Classifier) ||
                                  classifier.is_a?(Ea::Model::Package)
 
               refs = classifier.stereotype_refs
               return nil unless refs&.any?
 
-              refs.map { |ref| "«#{canonical(ref)}»" }
+              refs.map { |ref| "«#{canonical(ref, stereotype_fqname)}»" }
             end
 
-            # EA renders the stereotype string exactly as stored in
-            # t_object.Stereotype — corpus-verified: 3,284 placements
-            # render verbatim ('CodeList', 'codeList', 'codelist',
-            # 'featureType' …), zero case-canonicalized.
-            def self.canonical(ref)
+            # EA's standard Class stereotype displays as «type» while
+            # its semantic name remains Type. Custom profiles retain case.
+            def self.canonical(ref, stereotype_fqname = nil)
+              return "type" if ref == "Type" && stereotype_fqname == "StandardProfileL2::Type"
+
               ref
             end
 

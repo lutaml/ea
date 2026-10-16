@@ -10,7 +10,7 @@ module Ea
       #   2. theme.font_family / theme.font_size (when theme is themed)
       #   3. diagram-level default (most common non-nil value across
       #      the diagram's elements)
-      #   4. locale fallback (Calibri 10)
+      #   4. unthemed fallback (Cambria)
       #
       # Lives outside the Elements emitter so the resolution rule is
       # defined once (MECE) and reusable by Labels and any future
@@ -83,14 +83,8 @@ module Ea
           theme.element_font_family || theme.font_family
         end
 
-        # EA's app-default font depends on the system locale:
-        # Japanese Windows → "Yu Gothic UI" 13, English Windows →
-        # "Calibri" 10. We can't query EA's runtime, so we infer
-        # from the diagram:
-        #
-        # - If ANY element specifies font=, use the most common.
-        # - If NO element specifies font= (all are "use default"),
-        #   assume the EA English-locale default: Calibri 10.
+        # Unthemed diagrams without a saved family use Cambria.
+        # Saved families still supply the diagram default.
         def diagram_default_family
           families = element_families
           return FALLBACK_DEFAULT_FAMILY if families.empty?
@@ -98,7 +92,7 @@ module Ea
           most_common(families)
         end
 
-        FALLBACK_DEFAULT_FAMILY = "Calibri"
+        FALLBACK_DEFAULT_FAMILY = "Cambria"
 
         def most_common(values)
           return nil if values.empty?
