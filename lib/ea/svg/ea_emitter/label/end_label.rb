@@ -108,7 +108,8 @@ module Ea
             end
 
             if end_kind == :source
-              text_pos = source_top_property_role(connector, heading, anchor, text_box, role) || text_pos
+              text_pos = source_top_property_role(connector, heading, anchor, text_box, role) ||
+                         source_bottom_property_role(connector, heading, anchor, text_box, role) || text_pos
             end
 
             build_texts(role:, mult:, standalone:,
@@ -206,6 +207,10 @@ module Ea
             [left, y + baseline]
           end
 
+          def property_role_x(direction, origin, offset)
+            direction == :right ? origin + offset : origin - offset
+          end
+
           # EDGE=1 certifies the top dock independently of the clipped ray's
           # heading. An absent source box uses the upward Property seat.
           def source_top_property_role(connector, heading, anchor, box, role)
@@ -225,8 +230,29 @@ module Ea
             style[:stored_top_dock] == true && style.values_at(:mode, :lwidth, :tree) == ["3", "2", nil]
           end
 
-          def property_role_x(direction, origin, offset)
-            direction == :right ? origin + offset : origin - offset
+          # A saved external ray that first meets the source's bottom face
+          # seats an absent source Property role like the downward Property
+          # seat. The caller reports that face as a downward heading.
+          def source_bottom_property_role(connector, heading, anchor, box, role)
+            return nil unless source_bottom_dock?(connector, heading, box)
+
+            width = Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
+            return nil unless width
+
+            x, y = seat_corner(anchor, box)
+            inset, baseline = property_role_offsets(:down)
+            [x - inset - width, y + baseline]
+          end
+
+          def source_bottom_dock?(connector, heading, box)
+            source_seat?(:source, heading) && heading[0].zero? && heading[1].positive? &&
+              zero_source_property_box?(box) && default_presentation?(box) &&
+              source_bottom_property_route?(connector.style.to_h) &&
+              source_property_font?(connector, :down)
+          end
+
+          def source_bottom_property_route?(style)
+            style[:stored_association_ray] == true && style.values_at(:mode, :lwidth, :tree) == ["3", "2", nil]
           end
 
           def plain_upward_seat(connector, direction, anchor, box, role)

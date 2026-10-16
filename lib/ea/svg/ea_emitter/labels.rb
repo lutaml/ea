@@ -129,7 +129,7 @@ module Ea
 
           box = source_dock_bounds(connector)
           face = box && dock_face_heading(points.first, box)
-          return face if face && face.zip(heading).any? { |axis, delta| (axis * delta).positive? }
+          return face if face && face_leads_leg?(connector, face, heading, box)
 
           stored_upward_heading(connector, heading)
         end
@@ -145,6 +145,18 @@ module Ea
 
           original = leg_heading(stored.reverse)
           original.any?(&:zero?) ? original : heading
+        end
+
+        # A saved external ray enters the source through the face it first
+        # meets, even when the clipped leg then runs back across the box.
+        def face_leads_leg?(connector, face, heading, box)
+          anchor = connector.source_anchor
+          if face == [0, 1] && anchor && anchor.y > box.y + box.height &&
+             connector.style.to_h[:stored_association_ray] == true
+            return true
+          end
+
+          face.zip(heading).any? { |axis, delta| (axis * delta).positive? }
         end
 
         def stored_upward_heading(connector, heading)
