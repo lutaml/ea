@@ -4,27 +4,11 @@ module Ea
   module Svg
     module EaEmitter
       module Marker
-        # Diamond marker at the whole end of an aggregation, plus a
-        # navigability arrow apexing at the diamond's line-side tip.
-        #
-        # WHOLE-END SELECTION: EA flags the whole end either through
-        # t_connector.DestAccess (1 shared / 2 composite -> whole at
-        # the TARGET; corpus-verified 333EFCCF: PersonalRight_E is
-        # the DestAccess=2 end and every diamond sits there) or
-        # through the Connector_Type itself ("Aggregation"/
-        # "Composition" -> whole at the SOURCE; basic.qea's
-        # composition diagram). DestAccess wins when both appear.
-        # Without relationship data the direction heuristic applies
-        # ("Destination -> Source" -> whole at target).
-        #
-        # ARROW: dest-flagged aggregations draw a base-12 height-15
-        # open arrow stacked on the diamond tip pointing into the
-        # whole (333EFCCF: 6 diamonds + 6 path arrows). Type-inferred
-        # source-side aggregations draw the diamond only (basic.qea:
-        # 17 diamonds, 0 arrows).
+        # EA endpoint fields select the diamond end; direction selects
+        # the arrow end for target-owned aggregations.
         class Diamond < Kind
           def self.handles?(effective_type)
-            effective_type == "Aggregation" || effective_type == "Composition"
+            %w[Aggregation Composition].include?(effective_type)
           end
 
           def self.specs_for(connector, source, target, before_target, after_source, relationship: nil)
@@ -36,10 +20,8 @@ module Ea
                                         base: whole_base)]
             return specs unless whole_at_target
 
-            specs << Registry::Spec.new(shape: :arrow,
-                                        anchor: whole_anchor,
-                                        base: whole_base)
-            specs
+            specs.concat(direction_specs(connector, source, target,
+                                         before_target, after_source))
           end
 
           def self.whole_at_target?(connector, relationship)
@@ -58,6 +40,18 @@ module Ea
             relationship &&
               %w[shared composite].include?(relationship.source_aggregation.to_s)
           end
+
+          def self.direction_specs(connector, source, target, before_target,
+                                   after_source)
+            if connector.direction == "Destination -> Source"
+              return [Registry::Spec.new(shape: :arrow, anchor: source,
+                                         base: after_source)]
+            end
+
+            [Registry::Spec.new(shape: :arrow, anchor: target,
+                                base: before_target)]
+          end
+          private_class_method :direction_specs
         end
       end
     end

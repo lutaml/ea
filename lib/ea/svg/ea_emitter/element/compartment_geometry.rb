@@ -150,14 +150,30 @@ module Ea
             divider_y + size + (attr_first_offset || 7)
           end
 
-          # Tagged values appear after attributes (or after ops if
-          # present). EA does not emit a separate divider — the
-          # italic "tags" header marks the compartment. Constraints
-          # render ABOVE the attributes (constraints_first_y), not
-          # here.
+          # OCL constraints follow the regular content with a divider and caption.
+          # Suppress the whole compartment when its last row cannot fit.
+          def constraints_first_y
+            return nil unless constraints_count.to_i.positive?
+
+            first_y = constraints_caption_y
+            first_y if first_y + constraints_count * (size + 5) + 4 <= bounds.y + bounds.height
+          end
+
+          def constraints_caption_y
+            (regular_content_bottom_y || raw_attr_first_y) + size + 13
+          end
+
+          def constraints_divider_y
+            constraints_first_y - size - 7 if constraints_first_y
+          end
+
+          def constraints_bottom_y
+            constraints_first_y + constraints_count * (size + 5) if constraints_first_y
+          end
+
+          # Tagged values follow the last visible content compartment.
           def tagged_value_first_y
-            return nil unless tagged_values_count.to_i.positive? ||
-                              constraints_count.to_i.positive?
+            return nil unless tagged_values_count.to_i.positive?
 
             (content_bottom_y || raw_attr_first_y) + size + 5
           end
@@ -169,6 +185,10 @@ module Ea
           # the autosize gate must not treat the empty-compartment
           # anchor as content.
           def content_bottom_y
+            [regular_content_bottom_y, constraints_bottom_y].compact.max
+          end
+
+          def regular_content_bottom_y
             bottoms = []
             bottoms << attr_bottom_y if attr_lines_count.to_i.positive?
             bottoms << enum_literals_bottom_y if enum_literals_count.to_i.positive?

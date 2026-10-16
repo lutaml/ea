@@ -11,26 +11,17 @@ module Ea
         # content and suppresses them when they would overflow the
         # stored box height (never truncates rows).
         module Constraints
-          DEFAULT_TEXT_COLOR = "#000000"
-
           module_function
 
           def render(context)
             return nil unless context.constraints&.any?
-            return nil unless context.geometry.tagged_value_first_y
+            return nil unless context.geometry.constraints_first_y
 
-            first_y = context.geometry.tagged_value_first_y
-            line_h = context.size + 6
-            last_y = first_y + (context.constraints.size - 1) * line_h
-            return nil if last_y + 4 > context.bounds.y + context.bounds.height
-
-            Element::ConstraintRenderer.render(
-              context.constraints,
-              bounds: context.bounds,
-              first_y: first_y,
-              family: context.family, size: context.size,
-              fill: DEFAULT_TEXT_COLOR
+            divider = Element::DividerRenderer.render(
+              context.bounds, y: context.geometry.constraints_divider_y,
+                              stroke: context.stroke, stroke_width: context.stroke_width
             )
+            "#{divider}\n#{Element::ConstraintRenderer.render_compartment(context)}"
           end
         end
       end

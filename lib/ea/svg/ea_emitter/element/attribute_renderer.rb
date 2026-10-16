@@ -87,7 +87,7 @@ module Ea
           # Pass a `lookup` (any callable returning a Classifier for
           # an id) to enable inherited-property namespace prefixing.
           def self.lines_for(classifier, lookup: nil,
-                            exclude_association_ids: nil)
+                             exclude_association_ids: nil, stored_order: false)
             props = displayable_properties(classifier, exclude_association_ids)
             return [] unless props
 
@@ -95,19 +95,14 @@ module Ea
             if stereotypes.size == 1 && props.all? { |p| property_stereotype(p) }
               # EA renders ONE compartment stereotype header for a
               # uniformly-stereotyped attribute set (e.g. «Property»
-              # above GML property rows) and lists rows
-              # alphabetically - verified against EA-published SVGs.
+              # above GML property rows).
               header = "«#{canonical_stereotype(stereotypes.first)}»"
-              [header] + props.sort_by { |p| p.name.to_s }.map do |prop|
+              [header] + ordered_properties(props, stored_order, case_sensitive: true).map do |prop|
                 AttributeLineBuilder.new(prop, host: classifier,
                                          lookup: lookup).to_s
               end
             else
-              # EA lists attribute rows alphabetically (case-
-              # insensitive) — corpus-verified: 991 boxes strictly
-              # alphabetical vs 24 strictly stored-Pos order.
-              props.sort_by { |p| [p.name.to_s.downcase, p.name.to_s] }
-                   .flat_map do |prop|
+              ordered_properties(props, stored_order).flat_map do |prop|
                 lines = []
                 stereotype = property_stereotype(prop)
                 lines << "«#{stereotype}»" if stereotype
@@ -116,6 +111,20 @@ module Ea
               end
             end
           end
+
+          # QEA properties arrive in stored Pos order. Association ends retain
+          # their alphabetical fallback rather than using connector Pos values.
+          def self.ordered_properties(props, stored_order, case_sensitive: false)
+            alphabetical = lambda do |prop|
+              name = prop.name.to_s
+              case_sensitive ? [name] : [name.downcase, name]
+            end
+            return props.sort_by(&alphabetical) unless stored_order
+
+            own, ends = props.partition { |prop| !prop.association_id }
+            own + ends.sort_by(&alphabetical)
+          end
+          private_class_method :ordered_properties
 
           STEREOTYPE_DISPLAY = {
             "property" => "Property",

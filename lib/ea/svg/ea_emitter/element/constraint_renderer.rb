@@ -29,6 +29,34 @@ module Ea
             %(<g style="#{Style::TEXT_GROUP}">\n#{text_blocks.join("\n")}\n</g>)
           end
 
+          def self.render_compartment(context)
+            rows = context.constraints.each_with_index.map do |constraint, idx|
+              compartment_row(constraint, context, idx)
+            end
+            %(<g style="#{Style::TEXT_GROUP}">\n#{([compartment_caption(context)] + rows).join("\n")}\n</g>)
+          end
+
+          def self.compartment_row(constraint, context, index)
+            build_text(context.bounds.x + 5,
+                       context.geometry.constraints_first_y + (index + 1) * (context.size + 5),
+                       "{#{constraint.name}}", context.family, context.size, context.text_fill)
+          end
+          private_class_method :compartment_row
+
+          def self.compartment_caption(context)
+            TextRenderer.new(content: "constraints", x: caption_x(context),
+                             y: context.geometry.constraints_first_y, family: context.family,
+                             size: context.size, fill: context.text_fill, style: "italic").to_svg
+          end
+          private_class_method :compartment_caption
+
+          def self.caption_x(context)
+            width = TextRenderer.estimate_width("constraints", context.size, nil,
+                                                family: context.family, style: "italic").round
+            context.bounds.x + ((context.bounds.width - width) / 2).floor
+          end
+          private_class_method :caption_x
+
           def self.build_text(x, y, content, family, size, fill)
             TextRenderer.new(content: content, x: x, y: y,
                               family: family, size: size, fill: fill).to_svg
