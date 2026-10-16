@@ -24,12 +24,12 @@ module Ea
 
         attr_reader :content, :x, :y, :family, :size, :weight, :style,
                     :fill, :text_length, :rotation, :size_unit,
-                    :stroke_in_text, :width_factor
+                    :stroke_in_text, :width_factor, :logical_height
 
         def initialize(content:, x:, y:, family:, size:, weight: 400,
                        style: "normal", fill: DEFAULT_FILL,
                        text_length: nil, rotation: DEFAULT_ROTATION,
-                       size_unit: "px",
+                       size_unit: "px", logical_height: nil,
                        stroke_in_text: DEFAULT_STROKE_IN_TEXT,
                        width_factor: DEFAULT_WIDTH_FACTOR)
           @content = content.to_s
@@ -43,6 +43,7 @@ module Ea
           @text_length = text_length
           @rotation = rotation
           @size_unit = size_unit
+          @logical_height = logical_height if size_unit == "pt"
           @stroke_in_text = stroke_in_text
           @width_factor = width_factor
         end
@@ -154,10 +155,10 @@ module Ea
         GLYPH_FALLBACK = 0.61
 
         def self.estimate_width(text, size, _width_factor = nil, family: nil,
-                                weight: nil, style: nil)
+                                weight: nil, style: nil, logical_height: nil)
           real = Ea::Fonts::Metrics.text_length(text, size, family: family,
                                                             weight: weight,
-                                                            style: style)
+                                                            style: style, logical_height: logical_height)
           return real if real
 
           text.to_s.each_char.sum do |ch|
@@ -170,7 +171,7 @@ module Ea
 
           width = self.class.estimate_width(content, size, width_factor,
                                             family: family, weight: weight,
-                                            style: style)
+                                            style: style, logical_height: logical_height)
           width.round.to_s
         end
 

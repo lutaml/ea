@@ -137,6 +137,7 @@ module Ea
             font_family: presence(font_style[:font]),
             font_size: font_size_from(font_style),
             font_size_unit: "pt",
+            font_logical_height: font_logical_height_from(font_style),
             font_bold: truthy?(style_hash[:bold]),
             font_italic: truthy?(style_hash[:italic]),
             font_underline: truthy?(style_hash[:ul]),

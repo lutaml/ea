@@ -39,27 +39,31 @@ module Ea
           def self.compartment_row(constraint, context, index)
             build_text(context.bounds.x + 5,
                        context.geometry.constraints_first_y + (index + 1) * (context.size + 5),
-                       "{#{constraint.name}}", context.family, context.size, context.text_fill)
+                       "{#{constraint.name}}", context.family, context.size, context.text_fill,
+                       size_unit: context.size_unit, logical_height: context.logical_height)
           end
           private_class_method :compartment_row
 
           def self.compartment_caption(context)
             TextRenderer.new(content: "constraints", x: caption_x(context),
                              y: context.geometry.constraints_first_y, family: context.family,
-                             size: context.size, fill: context.text_fill, style: "italic").to_svg
+                             size: context.size, size_unit: context.size_unit, logical_height: context.logical_height,
+                             fill: context.text_fill, style: "italic").to_svg
           end
           private_class_method :compartment_caption
 
           def self.caption_x(context)
             width = TextRenderer.estimate_width("constraints", context.size, nil,
-                                                family: context.family, style: "italic").round
+                                                family: context.family, style: "italic",
+                                                logical_height: context.logical_height).round
             context.bounds.x + ((context.bounds.width - width) / 2).floor
           end
           private_class_method :caption_x
 
-          def self.build_text(x, y, content, family, size, fill)
+          def self.build_text(x, y, content, family, size, fill, size_unit: "px", logical_height: nil)
             TextRenderer.new(content: content, x: x, y: y,
-                              family: family, size: size, fill: fill).to_svg
+                             family: family, size: size, size_unit: size_unit,
+                             logical_height: logical_height, fill: fill).to_svg
           end
           private_class_method :build_text
         end

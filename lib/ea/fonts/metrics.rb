@@ -38,8 +38,15 @@ module Ea
       CAMBRIA_7_REGULAR_WIDTHS = JSON.parse(File.read(
                                               File.expand_path("cambria_7_regular_widths.json", __dir__)
                                             )).freeze
+      # Styled ASCII advances come from Cambria's native TTF metrics,
+      # quantized at the same 10px logical height as EA's 7pt font.
+      # Bold uses monochrome hinted advances from the native TTF.
+      CAMBRIA_7_STYLED_WIDTHS = JSON.parse(File.read(
+                                             File.expand_path("cambria_7_styled_widths.json", __dir__)
+                                           )).freeze
       CAMBRIA_7_GUILLEMET_PAIR_WIDTH = 10
-      private_constant :CAMBRIA_7_REGULAR_WIDTHS, :CAMBRIA_7_GUILLEMET_PAIR_WIDTH
+      private_constant :CAMBRIA_7_REGULAR_WIDTHS, :CAMBRIA_7_STYLED_WIDTHS,
+                       :CAMBRIA_7_GUILLEMET_PAIR_WIDTH
 
       # Advance used for codepoints missing from the tables.
       DEFAULT_ADVANCE = 0.25
@@ -63,10 +70,23 @@ module Ea
       # EA's Cambria 7pt compartment rows use a 12px cell; Carlito
       # uses 13px. Keep unmeasured sizes and pixel fonts on their
       # configured spacing.
-      def compartment_line_height(size, family:, unit: "pt", offset: 6)
+      def compartment_line_height(size, family:, unit: "pt", offset: 6, logical_height: nil)
         return size + offset - 1 if compact_compartment_font?(size, family: family, unit: unit)
 
-        size + offset
+        # Source sizes 90 and 100 both export as 9pt but retain
+        # distinct 12px and 13px logical heights. Apply that same
+        # source-height delta to the existing compartment spacing.
+        adjustment = if logical_height && unit == "pt" &&
+                        GDI_HEIGHT_FAMILIES.include?(resolve_family(family))
+                       logical_height - gdi_logical_height(size)
+                     else
+                       0
+                     end
+        size + offset + adjustment
+      end
+
+      def gdi_logical_height(size)
+        (size.to_f * 10 / 7).round
       end
 
       def compact_compartment_font?(size, family:, unit: "pt")
@@ -82,19 +102,19 @@ module Ea
       # textLength is the SUM of those per-glyph integers - corpus
       # fitted to 97-100% exact on 10k Carlito texts (bold 7pt
       # 1666/1671). The legacy sum-then-round model matched only 27%.
-      def text_length(text, size_pt, family: nil, weight: nil, style: nil)
+      def text_length(text, size_pt, family: nil, weight: nil, style: nil, logical_height: nil)
         return nil unless supported_family?(family)
         return nil if text.nil? || text.empty?
 
         return cambria_text_length(text, size_pt, weight, style) if resolve_family(family) == "Cambria"
 
-        advance_text_length(text, size_pt, family, weight, style)
+        advance_text_length(text, size_pt, family, weight, style, logical_height)
       end
 
-      def advance_text_length(text, size_pt, family, weight, style)
+      def advance_text_length(text, size_pt, family, weight, style, logical_height)
         resolved = resolve_family(family)
         if GDI_HEIGHT_FAMILIES.include?(resolved)
-          height = (size_pt.to_f * 10 / 7).round
+          height = logical_height || gdi_logical_height(size_pt)
           table = table_for(family, weight, style)
           latin = 0
           cjk_count = 0
@@ -118,8 +138,11 @@ module Ea
 
       def cambria_text_length(text, size_pt, weight, style)
         return nil unless size_pt.to_f.to_r == 7
-        return nil unless ["", "0", "400", "normal"].include?(weight.to_s)
-        return nil unless ["", "normal"].include?(style.to_s)
+        return nil unless ["", "0", "400", "normal", "700", "bold"].include?(weight.to_s)
+        return nil unless ["", "normal", "italic"].include?(style.to_s)
+
+        key = STYLE_KEYS.fetch([bold?(weight), italic?(style)])
+        return cambria_styled_length(text, key) unless key == :regular
 
         return cambria_ascii_length(text) unless text.start_with?("«") && text.end_with?("»")
 
@@ -127,6 +150,13 @@ module Ea
         inner_width + CAMBRIA_7_GUILLEMET_PAIR_WIDTH if inner_width
       end
       private_class_method :cambria_text_length
+
+      def cambria_styled_length(text, key)
+        table = CAMBRIA_7_STYLED_WIDTHS.fetch(key.to_s)
+        widths = text.each_char.map { |char| table[char] }
+        widths.sum unless widths.empty? || widths.include?(nil)
+      end
+      private_class_method :cambria_styled_length
 
       def cambria_ascii_length(text)
         widths = text.each_char.map { |char| CAMBRIA_7_REGULAR_WIDTHS[char] }

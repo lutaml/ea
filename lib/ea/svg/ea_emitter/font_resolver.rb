@@ -61,6 +61,10 @@ module Ea
           element&.font_size_unit || theme.font_size_unit || "pt"
         end
 
+        def logical_height_for(element)
+          element&.font_logical_height if size_unit_for(element) == "pt"
+        end
+
         def weight_for(element)
           bold = element&.font_bold ? 700 : nil
           bold || (theme.themed? ? theme.text_weight_normal : 400)

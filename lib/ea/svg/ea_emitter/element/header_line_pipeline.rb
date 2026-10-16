@@ -19,7 +19,7 @@ module Ea
         module HeaderLinePipeline
           Context = Struct.new(:classifier, :diagram_package_id,
                                :visually_nested, :umldi_keyword,
-                               :bounds_width, :font_size, :family,
+                               :bounds_width, :font_size, :family, :logical_height,
                                :off_canvas_parent_name,
                                :foreign_package_name,
                                :suppress_stereotypes,
@@ -57,7 +57,8 @@ module Ea
             width = lambda do |s|
               TextRenderer.estimate_width(
                 s, context.font_size || 9, nil,
-                family: context.family, weight: "700", style: font_style
+                family: context.family, weight: "700", style: font_style,
+                logical_height: context.logical_height
               ).round
             end
             return [text] if context.bounds_width.nil?

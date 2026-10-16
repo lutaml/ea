@@ -55,16 +55,30 @@ RSpec.describe Ea::Fonts::Metrics do
       end
     end
 
+    it "quantizes native Cambria styled advances at seven points" do
+      [
+        ["uro::OtherConstruction", 700, "normal", 112],
+        ["tun::IntTunnelInstallation", 700, "normal", 122],
+        ["uro::DataQualityAttribute", "bold", "normal", 121],
+        ["tun::_Opening", 700, "italic", 65],
+        ["_CityObject", 400, "italic", 46]
+      ].each do |text, weight, style, width|
+        expect(described_class.text_length(text, 7, family: "Cambria",
+                                                    weight: weight, style: style)).to eq(width)
+      end
+      expect(described_class.text_length("日本", 7, family: "Cambria", weight: 700)).to be_nil
+    end
+
     it "keeps unsupported Cambria sizes and styles on the fallback path" do
       [6, 7.1, 9].each do |size|
         expect(described_class.text_length("«property»", size,
                                            family: "Cambria")).to be_nil
       end
-      %w[700 bold 300 500].each do |weight|
+      %w[300 500].each do |weight|
         expect(described_class.text_length("+roleTwo", 7, family: "Cambria",
                                                           weight: weight)).to be_nil
       end
-      %w[italic oblique].each do |style|
+      %w[oblique].each do |style|
         expect(described_class.text_length("+roleTwo", 7, family: "Cambria",
                                                           style: style)).to be_nil
       end
@@ -112,7 +126,7 @@ RSpec.describe Ea::Fonts::Metrics do
     it "boldens via the bold advance table" do
       regular = described_class.text_length("Bold text", 7, family: "Carlito")
       bold = described_class.text_length("Bold text", 7, family: "Carlito",
-                                         weight: "700")
+                                                         weight: "700")
       expect(bold).to be > regular
     end
 
@@ -121,7 +135,7 @@ RSpec.describe Ea::Fonts::Metrics do
       expect(described_class.text_length("日本", 7, family: "Carlito"))
         .to be_within(0.01).of(2 * em)
       expect(described_class.text_length("日本", 7, family: "Carlito",
-                                         weight: "700"))
+                                                  weight: "700"))
         .to eq(described_class.text_length("日本", 7, family: "Carlito"))
     end
   end

@@ -78,6 +78,7 @@ module Ea
             if tree && zero_offset?(text_box, mult_box)
               text_pos, mult_pos = tree_positions(end_kind, anchor, role,
                                                   text_pos, mult_pos)
+              mult_pos = tree_left_multiplicity(end_kind, heading, anchor, mult_box, mult) || mult_pos
             elsif mult_box && stored_offsets_zero?(mult_box)
               # Start at the legacy default; measured directional seats
               # below replace it for default Cambria labels.
@@ -94,12 +95,14 @@ module Ea
                          source_property_seat(connector, direction, anchor, text_box, role) ||
                          plain_upward_seat(connector, direction, anchor, text_box, role) ||
                          role_seat(direction, anchor, text_box, role) || text_pos
-              mult_pos = directional_multiplicity(connector, direction, anchor, mult_box, mult) ||
+              mult_pos = directional_multiplicity(direction, anchor, mult_box, mult) ||
+                         horizontal_tree_multiplicity(connector, direction, anchor, mult_box, mult) ||
                          mult_seat(direction, anchor, mult_box) || mult_pos
             elsif end_kind == :target && !(tree && zero_offset?(text_box, mult_box))
               text_pos = target_vertical_role(connector, heading, anchor, text_box, role) ||
                          target_rightward_role(heading, anchor, text_box, role) || text_pos
-              mult_pos = target_multiplicity_seat(heading, anchor, mult_box) || mult_pos
+              mult_pos = target_multiplicity_seat(heading, anchor, mult_box) ||
+                         target_horizontal_multiplicity(heading, anchor, mult_box, mult) || mult_pos
             end
 
             build_texts(role:, mult:, standalone:,
@@ -306,15 +309,45 @@ module Ea
             %w[1 3].include?(style[:mode]) && style[:lwidth] == "2" && !style[:tree]
           end
 
-          def directional_multiplicity(connector, direction, anchor, box, mult)
+          def directional_multiplicity(direction, anchor, box, mult)
             return nil unless cambria_box?(box)
 
             x, y = seat_corner(anchor, box)
             return [x + 8, y + 15] if direction == :down
-            return nil unless direction == :left && source_property_font?(connector, direction)
+            return nil unless direction == :left
 
             width = Ea::Fonts::Metrics.text_length(mult, font_size, family: font_family)
             [x - width - 3, y + 15] if width
+          end
+
+          # On an "H" tree route a property end leaving right seats its
+          # multiplicity one text width further right than the plain
+          # rightward seat.
+          def horizontal_tree_multiplicity(connector, direction, anchor, box, mult)
+            return nil unless direction == :right && property_label?(connector, :source)
+            return nil unless connector.style.to_h[:tree] == "H" && cambria_box?(box) && !mult_empty?(mult)
+
+            width = Ea::Fonts::Metrics.text_length(mult, font_size, family: font_family)
+            x, y = seat_corner(anchor, box)
+            [x + SEAT_X_INSET + width, y + 15] if width
+          end
+
+          # A tree-route source leaving left seats its multiplicity like any
+          # other leftward source rather than at the rightward tree default.
+          def tree_left_multiplicity(end_kind, heading, anchor, box, mult)
+            return nil if end_kind != :source || mult_empty?(mult) || leg_direction(end_kind, heading) != :left
+
+            directional_multiplicity(:left, anchor, box, mult)
+          end
+
+          # A target whose first leg runs sideways seats its multiplicity at
+          # the stored corner like a source leaving the same way.
+          def target_horizontal_multiplicity(heading, anchor, box, mult)
+            return nil unless seat_font? && heading && heading[1].zero? && !heading[0].zero?
+            return nil if mult_empty?(mult)
+            return directional_multiplicity(:left, anchor, box, mult) if heading[0].negative?
+
+            mult_seat(:right, anchor, box)
           end
 
           def target_multiplicity_seat(heading, anchor, box)

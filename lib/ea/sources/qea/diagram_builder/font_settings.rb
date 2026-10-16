@@ -30,14 +30,18 @@ module Ea
           USE_DEFAULT_FONTSZ = [0].freeze
           GDI_DPI = 96
 
-          def font_size_from(style_hash)
+          def font_logical_height_from(style_hash)
             raw = style_hash[:fontsz]
             return nil if raw.nil? || raw.to_s.empty?
 
             return nil if USE_DEFAULT_FONTSZ.include?(raw.to_i)
 
-            pixels = (raw.to_f * GDI_DPI / 720).floor
-            (pixels * 72.0 / GDI_DPI).floor
+            (raw.to_f * GDI_DPI / 720).floor
+          end
+
+          def font_size_from(style_hash)
+            pixels = font_logical_height_from(style_hash)
+            (pixels * 72.0 / GDI_DPI).floor if pixels
           end
         end
       end

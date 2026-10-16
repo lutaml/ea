@@ -16,7 +16,8 @@ module Ea
               context.attr_lines,
               bounds: context.bounds,
               first_y: context.geometry.attr_first_y,
-              family: context.family, size: context.size, size_unit: context.size_unit,
+              family: context.family, size: context.size,
+              size_unit: context.size_unit, logical_height: context.logical_height,
               fill: context.theme.attribute_text_color,
               visibility_x_offset: context.theme.attribute_spec.visibility_x_offset,
               content_x_offset: context.theme.attribute_spec.content_x_offset

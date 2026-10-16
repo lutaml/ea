@@ -8,6 +8,18 @@ module Ea
         module AutoRouting
           private
 
+          # Without an authored Path, a direct Association can still store
+          # aligned mathematical origins rather than screen-space ports.
+          def stored_association_path?(model, link_row, source, target, geom)
+            return true unless model.connector_type == "Association" && link_row.path.to_s.empty?
+            return false unless geom.values_at(:sx, :sy, :ex, :ey).all?
+
+            origins = [stored_ray_origin(source, geom[:sx], geom[:sy]),
+                       stored_ray_origin(target, geom[:ex], geom[:ey])]
+            origins.first.y == origins.last.y && horizontal_ray_gap?(source, target) &&
+              origins.zip([source, target]).all? { |origin, box| inside_box?(origin, grown_bounds(box, 1)) }
+          end
+
           # A Mode 2 Association with equal SX/EX (vertical EDGE 1/3) or
           # equal SY/EY (horizontal EDGE 2/4) and no custom Path docks as a
           # straight line through the middle of the boxes' overlap, moved
@@ -88,7 +100,7 @@ module Ea
             coordinate if coordinate.between?(low, high)
           end
 
-          # Nonuniform horizontal offsets seat the route at the source row.
+          # Nonuniform horizontal offsets move the shared overlap row by SY.
           # Uniform offsets retain the shared-overlap routing contract.
           def source_row_association_ray(model, link_row, diagram_row, geom, context)
             return model if context || !source_row_association?(model, geom)
@@ -155,14 +167,10 @@ module Ea
           def source_row_origins(source, target, geom)
             return nil unless source_row_faces_target?(source, target, geom[:edge])
 
-            row = source_row_y(source, geom)
-            return nil unless [source, target].all? { |box| within_height?(row, box) }
+            row = overlap_ray_coordinate(source.y, source.height, target.y, target.height, -geom[:sy])
+            return nil unless row && [source, target].all? { |box| within_height?(row, box) }
 
             [source, target].map { |box| Ea::Model::Point.new(x: box.x + box.width / 2.0, y: row) }
-          end
-
-          def source_row_y(source, geom)
-            (source.y + source.height / 2.0 - geom[:sy]).floor
           end
 
           def source_row_faces_target?(source, target, edge)

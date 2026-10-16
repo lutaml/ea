@@ -40,13 +40,14 @@ module Ea
                           attr_line_offset: 6,
                           attr_first_offset: 7,
                           attr_group_lead: 0,
-                         family: nil, size_unit: "pt",
+                         family: nil, size_unit: "pt", logical_height: nil,
                           header_ghost: false,
                           header_ghost_tight: false)
             @bounds = bounds
             @size = size
             @family = family
             @size_unit = size_unit
+            @logical_height = logical_height
             @header_lines_count = header_lines_count
             @attr_lines_count = attr_lines_count
             @op_lines_count = op_lines_count
@@ -66,7 +67,7 @@ module Ea
 
           def line_height(offset)
             Ea::Fonts::Metrics.compartment_line_height(
-              size, family: @family, unit: @size_unit, offset: offset
+              size, family: @family, unit: @size_unit, offset: offset, logical_height: @logical_height
             )
           end
           private :line_height

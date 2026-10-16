@@ -20,13 +20,18 @@ module Ea
               return [] unless inst.is_a?(Ea::Model::InstanceSpecification)
 
               lines = stereotype_lines(inst, context)
-              label = inst.name.to_s
-              if inst.classifier_name && !inst.classifier_name.empty?
-                label = "#{label}: #{inst.classifier_name}"
-              end
-              lines + HeaderLinePipeline.wrap_words(label, context, :bold).map do |line|
+              lines + HeaderLinePipeline.wrap_words(label_for(inst), context, :bold).map do |line|
                 [line, :bold]
               end
+            end
+
+            # "Name / alias: Classifier"; t_object.Alias is the instance role.
+            def self.label_for(inst)
+              label = inst.name.to_s
+              label = "#{label} / #{inst.role_name}" unless inst.role_name.to_s.empty?
+              return label if inst.classifier_name.to_s.empty?
+
+              "#{label}: #{inst.classifier_name}"
             end
 
             def self.stereotype_lines(inst, context)

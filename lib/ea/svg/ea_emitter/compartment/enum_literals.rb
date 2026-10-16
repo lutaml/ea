@@ -24,7 +24,7 @@ module Ea
 
           def render_literals_block(context)
             line_h = Ea::Fonts::Metrics.compartment_line_height(
-              context.size, family: context.family, unit: context.size_unit,
+              context.size, family: context.family, unit: context.size_unit, logical_height: context.logical_height,
                             offset: LITERAL_LINE_OFFSET
             )
             text_blocks = []
@@ -72,12 +72,13 @@ module Ea
           def caption_text(context, y)
             content = "literals"
             len = TextRenderer.estimate_width(content, context.size, nil,
-                                              family: context.family).round
+                                              family: context.family, logical_height: context.logical_height).round
             x = (context.bounds.x + (context.bounds.width - len) / 2.0).floor
             TextRenderer.new(
               content: content,
               x: x, y: y,
-              family: context.family, size: context.size, size_unit: context.size_unit,
+              family: context.family, size: context.size,
+              size_unit: context.size_unit, logical_height: context.logical_height,
               fill: context.theme.text_color,
               stroke_in_text: context.theme.stroke_in_text_color,
               width_factor: context.theme.text_width_factor,
@@ -90,7 +91,8 @@ module Ea
               content: " ",
               x: context.bounds.x + (context.theme.attribute_spec.visibility_x_offset || 5),
               y: y,
-              family: context.family, size: context.size, size_unit: context.size_unit,
+              family: context.family, size: context.size,
+              size_unit: context.size_unit, logical_height: context.logical_height,
               fill: context.theme.text_color,
               stroke_in_text: context.theme.stroke_in_text_color,
               width_factor: context.theme.text_width_factor
@@ -103,7 +105,8 @@ module Ea
               content: content,
               x: context.bounds.x + (context.theme.attribute_spec.content_x_offset || 26),
               y: y,
-              family: context.family, size: context.size, size_unit: context.size_unit,
+              family: context.family, size: context.size,
+              size_unit: context.size_unit, logical_height: context.logical_height,
               fill: context.theme.text_color,
               stroke_in_text: context.theme.stroke_in_text_color,
               width_factor: context.theme.text_width_factor

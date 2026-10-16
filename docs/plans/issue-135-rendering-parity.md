@@ -8,7 +8,15 @@ This batch restores classifier font inheritance and point units, uses the
 Cambria compartment spacing for measured fonts, corrects header seats and default
 attribute color, removes labels for undrawn connectors, and preserves fixed
 multiplicity and ordering text. Association routing respects stored direction,
-offsets and authored orthogonal bends.
+offsets, authored orthogonal bends and each endpoint's explicit border width.
+Producer-certified rays retain their docking when they pass near a compartment
+divider.
+
+The batch also preserves the original QEA logical font height when distinct
+source sizes normalize to the same point size. Styled Cambria advances,
+compartment spacing and header wrapping share that font provenance. Nested
+classifier display options, object aliases, HTML notes and stored connector-end
+label boxes retain their source meaning.
 
 Validation compares the same 220 available diagrams. The comparable text metric
 retains its original 184 independently aligned diagrams; newly recovered

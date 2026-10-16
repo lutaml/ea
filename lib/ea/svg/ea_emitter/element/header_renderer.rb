@@ -12,12 +12,13 @@ module Ea
         # x= is the start position, not the center).
         class HeaderRenderer
           def self.render(lines, bounds:, first_y:, family:,
-                          size:, size_unit: "pt",
+                          size:, size_unit: "pt", logical_height: nil,
                           fill: "#000000", weight_normal: 400, weight_bold: 700,
                           stroke_in_text: "#000000", width_factor: 0.612,
                           line_offset: 6)
+            logical_height = nil unless size_unit == "pt"
             line_h = Ea::Fonts::Metrics.compartment_line_height(
-              size, family: family, unit: size_unit, offset: line_offset
+              size, family: family, unit: size_unit, offset: line_offset, logical_height: logical_height
             )
             text_blocks = lines.each_with_index.map do |(text, style), idx|
               weight = case style
@@ -40,17 +41,17 @@ module Ea
                     bounds.x + bounds.width - 3 -
                       Ea::Svg::EaEmitter::TextRenderer.estimate_width(
                         text, size, width_factor,
-                        family: family, weight: weight, style: font_style
+                        family: family, weight: weight, style: font_style, logical_height: logical_height
                       ).round
                   else
                     center_x_for(text, bounds, size, width_factor,
                                  family: family, weight: weight,
-                                 style: font_style)
+                                 style: font_style, logical_height: logical_height)
                   end
               TextRenderer.new(
                 content: text,
                 x: x, y: y,
-                family: family, size: size, size_unit: size_unit,
+                family: family, size: size, size_unit: size_unit, logical_height: logical_height,
                 weight: weight, style: font_style, fill: fill,
                 stroke_in_text: stroke_in_text, width_factor: width_factor
               ).to_svg
@@ -61,9 +62,9 @@ module Ea
           # EA centers text by its INTEGER textLength and floors the
           # resulting x (verified exact against EA-published SVGs).
           def self.center_x_for(text, bounds, size, width_factor,
-                                family: nil, weight: nil, style: nil)
+                                family: nil, weight: nil, style: nil, logical_height: nil)
             len = Ea::Svg::EaEmitter::TextRenderer.estimate_width(
-              text, size, width_factor, family: family, weight: weight, style: style
+              text, size, width_factor, family: family, weight: weight, style: style, logical_height: logical_height
             ).round
             (bounds.x + (bounds.width - len) / 2.0).floor
           end

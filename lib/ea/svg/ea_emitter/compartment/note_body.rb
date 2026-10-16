@@ -39,10 +39,10 @@ module Ea
             pitch = size + 7
             first_offset = size + 9
             y_index = 0
-            paragraphs = body.to_s.split(/\n/).reject { |p| p.strip.empty? }
+            paragraphs = NoteHtml.paragraphs(body)
             paragraphs.flat_map do |para|
-              lines = wrap_paragraph(para, usable, size, context.family)
-              lines.each_with_index.map do |line, i|
+              lines = wrap_paragraph(para.text, usable, size, context.family)
+              paragraph_svg = lines.each_with_index.map do |line, i|
                 y = context.bounds.y + first_offset + ((y_index + i) * pitch)
                 TextRenderer.new(
                   content: line,
@@ -54,7 +54,9 @@ module Ea
                   stroke_in_text: context.theme.stroke_in_text_color,
                   width_factor: context.theme.text_width_factor
                 ).to_svg
-              end.tap { y_index += lines.size + 1 }
+              end
+              y_index += lines.size + (para.tight ? 0 : 1)
+              paragraph_svg
             end
           end
 
