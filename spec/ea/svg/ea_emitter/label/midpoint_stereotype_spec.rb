@@ -43,13 +43,33 @@ RSpec.describe Ea::Svg::EaEmitter::Label::MidpointLabel, "centered bottom seats"
   end
 end
 
+RSpec.describe Ea::Svg::EaEmitter::Label::MidpointLabel, "native CY13 bottom seats" do
+  include_context "stored midpoint stereotype"
+
+  let(:stored_box) do
+    geometry = "$LMB=CX=44:CY=13:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;"
+    Ea::Sources::Qea::DiagramBuilder.new(nil).parse_label_boxes(geometry).fetch(:lmb)
+  end
+
+  it "places the CY13 basic 4 and plateau 78 imports below their stored route midpoints" do
+    controls = [
+      [[[165, 80], [261, 80]], [194, 93]],
+      [[[218, 120], [143, 190]], [161, 168]],
+      [[[309, 120], [393, 190]], [332, 168]]
+    ]
+    controls.each do |points, expected|
+      text = Nokogiri::XML(renderer.text_for(connector, points)).at_xpath("//text")
+
+      expect([text["x"].to_f, text["y"].to_f]).to eq(expected), points.inspect
+    end
+  end
+end
+
 RSpec.describe Ea::Svg::EaEmitter::Label::MidpointLabel, "unsupported box presentations" do
   include_context "stored midpoint stereotype"
 
   it "preserves midpoint placement for unsupported box presentations" do
-    controls = [nil, stored_box.merge("cx" => 44, "cy" => 13), stored_box.merge("cy" => 20),
-                stored_box.reject { |key, _| key == "cy" },
-                stored_box.merge("alignment" => 0), stored_box.merge("rotation" => 30),
+    controls = [nil, stored_box.merge("alignment" => 0), stored_box.merge("rotation" => 30),
                 stored_box.merge("hidden" => true), stored_box.merge("bold" => true),
                 stored_box.merge("italic" => true), stored_box.merge("underline" => true),
                 stored_box.merge("direction" => 2), stored_box.merge("color" => 1),

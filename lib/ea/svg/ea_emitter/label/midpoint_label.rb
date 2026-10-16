@@ -112,7 +112,7 @@ module Ea
             return nil unless stereotype_label(connector)
 
             box = connector.label_boxes.to_h[:lmb]
-            return nil unless default_name_box?(box) && box["cy"] == 18
+            return nil unless default_name_box?(box)
 
             stored_position(connector, points, box, LINE_PITCH)
           end
