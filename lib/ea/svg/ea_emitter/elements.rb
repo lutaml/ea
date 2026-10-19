@@ -332,8 +332,22 @@ module Ea
                                  constraints_count: 0, marker_count: 0,
                                  enum_literals_count: 0,
                                  attr_group_lead: 0, family: nil, size_unit: "pt", logical_height: nil)
+          divider_offset = divider_offset_for(header_lines, classifier)
+          attr_first_offset = attr_first_offset_for(attr_lines)
+          compact_standard = compact_header_offsets?(
+            classifier, header_lines, size,
+            family: family, size_unit: size_unit, logical_height: logical_height,
+            marker_count: marker_count, enum_literals_count: enum_literals_count,
+            divider_offset: divider_offset, attr_first_offset: attr_first_offset
+          )
+          if compact_standard
+            divider_offset = 7
+            # Attribute baselines retain their anchor when the divider moves up.
+            attr_first_offset = 8
+          end
           CompartmentGeometry.new(bounds: bounds, size: size, family: family,
                                   size_unit: size_unit, logical_height: logical_height,
+                                   compact_standard_operations: compact_standard,
                                    header_ghost: header_lines.any? &&
                                                   %i[italic italic_tight].include?(header_lines.first.last),
                                    header_ghost_tight: Element::HeaderLines.parent_ghost_gap(header_lines) == 3,
@@ -346,10 +360,19 @@ module Ea
                                    enum_literals_count: enum_literals_count,
                                    header_top_padding: header_padding_for(header_lines, classifier),
                                    header_line_offset: theme.compartments.header_line_offset,
-                                   divider_offset: divider_offset_for(header_lines, classifier),
+                                   divider_offset: divider_offset,
                                    attr_line_offset: theme.compartments.attr_line_offset,
-                                   attr_first_offset: attr_first_offset_for(attr_lines),
+                                   attr_first_offset: attr_first_offset,
                                    attr_group_lead: attr_group_lead)
+        end
+
+        def compact_header_offsets?(classifier, header_lines, size, **options)
+          classifier.is_a?(Ea::Model::Klass) &&
+            Ea::Fonts::Metrics.compact_compartment_font?(size, family: options[:family], unit: options[:size_unit]) &&
+            !%i[italic italic_tight].include?(header_lines.dig(0, 1)) &&
+            options.values_at(:logical_height, :marker_count, :enum_literals_count,
+                              :divider_offset, :attr_first_offset) == [nil, 0, 0, 8, 7] &&
+            theme.compartments.header_line_offset == 6 && theme.compartments.attr_line_offset == 6
         end
 
         # EA seats a stereotype line 3px higher than a bare class name

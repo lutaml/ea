@@ -40,6 +40,7 @@ module Ea
                           attr_line_offset: 6,
                           attr_first_offset: 7,
                           attr_group_lead: 0,
+                         compact_standard_operations: false,
                          family: nil, size_unit: "pt", logical_height: nil,
                           header_ghost: false,
                           header_ghost_tight: false)
@@ -61,6 +62,7 @@ module Ea
             @attr_line_offset = attr_line_offset
             @attr_first_offset = attr_first_offset
             @attr_group_lead = attr_group_lead
+            @compact_standard_operations = compact_standard_operations
             @header_ghost = header_ghost
             @header_ghost_tight = header_ghost_tight
           end
@@ -137,24 +139,29 @@ module Ea
           end
 
           def op_divider_y
+            return attr_bottom_y + line_height(attr_line_offset || 6) / 2.0 if compact_operation_spacing?
+
             attr_bottom_y + size + 5
           end
 
-          # EA's op block: first row 21 below the last attribute row
-          # (9pt... 7pt: attr_bottom + 21), uniform 13px pitch across
-          # attrs AND ops (6D4C665D: attrs ..520, ops 541..658 step 13).
-          # Attribute-empty boxes anchor on the divider instead:
-          # first op at divider + 14 (001A64C1: EA ops 104 vs our
-          # 125 when attrs were absent).
+          # Compact standard classes end attributes with a half row cell;
+          # operations then use the same inset as an attribute-empty box.
           def op_first_y
             return nil unless op_lines_count&.positive?
 
-            if attr_lines_count.to_i.positive?
-              attr_bottom_y + size + 14
-            else
-              divider_y + size + 7
-            end
+            anchor = if attr_lines_count.to_i.positive?
+                       compact_operation_spacing? ? op_divider_y : attr_bottom_y + 7
+                     else
+                       divider_y
+                     end
+            anchor + size + 7
           end
+
+          def compact_operation_spacing?
+            @compact_standard_operations && attr_lines_count.to_i.positive? &&
+              Ea::Fonts::Metrics.compact_compartment_font?(size, family: @family, unit: @size_unit)
+          end
+          private :compact_operation_spacing?
 
           def op_bottom_y
             return op_divider_y unless op_lines_count&.positive?
