@@ -334,16 +334,20 @@ module Ea
                                  attr_group_lead: 0, family: nil, size_unit: "pt", logical_height: nil)
           divider_offset = divider_offset_for(header_lines, classifier)
           attr_first_offset = attr_first_offset_for(attr_lines)
-          if compact_header_offsets?(classifier, header_lines, size,
-                                     family: family, size_unit: size_unit, logical_height: logical_height,
-                                     marker_count: marker_count, enum_literals_count: enum_literals_count,
-                                     divider_offset: divider_offset, attr_first_offset: attr_first_offset)
+          compact_standard = compact_header_offsets?(
+            classifier, header_lines, size,
+            family: family, size_unit: size_unit, logical_height: logical_height,
+            marker_count: marker_count, enum_literals_count: enum_literals_count,
+            divider_offset: divider_offset, attr_first_offset: attr_first_offset
+          )
+          if compact_standard
             divider_offset = 7
             # Attribute baselines retain their anchor when the divider moves up.
             attr_first_offset = 8
           end
           CompartmentGeometry.new(bounds: bounds, size: size, family: family,
                                   size_unit: size_unit, logical_height: logical_height,
+                                   compact_standard_operations: compact_standard,
                                    header_ghost: header_lines.any? &&
                                                   %i[italic italic_tight].include?(header_lines.first.last),
                                    header_ghost_tight: Element::HeaderLines.parent_ghost_gap(header_lines) == 3,

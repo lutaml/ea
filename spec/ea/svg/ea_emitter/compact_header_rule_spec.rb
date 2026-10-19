@@ -26,7 +26,7 @@ end
 RSpec.describe "Compact header operation anchors" do
   include CompactHeaderRuleHelpers
 
-  it "lets operation-only rows follow the corrected header while preserving attribute-based operations" do
+  it "anchors operation-only rows to the header and attribute-based operations to their divider" do
     operations = compact_source_context("basic", "2AAB709F", "Class A")
     combined = compact_source_context("basic", "D2FA55D3", "Class A")
     expect(operations.op_lines).to eq(["+ Operation A(int): void", "+ Operation B(int): void"])
@@ -34,7 +34,7 @@ RSpec.describe "Compact header operation anchors" do
       .to eq([26, 40])
     expect([combined.geometry.attr_first_y, combined.geometry.attr_bottom_y,
             combined.geometry.op_divider_y, combined.geometry.op_first_y].map { |y| y - combined.bounds.y })
-      .to eq([40, 52, 64, 73])
+      .to eq([40, 52, 58, 72])
   end
 end
 
