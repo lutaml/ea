@@ -342,7 +342,7 @@ module Ea
             return nil unless direction == :up && cambria_box?(box)
             return nil unless [0, 1].include?(box["alignment"])
             return nil unless connector_source_dest_stereotype(connector, :source).empty?
-            return nil unless plain_role_route?(connector.style.to_h)
+            return nil unless plain_role_route?(connector.style.to_h, box)
 
             width = Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
             return nil unless width
@@ -366,7 +366,7 @@ module Ea
           end
 
           def moved_target_property_box?(connector, box)
-            plain_vertical_box?(box) && box["alignment"] == 1 && box["cy"] == 35 &&
+            plain_vertical_box?(box) && box["alignment"] == 1 && [31, 35].include?(box["cy"]) &&
               !stored_offsets_zero?(box) && property_label?(connector, :target)
           end
 
@@ -473,7 +473,9 @@ module Ea
             end
           end
 
-          def plain_role_route?(style)
+          def plain_role_route?(style, box)
+            return box["cy"] == 16 if orthogonal_stub_route?(style)
+
             %w[1 3].include?(style[:mode]) && %w[0 2].include?(style[:lwidth]) &&
               [nil, "V"].include?(style[:tree])
           end
@@ -557,6 +559,7 @@ module Ea
 
           def left_property_route?(style)
             downward_property_route?(style) || mode_two_route?(style) ||
+              (style[:overlap_ray] == true && style.values_at(:mode, :lwidth, :tree) == ["2", "0", nil]) ||
               (style[:mode] == "3" && %w[0 2].include?(style[:lwidth]) &&
                 [nil, "H", "LV"].include?(style[:tree]))
           end
