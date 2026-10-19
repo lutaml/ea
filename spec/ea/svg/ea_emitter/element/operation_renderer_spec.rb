@@ -46,6 +46,37 @@ RSpec.describe Ea::Svg::EaEmitter::Element::OperationRenderer do
                                      family: "Carlito", size: 7)
       expect(Nokogiri::XML("<svg>#{svg}</svg>").css("text").size).to eq(0)
     end
+
+    it "centers the reception heading using its emitted text length" do
+      bounds = Ea::Model::Bounds.new(x: 12, y: 20, width: 125, height: 80)
+      operation = build_op(is_reception: true)
+      settings = [
+        { family: "Cambria", size: 7 },
+        { family: "Cambria", size: 7, size_unit: "pt" },
+        { family: "Carlito", size: 11 },
+        { family: "Liberation Sans", size: 9, size_unit: "pt", logical_height: 12 },
+        { family: "Cambria", size: 7, size_unit: "px", logical_height: 12 }
+      ]
+
+      settings.each do |font|
+        svg = described_class.render([operation], bounds: bounds, first_y: 50, **font)
+        heading = Nokogiri::XML("<svg>#{svg}</svg>").at_css("text")
+        emitted_width = heading["textLength"].to_f
+        center = heading["x"].to_f + emitted_width / 2
+
+        expect(center).to be_within(0.01).of(bounds.x + bounds.width / 2.0)
+      end
+    end
+
+    it "preserves heading baseline and operation rows when receptions are present" do
+      operations = [build_op(is_reception: true), build_op(name: "next")]
+      svg = described_class.render(operations, bounds: bounds, first_y: 50, family: "Carlito", size: 7)
+      texts = Nokogiri::XML("<svg>#{svg}</svg>").css("text")
+
+      expect(texts[0]["y"].to_f).to eq(50)
+      expect(texts[1]["y"].to_f).to eq(63)
+      expect(texts[3]["y"].to_f).to eq(76)
+    end
   end
 
   describe ".operation_text" do
