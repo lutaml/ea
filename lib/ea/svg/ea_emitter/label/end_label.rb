@@ -102,7 +102,8 @@ module Ea
                          horizontal_tree_multiplicity(connector, direction, anchor, mult_box, mult) ||
                          mult_seat(direction, anchor, mult_box) || mult_pos
             elsif end_kind == :target && !(tree && zero_offset?(text_box, mult_box))
-              text_pos = target_property_role(connector, heading, anchor, text_box, role) ||
+              text_pos = plain_leftward_target_role(connector, heading, anchor, text_box, role) ||
+                         target_property_role(connector, heading, anchor, text_box, role) ||
                          target_diagonal_property_role(connector, heading, anchor, text_box, role) ||
                          target_vertical_role(connector, heading, anchor, text_box, role) ||
                          target_rightward_role(heading, anchor, text_box, role) || text_pos
@@ -131,6 +132,21 @@ module Ea
           end
 
           private
+
+          def plain_leftward_target_role(connector, heading, anchor, box, role)
+            return nil unless heading && heading[0].negative? && heading[1].zero?
+            return nil unless plain_target_role?(connector, box, role)
+
+            PlainTargetSeat.position(
+              connector: connector, anchor: anchor, box: box,
+              width: Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
+            )
+          end
+
+          def plain_target_role?(connector, box, role)
+            seat_font? && cambria_box?(box) && !role_empty?(role) &&
+              connector_source_dest_stereotype(connector, :target).to_s.empty?
+          end
 
           def plain_leftward_source_role(connector, direction, anchor, box, role)
             return nil unless direction == :left && seat_font? && cambria_box?(box) && !role_empty?(role)
