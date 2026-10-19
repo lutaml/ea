@@ -121,6 +121,8 @@ module Ea
             if end_kind == :source
               text_pos = source_top_property_role(connector, heading, anchor, text_box, role) ||
                          source_bottom_property_role(connector, heading, anchor, text_box, role) || text_pos
+              mult_pos = source_top_property_multiplicity(connector, heading, anchor,
+                                                          [text_box, mult_box], mult) || mult_pos
               if external_upward_property_source?(connector, heading, anchor, text_box, source_bounds)
                 text_pos = external_upward_property_role(anchor, role) || text_pos
               end
@@ -339,12 +341,25 @@ module Ea
           # EDGE=1 certifies the top dock independently of the clipped ray's
           # heading. An absent source box uses the upward Property seat.
           def source_top_property_role(connector, heading, anchor, box, role)
-            return nil unless source_seat?(:source, heading) && heading[0].negative? && heading[1].positive?
-            return nil unless zero_source_property_box?(box)
-
-            return nil unless source_top_property_route?(connector.style.to_h)
+            return nil unless source_top_property_box?(connector, heading, box)
 
             source_property_seat(connector, :up, anchor, box, role)
+          end
+
+          def source_top_property_multiplicity(connector, heading, anchor, boxes, mult)
+            return nil if mult_empty?(mult)
+
+            role_box, mult_box = boxes
+            return nil unless source_top_property_box?(connector, heading, role_box)
+            return nil unless source_top_property_box?(connector, heading, mult_box)
+
+            mult_seat(:up, anchor, mult_box)
+          end
+
+          def source_top_property_box?(connector, heading, box)
+            source_seat?(:source, heading) && heading[0].negative? && heading[1].positive? &&
+              zero_source_property_box?(box) && source_top_property_route?(connector.style.to_h) &&
+              source_property_seat?(connector, :up, box)
           end
 
           # A persisted origin above the drawn source outline keeps the
