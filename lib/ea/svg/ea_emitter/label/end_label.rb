@@ -49,11 +49,12 @@ module Ea
           #   connector  - the DiagramConnector (for relationship lookup)
           #   end_kind   - :source or :target
           #   heading    - [dx, dy] of the first leg leaving the anchor
+          #   bend       - first bend of a saved descending vertical stair
           #   stored_labels - the connector has stored label boxes at
           #                   either end; false keeps the opposite-end
           #                   fallback
           def texts(text_box:, mult_box:, anchor:, connector:, end_kind:,
-                    tree: false, heading: nil, stored_labels: false)
+                    tree: false, heading: nil, stored_labels: false, bend: nil)
             from_property, role, mult = role_and_multiplicity(connector, end_kind)
             if role_empty?(role) && mult_empty?(mult)
               other_from_prop, other_role, other_mult = role_and_multiplicity(connector,
@@ -92,7 +93,8 @@ module Ea
             stereo = stereo.nil? || stereo.empty? ? nil : "«#{stereo}»"
             direction = leg_direction(end_kind, heading)
             if direction && !(tree && zero_offset?(text_box, mult_box))
-              text_pos = plain_vertical_role(connector, direction, anchor, text_box, role) ||
+              text_pos = plain_leftward_source_role(connector, direction, anchor, text_box, role) ||
+                         plain_vertical_role(connector, direction, anchor, text_box, role) ||
                          source_property_seat(connector, direction, anchor, text_box, role) ||
                          plain_upward_seat(connector, direction, anchor, text_box, role) ||
                          role_seat(direction, anchor, text_box, role) || text_pos
@@ -100,7 +102,9 @@ module Ea
                          horizontal_tree_multiplicity(connector, direction, anchor, mult_box, mult) ||
                          mult_seat(direction, anchor, mult_box) || mult_pos
             elsif end_kind == :target && !(tree && zero_offset?(text_box, mult_box))
-              text_pos = target_property_role(connector, heading, anchor, text_box, role) ||
+              text_pos = plain_leftward_target_role(connector, heading, anchor, text_box, role) ||
+                         target_leftward_property_role(connector, heading, anchor, text_box, role) ||
+                         target_property_role(connector, heading, anchor, text_box, role) ||
                          target_diagonal_property_role(connector, heading, anchor, text_box, role) ||
                          target_vertical_role(connector, heading, anchor, text_box, role) ||
                          target_rightward_role(heading, anchor, text_box, role) || text_pos
@@ -115,11 +119,68 @@ module Ea
 
             text_box = text_box.merge("alignment" => 1) if phantom_property_box?(connector, direction, text_box)
 
+            if end_kind == :target && !from_property
+              bend_positions = target_bend_positions(connector, bend, text_box, mult_box, role)
+              text_pos, mult_pos = bend_positions if bend_positions
+            end
+            if end_kind == :source && !from_property
+              stair_positions = source_stair_positions(connector, anchor, text_box, mult_box, role)
+              text_pos, mult_pos = stair_positions if stair_positions
+            end
+
             build_texts(role:, mult:, standalone:,
                         text_pos:, mult_pos:, stereo:, text_box:)
           end
 
           private
+
+          def plain_leftward_target_role(connector, heading, anchor, box, role)
+            return nil unless heading && heading[0].negative? && heading[1].zero?
+            return nil unless plain_target_role?(connector, box, role)
+
+            PlainTargetSeat.position(
+              connector: connector, anchor: anchor, box: box,
+              width: Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
+            )
+          end
+
+          def plain_target_role?(connector, box, role)
+            seat_font? && cambria_box?(box) && !role_empty?(role) &&
+              connector_source_dest_stereotype(connector, :target).to_s.empty?
+          end
+
+          def plain_leftward_source_role(connector, direction, anchor, box, role)
+            return nil unless direction == :left && seat_font? && cambria_box?(box) && !role_empty?(role)
+            return nil unless connector_source_dest_stereotype(connector, :source).to_s.empty?
+
+            PlainSourceSeat.position(
+              connector: connector, anchor: anchor, box: box,
+              width: Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
+            )
+          end
+
+          def source_stair_positions(connector, anchor, text_box, mult_box, role)
+            return nil unless seat_font? && cambria_box?(text_box) && cambria_box?(mult_box)
+            return nil if role_empty?(role)
+
+            property = property_label?(connector, :source)
+            return nil unless property || connector_source_dest_stereotype(connector, :source).to_s.empty?
+
+            SourceStairSeat.positions(
+              connector: connector, anchor: anchor, text_box: text_box, mult_box: mult_box,
+              width: Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
+            )
+          end
+
+          def target_bend_positions(connector, bend, text_box, mult_box, role)
+            return nil unless bend && seat_font? && cambria_box?(text_box) && cambria_box?(mult_box)
+            return nil unless connector_source_dest_stereotype(connector, :target).to_s.empty? && !role_empty?(role)
+
+            TargetBendSeat.positions(
+              connector: connector, bend: bend, text_box: text_box, mult_box: mult_box,
+              width: Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
+            )
+          end
 
           # With stored boxes on the connector, an end that carries no
           # data of its own draws only its own stereotype; the data end
@@ -281,13 +342,36 @@ module Ea
             return nil unless direction == :up && cambria_box?(box)
             return nil unless [0, 1].include?(box["alignment"])
             return nil unless connector_source_dest_stereotype(connector, :source).empty?
-            return nil unless plain_role_route?(connector.style.to_h)
+            return nil unless plain_role_route?(connector.style.to_h, box)
 
             width = Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
             return nil unless width
 
             x, y = seat_corner(anchor, box)
             [x - SEAT_X_INSET - width, y - 6]
+          end
+
+          # Moved target Property clusters on horizontal arrivals share
+          # the leftward source seat relative to their stored corner.
+          def target_leftward_property_role(connector, heading, anchor, box, role)
+            return nil unless heading && heading[0].negative? && heading[1].zero?
+            return nil unless moved_target_property_box?(connector, box)
+            return nil unless horizontal_target_property_route?(connector.style.to_h)
+
+            width = Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
+            return nil unless width
+
+            x, y = seat_corner(anchor, box)
+            [x - property_role_offsets(:left).first - width, y - 7]
+          end
+
+          def moved_target_property_box?(connector, box)
+            plain_vertical_box?(box) && box["alignment"] == 1 && [31, 35].include?(box["cy"]) &&
+              !stored_offsets_zero?(box) && property_label?(connector, :target)
+          end
+
+          def horizontal_target_property_route?(style)
+            style.values_at(:mode, :lwidth) == %w[3 2] && [nil, "LH"].include?(style[:tree])
           end
 
           # An upward target uses the downward property's right edge and
@@ -389,7 +473,9 @@ module Ea
             end
           end
 
-          def plain_role_route?(style)
+          def plain_role_route?(style, box)
+            return box["cy"] == 16 if orthogonal_stub_route?(style)
+
             %w[1 3].include?(style[:mode]) && %w[0 2].include?(style[:lwidth]) &&
               [nil, "V"].include?(style[:tree])
           end
@@ -473,6 +559,7 @@ module Ea
 
           def left_property_route?(style)
             downward_property_route?(style) || mode_two_route?(style) ||
+              (style[:overlap_ray] == true && style.values_at(:mode, :lwidth, :tree) == ["2", "0", nil]) ||
               (style[:mode] == "3" && %w[0 2].include?(style[:lwidth]) &&
                 [nil, "H", "LV"].include?(style[:tree]))
           end

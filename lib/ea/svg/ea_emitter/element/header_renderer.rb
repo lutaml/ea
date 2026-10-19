@@ -18,13 +18,14 @@ module Ea
                           size:, size_unit: "pt", logical_height: nil,
                           fill: "#000000", weight_normal: 400, weight_bold: 700,
                           stroke_in_text: "#000000", width_factor: 0.612,
-                          line_offset: 6)
+                          line_offset: 6, default_signal_header: false)
             logical_height = nil unless size_unit == "pt"
             layout = line_layout(
               lines, bounds: bounds, first_y: first_y, family: family,
                      size: size, size_unit: size_unit, logical_height: logical_height,
                      weight_normal: weight_normal, weight_bold: weight_bold,
-                     width_factor: width_factor, line_offset: line_offset
+                     width_factor: width_factor, line_offset: line_offset,
+                     default_signal_header: default_signal_header
             )
             text_blocks = layout.map do |line|
               TextRenderer.new(
@@ -44,12 +45,21 @@ module Ea
           def self.line_layout(lines, bounds:, first_y:, family:, size:,
                                size_unit: "pt", logical_height: nil,
                                weight_normal: 400, weight_bold: 700,
-                               width_factor: 0.612, line_offset: 6)
+                               width_factor: 0.612, line_offset: 6, default_signal_header: false)
             logical_height = nil unless size_unit == "pt"
             line_h = Ea::Fonts::Metrics.compartment_line_height(
               size, family: family, unit: size_unit, offset: line_offset,
                     logical_height: logical_height
             )
+            # Native default Cambria 7pt Signals use a 15px header pitch.
+            # Keep explicit fonts, logical heights and layout overrides intact.
+            if default_signal_header && family == "Cambria" && size == 7 &&
+               size_unit == "pt" && logical_height.nil? && line_offset == 6 &&
+               first_y == bounds.y + 13 && lines.size == 2 &&
+               lines.first == ["«signal»", :normal] && lines.last.last == :bold
+              first_y -= 1
+              line_h = 15
+            end
             ghost_shift = HeaderLines.parent_ghost_gap(lines)
             lines.each_with_index.map do |(text, style), idx|
               weight = %i[bold bold_italic].include?(style) ? weight_bold : weight_normal

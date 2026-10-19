@@ -24,8 +24,17 @@ module Ea
               weight_bold: context.theme.text_weight_bold,
               stroke_in_text: context.theme.stroke_in_text_color,
               width_factor: context.theme.text_width_factor,
-              line_offset: context.theme.compartments.header_line_offset
+              line_offset: context.theme.compartments.header_line_offset,
+              default_signal_header: default_signal_header?(context)
             )
+          end
+
+          def default_signal_header?(context)
+            context.classifier.is_a?(Ea::Model::Signal) &&
+              context.classifier.stereotype_refs.empty? &&
+              context.element.font_size_inherited == true &&
+              context.element.font_family.nil? &&
+              !context.element.font_bold && !context.element.font_italic
           end
         end
       end

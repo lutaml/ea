@@ -156,6 +156,7 @@ module Ea
                                      logical_height: logical_height,
                                      content_x_offset: attribute_content_x_offset(size, family, size_unit)),
                    row_content_width(op_lines, 3, size, family, logical_height: logical_height),
+                   tag_content_width(element, classifier, size, family, logical_height: logical_height),
                    Compartment::EnumLiterals.content_width(
                      enum_literals_for(classifier),
                      theme: theme, size: size, family: family,
@@ -302,7 +303,7 @@ module Ea
         end
 
         def attribute_content_x_offset(size, family, size_unit)
-          offset = (theme.attribute_spec.content_x_offset || Element::AttributeRenderer::DEFAULT_CONTENT_X_OFFSET) +
+          offset = (theme.attribute_content_x_offset || Element::AttributeRenderer::DEFAULT_CONTENT_X_OFFSET) +
                    2 * (size - 7)
           offset -= 1 if Ea::Fonts::Metrics.compact_compartment_font?(size, family: family, unit: size_unit)
           offset
@@ -310,6 +311,17 @@ module Ea
 
         def compartment_bottom_padding(size, family, size_unit)
           Ea::Fonts::Metrics.compact_compartment_font?(size, family: family, unit: size_unit) ? 7 : 8
+        end
+
+        def tag_content_width(element, classifier, size, family, logical_height: nil)
+          return nil unless element.show_tagged_values
+
+          tagged_values_for(classifier).map do |tag|
+            TextRenderer.estimate_width("#{tag.key} = #{tag.value}", size,
+                                        family: family, weight: 400, style: "normal",
+                                        logical_height: logical_height).round +
+              2 * Element::TaggedValueRenderer::LINE_X_OFFSET
+          end.max
         end
 
         def row_content_width(lines, right_pad, size, family, **font_options)

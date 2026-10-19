@@ -317,7 +317,7 @@ RSpec.describe Ea::Svg::EaEmitter::Label::EndLabel do
                   { box: traffic[:box].merge("rotation" => 90) },
                   { box: traffic[:box].merge("alignment" => nil) },
                   { style: { mode: "2", lwidth: "2" } },
-                  { style: { mode: "3", lwidth: "2", tree: "OS" } }, { heading: [1, -100] }]
+                  { style: { mode: "3", lwidth: "2", tree: "LH" } }, { heading: [1, -100] }]
       controls.each do |options|
         positions = upward_property_positions(
           traffic, stereotype: "", style: { mode: "3", lwidth: "2" }, **options

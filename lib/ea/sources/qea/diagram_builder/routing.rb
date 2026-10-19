@@ -164,7 +164,21 @@ module Ea
 
             set_stored_ray_origins(model, source, target, geom)
             model.style[:association_ray_outline] = true if model.connector_type == "Association"
+            model.style[:stored_origin_ray] = true if stored_origin_ray?(model, source, target)
             model
+          end
+
+          # Certify only a straight, width-2 custom-line ray whose corrected
+          # stored origins lie inside their own outlines. Its clipped row is
+          # authored geometry, even when it coincides with a header divider.
+          def stored_origin_ray?(model, source, target)
+            style = model.style.to_h
+            return false unless model.connector_type == "Generalization" &&
+                                style[:lwidth] == "2" && association_ray_style?(style)
+
+            [model.source_anchor, model.target_anchor].zip([source, target]).all? do |origin, box|
+              inside_box?(origin, grown_bounds(box, 1))
+            end
           end
 
           # An empty-Path Mode 3 Association follows the line between its
@@ -176,6 +190,8 @@ module Ea
             return model unless association_ray_candidate?(model, link_row)
 
             source, target = stored_ray_boxes(link_row, diagram_row)
+            return model if default_center_ray?(model) && !horizontal_ray_gap?(source, target)
+
             width = association_outline_width(model, link_row, diagram_row)
             origins = association_ray_origins(source, target, geom, width)
             return model unless origins
@@ -287,8 +303,24 @@ module Ea
           def association_ray_candidate?(model, link_row)
             model.connector_type == "Association" && link_row.path.to_s.empty? &&
               model.source_anchor && model.target_anchor &&
-              (model.source_port || model.target_port || aligned_default_origins?(model)) &&
+              association_ray_ports?(model) &&
               association_ray_style?(model.style.to_h)
+          end
+
+          def association_ray_ports?(model)
+            model.source_port || model.target_port || aligned_default_origins?(model) || default_center_ray?(model)
+          end
+
+          # Without stored offsets or ports, a width-2 custom line between
+          # horizontally separated boxes follows their centers to the stroke.
+          def default_center_ray?(model)
+            !model.has_geometry_offsets && model.style[:lwidth] == "2" && model.waypoints.size == 2 &&
+              [model.source_port, model.target_port].all?(&:nil?) &&
+              diagonal_origins?(model.source_anchor, model.target_anchor)
+          end
+
+          def diagonal_origins?(first, last)
+            first.x != last.x && first.y != last.y
           end
 
           # Zero offsets omit ports, but an explicitly stored axis-aligned

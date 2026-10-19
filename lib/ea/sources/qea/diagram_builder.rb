@@ -396,9 +396,10 @@ module Ea
         # Internal producer flag, like :direct. A model relationship with no
         # link row is stroked at the 2px box outline, so its ends dock there.
         def phantom_style(connector_type)
-          return { direct: true } if PHANTOM_DOUBLE_BACK_TYPES.include?(connector_type)
-
-          %w[Aggregation Association].include?(connector_type) ? { phantom_outline: true } : {}
+          style = { lwidth: "1" }
+          style[:direct] = true if PHANTOM_DOUBLE_BACK_TYPES.include?(connector_type)
+          style[:phantom_outline] = true if %w[Aggregation Association].include?(connector_type)
+          style
         end
 
         # Computes the edge attachment point on source bounds that
@@ -422,6 +423,24 @@ module Ea
             x = cx + dx * (y - cy).abs / dy.abs rescue cx
             [x, y]
           end
+        end
+
+        # Preserve original Path absence: authored two-point paths can look
+        # identical after routing but retain their stored label offsets.
+        def mark_plain_source_seat(model, link_row, context)
+          return if context || !link_row.path.to_s.empty? || model.connector_type != "Aggregation"
+          return unless model.style.values_at(:mode, :lwidth, :tree) == ["3", "2", nil]
+          return unless model.source_stereotype.to_s.empty?
+
+          model.style[:plain_source_seat] = true
+        end
+
+        def mark_plain_target_seat(model, link_row, context)
+          return if context || !link_row.path.to_s.empty? || model.connector_type != "Association"
+          return unless model.style.values_at(:mode, :lwidth, :tree) == ["3", "2", nil]
+          return unless model.target_stereotype.to_s.empty?
+
+          model.style[:plain_target_seat] = true
         end
 
         def build_connector(link_row, diagram_row)
@@ -454,6 +473,8 @@ module Ea
             has_geometry_offsets: geometry_has_offsets?(link_row.geometry),
             is_substitutable: substitutable_connector?(connector)
           ), link_row, diagram_row, geom)
+          mark_plain_source_seat(model, link_row, context)
+          mark_plain_target_seat(model, link_row, context)
           model = collapse_partial_port_jog(model, link_row, diagram_row)
           model = correct_partial_port_origins(model, link_row, diagram_row, geom, context)
           model = direct_empty_path_ray(model, link_row, diagram_row, geom, context)

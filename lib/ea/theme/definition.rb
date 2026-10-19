@@ -108,6 +108,7 @@ module Ea
         @geometry = geometry || DEFAULT_GEOMETRY.dup
         @frame = frame || DEFAULT_FRAME.dup
         @compartments = compartments || DEFAULT_COMPARTMENTS.dup
+        @attribute_spec_override = attribute_spec
         @attribute_spec = attribute_spec || DEFAULT_ATTR.dup
         @markers = markers || DEFAULT_MARKERS.dup
         @package = package || DEFAULT_PACKAGE.dup
@@ -135,6 +136,12 @@ module Ea
 
       def label_font_size_unit
         @label_font_size_unit || font_size_unit
+      end
+
+      # Attribute cells have a different inherited seat from enum literals,
+      # which continue to consume the legacy attribute_spec default.
+      def attribute_content_x_offset
+        @attribute_spec_override ? attribute_spec.content_x_offset : 22
       end
 
       def with(**overrides)
@@ -193,7 +200,8 @@ module Ea
           marker_stroke_width: marker_stroke_width,
           text_width_factor: text_width_factor,
           geometry: geometry, frame: frame, compartments: compartments,
-          attribute_spec: attribute_spec, markers: markers,
+          # Preserve omission so reconstruction retains the attribute-cell default.
+          attribute_spec: @attribute_spec_override, markers: markers,
           package: package, note: note, fills: fills
         }
       end

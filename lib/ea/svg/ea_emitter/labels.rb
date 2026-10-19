@@ -97,6 +97,7 @@ module Ea
                              mult_box: tgt_mb,
                              anchor: target_pt, connector: connector,
                              end_kind: :target, tree: tree && tree[:target],
+                             bend: Label::TargetBendSeat.reference(points),
                              heading: (stored_tgt || stored_labels) && target_heading(connector, points),
                              stored_labels: stored_labels).each { |t| texts << t }
           texts
