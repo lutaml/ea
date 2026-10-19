@@ -20,6 +20,7 @@ module Ea
                                         anchor: whole_anchor,
                                         base: whole_base)]
             return specs unless whole_at_target
+            return specs if arrow_on_target_diamond?(connector, relationship)
 
             specs.concat(direction_specs(connector, source, target,
                                          before_target, after_source))
@@ -66,6 +67,14 @@ module Ea
 
             !whole_end_at_source?(connector)
           end
+
+          # EA draws no arrow where a directed, dest-flagged aggregation
+          # would put it on its own target diamond.
+          def self.arrow_on_target_diamond?(connector, relationship)
+            connector.direction == "Source -> Destination" &&
+              dest_flagged?(relationship)
+          end
+          private_class_method :arrow_on_target_diamond?
 
           def self.dest_flagged?(relationship)
             relationship &&
