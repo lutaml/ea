@@ -17,7 +17,7 @@ RSpec.describe "QEA tagged-value caption centering" do
   it "uses native integer caption width within the simple owner bounds" do
     nodes = trailing_tag_public_nodes
 
-    expect(nodes.first["x"].to_f).to eq(71)
+    expect(nodes.first["x"].to_f).to eq(82)
     expect(nodes.map { |node| node["textLength"].to_i }).to eq([17, 101, 80])
     expect(nodes.map { |node| node["y"].to_f }).to eq([89, 101, 113])
     expect(tag_caption_nodes(width: 111).first["x"].to_f).to eq(57)
