@@ -120,12 +120,26 @@ module Ea
               bend_positions = target_bend_positions(connector, bend, text_box, mult_box, role)
               text_pos, mult_pos = bend_positions if bend_positions
             end
+            if end_kind == :source && !from_property
+              stair_positions = source_stair_positions(connector, anchor, text_box, mult_box, role)
+              text_pos, mult_pos = stair_positions if stair_positions
+            end
 
             build_texts(role:, mult:, standalone:,
                         text_pos:, mult_pos:, stereo:, text_box:)
           end
 
           private
+
+          def source_stair_positions(connector, anchor, text_box, mult_box, role)
+            return nil unless seat_font? && cambria_box?(text_box) && cambria_box?(mult_box)
+            return nil unless connector_source_dest_stereotype(connector, :source).to_s.empty? && !role_empty?(role)
+
+            SourceStairSeat.positions(
+              connector: connector, anchor: anchor, text_box: text_box, mult_box: mult_box,
+              width: Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
+            )
+          end
 
           def target_bend_positions(connector, bend, text_box, mult_box, role)
             return nil unless bend && seat_font? && cambria_box?(text_box) && cambria_box?(mult_box)
