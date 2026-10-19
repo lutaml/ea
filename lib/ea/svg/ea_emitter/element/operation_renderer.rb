@@ -26,9 +26,10 @@ module Ea
             text_blocks = []
             has_receptions = operations.any?(&:is_reception)
             if has_receptions
+              heading_width = reception_heading_width(family, size, size_unit, logical_height)
               text_blocks << TextRenderer.new(
                 content: "receptions",
-                x: bounds.x + (bounds.width / 2.0) - (8 * size * 0.65) / 2,
+                x: bounds.x + (bounds.width / 2.0) - heading_width / 2.0,
                 y: first_y,
                 family: family, size: size, size_unit: size_unit, logical_height: logical_height,
                 style: "italic", fill: "#000000"
@@ -36,12 +37,14 @@ module Ea
             end
             ops = has_receptions ? operations : operations
             offset = has_receptions ? 1 : 0
+            content_x_offset = CONTENT_X_OFFSET + 2 * (size - 7)
+            content_x_offset -= 1 if Ea::Fonts::Metrics.compact_compartment_font?(size, family: family, unit: size_unit)
             ops.each_with_index do |op, idx|
               y = first_y + ((idx + offset) * line_h)
               text_blocks << build_text(bounds.x + VISIBILITY_X_OFFSET, y,
                                         visibility_prefix(op), family, size, size_unit, logical_height: logical_height)
               text = operation_text(op, parameter_detail: parameter_detail)
-              text_blocks << build_text(bounds.x + AttributeRenderer.content_x_offset(size), y,
+              text_blocks << build_text(bounds.x + content_x_offset, y,
                                         text, family, size, size_unit, logical_height: logical_height)
             end
             %(<g style="#{Style::TEXT_GROUP}">\n#{text_blocks.join("\n")}\n</g>)
@@ -101,6 +104,15 @@ module Ea
             params
           end
           private_class_method :reception_params
+
+          def self.reception_heading_width(family, size, size_unit, logical_height)
+            TextRenderer.estimate_width(
+              "receptions", size,
+              family: family, weight: 400, style: "italic",
+              logical_height: size_unit == "pt" ? logical_height : nil
+            ).round
+          end
+          private_class_method :reception_heading_width
 
           def self.build_text(x, y, content, family, size, size_unit, logical_height: nil)
             TextRenderer.new(content: content, x: x, y: y,
