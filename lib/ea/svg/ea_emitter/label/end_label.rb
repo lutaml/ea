@@ -79,6 +79,7 @@ module Ea
               text_pos, mult_pos = tree_positions(end_kind, anchor, role,
                                                   text_pos, mult_pos)
               mult_pos = tree_left_multiplicity(end_kind, heading, anchor, mult_box, mult) || mult_pos
+              text_pos = tree_left_property_role(connector, end_kind, heading, anchor, text_box, role) || text_pos
             elsif mult_box && stored_offsets_zero?(mult_box)
               # Start at the legacy default; measured directional seats
               # below replace it for default Cambria labels.
@@ -420,8 +421,18 @@ module Ea
             when :right then style.values_at(:mode, :lwidth, :tree) == %w[3 2 H]
             when :up then upward_property_route?(style)
             when :left then orthogonal_stub_route?(style) || left_property_route?(style)
-            else orthogonal_stub_route?(style) || downward_property_route?(style)
+            else orthogonal_stub_route?(style) || lateral_horizontal_route?(style) || downward_property_route?(style)
             end
+          end
+
+          # Mode 3, width 2 on the horizontal lateral tree.
+          def lateral_horizontal_route?(style)
+            style.values_at(:mode, :lwidth, :tree) == %w[3 2 LH]
+          end
+
+          # Mode 2, width 2 without a tree seats like the other width-2 modes.
+          def mode_two_route?(style)
+            style.values_at(:mode, :lwidth, :tree) == ["2", "2", nil]
           end
 
           def upward_property_route?(style)
@@ -437,7 +448,7 @@ module Ea
           end
 
           def left_property_route?(style)
-            downward_property_route?(style) ||
+            downward_property_route?(style) || mode_two_route?(style) ||
               (style[:mode] == "3" && %w[0 2].include?(style[:lwidth]) &&
                 [nil, "H", "LV"].include?(style[:tree]))
           end
@@ -467,6 +478,15 @@ module Ea
             width = Ea::Fonts::Metrics.text_length(mult, font_size, family: font_family)
             x, y = seat_corner(anchor, box)
             [x + SEAT_X_INSET + width, y + 15] if width
+          end
+
+          # An absent source box on a leftward tree leg seats a Property role
+          # at the leftward Property seat, not the rightward tree default.
+          def tree_left_property_role(connector, end_kind, heading, anchor, box, role)
+            return nil unless leg_direction(end_kind, heading) == :left && box["alignment"]&.zero?
+            return nil unless connector.style.to_h.values_at(:mode, :lwidth) == %w[3 2]
+
+            source_property_seat(connector, :left, anchor, box, role)
           end
 
           # A tree-route source leaving left seats its multiplicity like any
