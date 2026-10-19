@@ -15,6 +15,7 @@ module Ea
       # register rather than editing the orchestrator (OCP).
       module Label
         autoload :EndLabel, "ea/svg/ea_emitter/label/end_label"
+        autoload :TargetBendSeat, "ea/svg/ea_emitter/label/target_bend_seat"
         autoload :MidpointLabel, "ea/svg/ea_emitter/label/midpoint_label"
         autoload :Registry, "ea/svg/ea_emitter/label/registry"
       end

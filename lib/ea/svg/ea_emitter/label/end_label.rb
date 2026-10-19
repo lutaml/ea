@@ -49,11 +49,12 @@ module Ea
           #   connector  - the DiagramConnector (for relationship lookup)
           #   end_kind   - :source or :target
           #   heading    - [dx, dy] of the first leg leaving the anchor
+          #   bend       - first bend of a saved descending vertical stair
           #   stored_labels - the connector has stored label boxes at
           #                   either end; false keeps the opposite-end
           #                   fallback
           def texts(text_box:, mult_box:, anchor:, connector:, end_kind:,
-                    tree: false, heading: nil, stored_labels: false)
+                    tree: false, heading: nil, stored_labels: false, bend: nil)
             from_property, role, mult = role_and_multiplicity(connector, end_kind)
             if role_empty?(role) && mult_empty?(mult)
               other_from_prop, other_role, other_mult = role_and_multiplicity(connector,
@@ -115,11 +116,26 @@ module Ea
 
             text_box = text_box.merge("alignment" => 1) if phantom_property_box?(connector, direction, text_box)
 
+            if end_kind == :target && !from_property
+              bend_positions = target_bend_positions(connector, bend, text_box, mult_box, role)
+              text_pos, mult_pos = bend_positions if bend_positions
+            end
+
             build_texts(role:, mult:, standalone:,
                         text_pos:, mult_pos:, stereo:, text_box:)
           end
 
           private
+
+          def target_bend_positions(connector, bend, text_box, mult_box, role)
+            return nil unless bend && seat_font? && cambria_box?(text_box) && cambria_box?(mult_box)
+            return nil unless connector_source_dest_stereotype(connector, :target).to_s.empty? && !role_empty?(role)
+
+            TargetBendSeat.positions(
+              connector: connector, bend: bend, text_box: text_box, mult_box: mult_box,
+              width: Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
+            )
+          end
 
           # With stored boxes on the connector, an end that carries no
           # data of its own draws only its own stereotype; the data end
