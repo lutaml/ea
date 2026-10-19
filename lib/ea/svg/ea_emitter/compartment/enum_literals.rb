@@ -69,16 +69,9 @@ module Ea
 
           def literal_name_text(context, literal, y)
             content = literal_display(literal)
-            # EA uses the attribute row point-size increment for literal names.
-            offset = context.theme.attribute_spec.content_x_offset || 26
-            offset += 2 * (context.size - 7) if context.size_unit == "pt"
-            if Ea::Fonts::Metrics.compact_compartment_font?(context.size,
-                                                            family: context.family, unit: context.size_unit)
-              offset -= 1
-            end
             TextRenderer.new(
               content: content,
-              x: context.bounds.x + offset,
+              x: context.bounds.x + content_x_offset(context.theme, context.size, context.size_unit, context.family),
               y: y,
               family: context.family, size: context.size,
               size_unit: context.size_unit, logical_height: context.logical_height,
@@ -86,6 +79,26 @@ module Ea
               stroke_in_text: context.theme.stroke_in_text_color,
               width_factor: context.theme.text_width_factor
             ).to_svg
+          end
+
+          def content_width(literals, theme:, size:, family:, **font_options)
+            return nil if literals.empty?
+
+            logical_height = font_options[:logical_height] if font_options[:size_unit] == "pt"
+            length = literals.map do |literal|
+              TextRenderer.estimate_width(literal_display(literal), size, theme.text_width_factor,
+                                          family: family, weight: 400, style: "normal",
+                                          logical_height: logical_height).round
+            end.max
+            content_x_offset(theme, size, font_options[:size_unit], family) + length + 5
+          end
+
+          def content_x_offset(theme, size, size_unit, family)
+            # EA uses the attribute row point-size increment for literal names.
+            offset = theme.attribute_spec.content_x_offset || 26
+            offset += 2 * (size - 7) if size_unit == "pt"
+            offset -= 1 if Ea::Fonts::Metrics.compact_compartment_font?(size, family: family, unit: size_unit)
+            offset
           end
 
           # EA shows "Name = Code" for literals with a stored

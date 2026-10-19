@@ -151,20 +151,20 @@ module Ea
                       else
                         []
                       end
-          # Regenerated contexts grow the DRAWN width to fit the
-          # widest row: attr rows inset 22 + 5 right, op rows inset
-          # 22 + 3 (CharacterString 197+27=224, Integer 92+25=117).
-          # Titles never drive growth - they wrap instead.
-          if attr_lines.any? || op_lines.any?
-            row_w = [row_content_width(attr_lines, 5, size, family, logical_height),
-                     row_content_width(op_lines, 3, size, family, logical_height)].compact.max
-            if row_w && row_w > bounds.width
-              bounds = Ea::Model::Bounds.new(
-                x: bounds.x, y: bounds.y,
-                width: row_w,
-                height: bounds.height
-              )
-            end
+          # Titles wrap; content rows grow the drawn box to fit their insets.
+          row_w = [row_content_width(attr_lines, 5, size, family, logical_height),
+                   row_content_width(op_lines, 3, size, family, logical_height),
+                   Compartment::EnumLiterals.content_width(
+                     enum_literals_for(classifier),
+                     theme: theme, size: size, family: family,
+                     size_unit: size_unit, logical_height: logical_height
+                   )].compact.max
+          if row_w && row_w > bounds.width
+            bounds = Ea::Model::Bounds.new(
+              x: bounds.x, y: bounds.y,
+              width: row_w,
+              height: bounds.height
+            )
           end
           stereotype_fqname = element.style&.fetch(:stereotype_fqname, nil)
           header_lines = classifier ? Element::HeaderLines.for(classifier,
