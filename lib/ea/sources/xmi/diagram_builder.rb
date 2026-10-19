@@ -154,8 +154,9 @@ module Ea
           style = placed.style
           source = by_duid[style.soid]
           target = by_duid[style.eoid]
-          waypoints = compute_waypoints(geom, source, target)
           ext_meta = connector_meta(placed.subject)
+          waypoints = compute_waypoints(geom, source, target,
+                                        style: style, connector_type: ext_meta[:ea_type])
           Ea::Model::DiagramConnector.new(
             id: IdNormalizer.synthetic_id(owner_id, "conn", placed.subject),
             diagram_id: owner_id,
@@ -214,10 +215,13 @@ module Ea
           IdNormalizer.synthetic_id(owner_id, "elem", placed.subject)
         end
 
-        def compute_waypoints(geom, source, target)
+        def compute_waypoints(geom, source, target, style:, connector_type:)
           src_bounds = bounds_from_placed(source)
           tgt_bounds = bounds_from_placed(target)
           return [] unless src_bounds && tgt_bounds
+
+          stored = stored_route(geom, style, connector_type, src_bounds, tgt_bounds)
+          return stored if stored
 
           router = Ea::Svg::ConnectorRouter.new(
             source_bounds: src_bounds,
@@ -228,6 +232,24 @@ module Ea
             bend_path: geom.bend_points || []
           )
           router.waypoints.map do |x, y|
+            Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y))
+          end
+        end
+
+        # Stored bends with explicit ports at both ends are routed by
+        # StoredRoute; anything else keeps the generic router.
+        def stored_route(geom, style, connector_type, src_bounds, tgt_bounds)
+          offsets = { source: [geom.sx.to_i, geom.sy.to_i], target: [geom.ex.to_i, geom.ey.to_i] }
+          return if geom.bend_points.to_a.empty? || offsets.values.any? { |offset| offset.all?(&:zero?) }
+
+          points = StoredRoute.new.waypoints(
+            link: StoredRoute::Link.new(style.raw, geom.path.tr("$", ";")),
+            connector_type: connector_type, source: src_bounds, target: tgt_bounds,
+            bends: geom.bend_points, offsets: offsets
+          )
+          return unless points
+
+          points.map do |x, y|
             Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y))
           end
         end

@@ -5,6 +5,7 @@ require "spec_helper"
 RSpec.describe "XMI connector bend point sign" do
   include QeaBridgeCorpusHelpers
   include XmiBendSignHelpers
+  include XmiStoredRouteHelpers
 
   describe "Path parsing" do
     it "negates EA's stored Y into screen-positive Y" do
@@ -17,6 +18,16 @@ RSpec.describe "XMI connector bend point sign" do
 
     it "returns no bends for an empty Path" do
       expect(parsed_bends("")).to eq([])
+    end
+  end
+
+  describe Ea::Sources::Xmi::StoredRoute do
+    it "declines a bent route no stored-route rule claims, leaving it to the generic router" do
+      expect(stored_route_for("Mode=2;LWidth=1;", "Association")).to be_nil
+    end
+
+    it "does not claim a level-entry style on a connector type outside the rule" do
+      expect(stored_route_for("Mode=3;LWidth=2;", "Dependency")).to be_nil
     end
   end
 
@@ -37,6 +48,19 @@ RSpec.describe "XMI connector bend point sign" do
 
         expect(xmi[1...-1]).to eq(interior)
         expect(xmi[1...-1]).to eq(qea_connector_points(diagram, connector)[1...-1])
+      end
+    end
+
+    {
+      "d147 connector 481 (stored square)" => ["{E7AABA98-2450-4986-9736-DCCAF0108C50}",
+                                               "{852FF005-A86B-4c4e-B0FB-C08CBDA4CC5A}"],
+      "d148 connector 724 (stored stair)" => ["{00C5C772-5A03-434f-BF30-AC37542A1AAC}",
+                                              "{86668E1A-8EB0-4b0a-8B88-B0AEDA505BD6}"],
+      "d147 connector 848 (level entry)" => ["{E7AABA98-2450-4986-9736-DCCAF0108C50}",
+                                             "{AD628304-78EA-4E0B-B4AF-39769E39D20E}"]
+    }.each do |name, (diagram, connector)|
+      it "docks #{name} exactly where QEA does" do
+        expect(xmi_connector_points(diagram, connector)).to eq(qea_connector_points(diagram, connector))
       end
     end
 
