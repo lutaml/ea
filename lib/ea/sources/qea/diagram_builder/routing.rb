@@ -569,7 +569,9 @@ module Ea
 
             first = outline_dock(corners[0], corners[1], source)
             last = outline_dock(corners[-1], corners[-2], target)
-            [first, *corners, last] if first && last
+            return nil unless first && last && first != corners.first && last != corners.last
+
+            [first, *corners, last]
           end
 
           def stair_style?(link_row, connector)

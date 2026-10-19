@@ -31,4 +31,10 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
       expect(saved_aggregation_points(path: path)).to eq([[400, 356], [400, 591]])
     end
   end
+
+  it "retains fallback behavior when a saved corner coincides with an outline dock" do
+    ["305:-342;305:-643;", "399:-342;399:-643;"].each do |path|
+      expect(saved_aggregation_points(path: path)).to eq([[400, 356], [400, 591]])
+    end
+  end
 end
