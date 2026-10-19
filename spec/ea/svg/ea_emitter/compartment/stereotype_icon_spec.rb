@@ -3,17 +3,13 @@
 require "spec_helper"
 
 RSpec.describe Ea::Svg::EaEmitter::Compartment::StereotypeIcon do
+  include QeaMarkerHelpers
+
   let(:bounds) { Ea::Model::Bounds.new(x: 100, y: 100, width: 80, height: 50) }
 
-  def make_context(classifier)
-    Struct.new(:classifier, :bounds, :canvas).new(classifier, bounds, nil)
-  end
-
-  it "renders a polygon for FeatureType stereotype" do
+  it "returns nil for a FeatureType stereotype without ShapeScript" do
     klass = Ea::Model::Klass.new(name: "City", stereotype_refs: ["FeatureType"])
-    result = described_class.render(make_context(klass))
-    expect(result).to include("<polygon")
-    expect(result).to include('fill="#FAF1EC"')
+    expect(described_class.render(make_context(klass))).to be_nil
   end
 
   it "returns nil when classifier has no stereotype" do

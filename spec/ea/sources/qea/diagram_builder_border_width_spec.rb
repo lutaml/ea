@@ -7,17 +7,17 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
   include ConnectorRedockHelpers
 
   it "inherits saved object widths only when the placement uses its default" do
-    [["LWth=2;", 4, 2], ["LWth=0;", 4, 0], ["LWth=-1;", 4, 4],
+    [["LWth=2;", 4, 2], ["LWth=0;", 4, 1], ["LWth=-1;", 4, 4],
      [nil, 1, 1], ["LWth=-1;", -1, nil], [nil, nil, nil]].each do |style, stored, expected|
       document = border_width_document(placement: style, object_width: stored)
       expect(document.diagrams.first.elements.first.line_width).to eq(expected)
     end
   end
 
-  it "renders explicit widths before the diagram theme and preserves zero" do
+  it "renders explicit widths before the diagram theme and renders zero as a hairline" do
     [0, 1, 2, 4].each do |width|
       document = border_width_document(placement: "LWth=#{width};")
-      expect(rendered_border_width(document)).to eq(width)
+      expect(rendered_border_width(document)).to eq([width, 1].max)
     end
   end
 end

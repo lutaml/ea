@@ -233,7 +233,8 @@ module Ea
         private_class_method :facing_coordinate
 
         def stroke_outline?(connector, bounds)
-          (connector.style.to_h[:lwidth] == "2" || default_model_connector?(connector)) &&
+          (connector.style.to_h[:lwidth] == "2" || default_model_connector?(connector) ||
+           connector.connector_type == "NoteLink") &&
             bounds.all? { |box| box.width.positive? && box.height.positive? } &&
             outline_connector?(connector, bounds)
         end
@@ -311,7 +312,7 @@ module Ea
 
         def outline_connector?(connector, bounds)
           return true if default_model_connector?(connector)
-          return true if %w[Generalization Aggregation].include?(connector.connector_type)
+          return true if %w[Generalization Aggregation NoteLink].include?(connector.connector_type)
 
           return true if association_ray_outline?(connector)
           return false unless stored_association?(connector) || offset_free_association?(connector)

@@ -6,7 +6,7 @@ module Ea
       # Single source of truth for fill + stroke color decisions.
       #
       # Theme :119 applies:
-      #   - Border color (#9A8484) for element strokes
+      #   - Black default element strokes
       #   - Method color for operation text
       # Theme :119 does NOT apply:
       #   - Per-type fill colors (elements use default #FFFFFF)

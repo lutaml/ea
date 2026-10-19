@@ -43,7 +43,7 @@ module Ea
             return explicit
           end
 
-          theme_family_for(explicit) || diagram_default_family || DEFAULT_FONT_FAMILY
+          default_family_for(explicit)
         end
 
         def size_for(element)
@@ -72,14 +72,29 @@ module Ea
         end
 
         def style_for(element)
-          element&.font_italic ? "italic" : "normal"
+          return "italic" if element&.font_italic
+          return "normal" if element&.style&.key?(:italic)
+
+          diagram.hand_draw ? "italic" : "normal"
+        end
+
+        def header_style_for(style, element)
+          return style unless diagram.hand_draw && style_for(element) == "italic"
+
+          style == :bold ? :bold_italic : style
         end
 
         private
 
+        def default_family_for(explicit)
+          return "Source Sans Pro" if diagram.hand_draw
+
+          theme_family_for(explicit) || diagram_default_family || DEFAULT_FONT_FAMILY
+        end
+
         def theme_family_for(explicit)
           return unless theme.themed?
-          return theme.font_family if DEFAULT_MARKER_FAMILIES.include?(explicit)
+          return theme.font_family || "Carlito" if DEFAULT_MARKER_FAMILIES.include?(explicit)
 
           theme.element_font_family || theme.font_family
         end

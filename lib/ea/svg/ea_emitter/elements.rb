@@ -11,7 +11,7 @@ module Ea
       class Elements
         DEFAULT_FILL = "#FFFFFF"
         DEFAULT_STROKE = "#000000"
-        DEFAULT_STROKE_WIDTH = 2
+        DEFAULT_STROKE_WIDTH = 1
         DEFAULT_TEXT_COLOR = "#000000"
 
         attr_reader :diagram, :model_index, :canvas, :document
@@ -178,6 +178,9 @@ module Ea
                                                                 off_canvas_parent_name: parent_name,
                                                                 foreign_package_name: foreign_package_name_for(classifier),
                                                                 suppress_stereotypes: suppress_stereotypes?) : []
+          header_lines = header_lines.map do |text, style|
+            [text, font_resolver.header_style_for(style, element)]
+          end
           geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
                                           tagged_values_for(classifier).size,
                                           header_lines, classifier: classifier, family: family,
@@ -257,9 +260,11 @@ module Ea
           # Bag': Set enum box stored h59 -> EA 223 fitting six
           # literals); op-only boxes keep the no-growth behavior
           # (op_bottom_y is a divider sentinel, not content).
+          # Saved boxes may already fit rows with less than the growth
+          # padding. Test the baseline for overflow before adding padding.
           if (attr_lines.any? || enum_literals_for(classifier).any?) &&
              grown_bottom.positive? &&
-             grown_bottom + 8 > bounds.y + bounds.height
+             grown_bottom > bounds.y + bounds.height
             bounds = Ea::Model::Bounds.new(
               x: bounds.x, y: bounds.y,
               width: bounds.width,

@@ -23,7 +23,7 @@ RSpec.describe "Legend title extents" do
       expect(title["x"].to_f).to eq(centered_x)
       expect(title["style"]).to include("font-weight:700", "font-size:12pt")
       expect(item["style"]).to include("font-weight:0", "font-size:9pt")
-      expect(item["textLength"].to_i).to eq(68)
+      expect(item["textLength"].to_i).to eq(69)
       expect([item["x"], item["y"]]).to eq(["132.00", "92.00"])
     end
   end

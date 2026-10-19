@@ -38,7 +38,7 @@ RSpec.describe "Source element pen rendering" do
   it "decodes explicit and inherited nonblack pens from BGR without changing theme fallback" do
     [["LCol=255;", 0xFF0000, "#FF0000"],
      ["LCol=-1;", 0xFF0000, "#0000FF"],
-     [nil, -1, "#9A8484"]].each do |placement, saved, expected|
+     [nil, -1, "#000000"]].each do |placement, saved, expected|
       document = element_pen_document(placement: placement, object_color: saved)
       expect(rendered_element_pen(document)).to eq(expected)
     end

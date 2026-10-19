@@ -21,25 +21,11 @@ RSpec.describe Ea::Svg::EaEmitter::Element::StereotypeIconRenderer do
       expect(described_class.render(classifier: klass, bounds: bounds)).to eq("")
     end
 
-    it "emits a polygon for FeatureType stereotype via fallback" do
-      klass = Ea::Model::Klass.new(name: "City", stereotype_refs: ["FeatureType"])
-      result = described_class.render(classifier: klass, bounds: bounds)
-      expect(result).to include("<polygon")
-      expect(result).to include('fill="#FAF1EC"')
-      expect(result).to include('stroke="#69738C"')
-    end
-
-    it "emits a polygon for Type stereotype via fallback" do
-      klass = Ea::Model::Klass.new(name: "Quantity", stereotype_refs: ["Type"])
-      result = described_class.render(classifier: klass, bounds: bounds)
-      expect(result).to include("<polygon")
-    end
-
-    it "centers the fallback icon at the element's center" do
-      klass = Ea::Model::Klass.new(name: "City", stereotype_refs: ["FeatureType"])
-      result = described_class.render(classifier: klass, bounds: bounds)
-      expect(result).to include("130,")
-      expect(result).to include("220")
+    %w[FeatureType Type].each do |stereotype|
+      it "draws no icon for the #{stereotype} stereotype without ShapeScript" do
+        klass = Ea::Model::Klass.new(name: "City", stereotype_refs: [stereotype])
+        expect(described_class.render(classifier: klass, bounds: bounds)).to eq("")
+      end
     end
   end
 
@@ -59,14 +45,14 @@ RSpec.describe Ea::Svg::EaEmitter::Element::StereotypeIconRenderer do
       result = described_class.render(classifier: klass, bounds: bounds,
                                       mdg_registry: registry)
       expect(result).to include("<rect")
-      expect(result).not_to include("<polygon") # fallback bypassed
+      expect(result).not_to include("<polygon")
     end
 
-    it "falls back to hardcoded when registry has no match" do
+    it "draws no icon when the registry has no match" do
       other_klass = Ea::Model::Klass.new(name: "Y", stereotype_refs: ["FeatureType"])
       result = described_class.render(classifier: other_klass, bounds: bounds,
                                       mdg_registry: registry)
-      expect(result).to include("<polygon")
+      expect(result).to eq("")
     end
   end
 end
