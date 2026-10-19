@@ -33,8 +33,8 @@ RSpec.describe "QEA source Property direction at an external saved bottom dock" 
   include QeaSourceBottomDirectionHelpers
 
   it "keeps the bottom seat independently of stored source label offsets" do
-    [[0, 0], [11, -4]].each do |offset|
-      result = bottom_property_labels(offset: offset)
+    [[0, 0], [11, -4]].product([0, 1]).each do |offset, alignment|
+      result = bottom_property_labels(offset: offset, alignment: alignment)
       role = result[:texts].find { |text| text[:text] == "+lod0Geometry" }
 
       expect([role[:x], role[:y]]).to eq([result[:first][0] + offset[0] - 65 - 67,
@@ -52,12 +52,10 @@ RSpec.describe "QEA source Property direction at an external saved bottom dock" 
     expect([role[:x], role[:y]]).to eq(result[:first])
   end
 
-  it "preserves moved alignment-zero labels and plain role offsets" do
-    [{ offset: [11, -4], alignment: 0 }, { offset: [11, -4], stereotype: "" }].each do |presentation|
-      result = bottom_property_labels(**presentation)
-      role = result[:texts].find { |text| text[:text] == "+lod0Geometry" }
+  it "preserves plain role offsets" do
+    result = bottom_property_labels(offset: [11, -4], stereotype: "")
+    role = result[:texts].find { |text| text[:text] == "+lod0Geometry" }
 
-      expect([role[:x], role[:y]]).to eq([result[:first][0] + 11, result[:first][1] + 4])
-    end
+    expect([role[:x], role[:y]]).to eq([result[:first][0] + 11, result[:first][1] + 4])
   end
 end

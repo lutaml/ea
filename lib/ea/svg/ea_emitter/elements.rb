@@ -152,8 +152,10 @@ module Ea
                         []
                       end
           # Titles wrap; content rows grow the drawn box to fit their insets.
-          row_w = [row_content_width(attr_lines, 5, size, family, logical_height),
-                   row_content_width(op_lines, 3, size, family, logical_height),
+          row_w = [row_content_width(attr_lines, 5, size, family,
+                                     logical_height: logical_height,
+                                     content_x_offset: attribute_content_x_offset(size, family, size_unit)),
+                   row_content_width(op_lines, 3, size, family, logical_height: logical_height),
                    Compartment::EnumLiterals.content_width(
                      enum_literals_for(classifier),
                      theme: theme, size: size, family: family,
@@ -249,7 +251,8 @@ module Ea
           # Real attributes grow the DRAWN box past the stored
           # height instead of being dropped (0CABA7D7: stored h44
           # draws at h59). Grown height = last row baseline + EA's
-          # ~8px bottom padding. Render-local: the diagram-level
+          # trailing padding (7px for compact Cambria, 8px otherwise).
+          # Render-local: the diagram-level
           # canvas still derives from stored bounds.
           # content_bottom_y is nil when no compartment has rows;
           # op_bottom_y is NOT a sentinel (it reports the op-divider
@@ -268,7 +271,7 @@ module Ea
             bounds = Ea::Model::Bounds.new(
               x: bounds.x, y: bounds.y,
               width: bounds.width,
-              height: grown_bottom + 8 - bounds.y
+              height: grown_bottom + compartment_bottom_padding(size, family, size_unit) - bounds.y
             )
           end
           RenderContext.new(
@@ -298,18 +301,30 @@ module Ea
           )
         end
 
-        def row_content_width(lines, right_pad, size, family, logical_height)
+        def attribute_content_x_offset(size, family, size_unit)
+          offset = (theme.attribute_spec.content_x_offset || Element::AttributeRenderer::DEFAULT_CONTENT_X_OFFSET) +
+                   2 * (size - 7)
+          offset -= 1 if Ea::Fonts::Metrics.compact_compartment_font?(size, family: family, unit: size_unit)
+          offset
+        end
+
+        def compartment_bottom_padding(size, family, size_unit)
+          Ea::Fonts::Metrics.compact_compartment_font?(size, family: family, unit: size_unit) ? 7 : 8
+        end
+
+        def row_content_width(lines, right_pad, size, family, **font_options)
           return nil if lines.to_a.empty?
 
-          tl = lines.filter_map do |line|
+          lines.filter_map do |line|
             text = line.sub(/\A\S /, "")
-            Ea::Fonts::Metrics.text_length(text, size,
-                                           family: family,
-                                           weight: "400", logical_height: logical_height)&.round
-          end.max
-          return nil unless tl
+            length = Ea::Fonts::Metrics.text_length(text, size,
+                                                    family: family,
+                                                    weight: "400", logical_height: font_options[:logical_height])&.round
+            next unless length
 
-          22 + tl + right_pad
+            offset = line.match?(/\A[-+~#]\s/) ? font_options.fetch(:content_x_offset, 22) : 22
+            offset + length + right_pad
+          end.max
         end
 
         def compartment_geometry(bounds, size, attr_lines, op_lines,

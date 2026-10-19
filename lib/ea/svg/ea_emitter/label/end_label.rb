@@ -79,6 +79,7 @@ module Ea
               text_pos, mult_pos = tree_positions(end_kind, anchor, role,
                                                   text_pos, mult_pos)
               mult_pos = tree_left_multiplicity(end_kind, heading, anchor, mult_box, mult) || mult_pos
+              text_pos = tree_left_property_role(connector, end_kind, heading, anchor, text_box, role) || text_pos
             elsif mult_box && stored_offsets_zero?(mult_box)
               # Start at the legacy default; measured directional seats
               # below replace it for default Cambria labels.
@@ -210,8 +211,9 @@ module Ea
 
           def source_property_seat?(connector, direction, box)
             phantom_property_box?(connector, direction, box) ||
-              (%i[up left right down].include?(direction) && property_role_box?(box, direction) &&
-                source_property_font?(connector, direction))
+              (%i[up left right down].include?(direction) &&
+                property_role_box?(box, direction, connector.style.to_h) &&
+                source_property_font?(connector, direction, box))
           end
 
           # Phantom outlines carry synthesized zero boxes without alignment.
@@ -392,9 +394,23 @@ module Ea
               [nil, "V"].include?(style[:tree])
           end
 
-          def property_role_box?(box, direction)
-            alignments = direction == :down ? [1] : [0, 1]
-            box && alignments.include?(box["alignment"]) && default_presentation?(box)
+          def property_role_box?(box, direction, style = {})
+            return false unless box && default_presentation?(box)
+            return [0, 1].include?(box["alignment"]) unless direction == :down
+
+            case box["alignment"]
+            when 1 then true
+            when 0 then persisted_plain_down_box?(box, style)
+            else false
+            end
+          end
+
+          # Persisted alignment-0 boxes on untreed routes use the downward
+          # seat, including saved rays; the "OS" route also seats absent boxes.
+          def persisted_plain_down_box?(box, style)
+            return true if orthogonal_stub_route?(style)
+
+            !stored_offsets_zero?(box) && style[:tree].nil?
           end
 
           def property_role_offsets(direction)
@@ -405,26 +421,58 @@ module Ea
             end
           end
 
-          def source_property_font?(connector, direction)
+          def source_property_font?(connector, direction, box)
             source_property_cambria?(connector) &&
-              source_property_route?(connector.style.to_h, direction)
+              source_property_route?(connector.style.to_h, direction, box)
           end
 
           def source_property_cambria?(connector)
             font_family.to_s.casecmp("Cambria").zero? && property_label?(connector, :source)
           end
 
-          def source_property_route?(style, direction)
+          def source_property_route?(style, direction, box)
             case direction
-            when :left then left_property_route?(style)
             when :right then style.values_at(:mode, :lwidth, :tree) == %w[3 2 H]
-            when :down then downward_property_route?(style)
-            else %w[0 2].include?(style[:lwidth]) && style[:tree] != "OS"
+            when :up then upward_property_route?(style)
+            when :left then orthogonal_stub_route?(style) || left_property_route?(style)
+            else downward_source_route?(style, box)
             end
           end
 
+          def downward_source_route?(style, box)
+            [orthogonal_stub_route?(style), lateral_horizontal_route?(style), mode_two_route?(style),
+             downward_property_route?(style), persisted_width_zero_down_box?(box, style)].any?
+          end
+
+          def persisted_width_zero_down_box?(box, style)
+            box["alignment"]&.zero? && !stored_offsets_zero?(box) && style[:stored_association_ray] != true &&
+              style.values_at(:mode, :lwidth, :tree) == ["3", "0", nil]
+          end
+
+          # Mode 3, width 2 on the horizontal lateral tree.
+          def lateral_horizontal_route?(style)
+            style.values_at(:mode, :lwidth, :tree) == %w[3 2 LH]
+          end
+
+          # Mode 2, width 2 without a tree seats like the other width-2 modes.
+          def mode_two_route?(style)
+            style.values_at(:mode, :lwidth, :tree) == ["2", "2", nil]
+          end
+
+          def upward_property_route?(style)
+            return orthogonal_stub_route?(style) if style[:tree] == "OS"
+
+            %w[0 2].include?(style[:lwidth])
+          end
+
+          # The "OS" route seats its Property roles at the same directional
+          # corner seats as the untreed width-2 route.
+          def orthogonal_stub_route?(style)
+            style.values_at(:mode, :lwidth, :tree) == %w[3 2 OS]
+          end
+
           def left_property_route?(style)
-            downward_property_route?(style) ||
+            downward_property_route?(style) || mode_two_route?(style) ||
               (style[:mode] == "3" && %w[0 2].include?(style[:lwidth]) &&
                 [nil, "H", "LV"].include?(style[:tree]))
           end
@@ -454,6 +502,15 @@ module Ea
             width = Ea::Fonts::Metrics.text_length(mult, font_size, family: font_family)
             x, y = seat_corner(anchor, box)
             [x + SEAT_X_INSET + width, y + 15] if width
+          end
+
+          # An absent source box on a leftward tree leg seats a Property role
+          # at the leftward Property seat, not the rightward tree default.
+          def tree_left_property_role(connector, end_kind, heading, anchor, box, role)
+            return nil unless leg_direction(end_kind, heading) == :left && box&.[]("alignment")&.zero?
+            return nil unless connector.style.to_h.values_at(:mode, :lwidth) == %w[3 2]
+
+            source_property_seat(connector, :left, anchor, box, role)
           end
 
           # A tree-route source leaving left seats its multiplicity like any

@@ -33,7 +33,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
       "no path" => ["M 124 239 L 100 141"],
       "bent path" => ["M 55 239 L 55 190 L 70 180 L 85 141"],
       "no overlap" => ["M 55 239 L 55 190 L 70 190 L 335 141"],
-      "association" => ["M 125 240 L 99 140", "M 108.58 153.01 L 99 140 L 96.97 156.03"]
+      "association" => ["M 125 240 L 99 140", "M 109 153 L 99 140 L 97 156"]
     )
   end
   it "keeps an offset outside the shared span on its original stored jog" do

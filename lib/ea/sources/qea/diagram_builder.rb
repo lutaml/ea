@@ -138,6 +138,7 @@ module Ea
             style: style_hash,
             font_family: presence(font_style[:font]),
             font_size: font_size_from(font_style),
+            font_size_inherited: font_size_from(font_style).nil?,
             font_size_unit: "pt",
             font_logical_height: font_logical_height_from(font_style),
             font_bold: truthy?(style_hash[:bold]),

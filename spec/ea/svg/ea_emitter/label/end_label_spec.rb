@@ -559,7 +559,6 @@ RSpec.describe Ea::Svg::EaEmitter::Label::EndLabel do
 
     it "preserves unsupported downward role regimes" do
       [{ stereotype: nil }, { stereotype: "Type" }, { family: "Carlito" }, { size: 9 },
-       { box: traffic[:box].merge("alignment" => 0) },
        { box: traffic[:box].merge("italic" => true) },
        { style: { mode: "3", lwidth: "0" } },
        { style: { mode: "3", lwidth: "2", tree: "V" } }].each do |options|

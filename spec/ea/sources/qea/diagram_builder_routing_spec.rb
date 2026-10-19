@@ -52,7 +52,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     bent = "150:-250;450:-250;"
     docked_tip = "85 239 80 229 85 219 90 229"
     stale = ["M 135 240 L 85 190 L 385 190 L 435 40"]
-    stale_tip = "135 240 124.39 236.46 120.86 225.86 131.46 229.39"
+    stale_tip = "135 240 124 236 121 226 131 229"
     cases = [
       [{ path: bent, style: "TREE=V;LWidth=2;" },
        ["M 85 239 L 85 190 L 385 190 L 385 141"], [docked_tip]],
@@ -60,19 +60,19 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
        ["M 85 239 L 85 210 L 185 210 L 185 170 L 385 170 L 385 141"], [docked_tip]],
       [{ path: bent, style: "TREE=V;LWidth=2;", geometry: "SX=0;SY=0;EX=0;EY=0;EDGE=2;" },
        ["M 235 290 L 85 190 L 385 190 L 535 90"],
-       ["235 290 223.91 288.61 218.36 278.91 229.45 280.29"]],
+       ["235 290 224 289 218 279 229 280"]],
       [{ path: bent, style: "TREE=V;LWidth=2;", connector_type: "Association" },
-       [*stale, "M 435.95 56.13 L 435 40 L 424.56 52.33"], []],
+       [*stale, "M 436 56 L 435 40 L 425 52"], []],
       [{ path: bent, style: "TREE=V;LWidth=2;", geometry: "SX=0;SY=0;EX=0;EY=0;EDGE=4;",
          source: [100, 300, 200, 100], target: [100, 100, 200, 100] },
        ["M 135 239 L 135 141"], ["135 239 130 229 135 219 140 229"]],
       [{ path: "450:-250;", style: "TREE=V;LWidth=2;" },
        ["M 135 240 L 385 190 L 435 40"],
-       ["135 240 143.83 233.14 154.61 236.08 145.79 242.94"]],
+       ["135 240 144 233 155 236 146 243"]],
       [{ path: bent, style: "TREE=V;LWidth=2;",
          source: [100, 100, 200, 100], target: [400, 300, 200, 100] },
        ["M 135 40 L 85 190 L 385 190 L 435 240"],
-       ["135 40 136.58 51.07 128.68 58.97 127.09 47.91"]],
+       ["135 40 137 51 129 59 127 48"]],
       [{ path: "150:-199;450:-199;", style: "TREE=V;LWidth=2;" },
        ["M 85 239 L 85 139 L 385 139 L 435 40"], [docked_tip]],
       [{ path: "150:-200;450:-200;", style: "TREE=V;LWidth=2;" },
@@ -89,7 +89,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
        ["M 135 240 L 85 240 L 385 240 L 385 141"], ["135 240 125 245 115 240 125 235"]],
       [{ path: "150:-301;450:-301;", style: "TREE=V;LWidth=2;" },
        ["M 135 240 L 85 241 L 385 241 L 385 141"],
-       ["135 240 125.1 245.2 115 240.4 124.9 235.2"]]
+       ["135 240 125 245 115 240 125 235"]]
     ]
     ["0", "1", "3", "2.0", nil].each do |width|
       cases << [{ path: bent, style: width ? "TREE=V;LWidth=#{width};" : "TREE=V;" },
@@ -113,11 +113,11 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
                        geometry: "SX=0;SY=0;EX=0;EY=0;EDGE=2;")
     cases = [
       [right, "Generalization", "M 330 80 L 287 80 L 287 139 L 238 139",
-       "238 139 249 133 249 145"],
+       "238 139 254 133 254 145"],
       [right, "Aggregation", "M 330 80 L 287 80 L 287 139 L 238 139",
        "330 80 320 85 310 80 320 75"],
       [left, "Generalization", "M 238 139 L 287 139 L 287 80 L 330 80",
-       "330 80 319 86 319 74"],
+       "330 80 314 86 314 74"],
       [left, "Aggregation", "M 238 139 L 287 139 L 287 80 L 330 80",
        "238 139 248 134 258 139 248 144"]
     ]
@@ -136,43 +136,43 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
              style: "Mode=3;TREE=H;LWidth=2;" }
     cases = [
       ["width 0", { style: "Mode=3;TREE=H;LWidth=0;" },
-       { "Generalization" => ["M 331 80 L 287 80 L 287 139 L 35 139", "35 139 46 133 46 145"],
-         "Aggregation" => ["M 331 93 L 237 115", "331 93 322.4 100.15 311.53 97.56 320.12 90.41"] }],
+       { "Generalization" => ["M 331 80 L 287 80 L 287 139 L 35 139", "35 139 51 133 51 145"],
+         "Aggregation" => ["M 331 93 L 237 115", "331 93 322 100 312 98 320 90"] }],
       ["width 1", { style: "Mode=3;TREE=H;LWidth=1;" },
-       { "Generalization" => ["M 331 80 L 287 80 L 287 139 L 35 139", "35 139 46 133 46 145"],
-         "Aggregation" => ["M 331 93 L 237 115", "331 93 322.4 100.15 311.53 97.56 320.12 90.41"] }],
+       { "Generalization" => ["M 331 80 L 287 80 L 287 139 L 35 139", "35 139 51 133 51 145"],
+         "Aggregation" => ["M 331 93 L 237 115", "331 93 322 100 312 98 320 90"] }],
       ["width 3", { style: "Mode=3;TREE=H;LWidth=3;" },
-       { "Generalization" => ["M 331 80 L 287 80 L 287 139 L 35 139", "35 139 46 133 46 145"],
-         "Aggregation" => ["M 331 93 L 237 115", "331 93 322.4 100.15 311.53 97.56 320.12 90.41"] }],
+       { "Generalization" => ["M 331 80 L 287 80 L 287 139 L 35 139", "35 139 51 133 51 145"],
+         "Aggregation" => ["M 331 93 L 237 115", "331 93 322 100 312 98 320 90"] }],
       ["no width", { style: "Mode=3;TREE=H;" },
-       { "Generalization" => ["M 331 80 L 287 80 L 287 139 L 35 139", "35 139 46 133 46 145"],
-         "Aggregation" => ["M 331 93 L 237 115", "331 93 322.4 100.15 311.53 97.56 320.12 90.41"] }],
+       { "Generalization" => ["M 331 80 L 287 80 L 287 139 L 35 139", "35 139 51 133 51 145"],
+         "Aggregation" => ["M 331 93 L 237 115", "331 93 322 100 312 98 320 90"] }],
       ["mode 2", { style: "Mode=2;TREE=H;LWidth=2;" },
-       { "Generalization" => ["M 331 80 L 287 80 L 287 139 L 35 139", "35 139 46 133 46 145"],
-         "Aggregation" => ["M 330 94 L 238 115", "330 94 321.36 101.1 310.5 98.45 319.14 91.35"] }],
+       { "Generalization" => ["M 331 80 L 287 80 L 287 139 L 35 139", "35 139 51 133 51 145"],
+         "Aggregation" => ["M 330 94 L 238 115", "330 94 321 101 311 98 319 91"] }],
       ["tree V", { style: "Mode=3;TREE=V;LWidth=2;" },
-       { "Generalization" => ["M 331 80 L 287 80 L 287 139 L 35 139", "35 139 46 133 46 145"],
-         "Aggregation" => ["M 330 94 L 238 115", "330 94 321.36 101.1 310.5 98.45 319.14 91.35"] }],
+       { "Generalization" => ["M 331 80 L 287 80 L 287 139 L 35 139", "35 139 51 133 51 145"],
+         "Aggregation" => ["M 330 94 L 238 115", "330 94 321 101 311 98 319 91"] }],
       ["bends differ in x", { path: "762:-551;740:-610;" },
-       { "Generalization" => ["M 331 80 L 287 80 L 265 139 L 35 139", "35 139 46 133 46 145"],
-         "Aggregation" => ["M 330 94 L 238 115", "330 94 321.36 101.1 310.5 98.45 319.14 91.35"] }],
+       { "Generalization" => ["M 331 80 L 287 80 L 265 139 L 35 139", "35 139 51 133 51 145"],
+         "Aggregation" => ["M 330 94 L 238 115", "330 94 321 101 311 98 319 91"] }],
       ["three bends", { path: "762:-551;762:-580;762:-610;" },
-       { "Generalization" => ["M 331 80 L 287 80 L 287 109 L 287 139 L 35 139", "35 139 46 133 46 145"],
-         "Aggregation" => ["M 330 94 L 238 115", "330 94 321.36 101.1 310.5 98.45 319.14 91.35"] }],
+       { "Generalization" => ["M 331 80 L 287 80 L 287 109 L 287 139 L 35 139", "35 139 51 133 51 145"],
+         "Aggregation" => ["M 330 94 L 238 115", "330 94 321 101 311 98 319 91"] }],
       ["bend above source", { path: "762:-500;762:-610;" },
-       { "Generalization" => ["M 331 80 L 287 29 L 287 139 L 35 139", "35 139 46 133 46 145"],
-         "Aggregation" => ["M 330 94 L 238 115", "330 94 321.36 101.1 310.5 98.45 319.14 91.35"] }],
+       { "Generalization" => ["M 331 80 L 287 29 L 287 139 L 35 139", "35 139 51 133 51 145"],
+         "Aggregation" => ["M 330 94 L 238 115", "330 94 321 101 311 98 319 91"] }],
       ["bend below target", { path: "762:-551;762:-670;" },
-       { "Generalization" => ["M 331 80 L 287 80 L 287 199 L 35 139", "35 139 47.09 135.71 44.31 147.38"],
-         "Aggregation" => ["M 330 94 L 238 115", "330 94 321.36 101.1 310.5 98.45 319.14 91.35"] }],
+       { "Generalization" => ["M 331 80 L 287 80 L 287 199 L 35 139", "35 139 52 137 49 149"],
+         "Aggregation" => ["M 330 94 L 238 115", "330 94 321 101 311 98 319 91"] }],
       ["trunk against target outline", { path: "713:-551;713:-610;" },
-       { "Generalization" => ["M 331 80 L 238 80 L 238 139 L 35 139", "35 139 46 133 46 145"],
-         "Aggregation" => ["M 330 94 L 238 115", "330 94 321.36 101.1 310.5 98.45 319.14 91.35"] }],
+       { "Generalization" => ["M 331 80 L 238 80 L 238 139 L 35 139", "35 139 51 133 51 145"],
+         "Aggregation" => ["M 330 94 L 238 115", "330 94 321 101 311 98 319 91"] }],
       ["trunk against source outline", { path: "805:-551;805:-610;" },
-       { "Generalization" => ["M 331 80 L 330 80 L 330 139 L 35 139", "35 139 46 133 46 145"],
-         "Aggregation" => ["M 330 94 L 238 115", "330 94 321.36 101.1 310.5 98.45 319.14 91.35"] }],
+       { "Generalization" => ["M 331 80 L 330 80 L 330 139 L 35 139", "35 139 51 133 51 145"],
+         "Aggregation" => ["M 330 94 L 238 115", "330 94 321 101 311 98 319 91"] }],
       ["overlapping boxes", { target: [700, 560, 202, 101] },
-       { "Generalization" => ["M 141 80 L 97 80 L 97 139 L 35 139", "35 139 46 133 46 145"],
+       { "Generalization" => ["M 141 80 L 97 80 L 97 139 L 35 139", "35 139 51 133 51 145"],
          "Aggregation" => ["M 141 80 L 97 80 L 97 139 L 35 139", "141 80 131 85 121 80 131 75"] }]
     ]
 
@@ -217,37 +217,37 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
   it "respects connector types and routing styles for custom lines" do
     cases = [
       ["mode 2", { style: "Mode=2;LWidth=2;" },
-       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+       ["M 201 1054 L 162 217"], ["201 1054 196 1044 200 1034 206 1044"]],
       ["no mode", { style: "LWidth=2;" },
-       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+       ["M 201 1054 L 162 217"], ["201 1054 196 1044 200 1034 206 1044"]],
       ["width 1", { style: "Mode=3;LWidth=1;" },
-       ["M 201 1055 L 162 216"], ["201 1055 195.54 1045.24 200.07 1035.02 205.53 1044.78"]],
+       ["M 201 1055 L 162 216"], ["201 1055 196 1045 200 1035 206 1045"]],
       ["width 3", { style: "Mode=3;LWidth=3;" },
-       ["M 201 1055 L 162 216"], ["201 1055 195.54 1045.24 200.07 1035.02 205.53 1044.78"]],
+       ["M 201 1055 L 162 216"], ["201 1055 196 1045 200 1035 206 1045"]],
       ["no width", { style: "Mode=3;" },
-       ["M 201 1055 L 162 216"], ["201 1055 195.54 1045.24 200.07 1035.02 205.53 1044.78"]],
+       ["M 201 1055 L 162 216"], ["201 1055 196 1045 200 1035 206 1045"]],
       ["tree H", { style: "Mode=3;TREE=H;LWidth=2;" },
-       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+       ["M 201 1054 L 162 217"], ["201 1054 196 1044 200 1034 206 1044"]],
       ["tree V", { style: "Mode=3;TREE=V;LWidth=2;" },
        ["M 207 1054 L 207 936 L 153 936 L 153 217"], ["207 1054 202 1044 207 1034 212 1044"]],
       ["association", { connector_type: "Association" },
        ["M 207 1054 L 207 936 L 153 936 L 153 217", "M 159 232 L 153 217 L 147 232"], []],
       ["generalization", { connector_type: "Generalization" },
-       ["M 207 1054 L 207 936 L 153 936 L 153 217"], ["153 217 159 228 147 228"]],
+       ["M 207 1054 L 207 936 L 153 936 L 153 217"], ["153 217 159 233 147 233"]],
       ["bend left of source", { path: "600:-919;740:-919;" },
-       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+       ["M 201 1054 L 162 217"], ["201 1054 196 1044 200 1034 206 1044"]],
       ["bend right of target", { path: "794:-919;900:-919;" },
-       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+       ["M 201 1054 L 162 217"], ["201 1054 196 1044 200 1034 206 1044"]],
       ["bends differ in y", { path: "794:-919;740:-900;" },
-       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+       ["M 201 1054 L 162 217"], ["201 1054 196 1044 200 1034 206 1044"]],
       ["bends share x", { path: "794:-919;794:-900;" },
-       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+       ["M 201 1054 L 162 217"], ["201 1054 196 1044 200 1034 206 1044"]],
       ["three bends", { path: "794:-919;770:-919;740:-919;" },
-       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+       ["M 201 1054 L 162 217"], ["201 1054 196 1044 200 1034 206 1044"]],
       ["trunk at target outline", { path: "794:-200;740:-200;" },
-       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]],
+       ["M 201 1054 L 162 217"], ["201 1054 196 1044 200 1034 206 1044"]],
       ["trunk at source outline", { path: "794:-1037;740:-1037;" },
-       ["M 201 1054 L 162 217"], ["201 1054 195.54 1044.24 200.07 1034.02 205.53 1043.78"]]
+       ["M 201 1054 L 162 217"], ["201 1054 196 1044 200 1034 206 1044"]]
     ]
 
     cases.each do |name, override, paths, markers|
@@ -283,7 +283,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
   end
 
   it "keeps other width-0 tree inputs on their existing routes" do
-    flattened = [["M 179 231 L 136 110"], ["179 231 170.94 223.25 172.3 212.15 180.36 219.9"]]
+    flattened = [["M 179 231 L 136 110"], ["179 231 171 223 172 212 180 220"]]
     cases = [
       ["mode 2", { style: "Mode=2;LWidth=0;TREE=V;" }, *flattened],
       ["no mode", { style: "LWidth=0;TREE=V;" }, *flattened],
@@ -295,9 +295,9 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
       ["width 2", { style: "Mode=3;LWidth=2;TREE=V;" },
        ["M 191 230 L 191 160 L 124 160 L 124 111"], ["191 230 186 220 191 210 196 220"]],
       ["association", { connector_type: "Association" },
-       ["M 179 231 L 136 110", "M 146.68 122.12 L 136 110 L 135.37 126.14"], []],
+       ["M 179 231 L 136 110", "M 147 122 L 136 110 L 135 126"], []],
       ["generalization", { connector_type: "Generalization" },
-       ["M 191 231 L 191 160 L 124 160 L 124 110"], ["124 110 130 121 118 121"]],
+       ["M 191 231 L 191 160 L 124 160 L 124 110"], ["124 110 130 126 118 126"]],
       ["bend left of source", { path: "420:-169;467:-169;" }, *flattened],
       ["bend right of target", { path: "534:-169;600:-169;" }, *flattened],
       ["bends differ in y", { path: "534:-169;467:-160;" }, *flattened],
@@ -325,7 +325,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     # and EA draws one horizontal line clipped at the outer outlines.
     result = render_qea_route(connector_type: "Generalization", **computed_jog)
 
-    expect(result).to eq(paths: ["M 240 468 L 323 468"], markers: ["323 468 312 474 312 462"])
+    expect(result).to eq(paths: ["M 240 468 L 323 468"], markers: ["323 468 307 474 307 462"])
   end
 
   let(:computed_zero_leg) do
@@ -338,7 +338,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     # which stops the outline clipping; the reference is one 2-point line.
     result = render_qea_route(connector_type: "Generalization", **computed_zero_leg)
 
-    expect(result).to eq(paths: ["M 204 131 L 304 131"], markers: ["304 131 293 137 293 125"])
+    expect(result).to eq(paths: ["M 204 131 L 304 131"], markers: ["304 131 288 137 288 125"])
   end
 
   it "keeps other zero-leg inputs unchanged" do
@@ -361,7 +361,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
 
   it "keeps other computed and stored routes unchanged" do
     jogged = ["M 239 468 L 324 468 L 324 469"]
-    jog_tip = ["324 469 318 458 330 458"]
+    jog_tip = ["324 469 318 453 330 453"]
     cases = [
       ["stored 1px jog", { path: "1250:-780;1250:-781;" },
        ["M 240 468 L 324 468 L 324 469 L 324 469"], []],
@@ -370,9 +370,9 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
       ["tree V", { style: "Mode=3;LWidth=2;TREE=V;" }, jogged, jog_tip],
       ["tree H", { style: "Mode=3;LWidth=2;TREE=H;" }, jogged, jog_tip],
       ["overlapping boxes", { target: [1100, 352, 312, 465] },
-       ["M 239 468 L 174 468 L 174 469"], ["174 469 168 458 180 458"]],
+       ["M 239 468 L 174 468 L 174 469"], ["174 469 168 453 180 453"]],
       ["vertical ports", { geometry: "SX=0;SY=-8;EX=0;EY=-196;EDGE=1;" },
-       ["M 163 423 L 323 248"], ["323 248 320.01 260.17 311.15 252.07"]]
+       ["M 163 423 L 323 248"], ["323 248 317 264 308 256"]]
     ]
 
     cases.each do |name, override, paths, markers|
@@ -395,14 +395,14 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
 
   it "preserves marker tips and dimensions across adjacent-bend boundaries" do
     [
-      [199, ["385 140 379 129 391 129"]],
+      [199, ["385 140 379 124 391 124"]],
       [200, []],
-      [201, ["385 140 391 151 379 151"]],
-      [202, ["385 141 391 152 379 152"]],
-      [250, ["385 141 391 152 379 152"]],
-      [298, ["385 141 391 152 379 152"]],
-      [299, ["385 141 391 152 379 152"]],
-      [300, ["385 141 391 152 379 152"]]
+      [201, ["385 140 391 156 379 156"]],
+      [202, ["385 141 391 157 379 157"]],
+      [250, ["385 141 391 157 379 157"]],
+      [298, ["385 141 391 157 379 157"]],
+      [299, ["385 141 391 157 379 157"]],
+      [300, ["385 141 391 157 379 157"]]
     ].each do |bend, expected|
       result = render_qea_route(path: "150:-#{bend};450:-#{bend};", style: "TREE=V;LWidth=2;")
 
@@ -444,7 +444,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
 
   it "preserves other modes, styles, types and invalid lateral corners" do # rubocop:disable Metrics/BlockLength
     path = "M 200 141 L 363 171"
-    markers = ["200 141 210.74 137.89 219.67 144.62 208.93 147.73"]
+    markers = ["200 141 211 138 220 145 209 148"]
     controls = [
       { style: "Mode=1;TREE=LH;LWidth=2;" },
       { style: "Mode=2;TREE=LH;LWidth=2;" },
@@ -461,11 +461,11 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     ["Mode=3;TREE=LH;LWidth=1;", "Mode=3;TREE=LH;"].each do |style|
       expect(render_qea_route(**lateral_corner.merge(style: style)))
         .to eq(paths: ["M 195 140 L 364 171"],
-               markers: ["195 140 205.74 136.89 214.67 143.61 203.93 146.72"])
+               markers: ["195 140 206 137 215 144 204 147"])
     end
     expect(render_qea_route(**lateral_corner.merge(connector_type: "Generalization")))
       .to eq(paths: ["M 147 40 L 145 190 L 364 190"],
-             markers: ["364 190 353 196 353 184"])
+             markers: ["364 190 348 196 348 184"])
   end
 
   it "docks an untyped Mode 3 Association corner on the outline of each leg's box" do
@@ -602,7 +602,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
        "M 430 213 L 392 213 L 392 74 L 238 74", []],
       [square_corner.merge(connector_type: "Generalization", source: [311, 1135, 120, 80],
                            target: [611, 64, 330, 122], path: "161:-1167;161:-123;"),
-       "M 35 1143 L -115 1143 L -115 99 L 335 99", ["335 99 324 105 324 93"]],
+       "M 35 1143 L -115 1143 L -115 99 L 335 99", ["335 99 319 105 319 93"]],
       [square_corner.merge(connector_type: "Aggregation", source: [1290, 1200, 220, 104],
                            target: [945, 569, 365, 240], path: "1394:-646;"),
        "M 484 671 L 484 117 L 400 117", ["484 671 479 661 484 651 489 661"]],
@@ -816,11 +816,11 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
       [computed_zero_leg.merge(connector_type: "Aggregation"),
        "M 204 131 L 304 131", "204 131 214 126 224 131 214 136"],
       [computed_zero_leg.merge(geometry: "SX=84;SY=-1;EX=-171;EY=138;EDGE=2;"),
-       "M 204 131 L 304 133", "304 133 292.88 138.78 293.12 126.78"],
+       "M 204 131 L 304 133", "304 133 288 139 288 127"],
       [computed_jog.merge(connector_type: "Aggregation"),
        "M 240 468 L 323 468", "240 468 250 463 260 468 250 473"],
       [computed_jog.merge(geometry: "SX=103;SY=-8;EX=-156;EY=-193;EDGE=2;"),
-       "M 240 468 L 323 465", "323 465 312.22 471.39 311.79 459.4"]
+       "M 240 468 L 323 465", "323 465 307 472 307 460"]
     ]
     cases.each do |input, path, marker|
       expect(render_qea_route(**input)).to eq(paths: [path], markers: [marker])
@@ -864,7 +864,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
       association.target_aggregation = "composite"
     end
 
-    expect(result[:paths]).to eq(["M 146 80 L 354 80", "M 339 86 L 354 80 L 339 74"])
+    expect(result[:paths]).to eq(["M 146 80 L 354 80"])
     expect(result[:markers]).to eq(["354 80 344 85 334 80 344 75"])
   end
 end

@@ -125,13 +125,22 @@ module Ea
         # Unknown faces retain the stored-upward fallback.
         def source_heading(connector, points)
           heading = leg_heading(points)
-          return heading unless points.size == 2 && heading.none?(&:zero?)
+          return heading unless heading.none?(&:zero?) && source_face_route?(connector, points)
 
           box = source_dock_bounds(connector)
           face = box && source_dock_heading(connector, points.first, box)
           return face if face && face_leads_leg?(connector, face, heading, box)
 
           stored_upward_heading(connector, heading)
+        end
+
+        # Explicit source boxes preserve the heading of a manual bend. An
+        # omitted source box uses the same dock seat as a straight route.
+        def source_face_route?(connector, points)
+          return true if points.size == 2
+
+          boxes = connector.label_boxes || {}
+          end_boxes(boxes, :llt, :llb).nil? && !end_boxes(boxes, :lrt, :lrb).nil?
         end
 
         # A target dock that clips an axis-aligned stored leg into a slight
@@ -150,13 +159,22 @@ module Ea
         # A saved external ray enters the source through the face it first
         # meets, even when the clipped leg then runs back across the box.
         def face_leads_leg?(connector, face, heading, box)
-          anchor = connector.source_anchor
-          if face == [0, 1] && anchor && anchor.y > box.y + box.height &&
-             connector.style.to_h[:stored_association_ray] == true
-            return true
-          end
+          return true if saved_ray_beyond_face?(connector, face, box)
 
           face.zip(heading).any? { |axis, delta| (axis * delta).positive? }
+        end
+
+        # A saved ray from beyond the bottom or right face meets that face
+        # first. The top face is excluded: its clipped leg keeps the anchor seat.
+        def saved_ray_beyond_face?(connector, face, box)
+          anchor = connector.source_anchor
+          return false unless anchor && connector.style.to_h[:stored_association_ray] == true
+
+          case face
+          when [0, 1] then anchor.y > box.y + box.height
+          when [1, 0] then anchor.x > box.x + box.width
+          else false
+          end
         end
 
         def stored_upward_heading(connector, heading)

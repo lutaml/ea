@@ -22,7 +22,7 @@ module Ea
         DIAMOND_HALF_W = 5
         DIAMOND_HALF_H = 10
         TRI_HALF_BASE = 6
-        TRI_HEIGHT = 11
+        TRI_HEIGHT = 16
         # EA's path arrowheads are height 15 corpus-wide, with
         # distinct bases per connector kind: association
         # navigability arrows base 12, dependency arrows base 10
@@ -364,10 +364,10 @@ module Ea
           left_x = tx - ux * DIAMOND_HALF_H - (-uy) * DIAMOND_HALF_W
           left_y = ty - uy * DIAMOND_HALF_H - ux * DIAMOND_HALF_W
           pts = [
-            Canvas.coord(tx), Canvas.coord(ty),
-            Canvas.coord(right_x), Canvas.coord(right_y),
-            Canvas.coord(back_x), Canvas.coord(back_y),
-            Canvas.coord(left_x), Canvas.coord(left_y)
+            Canvas.coord(tx.round), Canvas.coord(ty.round),
+            Canvas.coord(right_x.round), Canvas.coord(right_y.round),
+            Canvas.coord(back_x.round), Canvas.coord(back_y.round),
+            Canvas.coord(left_x.round), Canvas.coord(left_y.round)
           ].join(" ")
           %(<polygon points="#{pts}" shape-rendering="auto"   style="fill-rule:evenodd;"/>)
         end
@@ -385,9 +385,9 @@ module Ea
           w2_x = back_x - (-uy) * TRI_HALF_BASE
           w2_y = back_y - ux * TRI_HALF_BASE
           pts = [
-            Canvas.coord(tx), Canvas.coord(ty),
-            Canvas.coord(w1_x), Canvas.coord(w1_y),
-            Canvas.coord(w2_x), Canvas.coord(w2_y)
+            Canvas.coord(tx.round), Canvas.coord(ty.round),
+            Canvas.coord(w1_x.round), Canvas.coord(w1_y.round),
+            Canvas.coord(w2_x.round), Canvas.coord(w2_y.round)
           ].join(" ")
           %(<polygon points="#{pts}" shape-rendering="auto"   style="fill-rule:evenodd;"/>)
         end
@@ -404,7 +404,9 @@ module Ea
           w1_y = back_y + ux * ARROW_HALF_BASE
           w2_x = back_x - (-uy) * ARROW_HALF_BASE
           w2_y = back_y - ux * ARROW_HALF_BASE
-          d = "M #{Canvas.coord(w1_x)} #{Canvas.coord(w1_y)} L #{Canvas.coord(tx)} #{Canvas.coord(ty)} L #{Canvas.coord(w2_x)} #{Canvas.coord(w2_y)}"
+          d = "M #{Canvas.coord(w1_x.round)} #{Canvas.coord(w1_y.round)} " \
+              "L #{Canvas.coord(tx.round)} #{Canvas.coord(ty.round)} " \
+              "L #{Canvas.coord(w2_x.round)} #{Canvas.coord(w2_y.round)}"
           %(<path d="#{d}" shape-rendering="auto"/>)
         end
 

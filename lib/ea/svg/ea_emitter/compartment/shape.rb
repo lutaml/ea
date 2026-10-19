@@ -15,7 +15,7 @@ module Ea
                 context.bounds,
                 legend: context.model_element.legend,
                 family: context.family,
-                item_font: { size: context.element&.font_size&.nonzero?, unit: context.size_unit,
+                item_font: { size: legend_item_size(context), unit: context.size_unit,
                              logical_height: context.logical_height }
               )
             elsif context.model_element.is_a?(Ea::Model::Note)
@@ -53,6 +53,17 @@ module Ea
               )
             end
           end
+
+          def legend_item_size(context)
+            element = context.element
+            return unless element
+            return element.font_size if element.font_size&.nonzero?
+
+            # Parsed source defaults inherit; unspecified callers keep 9pt.
+            inherited = element.font_size_inherited || element.style&.fetch(:fontsz, nil).to_s == "0"
+            context.size if inherited
+          end
+          private_class_method :legend_item_size
 
           # A Text element with LegendOpts= renders as the legend
           # block rather than a folder silhouette. Dispatch on the
