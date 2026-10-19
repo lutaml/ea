@@ -17,10 +17,11 @@ module Ea
             whole_anchor = whole_at_target ? target : source
             whole_base = whole_at_target ? before_target : after_source
             specs = [Registry::Spec.new(shape: diamond_shape(connector, relationship, whole_at_target),
-                                        anchor: whole_anchor,
-                                        base: whole_base)]
+                                        anchor: whole_anchor, base: whole_base)]
             return specs unless whole_at_target
-            return specs if arrow_on_target_diamond?(connector, relationship)
+
+            target, before_target = target_arrow_points(connector, relationship, target, before_target)
+            return specs unless target
 
             specs.concat(direction_specs(connector, source, target,
                                          before_target, after_source))
@@ -68,13 +69,26 @@ module Ea
             !whole_end_at_source?(connector)
           end
 
-          # EA draws no arrow where a directed, dest-flagged aggregation
-          # would put it on its own target diamond.
+          # Navigable target-owned aggregations put the arrow at the
+          # diamond's inner vertex; nonnavigable targets omit it.
           def self.arrow_on_target_diamond?(connector, relationship)
             connector.direction == "Source -> Destination" &&
               dest_flagged?(relationship)
           end
           private_class_method :arrow_on_target_diamond?
+
+          def self.inner_vertex(tip, base)
+            tx, ty = tip
+            bx, by = base
+            dx = bx - tx
+            dy = by - ty
+            length = Math.hypot(dx, dy)
+            return tip if length.zero?
+
+            depth = Markers::DIAMOND_HALF_H * 2
+            [(tx + dx / length * depth).round, (ty + dy / length * depth).round]
+          end
+          private_class_method :inner_vertex
 
           def self.dest_flagged?(relationship)
             relationship &&
@@ -97,6 +111,16 @@ module Ea
                                 base: before_target)]
           end
           private_class_method :direction_specs
+
+          def self.target_arrow_points(connector, relationship, target, before_target)
+            return [target, before_target] unless arrow_on_target_diamond?(connector, relationship)
+            return [] unless relationship.target_navigable
+
+            anchor = inner_vertex(target, before_target)
+            base = anchor.zip(before_target, target).map { |inner, before, tip| inner + before - tip }
+            [anchor, base]
+          end
+          private_class_method :target_arrow_points
         end
       end
     end
