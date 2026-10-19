@@ -256,12 +256,14 @@ module Ea
         end
         private_class_method :default_model_connector?
 
-        # A thin straight Generalization/Aggregation/Association between two elements
-        # drawn with a 2px border stops on the outer edge of those borders.
+        # Thin connectors between explicitly bordered elements stop on the outer
+        # edge of their 2px borders, including package imports.
         def bordered_outline?(connector, diagram, refs, bounds)
           style = connector.style.to_h
           return false unless style[:lwidth] == "0" && !style[:tree]
-          return false unless %w[Generalization Aggregation Association Dependency].include?(connector.connector_type)
+          return false unless %w[Generalization Aggregation Association Dependency Package].include?(
+            connector.connector_type
+          )
           return false unless bounds.all? { |box| box.width.positive? && box.height.positive? }
 
           ends = [[refs.first, style[:soid]], [refs.last, style[:eoid]]]
