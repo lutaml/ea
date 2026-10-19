@@ -516,13 +516,19 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
   end
 
   it "accepts a width-2 stored origin on its own box's 1px outer stroke only" do
-    outline = offset_line.merge(geometry: "SX=-89;SY=-6;EX=157;EY=128;EDGE=4;")
+    outline = offset_line.merge(geometry: "SX=-89;SY=-6;EX=157;EY=128;EDGE=4;",
+                                object_styles: ["font=Arial;", "font=Arial;"])
     cases = [
       outline, outline.merge(style: "Mode=3;LWidth=0;"),
       outline.merge(geometry: "SX=-89;SY=-6;EX=158;EY=128;EDGE=4;"),
       outline.merge(geometry: "SX=-89;SY=-6;EX=157;EY=129;EDGE=4;")
     ]
-    expect(cases.map { |input| render_qea_route(**input)[:paths].first })
+    paths = cases.map do |input|
+      render_qea_route(**input) do |document|
+        expect(qea_route_dividers(document).fetch("child")).to eq(118)
+      end[:paths].first
+    end
+    expect(paths)
       .to eq(["M 501 144 L 348 144", "M 502 146 L 348 400",
               "M 502 146 L 349 400", "M 501 143 L 348 143"])
   end
@@ -583,7 +589,12 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     expected = ["M 501 143 L 348 143", "M 502 146 L 347 288",
                 "M 502 146 L 347 288", "M 502 146 L 347 288", "M 502 168 L 347 219",
                 "M 502 146 L 274 505"]
-    expect(controls.map { |input| render_qea_route(**input)[:paths].first }).to eq(expected)
+    paths = controls.map do |input|
+      render_qea_route(**input.merge(object_styles: ["font=Arial;", "font=Arial;"])) do |document|
+        expect(qea_route_dividers(document).fetch("child")).to eq(118)
+      end[:paths].first
+    end
+    expect(paths).to eq(expected)
   end
 
   let(:square_corner) do

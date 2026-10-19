@@ -52,6 +52,14 @@ module QeaRoutingHelpers
   end
   # rubocop:enable Metrics/AbcSize,Metrics/MethodLength,Metrics/ParameterLists
 
+  def qea_route_dividers(document)
+    elements = Ea::Svg::EaEmitter::Elements.new(
+      document.diagrams.first, model_index: document.index_by_id, document: document
+    )
+    elements.render
+    elements.divider_y
+  end
+
   def render_phantom(connector_type:)
     rows = Ea::Qea::Models
     database = build_test_database(
