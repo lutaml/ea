@@ -103,6 +103,7 @@ module Ea
                          mult_seat(direction, anchor, mult_box) || mult_pos
             elsif end_kind == :target && !(tree && zero_offset?(text_box, mult_box))
               text_pos = plain_leftward_target_role(connector, heading, anchor, text_box, role) ||
+                         target_leftward_property_role(connector, heading, anchor, text_box, role) ||
                          target_property_role(connector, heading, anchor, text_box, role) ||
                          target_diagonal_property_role(connector, heading, anchor, text_box, role) ||
                          target_vertical_role(connector, heading, anchor, text_box, role) ||
@@ -160,7 +161,10 @@ module Ea
 
           def source_stair_positions(connector, anchor, text_box, mult_box, role)
             return nil unless seat_font? && cambria_box?(text_box) && cambria_box?(mult_box)
-            return nil unless connector_source_dest_stereotype(connector, :source).to_s.empty? && !role_empty?(role)
+            return nil if role_empty?(role)
+
+            property = property_label?(connector, :source)
+            return nil unless property || connector_source_dest_stereotype(connector, :source).to_s.empty?
 
             SourceStairSeat.positions(
               connector: connector, anchor: anchor, text_box: text_box, mult_box: mult_box,
@@ -345,6 +349,29 @@ module Ea
 
             x, y = seat_corner(anchor, box)
             [x - SEAT_X_INSET - width, y - 6]
+          end
+
+          # Moved target Property clusters on horizontal arrivals share
+          # the leftward source seat relative to their stored corner.
+          def target_leftward_property_role(connector, heading, anchor, box, role)
+            return nil unless heading && heading[0].negative? && heading[1].zero?
+            return nil unless moved_target_property_box?(connector, box)
+            return nil unless horizontal_target_property_route?(connector.style.to_h)
+
+            width = Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
+            return nil unless width
+
+            x, y = seat_corner(anchor, box)
+            [x - property_role_offsets(:left).first - width, y - 7]
+          end
+
+          def moved_target_property_box?(connector, box)
+            plain_vertical_box?(box) && box["alignment"] == 1 && box["cy"] == 35 &&
+              !stored_offsets_zero?(box) && property_label?(connector, :target)
+          end
+
+          def horizontal_target_property_route?(style)
+            style.values_at(:mode, :lwidth) == %w[3 2] && [nil, "LH"].include?(style[:tree])
           end
 
           # An upward target uses the downward property's right edge and
