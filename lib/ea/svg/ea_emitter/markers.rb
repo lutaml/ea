@@ -22,7 +22,7 @@ module Ea
         DIAMOND_HALF_W = 5
         DIAMOND_HALF_H = 10
         TRI_HALF_BASE = 6
-        TRI_HEIGHT = 11
+        TRI_HEIGHT = 16
         # EA's path arrowheads are height 15 corpus-wide, with
         # distinct bases per connector kind: association
         # navigability arrows base 12, dependency arrows base 10
