@@ -395,8 +395,18 @@ module Ea
           end
 
           def property_role_box?(box, direction, style = {})
-            alignments = direction == :down && !orthogonal_stub_route?(style) ? [1] : [0, 1]
-            box && alignments.include?(box["alignment"]) && default_presentation?(box)
+            return false unless box && default_presentation?(box)
+            return [0, 1].include?(box["alignment"]) unless direction == :down
+
+            box["alignment"] == 1 || (box["alignment"] == 0 && persisted_plain_down_box?(box, style))
+          end
+
+          # A persisted alignment-0 box on a plain width-2 route (no tree, no
+          # saved ray) seats like an alignment-1 box; the "OS" route always does.
+          def persisted_plain_down_box?(box, style)
+            return true if orthogonal_stub_route?(style)
+
+            !stored_offsets_zero?(box) && style[:tree].nil? && style[:stored_association_ray] != true
           end
 
           def property_role_offsets(direction)
@@ -421,8 +431,13 @@ module Ea
             when :right then style.values_at(:mode, :lwidth, :tree) == %w[3 2 H]
             when :up then upward_property_route?(style)
             when :left then orthogonal_stub_route?(style) || left_property_route?(style)
-            else orthogonal_stub_route?(style) || lateral_horizontal_route?(style) || downward_property_route?(style)
+            else downward_source_route?(style)
             end
+          end
+
+          def downward_source_route?(style)
+            [orthogonal_stub_route?(style), lateral_horizontal_route?(style), mode_two_route?(style),
+             downward_property_route?(style)].any?
           end
 
           # Mode 3, width 2 on the horizontal lateral tree.

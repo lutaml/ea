@@ -150,13 +150,22 @@ module Ea
         # A saved external ray enters the source through the face it first
         # meets, even when the clipped leg then runs back across the box.
         def face_leads_leg?(connector, face, heading, box)
-          anchor = connector.source_anchor
-          if face == [0, 1] && anchor && anchor.y > box.y + box.height &&
-             connector.style.to_h[:stored_association_ray] == true
-            return true
-          end
+          return true if saved_ray_beyond_face?(connector, face, box)
 
           face.zip(heading).any? { |axis, delta| (axis * delta).positive? }
+        end
+
+        # A saved ray from beyond the bottom or right face meets that face
+        # first. The top face is excluded: its clipped leg keeps the anchor seat.
+        def saved_ray_beyond_face?(connector, face, box)
+          anchor = connector.source_anchor
+          return false unless anchor && connector.style.to_h[:stored_association_ray] == true
+
+          case face
+          when [0, 1] then anchor.y > box.y + box.height
+          when [1, 0] then anchor.x > box.x + box.width
+          else false
+          end
         end
 
         def stored_upward_heading(connector, heading)
