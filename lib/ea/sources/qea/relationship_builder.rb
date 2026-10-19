@@ -23,6 +23,8 @@ module Ea
           args = common_args(row)
           args.merge!(association_args(row)) if klass == Ea::Model::Association
           args.merge!(generalization_args(row)) if klass == Ea::Model::Generalization
+          args.merge!(dependency_args(row)) if klass == Ea::Model::Dependency
+          args.merge!(realization_args(row)) if klass == Ea::Model::Realization
           klass.new(**args)
         end
 
@@ -47,6 +49,20 @@ module Ea
           {
             specific_id: id_for_object_id(row.start_object_id),
             general_id: id_for_object_id(row.end_object_id)
+          }
+        end
+
+        def dependency_args(row)
+          {
+            client_id: id_for_object_id(row.start_object_id),
+            supplier_id: id_for_object_id(row.end_object_id)
+          }
+        end
+
+        def realization_args(row)
+          {
+            realizing_id: id_for_object_id(row.start_object_id),
+            contract_id: id_for_object_id(row.end_object_id)
           }
         end
 
