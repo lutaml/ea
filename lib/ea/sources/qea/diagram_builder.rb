@@ -14,12 +14,14 @@ module Ea
         autoload :AutoRouting, "ea/sources/qea/diagram_builder/auto_routing"
         autoload :StoredSquarePorts, "ea/sources/qea/diagram_builder/stored_square_ports"
         autoload :FontSettings, "ea/sources/qea/diagram_builder/font_settings"
+        autoload :AssociationClass, "ea/sources/qea/diagram_builder/association_class"
         include Routing
         include AutoRouting
         include StoredSquarePorts
         include FontSettings
+        include AssociationClass
         private_constant :Routing
-        private_constant :AutoRouting, :StoredSquarePorts, :FontSettings
+        private_constant :AutoRouting, :StoredSquarePorts, :FontSettings, :AssociationClass
 
         attr_reader :database
 
@@ -487,7 +489,8 @@ module Ea
           model = auto_port_elbow(model, link_row, diagram_row, geom, context)
           model = mark_default_square_ray(model, link_row, geom, context)
           model = restore_stored_square_ports(model, link_row, diagram_row, geom, context)
-          reversed_stored_corner(model, link_row, diagram_row, geom, context)
+          model = reversed_stored_corner(model, link_row, diagram_row, geom, context)
+          mark_association_class(model, connector, diagram_row)
         end
 
         # Ray origin for one connector end: the element's center

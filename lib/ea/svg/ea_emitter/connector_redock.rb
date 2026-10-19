@@ -19,6 +19,10 @@ module Ea
         # self-loop, or no drawn bounds for either end).
         def pairs_for(connector, diagram, model_index, bounds_map)
           return nil unless bounds_map
+
+          tether = association_class_pairs(connector, bounds_map)
+          return tether if tether
+
           points = waypoint_pairs(connector)
           lateral = lateral_tree?(connector, points)
           trunk = trunk_tree?(connector, points)
@@ -73,6 +77,42 @@ module Ea
           pairs = stored_top_pairs(connector, source, pairs)
           auto_port_elbow_pairs(connector, source, target, pairs)
         end
+
+        # A tether joins its saved association anchor to the facing
+        # side-center of the attached class, rather than to the other proxy.
+        def association_class_pairs(connector, bounds_map)
+          bounds = bounds_map[connector.style.to_h[:association_class_ref]]
+          anchor = connector.source_anchor
+          return nil unless bounds && anchor
+
+          [[anchor.x, anchor.y], association_class_dock(bounds, anchor)]
+        end
+        private_class_method :association_class_pairs
+
+        def association_class_dock(bounds, anchor)
+          center = association_class_center(bounds)
+          if horizontal_association_class?(bounds, anchor, center)
+            [association_class_edge_coordinate(bounds.x, bounds.width, anchor.x), center[1]]
+          else
+            [center[0], association_class_edge_coordinate(bounds.y, bounds.height, anchor.y)]
+          end
+        end
+        private_class_method :association_class_dock
+
+        def association_class_center(bounds)
+          [bounds.x + bounds.width / 2, bounds.y + bounds.height / 2]
+        end
+        private_class_method :association_class_center
+
+        def horizontal_association_class?(bounds, anchor, center)
+          (anchor.x - center[0]).abs * bounds.height > (anchor.y - center[1]).abs * bounds.width
+        end
+        private_class_method :horizontal_association_class?
+
+        def association_class_edge_coordinate(origin, size, anchor)
+          anchor > origin + size / 2 ? origin + size : origin
+        end
+        private_class_method :association_class_edge_coordinate
 
         # Auto routing turns at the clipped target column when the source
         # leaves a side edge and the target enters through its top or bottom.
