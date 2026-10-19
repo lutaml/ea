@@ -16,7 +16,7 @@ RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do
     end
 
     expect(connector.style[:lwidth]).to eq("0")
-    expect(diagram.elements.map(&:line_width)).to eq([0, 2])
+    expect(diagram.elements.map(&:line_width)).to eq([1, 2])
     expect(described_class.pairs_for(connector, diagram, document.index_by_id, bounds))
       .to eq([[310, 714], [449, 684]])
   end
