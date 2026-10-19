@@ -18,7 +18,7 @@ module Ea
 
           def self.render(tagged_values, bounds:, first_y:, family:, size:, fill: "#000000",
                           size_unit: "px", logical_height: nil)
-            line_h = size + 4
+            line_h = line_height(size, family, size_unit, logical_height)
             text_blocks = [build_text(bounds.x + centered_x_offset(bounds, size), first_y,
                                       HEADER_TEXT, family, size, fill,
                                       style: "italic", size_unit: size_unit, logical_height: logical_height)]
@@ -38,6 +38,14 @@ module Ea
                              style: style).to_svg
           end
           private_class_method :build_text
+
+          def self.line_height(size, family, size_unit, logical_height)
+            Ea::Fonts::Metrics.compartment_line_height(
+              size, family: family, unit: size_unit, logical_height: logical_height,
+                    offset: size_unit == "pt" ? 6 : 4
+            )
+          end
+          private_class_method :line_height
 
           # Center the "tags" header text within the bounds width.
           def self.centered_x_offset(bounds, size)

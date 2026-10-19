@@ -74,7 +74,7 @@ module Ea
         end
 
         def package_stereotype(context)
-          context.classifier.stereotype_refs.first.to_s
+          context.model_element.stereotype_refs.first.to_s
         end
 
         def record_drawn_bounds(element, context)
@@ -84,11 +84,11 @@ module Ea
           return unless raw
 
           width = context.bounds.width
-          if classifier_package?(context.classifier)
+          if classifier_package?(context.model_element)
             tab = Element::PackageShapeRenderer.autosized_tab_width(
-              label: context.classifier.name.to_s,
+              label: context.model_element.name.to_s,
               stereotype: package_stereotype(context),
-              size: context.size
+              size: context.size, family: context.family
             )
             width = [raw.width, tab + Element::PackageShapeRenderer::TAB_BODY_EXTRA].max
           end
@@ -704,7 +704,7 @@ module Ea
         end
 
         def font_resolver
-          @font_resolver ||= FontResolver.new(diagram, theme: theme)
+          @font_resolver ||= FontResolver.new(diagram, theme: theme, model_index: model_index)
         end
 
         def element_filter

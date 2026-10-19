@@ -185,25 +185,33 @@ module Ea
           end
 
           def body_width
-            [bounds.width, self.class.autosized_tab_width(label: label, stereotype: stereotype, size: size) + TAB_BODY_EXTRA].max
+            [bounds.width, autosized_tab_width + TAB_BODY_EXTRA].max
           end
 
           def tab_width
-            [body_width,
-             self.class.autosized_tab_width(label: label, stereotype: stereotype, size: size)].min
+            [body_width, autosized_tab_width].min
+          end
+
+          def autosized_tab_width
+            self.class.autosized_tab_width(
+              label: label, stereotype: stereotype, size: size, family: family
+            )
           end
 
           # Tab width fits the widest text line (stereotype or name)
           # plus padding, floored at EA's minimum tab width. The body
           # extends 15px past the tab on the right.
-          def self.autosized_tab_width(label:, stereotype:, size:)
-            lines = [label, stereotype && !stereotype.empty? ? "«#{stereotype}»" : nil].compact
-            widest = lines.map { |l| TextRenderer.estimate_width(l, size) }.max || 0
+          def self.autosized_tab_width(label:, stereotype:, size:, family: nil)
+            lines = [[label, 700]]
+            lines << ["«#{stereotype}»", 0] if stereotype && !stereotype.empty?
+            widest = lines.map do |text, weight|
+              TextRenderer.estimate_width(text, size, family: family, weight: weight)
+            end.max || 0
             [widest + TAB_NAME_EXTRA, DEFAULT_TAB_WIDTH].max.round
           end
 
-          def self.body_width_for(label:, stereotype:, size:)
-            autosized_tab_width(label: label, stereotype: stereotype, size: size) + TAB_BODY_EXTRA
+          def self.body_width_for(label:, stereotype:, size:, family: nil)
+            autosized_tab_width(label: label, stereotype: stereotype, size: size, family: family) + TAB_BODY_EXTRA
           end
 
         end

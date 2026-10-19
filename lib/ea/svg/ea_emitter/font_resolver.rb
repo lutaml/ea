@@ -23,10 +23,11 @@ module Ea
         # a use-default marker (see QEA DiagramBuilder.font_size_from).
         DEFAULT_ELEMENT_FONT_SIZE = 7
 
-        attr_reader :diagram, :theme
+        attr_reader :diagram, :theme, :model_index
 
-        def initialize(diagram, theme: nil)
+        def initialize(diagram, theme: nil, model_index: {})
           @diagram = diagram
+          @model_index = model_index
           @theme = theme || Ea::Theme::Registry.default
         end
 
@@ -84,7 +85,8 @@ module Ea
         end
 
         # Unthemed diagrams without a saved family use Cambria.
-        # Saved families still supply the diagram default.
+        # Saved classifier families still supply the diagram default.
+        # A note's explicit font belongs to its body, not sibling classifiers.
         def diagram_default_family
           families = element_families
           return FALLBACK_DEFAULT_FAMILY if families.empty?
@@ -102,7 +104,10 @@ module Ea
         end
 
         def element_families
-          (diagram.elements || []).map(&:font_family).compact.reject do |family|
+          placements = (diagram.elements || []).reject do |element|
+            model_index[element.model_element_ref].is_a?(Ea::Model::Note)
+          end
+          placements.map(&:font_family).compact.reject do |family|
             family.empty? || DEFAULT_MARKER_FAMILIES.include?(family)
           end
         end
