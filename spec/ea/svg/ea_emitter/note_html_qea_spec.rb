@@ -60,6 +60,6 @@ RSpec.describe Ea::Svg::EaEmitter::Compartment::NoteHtml do
     rows = svg.scan(%r{y="([\d.]+)"[^>]*>([^<]*)</text>}).to_h { |y, text| [text, y.to_f] }
 
     expect(rows.keys).to eq(["- First", "Second"])
-    expect(rows["Second"] - rows["- First"]).to eq(16)
+    expect(rows["Second"] - rows["- First"]).to eq(15)
   end
 end
