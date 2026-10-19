@@ -73,7 +73,7 @@ module Ea
               x: bounds.x + (context.theme.attribute_spec.content_x_offset || 26),
               y: y_pos,
               family: context.family, size: context.size,
-              size_unit: context.size_unit, fill: fill
+              size_unit: context.size_unit, logical_height: context.logical_height, fill: fill
             ).to_svg
           end
           module_function :line_text
@@ -86,7 +86,7 @@ module Ea
               x: x_pos,
               y: y_pos,
               family: context.family, size: context.size,
-              size_unit: context.size_unit, fill: fill,
+              size_unit: context.size_unit, logical_height: context.logical_height, fill: fill,
               style: "italic"
             ).to_svg
           end
