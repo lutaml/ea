@@ -81,13 +81,15 @@ module Ea
           # A Mode 2 Generalization whose stored Path is a horizontal jog
           # between vertically separated boxes that overlap in x is EA's
           # auto-route: one vertical ray at the overlap midpoint plus SX.
-          # The stored jog is stale; the ray docks on both 1px outlines.
+          # Empty Paths qualify only when both saved origins face the gap.
+          # The ray docks on both 1px outlines.
           def mode2_overlap_ray(model, link_row, diagram_row, geom, context)
             return model if context || !mode2_overlap_candidate?(model, link_row, geom)
 
             source, target = stored_ray_boxes(link_row, diagram_row)
             column = overlap_ray_coordinate(source.x, source.width, target.x, target.width, geom[:sx])
             return model unless column && vertical_separation?(source, target)
+            return model unless mode2_overlap_path?(link_row, source, target, geom, column)
 
             set_overlap_ray(model, column, source, target)
           end
@@ -104,8 +106,35 @@ module Ea
 
           def mode2_overlap_candidate?(model, link_row, geom)
             model.connector_type == "Generalization" && model.has_geometry_offsets &&
-              mode2_overlap_style?(model.style.to_h, geom) && model.waypoints.size == 4 &&
-              horizontal_jog?(intermediate_waypoints(link_row))
+              mode2_overlap_style?(model.style.to_h, geom) &&
+              ((model.waypoints.size == 2 && link_row.path.to_s.empty?) ||
+               (model.waypoints.size == 4 && horizontal_jog?(intermediate_waypoints(link_row))))
+          end
+
+          def mode2_overlap_path?(link_row, source, target, geom, column)
+            !link_row.path.to_s.empty? || mode2_facing_origins?(source, target, geom, column)
+          end
+
+          # Saved origins on the facing border or one pixel inside it identify
+          # the empty auto-route. Interior and external origins retain their ray.
+          def mode2_facing_origins?(source, target, geom, column)
+            return false unless geom.values_at(:sx, :sy, :ex, :ey).all?
+
+            origins = [stored_ray_origin(source, geom[:sx], geom[:sy]),
+                       stored_ray_origin(target, geom[:ex], geom[:ey])]
+            return false unless mode2_origins_share_column?(origins, source, column)
+
+            origins.zip([source, target], overlap_ray_ends(column, source, target)).all? do |origin, box, dock|
+              mode2_origin_on_face?(origin, box, dock[1])
+            end
+          end
+
+          def mode2_origin_on_face?(origin, box, outline_y)
+            inside_box?(origin, box) && (origin.y - outline_y).abs.between?(1, 2)
+          end
+
+          def mode2_origins_share_column?(origins, source, column)
+            origins.first.x == column && origins.last.x.between?(source.x, source.x + source.width)
           end
 
           def mode2_overlap_style?(style, geom)
