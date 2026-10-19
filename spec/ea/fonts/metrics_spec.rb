@@ -151,13 +151,13 @@ RSpec.describe Ea::Fonts::Metrics do
       expect(bold).to be > regular
     end
 
-    it "measures CJK glyphs at the nominal size, unscaled by style" do
+    it "measures unmeasured CJK glyphs at the nominal size, unscaled by style" do
       em = 7 * described_class::CJK_ADVANCE
-      expect(described_class.text_length("日本", 7, family: "Carlito"))
+      expect(described_class.text_length("日本", 7, family: "Arial"))
         .to be_within(0.01).of(2 * em)
-      expect(described_class.text_length("日本", 7, family: "Carlito",
+      expect(described_class.text_length("日本", 7, family: "Arial",
                                                   weight: "700"))
-        .to eq(described_class.text_length("日本", 7, family: "Carlito"))
+        .to eq(described_class.text_length("日本", 7, family: "Arial"))
     end
   end
 

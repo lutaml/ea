@@ -49,12 +49,13 @@ module Ea
           #   connector  - the DiagramConnector (for relationship lookup)
           #   end_kind   - :source or :target
           #   heading    - [dx, dy] of the first leg leaving the anchor
+          #   source_bounds - effective drawn source outline, in anchor coordinates
           #   bend       - first bend of a saved descending vertical stair
           #   stored_labels - the connector has stored label boxes at
           #                   either end; false keeps the opposite-end
           #                   fallback
           def texts(text_box:, mult_box:, anchor:, connector:, end_kind:,
-                    tree: false, heading: nil, stored_labels: false, bend: nil)
+                    tree: false, heading: nil, stored_labels: false, bend: nil, source_bounds: nil)
             from_property, role, mult = role_and_multiplicity(connector, end_kind)
             if role_empty?(role) && mult_empty?(mult)
               other_from_prop, other_role, other_mult = role_and_multiplicity(connector,
@@ -116,6 +117,9 @@ module Ea
             if end_kind == :source
               text_pos = source_top_property_role(connector, heading, anchor, text_box, role) ||
                          source_bottom_property_role(connector, heading, anchor, text_box, role) || text_pos
+              if external_upward_property_source?(connector, heading, anchor, text_box, source_bounds)
+                text_pos = external_upward_property_role(anchor, role) || text_pos
+              end
             end
 
             text_box = text_box.merge("alignment" => 1) if phantom_property_box?(connector, direction, text_box)
@@ -337,6 +341,43 @@ module Ea
             return nil unless source_top_property_route?(connector.style.to_h)
 
             source_property_seat(connector, :up, anchor, box, role)
+          end
+
+          # A persisted origin above the drawn source outline keeps the
+          # upward seat's inset and the shared upper baseline, including
+          # steep diagonals. Origins clipped onto the face retain -6.
+          def external_upward_property_role(anchor, role)
+            width = Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
+            return nil unless width
+
+            inset, = property_role_offsets(:up)
+            _, baseline = property_role_offsets(:left)
+            [[anchor[0] - inset - width, MIN_ROLE_X].max, anchor[1] + baseline]
+          end
+
+          def external_upward_property_source?(connector, heading, anchor, box, bounds)
+            upward_source_heading?(heading) &&
+              zero_source_property_box?(box) && cambria_box?(box) && source_property_cambria?(connector) &&
+              external_source_route?(connector, anchor) && above_source_outline?(anchor, bounds)
+          end
+
+          def upward_source_heading?(heading)
+            source_seat?(:source, heading) && heading[1].negative? && heading[1].abs > heading[0].abs
+          end
+
+          def external_source_route?(connector, anchor)
+            origin = connector.source_anchor
+            connector.connector_type == "Association" && connector.waypoints.size == 3 &&
+              connector.style.to_h.values_at(:mode, :lwidth, :tree) == ["3", "0", nil] &&
+              connector.label_boxes.to_h.values_at(:llt, :llb).all?(&:nil?) &&
+              origin && [origin.x, origin.y] == anchor
+          end
+
+          def above_source_outline?(anchor, bounds)
+            return false unless bounds&.width&.positive? && bounds.height.positive?
+
+            anchor[1] < bounds.y &&
+              anchor[0].between?(bounds.x, bounds.x + bounds.width)
           end
 
           def zero_source_property_box?(box)
