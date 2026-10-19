@@ -93,7 +93,8 @@ module Ea
             stereo = stereo.nil? || stereo.empty? ? nil : "«#{stereo}»"
             direction = leg_direction(end_kind, heading)
             if direction && !(tree && zero_offset?(text_box, mult_box))
-              text_pos = plain_vertical_role(connector, direction, anchor, text_box, role) ||
+              text_pos = plain_leftward_source_role(connector, direction, anchor, text_box, role) ||
+                         plain_vertical_role(connector, direction, anchor, text_box, role) ||
                          source_property_seat(connector, direction, anchor, text_box, role) ||
                          plain_upward_seat(connector, direction, anchor, text_box, role) ||
                          role_seat(direction, anchor, text_box, role) || text_pos
@@ -130,6 +131,16 @@ module Ea
           end
 
           private
+
+          def plain_leftward_source_role(connector, direction, anchor, box, role)
+            return nil unless direction == :left && seat_font? && cambria_box?(box) && !role_empty?(role)
+            return nil unless connector_source_dest_stereotype(connector, :source).to_s.empty?
+
+            PlainSourceSeat.position(
+              connector: connector, anchor: anchor, box: box,
+              width: Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
+            )
+          end
 
           def source_stair_positions(connector, anchor, text_box, mult_box, role)
             return nil unless seat_font? && cambria_box?(text_box) && cambria_box?(mult_box)

@@ -424,6 +424,16 @@ module Ea
           end
         end
 
+        # Preserve original Path absence: authored two-point paths can look
+        # identical after routing but retain their stored label offsets.
+        def mark_plain_source_seat(model, link_row, context)
+          return if context || !link_row.path.to_s.empty? || model.connector_type != "Aggregation"
+          return unless model.style.values_at(:mode, :lwidth, :tree) == ["3", "2", nil]
+          return unless model.source_stereotype.to_s.empty?
+
+          model.style[:plain_source_seat] = true
+        end
+
         def build_connector(link_row, diagram_row)
           connector = database.find_connector(link_row.connectorid)
           geom = parse_geometry_fields(link_row.geometry)
@@ -454,6 +464,7 @@ module Ea
             has_geometry_offsets: geometry_has_offsets?(link_row.geometry),
             is_substitutable: substitutable_connector?(connector)
           ), link_row, diagram_row, geom)
+          mark_plain_source_seat(model, link_row, context)
           model = collapse_partial_port_jog(model, link_row, diagram_row)
           model = correct_partial_port_origins(model, link_row, diagram_row, geom, context)
           model = direct_empty_path_ray(model, link_row, diagram_row, geom, context)
