@@ -92,7 +92,8 @@ module Ea
                              anchor: source_pt, connector: connector,
                              end_kind: :source, tree: tree && tree[:source],
                              heading: (stored_src || stored_labels) && source_heading(connector, points),
-                             stored_labels: stored_labels).each { |t| texts << t }
+                             stored_labels: stored_labels,
+                             source_bounds: source_dock_bounds(connector)).each { |t| texts << t }
           end_renderer.texts(text_box: tgt_tb,
                              mult_box: tgt_mb,
                              anchor: target_pt, connector: connector,
