@@ -112,6 +112,8 @@ module Ea
                          source_bottom_property_role(connector, heading, anchor, text_box, role) || text_pos
             end
 
+            text_box = text_box.merge("alignment" => 1) if phantom_property_box?(connector, direction, text_box)
+
             build_texts(role:, mult:, standalone:,
                         text_pos:, mult_pos:, stereo:, text_box:)
           end
@@ -194,8 +196,7 @@ module Ea
           # Property-role clusters use a direction-specific horizontal seat;
           # alignment controls the stereotype line within that cluster.
           def source_property_seat(connector, direction, anchor, box, role)
-            return nil unless %i[up left right down].include?(direction) && property_role_box?(box, direction)
-            return nil unless source_property_font?(connector, direction)
+            return nil unless source_property_seat?(connector, direction, box)
 
             width = Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
             return nil unless width
@@ -205,6 +206,22 @@ module Ea
             left = property_role_x(direction, x, inset + width)
             left = [left, MIN_ROLE_X].max if direction == :up
             [left, y + baseline]
+          end
+
+          def source_property_seat?(connector, direction, box)
+            phantom_property_box?(connector, direction, box) ||
+              (%i[up left right down].include?(direction) && property_role_box?(box, direction) &&
+                source_property_font?(connector, direction))
+          end
+
+          # Phantom outlines carry synthesized zero boxes without alignment.
+          # Their default Property cluster uses the directional seat with a
+          # centered stereotype; persisted or moved boxes keep their own seat.
+          def phantom_property_box?(connector, direction, box)
+            %i[up left].include?(direction) && seat_font? && cambria_box?(box) &&
+              box["alignment"].nil? && stored_offsets_zero?(box) &&
+              connector.style.to_h[:phantom_outline] == true &&
+              property_label?(connector, :source)
           end
 
           def property_role_x(direction, origin, offset)
