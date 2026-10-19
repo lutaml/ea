@@ -105,7 +105,11 @@ module Ea
           end
 
           def overlap_ray_style?(style, geom)
-            style[:mode] == "2" || (style[:mode] == "3" && style[:lwidth] == "0" && geom[:edge] == 2)
+            return true if style[:mode] == "2"
+
+            # All-zero offsets retain the default center ray.
+            style[:mode] == "3" && style[:lwidth] == "0" && geom[:edge] == 2 &&
+              geom.values_at(:sx, :sy, :ex, :ey).any? { |offset| offset.to_i.nonzero? }
           end
 
           def uniform_overlap_offsets?(geom)
