@@ -34,6 +34,9 @@ module Ea
           target_bounds = bounds_map[target_ref]
           return nil unless source_bounds && target_bounds
           return nil if source_ref == target_ref
+          if flush_overlap_ray?(connector)
+            return clipped_pairs([source_bounds, target_bounds], [connector.source_anchor, connector.target_anchor])
+          end
           return trunk_pairs(points, source_bounds, target_bounds, connector.style[:tree]) if trunk
 
           square = OrthogonalRay.pairs_for(connector, source_bounds, target_bounds)
@@ -240,9 +243,13 @@ module Ea
         end
         private_class_method :stroke_outline?
 
-        # The QEA builder marks the Mode 2 Association overlap rays it
-        # produced; EA docks them on the outer stroke edge whatever the
-        # line width. Naturally aligned centres keep the legacy docking.
+        # The builder certifies the empty flush route's shared row and nominal docks.
+        def flush_overlap_ray?(connector)
+          connector.connector_type == "Association" && connector.style.to_h[:flush_overlap_ray] == true
+        end
+        private_class_method :flush_overlap_ray?
+
+        # The QEA builder marks Mode 2 overlap rays for outer-stroke docking.
         def overlap_ray?(connector)
           connector.connector_type == "Association" && connector.style.to_h[:overlap_ray] == true
         end
@@ -429,6 +436,7 @@ module Ea
                             bounds_map, divider_y_by_ref)
           return nil unless bounds_map && divider_y_by_ref
           return nil unless pairs.size == 2
+          return nil if flush_overlap_ray?(connector)
           return nil if explicit_association_ray?(pairs, connector)
 
           rel = relationship_for(connector, model_index)

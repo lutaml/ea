@@ -34,13 +34,14 @@ module Ea
           # A Mode 2 Association with equal SX/EX (vertical EDGE 1/3) or
           # equal SY/EY (horizontal EDGE 2/4) and no custom Path docks as a
           # straight line through the middle of the boxes' overlap, moved
-          # by the shared stored offset. Stored SY counts upward.
+          # by the shared stored offset. Empty flush Mode 3 routes facing
+          # right use the same row. Stored SY counts upward.
           def overlap_ray_origins(model, link_row, diagram_row, geom, context)
             return model if context
             return model unless overlap_ray_candidate?(model, link_row, geom)
 
             source, target = stored_ray_boxes(link_row, diagram_row)
-            origins = overlap_origins(source, target, geom)
+            origins = overlap_origins(source, target, geom, model.style[:mode])
             return model unless origins && overlap_correction?(source, target, geom)
 
             model.source_anchor, model.target_anchor = origins.map do |ox, oy|
@@ -50,7 +51,18 @@ module Ea
               model.waypoints = port_waypoints(model, [model.source_anchor, model.target_anchor])
             end
             model.style[:overlap_ray] = true
+            flush_overlap_ports(model, source, target)
             model
+          end
+
+          def flush_overlap_ports(model, source, target)
+            return unless model.style[:mode] == "3"
+
+            row = model.source_anchor.y
+            model.source_port = Ea::Model::Point.new(x: source.x + source.width, y: row)
+            model.target_port = Ea::Model::Point.new(x: target.x, y: row)
+            model.waypoints = port_waypoints(model, [model.source_port, model.target_port])
+            model.style[:flush_overlap_ray] = true
           end
 
           # Aligned, zero-offset EDGE 2 routes already have their legacy docks.
@@ -61,7 +73,9 @@ module Ea
 
           # Both ray origins share the overlap coordinate on the axis the
           # offsets move and sit at each box's centre on the other axis.
-          def overlap_origins(source, target, geom)
+          def overlap_origins(source, target, geom, mode = nil)
+            return nil if mode == "3" && !source_row_faces_target?(source, target, geom[:edge])
+
             along, across, offset = overlap_axes(geom)
             coordinate = overlap_ray_coordinate(*box_span(source, along), *box_span(target, along), offset)
             return nil unless coordinate && disjoint_span?(*box_span(source, across), *box_span(target, across))
@@ -85,9 +99,13 @@ module Ea
           end
 
           def overlap_ray_candidate?(model, link_row, geom)
-            model.connector_type == "Association" && model.style[:mode] == "2" &&
+            model.connector_type == "Association" && overlap_ray_style?(model.style, geom) &&
               [2, 3].include?(model.waypoints.size) && link_row.path.to_s.empty? && !model.style[:tree] &&
               model.has_geometry_offsets && uniform_overlap_offsets?(geom)
+          end
+
+          def overlap_ray_style?(style, geom)
+            style[:mode] == "2" || (style[:mode] == "3" && style[:lwidth] == "0" && geom[:edge] == 2)
           end
 
           def uniform_overlap_offsets?(geom)
