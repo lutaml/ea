@@ -15,7 +15,7 @@ module Ea
                 context.bounds,
                 legend: context.model_element.legend,
                 family: context.family,
-                item_font: { size: context.element&.font_size&.nonzero?, unit: context.size_unit,
+                item_font: { size: legend_item_size(context), unit: context.size_unit,
                              logical_height: context.logical_height }
               )
             elsif context.model_element.is_a?(Ea::Model::Note)
@@ -53,6 +53,16 @@ module Ea
               )
             end
           end
+
+          def legend_item_size(context)
+            explicit = context.element&.font_size&.nonzero?
+            return explicit if explicit
+
+            # A saved zero requests the resolved default; missing metadata
+            # keeps the legend renderer's independent item default.
+            context.size if context.element&.style&.fetch(:fontsz, nil).to_s == "0"
+          end
+          private_class_method :legend_item_size
 
           # A Text element with LegendOpts= renders as the legend
           # block rather than a folder silhouette. Dispatch on the

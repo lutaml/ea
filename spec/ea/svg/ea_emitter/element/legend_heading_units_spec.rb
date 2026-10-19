@@ -8,14 +8,17 @@ RSpec.describe "Legend heading font units" do
   let(:document) { public_compartment_document }
 
   it "converts the saved pixel heading size to the native point size" do
-    %w[00C5C772-5A03-434f-BF30-AC37542A1AAC 09AF6B8A-557C-43bc-BBB0-47C1E9401EF3].each do |id|
+    {
+      "00C5C772-5A03-434f-BF30-AC37542A1AAC" => 7,
+      "09AF6B8A-557C-43bc-BBB0-47C1E9401EF3" => 9
+    }.each do |id, item_size|
       texts = compartment_texts(document, id)
       title = texts.find { |node| node.text == "凡例" }
       labels = texts.select { |node| node.text.include?("で定義されたクラス") }
 
       expect(title["style"]).to include("font-size:12pt")
       expect(labels.size).to eq(3)
-      expect(labels.map { |node| node["style"] }).to all(include("font-size:9pt"))
+      expect(labels.map { |node| node["style"] }).to all(include("font-size:#{item_size}pt"))
     end
   end
 
