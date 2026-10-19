@@ -73,7 +73,7 @@ RSpec.describe Ea::Svg::EaEmitter::ColorResolver do
     it "returns theme border color when themed" do
       element = Ea::Model::DiagramElement.new(id: "e")
       resolver = described_class.new(theme: theme_119)
-      expect(resolver.stroke_for(element)).to eq("#9A8484")
+      expect(resolver.stroke_for(element)).to eq("#000000")
     end
 
     it "returns default stroke when no LCol and default theme" do

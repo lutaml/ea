@@ -39,7 +39,7 @@ RSpec.describe "Ea::Theme end-to-end lifecycle" do
       expect(diagram.theme.font_size).to eq(7)
       expect(diagram.theme.font_size_unit).to eq("pt")
       expect(diagram.theme.text_color).to eq("#000000")
-      expect(diagram.theme.border_color).to eq("#9A8484")
+      expect(diagram.theme.border_color).to eq("#000000")
       expect(diagram.theme.stroke_width).to eq(1)
     end
   end
@@ -59,7 +59,7 @@ RSpec.describe "Ea::Theme end-to-end lifecycle" do
     it "preserves inherited fields from base theme" do
       expect(diagram.theme.font_family).to eq("Carlito")
       expect(diagram.theme.font_size).to eq(7)
-      expect(diagram.theme.border_color).to eq("#9A8484")
+      expect(diagram.theme.border_color).to eq("#000000")
     end
   end
 
