@@ -36,12 +36,14 @@ module Ea
             end
             ops = has_receptions ? operations : operations
             offset = has_receptions ? 1 : 0
+            content_x_offset = CONTENT_X_OFFSET + 2 * (size - 7)
+            content_x_offset -= 1 if Ea::Fonts::Metrics.compact_compartment_font?(size, family: family, unit: size_unit)
             ops.each_with_index do |op, idx|
               y = first_y + ((idx + offset) * line_h)
               text_blocks << build_text(bounds.x + VISIBILITY_X_OFFSET, y,
                                         visibility_prefix(op), family, size, size_unit, logical_height: logical_height)
               text = operation_text(op, parameter_detail: parameter_detail)
-              text_blocks << build_text(bounds.x + AttributeRenderer.content_x_offset(size), y,
+              text_blocks << build_text(bounds.x + content_x_offset, y,
                                         text, family, size, size_unit, logical_height: logical_height)
             end
             %(<g style="#{Style::TEXT_GROUP}">\n#{text_blocks.join("\n")}\n</g>)
