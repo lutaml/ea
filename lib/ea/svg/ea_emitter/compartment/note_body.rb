@@ -72,29 +72,50 @@ module Ea
           end
           module_function :vertical_layout
 
-          # Wrap at whitespace until native script-specific break metrics are
-          # established. Every word but the paragraph's last carries its
-          # trailing space into the fit test.
+          # Break at whitespace and between a CJK character and its
+          # neighbours. Every atom but the paragraph's last carries a
+          # following space, when the source has one, into the fit test.
           def wrap_paragraph(para, usable, size, family, logical_height: nil)
             lines = []
             current = ""
-            words = para.strip.split(/\s+/)
-            words.each_with_index do |word, index|
-              candidate = current.empty? ? word : "#{current} #{word}"
-              trailing = index < words.size - 1 ? " " : ""
-              width = TextRenderer.estimate_width("#{candidate}#{trailing}", size, nil,
-                                                  family: family, logical_height: logical_height).round
-              if current.empty? || width <= usable
+            atoms = break_atoms(para)
+            atoms.each_with_index do |atom, index|
+              candidate = current.empty? ? atom[:text] : "#{current}#{atom[:space]}#{atom[:text]}"
+              measured = "#{candidate}#{atoms.dig(index + 1, :space)}"
+              if current.empty? || fit_width(measured, size, family, logical_height) <= usable
                 current = candidate
               else
                 lines << current
-                current = word
+                current = atom[:text]
               end
             end
             lines << current unless current.empty?
             lines
           end
           module_function :wrap_paragraph
+
+          def fit_width(text, size, family, logical_height)
+            TextRenderer.estimate_width(text, size, nil, family: family, logical_height: logical_height).round
+          end
+          module_function :fit_width
+
+          # Unbreakable runs of text with the space that precedes each one.
+          def break_atoms(text)
+            words = text.split(/\s+/).reject(&:empty?)
+            words.each_with_index.flat_map { |word, index| word_atoms(word, index.positive? ? " " : "") }
+          end
+          module_function :break_atoms
+
+          def word_atoms(word, space)
+            runs = word.chars.slice_when { |a, b| cjk_char?(a) || cjk_char?(b) }.map(&:join)
+            runs.each_with_index.map { |run, i| { text: run, space: i.zero? ? space : "" } }
+          end
+          module_function :word_atoms
+
+          def cjk_char?(char)
+            Ea::Fonts::Metrics.cjk?(char.ord)
+          end
+          module_function :cjk_char?
 
           def group_style(context)
             "stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; " \

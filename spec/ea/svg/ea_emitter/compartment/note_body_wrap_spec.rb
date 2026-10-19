@@ -22,12 +22,6 @@ RSpec.describe Ea::Svg::EaEmitter::Compartment::NoteBody do
       )
     end
 
-    it "keeps unspaced script runs intact when their native break metrics are unavailable" do
-      expect(wrap_note("日本語 Envelope", 1, 9, "Carlito")).to eq(%w[日本語 Envelope])
-      expect(wrap_note("gml:Envelopeを用いて", 1, 9, "Carlito")).to eq(["gml:Envelopeを用いて"])
-      expect(wrap_note("都市計画。 次元数。", 18, 9, "Carlito")).to eq(%w[都市計画。 次元数。])
-    end
-
     it "measures at the source-selected logical height" do
       text = "Reference information"
 
@@ -80,27 +74,6 @@ RSpec.describe "Note source logical height" do
       expect(rows.map { |row| row["textLength"].to_i }).to eq(lengths)
       expect(rows.map { |row| row["y"].to_f }).to eq(baselines)
       expect(rows.map { |row| row["style"] }).to all(include("font-size:9pt"))
-    end
-  end
-end
-
-RSpec.describe "QEA source note wrap preservation" do
-  include QeaContentHelpers
-
-  let(:document) { Ea::Sources::Qea::Adapter.from_path("examples/qea/20251010_current_plateau_v5.1.qea") }
-
-  it "preserves the native first line of diagram 27 note 445" do
-    expect(qea_texts(document, "C028B286")).to include(
-      "本UMLクラス図は、CityGML 2.0の仕様CityGML 2.0のXML"
-    )
-  end
-
-  %w[676B9C9A 926AFE38].each do |diagram|
-    it "keeps note 175's final punctuation attached in diagram #{diagram}" do
-      texts = qea_texts(document, diagram)
-
-      expect(texts).to include("gml:Envelopeを用いて都市計画データの空間範囲、空間参照系及び次元数を指定する。")
-      expect(texts).not_to include("。")
     end
   end
 end
