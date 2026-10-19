@@ -272,7 +272,7 @@ module Ea
             model_element: model_element,
             classifier: classifier,
             fill: resolve_fill(element, classifier),
-            stroke: resolve_stroke,
+            stroke: resolve_stroke(element),
             stroke_width: resolve_stroke_width(element),
             text_fill: theme.text_color,
             family: family, size: size, size_unit: size_unit, logical_height: logical_height,
@@ -665,8 +665,8 @@ module Ea
           color_resolver.fill_for(element, classifier)
         end
 
-        def resolve_stroke
-          color_resolver.stroke_for(nil)
+        def resolve_stroke(element)
+          color_resolver.stroke_for(element)
         end
 
         def resolve_stroke_width(element)
