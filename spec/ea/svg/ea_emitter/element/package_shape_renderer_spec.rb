@@ -92,7 +92,7 @@ RSpec.describe Ea::Svg::EaEmitter::Element::PackageShapeRenderer do
     expect(nodes.css("text").map { |text| [text["x"], text["y"]] })
       .to eq([["40.00", "73.00"]])
     expect(nodes.css("polygon").map { |polygon| polygon["points"] })
-      .to eq(["35 80 169 80 169 234 35 234 35 80",
-              "35 60 140 60 140 80 35 80 35 60"])
+      .to eq(["35 79 169 79 169 234 35 234 35 79",
+              "35 60 140 60 140 79 35 79 35 60"])
   end
 end

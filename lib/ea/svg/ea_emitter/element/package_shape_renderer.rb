@@ -10,13 +10,12 @@ module Ea
         # type.
         #
         # Layout (element bounds cover tab + body together; the tab
-        # occupies the TOP of the stored rect — corpus-verified
-        # against EA-published package polygons, single tab 20px and
-        # stereotype tab 36px, both inside):
+        # occupies the TOP of the stored rect, with its height adjusted
+        # by the font line height for each header row):
         #
         #   ┌───┐
-        #   │tab│   ← top TAB_HEIGHT rows of the bounds;
-        #   │   │     36px when a stereotype is present
+        #   │tab│   ← one name row, or two rows with a stereotype
+        #   │   │
         #   ├───┴──────────┐
         #   │               │  the name renders bold, left-aligned;
         #   │     body      │  the body always starts where the
@@ -148,7 +147,11 @@ module Ea
           end
 
           def tab_height
-            has_stereotype? ? TAB_HEIGHT_DOUBLE : TAB_HEIGHT_SINGLE
+            nominal_height = has_stereotype? ? TAB_HEIGHT_DOUBLE : TAB_HEIGHT_SINGLE
+            rows = has_stereotype? ? 2 : 1
+            # Preserve the nominal padding while each row follows the same
+            # font line height used to place the package header text.
+            nominal_height + rows * (tab_line_height - TAB_LABEL_Y_OFFSET)
           end
 
           def body_points
