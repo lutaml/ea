@@ -11,55 +11,70 @@ module Ea
         # the left edge from text-width approximation since SVG text
         # x= is the start position, not the center).
         class HeaderRenderer
+          HeaderLine = Struct.new(:text, :style, :x, :y, :text_length,
+                                  :weight, :font_style, keyword_init: true)
+
           def self.render(lines, bounds:, first_y:, family:,
                           size:, size_unit: "pt", logical_height: nil,
                           fill: "#000000", weight_normal: 400, weight_bold: 700,
                           stroke_in_text: "#000000", width_factor: 0.612,
                           line_offset: 6)
             logical_height = nil unless size_unit == "pt"
-            line_h = Ea::Fonts::Metrics.compartment_line_height(
-              size, family: family, unit: size_unit, offset: line_offset, logical_height: logical_height
+            layout = line_layout(
+              lines, bounds: bounds, first_y: first_y, family: family,
+                     size: size, size_unit: size_unit, logical_height: logical_height,
+                     weight_normal: weight_normal, weight_bold: weight_bold,
+                     width_factor: width_factor, line_offset: line_offset
             )
-            ghost_shift = HeaderLines.parent_ghost_gap(lines)
-            text_blocks = lines.each_with_index.map do |(text, style), idx|
-              weight = case style
-                       when :bold, :bold_italic then weight_bold
-                       else weight_normal
-                       end
-              font_style = %i[italic italic_tight bold_italic].include?(style) ? "italic" : "normal"
-              y = first_y + (idx * line_h) +
-                  (idx >= 1 && ghost_shift.positive? ? ghost_shift : 0)
-              x = if %i[italic italic_tight].include?(style)
-                    # Parent ghosts end 3px inside the box's right edge.
-                    bounds.x + bounds.width - 3 -
-                      Ea::Svg::EaEmitter::TextRenderer.estimate_width(
-                        text, size, width_factor,
-                        family: family, weight: weight, style: font_style, logical_height: logical_height
-                      ).round
-                  else
-                    center_x_for(text, bounds, size, width_factor,
-                                 family: family, weight: weight,
-                                 style: font_style, logical_height: logical_height)
-                  end
+            text_blocks = layout.map do |line|
               TextRenderer.new(
-                content: text,
-                x: x, y: y,
+                content: line.text,
+                x: line.x, y: line.y,
                 family: family, size: size, size_unit: size_unit, logical_height: logical_height,
-                weight: weight, style: font_style, fill: fill,
-                stroke_in_text: stroke_in_text, width_factor: width_factor
+                weight: line.weight, style: line.font_style, fill: fill,
+                stroke_in_text: stroke_in_text, width_factor: width_factor,
+                text_length: line.text_length
               ).to_svg
             end
             %(<g style="#{Style::TEXT_GROUP}">\n#{text_blocks.join("\n")}\n</g>)
           end
 
+          # Returns the exact integer placement and width used for each
+          # emitted header line so dependent compartments can align to it.
+          def self.line_layout(lines, bounds:, first_y:, family:, size:,
+                               size_unit: "pt", logical_height: nil,
+                               weight_normal: 400, weight_bold: 700,
+                               width_factor: 0.612, line_offset: 6)
+            logical_height = nil unless size_unit == "pt"
+            line_h = Ea::Fonts::Metrics.compartment_line_height(
+              size, family: family, unit: size_unit, offset: line_offset,
+                    logical_height: logical_height
+            )
+            ghost_shift = HeaderLines.parent_ghost_gap(lines)
+            lines.each_with_index.map do |(text, style), idx|
+              weight = %i[bold bold_italic].include?(style) ? weight_bold : weight_normal
+              font_style = %i[italic italic_tight bold_italic].include?(style) ? "italic" : "normal"
+              text_length = TextRenderer.estimate_width(
+                text, size, width_factor, family: family, weight: weight,
+                                          style: font_style, logical_height: logical_height
+              ).round
+              y = first_y + (idx * line_h) +
+                  (idx >= 1 && ghost_shift.positive? ? ghost_shift : 0)
+              x = if %i[italic italic_tight].include?(style)
+                    bounds.x + bounds.width - 3 - text_length
+                  else
+                    center_x_for(text_length, bounds)
+                  end
+              HeaderLine.new(text: text, style: style, x: x, y: y,
+                             text_length: text_length, weight: weight,
+                             font_style: font_style)
+            end
+          end
+
           # EA centers text by its INTEGER textLength and floors the
           # resulting x (verified exact against EA-published SVGs).
-          def self.center_x_for(text, bounds, size, width_factor,
-                                family: nil, weight: nil, style: nil, logical_height: nil)
-            len = Ea::Svg::EaEmitter::TextRenderer.estimate_width(
-              text, size, width_factor, family: family, weight: weight, style: style, logical_height: logical_height
-            ).round
-            (bounds.x + (bounds.width - len) / 2.0).floor
+          def self.center_x_for(text_length, bounds)
+            (bounds.x + (bounds.width - text_length) / 2.0).floor
           end
           private_class_method :center_x_for
         end

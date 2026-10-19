@@ -14,6 +14,7 @@ module Ea
           ROW_HEIGHT = 16
           ICON_X_OFFSET = 5
           TEXT_X_OFFSET = 23
+          FIRST_BASELINE_OFFSET = 15
 
           module_function
 
@@ -22,7 +23,7 @@ module Ea
             return nil if rows.nil? || rows.empty?
 
             bounds = context.bounds
-            first_y = context.geometry.attr_first_y
+            first_y = first_baseline(context)
             blocks = rows.each_with_index.flat_map do |row, idx|
               y_top = first_y - 11 + (idx * ROW_HEIGHT)
               y_text = first_y + (idx * ROW_HEIGHT)
@@ -33,6 +34,14 @@ module Ea
             end
             wrap_group(blocks.join("\n"))
           end
+
+          def first_baseline(context)
+            context.bounds.y + Element::PackageShapeRenderer.tab_height_for(
+              stereotype: Shape.package_stereotype(context.model_element),
+              family: context.family, size: context.size, size_unit: context.size_unit
+            ) + FIRST_BASELINE_OFFSET
+          end
+          private_class_method :first_baseline
 
           def wrap_group(body)
             %(<g style="#{group_style}">\n#{body}\n</g>)

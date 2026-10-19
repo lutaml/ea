@@ -45,6 +45,21 @@ module Ea
                 family, size, size_unit, text_fill).to_svg
           end
 
+          def self.tab_height_for(stereotype:, family:, size:, size_unit: "pt")
+            rows = stereotype && !stereotype.empty? ? 2 : 1
+            nominal_height = rows == 2 ? TAB_HEIGHT_DOUBLE : TAB_HEIGHT_SINGLE
+            line_height = if size_unit == "pt"
+                            Ea::Fonts::Metrics.compartment_line_height(
+                              size, family: family, unit: size_unit, offset: TAB_TEXT_PADDING
+                            )
+                          else
+                            TAB_LABEL_Y_OFFSET
+                          end
+            # Preserve the nominal padding while each row follows the same
+            # font line height used to place the package header text.
+            nominal_height + rows * (line_height - TAB_LABEL_Y_OFFSET)
+          end
+
           def initialize(bounds, fill, stroke, stroke_width, label,
                          stereotype, family, size, size_unit, text_fill)
             @bounds = bounds
@@ -147,11 +162,8 @@ module Ea
           end
 
           def tab_height
-            nominal_height = has_stereotype? ? TAB_HEIGHT_DOUBLE : TAB_HEIGHT_SINGLE
-            rows = has_stereotype? ? 2 : 1
-            # Preserve the nominal padding while each row follows the same
-            # font line height used to place the package header text.
-            nominal_height + rows * (tab_line_height - TAB_LABEL_Y_OFFSET)
+            self.class.tab_height_for(stereotype: stereotype, family: family,
+                                      size: size, size_unit: size_unit)
           end
 
           def body_points
