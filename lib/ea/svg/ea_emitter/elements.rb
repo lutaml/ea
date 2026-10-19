@@ -316,8 +316,7 @@ module Ea
                                   size_unit: size_unit, logical_height: logical_height,
                                    header_ghost: header_lines.any? &&
                                                   %i[italic italic_tight].include?(header_lines.first.last),
-                                   header_ghost_tight: header_lines.any? &&
-                                                       header_lines.first.last == :italic_tight,
+                                   header_ghost_tight: Element::HeaderLines.parent_ghost_gap(header_lines) == 3,
                                    header_lines_count: header_lines.size,
                                    attr_lines_count: attr_lines.size,
                                    op_lines_count: op_lines.size,
