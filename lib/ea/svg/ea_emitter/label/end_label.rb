@@ -408,7 +408,8 @@ module Ea
           end
 
           def horizontal_target_property_route?(style)
-            style.values_at(:mode, :lwidth) == %w[3 2] && [nil, "LH"].include?(style[:tree])
+            style.values_at(:mode, :lwidth, :tree) == ["3", "0", nil] ||
+              (style.values_at(:mode, :lwidth) == %w[3 2] && [nil, "LH"].include?(style[:tree]))
           end
 
           # An upward target uses the downward property's right edge and
