@@ -125,13 +125,22 @@ module Ea
         # Unknown faces retain the stored-upward fallback.
         def source_heading(connector, points)
           heading = leg_heading(points)
-          return heading unless points.size == 2 && heading.none?(&:zero?)
+          return heading unless heading.none?(&:zero?) && source_face_route?(connector, points)
 
           box = source_dock_bounds(connector)
           face = box && source_dock_heading(connector, points.first, box)
           return face if face && face_leads_leg?(connector, face, heading, box)
 
           stored_upward_heading(connector, heading)
+        end
+
+        # Explicit source boxes preserve the heading of a manual bend. An
+        # omitted source box uses the same dock seat as a straight route.
+        def source_face_route?(connector, points)
+          return true if points.size == 2
+
+          boxes = connector.label_boxes || {}
+          end_boxes(boxes, :llt, :llb).nil? && !end_boxes(boxes, :lrt, :lrb).nil?
         end
 
         # A target dock that clips an axis-aligned stored leg into a slight
