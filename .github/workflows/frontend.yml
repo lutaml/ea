@@ -1,47 +1,35 @@
-name: Frontend build check
-
+name: Windows font diagnostic (never merge)
+run-name: Windows GDI font diagnostic
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'frontend/**'
-      - '.github/workflows/frontend.yml'
-  pull_request:
-    paths:
-      - 'frontend/**'
-      - '.github/workflows/frontend.yml'
   workflow_dispatch:
-
 permissions:
   contents: read
-
 jobs:
-  build-check:
-    runs-on: ubuntu-latest
+  measure:
+    runs-on: windows-2022
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: frontend/package-lock.json
-
-      - name: Install
-        working-directory: frontend
-        run: npm ci
-
-      - name: Build
-        working-directory: frontend
-        run: npm run build
-
-      - name: Dist matches committed
+      - name: Install Japanese supplemental fonts
+        shell: pwsh
         run: |
-          # `npm run build` rewrites dist/. If anything differs from
-          # what's committed, ask the contributor to rebuild and
-          # commit dist/ as part of the same PR.
-          if ! git diff --exit-code --stat frontend/dist; then
-            echo "::error::frontend/dist/ is out of date. Run 'cd frontend && npm install && npm run build' and commit the result."
-            git diff --stat frontend/dist
-            exit 1
-          fi
+          $ErrorActionPreference = 'Stop'
+          New-Item -ItemType Directory -Force diagnostics/windows-fonts/results | Out-Null
+          $capability = Get-WindowsCapability -Online -Name 'Language.Fonts.Jpan~~~und-JPAN~0.0.1.0'
+          $capability | ConvertTo-Json | Set-Content diagnostics/windows-fonts/results/capability-before.json
+          if ($capability.State -ne 'Installed') {
+            Add-WindowsCapability -Online -Name $capability.Name | ConvertTo-Json | Set-Content diagnostics/windows-fonts/results/capability-install.json
+          }
+          $after = Get-WindowsCapability -Online -Name $capability.Name
+          $after | ConvertTo-Json | Set-Content diagnostics/windows-fonts/results/capability-after.json
+          if ($after.State -ne 'Installed') { throw 'Japanese supplemental fonts unavailable' }
+      - name: Compile and measure GDI fonts
+        shell: pwsh
+        run: ./diagnostics/windows-fonts/Measure-Fonts.ps1
+      - name: Upload numbers and metadata only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-gdi-font-measurements
+          path: diagnostics/windows-fonts/results/*.json
+          if-no-files-found: error
