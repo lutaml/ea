@@ -28,7 +28,7 @@ RSpec.describe "QEA notes with HTML markup" do
     paragraphs = Ea::Svg::EaEmitter::Compartment::NoteHtml.paragraphs("First line\r\nSecond <not tags")
 
     expect(paragraphs.map { |paragraph| paragraph.text.strip }).to eq(["First line", "Second <not tags"])
-    expect(paragraphs.map(&:tight)).to eq([false, false])
+    expect(paragraphs.map(&:gap)).to eq([0, 0])
   end
 end
 
@@ -37,14 +37,14 @@ RSpec.describe Ea::Svg::EaEmitter::Compartment::NoteHtml do
     paragraphs = described_class.paragraphs("First<br>Second<br/>Third\nNext")
 
     expect(paragraphs.map(&:text)).to eq(%w[First Second Third Next])
-    expect(paragraphs.map(&:tight)).to eq([true, true, false, false])
+    expect(paragraphs.map(&:gap)).to eq([0, 0, 0, 0])
   end
 
   it "bullets only the first segment of a list item broken by <br>" do
     paragraphs = described_class.paragraphs("<ul>\n<li>First<br>Second</li>\n<li>Next</li>\n</ul>")
 
     expect(paragraphs.map(&:text)).to eq(["- First", "Second", "- Next"])
-    expect(paragraphs.map(&:tight)).to eq([true, true, false])
+    expect(paragraphs.map(&:gap)).to eq([0, 0, 0])
   end
 
   it "emits the segments of a <br> note on consecutive rows" do

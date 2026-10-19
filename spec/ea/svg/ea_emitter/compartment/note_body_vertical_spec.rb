@@ -26,7 +26,7 @@ module NoteVerticalHelpers
   def note_rows(family:, size:, logical_height: nil)
     context = Ea::Svg::EaEmitter::RenderContext.new(
       bounds: Ea::Model::Bounds.new(x: 10, y: 100, width: 400, height: 200),
-      model_element: Ea::Model::Note.new(id: "N1", body: "First\nSecond"),
+      model_element: Ea::Model::Note.new(id: "N1", body: "First\n\nSecond"),
       family: family, size: size, size_unit: "pt", logical_height: logical_height,
       theme: Ea::Theme::Registry.default
     )
@@ -72,7 +72,7 @@ RSpec.describe "Note first baseline and line pitch" do
       first, second = note_rows(family: family, size: size, logical_height: height)
 
       expect(first).to eq(offset)
-      expect(second - first).to eq(pitch * 2) # "\n" adds one blank pitch row
+      expect(second - first).to eq(pitch * 2) # an empty line adds one blank pitch row
     end
   end
 end

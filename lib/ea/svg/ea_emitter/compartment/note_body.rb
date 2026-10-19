@@ -31,7 +31,7 @@ module Ea
             # of the note font and the first baseline sits TEXT_TOP
             # plus the cell ascent below the top; fonts without
             # vertical data keep pitch size+7 and offset size+9. Each
-            # paragraph break adds one blank pitch row.
+            # empty source line adds one blank pitch row.
             usable = context.bounds.width - 4
             size = context.size
             family = context.family
@@ -55,7 +55,7 @@ module Ea
                   width_factor: context.theme.text_width_factor
                 ).to_svg
               end
-              y_index += lines.size + (para.tight ? 0 : 1)
+              y_index += lines.size + para.gap
               paragraph_svg
             end
           end
