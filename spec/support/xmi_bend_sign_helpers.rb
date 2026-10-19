@@ -19,12 +19,14 @@ module XmiBendSignHelpers
   end
 
   # Native SVG element rects anchor the canvas: the shift between a model
-  # element's bounds and the native <rect> of identical size.
+  # element's bounds and the unique native <rect> of identical size.
   def native_shift(diagram_guid, element_guid)
     _doc, diagram = plateau_xmi_diagram(diagram_guid)
     bounds = diagram.elements.find { |e| e.id.to_s.upcase.end_with?(element_guid.tr("-", "_").upcase) }.bounds
-    rect = native_rects(diagram.id).find { |r| r.values_at(2, 3) == [bounds.width, bounds.height] }
-    [rect[0] - bounds.x, rect[1] - bounds.y]
+    rects = native_rects(diagram.id).select { |r| r.values_at(2, 3) == [bounds.width, bounds.height] }
+    raise "native rect for #{element_guid} is not unique (#{rects.size})" unless rects.one?
+
+    [rects.first[0] - bounds.x, rects.first[1] - bounds.y]
   end
 
   def native_rects(diagram_id)

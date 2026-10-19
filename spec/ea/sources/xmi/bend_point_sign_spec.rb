@@ -45,7 +45,7 @@ RSpec.describe "XMI connector bend point sign" do
       points = xmi_connector_points(diagram, "{A6B31A84-81F1-491b-930F-2019375C00B1}")
       dx, dy = native_shift(diagram, "6F915D44_6B5C_4298_891D_0FB0B1AF24F0")
 
-      expect(dx).to eq(native_shift(diagram, "E66C1C01_AE82_4fc8_ACB5_0C3541A6240A")[0])
+      expect(native_shift(diagram, "E66C1C01_AE82_4fc8_ACB5_0C3541A6240A")).to eq([dx, dy])
       expect(points[1...-1].map { |x, y| [x + dx, y + dy] }).to eq([[241, 321], [463, 321]])
     end
 
