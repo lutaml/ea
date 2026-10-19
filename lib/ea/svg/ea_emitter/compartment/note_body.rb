@@ -57,52 +57,29 @@ module Ea
             end
           end
 
-          # A line breaks between words and beside any CJK character; a
-          # run of other characters never splits. Every word but the
-          # paragraph's last carries its trailing space into the fit test.
+          # Wrap at whitespace until native script-specific break metrics are
+          # established. Every word but the paragraph's last carries its
+          # trailing space into the fit test.
           def wrap_paragraph(para, usable, size, family, logical_height: nil)
             lines = []
             current = ""
-            break_pieces(para.strip.split(/\s+/)).each do |piece|
-              candidate = current.empty? ? piece.text : "#{current}#{piece.glue}#{piece.text}"
-              width = TextRenderer.estimate_width("#{candidate}#{piece.trailing}", size, nil,
+            words = para.strip.split(/\s+/)
+            words.each_with_index do |word, index|
+              candidate = current.empty? ? word : "#{current} #{word}"
+              trailing = index < words.size - 1 ? " " : ""
+              width = TextRenderer.estimate_width("#{candidate}#{trailing}", size, nil,
                                                   family: family, logical_height: logical_height).round
               if current.empty? || width <= usable
                 current = candidate
               else
                 lines << current
-                current = piece.text
+                current = word
               end
             end
             lines << current unless current.empty?
             lines
           end
           module_function :wrap_paragraph
-
-          Piece = Struct.new(:text, :glue, :trailing)
-
-          def break_pieces(words)
-            words.each_with_index.flat_map do |word, word_index|
-              units = units_of(word)
-              units.each_with_index.map do |unit, unit_index|
-                Piece.new(unit,
-                          unit_index.zero? && word_index.positive? ? " " : "",
-                          unit_index == units.size - 1 && word_index < words.size - 1 ? " " : "")
-              end
-            end
-          end
-          module_function :break_pieces
-
-          # Single CJK characters and the runs of other characters between.
-          def units_of(text)
-            text.each_char.chunk_while { |a, b| !cjk?(a) && !cjk?(b) }.map(&:join)
-          end
-          module_function :units_of
-
-          def cjk?(char)
-            Ea::Fonts::Metrics.cjk?(char.ord)
-          end
-          module_function :cjk?
 
           def group_style(context)
             "stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; " \
