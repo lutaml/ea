@@ -11,7 +11,8 @@ module LabelDownAlignmentHelpers
 
   def down_alignment_controls
     [{ style: { mode: "3", lwidth: "2", stored_association_ray: true } },
-     { style: { mode: "3", lwidth: "2", tree: "V" } }, { style: { mode: "3", lwidth: "0" } }, { family: "Carlito" }, { stereotype: nil },
+     { style: { mode: "3", lwidth: "2", tree: "V" } },
+     { style: { mode: "3", lwidth: "0" } }, { family: "Carlito" }, { stereotype: nil },
      { box: { "ox" => 0, "oy" => 0, "alignment" => 0 } }]
   end
 
