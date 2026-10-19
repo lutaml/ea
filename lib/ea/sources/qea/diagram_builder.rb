@@ -145,6 +145,7 @@ module Ea
             font_underline: truthy?(style_hash[:ul]),
             show_tagged_values: truthy?(style_hash[:tag]),
             line_width: effective_line_width(obj_row, style_hash),
+            line_color: effective_line_color(obj_row, style_hash),
             background_color: style_hash[:bcol]&.to_i
           )
         end
@@ -157,6 +158,17 @@ module Ea
 
             width = raw.to_i
             return width if width >= 0
+          end
+          nil
+        end
+
+        def effective_line_color(obj_row, style)
+          object = database.find_object(obj_row.ea_object_id)
+          [style[:lcol], object&.bordercolor].each do |raw|
+            next if raw.nil? || raw.to_s.empty?
+
+            color = raw.to_i
+            return color if color >= 0
           end
           nil
         end
@@ -452,7 +464,8 @@ module Ea
           model = overlap_ray_origins(model, link_row, diagram_row, geom, context)
           model = auto_port_elbow(model, link_row, diagram_row, geom, context)
           model = mark_default_square_ray(model, link_row, geom, context)
-          restore_stored_square_ports(model, link_row, diagram_row, geom, context)
+          model = restore_stored_square_ports(model, link_row, diagram_row, geom, context)
+          reversed_stored_corner(model, link_row, diagram_row, geom, context)
         end
 
         # Ray origin for one connector end: the element's center
