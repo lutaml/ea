@@ -25,6 +25,14 @@ RSpec.describe "Phantom source Property label preservation" do
   let(:box) { { "ox" => 0, "oy" => 0 } }
   let(:style) { { phantom_outline: true } }
 
+  it "preserves the target Property cluster when the source also has Property labels" do
+    positions = upward_property_positions({ role: "lod4Geometry", anchor: [152, 650], box: box },
+                                          style: style, end_kind: :target, target_stereotype: "property",
+                                          heading: [0, -1], mult_box: box)
+
+    expect(positions).to eq("+lod4Geometry" => [152, 650], "«property»" => [152, 662], "0..1" => [160, 643])
+  end
+
   it "preserves moved, styled, explicitly aligned and unflagged boxes" do
     [
       [{ "ox" => 9, "oy" => 2 }, style, [161, 648], [161, 660]],
