@@ -385,9 +385,9 @@ module Ea
           w2_x = back_x - (-uy) * TRI_HALF_BASE
           w2_y = back_y - ux * TRI_HALF_BASE
           pts = [
-            Canvas.coord(tx), Canvas.coord(ty),
-            Canvas.coord(w1_x), Canvas.coord(w1_y),
-            Canvas.coord(w2_x), Canvas.coord(w2_y)
+            Canvas.coord(tx.round), Canvas.coord(ty.round),
+            Canvas.coord(w1_x.round), Canvas.coord(w1_y.round),
+            Canvas.coord(w2_x.round), Canvas.coord(w2_y.round)
           ].join(" ")
           %(<polygon points="#{pts}" shape-rendering="auto"   style="fill-rule:evenodd;"/>)
         end

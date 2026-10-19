@@ -21,18 +21,23 @@ end
 RSpec.describe Ea::Svg::EaEmitter::Markers do
   include_context "native triangle dimensions"
 
-  it "keeps the native 16-unit depth and 12-unit base in every orientation" do
-    [[100, 0], [-100, 0], [0, 100], [0, -100], [100, 100], [-100, -100]].each do |base|
+  it "keeps native whole-pixel vertices at each triangle orientation" do
+    {
+      [100, 0] => [[16, -6], [16, 6]], [-100, 0] => [[-16, 6], [-16, -6]],
+      [0, 100] => [[6, 16], [-6, 16]], [0, -100] => [[-6, -16], [6, -16]],
+      [100, 100] => [[16, 7], [7, 16]], [-100, -100] => [[-16, -7], [-7, -16]]
+    }.each do |base, vertices|
       polygon = Nokogiri::XML.fragment(renderer.triangle_polygon([0, 0], base)).at_css("polygon")
       points = polygon["points"].split.map(&:to_f).each_slice(2).to_a
-      length = Math.hypot(*base)
-      ux, uy = base.map { |value| value / length }
 
-      expect(points.first).to eq([0, 0])
-      expect(points.drop(1).map { |x, y| x * ux + y * uy }).to all(be_within(0.01).of(16))
-      offsets = points.drop(1).map { |x, y| -x * uy + y * ux }.sort
-      expect(offsets).to match([-6.0, 6.0].map { |value| be_within(0.01).of(value) })
+      expect(points).to eq([[0, 0], *vertices])
     end
+  end
+
+  it "matches source connector 702's native near-vertical triangle vertices" do
+    polygon = Nokogiri::XML.fragment(renderer.triangle_polygon([850, 422], [851, 460])).at_css("polygon")
+
+    expect(polygon["points"].split.map(&:to_f)).to eq([850, 422, 856, 438, 844, 438])
   end
 end
 
