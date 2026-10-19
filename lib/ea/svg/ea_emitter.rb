@@ -31,6 +31,8 @@ module Ea
       autoload :Style, "ea/svg/ea_emitter/style"
       autoload :Elements, "ea/svg/ea_emitter/elements"
       autoload :Connectors, "ea/svg/ea_emitter/connectors"
+      autoload :ConnectorBridges, "ea/svg/ea_emitter/connector_bridges"
+      private_constant :ConnectorBridges
       autoload :Markers, "ea/svg/ea_emitter/markers"
       autoload :Labels, "ea/svg/ea_emitter/labels"
       autoload :GhostLabels, "ea/svg/ea_emitter/ghost_labels"

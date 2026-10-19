@@ -136,6 +136,7 @@ module Ea
                                        obj_row.instance_id),
             diagram_id: IdNormalizer.from_guid(diagram_row.ea_guid),
             model_element_ref: ref_for_object(obj_row),
+            z_order: obj_row.sequence,
             bounds: bounds_from_rect(obj_row),
             style: style_hash,
             font_family: presence(font_style[:font]),
@@ -455,6 +456,8 @@ module Ea
                                        link_row.instance_id),
             diagram_id: IdNormalizer.from_guid(diagram_row.ea_guid),
             relationship_ref: ref_for_connector(link_row),
+            source_element_ref: unique_placement_ref(diagram_row.diagram_id, connector&.start_object_id),
+            target_element_ref: unique_placement_ref(diagram_row.diagram_id, connector&.end_object_id),
             connector_type: connector&.connector_type,
             direction: connector&.direction,
             source_stereotype: connector&.sourcestereotype,
@@ -931,6 +934,16 @@ module Ea
         def diagram_object_placement(diagram_id, ea_object_id)
           objects = database.diagram_objects_for(diagram_id) || []
           objects.find { |o| o.ea_object_id == ea_object_id }
+        end
+
+        def unique_placement_ref(diagram_id, ea_object_id)
+          return nil unless ea_object_id
+
+          placements = (database.diagram_objects_for(diagram_id) || [])
+                       .select { |placement| placement.ea_object_id == ea_object_id }
+          return nil unless placements.one?
+
+          IdNormalizer.synthetic("de", diagram_id, placements.first.instance_id)
         end
 
         # Compute the connection point on an element's edge for the
