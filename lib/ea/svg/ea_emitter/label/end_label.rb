@@ -210,7 +210,8 @@ module Ea
 
           def source_property_seat?(connector, direction, box)
             phantom_property_box?(connector, direction, box) ||
-              (%i[up left right down].include?(direction) && property_role_box?(box, direction) &&
+              (%i[up left right down].include?(direction) &&
+                property_role_box?(box, direction, connector.style.to_h) &&
                 source_property_font?(connector, direction))
           end
 
@@ -392,8 +393,8 @@ module Ea
               [nil, "V"].include?(style[:tree])
           end
 
-          def property_role_box?(box, direction)
-            alignments = direction == :down ? [1] : [0, 1]
+          def property_role_box?(box, direction, style = {})
+            alignments = direction == :down && !orthogonal_stub_route?(style) ? [1] : [0, 1]
             box && alignments.include?(box["alignment"]) && default_presentation?(box)
           end
 
@@ -416,11 +417,23 @@ module Ea
 
           def source_property_route?(style, direction)
             case direction
-            when :left then left_property_route?(style)
             when :right then style.values_at(:mode, :lwidth, :tree) == %w[3 2 H]
-            when :down then downward_property_route?(style)
-            else %w[0 2].include?(style[:lwidth]) && style[:tree] != "OS"
+            when :up then upward_property_route?(style)
+            when :left then orthogonal_stub_route?(style) || left_property_route?(style)
+            else orthogonal_stub_route?(style) || downward_property_route?(style)
             end
+          end
+
+          def upward_property_route?(style)
+            return orthogonal_stub_route?(style) if style[:tree] == "OS"
+
+            %w[0 2].include?(style[:lwidth])
+          end
+
+          # The "OS" route seats its Property roles at the same directional
+          # corner seats as the untreed width-2 route.
+          def orthogonal_stub_route?(style)
+            style.values_at(:mode, :lwidth, :tree) == %w[3 2 OS]
           end
 
           def left_property_route?(style)
