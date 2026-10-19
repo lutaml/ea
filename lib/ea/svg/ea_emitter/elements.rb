@@ -302,7 +302,7 @@ module Ea
         end
 
         def attribute_content_x_offset(size, family, size_unit)
-          offset = (theme.attribute_spec.content_x_offset || Element::AttributeRenderer::DEFAULT_CONTENT_X_OFFSET) +
+          offset = (theme.attribute_content_x_offset || Element::AttributeRenderer::DEFAULT_CONTENT_X_OFFSET) +
                    2 * (size - 7)
           offset -= 1 if Ea::Fonts::Metrics.compact_compartment_font?(size, family: family, unit: size_unit)
           offset

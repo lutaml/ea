@@ -20,7 +20,7 @@ module Ea
               size_unit: context.size_unit, logical_height: context.logical_height,
               fill: context.theme.attribute_text_color,
               visibility_x_offset: context.theme.attribute_spec.visibility_x_offset,
-              content_x_offset: context.theme.attribute_spec.content_x_offset
+              content_x_offset: context.theme.attribute_content_x_offset
             )
           end
         end
