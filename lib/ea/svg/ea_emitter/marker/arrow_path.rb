@@ -4,7 +4,9 @@ module Ea
   module Svg
     module EaEmitter
       module Marker
-        # Navigability arrow at the target end of an association.
+        # Navigability arrow at the target end of an association, plus
+        # the diamond of an association whose end carries an aggregate
+        # flag (SourceIsAggregate/DestIsAggregate).
         # Rendered as a `<path>` (not polygon) sharing style with the
         # connector line. When both ends are navigable
         # (bidirectional association), EA renders a separate arrow at
@@ -16,6 +18,14 @@ module Ea
 
           def self.specs_for(connector, source, target, before_target,
                              after_source, relationship: nil)
+            Diamond.flagged_end_specs(relationship, source, target,
+                                      before_target, after_source) +
+              arrow_specs(connector, source, target, before_target,
+                          after_source)
+          end
+
+          def self.arrow_specs(connector, source, target, before_target,
+                               after_source)
             # EA draws the navigability arrow on directed
             # associations AND aggregations (333EFCCF: 6 aggregations
             # render diamond + path arrow); Direction
@@ -33,6 +43,7 @@ module Ea
             base = whole_end_at_source ? before_target : after_source
             [Registry::Spec.new(shape: :arrow, anchor: anchor, base: base)]
           end
+          private_class_method :arrow_specs
 
           # EA marks truly bidirectional associations with
           # direction="Bi-Directional" on t_connector. These get a

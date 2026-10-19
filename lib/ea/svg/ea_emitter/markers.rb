@@ -9,7 +9,9 @@ module Ea
       #
       # Layer style keys:
       #   - :diamond_filled  → 4-pt <polygon>, black fill
+      #   - :diamond_hollow  → 4-pt <polygon>, white fill
       #   - :triangle_open   → 3-pt <polygon>, white fill
+      #   - :nesting_circle  → <ellipse> + plus <path>, white fill
       #   - :arrow           → 3-pt <path>, no fill (shares style with
       #     connector lines — same stroke, no fill)
       #
@@ -48,22 +50,19 @@ module Ea
 
         def layers
           entries = visible_connectors.flat_map { |c| entries_for(c) }
-          return [] if entries.empty?
 
           if grouped
-            entries.group_by(&:style_key).map do |key, grouped_entries|
+            entries.group_by { |e| [e.style_key, e.stroke_width] }.map do |(key, width), grouped_entries|
               # EA emits ONE marker per connector regardless of
               # anchor overlap. Verified against plateau Bridge
               # diagram: 9 generalizations fanning from the same
               # parent anchor produce 9 distinct triangle polygons
               # at the same coordinates. The earlier "dedup by
               # anchor" hypothesis is disproven by reference SVGs.
-              Layer.new(style_key: key,
-                        style: style_for(key),
-                        body: grouped_entries.map(&:body).join("\n  "))
+              marker_layer(key, width, grouped_entries.map(&:body).join("\n  "))
             end
           else
-            entries.map { |e| Layer.new(style_key: e.style_key, style: style_for(e.style_key), body: e.body) }
+            entries.map { |e| marker_layer(e.style_key, e.stroke_width, e.body) }
           end
         end
 
@@ -86,7 +85,7 @@ module Ea
         # for future use (e.g. overlap diagnostics) but no longer
         # drives dedup — EA emits one marker per connector.
         Entry = Struct.new(:style_key, :body, :anchor,
-                           :connector_waypoint_count,
+                           :connector_waypoint_count, :stroke_width,
                            keyword_init: true) do
           def hash
             anchor.hash
@@ -109,13 +108,17 @@ module Ea
             style_key: :diamond_filled,
             render: ->(m, anchor, base) { m.diamond_polygon(anchor, base) }
           },
+          diamond_hollow: {
+            style_key: :diamond_hollow,
+            render: ->(m, anchor, base) { m.diamond_polygon(anchor, base) }
+          },
           triangle: {
             style_key: :triangle_open,
             render: ->(m, anchor, base) { m.triangle_polygon(anchor, base) }
           },
-          plus: {
-            style_key: :connector_line,
-            render: ->(m, anchor, _base) { m.plus_path(anchor) }
+          nesting: {
+            style_key: :nesting_circle,
+            render: ->(m, anchor, base) { m.nesting_marker(anchor, base) }
           },
           arrow: {
             style_key: :connector_line,
@@ -124,10 +127,6 @@ module Ea
           dependency_arrow: {
             style_key: :connector_line,
             render: ->(m, anchor, base) { m.dependency_arrow_path(anchor, base) }
-          },
-          package_anchor: {
-            style_key: :connector_line,
-            render: ->(m, anchor, base) { m.package_anchor_path(anchor, base) }
           }
         }.freeze
 
@@ -135,15 +134,22 @@ module Ea
         # is shared, so only the fill and opacity vary.
         STYLE_MAP = {
           diamond_filled: { fill: "#000000", opacity: "1.00" },
+          diamond_hollow: { fill: "#FFFFFF", opacity: "1.00" },
           triangle_open: { fill: "#FFFFFF", opacity: "1.00" },
+          nesting_circle: { fill: "#FFFFFF", opacity: "1.00" },
           connector_line: { fill: "#000000", opacity: "0.00" }
         }.freeze
 
-        def style_for(key)
+        def marker_layer(key, width, body)
+          Layer.new(style_key: Connectors.layer_key(key, width, stroke_width),
+                    style: style_for(key, width), body: body)
+        end
+
+        def style_for(key, width = stroke_width)
           spec = STYLE_MAP[key]
           return nil unless spec
 
-          "stroke-width:#{stroke_width};stroke-linecap:round;stroke-linejoin:bevel; " \
+          "stroke-width:#{width};stroke-linecap:round;stroke-linejoin:bevel; " \
             "fill:#{spec[:fill]};fill-opacity:#{spec[:opacity]}; " \
             "stroke:#000000; stroke-opacity:1.00"
         end
@@ -164,7 +170,8 @@ module Ea
             Entry.new(style_key: style_key_for(spec),
                       body: body,
                       anchor: anchor_for(spec),
-                      connector_waypoint_count: waypoint_count)
+                      connector_waypoint_count: waypoint_count,
+                      stroke_width: Connectors.stroke_width_for(connector, stroke_width))
           end
         end
 
@@ -279,20 +286,34 @@ module Ea
           entry[:render].call(self, spec.anchor, spec.base)
         end
 
-        # Plus marker: two crossed line segments at the anchor.
-        # EA encodes as one <path> with two sub-paths:
-        #   M cx cy-8 L cx cy+8    (vertical arm)
-        #   M cx+8 cy L cx-8 cy    (horizontal arm)
-        def plus_path(anchor)
-          cx, cy = translate_point(anchor)
-          cx_str = Canvas.coord(cx)
-          cy_str = Canvas.coord(cy)
-          up = Canvas.coord(cy - Marker::Plus::ARM_LENGTH)
-          down = Canvas.coord(cy + Marker::Plus::ARM_LENGTH)
-          left = Canvas.coord(cx - Marker::Plus::ARM_LENGTH)
-          right = Canvas.coord(cx + Marker::Plus::ARM_LENGTH)
-          d = "M #{cx_str} #{up} L #{cx_str} #{down} M #{right} #{cy_str} L #{left} #{cy_str}"
+        # Nesting marker: a white circle tangent to the container edge
+        # at the anchor, with a plus through its centre. The plus is an
+        # unfilled path, so it stays visible on the circle's fill.
+        def nesting_marker(tip, base)
+          tx, ty = translate_point(tip)
+          bx, by = translate_point(base)
+          ux, uy = unit_vector(tx, ty, bx, by)
+          return nil unless ux
+
+          radius = Marker::Plus::ARM_LENGTH
+          cx_val = tx - ux * radius
+          cy_val = ty - uy * radius
+          circle = %(<ellipse cx="#{fixed(cx_val)}" cy="#{fixed(cy_val)}" ) +
+                   %(rx="#{radius}.00" ry="#{radius}.00" shape-rendering="auto"  />)
+          [circle, plus_path(cx_val, cy_val)].join("\n  ")
+        end
+
+        def plus_path(center_x, center_y)
+          arm = Marker::Plus::ARM_LENGTH
+          d = "M #{Canvas.coord(center_x)} #{Canvas.coord(center_y - arm)} " \
+              "L #{Canvas.coord(center_x)} #{Canvas.coord(center_y + arm)} " \
+              "M #{Canvas.coord(center_x + arm)} #{Canvas.coord(center_y)} " \
+              "L #{Canvas.coord(center_x - arm)} #{Canvas.coord(center_y)}"
           %(<path d="#{d}" shape-rendering="auto"/>)
+        end
+
+        def fixed(value)
+          format("%<value>.2f", value: value)
         end
 
         def specs_for(connector)
@@ -387,38 +408,6 @@ module Ea
           %(<path d="#{d}" shape-rendering="auto"/>)
         end
 
-        # «import» source-end marker: a small closed trapezoid that
-        # visually represents the imported package. Shape is a 4-point
-        # polygon: top edge shorter than bottom edge, centered on the
-        # anchor point.
-        PACKAGE_ANCHOR_W = 5
-        PACKAGE_ANCHOR_H_TOP = 3
-        PACKAGE_ANCHOR_H_BOTTOM = 4
-
-        def package_anchor_path(tip, base)
-          tx, ty = translate_point(tip)
-          bx, by = translate_point(base)
-          ux, uy = unit_vector(tx, ty, bx, by)
-          return nil unless ux
-
-          back_x = tx - ux * PACKAGE_ANCHOR_H_BOTTOM
-          back_y = ty - uy * PACKAGE_ANCHOR_H_BOTTOM
-          tl_x = tx - ux * PACKAGE_ANCHOR_H_TOP + (-uy) * PACKAGE_ANCHOR_W
-          tl_y = ty - uy * PACKAGE_ANCHOR_H_TOP + ux * PACKAGE_ANCHOR_W
-          tr_x = tx - ux * PACKAGE_ANCHOR_H_TOP - (-uy) * PACKAGE_ANCHOR_W
-          tr_y = ty - uy * PACKAGE_ANCHOR_H_TOP - ux * PACKAGE_ANCHOR_W
-          bl_x = back_x + (-uy) * (PACKAGE_ANCHOR_W + 1)
-          bl_y = back_y + ux * (PACKAGE_ANCHOR_W + 1)
-          br_x = back_x - (-uy) * (PACKAGE_ANCHOR_W + 1)
-          br_y = back_y - ux * (PACKAGE_ANCHOR_W + 1)
-          d = "M #{Canvas.coord(tl_x)} #{Canvas.coord(tl_y)} " \
-              "L #{Canvas.coord(tr_x)} #{Canvas.coord(tr_y)} " \
-              "L #{Canvas.coord(br_x)} #{Canvas.coord(br_y)} " \
-              "L #{Canvas.coord(bl_x)} #{Canvas.coord(bl_y)} " \
-              "L #{Canvas.coord(tl_x)} #{Canvas.coord(tl_y)} Z"
-          %(<path d="#{d}" shape-rendering="auto"/>)
-        end
-
         # Dependency arrowhead: same open-path form as arrow_path
         # but EA's slimmer base-10 template. Coordinates are whole
         # pixels in EA's output (e.g. "M 2732 183 L 2747 178
@@ -449,8 +438,8 @@ module Ea
 
           [dx / len, dy / len]
         end
-        public :diamond_polygon, :triangle_polygon, :plus_path,
-               :arrow_path, :dependency_arrow_path, :package_anchor_path
+        public :diamond_polygon, :triangle_polygon, :nesting_marker,
+               :arrow_path, :dependency_arrow_path
 
         def translate_point(p)
           return p unless @canvas

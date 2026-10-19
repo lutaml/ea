@@ -23,20 +23,29 @@ RSpec.describe Ea::Svg::EaEmitter::Marker::Plus do
     let(:before_target) { [40, 40] }
     let(:after_source) { [10, 10] }
 
-    it "returns one Spec with :plus shape" do
+    it "returns one Spec with :nesting shape" do
       connector = Ea::Model::DiagramConnector.new(id: "c1",
-                                                    connector_type: "Nesting")
+                                                  connector_type: "Nesting")
       specs = described_class.specs_for(connector, source, target,
-                                          before_target, after_source)
+                                        before_target, after_source)
       expect(specs.size).to eq(1)
-      expect(specs.first.shape).to eq(:plus)
+      expect(specs.first.shape).to eq(:nesting)
     end
 
-    it "anchors the plus at the source end by default" do
+    it "anchors the marker at the container (target) end by default" do
       connector = Ea::Model::DiagramConnector.new(id: "c1",
-                                                    connector_type: "Nesting")
+                                                  connector_type: "Nesting")
       specs = described_class.specs_for(connector, source, target,
-                                          before_target, after_source)
+                                        before_target, after_source)
+      expect(specs.first.anchor).to eq(target)
+    end
+
+    it "anchors at the source end when the direction is reversed" do
+      connector = Ea::Model::DiagramConnector.new(id: "c1",
+                                                  connector_type: "Nesting",
+                                                  direction: "Destination -> Source")
+      specs = described_class.specs_for(connector, source, target,
+                                        before_target, after_source)
       expect(specs.first.anchor).to eq(source)
     end
   end

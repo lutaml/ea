@@ -15,7 +15,7 @@ module Ea
         class OpenTriangle < Kind
           def self.handles?(effective_type)
             %w[Generalization Realization Realisation Dependency
-               InformationFlow NoteLink].include?(effective_type)
+               InformationFlow].include?(effective_type)
           end
 
           def self.specs_for(connector, source, target, before_target, after_source, relationship: nil)

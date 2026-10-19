@@ -31,22 +31,39 @@ module Ea
           @divider_y_by_ref = divider_y_by_ref
         end
 
+        # EA draws each connector (and its markers) with the pen width
+        # stored in the diagram link style (`LWidth`); links without
+        # the field keep the diagram default.
+        def self.stroke_width_for(connector, default)
+          style = connector.style || {}
+          raw = style[:lwidth] || style["lwidth"]
+          return default if raw.to_s.strip.empty?
+
+          [raw.to_i, 1].max
+        end
+
+        # Layer key for a style group: the plain key at the default
+        # width, suffixed with the width otherwise so layers of
+        # different widths never merge.
+        def self.layer_key(key, width, default)
+          width == default ? key : :"#{key}_w#{width}"
+        end
+
         def layers
-          paths = visible_connectors.filter_map { |c| path_for(c) }
-          return [] if paths.empty?
+          widths = paths_with_widths
 
           if grouped
-            [Layer.new(style_key: LINE_STYLE_KEY, style: line_style,
-                       body: paths.join("\n  "))]
-          else
-            paths.map do |path|
-              Layer.new(style_key: LINE_STYLE_KEY, style: line_style, body: path)
+            widths.group_by(&:first).map do |width, entries|
+              line_layer(width, entries.map(&:last).join("\n  "))
             end
+          else
+            widths.map { |width, path| line_layer(width, path) }
           end
         end
 
-        def line_style
-          "stroke-width:#{stroke_width};stroke-linecap:round;stroke-linejoin:bevel; fill:#000000;fill-opacity:0.00; stroke:#000000; stroke-opacity:1.00"
+        def line_style(width = stroke_width)
+          "stroke-width:#{width};stroke-linecap:round;stroke-linejoin:bevel; " \
+            "fill:#000000;fill-opacity:0.00; stroke:#000000; stroke-opacity:1.00"
         end
 
         # Backwards-compatible render — joins all layers' `<g>`.
@@ -55,6 +72,18 @@ module Ea
         end
 
         private
+
+        def paths_with_widths
+          visible_connectors.filter_map do |connector|
+            path = path_for(connector)
+            [self.class.stroke_width_for(connector, stroke_width), path] if path
+          end
+        end
+
+        def line_layer(width, body)
+          Layer.new(style_key: self.class.layer_key(LINE_STYLE_KEY, width, stroke_width),
+                    style: line_style(width), body: body)
+        end
 
         def visible_connectors
           (diagram.connectors || []).select(&:renderable?)

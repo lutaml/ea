@@ -4,6 +4,8 @@ require "spec_helper"
 require "ea"
 
 RSpec.describe Ea::Svg::EaEmitter::Marker::Registry do
+  include QeaMarkerHelpers
+
   let(:connector) do
     Ea::Model::DiagramConnector.new(
       id: "dc1",
@@ -20,30 +22,15 @@ RSpec.describe Ea::Svg::EaEmitter::Marker::Registry do
   let(:before_target) { [0, 0] }
   let(:after_source) { [100, 0] }
 
-  def specs(connector_type, direction = "Source -> Destination", relationship: nil)
-    connector = Ea::Model::DiagramConnector.new(
-      id: "dc",
-      connector_type: connector_type,
-      direction: direction,
-      waypoints: [
-        Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: 0, y: 0)),
-        Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: 100, y: 0))
-      ]
-    )
-    described_class.specs_for(connector, connector_type,
-                              [0, 0], [100, 0], [0, 0], [100, 0],
-                              relationship: relationship)
-  end
-
   it "keeps source-owned aggregations arrowless" do
     out = specs("Aggregation")
-    expect(out.map(&:shape)).to eq(%i[diamond])
+    expect(out.map(&:shape)).to eq(%i[diamond_hollow])
     expect(out.map(&:anchor)).to eq([[0, 0]])
   end
 
   it "places reverse aggregation arrows at source while retaining target diamond" do
     out = specs("Aggregation", "Destination -> Source")
-    expect(out.map(&:shape)).to eq(%i[diamond arrow])
+    expect(out.map(&:shape)).to eq(%i[diamond_hollow arrow])
     expect(out.map(&:anchor)).to eq([[100, 0], [0, 0]])
   end
 
@@ -106,6 +93,10 @@ RSpec.describe Ea::Svg::EaEmitter::Marker::Registry do
     expect(out.map(&:shape)).to eq([:arrow])
   end
 
+  it "draws no marker on a NoteLink, which EA leaves as a bare dashed line" do
+    expect(specs("NoteLink")).to eq([])
+  end
+
   it "returns no specs for unknown connector type" do
     expect(specs("UnknownType")).to eq([])
   end
@@ -122,7 +113,7 @@ RSpec.describe Ea::Svg::EaEmitter::Marker::Registry do
     )
     out = described_class.specs_for(connector, "Aggregation",
                                     [0, 0], [100, 0], [0, 0], [100, 0])
-    diamond = out.find { |s| s.shape == :diamond }
+    diamond = out.find { |s| s.shape == :diamond_hollow }
     # whole_end_at_source is false → diamond anchor = target
     expect(diamond.anchor).to eq([100, 0])
   end
@@ -142,8 +133,8 @@ RSpec.describe Ea::Svg::EaEmitter::Marker::Registry do
 
         def self.specs_for(_connector, *_args)
           [Ea::Svg::EaEmitter::Marker::Registry::Spec.new(shape: :diamond,
-                                                           anchor: [0, 0],
-                                                           base: [10, 0])]
+                                                          anchor: [0, 0],
+                                                          base: [10, 0])]
         end
       end
       described_class.register(custom_kind)
