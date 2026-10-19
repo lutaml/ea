@@ -19,8 +19,8 @@ module Ea
           def self.render(tagged_values, bounds:, first_y:, family:, size:, fill: "#000000",
                           size_unit: "px", logical_height: nil)
             line_h = line_height(size, family, size_unit, logical_height)
-            text_blocks = [build_text(bounds.x + centered_x_offset(bounds, size), first_y,
-                                      HEADER_TEXT, family, size, fill,
+            text_blocks = [build_text(bounds.x + centered_x_offset(bounds, family, size, size_unit, logical_height),
+                                      first_y, HEADER_TEXT, family, size, fill,
                                       style: "italic", size_unit: size_unit, logical_height: logical_height)]
             tagged_values.each_with_index do |tv, idx|
               text_blocks << build_text(bounds.x + LINE_X_OFFSET, first_y + ((idx + 1) * line_h),
@@ -48,9 +48,18 @@ module Ea
           private_class_method :line_height
 
           # Center the "tags" header text within the bounds width.
-          def self.centered_x_offset(bounds, size)
-            text_width = HEADER_TEXT.length * (size / 2)
-            centered = (bounds.width / 2 - text_width / 2).floor
+          def self.centered_x_offset(bounds, family, size, size_unit, logical_height)
+            # QEA point captions center on the same integer width emitted in SVG.
+            # Retain the legacy pixel API's placement.
+            text_width = if size_unit == "pt"
+                           TextRenderer.estimate_width(
+                             HEADER_TEXT, size, family: family, weight: 400,
+                                                style: "italic", logical_height: logical_height
+                           ).round
+                         else
+                           HEADER_TEXT.length * (size / 2)
+                         end
+            centered = ((bounds.width - text_width) / 2.0).floor
             [HEADER_X_OFFSET, centered].max
           end
           private_class_method :centered_x_offset
