@@ -70,13 +70,23 @@ module Ea
             content = "#{slot.name} #{slot.op} #{slot.value}"
             TextRenderer.new(
               content: content,
-              x: bounds.x + (context.theme.attribute_spec.content_x_offset || 26),
+              x: bounds.x + content_x_offset(context),
               y: y_pos,
               family: context.family, size: context.size,
               size_unit: context.size_unit, logical_height: context.logical_height, fill: fill
             ).to_svg
           end
           module_function :line_text
+
+          def content_x_offset(context)
+            offset = context.theme.attribute_spec.content_x_offset || 26
+            if Ea::Fonts::Metrics.compact_compartment_font?(context.size,
+                                                            family: context.family, unit: context.size_unit)
+              offset -= 1
+            end
+            offset
+          end
+          module_function :content_x_offset
 
           def subtitle_text(text, bounds, y_pos, context, fill)
             estimated_width = text.length * context.size * 0.5

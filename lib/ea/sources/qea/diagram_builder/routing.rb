@@ -555,7 +555,7 @@ module Ea
           end
 
           # A width-2 Mode 3 route without a tree style keeps authored orthogonal
-          # bends: two corners for Associations, three or more for Aggregations.
+          # bends: two corners for Associations, two or more for Aggregations.
           # Each end docks on
           # the 1px outline its adjacent leg points at, from the corner's own
           # coordinate; any end that cannot do so leaves the route unchanged.
@@ -569,7 +569,13 @@ module Ea
 
             first = outline_dock(corners[0], corners[1], source)
             last = outline_dock(corners[-1], corners[-2], target)
-            [first, *corners, last] if first && last
+            return nil unless distinct_stair_docks?(corners, first, last)
+
+            [first, *corners, last]
+          end
+
+          def distinct_stair_docks?(corners, first, last)
+            first && last && first != corners.first && last != corners.last
           end
 
           def stair_style?(link_row, connector)
@@ -579,7 +585,7 @@ module Ea
           end
 
           def stair_corner_count?(corners, connector_type)
-            connector_type == "Association" ? corners.size == 2 : corners.size >= 3
+            connector_type == "Association" ? corners.size == 2 : corners.size >= 2
           end
 
           # Every leg is non-zero and runs along the opposite axis of the last.

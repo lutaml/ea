@@ -154,18 +154,11 @@ module Ea
             (block_left + (block_right - block_left - title_text_width.round) / 2.0).floor
           end
 
-          CJK_RANGE = /[\u3000-\u9fff\uff00-\uffef]/
-
-          # Real font metrics when available; legacy per-char
-          # estimate otherwise (families without metric tables).
           def estimated_width(text, size, weight: nil, logical_height: nil, text_family: family)
-            measured = Ea::Fonts::Metrics.text_length(text, size, family: text_family, weight: weight,
-                                                                  logical_height: logical_height)
-            return measured if measured
-
-            text.to_s.each_char.sum do |ch|
-              ch.match?(CJK_RANGE) ? size * 0.70 : size * 0.612
-            end
+            TextRenderer.estimate_width(
+              text, size, family: text_family, weight: weight,
+                          logical_height: logical_height
+            ).round
           end
 
           def widest_item_label_width
