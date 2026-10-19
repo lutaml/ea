@@ -13,7 +13,7 @@ module Ea
         # classifier.
         module InstanceSlots
           ROW_OFFSET = 13
-          SUBTITLE_EXTRA_OFFSET = 10
+          SUBTITLE_OFFSET_FROM_BOTTOM = 15
 
           module_function
 
@@ -34,7 +34,7 @@ module Ea
               blocks << line_text(slot, bounds, y, context, fill)
             end
             if subtitle
-              y = first_y + (slots.size * ROW_OFFSET) + SUBTITLE_EXTRA_OFFSET
+              y = bounds.y + bounds.height + SUBTITLE_OFFSET_FROM_BOTTOM
               blocks << subtitle_text(subtitle, bounds, y, context, fill)
             end
             wrap(blocks.join("\n"), fill)
