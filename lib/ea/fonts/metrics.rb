@@ -51,8 +51,16 @@ module Ea
       VERTICAL_METRICS = JSON.parse(File.read(
                                       File.expand_path("vertical_metrics.json", __dir__)
                                     )).freeze
+      # Carlito and Cambria have no CJK glyphs. EA's CJK widths for them
+      # match MS UI Gothic's GDI advances, measured on Windows per
+      # "height:weight:style"; that match does not prove the linked face.
+      CJK_FALLBACK_WIDTHS = JSON.parse(File.read(
+                                         File.expand_path("cjk_fallback_widths.json", __dir__)
+                                       )).fetch("widths").freeze
+      CJK_FALLBACK_FAMILIES = %w[Carlito Cambria].freeze
       private_constant :CAMBRIA_7_REGULAR_WIDTHS, :CAMBRIA_7_STYLED_WIDTHS,
-                       :CAMBRIA_7_GUILLEMET_PAIR_WIDTH, :VERTICAL_METRICS
+                       :CAMBRIA_7_GUILLEMET_PAIR_WIDTH, :VERTICAL_METRICS,
+                       :CJK_FALLBACK_WIDTHS, :CJK_FALLBACK_FAMILIES
 
       # Advance used for codepoints missing from the tables.
       DEFAULT_ADVANCE = 0.25
@@ -60,11 +68,9 @@ module Ea
       # Inferred subpixel steps that reproduce EA's near-half-pixel rounding.
       GDI_SUBPIXELS = 64
 
-      # Carlito/Arial have no CJK glyphs; EA's renderer falls back to
-      # a proportional CJK font whose advances measure ~0.709em at
-      # the NOMINAL size (not scaled by the per-style factors) —
-      # fitted from EA-published textLengths (52 mixed-script
-      # samples).
+      # Advance for CJK glyphs with no measured fallback width: ~0.709em
+      # at the NOMINAL size (not scaled by the per-style factors),
+      # fitted from EA-published textLengths (52 mixed-script samples).
       CJK_ADVANCE = 0.709
       CJK_RANGES = [
         (0x3000..0x303F),   # CJK punctuation
@@ -146,11 +152,13 @@ module Ea
         if GDI_HEIGHT_FAMILIES.include?(resolved)
           height = logical_height || gdi_logical_height(size_pt)
           table = table_for(family, weight, style)
+          fallback = cjk_fallback_widths(resolved, height, weight, style)
           latin = 0
           cjk_count = 0
           text.each_char do |ch|
             if cjk?(ch.ord)
-              cjk_count += 1
+              measured = fallback[ch]
+              measured ? latin += measured : cjk_count += 1
             else
               latin += gdi_pixel_advance(table[cp_key(ch)] || DEFAULT_ADVANCE, height)
             end
@@ -166,30 +174,45 @@ module Ea
 
       private_class_method :advance_text_length
 
+      # Measured fallback advances for `family` at this height and style,
+      # keyed by character; empty when the configuration was not measured.
+      def cjk_fallback_widths(family, height, weight, style)
+        return {} unless CJK_FALLBACK_FAMILIES.include?(family)
+
+        CJK_FALLBACK_WIDTHS.fetch("#{height}:#{bold?(weight) ? 700 : 400}:#{italic?(style) ? "italic" : "normal"}", {})
+      end
+      private_class_method :cjk_fallback_widths
+
       def cambria_text_length(text, size_pt, weight, style)
         return nil unless size_pt.to_f.to_r == 7
         return nil unless ["", "0", "400", "normal", "700", "bold"].include?(weight.to_s)
         return nil unless ["", "normal", "italic"].include?(style.to_s)
 
+        fallback = cambria_cjk_widths(weight, style)
         key = STYLE_KEYS.fetch([bold?(weight), italic?(style)])
-        return cambria_styled_length(text, key) unless key == :regular
+        return cambria_styled_length(text, key, fallback) unless key == :regular
 
-        return cambria_ascii_length(text) unless text.start_with?("«") && text.end_with?("»")
+        return cambria_ascii_length(text, fallback) unless text.start_with?("«") && text.end_with?("»")
 
-        inner_width = cambria_ascii_length(text[1...-1])
+        inner_width = cambria_ascii_length(text[1...-1], fallback)
         inner_width + CAMBRIA_7_GUILLEMET_PAIR_WIDTH if inner_width
       end
       private_class_method :cambria_text_length
 
-      def cambria_styled_length(text, key)
+      def cambria_cjk_widths(weight, style)
+        cjk_fallback_widths("Cambria", gdi_logical_height(7), weight, style)
+      end
+      private_class_method :cambria_cjk_widths
+
+      def cambria_styled_length(text, key, fallback)
         table = CAMBRIA_7_STYLED_WIDTHS.fetch(key.to_s)
-        widths = text.each_char.map { |char| table[char] }
+        widths = text.each_char.map { |char| table[char] || fallback[char] }
         widths.sum unless widths.empty? || widths.include?(nil)
       end
       private_class_method :cambria_styled_length
 
-      def cambria_ascii_length(text)
-        widths = text.each_char.map { |char| CAMBRIA_7_REGULAR_WIDTHS[char] }
+      def cambria_ascii_length(text, fallback)
+        widths = text.each_char.map { |char| CAMBRIA_7_REGULAR_WIDTHS[char] || fallback[char] }
         widths.sum unless widths.empty? || widths.include?(nil)
       end
       private_class_method :cambria_ascii_length

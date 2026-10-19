@@ -64,7 +64,7 @@ RSpec.describe "Legend fractional metric extents" do
   it "centers integer emitted widths while preserving fractional metric item output" do
     bounds = Ea::Model::Bounds.new(x: 100, y: 50, width: 300, height: 120)
     %w[Carlito Calibri].each do |family|
-      [["A凡", "14", "72.00"], ["A凡凡", "21", "76.00"]].each do |label, width, title_x|
+      [["A日", "14", "72.00"], ["A日日", "21", "76.00"]].each do |label, width, title_x|
         legend = Ea::Model::Legend.new(title: "Legend heading", items: [Ea::Model::LegendItem.new(name: label)])
         svg = Ea::Svg::EaEmitter::Element::LegendRenderer.render(bounds, legend: legend, family: family)
         item, title = Nokogiri::XML("<svg>#{svg}</svg>").css("text")
