@@ -28,10 +28,12 @@ module Ea
           MIN_ROLE_X = 3
 
           attr_reader :canvas, :model_index, :document, :theme,
-                      :font_family, :font_size, :font_unit
+                      :font_family, :font_size, :font_unit,
+                      :font_weight, :font_style
 
           def initialize(canvas:, model_index:, document:, theme:,
-                         font_family:, font_size:, font_unit:)
+                         font_family:, font_size:, font_unit:,
+                         font_weight: 400, font_style: "normal")
             @canvas = canvas
             @model_index = model_index
             @document = document
@@ -39,6 +41,8 @@ module Ea
             @font_family = font_family
             @font_size = font_size
             @font_unit = font_unit
+            @font_weight = font_weight
+            @font_style = font_style
           end
 
           # Returns an Array of `<text>` SVG strings for one endpoint.
@@ -532,9 +536,8 @@ module Ea
             seat_font? && cambria_box?(box) && [0, 1].include?(box["alignment"])
           end
 
-          # A target leg that runs down seats only on the "LV" tree route
-          # with line width 2; every other vertical seat needs the plain
-          # width-0 route.
+          # Downward target seats require LV width 2; upward target seats
+          # also accept LV width 0. Source seats require a plain width-0 route.
           def plain_vertical_connector?(connector, end_kind, direction)
             return false unless connector.connector_type == "Association" &&
                                 connector_source_dest_stereotype(connector, end_kind).empty?
@@ -547,6 +550,8 @@ module Ea
 
             if direction == :target_down
               style[:lwidth] == "2" && style[:tree] == "LV"
+            elsif direction == :target_up
+              style[:lwidth] == "0" && [nil, "LV"].include?(style[:tree])
             else
               style[:lwidth] == "0" && !style[:tree]
             end
@@ -994,6 +999,7 @@ module Ea
             y_t = canvas ? canvas.translate_y(y) : y
             TextRenderer.new(content:, x: x_t, y: y_t,
                              family: font_family, size: font_size,
+                             weight: font_weight, style: font_style,
                              size_unit: font_unit,
                              fill: fill_color).to_svg
           end

@@ -17,6 +17,11 @@ module Ea
       # text-emitting layer.
       class FontResolver
         DEFAULT_FONT_FAMILY = "Yu Gothic UI"
+        # EA draws every text kind of a hand-drawn diagram (names, notes,
+        # connector labels) in this family.
+        HAND_DRAW_FAMILY = "Source Sans Pro"
+        # Native hand-drawn connector end labels carry font-weight:0.
+        HAND_DRAW_LABEL_WEIGHT = 0
         # EA's default element compartment font size. EA-published
         # reference SVGs render body text at 7pt (the current EA
         # theme size) for every element whose objectstyle fontsz is
@@ -87,7 +92,7 @@ module Ea
         private
 
         def default_family_for(explicit)
-          return "Source Sans Pro" if diagram.hand_draw
+          return HAND_DRAW_FAMILY if diagram.hand_draw
 
           theme_family_for(explicit) || diagram_default_family || DEFAULT_FONT_FAMILY
         end

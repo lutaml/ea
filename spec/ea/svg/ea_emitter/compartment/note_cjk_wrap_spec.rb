@@ -63,3 +63,14 @@ RSpec.describe "Note CJK rows against the native plateau notes" do
     )
   end
 end
+
+RSpec.describe "Note CJK rows keep closing punctuation attached" do
+  include QeaContentHelpers
+  include NoteCjkWrapHelpers
+
+  %w[676B9C9A 926AFE38].each do |guid|
+    it "emits no row holding only the closing full stop in diagram #{guid}" do
+      expect(qea_texts(plateau_document, guid)).not_to include("。")
+    end
+  end
+end

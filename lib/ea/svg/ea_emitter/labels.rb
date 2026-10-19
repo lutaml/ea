@@ -292,7 +292,9 @@ module Ea
             theme: theme,
             font_family: label_font_family,
             font_size: label_font_size,
-            font_unit: theme.label_font_size_unit
+            font_unit: theme.label_font_size_unit,
+            font_weight: label_font_weight,
+            font_style: label_font_style
           )
         end
 
@@ -302,7 +304,9 @@ module Ea
             model_index: model_index,
             font_family: label_font_family,
             font_size: label_font_size,
-            font_unit: theme.label_font_size_unit
+            font_unit: theme.label_font_size_unit,
+            font_weight: label_font_weight,
+            font_style: label_font_style
           )
         end
 
@@ -328,7 +332,17 @@ module Ea
         end
 
         def label_font_family
+          return FontResolver::HAND_DRAW_FAMILY if diagram.hand_draw
+
           theme.label_font_family || DEFAULT_FAMILY
+        end
+
+        def label_font_weight
+          diagram.hand_draw ? FontResolver::HAND_DRAW_LABEL_WEIGHT : 400
+        end
+
+        def label_font_style
+          diagram.hand_draw ? "italic" : "normal"
         end
 
         def label_font_size
