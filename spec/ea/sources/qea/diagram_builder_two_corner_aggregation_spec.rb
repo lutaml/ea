@@ -26,14 +26,9 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
       .to eq([[510, 342], [700, 342], [700, 643], [604, 643]])
   end
 
-  it "retains fallback behavior for absent, malformed or duplicate saved corners" do
-    [nil, "junk273:-342;273:-643;", "273:-342;273:-342;"].each do |path|
-      expect(saved_aggregation_points(path: path)).to eq([[400, 356], [400, 591]])
-    end
-  end
-
-  it "retains fallback behavior when a saved corner coincides with an outline dock" do
-    ["305:-342;305:-643;", "399:-342;399:-643;"].each do |path|
+  it "retains fallback behavior for absent, malformed, duplicate or zero-leg saved corners" do
+    [nil, "junk273:-342;273:-643;", "273:-342;273:-342;",
+     "305:-342;305:-643;", "399:-342;399:-643;"].each do |path|
       expect(saved_aggregation_points(path: path)).to eq([[400, 356], [400, 591]])
     end
   end
