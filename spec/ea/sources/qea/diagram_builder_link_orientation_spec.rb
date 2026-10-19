@@ -54,7 +54,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
     expect(reversed_route).to eq(before)
   end
 
-  def reversed_route
+  let(:reversed_route) do
     diagram = described_class.new(database).build_one(diagram_row)
     connector = diagram.connectors.find { |row| row.relationship_ref.start_with?("8D4E3649") }
     connector.waypoints.map { |wp| [wp.position.x, wp.position.y] }
