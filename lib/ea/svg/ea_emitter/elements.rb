@@ -257,9 +257,11 @@ module Ea
           # Bag': Set enum box stored h59 -> EA 223 fitting six
           # literals); op-only boxes keep the no-growth behavior
           # (op_bottom_y is a divider sentinel, not content).
+          # Saved boxes may already fit rows with less than the growth
+          # padding. Test the baseline for overflow before adding padding.
           if (attr_lines.any? || enum_literals_for(classifier).any?) &&
              grown_bottom.positive? &&
-             grown_bottom + 8 > bounds.y + bounds.height
+             grown_bottom > bounds.y + bounds.height
             bounds = Ea::Model::Bounds.new(
               x: bounds.x, y: bounds.y,
               width: bounds.width,
