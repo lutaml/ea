@@ -31,7 +31,7 @@ RSpec.describe "Trailing compartment font context" do
     slots = trailing_slot_nodes(size_unit: "px", logical_height: 12)
 
     expect(tags.map { |node| [node["x"].to_f, node["y"].to_f] }).to eq([[52, 50], [15, 63]])
-    expect(slots.map { |node| [node["x"].to_f, node["y"].to_f] }).to eq([[32, 50], [78.5, 73]])
+    expect(slots.map { |node| [node["x"].to_f, node["y"].to_f] }).to eq([[32, 50], [72, 73]])
     # Carlito's c advance (0.4229em) quantizes to 6px at H13,
     # making HighPrecision = false 109px with subpixel rounding.
     expect(tags.map { |node| node["textLength"].to_i }).to eq([23, 109])

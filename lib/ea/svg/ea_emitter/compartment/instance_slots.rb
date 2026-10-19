@@ -30,7 +30,7 @@ module Ea
             fill = context.theme.attribute_text_color
             blocks = []
             slots.each_with_index do |slot, idx|
-              y = first_y + (idx * ROW_OFFSET)
+              y = first_y + (idx * row_offset(context))
               blocks << line_text(slot, bounds, y, context, fill)
             end
             if subtitle
@@ -88,9 +88,19 @@ module Ea
           end
           module_function :content_x_offset
 
+          def row_offset(context)
+            return ROW_OFFSET unless Ea::Fonts::Metrics.compact_compartment_font?(
+              context.size, family: context.family, unit: context.size_unit
+            )
+
+            Ea::Fonts::Metrics.compartment_line_height(
+              context.size, family: context.family, unit: context.size_unit
+            )
+          end
+          module_function :row_offset
+
           def subtitle_text(text, bounds, y_pos, context, fill)
-            estimated_width = text.length * context.size * 0.5
-            x_pos = bounds.x + (bounds.width - estimated_width) / 2.0
+            x_pos = (bounds.x + (bounds.width - subtitle_width(text, context)) / 2.0).floor
             TextRenderer.new(
               content: text,
               x: x_pos,
@@ -101,6 +111,15 @@ module Ea
             ).to_svg
           end
           module_function :subtitle_text
+
+          def subtitle_width(text, context)
+            TextRenderer.estimate_width(
+              text, context.size, nil,
+              family: context.family, style: "italic",
+              logical_height: context.size_unit == "pt" ? context.logical_height : nil
+            ).round
+          end
+          module_function :subtitle_width
 
           def wrap(body, fill)
             group_style = "stroke-width:1;stroke-linecap:round;" \
