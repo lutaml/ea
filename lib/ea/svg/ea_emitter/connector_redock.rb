@@ -21,7 +21,8 @@ module Ea
           return nil unless bounds_map
           points = waypoint_pairs(connector)
           lateral = lateral_tree?(connector, points)
-          return nil unless points.size == 2 || lateral
+          trunk = trunk_tree?(connector, points)
+          return nil unless points.size == 2 || lateral || trunk
 
           rel = relationship_for(connector, model_index)
           return nil unless rel
@@ -33,6 +34,7 @@ module Ea
           target_bounds = bounds_map[target_ref]
           return nil unless source_bounds && target_bounds
           return nil if source_ref == target_ref
+          return trunk_pairs(points, source_bounds, target_bounds, connector.style[:tree]) if trunk
 
           square = OrthogonalRay.pairs_for(connector, source_bounds, target_bounds)
           return square if square
@@ -164,6 +166,37 @@ module Ea
         end
         private_class_method :lateral_tree?
 
+        # The QEA builder already docks the Generalization, Aggregation and
+        # Association trunks; the other types (Dependency, Nesting, ...) keep
+        # their stored ends. A flush (width 0) vertical or horizontal trunk
+        # runs axis-aligned into both boxes, so a stored end off that axis or
+        # on the far edge of its box is a lost dock the adjacent bend names.
+        BUILDER_TRUNK_TYPES = %w[Generalization Aggregation Association].freeze
+
+        def trunk_tree?(connector, points)
+          style = connector.style.to_h
+          points.size >= 3 && style[:mode] == "3" && style[:lwidth] == "0" &&
+            %w[V H].include?(style[:tree]) && !BUILDER_TRUNK_TYPES.include?(connector.connector_type)
+        end
+        private_class_method :trunk_tree?
+
+        def trunk_pairs(points, source, target, tree)
+          first = trunk_dock(points[0], points[1], source, tree)
+          last = trunk_dock(points[-1], points[-2], target, tree)
+          return nil if first == points[0] && last == points[-1]
+
+          [first, *points[1..-2], last]
+        end
+        private_class_method :trunk_pairs
+
+        def trunk_dock(end_point, bend, bounds, tree)
+          return end_point unless bounds.width.positive? && bounds.height.positive?
+
+          dock = tree == "V" ? vertical_target(bend, bounds) : horizontal_target(bend, bounds)
+          dock || end_point
+        end
+        private_class_method :trunk_dock
+
         # The bend selects the near target edge even when the boxes overlap.
         # Preserve the source leg and bend; only the final dock changes.
         def lateral_target(bend, bounds, tree)
@@ -227,7 +260,7 @@ module Ea
         def bordered_outline?(connector, diagram, refs, bounds)
           style = connector.style.to_h
           return false unless style[:lwidth] == "0" && !style[:tree]
-          return false unless %w[Generalization Aggregation Association].include?(connector.connector_type)
+          return false unless %w[Generalization Aggregation Association Dependency].include?(connector.connector_type)
           return false unless bounds.all? { |box| box.width.positive? && box.height.positive? }
 
           ends = [[refs.first, style[:soid]], [refs.last, style[:eoid]]]
@@ -508,15 +541,15 @@ module Ea
 
         # Polymorphic relationship ends, in connector start→end
         # order: Generalization child→parent (specific_id/general_id),
+        # Realization realizing_id/contract_id,
         # Dependency client→supplier (client_id/supplier_id),
         # Association source_id/target_id.
         def end_refs(rel)
-          if rel.respond_to?(:specific_id)
-            [rel.specific_id, rel.general_id]
-          elsif rel.respond_to?(:client_id)
-            [rel.client_id, rel.supplier_id]
-          else
-            [rel.source_id, rel.target_id]
+          case rel
+          when Ea::Model::Generalization then [rel.specific_id, rel.general_id]
+          when Ea::Model::Realization then [rel.realizing_id, rel.contract_id]
+          when Ea::Model::Dependency then [rel.client_id, rel.supplier_id]
+          else [rel.source_id, rel.target_id]
           end
         end
 
