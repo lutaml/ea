@@ -438,6 +438,7 @@ module Ea
           return nil unless pairs.size == 2
           return nil if flush_overlap_ray?(connector)
           return nil if explicit_association_ray?(pairs, connector)
+          return nil if connector.style.to_h[:stored_origin_ray] == true
 
           rel = relationship_for(connector, model_index)
           return nil unless rel
