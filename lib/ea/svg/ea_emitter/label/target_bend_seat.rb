@@ -5,8 +5,7 @@ module Ea
     module EaEmitter
       module Label
         # Moved plain target pairs on saved vertical stairs use the first
-        # bend as their reference. Plateau's three unchanged QEA/XMI routes
-        # agree on the opposing 8px gutters and the baseline 3px above OY.
+        # bend, opposing 8px gutters and a baseline 3px above the saved OY.
         module TargetBendSeat
           def self.reference(points)
             return nil unless points.size == 4
