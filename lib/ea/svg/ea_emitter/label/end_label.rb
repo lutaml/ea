@@ -532,9 +532,8 @@ module Ea
             seat_font? && cambria_box?(box) && [0, 1].include?(box["alignment"])
           end
 
-          # A target leg that runs down seats only on the "LV" tree route
-          # with line width 2; every other vertical seat needs the plain
-          # width-0 route.
+          # Downward target seats require LV width 2; upward target seats
+          # also accept LV width 0. Source seats require a plain width-0 route.
           def plain_vertical_connector?(connector, end_kind, direction)
             return false unless connector.connector_type == "Association" &&
                                 connector_source_dest_stereotype(connector, end_kind).empty?
@@ -547,6 +546,8 @@ module Ea
 
             if direction == :target_down
               style[:lwidth] == "2" && style[:tree] == "LV"
+            elsif direction == :target_up
+              style[:lwidth] == "0" && [nil, "LV"].include?(style[:tree])
             else
               style[:lwidth] == "0" && !style[:tree]
             end
