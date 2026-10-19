@@ -69,7 +69,7 @@ RSpec.describe Ea::Svg::EaEmitter::Label::MidpointLabel, "unsupported box presen
   include_context "stored midpoint stereotype"
 
   it "preserves midpoint placement for unsupported box presentations" do
-    controls = [nil, stored_box.merge("alignment" => 0), stored_box.merge("rotation" => 30),
+    controls = [nil, stored_box.merge("alignment" => 2), stored_box.merge("rotation" => 30),
                 stored_box.merge("hidden" => true), stored_box.merge("bold" => true),
                 stored_box.merge("italic" => true), stored_box.merge("underline" => true),
                 stored_box.merge("direction" => 2), stored_box.merge("color" => 1),
