@@ -452,7 +452,8 @@ module Ea
           model = overlap_ray_origins(model, link_row, diagram_row, geom, context)
           model = auto_port_elbow(model, link_row, diagram_row, geom, context)
           model = mark_default_square_ray(model, link_row, geom, context)
-          restore_stored_square_ports(model, link_row, diagram_row, geom, context)
+          model = restore_stored_square_ports(model, link_row, diagram_row, geom, context)
+          reversed_stored_corner(model, link_row, diagram_row, geom, context)
         end
 
         # Ray origin for one connector end: the element's center

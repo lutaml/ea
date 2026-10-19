@@ -8,6 +8,51 @@ module Ea
         module Routing
           private
 
+          # Offsets stay attached to semantic Start/End IDs even when the
+          # saved corner follows the opposite placement order. Clip each leg
+          # from its stored mathematical origin, retaining external origins.
+          def reversed_stored_corner(model, link_row, diagram_row, geom, context)
+            return model if context || !geom.values_at(:sx, :sy, :ex, :ey).all?
+
+            connector = database.find_connector(link_row.connectorid)
+            return model unless connector && reversed_corner_link?(link_row, diagram_row, connector)
+
+            boxes = stored_ray_boxes(link_row, diagram_row)
+            origins = [stored_ray_origin(boxes[0], geom[:sx], geom[:sy]),
+                       stored_ray_origin(boxes[1], geom[:ex], geom[:ey])]
+            x, y = intermediate_waypoints(link_row).first
+            bend = Ea::Model::Point.new(x: x, y: y)
+            ends = origins.zip(boxes).map do |origin, box|
+              inside_box?(origin, box) ? diagonal_corner_exit(origin, bend, box) : origin
+            end
+            return model unless ends.all?
+
+            model.waypoints = [ends[0], bend, ends[1]].map { |point| Ea::Model::Waypoint.new(position: point) }
+            model.source_anchor, model.target_anchor = origins
+            model
+          end
+
+          # Path follows SOID/EOID placement order, independently of the
+          # relationship's Start/End IDs. Only a complete, unique DUID pair
+          # can reverse the authored single-corner route.
+          def reversed_corner_link?(link_row, diagram_row, connector)
+            style = DiagramStyleParser.parse(link_row.style)
+            return false unless connector.connector_type == "Association" &&
+                                style.values_at(:mode, :lwidth, :tree) == ["3", "0", nil] &&
+                                parse_geometry_fields(link_row.geometry)[:edge] == 2 &&
+                                intermediate_waypoints(link_row).size == 1
+
+            ids = style.values_at(:soid, :eoid)
+            return false if ids.any? { |id| id.to_s.empty? } || ids.uniq.size != 2
+
+            placements = database.diagram_objects_for(diagram_row.diagram_id) || []
+            ends = ids.map do |id|
+              matches = placements.select { |row| DiagramStyleParser.parse(row.objectstyle)[:duid] == id }
+              matches.first.ea_object_id if matches.size == 1
+            end
+            ends == [connector.end_object_id, connector.start_object_id] && ends.uniq.size == 2
+          end
+
           # An empty custom-line Path has no authored corner to preserve.
           # Keep normalized port routes; replace only the computed EDGE2 jog.
           def direct_empty_path_ray(model, link_row, diagram_row, geom, context)
