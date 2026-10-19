@@ -38,8 +38,9 @@ module Ea
         end
 
         # EA's Path= field uses the format `x1:y1$x2:y2$...` where
-        # each pair is a bend point. Coordinates are absolute pixel
-        # positions on the diagram canvas.
+        # each pair is a bend point. EA stores Y negated (as in QEA
+        # t_diagramlinks.Path); the result uses screen-positive Y,
+        # like element bounds.
         def parse_bend_path(raw)
           return [] if raw.nil? || raw.empty?
 
@@ -49,7 +50,7 @@ module Ea
             x_str, y_str = pair.split(":", 2)
             x = int(x_str)
             y = int(y_str)
-            [x, y] if x && y
+            [x, -y] if x && y
           end
         end
 
