@@ -20,6 +20,7 @@ module Ea
               bounds: context.bounds,
               first_y: context.geometry.tagged_value_first_y,
               family: context.family, size: context.size,
+              size_unit: context.size_unit, logical_height: context.logical_height,
               fill: DEFAULT_TEXT_COLOR
             )
           end

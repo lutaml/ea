@@ -196,7 +196,7 @@ module Ea
           def tagged_value_first_y
             return nil unless tagged_values_count.to_i.positive?
 
-            (content_bottom_y || raw_attr_first_y) + size + 5
+            content_bottom_y ? content_bottom_y + size + 5 : raw_attr_first_y
           end
 
           # The lowest content edge among attributes, enum literals,

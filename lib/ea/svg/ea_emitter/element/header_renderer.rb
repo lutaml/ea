@@ -20,20 +20,13 @@ module Ea
             line_h = Ea::Fonts::Metrics.compartment_line_height(
               size, family: family, unit: size_unit, offset: line_offset, logical_height: logical_height
             )
+            ghost_shift = HeaderLines.parent_ghost_gap(lines)
             text_blocks = lines.each_with_index.map do |(text, style), idx|
               weight = case style
                        when :bold, :bold_italic then weight_bold
                        else weight_normal
                        end
               font_style = %i[italic italic_tight bold_italic].include?(style) ? "italic" : "normal"
-              # EA spaces the line AFTER a right-aligned ghost 3px
-              # wider than the pitch. Interfaces use a tighter +3
-              # (936AA434/Surface: ghost 100, «interface» 116).
-              ghost_shift = case lines.first.last
-                            when :italic then 6
-                            when :italic_tight then 3
-                            else 0
-                            end
               y = first_y + (idx * line_h) +
                   (idx >= 1 && ghost_shift.positive? ? ghost_shift : 0)
               x = if %i[italic italic_tight].include?(style)
