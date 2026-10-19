@@ -507,7 +507,7 @@ module Ea
           # An absent source box on a leftward tree leg seats a Property role
           # at the leftward Property seat, not the rightward tree default.
           def tree_left_property_role(connector, end_kind, heading, anchor, box, role)
-            return nil unless leg_direction(end_kind, heading) == :left && box["alignment"]&.zero?
+            return nil unless leg_direction(end_kind, heading) == :left && box&.[]("alignment")&.zero?
             return nil unless connector.style.to_h.values_at(:mode, :lwidth) == %w[3 2]
 
             source_property_seat(connector, :left, anchor, box, role)
