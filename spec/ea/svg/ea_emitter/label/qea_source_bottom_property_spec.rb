@@ -42,12 +42,17 @@ RSpec.describe "QEA zero-box source Property whose saved ray meets the bottom fa
     expect(result[:last][1]).to be < result[:first][1]
   end
 
-  it "preserves moved source boxes and plain roles" do
-    [{ offset: 9 }, { stereotype: "" }].each do |presentation|
-      result = bottom_property_labels(**presentation)
-      role = result[:texts].find { |text| text[:text] == "+lod0Geometry" }
+  it "seats moved source Property boxes at the downward corner" do
+    result = bottom_property_labels(offset: 9)
+    role = result[:texts].find { |text| text[:text] == "+lod0Geometry" }
 
-      expect([role[:x], role[:y]]).to eq([result[:first][0] + presentation.fetch(:offset, 0), result[:first][1]])
-    end
+    expect([role[:x], role[:y]]).to eq([result[:first][0] + 9 - 65 - 67, result[:first][1] + 15])
+  end
+
+  it "preserves plain roles" do
+    result = bottom_property_labels(stereotype: "")
+    role = result[:texts].find { |text| text[:text] == "+lod0Geometry" }
+
+    expect([role[:x], role[:y]]).to eq(result[:first])
   end
 end

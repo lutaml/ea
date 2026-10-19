@@ -213,7 +213,7 @@ module Ea
             phantom_property_box?(connector, direction, box) ||
               (%i[up left right down].include?(direction) &&
                 property_role_box?(box, direction, connector.style.to_h) &&
-                source_property_font?(connector, direction))
+                source_property_font?(connector, direction, box))
           end
 
           # Phantom outlines carry synthesized zero boxes without alignment.
@@ -398,15 +398,19 @@ module Ea
             return false unless box && default_presentation?(box)
             return [0, 1].include?(box["alignment"]) unless direction == :down
 
-            box["alignment"] == 1 || (box["alignment"] == 0 && persisted_plain_down_box?(box, style))
+            case box["alignment"]
+            when 1 then true
+            when 0 then persisted_plain_down_box?(box, style)
+            else false
+            end
           end
 
-          # A persisted alignment-0 box on a plain width-2 route (no tree, no
-          # saved ray) seats like an alignment-1 box; the "OS" route always does.
+          # Persisted alignment-0 boxes on untreed routes use the downward
+          # seat, including saved rays; the "OS" route also seats absent boxes.
           def persisted_plain_down_box?(box, style)
             return true if orthogonal_stub_route?(style)
 
-            !stored_offsets_zero?(box) && style[:tree].nil? && style[:stored_association_ray] != true
+            !stored_offsets_zero?(box) && style[:tree].nil?
           end
 
           def property_role_offsets(direction)
@@ -417,27 +421,32 @@ module Ea
             end
           end
 
-          def source_property_font?(connector, direction)
+          def source_property_font?(connector, direction, box)
             source_property_cambria?(connector) &&
-              source_property_route?(connector.style.to_h, direction)
+              source_property_route?(connector.style.to_h, direction, box)
           end
 
           def source_property_cambria?(connector)
             font_family.to_s.casecmp("Cambria").zero? && property_label?(connector, :source)
           end
 
-          def source_property_route?(style, direction)
+          def source_property_route?(style, direction, box)
             case direction
             when :right then style.values_at(:mode, :lwidth, :tree) == %w[3 2 H]
             when :up then upward_property_route?(style)
             when :left then orthogonal_stub_route?(style) || left_property_route?(style)
-            else downward_source_route?(style)
+            else downward_source_route?(style, box)
             end
           end
 
-          def downward_source_route?(style)
+          def downward_source_route?(style, box)
             [orthogonal_stub_route?(style), lateral_horizontal_route?(style), mode_two_route?(style),
-             downward_property_route?(style)].any?
+             downward_property_route?(style), persisted_width_zero_down_box?(box, style)].any?
+          end
+
+          def persisted_width_zero_down_box?(box, style)
+            box["alignment"]&.zero? && !stored_offsets_zero?(box) && style[:stored_association_ray] != true &&
+              style.values_at(:mode, :lwidth, :tree) == ["3", "0", nil]
           end
 
           # Mode 3, width 2 on the horizontal lateral tree.

@@ -15,7 +15,7 @@ RSpec.describe "QEA source Property roles with a persisted alignment-zero box le
     end
   end
 
-  it "keeps saved-ray, tree, width-0, absent-box and custom presentations at their stored offsets" do
+  it "keeps unsupported routes, absent boxes and custom presentations at their stored offsets" do
     down_alignment_records.product(down_alignment_controls).each do |record, options|
       positions = down_alignment_positions(record, options)
 
