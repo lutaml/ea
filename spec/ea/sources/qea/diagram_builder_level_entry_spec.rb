@@ -26,10 +26,10 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
 
   it "enters stored-path ends orthogonally when the adjacent bend is level with the box" do
     expected = {
-      generalization: [["M 34 1031 L -39 1031 L -39 91 L 284 91"], ["284 91 273 97 273 85"]],
+      generalization: [["M 34 1031 L -39 1031 L -39 91 L 284 91"], ["284 91 268 97 268 85"]],
       aggregation: [["M 239 204 L 267 204 L 267 121 L 484 121"],
                     ["239 204 249 199 259 204 249 209"]],
-      single_bend: [["M 96 170 L 96 92 L 258 92"], ["258 92 247 98 247 86"]]
+      single_bend: [["M 96 170 L 96 92 L 258 92"], ["258 92 242 98 242 86"]]
     }
 
     records.each do |name, input|
@@ -65,16 +65,16 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
 
   it "keeps other single-corner inputs on their existing routes" do
     base = corners[:wide]
-    flat = [["M 336 456 L 471 375"], ["336 456 342 446.57 353.15 445.71 347.15 455.14"]]
+    flat = [["M 336 456 L 471 375"], ["336 456 342 447 353 446 347 455"]]
     cases = [
       ["mode 2", { style: "Mode=2;LWidth=2;" }, *flat],
       ["width 0", { style: "Mode=3;LWidth=0;" }, ["M 335 456 L 472 374"],
-       ["335 456 341.01 446.57 352.16 445.73 346.15 455.15"]],
+       ["335 456 341 447 352 446 346 455"]],
       ["tree V", { style: "Mode=3;LWidth=2;TREE=V;" }, *flat],
       ["association", { connector_type: "Association" },
-       ["M 335 456 L 472 374", "M 462.21 386.85 L 472 374 L 456.05 376.56"], []],
+       ["M 335 456 L 472 374", "M 462 387 L 472 374 L 456 377"], []],
       ["generalization", { connector_type: "Generalization" },
-       ["M 285 340 L 285 271 L 471 271"], ["471 271 460 277 460 265"]],
+       ["M 285 340 L 285 271 L 471 271"], ["471 271 455 277 455 265"]],
       ["corner not level with source", { path: "800:-531;" }, *flat],
       ["corner not level with target", { path: "670:-200;" }, *flat],
       ["two corners", { path: "670:-531;700:-531;" }, *flat]
@@ -90,7 +90,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
   it "respects connector types and routing styles for stored paths" do
     base = records[:generalization]
     kept = [["M 35 991 L -39 1031 L -39 91 L 285 162"],
-            ["285 162 272.97 165.51 275.54 153.78"]]
+            ["285 162 268 164 271 153"]]
     cases = [
       ["tree V", { style: "Mode=3;LWidth=2;TREE=V;" }, *kept],
       ["tree H", { style: "Mode=3;LWidth=2;TREE=H;" }, *kept],
@@ -100,11 +100,11 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
       ["association", { connector_type: "Association" },
        ["M 34 1031 L -39 1031 L -39 91 L 284 91", "M 269 97 L 284 91 L 269 85"], []],
       ["source bend not level", { path: "206:-1000;206:-151;" },
-       ["M 35 990 L -39 940 L -39 91 L 284 91"], ["284 91 273 97 273 85"]],
+       ["M 35 990 L -39 940 L -39 91 L 284 91"], ["284 91 268 97 268 85"]],
       ["source bend inside box", { path: "320:-1091;206:-151;" },
-       ["M 75 991 L 75 1031 L -39 91 L 284 91"], ["284 91 273 97 273 85"]],
+       ["M 75 991 L 75 1031 L -39 91 L 284 91"], ["284 91 268 97 268 85"]],
       ["no stored path", { path: nil },
-       ["M 103 990 L 284 119"], ["284 119 287.64 130.99 275.89 128.55"]]
+       ["M 103 990 L 284 119"], ["284 119 287 136 275 133"]]
     ]
 
     cases.each do |name, override, paths, markers|

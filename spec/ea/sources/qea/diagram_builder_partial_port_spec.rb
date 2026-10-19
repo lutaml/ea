@@ -42,8 +42,8 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
 
   it "draws sloped partial-port lines from the source center to the target ray origin" do
     expected = {
-      right: [["M 255 433 L 437 434"], ["255 433 265.03 428.06 275 433.11 264.97 438.05"]],
-      left: [["M 504 472 L 348 470"], ["504 472 493.94 476.87 484 471.74 494.06 466.87"]],
+      right: [["M 255 433 L 437 434"], ["255 433 265 428 275 433 265 438"]],
+      left: [["M 504 472 L 348 470"], ["504 472 494 477 484 472 494 467"]],
       level: [["M 255 265 L 421 265"], ["255 265 265 260 275 265 265 270"]]
     }
 
@@ -56,7 +56,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
 
   it "uses partial stored ray origins for Associations as well as Aggregations" do
     cases = [
-      [sloped[:right], ["M 255 433 L 437 434", "M 421.97 439.92 L 437 434 L 422.03 427.92"]],
+      [sloped[:right], ["M 255 433 L 437 434", "M 422 440 L 437 434 L 422 428"]],
       [left_source, ["M 255 482 L 422 482", "M 407 488 L 422 482 L 407 476"]]
     ]
     cases.each do |input, paths|
@@ -68,20 +68,20 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
   it "keeps other sloped partial-port inputs on their existing routes" do
     base = sloped[:right]
     base_route = [["M 184 387 L 437 110"],
-                  ["184 387 187.05 376.24 197.49 372.23 194.44 382.99"]]
+                  ["184 387 187 376 197 372 194 383"]]
     cases = [
       ["generalization", { connector_type: "Generalization" },
-       ["M 184 387 L 437 110"], ["437 110 434.01 122.17 425.15 114.08"]],
+       ["M 184 387 L 437 110"], ["437 110 431 126 422 118"]],
       ["mode 2", { style: "Mode=2;LWidth=2;" }, *base_route],
       ["width 0", { style: "Mode=3;LWidth=0;" }, ["M 184 388 L 438 109"],
-       ["184 388 187.03 377.24 197.46 373.21 194.43 383.97"]],
+       ["184 388 187 377 197 373 194 384"]],
       ["tree V", { style: "Mode=3;LWidth=2;TREE=V;" }, *base_route],
       ["stored path", { path: "450:-445;" }, ["M 255 434 L 338 434 L 437 434"],
        ["255 434 265 429 275 434 265 439"]],
       ["source port too", { geometry: "EDGE=2;SX=40;SY=0;EX=-156;EY=-163;" },
-       ["M 255 432 L 437 434"], ["255 432 265.05 427.11 275 432.22 264.94 437.11"]],
+       ["M 255 432 L 437 434"], ["255 432 265 427 275 432 265 437"]],
       ["overlapping boxes", { target: [300, 51, 312, 465] }, ["M 150 387 L 187 116"],
-       ["150 387 146.4 376.42 152.71 367.18 156.31 377.77"]]
+       ["150 387 146 376 153 367 156 378"]]
     ]
 
     cases.each do |name, override, paths, markers|
@@ -104,20 +104,20 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
   end
 
   it "keeps other single-source-port inputs on their existing routes" do
-    slanted = [["M 294 78 L 144 76"], ["294 78 283.93 82.87 274 77.73 284.07 72.87"]]
+    slanted = [["M 294 78 L 144 76"], ["294 78 284 83 274 78 284 73"]]
     cases = [
       ["width 2", { style: "Mode=3;LWidth=2;" }, ["M 293 78 L 145 76"],
-       ["293 78 282.93 82.86 273 77.73 283.07 72.87"]],
+       ["293 78 283 83 273 78 283 73"]],
       ["width 1", { style: "Mode=3;LWidth=1;" }, *slanted],
       ["generalization", { connector_type: "Generalization" },
-       ["M 294 78 L 144 76"], ["144 76 155.08 70.15 154.92 82.15"]],
+       ["M 294 78 L 144 76"], ["144 76 160 70 160 82"]],
       ["mode 2", { style: "Mode=2;LWidth=0;" }, *slanted],
       ["tree V", { style: "Mode=3;LWidth=0;TREE=V;" }, *slanted],
       ["stored path", { path: "300:-135;" }, *slanted],
       ["both ports", { geometry: "SX=-53;SY=2;EX=40;EY=3;EDGE=4;" }, ["M 294 74 L 144 72"],
-       ["294 74 283.93 78.87 274 73.73 284.07 68.87"]],
+       ["294 74 284 79 274 74 284 69"]],
       ["overlapping boxes", { target: [300, 100, 109, 70] }, ["M 94 78 L 141 110"],
-       ["94 78 105.08 79.49 110.53 89.26 99.45 87.76"]]
+       ["94 78 105 79 111 89 99 88"]]
     ]
 
     cases.each do |name, override, paths, markers|
@@ -129,10 +129,10 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
 
   it "keeps other partial-port inputs on their existing routes" do
     slanted = [["M 173 437 L 422 63"],
-               ["173 437 174.38 425.91 184.08 420.35 182.7 431.45"]]
+               ["173 437 174 426 184 420 183 431"]]
     cases = [
       ["generalization", { connector_type: "Generalization" },
-       ["M 173 437 L 422 63"], ["422 63 420.9 75.48 410.91 68.83"]],
+       ["M 173 437 L 422 63"], ["422 63 418 80 408 73"]],
       ["mode 2", { style: "Mode=2;LWidth=2;" }, *slanted],
       ["width 0", { style: "Mode=3;LWidth=0;" }, ["M 254 482 L 423 482"],
        ["254 482 264 477 274 482 264 487"]],
@@ -140,11 +140,11 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
       ["stored path", { path: "400:-457;" }, ["M 255 482 L 356 482 L 422 482"],
        ["255 482 265 477 275 482 265 487"]],
       ["steeper end", { geometry: "EDGE=2;EX=-156;EY=-200;" }, ["M 255 478 L 422 472"],
-       ["255 478 264.81 472.64 274.99 477.28 265.17 482.64"]],
+       ["255 478 265 473 275 477 265 483"]],
       ["both ports", { geometry: "EDGE=2;SX=50;SY=0;EX=-156;EY=-210;" },
        ["M 255 482 L 422 482"], ["255 482 265 477 275 482 265 487"]],
       ["overlapping boxes", { target: [200, 15, 312, 465] }, ["M 145 437 L 155 97"],
-       ["145 437 140.3 426.86 145.59 417.01 150.29 427.15"]]
+       ["145 437 140 427 146 417 150 427"]]
     ]
 
     cases.each do |name, override, paths, markers|

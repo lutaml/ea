@@ -42,17 +42,17 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     controls.each do |change|
       expect(render_qea_route(**input.merge(change))).to eq(
         paths: ["M 382 362 L 295 234"],
-        markers: ["382 362 372.24 356.54 370.76 345.46 380.51 350.92"]
+        markers: ["382 362 372 357 371 345 381 351"]
       ), change.inspect
     end
     %w[0 1 3].each do |width|
       expect(render_qea_route(**input.merge(style: "TREE=V;LWidth=#{width};"))).to eq(
         paths: ["M 383 363 L 294 233"],
-        markers: ["383 363 373.23 357.57 371.7 346.5 381.48 351.92"]
+        markers: ["383 363 373 358 372 346 381 352"]
       ), width
     end
     expect(render_qea_route(**input.merge(connector_type: "Association"))).to eq(
-      paths: ["M 383 363 L 294 233", "M 307.42 241.99 L 294 233 L 297.52 248.77"],
+      paths: ["M 383 363 L 294 233", "M 307 242 L 294 233 L 298 249"],
       markers: []
     )
   end

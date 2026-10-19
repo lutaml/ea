@@ -52,7 +52,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
         source: [463, 528, 100, 77], target: [453, 394, 136, 77]
       )
 
-      expect(result[:paths]).to eq(["M 395 212 L 403 78", "M 408.1 93.33 L 403 78 L 396.12 92.62"])
+      expect(result[:paths]).to eq(["M 395 212 L 403 78", "M 408 93 L 403 78 L 396 93"])
     end
   end
 end

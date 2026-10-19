@@ -15,7 +15,7 @@ RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do
 
   it "stops thin straight connectors on the outer edge of 2px element borders" do
     expect(render_qea_route(**thin, object_styles: [bordered, bordered])).to eq(
-      paths: ["M 227 601 L 227 506"], markers: ["227 506 233 517 221 517"]
+      paths: ["M 227 601 L 227 506"], markers: ["227 506 233 522 221 522"]
     )
     association = thin.merge(connector_type: "Association")
     expect(render_qea_route(**association, object_styles: [bordered, bordered])).to eq(
@@ -24,7 +24,7 @@ RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do
   end
 
   it "keeps default, absent, one-ended and legacy-width cases on their routes" do
-    edge = { paths: ["M 227 602 L 227 505"], markers: ["227 505 233 516 221 516"] }
+    edge = { paths: ["M 227 602 L 227 505"], markers: ["227 505 233 521 221 521"] }
     cases = [
       ["default border", thin, [default, default], edge],
       ["no object style", thin, [nil, nil], edge],
@@ -32,7 +32,7 @@ RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do
       ["border 0", thin, ["LWth=0;", "LWth=0;"], edge],
       ["tree V", thin.merge(style: "Mode=3;LWidth=0;TREE=V;"), [bordered, bordered], edge],
       ["connector width 2", thin.merge(style: "Mode=3;LWidth=2;"), [default, default],
-       { paths: ["M 227 601 L 227 506"], markers: ["227 506 233 517 221 517"] }],
+       { paths: ["M 227 601 L 227 506"], markers: ["227 506 233 522 221 522"] }],
       ["unbordered association", thin.merge(connector_type: "Association"), [default, default],
        { paths: ["M 227 602 L 227 505", "M 233 520 L 227 505 L 221 520"], markers: [] }]
     ]

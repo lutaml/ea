@@ -38,7 +38,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     )
 
     expect(result[:paths]).to eq(["M 191 377 L 149 377 L 149 105"])
-    expect(result[:markers]).to eq(["149 105 155 116 143 116"])
+    expect(result[:markers]).to eq(["149 105 155 121 143 121"])
   end
 
   it "retains top redocking for a vertical tree and an inward lateral bend" do

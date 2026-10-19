@@ -39,7 +39,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
     controls.each do |changes|
       result = render_qea_route(**default_square.merge(changes))
       expect(result).to eq(paths: ["M 473 187 L 260 168"],
-                           markers: ["473 187 462.6 191.09 453.08 185.22 463.48 181.13"])
+                           markers: ["473 187 463 191 453 185 463 181"])
     end
   end
 
@@ -47,7 +47,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
     %w[0 1].each do |width|
       result = render_qea_route(**default_square.merge(style: "Mode=3;TREE=OS;LWidth=#{width};"))
       expect(result).to eq(paths: ["M 474 187 L 259 168"],
-                           markers: ["474 187 463.6 191.1 454.08 185.24 464.48 181.14"])
+                           markers: ["474 187 464 191 454 185 464 181"])
     end
   end
 end
@@ -63,6 +63,6 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
     end
 
     expect(result).to eq(paths: ["M 473 187 L 260 168"],
-                         markers: ["473 187 462.6 191.09 453.08 185.22 463.48 181.13"])
+                         markers: ["473 187 463 191 453 185 463 181"])
   end
 end

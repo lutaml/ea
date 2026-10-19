@@ -95,10 +95,10 @@ RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do # rubocop:disable Metrics/
     [
       ["LV", [[776, 1209], [1015, 1209], [1015, 1046]],
        [820, 1046, 390, 139], "M 776 1209 L 1015 1209 L 1015 1185",
-       "1015 1185 1021 1196 1009 1196"],
+       "1015 1185 1021 1201 1009 1201"],
       ["LH", [[1021, 231], [1021, 161], [860, 222]],
        [530, 100, 330, 122], "M 1021 231 L 1021 161 L 860 161",
-       "860 161 871 155 871 167"]
+       "860 161 876 155 876 167"]
     ].each do |tree, points, target, path, marker|
       source = tree == "LV" ? [387, 1174, 389, 71] : [920, 231, 202, 101]
       fixture = redock_fixture(points: points, source: source, target: target)
@@ -144,20 +144,20 @@ RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do # rubocop:disable Metrics/
 
   it "clips width-2 generalization and aggregation lines and markers against the stroke outline" do # rubocop:disable Metrics/BlockLength
     [
-      [{}, "M 20 99 L 20 41", "20 41 26 52 14 52"],
+      [{}, "M 20 99 L 20 41", "20 41 26 57 14 57"],
       [{ source: [0, 0, 40, 40], target: [0, 100, 40, 40], anchors: [[20, 20], [20, 120]] },
-       "M 20 41 L 20 99", "20 99 14 88 26 88"],
+       "M 20 41 L 20 99", "20 99 14 83 26 83"],
       [{ source: [100, 100, 40, 40], anchors: [[120, 120], [20, 20]] },
-       "M 99 99 L 41 41", "41 41 53.02 44.54 44.54 53.02"],
-      [{ anchors: [[25, 120], [25, 20]] }, "M 25 99 L 25 41", "25 41 31 52 19 52"],
-      [{ anchors: nil }, "M 20 99 L 20 41", "20 41 26 52 14 52"],
-      [{ anchors: [nil, [20, 20]] }, "M 20 99 L 20 41", "20 41 26 52 14 52"],
-      [{ anchors: [[20, 120], nil] }, "M 20 99 L 20 41", "20 41 26 52 14 52"],
+       "M 99 99 L 41 41", "41 41 57 48 48 57"],
+      [{ anchors: [[25, 120], [25, 20]] }, "M 25 99 L 25 41", "25 41 31 57 19 57"],
+      [{ anchors: nil }, "M 20 99 L 20 41", "20 41 26 57 14 57"],
+      [{ anchors: [nil, [20, 20]] }, "M 20 99 L 20 41", "20 41 26 57 14 57"],
+      [{ anchors: [[20, 120], nil] }, "M 20 99 L 20 41", "20 41 26 57 14 57"],
       [{ type: "Aggregation" }, "M 20 99 L 20 41", "20 99 15 89 20 79 25 89"],
       [{ source: [0, 39, 40, 40], anchors: [[20, 59], [20, 20]] },
-       "M 20 38 L 20 41", "20 41 14 30 26 30"],
+       "M 20 38 L 20 41", "20 41 14 25 26 25"],
       [{ source: [39, 39, 40, 40], anchors: [[59, 59], [20, 20]] },
-       "M 38 38 L 41 41", "41 41 28.98 37.46 37.46 28.98"]
+       "M 38 38 L 41 41", "41 41 25 34 34 25"]
     ].each do |parameters, path, marker|
       expect(redock_output(redock_fixture(parameters))).to eq([[path], [marker]]), parameters.inspect
     end
@@ -180,7 +180,7 @@ RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do # rubocop:disable Metrics/
     [nil, { "lwidth" => "2" }].each do |style|
       fixture = redock_fixture
       fixture[:diagram].connectors.first.style = style
-      expect(redock_output(fixture)).to eq([["M 20 100 L 20 40"], ["20 40 26 51 14 51"]])
+      expect(redock_output(fixture)).to eq([["M 20 100 L 20 40"], ["20 40 26 56 14 56"]])
     end
     expect(redock_output(redock_fixture(type: "Association"))).to eq(
       [["M 20 100 L 20 40"], ["M 26 55 L 20 40 L 14 55"]]
@@ -253,7 +253,7 @@ RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do # rubocop:disable Metrics/
                              target: [100, 0, 40, 40], anchors: [[20, 120], [120, 20]],
                              dividers: { "s" => 100, "t" => 10 }
                            ))
-    expect(result).to eq([["M 41 112 L 99 41"], ["99 41 96.69 53.31 87.39 45.72"]])
+    expect(result).to eq([["M 41 112 L 99 41"], ["99 41 94 57 84 50"]])
   end
 
   it "preserves the map, rectangles and connector geometry through both consumers" do
@@ -267,7 +267,7 @@ RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do # rubocop:disable Metrics/
     geometry = [connector.source_anchor, connector.target_anchor, connector.source_port,
                 connector.target_port, *connector.waypoints, *connector.waypoints.map(&:position)]
     before_geometry = geometry.map(&:to_json)
-    expect(redock_output(fixture)).to eq([["M 25 99 L 25 41"], ["25 41 31 52 19 52"]])
+    expect(redock_output(fixture)).to eq([["M 25 99 L 25 41"], ["25 41 31 57 19 57"]])
     expect(fixture[:drawn_bounds]).to equal(bounds)
     expect(bounds.keys).to eq(rectangles.keys)
     rectangles.each { |key, box| expect(bounds[key]).to equal(box) }

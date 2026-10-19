@@ -37,11 +37,11 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
     cases = [
       [[727, 717, 254, 88], [800, 515, 100, 162],
        "SX=0;SY=0;EX=2;EY=-7;EDGE=1;", "Generalization",
-       { paths: ["M 161 241 L 161 202"], markers: ["161 202 167 213 155 213"] },
+       { paths: ["M 161 241 L 161 202"], markers: ["161 202 167 218 155 218"] },
        [[854, 761], [852, 603]]],
       [[11, 461, 224, 108], [33, 249, 182, 70],
        "SX=-1;SY=0;EDGE=1;EX=0;EY=0;", "Generalization",
-       { paths: ["M 147 252 L 147 111"], markers: ["147 111 153 122 141 122"] },
+       { paths: ["M 147 252 L 147 111"], markers: ["147 111 153 127 141 127"] },
        [[122, 515], [124, 284]]]
     ]
     cases.each do |entry|
@@ -121,7 +121,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
     cases = [
       [[73, 558, 224, 108], [95, 376, 182, 70],
        "SX=-1;SY=0;EDGE=1;EX=0;EY=0;", "Generalization",
-       { paths: ["M 147 222 L 147 111"], markers: ["147 111 153 122 141 122"] },
+       { paths: ["M 147 222 L 147 111"], markers: ["147 111 153 127 141 127"] },
        [[184, 612], [186, 411]]]
     ]
     cases.each do |entry|
@@ -146,11 +146,11 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
               geometry: "SX=0;SY=0;EX=2;EY=-7;EDGE=1;", style: "Mode=3;TREE=OS;LWidth=2;" }
     cases = [
       [{ geometry: "SX=1000;SY=0;EX=2;EY=-7;EDGE=1;" },
-       { paths: ["M 1162 286 L 209 122"], markers: ["209 122 220.86 117.95 218.82 129.78"] }],
+       { paths: ["M 1162 286 L 209 122"], markers: ["209 122 226 119 224 131"] }],
       [{ target: [1200, 515, 100, 162] },
-       { paths: ["M 266 241 L 507 136"], markers: ["507 136 499.31 145.89 494.52 134.89"] }],
+       { paths: ["M 266 241 L 507 136"], markers: ["507 136 495 148 490 137"] }],
       [{ geometry: "EX=2;EY=-7;EDGE=1;" },
-       { paths: ["M 161 241 L 161 203"], markers: ["161 203 167 214 155 214"] }]
+       { paths: ["M 161 241 L 161 203"], markers: ["161 203 167 219 155 219"] }]
     ]
     cases.each do |changes, expected|
       connector = nil
@@ -171,9 +171,9 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
               geometry: "SX=0;SY=0;EX=2;EY=-7;EDGE=1;", style: "Mode=3;TREE=OS;LWidth=2;" }
     cases = [
       [{ path: "854:-700;852:-690;" },
-       { paths: ["M 162 241 L 162 225 L 160 215 L 160 203"], markers: ["160 203 166 214 154 214"] }],
+       { paths: ["M 162 241 L 162 225 L 160 215 L 160 203"], markers: ["160 203 166 219 154 219"] }],
       [{ style: "Mode=2;TREE=OS;LWidth=2;" },
-       { paths: ["M 161 241 L 161 203"], markers: ["161 203 167 214 155 214"] }]
+       { paths: ["M 161 241 L 161 203"], markers: ["161 203 167 219 155 219"] }]
     ]
     cases.each do |changes, expected|
       connector = nil
