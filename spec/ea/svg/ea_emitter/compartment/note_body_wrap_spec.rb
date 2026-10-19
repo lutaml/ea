@@ -62,10 +62,10 @@ end
 
 RSpec.describe "Note source logical height" do
   [
-    [12, ["Reference information"], [111]],
-    [13, %w[Reference information], [53, 63]],
-    [nil, %w[Reference information], [53, 63]]
-  ].each do |height, texts, lengths|
+    [12, ["Reference information"], [111], [45]],
+    [13, %w[Reference information], [53, 63], [46, 61]],
+    [nil, %w[Reference information], [53, 63], [46, 61]]
+  ].each do |height, texts, lengths, baselines|
     it "uses source height #{height.inspect} for wrapping and emitted textLength" do
       context = Ea::Svg::EaEmitter::RenderContext.new(
         bounds: Ea::Model::Bounds.new(x: 10, y: 20, width: 119, height: 80),
@@ -78,7 +78,7 @@ RSpec.describe "Note source logical height" do
 
       expect(rows.map(&:text)).to eq(texts)
       expect(rows.map { |row| row["textLength"].to_i }).to eq(lengths)
-      expect(rows.map { |row| row["y"].to_f }).to eq(texts.size == 1 ? [38] : [38, 54])
+      expect(rows.map { |row| row["y"].to_f }).to eq(baselines)
       expect(rows.map { |row| row["style"] }).to all(include("font-size:9pt"))
     end
   end

@@ -112,14 +112,15 @@ module Ea
             return nil unless stereotype_label(connector)
 
             box = connector.label_boxes.to_h[:lmb]
-            return nil unless default_name_box?(box)
+            return nil unless default_name_box?(box, alignments: [0, 1])
 
             stored_position(connector, points, box, LINE_PITCH)
           end
 
           # At 7pt, a centered name's stored corner is 3px below its baseline.
           def stored_name_position(connector, points)
-            stored_position(connector, points, stored_name_box(connector), -3)
+            seat_points = horizontal_bend_seat(points) || points
+            stored_position(connector, seat_points, stored_name_box(connector, points), -3)
           end
 
           def stored_position(connector, points, box, baseline)
@@ -133,21 +134,37 @@ module Ea
             [x + offset_x - (width / 2.0).floor, y + offset_y + baseline]
           end
 
-          def stored_name_box(connector)
+          def stored_name_box(connector, points)
             return nil unless connector.is_a?(Ea::Model::DiagramConnector) && measured_name_font?
             return nil if connector.is_substitutable || stereotype_label(connector)
             return nil if midpoint_content(connector).include?(": ")
 
             box = connector.label_boxes.to_h[:lmt]
-            box if default_name_box?(box)
+            alignments = name_box_alignments(points)
+            box if default_name_box?(box, alignments: alignments)
+          end
+
+          def name_box_alignments(points)
+            horizontal_bend_seat(points) ? [0, 1] : [1]
+          end
+
+          # A vertical-to-horizontal bend seats its name on the horizontal leg.
+          def horizontal_bend_seat(points)
+            return nil unless points.size == 3
+
+            source, bend, target = points
+            return nil unless source[0] == bend[0] && source[1] != bend[1] &&
+                              bend[1] == target[1] && bend[0] != target[0]
+
+            [bend, target]
           end
 
           def measured_name_font?
             font_family.to_s.casecmp("Cambria").zero? && font_size == 7 && font_unit == "pt"
           end
 
-          def default_name_box?(box)
-            return false unless box && box["alignment"] == 1
+          def default_name_box?(box, alignments: [1])
+            return false unless box && alignments.include?(box["alignment"])
             return false unless box.values_at("ox", "oy").all?
             return false unless [nil, 0, 1].include?(box["direction"]) && [nil, -1].include?(box["color"])
 

@@ -152,6 +152,7 @@ module Ea
           # Computed-jog origins are already normalized to their derived ports.
           def correct_stored_ray_origins(model, link_row, diagram_row, geom, context)
             return model if context
+            return notelink_stored_ray(model, link_row, diagram_row, geom) if model.connector_type == "NoteLink"
             return model unless stored_ray_candidate?(model, link_row, geom)
 
             source, target = stored_ray_boxes(link_row, diagram_row)
@@ -166,6 +167,30 @@ module Ea
             model.style[:association_ray_outline] = true if model.connector_type == "Association"
             model.style[:stored_origin_ray] = true if stored_origin_ray?(model, source, target)
             model
+          end
+
+          # A straight top-docked NoteLink uses mathematical saved Y offsets,
+          # like the other custom rays, while authored bends keep their ports.
+          def notelink_stored_ray(model, link_row, diagram_row, geom)
+            return model unless notelink_ray_candidate?(model, link_row, geom)
+
+            source, target = stored_ray_boxes(link_row, diagram_row)
+            return model unless target.y + target.height < source.y
+            return model unless notelink_origins_inside?(source, target, geom)
+
+            set_stored_ray_origins(model, source, target, geom)
+          end
+
+          def notelink_ray_candidate?(model, link_row, geom)
+            model.waypoints.size == 2 && link_row.path.to_s.empty? && model.style[:lwidth] == "2" &&
+              association_ray_style?(model.style.to_h) &&
+              geom[:edge] == 1 && geom.values_at(:sx, :sy, :ex, :ey).all?
+          end
+
+          def notelink_origins_inside?(source, target, geom)
+            origins = [stored_ray_origin(source, geom[:sx], geom[:sy]),
+                       stored_ray_origin(target, geom[:ex], geom[:ey])]
+            origins.zip([source, target]).all? { |origin, box| inside_box?(origin, box) }
           end
 
           # Certify only a straight, width-2 custom-line ray whose corrected

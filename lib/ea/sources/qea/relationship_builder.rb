@@ -80,9 +80,9 @@ module Ea
             target_multiplicity_raw: raw_card(row.destcard),
             source_aggregation: source_aggregation_for(row),
             target_aggregation: aggregation_from(row.destisaggregate),
-            source_navigable: navigable?(row.sourceaccess, row.direction,
+            source_navigable: navigable?(row.sourceisnavigable, row.direction,
                                          :source),
-            target_navigable: navigable?(row.destaccess, row.direction, :target)
+            target_navigable: navigable?(row.destisnavigable, row.direction, :target)
           }
         end
 
@@ -148,10 +148,10 @@ module Ea
           ConnectorRelationshipMap.source_aggregation_for(row.connector_type)
         end
 
-        def navigable?(_access, direction, end_label)
-          # EA's navigability is messy. Treat unspecified direction
-          # as bidirectional, "Source -> Destination" as target-only
-          # navigable, etc. Conservative default: both ends navigable.
+        def navigable?(flag, direction, end_label)
+          return flag == 1 if [0, 1].include?(flag)
+
+          # Missing or unspecified flags retain the direction fallback.
           case direction.to_s
           when "<->", "" then true
           when "->" then end_label == :target

@@ -91,6 +91,7 @@ module Ea
         end
 
         def dashed?(connector)
+          return true if connector.style.to_h[:association_class_ref]
           return true if connector.connector_type == "Dependency"
           return false unless connector.connector_type == "Package"
 

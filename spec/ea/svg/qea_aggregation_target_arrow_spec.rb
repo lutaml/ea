@@ -12,7 +12,7 @@ RSpec.describe "QEA target-owned aggregation navigability arrow" do
   ].each do |type, flag, fill|
     it "draws only the #{fill} target diamond for a #{type} flagged #{flag} directed Source -> Destination" do
       geometry = diamond_geometry(connector_type: type, destisaggregate: flag,
-                                  direction: "Source -> Destination")
+                                  destisnavigable: 0, direction: "Source -> Destination")
 
       expect(geometry[:tip]).to eq(geometry[:finish])
       expect(geometry[:keys]).to eq([fill])

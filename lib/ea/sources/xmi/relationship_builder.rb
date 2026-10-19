@@ -76,8 +76,8 @@ module Ea
             target_multiplicity_upper: parse_upper(target_end),
             source_aggregation: source_end&.aggregation || "none",
             target_aggregation: target_end&.aggregation || "none",
-            source_navigable: navigable?(source_end),
-            target_navigable: navigable?(target_end)
+            source_navigable: navigable?(element, :source),
+            target_navigable: navigable?(element, :target)
           }
         end
 
@@ -128,13 +128,20 @@ module Ea
           Integer(raw) rescue 1
         end
 
-        def navigable?(end_element)
-          return true unless end_element
+        def connector_index
+          @connector_index ||= begin
+            connectors = root.extension&.connectors&.connector || []
+            connectors.each_with_object({}) do |connector, index|
+              index[connector.idref] = connector if connector.idref
+            end
+          end
+        end
 
-          # XMI represents non-navigable ends with aggregation=none
-          # and no role name; treat presence of role name or any
-          # aggregation as navigable. Default: navigable.
-          true
+        def navigable?(element, endpoint)
+          connector = connector_index[element.id]
+          end_element = connector&.public_send(endpoint)
+          flag = end_element&.modifiers&.is_navigable
+          flag.nil? || flag
         end
       end
     end

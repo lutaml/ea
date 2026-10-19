@@ -873,6 +873,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
       association = document.relationships.first
       association.source_aggregation = "none"
       association.target_aggregation = "composite"
+      association.target_navigable = false
     end
 
     expect(result[:paths]).to eq(["M 146 80 L 354 80"])

@@ -105,6 +105,7 @@ module Ea
               text_pos = plain_leftward_target_role(connector, heading, anchor, text_box, role) ||
                          target_leftward_property_role(connector, heading, anchor, text_box, role) ||
                          target_property_role(connector, heading, anchor, text_box, role) ||
+                         saved_ray_target_property_role(connector, heading, anchor, text_box, role) ||
                          target_diagonal_property_role(connector, heading, anchor, text_box, role) ||
                          target_vertical_role(connector, heading, anchor, text_box, role) ||
                          target_rightward_role(heading, anchor, text_box, role) || text_pos
@@ -138,10 +139,46 @@ module Ea
             return nil unless heading && heading[0].negative? && heading[1].zero?
             return nil unless plain_target_role?(connector, box, role)
 
+            return saved_ray_plain_target_position(anchor, box, role) if moved_plain_target_ray?(connector, box)
+
             PlainTargetSeat.position(
               connector: connector, anchor: anchor, box: box,
               width: Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
             )
+          end
+
+          def saved_ray_plain_target_position(anchor, box, role)
+            width = Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
+            x, y = seat_corner(anchor, box)
+            [x - width - SEAT_X_INSET, y - 7] if width
+          end
+
+          def moved_plain_target_ray?(connector, box)
+            saved_target_ray?(connector) && box.values_at("alignment", "cy") == [1, 16] &&
+              !stored_offsets_zero?(box)
+          end
+
+          def saved_target_ray?(connector)
+            connector.connector_type == "Association" &&
+              connector.style.to_h.values_at(:mode, :lwidth, :tree, :stored_association_ray) == ["3", "0", nil, true]
+          end
+
+          # Moved Property boxes on saved rays arriving from below use the
+          # downward seat, relative to the persisted label corner.
+          def saved_ray_target_property_role(connector, heading, anchor, box, role)
+            return nil unless downward_saved_property?(connector, heading, box)
+
+            width = Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
+            return nil unless width
+
+            x, y = seat_corner(anchor, box)
+            inset, baseline = property_role_offsets(:down)
+            [x - inset - width, y + baseline]
+          end
+
+          def downward_saved_property?(connector, heading, box)
+            heading && heading[1].positive? && heading[1] > heading[0].abs &&
+              saved_target_ray?(connector) && moved_target_property_box?(connector, box)
           end
 
           def plain_target_role?(connector, box, role)
@@ -371,7 +408,8 @@ module Ea
           end
 
           def horizontal_target_property_route?(style)
-            style.values_at(:mode, :lwidth) == %w[3 2] && [nil, "LH"].include?(style[:tree])
+            style.values_at(:mode, :lwidth, :tree) == ["3", "0", nil] ||
+              (style.values_at(:mode, :lwidth) == %w[3 2] && [nil, "LH"].include?(style[:tree]))
           end
 
           # An upward target uses the downward property's right edge and

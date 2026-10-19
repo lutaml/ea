@@ -45,8 +45,14 @@ module Ea
                                              File.expand_path("cambria_7_styled_widths.json", __dir__)
                                            )).freeze
       CAMBRIA_7_GUILLEMET_PAIR_WIDTH = 10
+      # Per-family OS/2 win metrics and, where the font has one, its
+      # 1:1 VDMX table (ppem => [ascent, descent] in pixels), read
+      # from the font files named in each entry's version.
+      VERTICAL_METRICS = JSON.parse(File.read(
+                                      File.expand_path("vertical_metrics.json", __dir__)
+                                    )).freeze
       private_constant :CAMBRIA_7_REGULAR_WIDTHS, :CAMBRIA_7_STYLED_WIDTHS,
-                       :CAMBRIA_7_GUILLEMET_PAIR_WIDTH
+                       :CAMBRIA_7_GUILLEMET_PAIR_WIDTH, :VERTICAL_METRICS
 
       # Advance used for codepoints missing from the tables.
       DEFAULT_ADVANCE = 0.25
@@ -90,6 +96,20 @@ module Ea
 
       def gdi_logical_height(size)
         (size.to_f * 10 / 7).round
+      end
+
+      # GDI text-cell [ascent, descent] in pixels at logical height
+      # `height`: the VDMX entry when the font has one (GDI prefers it
+      # for hinted fonts), else the rounded usWinAscent/usWinDescent.
+      # Nil when the family has no vertical data.
+      def gdi_cell_metrics(family, height)
+        data = VERTICAL_METRICS[resolve_family(family)]
+        return nil unless data && height
+
+        data.fetch("vdmx", {})[height.to_s] ||
+          [data["win_ascent"], data["win_descent"]].map do |units|
+            (units * height.to_f / data["units_per_em"]).round
+          end
       end
 
       # Quantize before rounding: near-half-pixel Carlito advances
