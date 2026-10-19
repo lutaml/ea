@@ -50,14 +50,14 @@ module Ea
         end
 
         def layers
-          widths = paths_with_widths
+          styles = paths_with_styles
 
           if grouped
-            widths.group_by(&:first).map do |width, entries|
-              line_layer(width, entries.map(&:last).join("\n  "))
+            styles.group_by(&:first).map do |(width, dashed), entries|
+              line_layer(width, dashed, entries.map(&:last).join("\n  "))
             end
           else
-            widths.map { |width, path| line_layer(width, path) }
+            styles.map { |(width, dashed), path| line_layer(width, dashed, path) }
           end
         end
 
@@ -73,16 +73,29 @@ module Ea
 
         private
 
-        def paths_with_widths
+        def paths_with_styles
           visible_connectors.filter_map do |connector|
             path = path_for(connector)
-            [self.class.stroke_width_for(connector, stroke_width), path] if path
+            next unless path
+
+            [[self.class.stroke_width_for(connector, stroke_width), dashed?(connector)], path]
           end
         end
 
-        def line_layer(width, body)
-          Layer.new(style_key: self.class.layer_key(LINE_STYLE_KEY, width, stroke_width),
-                    style: line_style(width), body: body)
+        def line_layer(width, dashed, body)
+          key = dashed ? :connector_line_dashed : LINE_STYLE_KEY
+          style = line_style(width)
+          style += ";stroke-dasharray:6,3" if dashed
+          Layer.new(style_key: self.class.layer_key(key, width, stroke_width),
+                    style: style, body: body)
+        end
+
+        def dashed?(connector)
+          return true if connector.connector_type == "Dependency"
+          return false unless connector.connector_type == "Package"
+
+          relationship = model_index && model_index[connector.relationship_ref]
+          relationship&.stereotype == "import"
         end
 
         def visible_connectors
