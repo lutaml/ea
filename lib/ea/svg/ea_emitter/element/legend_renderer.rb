@@ -126,8 +126,14 @@ module Ea
 
           def item_label(item, index)
             x = bounds.x + ICON_X_OFFSET + ICON_LABEL_GAP
-            y = item_top_y(index) + LABEL_BASELINE_FROM_ICON_TOP
+            y = item_top_y(index) + item_label_baseline
             build_text(item.name, x: x, y: y, size: item_font_size, weight: 0)
+          end
+
+          def item_label_baseline
+            return LABEL_BASELINE_FROM_ICON_TOP unless (item_font[:unit] || "pt") == "pt"
+
+            item_font[:logical_height] || LABEL_BASELINE_FROM_ICON_TOP
           end
 
           def title_text
