@@ -70,13 +70,16 @@ module Ea
             %(<path d="#{d}" shape-rendering="auto"/>)
           end
 
-          # Diagonal line marking the fold.
+          # Inner edges of the folded corner; the outer path supplies the diagonal.
           def fold_line
             x = bounds.x
             y = bounds.y
             w = bounds.width
             fold = [FOLD_SIZE, w / 3, bounds.height / 3].min
-            %(<path d="M #{Canvas.coord(x + w - fold)} #{Canvas.coord(y)} L #{Canvas.coord(x + w)} #{Canvas.coord(y + fold)}" shape-rendering="auto"/>)
+            d = "M #{Canvas.coord(x + w - fold)} #{Canvas.coord(y)} " \
+                "L #{Canvas.coord(x + w - fold)} #{Canvas.coord(y + fold)} " \
+                "L #{Canvas.coord(x + w)} #{Canvas.coord(y + fold)}"
+            %(<path d="#{d}" shape-rendering="auto"/>)
           end
 
           def text_block

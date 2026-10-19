@@ -151,8 +151,8 @@ module Ea
 
           # Real font metrics when available; legacy per-char
           # estimate otherwise (families without metric tables).
-          def estimated_width(text, size)
-            measured = Ea::Fonts::Metrics.text_length(text, size, family: family)
+          def estimated_width(text, size, weight: nil)
+            measured = Ea::Fonts::Metrics.text_length(text, size, family: family, weight: weight)
             return measured if measured
 
             text.to_s.each_char.sum do |ch|
@@ -181,7 +181,7 @@ module Ea
           end
 
           def title_text_width
-            estimated_width(legend.title, title_font_size)
+            estimated_width(legend.title, title_font_size, weight: 700)
           end
 
           def build_text(content, x:, y:, size:, weight:)

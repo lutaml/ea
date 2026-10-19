@@ -16,12 +16,17 @@ module Ea
                 legend: context.model_element.legend,
                 family: context.family
               )
-            elsif context.model_element.is_a?(Ea::Model::Package) ||
-                  context.model_element.is_a?(Ea::Model::Note)
-              # Notes keep the folder silhouette but never render a
-              # label (EA publishes note bodies only).
-              label = package_label(context.model_element) if context.model_element.is_a?(Ea::Model::Package)
-              stereotype = package_stereotype(context.model_element) if context.model_element.is_a?(Ea::Model::Package)
+            elsif context.model_element.is_a?(Ea::Model::Note)
+              Element::NoteShapeRenderer.render(
+                context.bounds,
+                body: "", fill: context.fill, stroke: context.stroke,
+                stroke_width: context.stroke_width,
+                family: context.family, size: context.size,
+                text_fill: context.text_fill
+              )
+            elsif context.model_element.is_a?(Ea::Model::Package)
+              label = package_label(context.model_element)
+              stereotype = package_stereotype(context.model_element)
               Element::PackageShapeRenderer.render(
                 context.bounds,
                 fill: context.fill, stroke: context.stroke,
