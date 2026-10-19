@@ -23,7 +23,8 @@ RSpec.describe "Trailing compartment font context" do
   it "retains the source logical height in instance slots and the foreign subtitle" do
     nodes = trailing_slot_nodes(size_unit: "pt", logical_height: 12)
 
-    expect(nodes.map { |node| node["textLength"].to_i }).to eq([102, 71])
+    # Italic Carlito m advances 10px at H12 in the measured GDI table.
+    expect(nodes.map { |node| node["textLength"].to_i }).to eq([102, 72])
   end
 
   it "uses pixel metrics independently of source logical height and preserves positions" do
