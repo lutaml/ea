@@ -128,7 +128,7 @@ module Ea
           return heading unless points.size == 2 && heading.none?(&:zero?)
 
           box = source_dock_bounds(connector)
-          face = box && dock_face_heading(points.first, box)
+          face = box && source_dock_heading(connector, points.first, box)
           return face if face && face_leads_leg?(connector, face, heading, box)
 
           stored_upward_heading(connector, heading)
@@ -180,6 +180,19 @@ module Ea
           return nil unless drawn_bounds[target]
 
           drawn_bounds[source]
+        end
+
+        # Saved rays can start outside the box. Project onto its boundary;
+        # corners stay ambiguous and the face must still lead the emitted leg.
+        def source_dock_heading(connector, point, box)
+          return dock_face_heading(point, box) unless connector.style.to_h[:association_ray_outline] == true
+          return nil unless box.width.positive? && box.height.positive?
+
+          dock_face_heading(projected_dock_point(point, box), box)
+        end
+
+        def projected_dock_point(point, box)
+          [point[0].clamp(box.x, box.x + box.width), point[1].clamp(box.y, box.y + box.height)]
         end
 
         def dock_face_heading(point, box)
