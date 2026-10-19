@@ -58,9 +58,15 @@ module Ea
                                          File.expand_path("cjk_fallback_widths.json", __dir__)
                                        )).fetch("widths").freeze
       CJK_FALLBACK_FAMILIES = %w[Carlito Cambria].freeze
+      # Carlito ASCII advances measured on Windows per "height:weight:style";
+      # they take precedence over the quantized design advances.
+      CARLITO_GDI_WIDTHS = JSON.parse(File.read(
+                                        File.expand_path("carlito_gdi_widths.json", __dir__)
+                                      )).fetch("widths").freeze
       private_constant :CAMBRIA_7_REGULAR_WIDTHS, :CAMBRIA_7_STYLED_WIDTHS,
                        :CAMBRIA_7_GUILLEMET_PAIR_WIDTH, :VERTICAL_METRICS,
-                       :CJK_FALLBACK_WIDTHS, :CJK_FALLBACK_FAMILIES
+                       :CJK_FALLBACK_WIDTHS, :CJK_FALLBACK_FAMILIES,
+                       :CARLITO_GDI_WIDTHS
 
       # Advance used for codepoints missing from the tables.
       DEFAULT_ADVANCE = 0.25
@@ -153,6 +159,7 @@ module Ea
           height = logical_height || gdi_logical_height(size_pt)
           table = table_for(family, weight, style)
           fallback = cjk_fallback_widths(resolved, height, weight, style)
+          measured_latin = measured_carlito_widths(resolved, height, weight, style)
           latin = 0
           cjk_count = 0
           text.each_char do |ch|
@@ -160,7 +167,8 @@ module Ea
               measured = fallback[ch]
               measured ? latin += measured : cjk_count += 1
             else
-              latin += gdi_pixel_advance(table[cp_key(ch)] || DEFAULT_ADVANCE, height)
+              latin += measured_latin[ch] ||
+                       gdi_pixel_advance(table[cp_key(ch)] || DEFAULT_ADVANCE, height)
             end
           end
           return latin + cjk_count * CJK_ADVANCE * size_pt.to_f
@@ -182,6 +190,13 @@ module Ea
         CJK_FALLBACK_WIDTHS.fetch("#{height}:#{bold?(weight) ? 700 : 400}:#{italic?(style) ? "italic" : "normal"}", {})
       end
       private_class_method :cjk_fallback_widths
+
+      def measured_carlito_widths(family, height, weight, style)
+        return {} unless family == "Carlito"
+
+        CARLITO_GDI_WIDTHS.fetch("#{height}:#{bold?(weight) ? 700 : 400}:#{italic?(style) ? "italic" : "normal"}", {})
+      end
+      private_class_method :measured_carlito_widths
 
       def cambria_text_length(text, size_pt, weight, style)
         return nil unless size_pt.to_f.to_r == 7
