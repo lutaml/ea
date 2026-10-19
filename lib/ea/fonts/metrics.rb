@@ -51,6 +51,9 @@ module Ea
       # Advance used for codepoints missing from the tables.
       DEFAULT_ADVANCE = 0.25
 
+      # Inferred subpixel steps that reproduce EA's near-half-pixel rounding.
+      GDI_SUBPIXELS = 64
+
       # Carlito/Arial have no CJK glyphs; EA's renderer falls back to
       # a proportional CJK font whose advances measure ~0.709em at
       # the NOMINAL size (not scaled by the per-style factors) —
@@ -89,6 +92,13 @@ module Ea
         (size.to_f * 10 / 7).round
       end
 
+      # Quantize before rounding: near-half-pixel Carlito advances
+      # round up in EA's output. The 1/64px step is inferred.
+      def gdi_pixel_advance(advance, height)
+        ((advance * height * GDI_SUBPIXELS).round / GDI_SUBPIXELS.to_f).round
+      end
+      private_class_method :gdi_pixel_advance
+
       def compact_compartment_font?(size, family:, unit: "pt")
         family.to_s.casecmp("Cambria").zero? && size == 7 && unit == "pt"
       end
@@ -122,7 +132,7 @@ module Ea
             if cjk?(ch.ord)
               cjk_count += 1
             else
-              latin += ((table[cp_key(ch)] || DEFAULT_ADVANCE) * height).round
+              latin += gdi_pixel_advance(table[cp_key(ch)] || DEFAULT_ADVANCE, height)
             end
           end
           return latin + cjk_count * CJK_ADVANCE * size_pt.to_f
@@ -166,7 +176,7 @@ module Ea
 
       # Families whose EA driver quantizes per-glyph advances
       # (fitted from published textLengths).
-      GDI_HEIGHT_FAMILIES = %w[Carlito].freeze
+      GDI_HEIGHT_FAMILIES = %w[Carlito Arial].freeze
 
       def supported_family?(family)
         !resolve_family(family).nil?

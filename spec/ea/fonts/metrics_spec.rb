@@ -105,6 +105,27 @@ RSpec.describe Ea::Fonts::Metrics do
       expect(nine).to eq(exp9.to_f)
     end
 
+    # EA-published textLengths constrain the inferred subpixel rounding.
+    [
+      ["class: gml:CodeType [0..1]", 400, "normal", 136],
+      ["uro::LargeCustomerFacilityAttribute", 700, "normal", 200],
+      ["uro::LengthAttribute", 700, "normal", 117],
+      ["uro::UtilityLink", 700, "italic", 82],
+      ["tran::TransportationComplex", 700, "normal", 160],
+      ["_TransportationObject", 400, "italic", 119]
+    ].each do |text, weight, style, expected|
+      it "measures Carlito 9pt #{weight} #{style} #{text.inspect} as #{expected}" do
+        expect(described_class.text_length(text, 9, family: "Carlito", weight: weight, style: style))
+          .to eq(expected)
+      end
+    end
+
+    # Arial's design advances are read from the installed Arial.ttf
+    # (periodcentered = 682/2048 em), not fitted: at H14 that is 4.66px.
+    it "uses the Arial font's own advance for the middle dot" do
+      expect(described_class.text_length("·", 10, family: "Arial")).to eq(5)
+    end
+
     it "treats Calibri as metric-compatible with Carlito" do
       expect(described_class.text_length("Hello", 7, family: "Calibri"))
         .to eq(described_class.text_length("Hello", 7, family: "Carlito"))
