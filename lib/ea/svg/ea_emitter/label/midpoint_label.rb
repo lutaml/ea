@@ -15,15 +15,17 @@ module Ea
         # Stereotype wins when both are present.
         class MidpointLabel
           attr_reader :canvas, :model_index, :font_family, :font_size,
-                      :font_unit
+                      :font_unit, :font_weight, :font_style
 
           def initialize(canvas:, model_index:, font_family:, font_size:,
-                         font_unit:)
+                         font_unit:, font_weight: 400, font_style: "normal")
             @canvas = canvas
             @model_index = model_index
             @font_family = font_family
             @font_size = font_size
             @font_unit = font_unit
+            @font_weight = font_weight
+            @font_style = font_style
           end
 
           # Returns the SVG `<text>` for the connector's midpoint
@@ -208,6 +210,7 @@ module Ea
             y_t = canvas ? canvas.translate_y(y) : y
             TextRenderer.new(content:, x: x_t, y: y_t,
                              family: font_family, size: font_size,
+                             weight: font_weight, style: font_style,
                              size_unit: font_unit,
                              fill: "#000000").to_svg
           end

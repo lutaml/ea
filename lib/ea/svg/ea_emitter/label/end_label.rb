@@ -28,10 +28,12 @@ module Ea
           MIN_ROLE_X = 3
 
           attr_reader :canvas, :model_index, :document, :theme,
-                      :font_family, :font_size, :font_unit
+                      :font_family, :font_size, :font_unit,
+                      :font_weight, :font_style
 
           def initialize(canvas:, model_index:, document:, theme:,
-                         font_family:, font_size:, font_unit:)
+                         font_family:, font_size:, font_unit:,
+                         font_weight: 400, font_style: "normal")
             @canvas = canvas
             @model_index = model_index
             @document = document
@@ -39,6 +41,8 @@ module Ea
             @font_family = font_family
             @font_size = font_size
             @font_unit = font_unit
+            @font_weight = font_weight
+            @font_style = font_style
           end
 
           # Returns an Array of `<text>` SVG strings for one endpoint.
@@ -995,6 +999,7 @@ module Ea
             y_t = canvas ? canvas.translate_y(y) : y
             TextRenderer.new(content:, x: x_t, y: y_t,
                              family: font_family, size: font_size,
+                             weight: font_weight, style: font_style,
                              size_unit: font_unit,
                              fill: fill_color).to_svg
           end
