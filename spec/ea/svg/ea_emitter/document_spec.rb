@@ -53,10 +53,30 @@ RSpec.describe Ea::Svg::EaEmitter::Document do
     expect(svg).to include("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\"")
   end
 
+  it "omits the generated frame for a source-empty diagram by default" do
+    empty = Ea::Model::Diagram.new(id: "empty", name: "Empty", diagram_type: "logical")
+    output = described_class.new(empty, model_index: {}).render
+
+    expect(output).to include("<rect ")
+    expect(output).not_to include("class Empty")
+    expect(output).not_to include("<path d=")
+    expect(output).not_to include("<polygon points=")
+  end
+
+  it "keeps an explicitly requested frame on a source-empty diagram" do
+    empty = Ea::Model::Diagram.new(id: "empty", name: "Empty", diagram_type: "logical")
+    output = described_class.new(empty, model_index: {}, frame: true).render
+
+    expect(output).to include("class Empty")
+    expect(output).to include("<path d=")
+    expect(output).to include("<polygon points=")
+  end
+
   it "emits root svg with cm width and height" do
     expect(svg).to match(/width="\d+\.\d{2}cm"/)
     expect(svg).to match(/height="\d+\.\d{2}cm"/)
     expect(svg).to include("viewBox=")
+    expect(svg).to include("class Overview")
   end
 
   it "includes the EA build marker in <desc>" do

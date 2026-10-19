@@ -12,10 +12,10 @@ module Ea
 
         attr_reader :diagram, :model_index, :frame, :document
 
-        def initialize(diagram, model_index:, frame: true, document: nil, **_options)
+        def initialize(diagram, model_index:, frame: nil, document: nil, **_options)
           @diagram = diagram
           @model_index = model_index
-          @frame = frame
+          @frame = frame.nil? ? !empty_diagram?(diagram) : frame
           @document = document
         end
 
@@ -86,6 +86,11 @@ module Ea
           %(<g>#{svg}</g>)
         end
         private :render_image
+
+        def empty_diagram?(source_diagram)
+          source_diagram.elements.empty? && source_diagram.connectors.empty?
+        end
+        private :empty_diagram?
       end
     end
   end
