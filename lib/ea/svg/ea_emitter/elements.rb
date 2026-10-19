@@ -11,7 +11,7 @@ module Ea
       class Elements
         DEFAULT_FILL = "#FFFFFF"
         DEFAULT_STROKE = "#000000"
-        DEFAULT_STROKE_WIDTH = 2
+        DEFAULT_STROKE_WIDTH = 1
         DEFAULT_TEXT_COLOR = "#000000"
 
         attr_reader :diagram, :model_index, :canvas, :document
@@ -178,6 +178,9 @@ module Ea
                                                                 off_canvas_parent_name: parent_name,
                                                                 foreign_package_name: foreign_package_name_for(classifier),
                                                                 suppress_stereotypes: suppress_stereotypes?) : []
+          header_lines = header_lines.map do |text, style|
+            [text, font_resolver.header_style_for(style, element)]
+          end
           geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
                                           tagged_values_for(classifier).size,
                                           header_lines, classifier: classifier, family: family,

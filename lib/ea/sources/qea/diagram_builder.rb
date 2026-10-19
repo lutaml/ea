@@ -150,14 +150,14 @@ module Ea
           )
         end
 
-        # Negative widths inherit the saved object border, then the diagram theme.
+        # Negative widths inherit; QEA zero widths request a one-pixel cosmetic pen.
         def effective_line_width(obj_row, style)
           object = database.find_object(obj_row.ea_object_id)
           [style[:lwth], object&.borderwidth].each do |raw|
             next if raw.nil? || raw.to_s.empty?
 
             width = raw.to_i
-            return width if width >= 0
+            return [width, 1].max if width >= 0
           end
           nil
         end
