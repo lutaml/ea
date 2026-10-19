@@ -14,7 +14,9 @@ module Ea
               Element::LegendRenderer.render(
                 context.bounds,
                 legend: context.model_element.legend,
-                family: context.family
+                family: context.family,
+                item_font: { size: context.element&.font_size&.nonzero?, unit: context.size_unit,
+                             logical_height: context.logical_height }
               )
             elsif context.model_element.is_a?(Ea::Model::Note)
               Element::NoteShapeRenderer.render(

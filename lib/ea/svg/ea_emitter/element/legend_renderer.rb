@@ -32,15 +32,16 @@ module Ea
           LABEL_BASELINE_FROM_ICON_TOP = 12
           DEFAULT_ITEM_FONT_SIZE = 9
 
-          def self.render(bounds, legend:, family:, canvas: nil)
-            new(bounds, legend, family, canvas).to_svg
+          def self.render(bounds, legend:, family:, canvas: nil, item_font: {})
+            new(bounds, legend, family, canvas, item_font).to_svg
           end
 
-          def initialize(bounds, legend, family, canvas)
+          def initialize(bounds, legend, family, canvas, item_font = {})
             @bounds = bounds
             @legend = legend
             @family = family
             @canvas = canvas
+            @item_font = item_font[:size]&.nonzero? ? item_font : {}
           end
 
           def to_svg
@@ -49,7 +50,7 @@ module Ea
 
           private
 
-          attr_reader :bounds, :legend, :family, :canvas
+          attr_reader :bounds, :legend, :family, :canvas, :item_font
 
           def container_layer
             body = format(
@@ -151,8 +152,9 @@ module Ea
 
           # Real font metrics when available; legacy per-char
           # estimate otherwise (families without metric tables).
-          def estimated_width(text, size, weight: nil)
-            measured = Ea::Fonts::Metrics.text_length(text, size, family: family, weight: weight)
+          def estimated_width(text, size, weight: nil, logical_height: nil)
+            measured = Ea::Fonts::Metrics.text_length(text, size, family: family, weight: weight,
+                                                                  logical_height: logical_height)
             return measured if measured
 
             text.to_s.each_char.sum do |ch|
@@ -161,7 +163,10 @@ module Ea
           end
 
           def widest_item_label_width
-            legend.items.map { |i| estimated_width(i.name, item_font_size) }.max || 0.0
+            logical_height = item_font[:logical_height] if (item_font[:unit] || "pt") == "pt"
+            legend.items.map do |item|
+              estimated_width(item.name, item_font_size, logical_height: logical_height)
+            end.max || 0.0
           end
 
           def item_top_y(index)
@@ -177,7 +182,7 @@ module Ea
           end
 
           def item_font_size
-            DEFAULT_ITEM_FONT_SIZE
+            item_font[:size] || DEFAULT_ITEM_FONT_SIZE
           end
 
           def title_text_width
@@ -186,10 +191,11 @@ module Ea
 
           def build_text(content, x:, y:, size:, weight:)
             tx, ty = translate(x, y)
+            size_unit = weight.zero? ? (item_font[:unit] || "pt") : "pt"
             TextRenderer.new(
               content: content.to_s, x: tx, y: ty,
-              family: family, size: size, size_unit: "pt",
-              weight: weight, fill: label_fill
+              family: family, size: size, size_unit: size_unit,
+              weight: weight, fill: label_fill, logical_height: weight.zero? ? item_font[:logical_height] : nil
             ).to_svg
           end
 
