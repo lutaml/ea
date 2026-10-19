@@ -152,8 +152,8 @@ module Ea
 
           # Real font metrics when available; legacy per-char
           # estimate otherwise (families without metric tables).
-          def estimated_width(text, size, weight: nil, logical_height: nil)
-            measured = Ea::Fonts::Metrics.text_length(text, size, family: family, weight: weight,
+          def estimated_width(text, size, weight: nil, logical_height: nil, text_family: family)
+            measured = Ea::Fonts::Metrics.text_length(text, size, family: text_family, weight: weight,
                                                                   logical_height: logical_height)
             return measured if measured
 
@@ -186,7 +186,11 @@ module Ea
           end
 
           def title_text_width
-            estimated_width(legend.title, title_font_size, weight: 700)
+            estimated_width(legend.title, title_font_size, weight: 700, text_family: heading_family)
+          end
+
+          def heading_family
+            legend.heading_family || family
           end
 
           def build_text(content, x:, y:, size:, weight:)
@@ -194,7 +198,7 @@ module Ea
             size_unit = weight.zero? ? (item_font[:unit] || "pt") : "pt"
             TextRenderer.new(
               content: content.to_s, x: tx, y: ty,
-              family: family, size: size, size_unit: size_unit,
+              family: weight.zero? ? family : heading_family, size: size, size_unit: size_unit,
               weight: weight, fill: label_fill, logical_height: weight.zero? ? item_font[:logical_height] : nil
             ).to_svg
           end

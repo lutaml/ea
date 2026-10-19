@@ -21,6 +21,7 @@ module Ea
 
       attribute :title, :string, default: -> { DEFAULT_TITLE }
       attribute :heading_size, :integer
+      attribute :heading_family, :string
       attribute :font_color, :integer, default: -> { DEFAULT_FONT_COLOR }
       attribute :background_color, :integer, default: -> { DEFAULT_BACKGROUND_COLOR }
       attribute :border_color, :integer, default: -> { DEFAULT_BORDER_COLOR }
@@ -32,6 +33,7 @@ module Ea
         map "name", to: :name
         map "title", to: :title
         map "headingSize", to: :heading_size
+        map "headingFamily", to: :heading_family
         map "fontColor", to: :font_color
         map "backgroundColor", to: :background_color
         map "borderColor", to: :border_color
