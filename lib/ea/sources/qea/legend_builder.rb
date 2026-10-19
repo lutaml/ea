@@ -12,6 +12,7 @@ module Ea
       # Returns nil when no matching xref exists (the Text element
       # is not a legend — caller should render it as a plain note).
       class LegendBuilder
+        DEFAULT_HEADING_FAMILY = "Cambria"
         LEGEND_XREF_NAME = "CustomProperties"
         LEGEND_TYPE_OBJECT_STYLE = "LEGEND_OBJECTSTYLE"
         LEGEND_TYPE_STYLE_SETTINGS = "LEGEND_STYLE_SETTINGS"
@@ -77,6 +78,7 @@ module Ea
           Ea::Model::Legend.new(
             title: style["TITLE"] || Ea::Model::Legend::DEFAULT_TITLE,
             heading_size: int_or_nil(style["HEADINGSIZE"]),
+            heading_family: DEFAULT_HEADING_FAMILY,
             font_color: int_or(style["FONTCOLOR"],
                                Ea::Model::Legend::DEFAULT_FONT_COLOR),
             background_color: int_or(style["BACKGROUNDCOLOR"],
