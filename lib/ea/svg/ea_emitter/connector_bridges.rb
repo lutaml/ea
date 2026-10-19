@@ -4,13 +4,13 @@ module Ea
   module Svg
     module EaEmitter
       # Bridges decorate resolved render paths; stored routes and marker seats
-      # remain centerlines. Placement order, rather than style group order,
-      # determines which connector passes over a crossing.
+      # remain centerlines. The connector's stored order key (reproducing EA's
+      # exported link order), rather than style group order, determines which
+      # connector passes over a crossing.
       class ConnectorBridges
         RADIUS = 6
 
-        def initialize(diagram, routes)
-          @owners = Array(diagram.elements).group_by(&:id)
+        def initialize(_diagram, routes)
           @routes = routes.map { |connector, points| [connector, points, priority_for(connector)] }
         end
 
@@ -54,9 +54,9 @@ module Ea
           commands.join(" ")
         end
 
+        # nil or empty: no bridge decision for this connector.
         def priority_for(connector)
-          owners = @owners[connector.source_element_ref]
-          owners.first.z_order if connector.source_element_ref && owners&.size == 1
+          connector.paint_order if connector.paint_order&.any?
         end
 
         def crossings_for(connector, priority, first, last)
@@ -71,10 +71,17 @@ module Ea
           separate_crossings(crossings, axis).sort_by { |point| (point[axis] - first[axis]).abs }
         end
 
+        # The order key is only proven across different start placements, so
+        # connectors leaving the same placement make no carrier decision.
         def lower_routes(connector, priority)
           @routes.select do |partner, _points, order|
-            !partner.equal?(connector) && order && order < priority
+            !partner.equal?(connector) && order && order.size == priority.size &&
+              !same_source?(connector, partner) && (order <=> priority).negative?
           end
+        end
+
+        def same_source?(connector, partner)
+          connector.source_element_ref && connector.source_element_ref == partner.source_element_ref
         end
 
         # Suppress both overlapping spans, including coincident crossings,

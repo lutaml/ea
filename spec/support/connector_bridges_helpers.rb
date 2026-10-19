@@ -11,6 +11,7 @@ module ConnectorBridgesHelpers
   end
 
   def bridge_diagram(connectors, orders = [25, 9, 21])
+    connectors.each_with_index { |connector, index| connector.paint_order ||= [orders[index]] }
     Ea::Model::Diagram.new(
       id: "bridges", connectors: connectors,
       elements: connectors.each_with_index.map do |connector, index|

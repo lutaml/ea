@@ -13,6 +13,12 @@ module Ea
       attribute :relationship_ref, :string
       attribute :source_element_ref, :string
       attribute :target_element_ref, :string
+      # Crossing-carrier key reproducing EA's exported XMI link order
+      # (not asserted to be native paint order). QEA input:
+      # [start placement Instance_ID, Connector_ID]; XMI input: [rank in
+      # the diagram's child order]. Keys of different lengths are never
+      # compared. nil or []: unresolved, no bridge decision.
+      attribute :paint_order, :integer, collection: true
       attribute :source_duid, :string
       attribute :target_duid, :string
       attribute :source_edge, :integer
@@ -59,6 +65,7 @@ module Ea
         map "relationshipRef", to: :relationship_ref
         map "sourceElementRef", to: :source_element_ref
         map "targetElementRef", to: :target_element_ref
+        map "paintOrder", to: :paint_order
         map "sourceDuid", to: :source_duid
         map "isSubstitutable", to: :is_substitutable
         map "targetDuid", to: :target_duid

@@ -458,6 +458,7 @@ module Ea
             relationship_ref: ref_for_connector(link_row),
             source_element_ref: unique_placement_ref(diagram_row.diagram_id, connector&.start_object_id),
             target_element_ref: unique_placement_ref(diagram_row.diagram_id, connector&.end_object_id),
+            paint_order: paint_order_for(diagram_row.diagram_id, connector),
             connector_type: connector&.connector_type,
             direction: connector&.direction,
             source_stereotype: connector&.sourcestereotype,
@@ -936,14 +937,26 @@ module Ea
           objects.find { |o| o.ea_object_id == ea_object_id }
         end
 
-        def unique_placement_ref(diagram_id, ea_object_id)
+        # Key reproducing EA's exported XMI link order: start placement
+        # Instance_ID, then Connector_ID. [] without a unique start placement.
+        def paint_order_for(diagram_id, connector)
+          placement = unique_placement(diagram_id, connector&.start_object_id)
+          return [] unless placement&.instance_id && connector.connector_id
+
+          [placement.instance_id, connector.connector_id]
+        end
+
+        def unique_placement(diagram_id, ea_object_id)
           return nil unless ea_object_id
 
           placements = (database.diagram_objects_for(diagram_id) || [])
                        .select { |placement| placement.ea_object_id == ea_object_id }
-          return nil unless placements.one?
+          placements.first if placements.one?
+        end
 
-          IdNormalizer.synthetic("de", diagram_id, placements.first.instance_id)
+        def unique_placement_ref(diagram_id, ea_object_id)
+          placement = unique_placement(diagram_id, ea_object_id)
+          IdNormalizer.synthetic("de", diagram_id, placement.instance_id) if placement
         end
 
         # Compute the connection point on an element's edge for the

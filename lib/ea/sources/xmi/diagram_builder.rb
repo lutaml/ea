@@ -144,10 +144,12 @@ module Ea
             acc[pe.style.duid] = pe if pe.style.duid
           end
 
-          placed_connectors.map { |p| build_connector(p, by_duid, owner_id) }
+          placed_connectors.each_with_index.map do |placed, index|
+            build_connector(placed, by_duid, owner_id, index)
+          end
         end
 
-        def build_connector(placed, by_duid, owner_id)
+        def build_connector(placed, by_duid, owner_id, rank)
           geom = placed.geometry
           style = placed.style
           source = by_duid[style.soid]
@@ -158,6 +160,7 @@ module Ea
             id: IdNormalizer.synthetic_id(owner_id, "conn", placed.subject),
             diagram_id: owner_id,
             relationship_ref: placed.subject,
+            paint_order: [rank],
             source_duid: style.soid,
             target_duid: style.eoid,
             source_element_ref: source && synthetic_element_id(owner_id, source),

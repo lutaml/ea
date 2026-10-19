@@ -66,13 +66,12 @@ end
 RSpec.describe Ea::Svg::EaEmitter::Connectors, "source-owner crossing bridges" do
   include_context "connector bridge diagram"
 
-  it "preserves paths with missing, tied or unresolved placement metadata" do
+  it "preserves paths with missing, tied or unresolved order keys" do
     [
-      ->(model) { model.elements.first.z_order = nil },
-      ->(model) { model.elements.last.z_order = nil },
-      ->(model) { model.elements.last.z_order = 25 },
-      ->(model) { model.connectors.first.source_element_ref = "model-a" },
-      ->(model) { model.connectors.last.source_element_ref = nil }
+      ->(model) { model.connectors.first.paint_order = nil },
+      ->(model) { model.connectors.last.paint_order = [] },
+      ->(model) { model.connectors.last.paint_order = [25] },
+      ->(model) { model.connectors.first.paint_order = [9, 1] }
     ].each do |change|
       model = bridge_diagram([bridge_connector("a", [[50, 0], [50, 100]]),
                               bridge_connector("b", [[0, 50], [100, 50]])])
@@ -180,5 +179,61 @@ RSpec.describe Ea::Svg::EaEmitter::Connectors, "crossing priority direction" do
     diagram = bridge_diagram([lower, higher], [9, 25])
     expected = ["M 0 50 L 100 50", "M 6 0 L 6 44 A 6 6 180 0 0 6 56 L 6 100"]
     expect(bridge_paths(diagram)).to eq(expected)
+  end
+end
+
+RSpec.describe Ea::Svg::EaEmitter::Connectors, "connector paint order" do
+  include ConnectorBridgesHelpers
+
+  let(:vertical) { bridge_connector("v", [[50, 0], [50, 100]]) }
+  let(:horizontal) { bridge_connector("h", [[0, 50], [100, 50]]) }
+  let(:arc) { "M 0 50 L 44 50 A 6 6 180 0 0 56 50 L 100 50" }
+
+  it "bridges over the connector with the later paint order despite owner z-order" do
+    vertical.paint_order = [10, 629]
+    horizontal.paint_order = [20, 630]
+    diagram = bridge_diagram([vertical, horizontal], [99, 1])
+    expect(bridge_paths(diagram)).to eq(["M 50 0 L 50 100", arc])
+  end
+
+  it "leaves identical keys unbridged" do
+    vertical.paint_order = [10, 629]
+    horizontal.paint_order = [10, 629]
+    expect(bridge_paths(bridge_diagram([vertical, horizontal]))).to eq(["M 50 0 L 50 100", "M 0 50 L 100 50"])
+  end
+end
+
+RSpec.describe Ea::Svg::EaEmitter::Connectors, "unresolved paint order" do
+  include ConnectorBridgesHelpers
+
+  it "fails closed for an empty key without falling back to owner z-order" do
+    vertical = bridge_connector("v", [[50, 0], [50, 100]], paint_order: [])
+    horizontal = bridge_connector("h", [[0, 50], [100, 50]], paint_order: [20, 630])
+    paths = bridge_paths(bridge_diagram([vertical, horizontal], [99, 1]))
+    expect(paths).to eq(["M 50 0 L 50 100", "M 0 50 L 100 50"])
+    horizontal.paint_order = []
+    vertical.paint_order = [30, 631]
+    expect(bridge_paths(bridge_diagram([vertical, horizontal], [1, 99]))).to eq(paths)
+  end
+
+  it "defaults to nil and round-trips through JSON" do
+    expect(Ea::Model::DiagramConnector.new(id: "a").paint_order).to be_nil
+    restored = Ea::Model::DiagramConnector.from_json(
+      Ea::Model::DiagramConnector.new(id: "a", paint_order: [583, 95]).to_json
+    )
+    expect(restored.paint_order).to eq([583, 95])
+  end
+end
+
+RSpec.describe Ea::Svg::EaEmitter::Connectors, "shared start placement" do
+  include ConnectorBridgesHelpers
+
+  it "makes no carrier decision between connectors leaving one placement" do
+    vertical = bridge_connector("v", [[50, 0], [50, 100]], paint_order: [10, 628])
+    horizontal = bridge_connector("h", [[0, 50], [100, 50]], paint_order: [10, 629])
+    vertical.source_element_ref = horizontal.source_element_ref = "shared"
+    expect(bridge_paths(bridge_diagram([vertical, horizontal]))).to eq(["M 50 0 L 50 100", "M 0 50 L 100 50"])
+    horizontal.source_element_ref = "other"
+    expect(bridge_paths(bridge_diagram([vertical, horizontal])).last).to include(" A ")
   end
 end

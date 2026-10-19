@@ -28,3 +28,13 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
     expect(missing.connectors.first.target_element_ref).to be_nil
   end
 end
+
+RSpec.describe Ea::Sources::Qea::DiagramBuilder, "paint order" do
+  include QeaBridgeOrderHelpers
+
+  it "records start placement instance id then connector id, unresolved when ambiguous" do
+    expect(bridge_order_diagram.connectors.first.paint_order).to eq([10, 1])
+    expect(bridge_order_diagram(sequences: [25, 9]).connectors.first.paint_order).to eq([10, 1])
+    expect(bridge_order_diagram(source_placements: 2).connectors.first.paint_order).to eq([])
+  end
+end
