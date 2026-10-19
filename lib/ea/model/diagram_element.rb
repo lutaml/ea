@@ -22,6 +22,8 @@ module Ea
       attribute :line_width, :integer
       attribute :font_family, :string
       attribute :font_size, :integer
+      # nil: unspecified provenance; true: source delegates to default resolution.
+      attribute :font_size_inherited, :boolean
       attribute :font_logical_height, :integer # original GDI pixel height before point normalization
       attribute :font_size_unit, :string # source font size unit, before theme fallback
       attribute :font_bold, :boolean
@@ -55,6 +57,7 @@ module Ea
         map "lineWidth", to: :line_width
         map "fontFamily", to: :font_family
         map "fontSize", to: :font_size
+        map "fontSizeInherited", to: :font_size_inherited, render_default: true
         map "fontSizeUnit", to: :font_size_unit
         map "fontLogicalHeight", to: :font_logical_height
         map "fontBold", to: :font_bold, render_default: true

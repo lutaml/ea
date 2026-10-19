@@ -55,12 +55,13 @@ module Ea
           end
 
           def legend_item_size(context)
-            explicit = context.element&.font_size&.nonzero?
-            return explicit if explicit
+            element = context.element
+            return unless element
+            return element.font_size if element.font_size&.nonzero?
 
-            # A saved zero requests the resolved default; missing metadata
-            # keeps the legend renderer's independent item default.
-            context.size if context.element&.style&.fetch(:fontsz, nil).to_s == "0"
+            # Parsed source defaults inherit; unspecified callers keep 9pt.
+            inherited = element.font_size_inherited || element.style&.fetch(:fontsz, nil).to_s == "0"
+            context.size if inherited
           end
           private_class_method :legend_item_size
 

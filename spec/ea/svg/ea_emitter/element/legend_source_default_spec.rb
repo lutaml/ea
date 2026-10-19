@@ -22,7 +22,7 @@ RSpec.describe "Legend source default font markers" do
     inherited = source_default_legend_svg(element: Ea::Model::DiagramElement.new(style: { fontsz: 0 }),
                                           size: 11, unit: "px")
     explicit = source_default_legend_svg(
-      element: Ea::Model::DiagramElement.new(style: { fontsz: "0" }, font_size: 10), unit: "px"
+      element: Ea::Model::DiagramElement.new(font_size_inherited: true, font_size: 10), unit: "px"
     )
 
     expect(inherited.css("text").first["style"]).to include("font-size:11px;")
@@ -48,12 +48,11 @@ RSpec.describe "QEA legend source defaults" do
   include LegendSourceDefaultHelpers
   include QeaCompartmentFontHelpers
 
-  it "preserves explicit saved sizes and the missing-marker default through QEA" do
+  it "preserves explicit saved sizes through QEA" do
     document = public_compartment_document
     [
       %w[0016F797-D055-4717-AF1A-606413D0A166 4E5A37CB-F6FA-44ea-8762-5F379CFFB6A2 90],
-      %w[227300E2-4F4B-4955-83B9-FA626CE8680B CEA68306-BC83-4809-A89A-9B9E7D45776D 100],
-      ["E9CDAD85-ECF1-43de-819F-30A0D01785E6", "CEA68306-BC83-4809-A89A-9B9E7D45776D", nil]
+      %w[227300E2-4F4B-4955-83B9-FA626CE8680B CEA68306-BC83-4809-A89A-9B9E7D45776D 100]
     ].each do |diagram_id, object_id, marker|
       placement, labels = source_default_qea_legend(document, diagram_id, object_id)
 
@@ -74,5 +73,35 @@ RSpec.describe "QEA legend zero marker inheritance" do
 
     expect(placement.style.fetch(:fontsz)).to eq("0")
     expect(labels.map { |node| node["style"] }).to all(include("font-size:7pt;", "font-family:Cambria;"))
+  end
+end
+
+RSpec.describe "QEA legend missing size inheritance" do
+  include LegendSourceDefaultHelpers
+  include QeaCompartmentFontHelpers
+
+  it "inherits 7pt for source defaults on both saved legend classifiers" do
+    document = public_compartment_document
+    [
+      %w[E9CDAD85-ECF1-43de-819F-30A0D01785E6 CEA68306-BC83-4809-A89A-9B9E7D45776D],
+      %w[A24E2778-5AD9-44f2-AB8F-5CD3913477D6 4E5A37CB-F6FA-44ea-8762-5F379CFFB6A2]
+    ].each do |diagram_id, object_id|
+      placement, labels = source_default_qea_legend(document, diagram_id, object_id)
+
+      expect(placement.style).not_to have_key(:fontsz)
+      expect(labels.map { |node| node["style"] }).to all(include("font-size:7pt;", "font-family:Cambria;"))
+    end
+  end
+end
+
+RSpec.describe "Legend source inheritance units" do
+  include LegendSourceDefaultHelpers
+
+  it "uses the resolved inherited size and unit without imposing a corpus size" do
+    svg = source_default_legend_svg(element: Ea::Model::DiagramElement.new(font_size_inherited: true),
+                                    size: 11, unit: "px")
+
+    expect(svg.css("text").first["style"]).to include("font-size:11px;")
+    expect(svg.css("text").last["style"]).to include("font-size:12pt;")
   end
 end
