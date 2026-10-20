@@ -42,10 +42,11 @@ RSpec.describe Ea::Sources::Xmi::DiagramBuilder do
     builder = described_class.new(OpenStruct.new, path)
     placed = OpenStruct.new(subject: "EAID_ASSOC", style: OpenStruct.new(duid: nil))
     class_placement = OpenStruct.new(subject: "EAID_CLASS", style: OpenStruct.new(duid: "CLASS_DUID"))
-    diagram_connector = OpenStruct.new(style: {}, waypoints: [
-                                         OpenStruct.new(position: OpenStruct.new(x: 522, y: 644)),
-                                         OpenStruct.new(position: OpenStruct.new(x: 522, y: 644))
-                                       ])
+    diagram_connector = Ea::Model::DiagramConnector.new(
+      id: "connector", style: {}, waypoints: Array.new(2) do
+        Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: 522, y: 644))
+      end
+    )
     properties = OpenStruct.new(ea_type: "Association", subtype: "Class")
     source = OpenStruct.new(idref: "EAID_PROXY_A", model: OpenStruct.new(type: "ProxyConnector"))
     target = OpenStruct.new(idref: "EAID_PROXY_B", model: OpenStruct.new(type: "ProxyConnector"))
@@ -54,8 +55,11 @@ RSpec.describe Ea::Sources::Xmi::DiagramBuilder do
     allow(builder).to receive(:connector_index).and_return("EAID_ASSOC" => connector)
     allow(builder).to receive(:build_connector).and_return(diagram_connector)
 
-    builder.send(:build_connectors, [placed], [class_placement], "DIAGRAM")
+    placements = OpenStruct.new(placed_connectors: [placed], placed_elements: [class_placement])
+    allow(Ea::Sources::Xmi::ExtensionElements).to receive(:new).and_return(placements)
+    allow(builder).to receive(:build_elements).and_return([])
+    diagram = builder.build_one(OpenStruct.new(id: "DIAGRAM"))
 
-    expect(diagram_connector.style[:association_class_ref]).to eq("EAID_CLASS")
+    expect(diagram.connectors.first.style[:association_class_ref]).to eq("EAID_CLASS")
   end
 end
