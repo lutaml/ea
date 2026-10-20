@@ -7,6 +7,13 @@ module Ea
       # uml:Generalization, uml:Realization, uml:Dependency) into
       # the appropriate Ea::Model::Relationship subclass.
       class RelationshipBuilder
+        # Connector types that imply an aggregation on the source end
+        # when the end itself records none.
+        AGGREGATION_FOR_CONNECTOR_TYPE = {
+          "Aggregation" => "shared",
+          "Composition" => "composite"
+        }.freeze
+
         attr_reader :root
 
         def initialize(root)
@@ -59,6 +66,41 @@ module Ea
         end
 
         def association_args(element)
+          connector = connector_index[element.id]
+          return owned_end_args(element) unless connector&.source && connector.target
+
+          connector_end_args(element, connector)
+        end
+
+        def connector_end_args(element, connector)
+          source = connector.source
+          target = connector.target
+          {
+            source_id: source.idref,
+            target_id: target.idref,
+            source_role_name: source.role&.name,
+            target_role_name: target.role&.name,
+            source_multiplicity_lower: card_lower(source.type&.multiplicity),
+            source_multiplicity_upper: card_upper(source.type&.multiplicity),
+            target_multiplicity_lower: card_lower(target.type&.multiplicity),
+            target_multiplicity_upper: card_upper(target.type&.multiplicity),
+            source_multiplicity_raw: raw_card(source.type&.multiplicity),
+            target_multiplicity_raw: raw_card(target.type&.multiplicity),
+            source_aggregation: source_aggregation(connector),
+            target_aggregation: target.type&.aggregation || "none",
+            source_navigable: navigable?(element, :source),
+            target_navigable: navigable?(element, :target)
+          }
+        end
+
+        def source_aggregation(connector)
+          flagged = connector.source.type&.aggregation || "none"
+          return flagged unless flagged == "none"
+
+          AGGREGATION_FOR_CONNECTOR_TYPE.fetch(connector.properties&.ea_type, "none")
+        end
+
+        def owned_end_args(element)
           ends = element.member_ends.to_a
           source_id = ends.first&.idref
           target_id = ends.last&.idref
@@ -79,6 +121,24 @@ module Ea
             source_navigable: navigable?(element, :source),
             target_navigable: navigable?(element, :target)
           }
+        end
+
+        def raw_card(cardinality)
+          text = cardinality.to_s.strip
+          text.empty? ? nil : text
+        end
+
+        def card_lower(cardinality)
+          text = raw_card(cardinality)
+          Integer(text.split("..").first, exception: false) if text
+        end
+
+        def card_upper(cardinality)
+          text = raw_card(cardinality)
+          return nil unless text
+
+          upper = text.split("..").last
+          upper == "*" ? -1 : Integer(upper, exception: false)
         end
 
         def generalization_args(element)
