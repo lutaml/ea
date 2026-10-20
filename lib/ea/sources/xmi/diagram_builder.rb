@@ -209,8 +209,7 @@ module Ea
           geom = placed.geometry
           style = placed.style
           edge_source, edge_target = connector_ends(owner_id, placed)
-          source = by_duid[style.soid] || sole_placement(by_subject, edge_source)
-          target = by_duid[style.eoid] || sole_placement(by_subject, edge_target)
+          source, target = placed_ends(style, by_duid, by_subject, edge_source, edge_target)
           ext_meta = connector_meta(placed.subject)
           route = connector_route(placed, source, target, owner_id, ext_meta[:ea_type])
           Ea::Model::DiagramConnector.new(
@@ -236,6 +235,23 @@ module Ea
             hidden: style.hidden,
             label_boxes: serialize_label_boxes(geom.label_boxes)
           )
+        end
+
+        # The saved SOID/EOID can name the model connector's ends in reverse
+        # order; the model connector decides which placement is the source.
+        def placed_ends(style, by_duid, by_subject, edge_source, edge_target)
+          source = by_duid[style.soid] || sole_placement(by_subject, edge_source)
+          target = by_duid[style.eoid] || sole_placement(by_subject, edge_target)
+          return [source, target] unless source && target &&
+                                         reversed_ends?(source, target, edge_source, edge_target)
+
+          [target, source]
+        end
+
+        def reversed_ends?(source, target, edge_source, edge_target)
+          guid_key(edge_source) != guid_key(edge_target) &&
+            guid_key(source.subject) == guid_key(edge_target) &&
+            guid_key(target.subject) == guid_key(edge_source)
         end
 
         def connector_meta(subject_id)
