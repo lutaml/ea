@@ -26,6 +26,7 @@ RSpec.describe "D09AF6B8 reliefComponent stored aggregation ray" do
     expect(connector.connector_type).to eq("Aggregation")
     expect(paths).to include("M 532 98 L 307 98")
     expect(d09_label_position(rendered, "+reliefComponent")).to eq(["362.00", "70.00"])
+    expect(d09_label_position(rendered, "1..*")).to eq(["469.00", "112.00"])
     expect(connector.source_anchor).to have_attributes(x: 1022, y: 142)
     expect(connector.target_anchor).to have_attributes(x: 562, y: 142)
   end
