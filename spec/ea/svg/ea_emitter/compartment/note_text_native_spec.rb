@@ -15,7 +15,7 @@ RSpec.describe Ea::Svg::EaEmitter::Compartment::NoteText do
 
       expect(rows.map { |row| row["x"].to_f }).to eq([note_x, note_x])
       expect(rows.map { |row| row["y"].to_f }).to eq([note_y, note_y + 13])
-      expect(rows.map(&:text)).to eq(["[Detailed notes that describe the", "concept.]"])
+      expect(rows.map(&:text)).to eq(["[Detailed notes that describe the ", "concept.]"])
       expect(rows.map { |row| row["style"] })
         .to all(include("font-family:Source Sans Pro;", "font-size:7pt;", "font-style:italic;"))
     end
@@ -28,7 +28,7 @@ RSpec.describe Ea::Svg::EaEmitter::Compartment::NoteText do
 
     expect(rows.map { |row| row["x"].to_f }).to eq([15, 15])
     expect(rows.map { |row| row["y"].to_f }).to eq([66, 79])
-    expect(rows.map(&:text)).to eq(["[Detailed notes that describe the", "concept.]"])
+    expect(rows.map(&:text)).to eq(["[Detailed notes that describe the ", "concept.]"])
   end
 end
 
