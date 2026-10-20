@@ -292,12 +292,16 @@ module Ea
 
           label_boxes.transform_values do |box|
             {
-              "cx" => box.cx, "cy" => box.cy,
               "ox" => box.ox, "oy" => box.oy,
+              "cx" => box.cx, "cy" => box.cy,
+              "hidden" => box.hidden,
               "bold" => box.bold,
               "italic" => box.italic,
               "underline" => box.underline,
-              "align" => box.align
+              "color" => box.color,
+              "alignment" => box.align,
+              "direction" => box.direction,
+              "rotation" => box.rotation
             }
           end
         end

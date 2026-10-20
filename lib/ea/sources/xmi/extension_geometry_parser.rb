@@ -73,7 +73,7 @@ module Ea
         end
 
         def extract_label_boxes(geometry_string)
-          geometry_string.to_s.scan(/\$?([A-Z]{3})=((?:[A-Za-z]{1,4}=-?\d+:)+)/).each_with_object({}) do |(key, body), acc|
+          geometry_string.to_s.scan(/\$?([A-Z]{3})=((?:[A-Za-z]{1,4}=-?\d+:?)+)/).each_with_object({}) do |(key, body), acc|
             sym = key.downcase.to_sym
             next unless LABEL_BOX_KEYS.include?(sym)
             next if body.nil? || body.empty?
@@ -99,6 +99,7 @@ module Ea
             italic: hash["ITA"] == 1,
             underline: hash["UND"] == 1,
             hidden: hash["HDN"] == 1,
+            color: hash["CLR"],
             align: hash["ALN"],
             direction: hash["DIR"],
             rotation: hash["ROT"]
@@ -115,7 +116,7 @@ module Ea
 
         LabelBox = Struct.new(
           :cx, :cy, :ox, :oy,
-          :bold, :italic, :underline, :hidden,
+          :bold, :italic, :underline, :hidden, :color,
           :align, :direction, :rotation,
           keyword_init: true
         )
