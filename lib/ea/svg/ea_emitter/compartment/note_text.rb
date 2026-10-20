@@ -76,7 +76,9 @@ module Ea
               elsif (current + " " + word).length <= max_chars
                 current = "#{current} #{word}"
               else
-                lines << current
+                # EA retains the consumed word separator on a wrapped
+                # documentation row, including it in SVG textLength.
+                lines << "#{current} "
                 current = word
               end
             end
