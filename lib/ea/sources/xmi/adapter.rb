@@ -36,12 +36,20 @@ module Ea
             diagrams: diagrams
           )
           apply_tagged_values(doc)
+          apply_receptions(doc)
           apply_stereotypes(doc)
           resolve_type_names(doc)
           doc
         end
 
         private
+
+        def apply_receptions(doc)
+          grouped = ReceptionBuilder.new(xmi_path).grouped_by_owner
+          doc.classifiers.each do |classifier|
+            classifier.operations.concat(grouped.fetch(classifier.id, []))
+          end
+        end
 
         # Attach stereotypes parsed from <xmi:Extension>/<elements>
         # to their owning classifiers and packages.
