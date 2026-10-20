@@ -341,7 +341,19 @@ module Ea
             inset, baseline = property_role_offsets(direction)
             left = property_role_x(direction, x, inset + width)
             left = [left, MIN_ROLE_X].max if direction == :up
+            left += source_property_centering(connector, direction, box, role)
             [left, y + baseline]
+          end
+
+          # Center a short role above the wider stereotype without moving
+          # the directional cluster's left edge. Other boxes keep their seat.
+          def source_property_centering(connector, direction, box, role)
+            return 0 unless %i[left down].include?(direction)
+            return 0 unless seat_font? && font_weight == 400 && font_style == "normal"
+            return 0 unless box.values_at("cy", "alignment") == [35, 1]
+
+            stereo = "«#{connector_source_dest_stereotype(connector, :source)}»"
+            -[stereotype_offset(role, stereo, box), 0].min
           end
 
           def source_property_seat?(connector, direction, box)
