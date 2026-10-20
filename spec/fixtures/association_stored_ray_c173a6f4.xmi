@@ -1,0 +1,1500 @@
+<?xml  version='1.0' encoding='UTF-8' ?>
+<xmi:XMI xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/UML/20161101/UMLDC" xmlns:thecustomprofile="http://www.sparxsystems.com/profiles/thecustomprofile/1.0" xmlns:GML="http://www.sparxsystems.com/profiles/GML/1.0" xmlns:StandardProfileL2="http://www.omg.org/spec/UML/20110701/StandardProfileL2.xmi">
+	<xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5" exporterID="1624"/>
+	<uml:Model xmi:type="uml:Model" name="EA_Model">
+					<packagedElement xmi:type="uml:Class" xmi:id="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0" name="SolitaryVegetationObject">
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_26DB8C7B_0B48_40fa_8FD9_4902241FFAAE" name="class">
+							<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003953_0B48_40fa_8FD9_4902241FFAAE" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003954_0B48_40fa_8FD9_4902241FFAAE" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_74DFC1C6_1D68_44da_A203_3D36366676B5" name="function">
+							<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003955_1D68_44da_A203_3D36366676B5" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003956_1D68_44da_A203_3D36366676B5" value="*"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_B9203454_D76E_4868_AF48_FF972033B378" name="usage">
+							<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003957_D76E_4868_AF48_FF972033B378" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003958_D76E_4868_AF48_FF972033B378" value="*"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_21052710_8D3C_45bc_AD8B_C8B8AB0F6EC4" name="species">
+							<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003959_8D3C_45bc_AD8B_C8B8AB0F6EC4" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003960_8D3C_45bc_AD8B_C8B8AB0F6EC4" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_B377AE78_8BB3_4e46_B3BB_6039A66BE9AB" name="height">
+							<type xmi:idref="EAID_E860F2C5_5E34_4d43_8E98_E03130A4D85C"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003961_8BB3_4e46_B3BB_6039A66BE9AB" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003962_8BB3_4e46_B3BB_6039A66BE9AB" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_DA2B9979_445A_41ee_B1D8_D17A55C1F88B" name="trunkDiameter">
+							<type xmi:idref="EAID_E860F2C5_5E34_4d43_8E98_E03130A4D85C"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003963_445A_41ee_B1D8_D17A55C1F88B" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003964_445A_41ee_B1D8_D17A55C1F88B" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_ABFF6DCA_0380_418a_A327_19F707D56131" name="crownDiameter">
+							<type xmi:idref="EAID_E860F2C5_5E34_4d43_8E98_E03130A4D85C"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003965_0380_418a_A327_19F707D56131" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003966_0380_418a_A327_19F707D56131" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_dstFE25BC_367E_4408_AEEB_EB583AEA5D02" name="lod1ImplicitRepresentation" association="EAID_01FE25BC_367E_4408_AEEB_EB583AEA5D02">
+							<type xmi:idref="EAID_D04B32ED_EF64_4ee3_9D40_122343957C3A"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003967__367E_4408_AEEB_EB583AEA5D02" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003968__367E_4408_AEEB_EB583AEA5D02" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_dstFE2A6F_77A3_4604_BFDD_C38F2337FBF1" name="lod4Geometry" association="EAID_04FE2A6F_77A3_4604_BFDD_C38F2337FBF1">
+							<type xmi:idref="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003969__77A3_4604_BFDD_C38F2337FBF1" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003970__77A3_4604_BFDD_C38F2337FBF1" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_dst3F30C7_D85D_4dc3_848B_0AD9E4A25AC3" name="lod2ImplicitRepresentation" association="EAID_143F30C7_D85D_4dc3_848B_0AD9E4A25AC3">
+							<type xmi:idref="EAID_D04B32ED_EF64_4ee3_9D40_122343957C3A"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003971__D85D_4dc3_848B_0AD9E4A25AC3" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003972__D85D_4dc3_848B_0AD9E4A25AC3" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_dstB83A92_CD30_4297_876C_562973482A92" name="lod3ImplicitRepresentation" association="EAID_6FB83A92_CD30_4297_876C_562973482A92">
+							<type xmi:idref="EAID_D04B32ED_EF64_4ee3_9D40_122343957C3A"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003973__CD30_4297_876C_562973482A92" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003974__CD30_4297_876C_562973482A92" value="1"/>
+						</ownedAttribute>
+						<generalization xmi:type="uml:Generalization" xmi:id="EAID_80974AA4_F711_4e14_AE09_A7F691605620" general="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB" isSubstitutable="true"/>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_dstA9B2F6_AFD0_4d74_ADA6_1C97890240A2" name="lod4ImplicitRepresentation" association="EAID_B4A9B2F6_AFD0_4d74_ADA6_1C97890240A2">
+							<type xmi:idref="EAID_D04B32ED_EF64_4ee3_9D40_122343957C3A"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003975__AFD0_4d74_ADA6_1C97890240A2" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003976__AFD0_4d74_ADA6_1C97890240A2" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src604A28_1D91_4321_A6AE_6879D7B6D440" name="lod3Geometry" association="EAID_1A604A28_1D91_4321_A6AE_6879D7B6D440">
+							<type xmi:idref="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003977__1D91_4321_A6AE_6879D7B6D440" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003978__1D91_4321_A6AE_6879D7B6D440" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src08B8F8_2152_4946_9380_A262F2BDB12B" name="lod2Geometry" association="EAID_4B08B8F8_2152_4946_9380_A262F2BDB12B">
+							<type xmi:idref="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003979__2152_4946_9380_A262F2BDB12B" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003980__2152_4946_9380_A262F2BDB12B" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src4E3649_784C_400e_9702_55CD270781E8" name="lod1Geometry" association="EAID_8D4E3649_784C_400e_9702_55CD270781E8">
+							<type xmi:idref="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003981__784C_400e_9702_55CD270781E8" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003982__784C_400e_9702_55CD270781E8" value="1"/>
+						</ownedAttribute>
+					</packagedElement>
+					<packagedElement xmi:type="uml:Class" xmi:id="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB" name="_VegetationObject" isAbstract="true">
+						<generalization xmi:type="uml:Generalization" xmi:id="EAID_8DAA0C73_91FB_4066_80B8_414EA743216E" general="EAID_60CE61DE_7E88_4e8b_BFED_13500E7DCDEC" isSubstitutable="true"/>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src96B346_1334_45d0_A01E_4C77B788CDD6" name="vegFacilityTypeAttribute" association="EAID_3296B346_1334_45d0_A01E_4C77B788CDD6" aggregation="composite">
+							<type xmi:idref="EAID_0D84639F_7E62_4824_B70E_58121A43C064"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003917__1334_45d0_A01E_4C77B788CDD6" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003918__1334_45d0_A01E_4C77B788CDD6" value="*"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_srcD67F70_93AB_4354_8DC6_AE741E7D56D3" name="vegFacilityIdAttribute" association="EAID_39D67F70_93AB_4354_8DC6_AE741E7D56D3" aggregation="composite">
+							<type xmi:idref="EAID_E66C1C01_AE82_4fc8_ACB5_0C3541A6240A"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003919__93AB_4354_8DC6_AE741E7D56D3" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003920__93AB_4354_8DC6_AE741E7D56D3" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_srcE2398D_1E6A_4919_94A6_F367FB6A8B98" name="vegKeyValuePairAttribute" association="EAID_DFE2398D_1E6A_4919_94A6_F367FB6A8B98" aggregation="composite">
+							<type xmi:idref="EAID_21B83B38_B136_475a_AAAA_8761EE9D273D"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003921__1E6A_4919_94A6_F367FB6A8B98" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003922__1E6A_4919_94A6_F367FB6A8B98" value="*"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src2D9B93_C04A_49d9_9BF5_A4C0D1806C00" name="vegDataQualityAttribute" association="EAID_E82D9B93_C04A_49d9_9BF5_A4C0D1806C00" aggregation="composite">
+							<type xmi:idref="EAID_8E4996A7_C42C_4613_A0A4_9A6D855F0CF7"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003923__C04A_49d9_9BF5_A4C0D1806C00" value="1"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003924__C04A_49d9_9BF5_A4C0D1806C00" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src720A43_FC15_4e61_9BB7_53DEB12E0CC9" name="vegFacilityAttribute" association="EAID_F8720A43_FC15_4e61_9BB7_53DEB12E0CC9" aggregation="composite">
+							<type xmi:idref="EAID_E93090C4_A8F1_4c8b_86CA_0D4E72D5722B"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003925__FC15_4e61_9BB7_53DEB12E0CC9" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003926__FC15_4e61_9BB7_53DEB12E0CC9" value="*"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_srcAE1D1F_A333_4bd4_9354_1BB702683F90" name="vegDmAttribute" association="EAID_FEAE1D1F_A333_4bd4_9354_1BB702683F90" aggregation="composite">
+							<type xmi:idref="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003927__A333_4bd4_9354_1BB702683F90" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003928__A333_4bd4_9354_1BB702683F90" value="*"/>
+						</ownedAttribute>
+					</packagedElement>
+						<packagedElement xmi:type="uml:Class" xmi:id="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8" name="DmAttribute" isAbstract="true">
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_ACCFA8A3_F6E1_4685_B213_5A1A090A6E40" name="dmCode">
+								<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001507_F6E1_4685_B213_5A1A090A6E40" value="1"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001508_F6E1_4685_B213_5A1A090A6E40" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_C629D1D3_002A_4859_94BD_7F6B1CF67B16" name="meshCode">
+								<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001509_002A_4859_94BD_7F6B1CF67B16" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001510_002A_4859_94BD_7F6B1CF67B16" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_srcEEB19A_A0A7_4b18_A384_04C114D29082" name="dmElement" association="EAID_A3EEB19A_A0A7_4b18_A384_04C114D29082" aggregation="composite">
+								<type xmi:idref="EAID_FFAACAE2_3792_4295_917F_D896AF8B6BF5"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001511__A0A7_4b18_A384_04C114D29082" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001512__A0A7_4b18_A384_04C114D29082" value="1"/>
+							</ownedAttribute>
+						</packagedElement>
+						<packagedElement xmi:type="uml:Class" xmi:id="EAID_8E4996A7_C42C_4613_A0A4_9A6D855F0CF7" name="DataQualityAttribute">
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_B2BD7D45_C19E_446c_84CE_7632E5D3EB4E" name="geometrySrcDescLod0">
+								<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001457_C19E_446c_84CE_7632E5D3EB4E" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001458_C19E_446c_84CE_7632E5D3EB4E" value="*"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_C5117AFF_5BD5_4466_A468_C406B4D0B0F7" name="geometrySrcDescLod1">
+								<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001459_5BD5_4466_A468_C406B4D0B0F7" value="1"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001460_5BD5_4466_A468_C406B4D0B0F7" value="*"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_6B9ABB0F_B646_4e83_AB6A_377768085566" name="geometrySrcDescLod2">
+								<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001461_B646_4e83_AB6A_377768085566" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001462_B646_4e83_AB6A_377768085566" value="*"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_3FA7B353_C3F9_41e2_AF9F_221A7AE8CCF8" name="geometrySrcDescLod3">
+								<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001463_C3F9_41e2_AF9F_221A7AE8CCF8" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001464_C3F9_41e2_AF9F_221A7AE8CCF8" value="*"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_26187124_24FC_4508_A413_E95078489AF1" name="geometrySrcDescLod4">
+								<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001465_24FC_4508_A413_E95078489AF1" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001466_24FC_4508_A413_E95078489AF1" value="*"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_70F42891_9777_4c78_8CAB_C869B2C2670F" name="thematicSrcDesc">
+								<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001467_9777_4c78_8CAB_C869B2C2670F" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001468_9777_4c78_8CAB_C869B2C2670F" value="*"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_F41C4FAD_816C_442d_8E25_7F938B228B47" name="appearanceSrcDescLod0">
+								<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001469_816C_442d_8E25_7F938B228B47" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001470_816C_442d_8E25_7F938B228B47" value="*"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_ABA3A41D_0383_4fd6_8503_31C1E98DB096" name="appearanceSrcDescLod1">
+								<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001471_0383_4fd6_8503_31C1E98DB096" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001472_0383_4fd6_8503_31C1E98DB096" value="*"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_D20F45B7_941D_421b_AED9_06C9D909FE6A" name="appearanceSrcDescLod2">
+								<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001473_941D_421b_AED9_06C9D909FE6A" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001474_941D_421b_AED9_06C9D909FE6A" value="*"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_2E148BC5_C307_4104_94E8_2C44BF43FA34" name="appearanceSrcDescLod3">
+								<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001475_C307_4104_94E8_2C44BF43FA34" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001476_C307_4104_94E8_2C44BF43FA34" value="*"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_9BF17E3F_1CF6_44f0_BEF2_AD3BE6481338" name="appearanceSrcDescLod4">
+								<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001477_1CF6_44f0_BEF2_AD3BE6481338" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001478_1CF6_44f0_BEF2_AD3BE6481338" value="*"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_2DDAA547_5E0C_4c7b_A273_0B4A9CC34332" name="lodType">
+								<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001479_5E0C_4c7b_A273_0B4A9CC34332" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001480_5E0C_4c7b_A273_0B4A9CC34332" value="*"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_5344B6FC_4445_47e6_B9E6_70DB63675469" name="lod1HeightType">
+								<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001481_4445_47e6_B9E6_70DB63675469" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001482_4445_47e6_B9E6_70DB63675469" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_D3E62732_7C55_4a9d_B6DE_4E8771AD24FC" name="tranDataAcquisition">
+								<type xmi:idref="EAID_29F1CA63_CA0A_4c4e_80D1_DA97B683B7CA"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001483_7C55_4a9d_B6DE_4E8771AD24FC" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001484_7C55_4a9d_B6DE_4E8771AD24FC" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_srcB36C4B_5694_46c3_A9ED_5F116B217962" name="publicSurveyDataQualityAttribute" association="EAID_B9B36C4B_5694_46c3_A9ED_5F116B217962" aggregation="composite">
+								<type xmi:idref="EAID_4E3B64AD_AC35_41be_84B1_9D973ED9F949"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001485__5694_46c3_A9ED_5F116B217962" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001486__5694_46c3_A9ED_5F116B217962" value="1"/>
+							</ownedAttribute>
+						</packagedElement>
+				<packagedElement xmi:type="uml:Class" xmi:id="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" name="_Geometry" isAbstract="true"/>
+						<packagedElement xmi:type="uml:Class" xmi:id="EAID_75DBB25D_29E9_4cb4_9813_1ACA7B4B73FD" name="DmGeometricAttribute">
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_97DFB648_8F0E_48c3_8603_DEA7E1BAF0BA" name="geometryType">
+								<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001545_8F0E_48c3_8603_DEA7E1BAF0BA" value="1"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001546_8F0E_48c3_8603_DEA7E1BAF0BA" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_252FEEB3_E8A0_4915_8849_EAE81B07AD48" name="mapLevel">
+								<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001547_E8A0_4915_8849_EAE81B07AD48" value="1"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001548_E8A0_4915_8849_EAE81B07AD48" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_CAF6092F_389C_462c_B5BC_9B6FA0B383B0" name="shapeType">
+								<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001549_389C_462c_B5BC_9B6FA0B383B0" value="1"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001550_389C_462c_B5BC_9B6FA0B383B0" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_446DC0CC_A96B_4cf0_8BCB_8260DCDC5511" name="visibility">
+								<type xmi:idref="EAID_3AAAA612_D4B4_441a_B0B5_F36D8601C4E2"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001551_A96B_4cf0_8BCB_8260DCDC5511" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001552_A96B_4cf0_8BCB_8260DCDC5511" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_36928F1E_0E9E_4518_94E0_00B620695D26" name="is3d">
+								<type xmi:idref="EAID_3AAAA612_D4B4_441a_B0B5_F36D8601C4E2"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001553_0E9E_4518_94E0_00B620695D26" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001554_0E9E_4518_94E0_00B620695D26" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_85A44932_972C_43ba_951B_FA45CF6F8CAC" name="isInstallation">
+								<type xmi:idref="EAID_3AAAA612_D4B4_441a_B0B5_F36D8601C4E2"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001555_972C_43ba_951B_FA45CF6F8CAC" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001556_972C_43ba_951B_FA45CF6F8CAC" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_1E700909_36C7_4b7b_98F8_8D086F4F448F" name="isEdited">
+								<type xmi:idref="EAID_3AAAA612_D4B4_441a_B0B5_F36D8601C4E2"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001557_36C7_4b7b_98F8_8D086F4F448F" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001558_36C7_4b7b_98F8_8D086F4F448F" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_FC6CD261_1703_4fbb_B471_C4B10D184040" name="isSupplementarySymbol">
+								<type xmi:idref="EAID_3AAAA612_D4B4_441a_B0B5_F36D8601C4E2"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001559_1703_4fbb_B471_C4B10D184040" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001560_1703_4fbb_B471_C4B10D184040" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_73D3A971_560F_41f6_B22D_E825940DE0FF" name="angle">
+								<type xmi:idref="EAID_EC62FBD0_6FC0_4c56_B24F_C7931BBF8793"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001561_560F_41f6_B22D_E825940DE0FF" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001562_560F_41f6_B22D_E825940DE0FF" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_266C8798_4DEF_48f9_BEC7_AC132D5D5416" name="elevation">
+								<type xmi:idref="EAID_E860F2C5_5E34_4d43_8E98_E03130A4D85C"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001563_4DEF_48f9_BEC7_AC132D5D5416" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001564_4DEF_48f9_BEC7_AC132D5D5416" value="1"/>
+							</ownedAttribute>
+							<generalization xmi:type="uml:Generalization" xmi:id="EAID_2931192E_84D1_44ea_8B5C_2252CD8AEAA6" general="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8" isSubstitutable="true"/>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_srcDAC21D_3D66_4242_B374_6659A30A3BB4" name="lod0Geometry" association="EAID_E5DAC21D_3D66_4242_B374_6659A30A3BB4">
+								<type xmi:idref="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001565__3D66_4242_B374_6659A30A3BB4" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001566__3D66_4242_B374_6659A30A3BB4" value="1"/>
+							</ownedAttribute>
+						</packagedElement>
+						<packagedElement xmi:type="uml:Association" xmi:id="EAID_E82D9B93_C04A_49d9_9BF5_A4C0D1806C00">
+							<memberEnd xmi:idref="EAID_dst2D9B93_C04A_49d9_9BF5_A4C0D1806C00"/>
+							<ownedEnd xmi:type="uml:Property" xmi:id="EAID_dst2D9B93_C04A_49d9_9BF5_A4C0D1806C00" association="EAID_E82D9B93_C04A_49d9_9BF5_A4C0D1806C00">
+								<type xmi:idref="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB"/>
+							</ownedEnd>
+							<memberEnd xmi:idref="EAID_src2D9B93_C04A_49d9_9BF5_A4C0D1806C00"/>
+						</packagedElement>
+						<packagedElement xmi:type="uml:Association" xmi:id="EAID_FEAE1D1F_A333_4bd4_9354_1BB702683F90">
+							<memberEnd xmi:idref="EAID_dstAE1D1F_A333_4bd4_9354_1BB702683F90"/>
+							<ownedEnd xmi:type="uml:Property" xmi:id="EAID_dstAE1D1F_A333_4bd4_9354_1BB702683F90" association="EAID_FEAE1D1F_A333_4bd4_9354_1BB702683F90">
+								<type xmi:idref="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB"/>
+							</ownedEnd>
+							<memberEnd xmi:idref="EAID_srcAE1D1F_A333_4bd4_9354_1BB702683F90"/>
+						</packagedElement>
+						<packagedElement xmi:type="uml:Association" xmi:id="EAID_E5DAC21D_3D66_4242_B374_6659A30A3BB4">
+							<memberEnd xmi:idref="EAID_dstDAC21D_3D66_4242_B374_6659A30A3BB4"/>
+							<memberEnd xmi:idref="EAID_srcDAC21D_3D66_4242_B374_6659A30A3BB4"/>
+							<ownedEnd xmi:type="uml:Property" xmi:id="EAID_dstDAC21D_3D66_4242_B374_6659A30A3BB4" association="EAID_E5DAC21D_3D66_4242_B374_6659A30A3BB4">
+								<type xmi:idref="EAID_75DBB25D_29E9_4cb4_9813_1ACA7B4B73FD"/>
+							</ownedEnd>
+						</packagedElement>
+					<packagedElement xmi:type="uml:Association" xmi:id="EAID_04FE2A6F_77A3_4604_BFDD_C38F2337FBF1">
+						<memberEnd xmi:idref="EAID_dstFE2A6F_77A3_4604_BFDD_C38F2337FBF1"/>
+						<memberEnd xmi:idref="EAID_srcFE2A6F_77A3_4604_BFDD_C38F2337FBF1"/>
+						<ownedEnd xmi:type="uml:Property" xmi:id="EAID_srcFE2A6F_77A3_4604_BFDD_C38F2337FBF1" association="EAID_04FE2A6F_77A3_4604_BFDD_C38F2337FBF1">
+							<type xmi:idref="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0"/>
+						</ownedEnd>
+					</packagedElement>
+					<packagedElement xmi:type="uml:Association" xmi:id="EAID_4B08B8F8_2152_4946_9380_A262F2BDB12B">
+						<memberEnd xmi:idref="EAID_dst08B8F8_2152_4946_9380_A262F2BDB12B"/>
+						<memberEnd xmi:idref="EAID_src08B8F8_2152_4946_9380_A262F2BDB12B"/>
+						<ownedEnd xmi:type="uml:Property" xmi:id="EAID_dst08B8F8_2152_4946_9380_A262F2BDB12B" association="EAID_4B08B8F8_2152_4946_9380_A262F2BDB12B">
+							<type xmi:idref="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI004383__2152_4946_9380_A262F2BDB12B" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI004384__2152_4946_9380_A262F2BDB12B" value="1"/>
+						</ownedEnd>
+					</packagedElement>
+					<packagedElement xmi:type="uml:Association" xmi:id="EAID_1A604A28_1D91_4321_A6AE_6879D7B6D440">
+						<memberEnd xmi:idref="EAID_dst604A28_1D91_4321_A6AE_6879D7B6D440"/>
+						<memberEnd xmi:idref="EAID_src604A28_1D91_4321_A6AE_6879D7B6D440"/>
+						<ownedEnd xmi:type="uml:Property" xmi:id="EAID_dst604A28_1D91_4321_A6AE_6879D7B6D440" association="EAID_1A604A28_1D91_4321_A6AE_6879D7B6D440">
+							<type xmi:idref="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0"/>
+						</ownedEnd>
+					</packagedElement>
+					<packagedElement xmi:type="uml:Association" xmi:id="EAID_8D4E3649_784C_400e_9702_55CD270781E8">
+						<memberEnd xmi:idref="EAID_dst4E3649_784C_400e_9702_55CD270781E8"/>
+						<memberEnd xmi:idref="EAID_src4E3649_784C_400e_9702_55CD270781E8"/>
+						<ownedEnd xmi:type="uml:Property" xmi:id="EAID_dst4E3649_784C_400e_9702_55CD270781E8" association="EAID_8D4E3649_784C_400e_9702_55CD270781E8">
+							<type xmi:idref="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0"/>
+						</ownedEnd>
+					</packagedElement>
+	</uml:Model>
+		<umldi:Diagram xmi:type="umldi:UMLClassDiagram" xmi:id="EAID_C173A6F4_1D1B_400e_AD8C_64FFF7CD5BE5" isFrame="false" modelElement="EAPK_751CA17F_F2ED_47a4_9F56_8036104573A6">
+			<ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_C173A6F4_1D1B_400e_98BD_6C8A30193EF0" modelElement="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0">
+				<ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_1D1B_400e_98BD_6C8A30193EF0" text="FeatureType"/>
+				<ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_1D1B_400e_98BD_6C8A30193EF0" text="SolitaryVegetationObject"/>
+				<bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_1D1B_400e_98BD_6C8A30193EF0" x="580" y="340" width="277" height="171"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_C173A6F4_1D1B_400e_B8BE_5DEC8DFC8DDB" modelElement="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB">
+				<ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_1D1B_400e_B8BE_5DEC8DFC8DDB" text="featureType"/>
+				<ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_1D1B_400e_B8BE_5DEC8DFC8DDB" text="_VegetationObject"/>
+				<bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_1D1B_400e_B8BE_5DEC8DFC8DDB" x="267" y="386" width="167" height="80"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_C173A6F4_1D1B_400e_93F5_DCC06A1FB3A8" modelElement="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8">
+				<ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_1D1B_400e_93F5_DCC06A1FB3A8" text="DataType"/>
+				<ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_1D1B_400e_93F5_DCC06A1FB3A8" text="DmAttribute"/>
+				<bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_1D1B_400e_93F5_DCC06A1FB3A8" x="214" y="564" width="220" height="88"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_C173A6F4_1D1B_400e_A0A4_9A6D855F0CF7" modelElement="EAID_8E4996A7_C42C_4613_A0A4_9A6D855F0CF7">
+				<ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_1D1B_400e_A0A4_9A6D855F0CF7" text="DataType"/>
+				<ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_1D1B_400e_A0A4_9A6D855F0CF7" text="DataQualityAttribute"/>
+				<bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_1D1B_400e_A0A4_9A6D855F0CF7" x="534" y="560" width="300" height="292"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_C173A6F4_1D1B_400e_BE3E_4447F57FE997" modelElement="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997">
+				<ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_1D1B_400e_BE3E_4447F57FE997" text="Type"/>
+				<ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_1D1B_400e_BE3E_4447F57FE997" text="_Geometry"/>
+				<bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_1D1B_400e_BE3E_4447F57FE997" x="604" y="904" width="160" height="51"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_C173A6F4_1D1B_400e_9813_1ACA7B4B73FD" modelElement="EAID_75DBB25D_29E9_4cb4_9813_1ACA7B4B73FD">
+				<ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_1D1B_400e_9813_1ACA7B4B73FD" text="DataType"/>
+				<ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_1D1B_400e_9813_1ACA7B4B73FD" text="DmGeometricAttribute"/>
+				<bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_1D1B_400e_9813_1ACA7B4B73FD" x="185" y="773" width="276" height="224"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLEdge" xmi:id="EAID_C173A6F4_1D1B_400e_AE09_A7F691605620" source="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0" target="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB" modelElement="EAID_80974AA4_F711_4e14_AE09_A7F691605620">
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000000_1D1B_400e_AE09_A7F691605620" x="579" y="425"/>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000001_1D1B_400e_AE09_A7F691605620" x="435" y="425"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLEdge" xmi:id="EAID_C173A6F4_1D1B_400e_9BF5_A4C0D1806C00" source="EAID_8E4996A7_C42C_4613_A0A4_9A6D855F0CF7" target="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB" modelElement="EAID_E82D9B93_C04A_49d9_9BF5_A4C0D1806C00">
+				<ownedElement xmi:type="umldi:UMLAssociationEndLabel" xmi:id="EAID_SEL000000_1D1B_400e_9BF5_A4C0D1806C00" text="+vegDataQualityAttribute&#xA;«property»" modelElement="EAID_src2D9B93_C04A_49d9_9BF5_A4C0D1806C00">
+					<bounds xmi:type="dc:bounds" xmi:id="EAID_DBSEL000000_1D1B_400e_9BF5_A4C0D1806C00" x="495" y="543" width="112" height="25"/>
+				</ownedElement>
+				<ownedElement xmi:type="umldi:UMLMultiplicityLabel" xmi:id="EAID_SML000000_1D1B_400e_9BF5_A4C0D1806C00" text="1" modelElement="EAID_src2D9B93_C04A_49d9_9BF5_A4C0D1806C00">
+					<bounds xmi:type="dc:bounds" xmi:id="EAID_DBSML000000_1D1B_400e_9BF5_A4C0D1806C00" x="694" y="544" width="7" height="13"/>
+				</ownedElement>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000000_1D1B_400e_9BF5_A4C0D1806C00" x="680" y="559"/>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000001_1D1B_400e_9BF5_A4C0D1806C00" x="680" y="516"/>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000002_1D1B_400e_9BF5_A4C0D1806C00" x="350" y="516"/>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000003_1D1B_400e_9BF5_A4C0D1806C00" x="350" y="467"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLEdge" xmi:id="EAID_C173A6F4_1D1B_400e_9354_1BB702683F90" source="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8" target="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB" modelElement="EAID_FEAE1D1F_A333_4bd4_9354_1BB702683F90">
+				<ownedElement xmi:type="umldi:UMLAssociationEndLabel" xmi:id="EAID_SEL000000_1D1B_400e_9354_1BB702683F90" text="+vegDmAttribute&#xA;«property»" modelElement="EAID_srcAE1D1F_A333_4bd4_9354_1BB702683F90">
+					<bounds xmi:type="dc:bounds" xmi:id="EAID_DBSEL000000_1D1B_400e_9354_1BB702683F90" x="169" y="539" width="75" height="25"/>
+				</ownedElement>
+				<ownedElement xmi:type="umldi:UMLMultiplicityLabel" xmi:id="EAID_SML000000_1D1B_400e_9354_1BB702683F90" text="0..*" modelElement="EAID_srcAE1D1F_A333_4bd4_9354_1BB702683F90">
+					<bounds xmi:type="dc:bounds" xmi:id="EAID_DBSML000000_1D1B_400e_9354_1BB702683F90" x="361" y="539" width="15" height="13"/>
+				</ownedElement>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000000_1D1B_400e_9354_1BB702683F90" x="324" y="563"/>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000001_1D1B_400e_9354_1BB702683F90" x="324" y="516"/>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000002_1D1B_400e_9354_1BB702683F90" x="350" y="516"/>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000003_1D1B_400e_9354_1BB702683F90" x="350" y="467"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLEdge" xmi:id="EAID_C173A6F4_1D1B_400e_B374_6659A30A3BB4" source="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" target="EAID_75DBB25D_29E9_4cb4_9813_1ACA7B4B73FD" modelElement="EAID_E5DAC21D_3D66_4242_B374_6659A30A3BB4">
+				<ownedElement xmi:type="umldi:UMLAssociationEndLabel" xmi:id="EAID_SEL000000_1D1B_400e_B374_6659A30A3BB4" text="+lod0Geometry&#xA;«property»" modelElement="EAID_srcDAC21D_3D66_4242_B374_6659A30A3BB4">
+					<bounds xmi:type="dc:bounds" xmi:id="EAID_DBSEL000000_1D1B_400e_B374_6659A30A3BB4" x="595" y="961" width="68" height="25"/>
+				</ownedElement>
+				<ownedElement xmi:type="umldi:UMLMultiplicityLabel" xmi:id="EAID_SML000000_1D1B_400e_B374_6659A30A3BB4" text="0..1" modelElement="EAID_srcDAC21D_3D66_4242_B374_6659A30A3BB4">
+					<bounds xmi:type="dc:bounds" xmi:id="EAID_DBSML000000_1D1B_400e_B374_6659A30A3BB4" x="735" y="961" width="17" height="13"/>
+				</ownedElement>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000000_1D1B_400e_B374_6659A30A3BB4" x="727" y="956"/>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000001_1D1B_400e_B374_6659A30A3BB4" x="462" y="905"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLEdge" xmi:id="EAID_C173A6F4_1D1B_400e_8B5C_2252CD8AEAA6" source="EAID_75DBB25D_29E9_4cb4_9813_1ACA7B4B73FD" target="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8" modelElement="EAID_2931192E_84D1_44ea_8B5C_2252CD8AEAA6">
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000000_1D1B_400e_8B5C_2252CD8AEAA6" x="323" y="772"/>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000001_1D1B_400e_8B5C_2252CD8AEAA6" x="374" y="105"/>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000002_1D1B_400e_8B5C_2252CD8AEAA6" x="401" y="105"/>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000003_1D1B_400e_8B5C_2252CD8AEAA6" x="323" y="653"/>
+			</ownedElement>
+		</umldi:Diagram>
+	<xmi:Extension extender="Enterprise Architect" extenderID="6.5">
+		<elements>
+			<element xmi:idref="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0" xmi:type="uml:Class" name="SolitaryVegetationObject" scope="public">
+				<model package="EAPK_888CC93A_C3E5_4d7f_86B4_42EAA804728D" tpos="0" ea_localid="186" ea_eleType="element"/>
+				<properties documentation="独立した樹木。&#xA;&#xA;.SolitaryVegetationObjectの例&#xA;image::images/358.webp.png[width=&quot;150&quot;]&#xA;&#xA;* 属性core:creationDateは運用上必須とする。" isSpecification="false" sType="Class" nType="0" alias="VegetatieObject" scope="public" stereotype="FeatureType" isRoot="false" isLeaf="false" isAbstract="false" isActive="false"/>
+				<project author="lvandenbrink" version="1.0" phase="1.0" created="2021-05-17 18:23:34" modified="2025-10-07 12:01:22" complexity="1" status="Proposed"/>
+				<code product_name="Java" gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags>
+					<tag xmi:id="EAID_4B41AB76_542D_4919_A20C_7BB91893AF7B" name="adeHook" value="true" modelElement="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0"/>
+					<tag xmi:id="EAID_0A45F5F4_CAFE_4e66_AAF6_0FCA5CB1C654" name="asDictionary" value="false" modelElement="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0"/>
+					<tag xmi:id="EAID_D6216360_3735_42d4_8591_D2FDB9FB5596" name="asGroup" value="false" modelElement="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0"/>
+					<tag xmi:id="EAID_ED33D65F_DF35_1ddf_89AB_20D52B844E8B" name="byValuePropertyType" value="false#NOTES#Values: true,false&#xA;Default: false&#xA;Description: Create a named complex type ( property type ) that requires the instance to be encoded inline&#xA;" modelElement="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0"/>
+					<tag xmi:id="EAID_8B82FAD6_C357_4a29_8465_0F3F7AF29F1A" name="generateSchema" value="true" modelElement="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0"/>
+					<tag xmi:id="EAID_26B33348_211E_5f21_BB1A_FEEB6C125F5C" name="isCollection" value="false#NOTES#Values: true,false&#xA;Default: false&#xA;Description: Identifies the class as a collection&#xA;" modelElement="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0"/>
+					<tag xmi:id="EAID_F9638764_B69A_b0b6_8D44_410668E510EF" name="noPropertyType" value="false#NOTES#Values: true,false&#xA;Default: false&#xA;Description: Suppress creation of a named complex type ( property type ) that supports inline or byReference encoding&#xA;" modelElement="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0"/>
+				</tags>
+				<xrefs value="$XREFPROP=$XID={C9BB9A27-19BE-423e-B27A-D8B92E6D28B7}$XID;$NAM=Stereotypes$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=FeatureType;FQName=GML::FeatureType;@ENDSTEREO;$DES;$CLT={32ECE50F-17C7-4864-98BD-6C8A30193EF0}$CLT;$ENDXREF;$XREFPROP=$XID={3D606812-E759-4eae-9B22-9776F6F4E470}$XID;$NAM=CustomProperties$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@PROP=@NAME=isActive@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={32ECE50F-17C7-4864-98BD-6C8A30193EF0}$CLT;$ENDXREF;"/>
+				<extendedProperties tagged="0" package_name="veg"/>
+				<attributes>
+					<attribute xmi:idref="EAID_26DB8C7B_0B48_40fa_8FD9_4902241FFAAE" name="class" scope="Public">
+						<initial/>
+						<documentation value="高木、中木、低木の別。コードリスト（&amp;lt;&amp;lt;SolitaryVegetationObject_class.xml,SolitaryVegetationObject_class.xml&amp;gt;&amp;gt;）より選択する。"/>
+						<model ea_localid="331" ea_guid="{26DB8C7B-0B48-40fa-8FD9-4902241FFAAE}"/>
+						<properties type="gml:CodeType" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="0"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="IsLiteral=0;volatile=0;union=0;"/>
+						<tags>
+							<tag xmi:id="EAID_7795ED38_F6DE_4970_A20B_6EC28638FE8C" name="sequenceNumber" value="0"/>
+							<tag xmi:id="EAID_DED7E533_1813_4fd4_9496_F0119493D607" name="isMetadata" value="false"/>
+							<tag xmi:id="EAID_FD94C2BF_F078_4def_878E_2FE119FA7D5A" name="inlineOrByReference" value="inline"/>
+						</tags>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_74DFC1C6_1D68_44da_A203_3D36366676B5" name="function" scope="Public">
+						<initial/>
+						<documentation value="常緑又は落葉の区分及び針葉又は広葉の区分。コードリスト（&amp;lt;&amp;lt;SolitaryVegetationObject_function.xml,SolitaryVegetationObject_function.xml&amp;gt;&amp;gt;）より選択する。"/>
+						<model ea_localid="332" ea_guid="{74DFC1C6-1D68-44da-A203-3D36366676B5}"/>
+						<properties type="gml:CodeType" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="1"/>
+						<stereotype/>
+						<bounds lower="0" upper="*"/>
+						<options/>
+						<style/>
+						<styleex value="IsLiteral=0;volatile=0;union=0;"/>
+						<tags>
+							<tag xmi:id="EAID_EBA0B9A0_2029_4fa9_85EE_A9E7E0463DC1" name="sequenceNumber" value="1"/>
+							<tag xmi:id="EAID_44E7C55E_A1D0_47de_AD22_BCAE6688FDDF" name="isMetadata" value="false"/>
+							<tag xmi:id="EAID_0E251CEA_5B2B_4804_9123_D48BB8BA4542" name="inlineOrByReference" value="inline"/>
+						</tags>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_B9203454_D76E_4868_AF48_FF972033B378" name="usage" scope="Public">
+						<initial/>
+						<documentation value="樹木の用途。標準製品仕様書では使用しない。"/>
+						<model ea_localid="333" ea_guid="{B9203454-D76E-4868-AF48-FF972033B378}"/>
+						<properties type="gml:CodeType" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="2"/>
+						<stereotype/>
+						<bounds lower="0" upper="*"/>
+						<options/>
+						<style/>
+						<styleex value="IsLiteral=0;volatile=0;union=0;"/>
+						<tags>
+							<tag xmi:id="EAID_49488BC6_9AB7_437f_8EC1_16CFB2AE582E" name="sequenceNumber" value="2"/>
+							<tag xmi:id="EAID_568B5895_CAA5_4c34_BD97_15D592F32352" name="isMetadata" value="false"/>
+							<tag xmi:id="EAID_F5167BD4_8E5E_4b25_9188_47E444A8AB34" name="inlineOrByReference" value="inline"/>
+						</tags>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_21052710_8D3C_45bc_AD8B_C8B8AB0F6EC4" name="species" scope="Public">
+						<initial/>
+						<documentation value="樹木の樹種。標準製品仕様書では使用しない。"/>
+						<model ea_localid="334" ea_guid="{21052710-8D3C-45bc-AD8B-C8B8AB0F6EC4}"/>
+						<properties type="gml:CodeType" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="3"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="IsLiteral=0;volatile=0;union=0;"/>
+						<tags>
+							<tag xmi:id="EAID_60962A1D_AF58_436d_A5A6_66DF10C02DCA" name="sequenceNumber" value="3"/>
+							<tag xmi:id="EAID_09E03252_D59B_4de3_ADF0_3F7A499A9AC5" name="isMetadata" value="false"/>
+							<tag xmi:id="EAID_B8672139_59AC_4230_97FE_32738BBFB358" name="inlineOrByReference" value="inline"/>
+						</tags>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_B377AE78_8BB3_4e46_B3BB_6039A66BE9AB" name="height" scope="Public">
+						<initial/>
+						<documentation value="樹高。樹木の樹冠の頂端から根鉢の上端までの垂直高をいい、一部の突出した枝は含まない。単位はm（uom=&quot;m&quot;）とする。"/>
+						<model ea_localid="1798" ea_guid="{B377AE78-8BB3-4e46-B3BB-6039A66BE9AB}"/>
+						<properties type="gml:LengthType" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="4"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="IsLiteral=0;volatile=0;union=0;"/>
+						<tags>
+							<tag xmi:id="EAID_5924FE52_0EAB_4e92_AD87_AE9467FF040A" name="sequenceNumber" value="4"/>
+							<tag xmi:id="EAID_291F2675_ED02_4472_B963_E7FD7E035108" name="isMetadata" value="false"/>
+							<tag xmi:id="EAID_B4C69CD1_5B4D_4a2c_B0F8_B7BC56ED0C34" name="inlineOrByReference" value="inline"/>
+						</tags>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_DA2B9979_445A_41ee_B1D8_D17A55C1F88B" name="trunkDiameter" scope="Public">
+						<initial/>
+						<documentation value="樹径。幹周を3.14で除算した数値。 +&#xA;なお、幹周とは樹木の幹の周長をいい、根鉢の上端より1.2m上りの位置を測定する。この部分に枝が分岐しているときは、その上部を測定する。幹が二本以上の樹木の場合においては、各々の周長の総和の70％をもって幹周とする。単位はm（uom=&quot;m&quot;）とする。"/>
+						<model ea_localid="335" ea_guid="{DA2B9979-445A-41ee-B1D8-D17A55C1F88B}"/>
+						<properties type="gml:LengthType" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="5"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="IsLiteral=0;volatile=0;union=0;"/>
+						<tags>
+							<tag xmi:id="EAID_6BD55011_4086_4851_AC5C_6C6A5AAFFFBB" name="sequenceNumber" value="5"/>
+							<tag xmi:id="EAID_0DE192A4_1F14_4eb2_BDFE_7FFB48D14E14" name="isMetadata" value="false"/>
+							<tag xmi:id="EAID_529E8770_C9E4_473a_B528_CE9B95A4F9E7" name="inlineOrByReference" value="inline"/>
+						</tags>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_ABFF6DCA_0380_418a_A327_19F707D56131" name="crownDiameter" scope="Public">
+						<initial/>
+						<documentation value="樹木の四方面に伸長した枝(葉)の幅をいう。測定方向により幅に長短がある場合は、最長と最短の平均値とする。なお一部の突出した枝は含まない。単位はm（uom=&quot;m&quot;）とする。"/>
+						<model ea_localid="336" ea_guid="{ABFF6DCA-0380-418a-A327-19F707D56131}"/>
+						<properties type="gml:LengthType" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="6"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="IsLiteral=0;volatile=0;union=0;"/>
+						<tags>
+							<tag xmi:id="EAID_88E80D49_ED08_4f1c_9966_EBC4066F3A21" name="sequenceNumber" value="6"/>
+							<tag xmi:id="EAID_6157EFCF_47EB_4783_9395_BBC30BB0553E" name="isMetadata" value="false"/>
+							<tag xmi:id="EAID_33CE083C_557E_44e8_96DA_AB7DDDC8BBBF" name="inlineOrByReference" value="inline"/>
+						</tags>
+						<xrefs/>
+					</attribute>
+				</attributes>
+				<links>
+					<Association xmi:id="EAID_01FE25BC_367E_4408_AEEB_EB583AEA5D02" start="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0" end="EAID_D04B32ED_EF64_4ee3_9D40_122343957C3A"/>
+					<Association xmi:id="EAID_04FE2A6F_77A3_4604_BFDD_C38F2337FBF1" start="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0" end="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997"/>
+					<Association xmi:id="EAID_143F30C7_D85D_4dc3_848B_0AD9E4A25AC3" start="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0" end="EAID_D04B32ED_EF64_4ee3_9D40_122343957C3A"/>
+					<Association xmi:id="EAID_6FB83A92_CD30_4297_876C_562973482A92" start="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0" end="EAID_D04B32ED_EF64_4ee3_9D40_122343957C3A"/>
+					<Generalization xmi:id="EAID_80974AA4_F711_4e14_AE09_A7F691605620" start="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0" end="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB"/>
+					<Association xmi:id="EAID_B4A9B2F6_AFD0_4d74_ADA6_1C97890240A2" start="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0" end="EAID_D04B32ED_EF64_4ee3_9D40_122343957C3A"/>
+					<Association xmi:id="EAID_1A604A28_1D91_4321_A6AE_6879D7B6D440" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0"/>
+					<Association xmi:id="EAID_4B08B8F8_2152_4946_9380_A262F2BDB12B" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0"/>
+					<Association xmi:id="EAID_8D4E3649_784C_400e_9702_55CD270781E8" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB" xmi:type="uml:Class" name="_VegetationObject" scope="public">
+				<model package="EAPK_888CC93A_C3E5_4d7f_86B4_42EAA804728D" tpos="0" ea_localid="185" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Class" nType="0" scope="public" stereotype="featureType" isRoot="false" isLeaf="false" isAbstract="true" isActive="false"/>
+				<project author="lvandenbrink" version="1.0" phase="1.0" created="2021-05-17 18:23:33" modified="2023-03-11 12:05:03" complexity="1" status="Proposed"/>
+				<code product_name="Java" gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags>
+					<tag xmi:id="EAID_C1B5C734_AD02_488a_8013_8DA0786D9ADD" name="adeHook" value="true" modelElement="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB"/>
+					<tag xmi:id="EAID_357A66C7_3360_4296_A28E_A6EDB6CCB783" name="asDictionary" value="false" modelElement="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB"/>
+					<tag xmi:id="EAID_3EEE925E_C9BC_47ab_A2DA_DE5B719B288E" name="asGroup" value="false" modelElement="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB"/>
+					<tag xmi:id="EAID_104C3ABE_E37A_47bd_AE92_8CD45F1E3F0A" name="byValuePropertyType" value="false" modelElement="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB"/>
+					<tag xmi:id="EAID_D63BE249_3FDE_4127_B049_7D1910CA8A87" name="generateSchema" value="true" modelElement="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB"/>
+					<tag xmi:id="EAID_9013BA77_DE74_4803_B6FC_4187DB0FD916" name="isCollection" value="false" modelElement="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB"/>
+					<tag xmi:id="EAID_959E504A_9E60_46a1_845D_A03DC173DEF5" name="noPropertyType" value="false" modelElement="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB"/>
+				</tags>
+				<xrefs value="$XREFPROP=$XID={BBDC0A7E-33F4-43f0-8821-4996B64AD189}$XID;$NAM=Stereotypes$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=featureType;GUID={45CCF0B8-A300-4cb5-BA7E-B57CC5966D59};@ENDSTEREO;$DES;$CLT={46C3349F-67E8-4529-B8BE-5DEC8DFC8DDB}$CLT;$ENDXREF;$XREFPROP=$XID={E24A1CE4-EDA3-4814-977F-2365553E3102}$XID;$NAM=CustomProperties$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@PROP=@NAME=isActive@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={46C3349F-67E8-4529-B8BE-5DEC8DFC8DDB}$CLT;$ENDXREF;"/>
+				<extendedProperties tagged="0" package_name="veg"/>
+				<links>
+					<Generalization xmi:id="EAID_8DAA0C73_91FB_4066_80B8_414EA743216E" start="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB" end="EAID_60CE61DE_7E88_4e8b_BFED_13500E7DCDEC"/>
+					<Aggregation xmi:id="EAID_3296B346_1334_45d0_A01E_4C77B788CDD6" start="EAID_0D84639F_7E62_4824_B70E_58121A43C064" end="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB"/>
+					<Aggregation xmi:id="EAID_39D67F70_93AB_4354_8DC6_AE741E7D56D3" start="EAID_E66C1C01_AE82_4fc8_ACB5_0C3541A6240A" end="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB"/>
+					<Generalization xmi:id="EAID_80974AA4_F711_4e14_AE09_A7F691605620" start="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0" end="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB"/>
+					<Generalization xmi:id="EAID_8CB3451C_761B_47b5_B739_0D06EB385130" start="EAID_5D83B120_4F49_4ed1_BB29_B2998475DA9C" end="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB"/>
+					<Aggregation xmi:id="EAID_DFE2398D_1E6A_4919_94A6_F367FB6A8B98" start="EAID_21B83B38_B136_475a_AAAA_8761EE9D273D" end="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB"/>
+					<Aggregation xmi:id="EAID_E82D9B93_C04A_49d9_9BF5_A4C0D1806C00" start="EAID_8E4996A7_C42C_4613_A0A4_9A6D855F0CF7" end="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB"/>
+					<Aggregation xmi:id="EAID_F8720A43_FC15_4e61_9BB7_53DEB12E0CC9" start="EAID_E93090C4_A8F1_4c8b_86CA_0D4E72D5722B" end="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB"/>
+					<Aggregation xmi:id="EAID_FEAE1D1F_A333_4bd4_9354_1BB702683F90" start="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8" end="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8" xmi:type="uml:Class" name="DmAttribute" scope="public">
+				<model package="EAPK_BCC79C61_EB22_4305_B574_693E41527057" tpos="0" ea_localid="405" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Class" nType="0" scope="public" stereotype="DataType" isRoot="false" isLeaf="false" isAbstract="true" isActive="false"/>
+				<project author="048827" version="1.0" phase="1.0" created="2022-09-16 11:36:51" modified="2023-03-09 21:37:23" complexity="1" status="Proposed"/>
+				<code product_name="Java" gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags>
+					<tag xmi:id="EAID_26B33348_88EC_9d88_9B1B_29932561367B" name="isCollection" value="false#NOTES#Values: true,false&#xA;Default: false&#xA;Description: Identifies the class as a collection&#xA;" modelElement="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8"/>
+					<tag xmi:id="EAID_F9638764_49E8_2849_AE94_614CDC0C6331" name="noPropertyType" value="false#NOTES#Values: true,false&#xA;Default: false&#xA;Description: Suppress creation of a named complex type ( property type ) that supports inline or byReference encoding&#xA;" modelElement="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8"/>
+				</tags>
+				<xrefs value="$XREFPROP=$XID={F93B36E4-12E9-4446-9212-D1F433A4D9E9}$XID;$NAM=Stereotypes$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=DataType;FQName=GML::DataType;@ENDSTEREO;$DES;$CLT={C957C9A8-14C3-43ac-93F5-DCC06A1FB3A8}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
+				<extendedProperties tagged="0" package_name="uro"/>
+				<attributes>
+					<attribute xmi:idref="EAID_ACCFA8A3_F6E1_4685_B213_5A1A090A6E40" name="dmCode" scope="Public">
+						<initial/>
+						<documentation value="DMの図式分類コード。レイヤ番号（2桁）とデータ項目（2桁）からなる4桁の半角数字の列。 +&#xA;コードリスト（&amp;lt;&amp;lt;Common_dmCode.xml,Common_dmCode.xml&amp;gt;&amp;gt;）より選択する。"/>
+						<model ea_localid="829" ea_guid="{ACCFA8A3-F6E1-4685-B213-5A1A090A6E40}"/>
+						<properties type="gml:CodeType" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="0"/>
+						<stereotype/>
+						<bounds lower="1" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_C629D1D3_002A_4859_94BD_7F6B1CF67B16" name="meshCode" scope="Public">
+						<initial/>
+						<documentation value="数値地形図データが含まれる国土基本図の図郭識別番号。"/>
+						<model ea_localid="1850" ea_guid="{C629D1D3-002A-4859-94BD-7F6B1CF67B16}"/>
+						<properties type="gml:CodeType" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="1"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+				</attributes>
+				<links>
+					<Aggregation xmi:id="EAID_16B6E623_A3B1_40c4_968A_D2C35D1139B3" start="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8" end="EAID_3EA549ED_B7DB_4947_939C_DD33689C7E42"/>
+					<Aggregation xmi:id="EAID_2270919A_863C_4ad4_9A74_FBB3DC5A9770" start="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8" end="EAID_6F915D44_6B5C_4298_891D_0FB0B1AF24F0"/>
+					<Aggregation xmi:id="EAID_45648CC3_A368_46cf_BA42_6DB81B615A70" start="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8" end="EAID_6C5DA642_083B_4b6d_B81A_172F0CB66CF1"/>
+					<Aggregation xmi:id="EAID_47787155_C8F0_4572_B5C6_FD09390B1760" start="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8" end="EAID_4CBABC36_0021_41a8_8ADF_710C3D864C84"/>
+					<Aggregation xmi:id="EAID_6351C5A7_B43F_48da_AF97_DCF4DB736CE2" start="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8" end="EAID_162F1789_29D3_4392_9AC5_C3633040FE44"/>
+					<Aggregation xmi:id="EAID_79E8B13D_0177_4245_9DF4_6F31D3CF90EC" start="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8" end="EAID_E82076B9_A433_4e3c_8A7E_588940128669"/>
+					<Aggregation xmi:id="EAID_84A8AB97_F71A_44f8_B616_32C32D62943B" start="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8" end="EAID_1AE0A6D0_5993_421d_9E93_1298DA83C329"/>
+					<Aggregation xmi:id="EAID_C10683F0_8D81_4dc2_B424_7007DB5D1D99" start="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8" end="EAID_9168A6BA_3C3F_4cc4_8031_96770453E1BF"/>
+					<Aggregation xmi:id="EAID_C691B74E_1CDC_414d_9C27_4F8B31EC9092" start="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8" end="EAID_4FD70EE3_146B_4b39_BEF3_6246F2F0DD4D"/>
+					<Aggregation xmi:id="EAID_D0744190_1F86_44cd_B6E0_F9A442FB839E" start="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Aggregation xmi:id="EAID_F4228FDF_9AAA_4f1f_8D63_D5A7D2657F59" start="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8" end="EAID_C4BCE38B_7CE8_410b_B31D_B49A4FBE04F5"/>
+					<Aggregation xmi:id="EAID_FEAE1D1F_A333_4bd4_9354_1BB702683F90" start="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8" end="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB"/>
+					<Generalization xmi:id="EAID_2931192E_84D1_44ea_8B5C_2252CD8AEAA6" start="EAID_75DBB25D_29E9_4cb4_9813_1ACA7B4B73FD" end="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8"/>
+					<Generalization xmi:id="EAID_63FFF9AA_4FE0_4dcf_BA6E_83BCC51B6A09" start="EAID_FA65EA18_9554_4ab4_B1EB_8C34EFD57926" end="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8"/>
+					<Aggregation xmi:id="EAID_A3EEB19A_A0A7_4b18_A384_04C114D29082" start="EAID_FFAACAE2_3792_4295_917F_D896AF8B6BF5" end="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_8E4996A7_C42C_4613_A0A4_9A6D855F0CF7" xmi:type="uml:Class" name="DataQualityAttribute" scope="public">
+				<model package="EAPK_BCC79C61_EB22_4305_B574_693E41527057" tpos="0" ea_localid="214" ea_eleType="element"/>
+				<properties documentation="都市オブジェクトの品質を記述するためのデータ型。" isSpecification="false" sType="Class" nType="0" scope="public" stereotype="DataType" isRoot="false" isLeaf="false" isAbstract="false" isActive="false"/>
+				<project author="048827" version="1.0" phase="1.0" created="2021-11-04 17:18:26" modified="2025-10-07 13:13:54" complexity="1" status="Proposed"/>
+				<code product_name="Java" gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags>
+					<tag xmi:id="EAID_26B33348_88EC_9d88_8509_6CDEEDE7E752" name="isCollection" value="false#NOTES#Values: true,false&#xA;Default: false&#xA;Description: Identifies the class as a collection&#xA;" modelElement="EAID_8E4996A7_C42C_4613_A0A4_9A6D855F0CF7"/>
+					<tag xmi:id="EAID_F9638764_49E8_2849_BD90_AFE10658F3D5" name="noPropertyType" value="false#NOTES#Values: true,false&#xA;Default: false&#xA;Description: Suppress creation of a named complex type ( property type ) that supports inline or byReference encoding&#xA;" modelElement="EAID_8E4996A7_C42C_4613_A0A4_9A6D855F0CF7"/>
+				</tags>
+				<xrefs value="$XREFPROP=$XID={800919D5-66A6-4621-ACBB-BC908C0633EF}$XID;$NAM=Stereotypes$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=DataType;FQName=GML::DataType;@ENDSTEREO;$DES;$CLT={8E4996A7-C42C-4613-A0A4-9A6D855F0CF7}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
+				<extendedProperties tagged="0" package_name="uro"/>
+				<attributes>
+					<attribute xmi:idref="EAID_B2BD7D45_C19E_446c_84CE_7632E5D3EB4E" name="geometrySrcDescLod0" scope="Public">
+						<initial/>
+						<documentation value="LOD0の幾何オブジェクトの作成に使用した原典資料の種類。 +&#xA;コードリスト（&amp;lt;&amp;lt;DataQualityAttribute_geometrySrcDesc.xml,DataQualityAttribute_geometrySrcDesc.xml&amp;gt;&amp;gt;）より選択する。拡張製品仕様書でLOD0の幾何オブジェクトが作成対象となっている場合は必須とする。この場合、具体的な都市オブジェクトがLOD0の幾何オブジェクトを含んでいない場合でも、「未作成」を示すコード「999」を選択すること（例えば、建築物モデルについて、一部の範囲のみLOD0の幾何オブジェクトが作成され、対象とする都市オブジェクトにはLOD1の幾何オブジェクトのみが含まれているような場合でも、その都市オブジェクトに関する本属性の値は「999」となる。）。&#xA;"/>
+						<model ea_localid="392" ea_guid="{B2BD7D45-C19E-446c-84CE-7632E5D3EB4E}"/>
+						<properties type="gml:CodeType" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="0"/>
+						<stereotype/>
+						<bounds lower="0" upper="*"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_C5117AFF_5BD5_4466_A468_C406B4D0B0F7" name="geometrySrcDescLod1" scope="Public">
+						<initial/>
+						<documentation value="LOD1の幾何オブジェクトの作成に使用した原典資料の種類。 +&#xA;コードリスト（&amp;lt;&amp;lt;DataQualityAttribute_geometrySrcDesc.xml,DataQualityAttribute_geometrySrcDesc.xml&amp;gt;&amp;gt;）より選択する。具体的な都市オブジェクトがLOD1の幾何オブジェクトを含んでいない場合でも、「未作成」を示すコード「999」を選択すること。"/>
+						<model ea_localid="282" ea_guid="{C5117AFF-5BD5-4466-A468-C406B4D0B0F7}"/>
+						<properties type="gml:CodeType" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="1"/>
+						<stereotype/>
+						<bounds lower="1" upper="*"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_6B9ABB0F_B646_4e83_AB6A_377768085566" name="geometrySrcDescLod2" scope="Public">
+						<initial/>
+						<documentation value="LOD2の幾何オブジェクトの作成に使用した原典資料の種類。 +&#xA;コードリスト（&amp;lt;&amp;lt;DataQualityAttribute_geometrySrcDesc.xml,DataQualityAttribute_geometrySrcDesc.xml&amp;gt;&amp;gt;）より選択する。拡張製品仕様書でLOD2の幾何オブジェクトが作成対象となっている場合は必須とする。この場合、具体的な都市オブジェクトがLOD2の幾何オブジェクトを含んでいない場合でも、「未作成」を示すコード「999」を選択すること（例えば、建築物モデルについて、一部の範囲のみLOD0の幾何オブジェクトが作成され、対象とする都市オブジェクトにはLOD1の幾何オブジェクトのみが含まれているような場合でも、その都市オブジェクトに関する本属性の値は「999」となる。）。"/>
+						<model ea_localid="393" ea_guid="{6B9ABB0F-B646-4e83-AB6A-377768085566}"/>
+						<properties type="gml:CodeType" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="2"/>
+						<stereotype/>
+						<bounds lower="0" upper="*"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_3FA7B353_C3F9_41e2_AF9F_221A7AE8CCF8" name="geometrySrcDescLod3" scope="Public">
+						<initial/>
+						<documentation value="LOD3の幾何オブジェクトの作成に使用した原典資料の種類。 +&#xA;コードリスト（&amp;lt;&amp;lt;DataQualityAttribute_geometrySrcDesc.xml,DataQualityAttribute_geometrySrcDesc.xml&amp;gt;&amp;gt;）より選択する。拡張製品仕様書でLOD3の幾何オブジェクトが作成対象となっている場合は必須とする。この場合、具体的な都市オブジェクトがLOD3の幾何オブジェクトを含んでいない場合でも、「未作成」を示すコード「999」を選択すること（例えば、建築物モデルについて、一部の範囲のみLOD0の幾何オブジェクトが作成され、対象とする都市オブジェクトにはLOD1の幾何オブジェクトのみが含まれているような場合でも、その都市オブジェクトに関する本属性の値は「999」となる。）。"/>
+						<model ea_localid="1657" ea_guid="{3FA7B353-C3F9-41e2-AF9F-221A7AE8CCF8}"/>
+						<properties type="gml:CodeType" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="3"/>
+						<stereotype/>
+						<bounds lower="0" upper="*"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_26187124_24FC_4508_A413_E95078489AF1" name="geometrySrcDescLod4" scope="Public">
+						<initial/>
+						<documentation value="LOD4の幾何オブジェクトの作成に使用した原典資料の種類。 +&#xA;コードリスト（&amp;lt;&amp;lt;DataQualityAttribute_geometrySrcDesc.xml,DataQualityAttribute_geometrySrcDesc.xml&amp;gt;&amp;gt;）より選択する。拡張製品仕様書でLOD4の幾何オブジェクトが作成対象となっている場合は必須とする。この場合、具体的な都市オブジェクトがLOD4の幾何オブジェクトを含んでいない場合でも、「未作成」を示すコード「999」を選択すること（例えば、建築物モデルについて、一部の範囲のみLOD0の幾何オブジェクトが作成され、対象とする都市オブジェクトにはLOD1の幾何オブジェクトのみが含まれているような場合でも、その都市オブジェクトに関する本属性の値は「999」となる。）。"/>
+						<model ea_localid="1027" ea_guid="{26187124-24FC-4508-A413-E95078489AF1}"/>
+						<properties type="gml:CodeType" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="4"/>
+						<stereotype/>
+						<bounds lower="0" upper="*"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_70F42891_9777_4c78_8CAB_C869B2C2670F" name="thematicSrcDesc" scope="Public">
+						<initial/>
+						<documentation value="主題属性の作成に使用した原典資料の種類。 +&#xA;コードリスト（&amp;lt;&amp;lt;DataQualityAttribute_thematicSrcDesc.xml,DataQualityAttribute_thematicSrcDesc.xml&amp;gt;&amp;gt;）より選択する。 +&#xA;主題属性が作成対象となっている場合は必須とする。&#xA;"/>
+						<model ea_localid="434" ea_guid="{70F42891-9777-4c78-8CAB-C869B2C2670F}"/>
+						<properties type="gml:CodeType" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="5"/>
+						<stereotype/>
+						<bounds lower="0" upper="*"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_F41C4FAD_816C_442d_8E25_7F938B228B47" name="appearanceSrcDescLod0" scope="Public">
+						<initial/>
+						<documentation value="LOD0の幾何オブジェクトのアピアランスに使用した原典資料の種類。 +&#xA;コードリスト（&amp;lt;&amp;lt;DataQualityAttribute_appearanceSrcDesc.xml,DataQualityAttribute_appearanceSrcDesc.xml&amp;gt;&amp;gt;）より選択する。 +&#xA;拡張製品仕様書でLOD0の幾何オブジェクトのアピアランスが作成対象となっている場合は必須とする。この場合、具体的な都市オブジェクトがLOD0の幾何オブジェクトのアピアランスを含んでいない場合でも、「未作成」を示すコード「99」を選択すること。"/>
+						<model ea_localid="435" ea_guid="{F41C4FAD-816C-442d-8E25-7F938B228B47}"/>
+						<properties type="gml:CodeType" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="6"/>
+						<stereotype/>
+						<bounds lower="0" upper="*"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_ABA3A41D_0383_4fd6_8503_31C1E98DB096" name="appearanceSrcDescLod1" scope="Public">
+						<initial/>
+						<documentation value="LOD1の幾何オブジェクトのアピアランスに使用した原典資料の種類。 +&#xA;コードリスト（&amp;lt;&amp;lt;DataQualityAttribute_appearanceSrcDesc.xml,DataQualityAttribute_appearanceSrcDesc.xml&amp;gt;&amp;gt;）より選択する。 +&#xA;拡張製品仕様書LOD1の幾何オブジェクトのアピアランスが作成対象となっている場合は必須とする。この場合、具体的な都市オブジェクトがLOD1の幾何オブジェクトのアピアランスを含んでいない場合でも、「未作成」を示すコード「99」を選択すること。&#xA;"/>
+						<model ea_localid="1410" ea_guid="{ABA3A41D-0383-4fd6-8503-31C1E98DB096}"/>
+						<properties type="gml:CodeType" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="7"/>
+						<stereotype/>
+						<bounds lower="0" upper="*"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_D20F45B7_941D_421b_AED9_06C9D909FE6A" name="appearanceSrcDescLod2" scope="Public">
+						<initial/>
+						<documentation value="LOD2の幾何オブジェクトのアピアランスに使用した原典資料の種類。 +&#xA;コードリスト（&amp;lt;&amp;lt;DataQualityAttribute_appearanceSrcDesc.xml,DataQualityAttribute_appearanceSrcDesc.xml&amp;gt;&amp;gt;）より選択する。 +&#xA;拡張製品仕様書でLOD2の幾何オブジェクトのアピアランスが作成対象となっている場合は必須とする。この場合、具体的な都市オブジェクトがLOD2の幾何オブジェクトのアピアランスを含んでいない場合でも、「未作成」を示すコード「99」を選択すること。"/>
+						<model ea_localid="1411" ea_guid="{D20F45B7-941D-421b-AED9-06C9D909FE6A}"/>
+						<properties type="gml:CodeType" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="8"/>
+						<stereotype/>
+						<bounds lower="0" upper="*"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_2E148BC5_C307_4104_94E8_2C44BF43FA34" name="appearanceSrcDescLod3" scope="Public">
+						<initial/>
+						<documentation value="LOD3の幾何オブジェクトのアピアランスに使用した原典資料の種類。 +&#xA;コードリスト（&amp;lt;&amp;lt;DataQualityAttribute_appearanceSrcDesc.xml,DataQualityAttribute_appearanceSrcDesc.xml&amp;gt;&amp;gt;）より選択する。 +&#xA;拡張製品仕様書でLOD3の幾何オブジェクトのアピアランスが作成対象となっている場合は必須とする。この場合、具体的な都市オブジェクトがLOD3の幾何オブジェクトのアピアランスを含んでいない場合でも、「未作成」を示すコード「99」を選択すること。&#xA;"/>
+						<model ea_localid="1680" ea_guid="{2E148BC5-C307-4104-94E8-2C44BF43FA34}"/>
+						<properties type="gml:CodeType" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="9"/>
+						<stereotype/>
+						<bounds lower="0" upper="*"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_9BF17E3F_1CF6_44f0_BEF2_AD3BE6481338" name="appearanceSrcDescLod4" scope="Public">
+						<initial/>
+						<documentation value="LOD4の幾何オブジェクトのアピアランスに使用した原典資料の種類。 +&#xA;コードリスト（&amp;lt;&amp;lt;DataQualityAttribute_appearanceSrcDesc.xml,DataQualityAttribute_appearanceSrcDesc.xml&amp;gt;&amp;gt;）より選択する。 +&#xA;拡張製品仕様書でLOD4の幾何オブジェクトのアピアランスが作成対象となっている場合は必須とする。この場合、具体的な都市オブジェクトがLOD4の幾何オブジェクトのアピアランスを含んでいない場合でも、「未作成」を示すコード「99」を選択すること。"/>
+						<model ea_localid="1681" ea_guid="{9BF17E3F-1CF6-44f0-BEF2-AD3BE6481338}"/>
+						<properties type="gml:CodeType" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="10"/>
+						<stereotype/>
+						<bounds lower="0" upper="*"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_2DDAA547_5E0C_4c7b_A273_0B4A9CC34332" name="lodType" scope="Public">
+						<initial/>
+						<documentation value="幾何オブジェクトに適用されたLODの詳細な区分。&#xA;&#xA;* 建築物の場合 +&#xA;コードリスト（&amp;lt;&amp;lt;Building_lodType.xml,Building_lodType.xml&amp;gt;&amp;gt;）より選択する。 +&#xA;LOD2以上の幾何オブジェクトを作成する場合は必須とする。&#xA;* 道路、徒歩道又は広場の場合 +&#xA;コードリスト（&amp;lt;&amp;lt;Road_lodType.xml,Road_lodType.xml&amp;gt;&amp;gt;）より選択する。 +&#xA;LOD3の幾何オブジェクトを作成する場合は必須とする。&#xA;* 鉄道の場合 +&#xA;コードリスト（&amp;lt;&amp;lt;Railway_lodType.xml,Railway_lodType.xml&amp;gt;&amp;gt;）より選択する。 +&#xA;LOD3の幾何オブジェクトを作成する場合は必須とする。&#xA;* LODの細分が定義されていない地物型の場合 +&#xA;この属性を使用しない。&#xA;"/>
+						<model ea_localid="1028" ea_guid="{2DDAA547-5E0C-4c7b-A273-0B4A9CC34332}"/>
+						<properties type="gml:CodeType" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="11"/>
+						<stereotype/>
+						<bounds lower="0" upper="*"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_5344B6FC_4445_47e6_B9E6_70DB63675469" name="lod1HeightType" scope="Public">
+						<initial/>
+						<documentation value="LOD1の立体図形を作成する際に使用した高さの算出方法。コードリスト（&amp;lt;&amp;lt;DataQualityAttribute_lod1HeightType.xml,DataQualityAttribute_lod1HeightType.xml&amp;gt;&amp;gt;）より選択する。立体の幾何オブジェクトを作成する場合は必須とする。&#xA;&#xA;"/>
+						<model ea_localid="1029" ea_guid="{5344B6FC-4445-47e6-B9E6-70DB63675469}"/>
+						<properties type="gml:CodeType" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="12"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_D3E62732_7C55_4a9d_B6DE_4E8771AD24FC" name="tranDataAcquisition" scope="Public">
+						<initial/>
+						<documentation value="&amp;lt;&amp;lt;nilim_kiban_dps,道路基盤地図情報（整備促進版）製品仕様書（案）（平成27年5月）&amp;gt;&amp;gt;に定める「取得レベル(level)」を記述するための属性。 +&#xA;道路の場合にのみ使用する。"/>
+						<model ea_localid="1030" ea_guid="{D3E62732-7C55-4a9d-B6DE-4E8771AD24FC}"/>
+						<properties type="xs:string" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="13"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+				</attributes>
+				<links>
+					<Aggregation xmi:id="EAID_1F5D767C_FAC0_4aa7_BFEF_95AD411B32EF" start="EAID_8E4996A7_C42C_4613_A0A4_9A6D855F0CF7" end="EAID_4CBABC36_0021_41a8_8ADF_710C3D864C84"/>
+					<Aggregation xmi:id="EAID_2366A60A_5784_4029_A57D_5B5E8431B1FF" start="EAID_8E4996A7_C42C_4613_A0A4_9A6D855F0CF7" end="EAID_162F1789_29D3_4392_9AC5_C3633040FE44"/>
+					<Aggregation xmi:id="EAID_24681C17_1029_4502_9275_32CBFC5832FA" start="EAID_8E4996A7_C42C_4613_A0A4_9A6D855F0CF7" end="EAID_ACABD6DC_E4F2_4a04_BBD4_25CECBBDC6F6"/>
+					<Aggregation xmi:id="EAID_4AE764A6_4CC9_4f79_A9B7_8B9E39320E8C" start="EAID_8E4996A7_C42C_4613_A0A4_9A6D855F0CF7" end="EAID_6F915D44_6B5C_4298_891D_0FB0B1AF24F0"/>
+					<Aggregation xmi:id="EAID_53352C76_F4BA_4161_A777_E91A2AD26083" start="EAID_8E4996A7_C42C_4613_A0A4_9A6D855F0CF7" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Aggregation xmi:id="EAID_77407882_596C_4f92_892F_0AF653BF51FD" start="EAID_8E4996A7_C42C_4613_A0A4_9A6D855F0CF7" end="EAID_E82076B9_A433_4e3c_8A7E_588940128669"/>
+					<Aggregation xmi:id="EAID_A13635E2_7293_436f_8D08_0574CAB5A828" start="EAID_8E4996A7_C42C_4613_A0A4_9A6D855F0CF7" end="EAID_D8912145_D30D_42bb_8416_D45FBA900EF1"/>
+					<Aggregation xmi:id="EAID_AE25F3BD_33AA_4acc_A0BF_46BDA5F587BB" start="EAID_8E4996A7_C42C_4613_A0A4_9A6D855F0CF7" end="EAID_C4BCE38B_7CE8_410b_B31D_B49A4FBE04F5"/>
+					<Aggregation xmi:id="EAID_C0E75265_6D99_4712_9A3E_13096710BD81" start="EAID_8E4996A7_C42C_4613_A0A4_9A6D855F0CF7" end="EAID_1AE0A6D0_5993_421d_9E93_1298DA83C329"/>
+					<Aggregation xmi:id="EAID_E82D9B93_C04A_49d9_9BF5_A4C0D1806C00" start="EAID_8E4996A7_C42C_4613_A0A4_9A6D855F0CF7" end="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB"/>
+					<Aggregation xmi:id="EAID_FE4E27D8_6BEC_4946_971D_03C88DBC798B" start="EAID_8E4996A7_C42C_4613_A0A4_9A6D855F0CF7" end="EAID_4FD70EE3_146B_4b39_BEF3_6246F2F0DD4D"/>
+					<Aggregation xmi:id="EAID_B9B36C4B_5694_46c3_A9ED_5F116B217962" start="EAID_4E3B64AD_AC35_41be_84B1_9D973ED9F949" end="EAID_8E4996A7_C42C_4613_A0A4_9A6D855F0CF7"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" xmi:type="uml:Class" name="_Geometry" scope="public">
+				<model package="EAPK_939925FF_6235_4286_82FF_7392B33F305C" tpos="0" ea_localid="183" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Class" nType="0" scope="public" stereotype="Type" isRoot="false" isLeaf="false" isAbstract="true" isActive="false"/>
+				<project author="048827" version="1.0" phase="1.0" created="2021-05-17 14:42:09" modified="2023-03-11 00:01:45" complexity="1" status="Proposed"/>
+				<code product_name="Java" gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags>
+					<tag xmi:id="EAID_ED33D65F_DE49_98de_A36F_72248C6EBC29" name="byValuePropertyType" value="false#NOTES#Values: true,false&#xA;Default: false&#xA;Description: Create a named complex type ( property type ) that requires the instance to be encoded inline&#xA;" modelElement="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997"/>
+					<tag xmi:id="EAID_26B33348_AEB2_0bae_BF36_F9C889E329CA" name="isCollection" value="false#NOTES#Values: true,false&#xA;Default: false&#xA;Description: Identifies the class as a collection&#xA;" modelElement="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997"/>
+					<tag xmi:id="EAID_F9638764_F92E_b6f9_8B54_0E6C6C53A942" name="noPropertyType" value="false#NOTES#Values: true,false&#xA;Default: false&#xA;Description: Suppress creation of a named complex type ( property type ) that supports inline or byReference encoding&#xA;" modelElement="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997"/>
+					<tag xmi:id="EAID_8AFE49E4_2A6E_992a_932C_45FD9752B011" name="xmlSchemaType" value="#NOTES#Description: XML Schema typename, corresponding to the data type, if the class has a canonical XML Schema encoding&#xA;" modelElement="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997"/>
+				</tags>
+				<xrefs value="$XREFPROP=$XID={89F5218C-2E19-4682-98AB-5713EC6E6EAB}$XID;$NAM=Stereotypes$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=Type;FQName=GML::Type;@ENDSTEREO;$DES;$CLT={1FFA9854-10E5-47a7-BE3E-4447F57FE997}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
+				<extendedProperties tagged="0" package_name="gml"/>
+				<links>
+					<Association xmi:id="EAID_0130D165_5C3E_4de2_8701_117F2447EC5D" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_2AFB1204_195F_48c9_8BB1_B9701F91D855"/>
+					<Association xmi:id="EAID_0458A522_4A62_4af6_B0A9_D68647A1869B" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_05AC07E6_F13D_46ba_9F90_AD6BDEC013B6"/>
+					<Association xmi:id="EAID_07034165_A9CE_4fe5_B90A_11246F5CC8CD" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_FA65EA18_9554_4ab4_B1EB_8C34EFD57926"/>
+					<Association xmi:id="EAID_0F66C620_78DC_4bc3_BC8F_D1D1C3316977" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_8BECD2E5_6C4C_42d0_88BB_1CC6BF947BE4"/>
+					<Association xmi:id="EAID_11377ADA_5D40_4f6c_8F50_F0ABA4096796" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_9F8A548E_FB54_44af_9FA6_6D978EE3F0D4"/>
+					<Association xmi:id="EAID_1A604A28_1D91_4321_A6AE_6879D7B6D440" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0"/>
+					<Association xmi:id="EAID_1CB0E3CD_D658_48aa_AE6C_41D1E6B7FE76" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_E82076B9_A433_4e3c_8A7E_588940128669"/>
+					<Association xmi:id="EAID_22A8AFBA_04D4_49a6_A91A_2FC16B0887DE" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_4FE254C3_3809_4a04_9A5B_6BE9A8B2F47E"/>
+					<Association xmi:id="EAID_3774FDE7_4AE3_448a_B5FC_7C53A790C74F" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_8BECD2E5_6C4C_42d0_88BB_1CC6BF947BE4"/>
+					<Association xmi:id="EAID_3A81447C_D0F4_4da3_BE26_AAAFD5DB4F9E" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_E82076B9_A433_4e3c_8A7E_588940128669"/>
+					<Association xmi:id="EAID_3E63D0D0_7EA8_4568_AACD_A93A011CAF83" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_43F76F26_4414_485d_B19A_B6446431CCBB"/>
+					<Association xmi:id="EAID_43EE088C_6E67_459e_8810_A9B158C0BE96" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_E1A9480F_1DC4_4cc1_AE44_8CF4051583D3"/>
+					<Association xmi:id="EAID_482E676E_E851_4443_9E45_0065B417257A" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_E1A9480F_1DC4_4cc1_AE44_8CF4051583D3"/>
+					<Association xmi:id="EAID_48FAF17C_534F_447a_8E9A_862DCF26EB1E" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_B00A791A_ACE6_456c_BB84_0CA7FF23FEE1"/>
+					<Association xmi:id="EAID_48FCFFEA_7F89_454b_B020_808DCC7E66F1" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_E82076B9_A433_4e3c_8A7E_588940128669"/>
+					<Association xmi:id="EAID_4B08B8F8_2152_4946_9380_A262F2BDB12B" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0"/>
+					<Association xmi:id="EAID_52B10368_FC12_4afe_BAA6_0E4F61BF5937" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_1AE0A6D0_5993_421d_9E93_1298DA83C329"/>
+					<Association xmi:id="EAID_5C5CCD5C_DFB7_48e1_8B4A_8881B1D1CBD9" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_B00A791A_ACE6_456c_BB84_0CA7FF23FEE1"/>
+					<Association xmi:id="EAID_62C5ECBF_2BFB_4e2d_86F3_1287E4866EE2" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_F23692AF_2DB2_4b2b_A079_A3C7491B89CF"/>
+					<Association xmi:id="EAID_6B536668_B9EB_4595_A20D_1425539DE7FB" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_B00A791A_ACE6_456c_BB84_0CA7FF23FEE1"/>
+					<Association xmi:id="EAID_83D9DE51_F12A_4fdc_A109_4EF3F043919E" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_6BED99E1_DB04_409e_A9EB_0612A2CCC129"/>
+					<Association xmi:id="EAID_852FF005_A86B_4c4e_B0FB_C08CBDA4CC5A" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_445424B4_89D6_44b1_AD5D_CDE5110FA344"/>
+					<Association xmi:id="EAID_85D077F7_1C5F_4d5c_B7E1_CF7B3A643F87" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_43F76F26_4414_485d_B19A_B6446431CCBB"/>
+					<Association xmi:id="EAID_8D4E3649_784C_400e_9702_55CD270781E8" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0"/>
+					<Association xmi:id="EAID_90AF565F_DB5C_4af4_86D1_80A5E5A86948" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_E1A9480F_1DC4_4cc1_AE44_8CF4051583D3"/>
+					<Association xmi:id="EAID_934F4502_D2F6_4b05_B10E_3EE8B5965FB3" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_59681D36_BFE9_4513_BA97_133D39C01F34"/>
+					<Association xmi:id="EAID_A075B5C4_A07B_4206_9BBD_8246EE901114" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_4FE254C3_3809_4a04_9A5B_6BE9A8B2F47E"/>
+					<Association xmi:id="EAID_A1F754F1_FC38_4b72_BE06_8D231E6960E4" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_8BECD2E5_6C4C_42d0_88BB_1CC6BF947BE4"/>
+					<Association xmi:id="EAID_A38508BA_2015_4c77_AD20_BE8F350440F1" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_4FE254C3_3809_4a04_9A5B_6BE9A8B2F47E"/>
+					<Association xmi:id="EAID_A7F578A6_4EBC_4512_8856_370C7D48B158" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_E82076B9_A433_4e3c_8A7E_588940128669"/>
+					<Association xmi:id="EAID_AA6F4967_2B9B_4430_A931_02414A31798C" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_05AC07E6_F13D_46ba_9F90_AD6BDEC013B6"/>
+					<Association xmi:id="EAID_B723DB7C_8335_44e4_90C4_DF74A60462FC" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_B136B456_ED6E_4a18_AB69_77E223B70B61"/>
+					<Association xmi:id="EAID_B97F1F44_51FF_4c6a_8928_BB640923C39C" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_43F76F26_4414_485d_B19A_B6446431CCBB"/>
+					<Association xmi:id="EAID_BA770DA0_4C5D_4e6f_AD6C_B66229B4DE52" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_A80E44CF_C86F_41c4_9D07_972B6FBB971C"/>
+					<Association xmi:id="EAID_C3D6E6FC_61B4_41c5_8E19_EFD808DDD168" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_43F76F26_4414_485d_B19A_B6446431CCBB"/>
+					<Association xmi:id="EAID_C755CE2B_8E5B_4456_9415_0F05FF4E82C2" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_1AE0A6D0_5993_421d_9E93_1298DA83C329"/>
+					<Association xmi:id="EAID_D0398967_4EBA_4a2b_98DD_34109F8BACC2" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_1AE0A6D0_5993_421d_9E93_1298DA83C329"/>
+					<Association xmi:id="EAID_D22A5C4C_B4B4_4ed5_BF36_17B204ACD078" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_1AE0A6D0_5993_421d_9E93_1298DA83C329"/>
+					<Association xmi:id="EAID_D5FEE20C_C2A9_475d_8AFC_E7628A0B4D4F" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_43F76F26_4414_485d_B19A_B6446431CCBB"/>
+					<Association xmi:id="EAID_E5DAC21D_3D66_4242_B374_6659A30A3BB4" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_75DBB25D_29E9_4cb4_9813_1ACA7B4B73FD"/>
+					<Association xmi:id="EAID_E5E8A334_2561_4ae4_9EBD_696466522493" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_E82076B9_A433_4e3c_8A7E_588940128669"/>
+					<Association xmi:id="EAID_F4CA31E1_1CE9_413c_80E1_2F2A40CF6A26" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_4FE254C3_3809_4a04_9A5B_6BE9A8B2F47E"/>
+					<Association xmi:id="EAID_04FE2A6F_77A3_4604_BFDD_C38F2337FBF1" start="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0" end="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997"/>
+					<Association xmi:id="EAID_07F81436_7955_435e_8D2D_C56FA6E9D3D4" start="EAID_FB000DF0_F433_45b0_B04C_7BA108CD328B" end="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997"/>
+					<Association xmi:id="EAID_18D56CFE_202D_4d2c_A7CD_24B4F8F396FA" start="EAID_FB000DF0_F433_45b0_B04C_7BA108CD328B" end="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997"/>
+					<Association xmi:id="EAID_28459BA3_45E0_4759_ACEF_5BB92630D7F0" start="EAID_FB000DF0_F433_45b0_B04C_7BA108CD328B" end="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997"/>
+					<Generalization xmi:id="EAID_2C0DD1A3_20D9_45d7_8F4F_9CA3266F0EF9" start="EAID_8A3A51A1_8509_4272_ACE5_F6C907B53824" end="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997"/>
+					<Generalization xmi:id="EAID_65CA23F3_5C75_4f34_BB11_A94D0D48FB94" start="EAID_7FAB8425_4E7D_42e8_94F2_901B0F0C0300" end="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997"/>
+					<Generalization xmi:id="EAID_6776ED5B_505E_4038_892D_C26FDAA7252B" start="EAID_0D9C5B75_B368_4989_93DB_8DD90879B637" end="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997"/>
+					<Association xmi:id="EAID_E7FFECEB_996C_45b0_8E47_A56B4834C7DF" start="EAID_D04B32ED_EF64_4ee3_9D40_122343957C3A" end="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997"/>
+					<Association xmi:id="EAID_F64DBABE_4625_4c8b_949A_A6F09A3771CE" start="EAID_FB000DF0_F433_45b0_B04C_7BA108CD328B" end="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_75DBB25D_29E9_4cb4_9813_1ACA7B4B73FD" xmi:type="uml:Class" name="DmGeometricAttribute" scope="public">
+				<model package="EAPK_BCC79C61_EB22_4305_B574_693E41527057" tpos="0" ea_localid="380" ea_eleType="element"/>
+				<properties documentation="都市計画基本図として、地物の形状を公共測量標準図式に従って表現するためのデータ型。 +&#xA;uro:DmGeometrictAttributeは、地物の実体を表す図形だけではなく、地物を図式に従って表現する際に必要な情報（例：建物記号、建物の棟割線、記号の方向、指示点）を含む。 +&#xA;地物（ステレオタイプがFeatureTypeとなるクラス）は、関連役割uro:dmAttributeにより、このuro:DmGeometrictAttributeを保持できる。" isSpecification="false" sType="Class" nType="0" scope="public" stereotype="DataType" isRoot="false" isLeaf="false" isAbstract="false" isActive="false"/>
+				<project author="048827" version="1.0" phase="1.0" created="2022-06-13 05:32:36" modified="2025-02-18 16:56:39" complexity="1" status="Proposed"/>
+				<code product_name="Java" gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags>
+					<tag xmi:id="EAID_26B33348_88EC_9d88_A608_C41D78EE711A" name="isCollection" value="false#NOTES#Values: true,false&#xA;Default: false&#xA;Description: Identifies the class as a collection&#xA;" modelElement="EAID_75DBB25D_29E9_4cb4_9813_1ACA7B4B73FD"/>
+					<tag xmi:id="EAID_F9638764_49E8_2849_BAD3_E3470E588F52" name="noPropertyType" value="false#NOTES#Values: true,false&#xA;Default: false&#xA;Description: Suppress creation of a named complex type ( property type ) that supports inline or byReference encoding&#xA;" modelElement="EAID_75DBB25D_29E9_4cb4_9813_1ACA7B4B73FD"/>
+				</tags>
+				<xrefs value="$XREFPROP=$XID={F56EA15B-273E-4371-BC44-F61FF01F5F66}$XID;$NAM=Stereotypes$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=DataType;FQName=GML::DataType;@ENDSTEREO;$DES;$CLT={75DBB25D-29E9-4cb4-9813-1ACA7B4B73FD}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
+				<extendedProperties tagged="0" package_name="uro"/>
+				<attributes>
+					<attribute xmi:idref="EAID_97DFB648_8F0E_48c3_8603_DEA7E1BAF0BA" name="geometryType" scope="Public">
+						<initial/>
+						<documentation value="レコードタイプ。 +&#xA;コードリスト（&amp;lt;&amp;lt;Common_geometryType.xml,Common_geometryType.xml&amp;gt;&amp;gt;）より選択する。"/>
+						<model ea_localid="959" ea_guid="{97DFB648-8F0E-48c3-8603-DEA7E1BAF0BA}"/>
+						<properties type="gml:CodeType" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="0"/>
+						<stereotype/>
+						<bounds lower="1" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_252FEEB3_E8A0_4915_8849_EAE81B07AD48" name="mapLevel" scope="Public">
+						<initial/>
+						<documentation value="地図情報レベル。 +&#xA;コードリスト（&amp;lt;&amp;lt;Common_MapLevel.xml,Common_MapLevel.xml&amp;gt;&amp;gt;）より選択する。都市計画基本図の場合は、2500となる。"/>
+						<model ea_localid="828" ea_guid="{252FEEB3-E8A0-4915-8849-EAE81B07AD48}"/>
+						<properties type="gml:CodeType" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="1"/>
+						<stereotype/>
+						<bounds lower="1" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_CAF6092F_389C_462c_B5BC_9B6FA0B383B0" name="shapeType" scope="Public">
+						<initial/>
+						<documentation value="図形区分。 +&#xA;コードリスト（&amp;lt;&amp;lt;Common_shapeType.xml,Common_shapeType.xml&amp;gt;&amp;gt;）より選択する。"/>
+						<model ea_localid="763" ea_guid="{CAF6092F-389C-462c-B5BC-9B6FA0B383B0}"/>
+						<properties type="gml:CodeType" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="2"/>
+						<stereotype/>
+						<bounds lower="1" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_446DC0CC_A96B_4cf0_8BCB_8260DCDC5511" name="visibility" scope="Public">
+						<initial/>
+						<documentation value="可視性。上空から見た場合に、他の地物に遮蔽されておらず、上空から見えている（地図上に表現される）ことを示すフラグ。仮想的に設定された付属図形で描画対象としない場合にもこのフラグを0にする。 +&#xA;1 ：他の地物に遮蔽されていない。（省略時値） +&#xA;0 ：他の地物に遮蔽されている。"/>
+						<model ea_localid="764" ea_guid="{446DC0CC-A96B-4cf0-8BCB-8260DCDC5511}"/>
+						<properties type="xs:boolean" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="3"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_36928F1E_0E9E_4518_94E0_00B620695D26" name="is3d" scope="Public">
+						<initial/>
+						<documentation value="この図形の座標値が３次元データであることを示すフラグ。 +&#xA;1 ：この図形の座標値は３次元データである。 +&#xA;0 ：この図形の座標値は２次元データである。（省略時値） +&#xA;uro:is3d=0の場合、z値に示された”0”は意味を持たない。"/>
+						<model ea_localid="826" ea_guid="{36928F1E-0E9E-4518-94E0-00B620695D26}"/>
+						<properties type="xs:boolean" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="4"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_85A44932_972C_43ba_951B_FA45CF6F8CAC" name="isInstallation" scope="Public">
+						<initial/>
+						<documentation value="この図形が地物の付属図形であることを示すフラグ。 +&#xA;付属図形とは、地物の本質的な実体ではないが、描画処理などで地物を図形表現する際に利用可能な図形である。 +&#xA;1 ：この図形は付属図形である。 +&#xA;0 ：この図形は付属図形ではない。（省略時値） +&#xA;uro:isInstallationの値が1の場合、uro:dmShapeTypeの値は、0以外となる。"/>
+						<model ea_localid="827" ea_guid="{85A44932-972C-43ba-951B-FA45CF6F8CAC}"/>
+						<properties type="xs:boolean" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="5"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_1E700909_36C7_4b7b_98F8_8D086F4F448F" name="isEdited" scope="Public">
+						<initial/>
+						<documentation value="個別の編集処理がおこなわれたことを示すフラグ。 +&#xA;1：編集処理が行われた。 +&#xA;0：編集処理が行われていない。（省略時値）&#xA;"/>
+						<model ea_localid="1049" ea_guid="{1E700909-36C7-4b7b-98F8-8D086F4F448F}"/>
+						<properties type="xs:boolean" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="6"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_FC6CD261_1703_4fbb_B471_C4B10D184040" name="isSupplementarySymbol" scope="Public">
+						<initial/>
+						<documentation value="この図形が地物の補助記号であることを示すフラグ。 +&#xA;補助記号とは、公共測量標準図式において自動発生が可能とされる図形を指す。自動発生が不可能な場合で図形を作成する必要がある場合にのみ使用する。 +&#xA;1 ：この図形は補助記号である。 +&#xA;0 ：この図形は補助記号ではない。（省略時値）"/>
+						<model ea_localid="1050" ea_guid="{FC6CD261-1703-4fbb-B471-C4B10D184040}"/>
+						<properties type="xs:boolean" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="7"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_73D3A971_560F_41f6_B22D_E825940DE0FF" name="angle" scope="Public">
+						<initial/>
+						<documentation value="図形の角度。真北を0とし、時計まわりを正とする。 +&#xA;uro:dmGeometryTypeの値がE7（方向）の場合に多重度は任意となっているが、必須とする。"/>
+						<model ea_localid="978" ea_guid="{73D3A971-560F-41f6-B22D-E825940DE0FF}"/>
+						<properties type="xs:double" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="8"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_266C8798_4DEF_48f9_BEC7_AC132D5D5416" name="elevation" scope="Public">
+						<initial/>
+						<documentation value="この図形の標高。単位はmとする。 +&#xA;uro:dmCodeのレイヤ番号が73の場合は、必須とする。"/>
+						<model ea_localid="979" ea_guid="{266C8798-4DEF-48f9-BEC7-AC132D5D5416}"/>
+						<properties type="gml:LengthType" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="9"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+				</attributes>
+				<links>
+					<Generalization xmi:id="EAID_2931192E_84D1_44ea_8B5C_2252CD8AEAA6" start="EAID_75DBB25D_29E9_4cb4_9813_1ACA7B4B73FD" end="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8"/>
+					<Association xmi:id="EAID_E5DAC21D_3D66_4242_B374_6659A30A3BB4" start="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" end="EAID_75DBB25D_29E9_4cb4_9813_1ACA7B4B73FD"/>
+				</links>
+			</element>
+		</elements>
+		<connectors>
+			<connector xmi:idref="EAID_80974AA4_F711_4e14_AE09_A7F691605620">
+				<source xmi:idref="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0">
+					<model ea_localid="186" type="Class" name="SolitaryVegetationObject"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB">
+					<model ea_localid="185" type="Class" name="_VegetationObject"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="413"/>
+				<properties ea_type="Generalization" direction="Source -&gt; Destination"/>
+				<parameterSubstitutions/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_E82D9B93_C04A_49d9_9BF5_A4C0D1806C00">
+				<source xmi:idref="EAID_8E4996A7_C42C_4613_A0A4_9A6D855F0CF7">
+					<model ea_localid="214" type="Class" name="DataQualityAttribute"/>
+					<role name="vegDataQualityAttribute" stereotype="property" visibility="Public" targetScope="instance"/>
+					<type multiplicity="1" aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;"/>
+					<documentation/>
+					<xrefs value="$XREFPROP=$XID={94E83789-05F5-4a75-A2AF-C9090FA5AB02}$XID;$NAM=Stereotypes$NAM;$TYP=connectorSrcEnd property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=property;FQName=GML::property;@ENDSTEREO;$DES;$CLT={E82D9B93-C04A-49d9-9BF5-A4C0D1806C00}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
+					<tags>
+						<tag xmi:id="EAID_08A8199D_34EA_8c34_8BB5_6DB378BC369D" name="isMetadata" value="false$ea_notes=Values: true,false&#xA;Default: false&#xA;Description: If 'true', the property type will extend GML AbstractMetadataPropertyType. Else, it will extend GML AbstractMemberType.&#xA;"/>
+						<tag xmi:id="EAID_37DFCA0A_33B7_f633_9EFC_74EA02D7F75C" name="inlineOrByReference" value="inline$ea_notes=Values: byReference,inline&#xA;Default: inline&#xA;Description: Determines whether the property value will be encoded inline or by reference&#xA;"/>
+						<tag xmi:id="EAID_E810E922_7AEF_c27a_A889_E343D9D3D6AB" name="sequenceNumber" value="5$ea_notes= Unique integer value to order the properties of a class&#xA;"/>
+					</tags>
+				</source>
+				<target xmi:idref="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB">
+					<model ea_localid="185" type="Class" name="_VegetationObject"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="composite" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="901"/>
+				<properties ea_type="Aggregation" subtype="Strong" direction="Destination -&gt; Source"/>
+				<modifiers isRoot="false" isLeaf="false"/>
+				<documentation value="作成されたデータの品質に関する情報。必須とする。&#xA;&#xA;* 関連役割uro:publicSurveyDataQualityAttributeは、属性uro:srcScaleLod2、uro:srcScaleLod3及びuro:publicSurveySrcDescLod2、uro:publicSurveySrcDescLod3を使用しない。&#xA;"/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels lb="1" lt="+vegDataQualityAttribute&#xA;«property»"/>
+				<extendedProperties/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_FEAE1D1F_A333_4bd4_9354_1BB702683F90">
+				<source xmi:idref="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8">
+					<model ea_localid="405" type="Class" name="DmAttribute"/>
+					<role name="vegDmAttribute" stereotype="property" visibility="Public" targetScope="instance"/>
+					<type multiplicity="0..*" aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;"/>
+					<documentation/>
+					<xrefs value="$XREFPROP=$XID={34515F18-5D05-42ba-871E-2DA5627DAD5E}$XID;$NAM=Stereotypes$NAM;$TYP=connectorSrcEnd property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=property;FQName=GML::property;@ENDSTEREO;$DES;$CLT={FEAE1D1F-A333-4bd4-9354-1BB702683F90}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
+					<tags>
+						<tag xmi:id="EAID_08A8199D_34EA_8c34_9803_4BEB4B1F550A" name="isMetadata" value="false$ea_notes=Values: true,false&#xA;Default: false&#xA;Description: If 'true', the property type will extend GML AbstractMetadataPropertyType. Else, it will extend GML AbstractMemberType.&#xA;"/>
+						<tag xmi:id="EAID_37DFCA0A_33B7_f633_89B9_FDF2A7D12100" name="inlineOrByReference" value="inline$ea_notes=Values: byReference,inline&#xA;Default: inline&#xA;Description: Determines whether the property value will be encoded inline or by reference&#xA;"/>
+						<tag xmi:id="EAID_E810E922_7AEF_c27a_8B87_4F889FC0AA3B" name="sequenceNumber" value="4$ea_notes= Unique integer value to order the properties of a class&#xA;"/>
+					</tags>
+				</source>
+				<target xmi:idref="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB">
+					<model ea_localid="185" type="Class" name="_VegetationObject"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="composite" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="444"/>
+				<properties ea_type="Aggregation" subtype="Strong" direction="Destination -&gt; Source"/>
+				<modifiers isRoot="false" isLeaf="false"/>
+				<documentation value="公共測量標準図式による図形表現に必要な情報。"/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels lb="0..*" lt="+vegDmAttribute&#xA;«property»"/>
+				<extendedProperties/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_E5DAC21D_3D66_4242_B374_6659A30A3BB4">
+				<source xmi:idref="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997">
+					<model ea_localid="183" type="Class" name="_Geometry"/>
+					<role name="lod0Geometry" stereotype="property" visibility="Public" targetScope="instance"/>
+					<type multiplicity="0..1" aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;"/>
+					<documentation/>
+					<xrefs value="$XREFPROP=$XID={3B6B3447-C5AA-4478-9A69-72CEF4DE2C52}$XID;$NAM=Stereotypes$NAM;$TYP=connectorSrcEnd property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=property;FQName=GML::property;@ENDSTEREO;$DES;$CLT={E5DAC21D-3D66-4242-B374-6659A30A3BB4}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
+					<tags>
+						<tag xmi:id="EAID_08A8199D_34EA_8c34_910E_B0A7003413AF" name="isMetadata" value="false$ea_notes=Values: true,false&#xA;Default: false&#xA;Description: If 'true', the property type will extend GML AbstractMetadataPropertyType. Else, it will extend GML AbstractMemberType.&#xA;"/>
+						<tag xmi:id="EAID_37DFCA0A_33B7_f633_87C8_106141F817ED" name="inlineOrByReference" value="inline$ea_notes=Values: byReference,inline&#xA;Default: inline&#xA;Description: Determines whether the property value will be encoded inline or by reference&#xA;"/>
+						<tag xmi:id="EAID_E810E922_7AEF_c27a_B505_566DEF17C5F6" name="sequenceNumber" value="$ea_notes=Description: Unique integer value to order the properties of a class&#xA;"/>
+					</tags>
+				</source>
+				<target xmi:idref="EAID_75DBB25D_29E9_4cb4_9813_1ACA7B4B73FD">
+					<model ea_localid="380" type="Class" name="DmGeometricAttribute"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="433"/>
+				<properties ea_type="Association" direction="Destination -&gt; Source"/>
+				<modifiers isRoot="false" isLeaf="false"/>
+				<parameterSubstitutions/>
+				<documentation value="地物の形状を示す幾何オブジェクト。 +&#xA;参照先の幾何オブジェクトの型は、uro:dmCode の値に応じて、gml:MultiPoint、gml:MultiCurve又はgml:MultiSurfaceのいずれかとする。 +&#xA;いずれの幾何オブジェクトの型となるかは、数値地形図の取得方法に従う。"/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels lb="0..1" lt="+lod0Geometry&#xA;«property»"/>
+				<extendedProperties/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_2931192E_84D1_44ea_8B5C_2252CD8AEAA6">
+				<source xmi:idref="EAID_75DBB25D_29E9_4cb4_9813_1ACA7B4B73FD">
+					<model ea_localid="380" type="Class" name="DmGeometricAttribute"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8">
+					<model ea_localid="405" type="Class" name="DmAttribute"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="455"/>
+				<properties ea_type="Generalization" direction="Source -&gt; Destination"/>
+				<parameterSubstitutions/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_04FE2A6F_77A3_4604_BFDD_C38F2337FBF1">
+				<source xmi:idref="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0">
+					<model ea_localid="186" type="Class" name="SolitaryVegetationObject"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997">
+					<model ea_localid="183" type="Class" name="_Geometry"/>
+					<role name="lod4Geometry" visibility="Public" targetScope="instance"/>
+					<type multiplicity="0..1" aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="206"/>
+				<properties ea_type="Association" direction="Source -&gt; Destination"/>
+				<modifiers isRoot="false" isLeaf="false"/>
+				<parameterSubstitutions/>
+				<documentation value="LOD4の幾何形状。標準製品仕様書では使用しない。&#xA;"/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels rb="0..1" rt="+lod4Geometry"/>
+				<extendedProperties/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_4B08B8F8_2152_4946_9380_A262F2BDB12B">
+				<source xmi:idref="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997">
+					<model ea_localid="183" type="Class" name="_Geometry"/>
+					<role name="lod2Geometry" stereotype="property" visibility="Public" targetScope="instance"/>
+					<type multiplicity="0..1" aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;"/>
+					<documentation/>
+					<xrefs value="$XREFPROP=$XID={1801C775-E0E7-44bb-A145-E82113A8DCE1}$XID;$NAM=Stereotypes$NAM;$TYP=connectorSrcEnd property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=property;FQName=GML::property;@ENDSTEREO;$DES;$CLT={4B08B8F8-2152-4946-9380-A262F2BDB12B}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
+					<tags>
+						<tag xmi:id="EAID_08A8199D_34EA_8c34_B52C_ECF00EEB5069" name="isMetadata" value="false$ea_notes=Values: true,false&#xA;Default: false&#xA;Description: If 'true', the property type will extend GML AbstractMetadataPropertyType. Else, it will extend GML AbstractMemberType.&#xA;"/>
+						<tag xmi:id="EAID_37DFCA0A_33B7_f633_82B3_B15164BE40A1" name="inlineOrByReference" value="inline$ea_notes=Values: byReference,inline&#xA;Default: inline&#xA;Description: Determines whether the property value will be encoded inline or by reference&#xA;"/>
+						<tag xmi:id="EAID_E810E922_7AEF_c27a_9BB7_C38C7B0F7BA2" name="sequenceNumber" value="2$ea_notes=Description: Unique integer value to order the properties of a class&#xA;"/>
+					</tags>
+				</source>
+				<target xmi:idref="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0">
+					<model ea_localid="186" type="Class" name="SolitaryVegetationObject"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type multiplicity="0..1" aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="204"/>
+				<properties ea_type="Association" direction="Destination -&gt; Source"/>
+				<modifiers isRoot="false" isLeaf="false"/>
+				<parameterSubstitutions/>
+				<documentation value="単独木の形状を立体とし、その主要な部分の外形を面の集まり又は立体として区分して表現する。 +&#xA;樹冠と樹幹をそれぞれ簡略化した立体（楕円体、球体、円錐、角錐、角柱、円柱などの単純な立体図形）を組み合わせた立体として表現する。&#xA;&#xA;.LOD2のSolitaryVegetationObjectの例&#xA;image::images/360.webp.png[width=&quot;100&quot;]&#xA;&#xA;樹木量の算定等、容積が必要ではない場合には、gml:MultiSurfaceにより外形を構成する。"/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels lb="0..1" lt="+lod2Geometry&#xA;«property»" rb="0..1"/>
+				<extendedProperties/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_1A604A28_1D91_4321_A6AE_6879D7B6D440">
+				<source xmi:idref="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997">
+					<model ea_localid="183" type="Class" name="_Geometry"/>
+					<role name="lod3Geometry" stereotype="property" visibility="Public" targetScope="instance"/>
+					<type multiplicity="0..1" aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;"/>
+					<documentation/>
+					<xrefs value="$XREFPROP=$XID={F0886E85-7EAC-4515-9A84-5F038CBBC1C6}$XID;$NAM=Stereotypes$NAM;$TYP=connectorSrcEnd property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=property;FQName=GML::property;@ENDSTEREO;$DES;$CLT={1A604A28-1D91-4321-A6AE-6879D7B6D440}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
+					<tags>
+						<tag xmi:id="EAID_08A8199D_34EA_8c34_802C_404282CF9219" name="isMetadata" value="false$ea_notes=Values: true,false&#xA;Default: false&#xA;Description: If 'true', the property type will extend GML AbstractMetadataPropertyType. Else, it will extend GML AbstractMemberType.&#xA;"/>
+						<tag xmi:id="EAID_37DFCA0A_33B7_f633_8C44_6D99A6C4C22D" name="inlineOrByReference" value="inline$ea_notes=Values: byReference,inline&#xA;Default: inline&#xA;Description: Determines whether the property value will be encoded inline or by reference&#xA;"/>
+						<tag xmi:id="EAID_E810E922_7AEF_c27a_A95B_366E2AA425F8" name="sequenceNumber" value="3$ea_notes=Description: Unique integer value to order the properties of a class&#xA;"/>
+					</tags>
+				</source>
+				<target xmi:idref="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0">
+					<model ea_localid="186" type="Class" name="SolitaryVegetationObject"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="205"/>
+				<properties ea_type="Association" direction="Destination -&gt; Source"/>
+				<modifiers isRoot="false" isLeaf="false"/>
+				<parameterSubstitutions/>
+				<documentation value="単独木の形状を立体とし、その主要な部分の外形を面の集まり又は立体として詳細に区分して表現する。 +&#xA;一定高さごとに樹冠の横断面を作成し、この頂点を結び外形を構成する（樹冠内部の主枝等の表現は行わない）。&#xA;&#xA;.LOD3のSolitaryVegetationObjectの例&#xA;image::images/361.webp.png[width=&quot;100&quot;]&#xA;&#xA;樹木量の算定等、容積が必要ではない場合には、gml:MultiSurfaceにより外形を構成する。"/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels lb="0..1" lt="+lod3Geometry&#xA;«property»"/>
+				<extendedProperties/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_8D4E3649_784C_400e_9702_55CD270781E8">
+				<source xmi:idref="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997">
+					<model ea_localid="183" type="Class" name="_Geometry"/>
+					<role name="lod1Geometry" stereotype="property" visibility="Public" targetScope="instance"/>
+					<type multiplicity="0..1" aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;"/>
+					<documentation/>
+					<xrefs value="$XREFPROP=$XID={6A2F131B-4B23-4398-BC0E-E885D529E985}$XID;$NAM=Stereotypes$NAM;$TYP=connectorSrcEnd property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=property;FQName=GML::property;@ENDSTEREO;$DES;$CLT={8D4E3649-784C-400e-9702-55CD270781E8}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
+					<tags>
+						<tag xmi:id="EAID_08A8199D_34EA_8c34_8B01_1AF5A4C3C913" name="isMetadata" value="false$ea_notes=Values: true,false&#xA;Default: false&#xA;Description: If 'true', the property type will extend GML AbstractMetadataPropertyType. Else, it will extend GML AbstractMemberType.&#xA;"/>
+						<tag xmi:id="EAID_37DFCA0A_33B7_f633_A123_FAFED37BE236" name="inlineOrByReference" value="inline$ea_notes=Values: byReference,inline&#xA;Default: inline&#xA;Description: Determines whether the property value will be encoded inline or by reference&#xA;"/>
+						<tag xmi:id="EAID_E810E922_7AEF_c27a_8513_BCD516445F53" name="sequenceNumber" value="1$ea_notes=Description: Unique integer value to order the properties of a class&#xA;"/>
+					</tags>
+				</source>
+				<target xmi:idref="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0">
+					<model ea_localid="186" type="Class" name="SolitaryVegetationObject"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="755"/>
+				<properties ea_type="Association" direction="Destination -&gt; Source"/>
+				<modifiers isRoot="false" isLeaf="false"/>
+				<parameterSubstitutions/>
+				<documentation value="単独木の形状をそれが占有している範囲（面）に一律の高さを与えた立体として表現する。 +&#xA;樹冠の情報からの正射影の外周を樹高の高さで上向きに押し出した立体となる。&#xA;&#xA;.LOD1のSolitaryVegetationObjectの例&#xA;image::images/359.webp.png[width=&quot;100&quot;]"/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels lb="0..1" lt="+lod1Geometry&#xA;«property»"/>
+				<extendedProperties/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+		</connectors>
+		<diagrams>
+			<diagram xmi:id="EAID_C173A6F4_1D1B_400e_AD8C_64FFF7CD5BE5">
+				<model package="EAPK_751CA17F_F2ED_47a4_9F56_8036104573A6" localID="67" owner="EAPK_751CA17F_F2ED_47a4_9F56_8036104573A6" tpos="8"/>
+				<properties name="5_基本図_veg" type="Logical"/>
+				<project author="048827" version="1.0" created="2022-06-13 09:42:02" modified="2024-03-30 12:09:10"/>
+				<style1 value="ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;Border=1;HighlightForeign=1;PackageContents=1;SequenceNotes=0;ScalePrintImage=0;PPgs.cx=0;PPgs.cy=0;DocSize.cx=795;DocSize.cy=1138;ShowDetails=0;Orientation=P;Zoom=100;ShowTags=0;OpParams=1;VisibleAttributeDetail=0;ShowOpRetType=1;ShowIcons=1;CollabNums=0;HideProps=0;ShowReqs=0;ShowCons=0;PaperSize=9;HideParents=0;UseAlias=0;HideAtts=0;HideOps=0;HideStereo=0;HideElemStereo=0;ShowTests=0;ShowMaint=0;ConnectorNotation=UML 2.1;ExplicitNavigability=0;ShowShape=1;AllDockable=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;ShowNotes=0;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;"/>
+				<style2 value="ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;KanbanActive=0;MatrixLineWidth=1;MatrixLineClr=0;MatrixLocked=0;TConnectorNotation=UML 2.1;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;MDGDgm=;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;SuppressedCompartments=;Theme=:119;SaveTag=CB0E216B;"/>
+				<swimlanes value="locked=false;orientation=0;width=0;inbar=false;names=false;color=0;bold=false;fcol=0;tcol=15852766;ofCol=-1;ufCol=-1;hl=0;ufh=0;hh=0;cls=0;bw=0;hli=0;bro=0;SwimlaneFont=lfh:-13,lfw:0,lfi:0,lfu:0,lfs:0,lfface:Calibri,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;"/>
+				<matrixitems value="locked=false;matrixactive=false;swimlanesactive=true;kanbanactive=false;width=1;clrLine=0;"/>
+				<extendedProperties/>
+				<persistentstyle value="DGS=On=0:CNT=8:W=120:H=40:SG=0:SGH=0:AEB=0:;AR=0;DCL=0;Swimlanes=locked=false;orientation=0;width=0;inbar=false;names=false;color=0;bold=false;fcol=0;tcol=15852766;ofCol=-1;ufCol=-1;hl=0;ufh=0;hh=0;cls=0;bw=0;hli=0;bro=0;SwimlaneFont=lfh:-13,lfw:0,lfi:0,lfu:0,lfs:0,lfface:Calibri,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;;"/>
+				<xrefs/>
+				<elements>
+					<element geometry="Left=185;Top=773;Right=461;Bottom=997;imgL=185;imgT=773;imgR=461;imgB=997;" subject="EAID_75DBB25D_29E9_4cb4_9813_1ACA7B4B73FD" seqno="1" style="NSL=0;BCol=16764159;LWth=2;DUID=A5354B3C;"/>
+					<element geometry="Left=604;Top=904;Right=764;Bottom=955;imgL=604;imgT=904;imgR=764;imgB=955;" subject="EAID_1FFA9854_10E5_47a7_BE3E_4447F57FE997" seqno="2" style="NSL=0;BFol=-1;LCol=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;HideIcon=0;LWth=2;BCol=13434828;DUID=82F902ED;"/>
+					<element geometry="Left=534;Top=560;Right=834;Bottom=852;imgL=534;imgT=560;imgR=834;imgB=852;" subject="EAID_8E4996A7_C42C_4613_A0A4_9A6D855F0CF7" seqno="3" style="DUID=24E6CDE8;NSL=0;BCol=16764159;LWth=2;"/>
+					<element geometry="Left=214;Top=564;Right=434;Bottom=652;imgL=214;imgT=564;imgR=434;imgB=652;" subject="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8" seqno="4" style="NSL=0;BFol=-1;LCol=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;HideIcon=0;LWth=2;DUID=8EC2E306;BCol=16764159;"/>
+					<element geometry="Left=267;Top=386;Right=434;Bottom=466;imgL=267;imgT=386;imgR=434;imgB=466;" subject="EAID_46C3349F_67E8_4529_B8BE_5DEC8DFC8DDB" seqno="5" style="ImageID=0;font=Yu Gothic UI;bold=0;black=0;italic=0;ul=0;charset=0;pitch=50;BFol=0;fontsz=100;BCol=13434879;LWth=2;DUID=57759D17;NSL=0;"/>
+					<element geometry="Left=580;Top=340;Right=857;Bottom=511;imgL=580;imgT=340;imgR=857;imgB=511;" subject="EAID_32ECE50F_17C7_4864_98BD_6C8A30193EF0" seqno="6" style="NSL=0;LCol=-1;bold=0;black=0;italic=0;ul=0;charset=0;HideIcon=0;font=Yu Gothic UI;pitch=50;BFol=0;fontsz=100;BCol=13434879;LWth=2;DUID=EFFF71C0;"/>
+					<element geometry="EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_04FE2A6F_77A3_4604_BFDD_C38F2337FBF1" style="Mode=3;EOID=82F902ED;SOID=EFFF71C0;Color=-1;LWidth=0;Hidden=1;"/>
+					<element geometry="EDGE=4;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_80974AA4_F711_4e14_AE09_A7F691605620" style="Mode=3;EOID=57759D17;SOID=EFFF71C0;Color=-1;LWidth=2;Hidden=0;"/>
+					<element geometry="EDGE=1;SX=0;SY=0;$LLB=CX=8:CY=18:OX=11:OY=1:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LLT=CX=148:CY=18:OX=-14:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=680:-516$350:-516$;" subject="EAID_E82D9B93_C04A_49d9_9BF5_A4C0D1806C00" style="Mode=3;EOID=57759D17;SOID=24E6CDE8;Color=-1;LWidth=2;TREE=V;Hidden=0;"/>
+					<element geometry="EDGE=1;SX=0;SY=0;EX=-3;EY=8;$LLB=CX=19:CY=18:OX=34:OY=-8:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=0:DIR=0:ROT=0;LLT=CX=101:CY=18:OX=-21:OY=-8:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=0:DIR=0:ROT=0;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=324:-516$350:-516$;" subject="EAID_FEAE1D1F_A333_4bd4_9354_1BB702683F90" style="Mode=3;EOID=57759D17;SOID=8EC2E306;Color=-1;LWidth=2;TREE=V;Hidden=0;"/>
+					<element geometry="EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_4B08B8F8_2152_4946_9380_A262F2BDB12B" style="Mode=3;EOID=82F902ED;SOID=EFFF71C0;Color=-1;LWidth=0;Hidden=1;"/>
+					<element geometry="EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_1A604A28_1D91_4321_A6AE_6879D7B6D440" style="Mode=3;EOID=82F902ED;SOID=EFFF71C0;Color=-1;LWidth=0;Hidden=1;"/>
+					<element geometry="EDGE=2;SX=139;SY=-45;EX=34;EY=-1;$LLB=;LLT=;LMT=;LMB=;LRT=CX=93:CY=18:OX=3:OY=-26:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=0:DIR=0:ROT=0;LRB=CX=21:CY=18:OX=-3:OY=5:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=0:DIR=0:ROT=0;IRHS=;ILHS=;Path=;" subject="EAID_E5DAC21D_3D66_4242_B374_6659A30A3BB4" style="Mode=3;EOID=82F902ED;SOID=A5354B3C;Color=-1;LWidth=2;Hidden=0;"/>
+					<element geometry="EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_8D4E3649_784C_400e_9702_55CD270781E8" style="Mode=3;EOID=82F902ED;SOID=EFFF71C0;Color=-1;LWidth=0;Hidden=1;"/>
+					<element geometry="EDGE=1;SX=0;SY=0;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=374:-105$401:-105$;" subject="EAID_2931192E_84D1_44ea_8B5C_2252CD8AEAA6" style="Mode=1;EOID=8EC2E306;SOID=A5354B3C;Color=-1;LWidth=2;Hidden=0;"/>
+				</elements>
+			</diagram>
+		</diagrams>
+	</xmi:Extension>
+</xmi:XMI>

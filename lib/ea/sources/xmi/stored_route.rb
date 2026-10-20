@@ -42,7 +42,59 @@ module Ea
           [bounds_edge_point(source, target), bounds_edge_point(target, source)]
         end
 
+        # Apply QEA's saved Association stages after the initial route, including
+        # UMLDI fallback. A single stored corner and an empty-path stored ray
+        # carry mathematical origins that the generic facing-edge route loses.
+        def association_route(model, link:, bounds:, offsets:, edge:)
+          return {} unless stored_association_candidate?(model, bounds)
+
+          candidate = association_model(model, bounds, offsets)
+          initial = candidate.waypoints
+          association_stored_ray(candidate, link, bounds, ray_geometry(offsets, edge), false)
+          return {} if candidate.waypoints.equal?(initial)
+
+          association_metadata(candidate)
+        end
+
         private
+
+        def stored_association_candidate?(model, bounds)
+          model.connector_type == "Association" && bounds.values.all? &&
+            association_ray_style?(model.style.to_h) && model.style[:lwidth] == "2"
+        end
+
+        def association_metadata(model)
+          fields = %i[waypoints source_anchor target_anchor source_port target_port has_geometry_offsets]
+          fields.to_h { |name| [name, model.public_send(name)] }.merge(
+            style: model.style.to_h.reject { |key, _| key == :umldi_route }
+          )
+        end
+
+        def association_model(model, bounds, offsets)
+          Ea::Model::DiagramConnector.new(
+            { connector_type: model.connector_type, style: model.style.to_h.dup, waypoints: model.waypoints,
+              has_geometry_offsets: !offsets[:source][0].nil? }.merge(association_ends(bounds, offsets))
+          )
+        end
+
+        def association_ends(bounds, offsets)
+          %i[source target].each_with_object({}) do |kind, result|
+            box = bounds.fetch(kind)
+            offset = offsets.fetch(kind)
+            port = port_for(box, offset)
+            result["#{kind}_port".to_sym] = point_for(port) if port
+            result["#{kind}_anchor".to_sym] = association_anchor(box, offset)
+          end
+        end
+
+        def association_anchor(box, offset)
+          Ea::Model::Point.new(x: box.x + box.width / 2 + offset[0].to_i,
+                               y: box.y + box.height / 2 + offset[1].to_i)
+        end
+
+        def stored_ray_boxes(_link, bounds)
+          bounds.values_at(:source, :target)
+        end
 
         def direct_association_ray?(model, bounds, offsets)
           %w[Association Aggregation].include?(model.connector_type) && model.waypoints.size == 2 &&

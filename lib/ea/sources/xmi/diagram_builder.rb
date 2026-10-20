@@ -256,6 +256,7 @@ module Ea
                                                                   connector.label_boxes)
                                          end
           mark_stored_ray(connector, placed, source, target) unless options.fetch(:context)
+          mark_association_route(connector, placed, source, target) unless options.fetch(:context)
           connector
         end
 
@@ -280,12 +281,17 @@ module Ea
           connector.style[:association_ray_outline] = true unless metadata.empty?
         end
 
-        def stored_ray_metadata(connector, placed, source, target)
+        def stored_ray_metadata(connector, placed, source, target, stage: :ray_metadata)
           geom = placed.geometry
           link = StoredRoute::Link.new(placed.style.raw, geom.path.to_s.tr("$", ";"))
           bounds = { source: bounds_from_placed(source), target: bounds_from_placed(target) }
           offsets = { source: [geom.sx, geom.sy], target: [geom.ex, geom.ey] }
-          StoredRoute.new.ray_metadata(connector, link: link, bounds: bounds, offsets: offsets, edge: geom.edge)
+          StoredRoute.new.public_send(stage, connector, link: link, bounds: bounds, offsets: offsets, edge: geom.edge)
+        end
+
+        def mark_association_route(connector, placed, source, target)
+          metadata = stored_ray_metadata(connector, placed, source, target, stage: :association_route)
+          metadata.each { |name, value| connector.public_send("#{name}=", value) }
         end
 
         def mark_plain_source_seat(connector, placed, context)
