@@ -9,6 +9,7 @@ module Ea
       # SOID/EOID, EDGE, label boxes) when present. Falls back to
       # the UML-DI owned_element bounds otherwise.
       class DiagramBuilder
+        autoload :ConnectorMetadata, "ea/sources/xmi/diagram_builder/connector_metadata"
         autoload :FontSettings, "ea/sources/xmi/diagram_builder/font_settings"
         autoload :UmldiEdges, "ea/sources/xmi/diagram_builder/umldi_edges"
 
@@ -182,6 +183,9 @@ module Ea
             target_edge: geom.edge,
             connector_type: ext_meta[:ea_type],
             direction: ext_meta[:direction],
+            source_stereotype: ext_meta[:source_stereotype],
+            target_stereotype: ext_meta[:target_stereotype],
+            is_substitutable: ext_meta.fetch(:is_substitutable, false),
             waypoints: route[:waypoints],
             style: route[:style],
             line_color: style.color,
@@ -199,7 +203,11 @@ module Ea
           {
             ea_type: props&.ea_type,
             direction: props&.direction
-          }
+          }.merge(connector_metadata.for(connector))
+        end
+
+        def connector_metadata
+          @connector_metadata ||= ConnectorMetadata.new(xmi_path)
         end
 
         def connector_index
