@@ -32,6 +32,7 @@ module Ea
             relationships: relationships,
             stereotypes: [],
             notes: notes,
+            instance_specifications: instance_specifications,
             diagrams: diagrams
           )
           apply_tagged_values(doc)
@@ -131,6 +132,10 @@ module Ea
 
         def classifiers
           @classifiers ||= ClassifierBuilder.new(root).build_all
+        end
+
+        def instance_specifications
+          @instance_specifications ||= InstanceBuilder.new(root, xmi_path, classifiers).build_all
         end
 
         def relationships
