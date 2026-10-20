@@ -67,13 +67,14 @@ module Ea
           value == "1" || value == "true" || value == "-1"
         end
 
+        # fontsz is EA's tenths of a point, rendered through GDI's double
+        # rounding (pixels = floor(tenths * 96 / 720), points =
+        # floor(pixels * 72 / 96)). Absent or zero means inherit, as nil.
         def scale_font_size(value)
-          return 13 if value.nil? || value.empty?
+          tenths = int(value)
+          return nil if tenths.nil? || tenths.zero?
 
-          pct = int(value)
-          return 13 if pct.nil? || pct.zero?
-
-          (pct * 13 / 100).round
+          (tenths * 96 / 720 * 72 / 96.0).floor
         end
 
         Style = Struct.new(

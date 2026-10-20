@@ -24,9 +24,9 @@ RSpec.describe Ea::Sources::Xmi::ExtensionStyleParser do
       expect(parsed.font_family).to eq("Yu Gothic UI")
     end
 
-    it "scales fontsz percentage to pixel size" do
+    it "maps an explicit fontsz to points the way the QEA builder does" do
       parsed = described_class.parse(style)
-      expect(parsed.font_size).to eq(13) # 100% of 13
+      expect(parsed.font_size).to eq(9)
     end
 
     it "extracts DUID" do
@@ -34,9 +34,15 @@ RSpec.describe Ea::Sources::Xmi::ExtensionStyleParser do
       expect(parsed.duid).to eq("7CBAFC69")
     end
 
-    it "parses fontsz=200 as 26px" do
-      parsed = described_class.parse("fontsz=200;")
-      expect(parsed.font_size).to eq(26)
+    it "maps fontsz=90 and fontsz=200 like QEA" do
+      expect(described_class.parse("fontsz=90;").font_size).to eq(9)
+      expect(described_class.parse("fontsz=200;").font_size).to eq(19)
+    end
+
+    it "leaves absent, empty and zero fontsz as inherited" do
+      ["", "bold=0;", "fontsz=;", "fontsz=0;"].each do |raw|
+        expect(described_class.parse(raw).font_size).to be_nil
+      end
     end
   end
 
