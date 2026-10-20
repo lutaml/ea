@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "faces": [
+    "MS UI Gothic",
+    "Cambria"
+  ],
+  "logical_heights": [
+    16,
+    17
+  ],
+  "weights": [
+    400,
+    700
+  ],
+  "charsets": [
+    1,
+    128
+  ],
+  "text_samples": [
+    "凡",
+    "例",
+    "凡例",
+    "例凡",
+    "漢字",
+    "都市計画基礎調査",
+    "Legend heading",
+    "Classification"
+  ],
+  "glyph_text": " ()-.023:CDEGLMRSUXacefghilmnoprtvy、。いうえがけこさしじすそたてでとなにのはびべめよりるれをんクシスタッデトネメモュラリルン・ー上下交仕他位例修備傷元全内凡出利化区参及合噴因囲図土地埋域基堆堤報場壊字定害層山崩川差市広建形徒情指損数施木本林査梁植構様橋次正歩民水決河泥洪流漢火災照物現生用画異盛石砂礎示積空範築系置義腹致航街表計設調起路通造道部都鉄間雪（）",
+  "source": "Additional H16 measurement; H17 controls from prior run39276232219. No original EA export host identity or selected native heading height inferred."
+}
