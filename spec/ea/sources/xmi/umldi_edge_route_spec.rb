@@ -32,6 +32,17 @@ RSpec.describe "XMI connector routes from UMLDI edges" do
       expect(umldi_ends(edge + edge, "C1")).to be_nil
     end
 
+    it "has no ends when a second edge of the same connector lacks its ends" do
+      edges = %(<ownedElement type="umldi:UMLEdge" modelElement="C1" source="S" target="T"/>) +
+              %(<ownedElement type="umldi:UMLEdge" modelElement="C1"/>)
+      expect(umldi_ends(edges, "C1")).to be_nil
+    end
+
+    it "has no route when a second edge of the same connector has no waypoints" do
+      edges = umldi_edge("C1", [[0, 0], [0, 9]]) + umldi_edge("C1", [])
+      expect(umldi_route(edges, "C1")).to be_nil
+    end
+
     it "has no route for a connector without an edge" do
       expect(umldi_route(umldi_edge("C1", [[0, 0], [0, 9]]), "C2")).to be_nil
     end

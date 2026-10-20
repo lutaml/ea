@@ -32,10 +32,19 @@ module Ea
           end
 
           def diagram_ends(diagram)
-            edges = diagram.xpath("./ownedElement[@modelElement][@source][@target]")
-            edges.group_by { |edge| edge["modelElement"] }
-                 .select { |_, same| same.one? }
-                 .transform_values { |(edge)| [edge["source"], edge["target"]] }
+            unique_edges(diagram).each_with_object({}) do |(connector_id, edge), acc|
+              acc[connector_id] = [edge["source"], edge["target"]] if edge["source"] && edge["target"]
+            end
+          end
+
+          # Edges keyed by connector, keeping only connectors drawn by exactly
+          # one edge of the diagram, whatever that edge carries.
+          def unique_edges(diagram)
+            diagram.xpath("./ownedElement[@modelElement]")
+                   .select { |node| node.attributes["type"]&.value.to_s.end_with?("UMLEdge") }
+                   .group_by { |edge| edge["modelElement"] }
+                   .select { |_, same| same.one? }
+                   .transform_values(&:first)
           end
 
           def routes
@@ -45,9 +54,8 @@ module Ea
           end
 
           def diagram_routes(diagram)
-            edges = diagram.xpath("./ownedElement[@modelElement][waypoint]").group_by { |edge| edge["modelElement"] }
-            edges.each_with_object({}) do |(connector_id, same), acc|
-              points = same.one? ? waypoints(same.first) : []
+            unique_edges(diagram).each_with_object({}) do |(connector_id, edge), acc|
+              points = waypoints(edge)
               acc[connector_id] = points if points.size >= 2
             end
           end
