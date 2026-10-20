@@ -41,8 +41,8 @@ module Ea
             def diagram_property_roles(diagram, declared)
               unique_edges(diagram).transform_values do |edge|
                 edge.xpath("./ownedElement[@modelElement]").filter_map do |label|
-                  key = target_role_key(label)
-                  key if key == :target_role &&
+                  key = role_key(label)
+                  key if key &&
                          declared.include?([label["modelElement"], edge["modelElement"]])
                 end
               end
@@ -55,11 +55,13 @@ module Ea
                      .select { |_, edges| edges.one? }.transform_values(&:first)
             end
 
-            def target_role_key(label)
-              return unless (label["xmi:id"] || label["id"]).to_s.start_with?("EAID_TEL")
+            def role_key(label)
               return unless label.attributes["type"]&.value.to_s.end_with?("UMLAssociationEndLabel")
 
-              :target_role
+              case label["xmi:id"] || label["id"]
+              when /\AEAID_SEL/ then :source_role
+              when /\AEAID_TEL/ then :target_role
+              end
             end
           end
         end

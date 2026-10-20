@@ -15,12 +15,10 @@ RSpec.describe "0BE absent and stored zero extension labels" do
     )
   end
 
-  it "retains real zero LLT and only falls back for omitted multiplicity" do
+  it "retains real zero LLT alongside identity-proven source bounds" do
     connector = bounded_by_connector(box: "LLT")
     expect(connector.label_boxes.fetch(:llt)).to include("ox" => 0, "oy" => 0)
-    expect(connector.umldi_label_bounds).to eq(
-      source_multiplicity: { x: 843, y: 1356, width: 15, height: 13 }
-    )
+    expect(connector.umldi_label_bounds).to eq(saved.umldi_label_bounds)
     expect(bounded_by_route(connector)).to eq([[840, 1372], [892, 1225]])
   end
 

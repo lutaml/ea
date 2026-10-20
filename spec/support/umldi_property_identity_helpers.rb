@@ -20,8 +20,9 @@ module UmldiPropertyIdentityHelpers
     </xmi:XMI>
   XML
 
-  def with_property_label_identity(change = nil)
+  def with_property_label_identity(change = nil, label_id: "EAID_TEL_label")
     xml = Nokogiri::XML(SOURCE)
+    xml.at_xpath("//*[@modelElement='property']")["xmi:id"] = label_id
     change&.call(xml)
     Tempfile.create(["umldi-property-identity", ".xmi"]) do |file|
       file.write(xml.to_xml)
