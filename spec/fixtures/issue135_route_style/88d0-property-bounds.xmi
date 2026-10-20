@@ -1,0 +1,228 @@
+<?xml  version='1.0' encoding='UTF-8' ?>
+<xmi:XMI xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/UML/20161101/UMLDC" xmlns:thecustomprofile="http://www.sparxsystems.com/profiles/thecustomprofile/1.0" xmlns:GML="http://www.sparxsystems.com/profiles/GML/1.0" xmlns:StandardProfileL2="http://www.omg.org/spec/UML/20110701/StandardProfileL2.xmi">
+	<xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5" exporterID="1624"/>
+	<uml:Model xmi:type="uml:Model" name="EA_Model">
+				<packagedElement xmi:type="uml:Class" xmi:id="EAID_553A3DF9_69B8_4fb4_BF15_EC613B5B74CD" name="_Feature" isAbstract="true">
+					</packagedElement>
+					<packagedElement xmi:type="uml:Class" xmi:id="EAID_CBC5092D_58C8_41ac_A16C_139D40DA2EBC" name="CityModel">
+					</packagedElement>
+					<packagedElement xmi:type="uml:Class" xmi:id="EAID_D04B32ED_EF64_4ee3_9D40_122343957C3A" name="ImplicitGeometry">
+					</packagedElement>
+					<packagedElement xmi:type="uml:Class" xmi:id="EAID_A9427823_C389_4f88_82C9_DE7C4E30CFE6" name="TransformationMatrix4x4">
+					</packagedElement>
+				<packagedElement xmi:type="uml:Class" xmi:id="EAID_243AC62C_CA55_4b0c_8284_D861AD68708F" name="Point">
+					</packagedElement>
+					<packagedElement xmi:type="uml:Class" xmi:id="EAID_78C3FEC1_6E59_43ea_93F4_33C696CD4673" name="doubleBetween0and1"/>
+					<packagedElement xmi:type="uml:Class" xmi:id="EAID_5EC465D3_14DA_4895_B985_09B3FA5E5E63" name="doubleBetween0and1List">
+					</packagedElement>
+					<packagedElement xmi:type="uml:Class" xmi:id="EAID_60CE61DE_7E88_4e8b_BFED_13500E7DCDEC" name="_CityObject" isAbstract="true">
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_dstF26EAF_7E3C_48b2_AAE7_4769CF1AAFD6" name="externalReference" association="EAID_98F26EAF_7E3C_48b2_AAE7_4769CF1AAFD6" aggregation="composite">
+							<type xmi:idref="EAID_481950E3_F288_43f5_BAB6_95EE3A5DA15E"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003649__7E3C_48b2_AAE7_4769CF1AAFD6" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003650__7E3C_48b2_AAE7_4769CF1AAFD6" value="*"/>
+						</ownedAttribute>
+					</packagedElement>
+					<packagedElement xmi:type="uml:Association" xmi:id="EAID_98F26EAF_7E3C_48b2_AAE7_4769CF1AAFD6">
+						<memberEnd xmi:idref="EAID_dstF26EAF_7E3C_48b2_AAE7_4769CF1AAFD6"/>
+						<memberEnd xmi:idref="EAID_srcF26EAF_7E3C_48b2_AAE7_4769CF1AAFD6"/>
+						<ownedEnd xmi:type="uml:Property" xmi:id="EAID_srcF26EAF_7E3C_48b2_AAE7_4769CF1AAFD6" association="EAID_98F26EAF_7E3C_48b2_AAE7_4769CF1AAFD6">
+							<type xmi:idref="EAID_60CE61DE_7E88_4e8b_BFED_13500E7DCDEC"/>
+						</ownedEnd>
+					</packagedElement>
+					<packagedElement xmi:type="uml:Class" xmi:id="EAID_D76CA9FE_A023_4908_A53C_4AC09E5A521E" name="xAL::AddressDetails">
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_dst35AFCD_ABFF_4603_9B4E_14BAEC8D9ECA" name="xalAddress" association="EAID_3235AFCD_ABFF_4603_9B4E_14BAEC8D9ECA">
+							<type xmi:idref="EAID_2413CDE5_4D0C_4167_8289_43F8DDBEB9BD"/>
+						</ownedAttribute>
+					</packagedElement>
+					<packagedElement xmi:type="uml:Class" xmi:id="EAID_2413CDE5_4D0C_4167_8289_43F8DDBEB9BD" name="Address">
+					</packagedElement>
+					<packagedElement xmi:type="uml:Class" xmi:id="EAID_481950E3_F288_43f5_BAB6_95EE3A5DA15E" name="ExternalReference">
+					</packagedElement>
+					<packagedElement xmi:type="uml:Association" xmi:id="EAID_3235AFCD_ABFF_4603_9B4E_14BAEC8D9ECA">
+						<memberEnd xmi:idref="EAID_dst35AFCD_ABFF_4603_9B4E_14BAEC8D9ECA"/>
+						<memberEnd xmi:idref="EAID_src35AFCD_ABFF_4603_9B4E_14BAEC8D9ECA"/>
+						<ownedEnd xmi:type="uml:Property" xmi:id="EAID_src35AFCD_ABFF_4603_9B4E_14BAEC8D9ECA" association="EAID_3235AFCD_ABFF_4603_9B4E_14BAEC8D9ECA" aggregation="composite">
+							<type xmi:idref="EAID_D76CA9FE_A023_4908_A53C_4AC09E5A521E"/>
+						</ownedEnd>
+					</packagedElement>
+		<umldi:Diagram xmi:type="umldi:UMLClassDiagram" xmi:id="EAID_88D0CB44_20D0_44fc_A6E3_B663332EF401" isFrame="false" modelElement="EAPK_526A0DDE_1614_4df1_920F_F681125AE7C4">
+			<ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_88D0CB44_20D0_44fc_BFED_13500E7DCDEC" modelElement="EAID_60CE61DE_7E88_4e8b_BFED_13500E7DCDEC">
+				<ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_20D0_44fc_BFED_13500E7DCDEC" text="FeatureType"/>
+				<ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_20D0_44fc_BFED_13500E7DCDEC" text="_CityObject"/>
+				<bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_20D0_44fc_BFED_13500E7DCDEC" x="344" y="245" width="330" height="122"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_88D0CB44_20D0_44fc_A16C_139D40DA2EBC" modelElement="EAID_CBC5092D_58C8_41ac_A16C_139D40DA2EBC">
+				<ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_20D0_44fc_A16C_139D40DA2EBC" text="FeatureType"/>
+				<ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_20D0_44fc_A16C_139D40DA2EBC" text="CityModel"/>
+				<bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_20D0_44fc_A16C_139D40DA2EBC" x="28" y="271" width="109" height="70"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_88D0CB44_20D0_44fc_BF15_EC613B5B74CD" modelElement="EAID_553A3DF9_69B8_4fb4_BF15_EC613B5B74CD">
+				<ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_20D0_44fc_BF15_EC613B5B74CD" text="FeatureType"/>
+				<ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_20D0_44fc_BF15_EC613B5B74CD" text="_Feature"/>
+				<bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_20D0_44fc_BF15_EC613B5B74CD" x="379" y="36" width="260" height="105"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_88D0CB44_20D0_44fc_8289_43F8DDBEB9BD" modelElement="EAID_2413CDE5_4D0C_4167_8289_43F8DDBEB9BD">
+				<ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_20D0_44fc_8289_43F8DDBEB9BD" text="FeatureType"/>
+				<ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_20D0_44fc_8289_43F8DDBEB9BD" text="Address"/>
+				<bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_20D0_44fc_8289_43F8DDBEB9BD" x="776" y="157" width="100" height="80"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_88D0CB44_20D0_44fc_A53C_4AC09E5A521E" modelElement="EAID_D76CA9FE_A023_4908_A53C_4AC09E5A521E">
+				<ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_20D0_44fc_A53C_4AC09E5A521E" text="xAL::AddressDetails"/>
+				<bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_20D0_44fc_A53C_4AC09E5A521E" x="984" y="157" width="100" height="63"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_88D0CB44_20D0_44fc_9D40_122343957C3A" modelElement="EAID_D04B32ED_EF64_4ee3_9D40_122343957C3A">
+				<ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_20D0_44fc_9D40_122343957C3A" text="Type"/>
+				<ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_20D0_44fc_9D40_122343957C3A" text="ImplicitGeometry"/>
+				<bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_20D0_44fc_9D40_122343957C3A" x="0" y="451" width="404" height="105"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_88D0CB44_20D0_44fc_82C9_DE7C4E30CFE6" modelElement="EAID_A9427823_C389_4f88_82C9_DE7C4E30CFE6">
+				<ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_20D0_44fc_82C9_DE7C4E30CFE6" text="dataType"/>
+				<ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_20D0_44fc_82C9_DE7C4E30CFE6" text="TransformationMatrix4x4"/>
+				<bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_20D0_44fc_82C9_DE7C4E30CFE6" x="321" y="580" width="250" height="68"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_88D0CB44_20D0_44fc_8284_D861AD68708F" modelElement="EAID_243AC62C_CA55_4b0c_8284_D861AD68708F">
+				<ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_20D0_44fc_8284_D861AD68708F" text="Type"/>
+				<ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_20D0_44fc_8284_D861AD68708F" text="Point"/>
+				<bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_20D0_44fc_8284_D861AD68708F" x="619" y="451" width="194" height="91"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_88D0CB44_20D0_44fc_BAB6_95EE3A5DA15E" modelElement="EAID_481950E3_F288_43f5_BAB6_95EE3A5DA15E">
+				<ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_20D0_44fc_BAB6_95EE3A5DA15E" text="DataType"/>
+				<ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_20D0_44fc_BAB6_95EE3A5DA15E" text="ExternalReference"/>
+				<bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_20D0_44fc_BAB6_95EE3A5DA15E" x="876" y="271" width="269" height="70"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_88D0CB44_20D0_44fc_93F4_33C696CD4673" modelElement="EAID_78C3FEC1_6E59_43ea_93F4_33C696CD4673">
+				<ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_20D0_44fc_93F4_33C696CD4673" text="BasicType"/>
+				<ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_20D0_44fc_93F4_33C696CD4673" text="doubleBetween0and1"/>
+				<bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_20D0_44fc_93F4_33C696CD4673" x="947" y="435" width="174" height="70"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_88D0CB44_20D0_44fc_B985_09B3FA5E5E63" modelElement="EAID_5EC465D3_14DA_4895_B985_09B3FA5E5E63">
+				<ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_20D0_44fc_B985_09B3FA5E5E63" text="BasicType"/>
+				<ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_20D0_44fc_B985_09B3FA5E5E63" text="doubleBetween0and1List"/>
+				<bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_20D0_44fc_B985_09B3FA5E5E63" x="939" y="565" width="190" height="70"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLEdge" xmi:id="EAID_88D0CB44_20D0_44fc_B7AF_F3C74831A288" source="EAID_60CE61DE_7E88_4e8b_BFED_13500E7DCDEC" target="EAID_553A3DF9_69B8_4fb4_BF15_EC613B5B74CD" modelElement="EAID_B8FB5E46_F4AD_4a5b_B7AF_F3C74831A288">
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000000_20D0_44fc_B7AF_F3C74831A288" x="509" y="245"/>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000001_20D0_44fc_B7AF_F3C74831A288" x="509" y="141"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLEdge" xmi:id="EAID_88D0CB44_20D0_44fc_AAE7_4769CF1AAFD6" source="EAID_60CE61DE_7E88_4e8b_BFED_13500E7DCDEC" target="EAID_481950E3_F288_43f5_BAB6_95EE3A5DA15E" modelElement="EAID_98F26EAF_7E3C_48b2_AAE7_4769CF1AAFD6">
+				<ownedElement xmi:type="umldi:UMLAssociationEndLabel" xmi:id="EAID_TEL000000_20D0_44fc_AAE7_4769CF1AAFD6" text="+externalReference" modelElement="EAID_dstF26EAF_7E3C_48b2_AAE7_4769CF1AAFD6">
+					<bounds xmi:type="dc:bounds" xmi:id="EAID_DBTEL000000_20D0_44fc_AAE7_4769CF1AAFD6" x="767" y="288" width="86" height="13"/>
+				</ownedElement>
+				<ownedElement xmi:type="umldi:UMLMultiplicityLabel" xmi:id="EAID_TML000000_20D0_44fc_AAE7_4769CF1AAFD6" text="0..*" modelElement="EAID_dstF26EAF_7E3C_48b2_AAE7_4769CF1AAFD6">
+					<bounds xmi:type="dc:bounds" xmi:id="EAID_DBTML000000_20D0_44fc_AAE7_4769CF1AAFD6" x="849" y="310" width="15" height="13"/>
+				</ownedElement>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000000_20D0_44fc_AAE7_4769CF1AAFD6" x="674" y="306"/>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000001_20D0_44fc_AAE7_4769CF1AAFD6" x="876" y="306"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLEdge" xmi:id="EAID_88D0CB44_20D0_44fc_9B4E_14BAEC8D9ECA" source="EAID_D76CA9FE_A023_4908_A53C_4AC09E5A521E" target="EAID_2413CDE5_4D0C_4167_8289_43F8DDBEB9BD" modelElement="EAID_3235AFCD_ABFF_4603_9B4E_14BAEC8D9ECA">
+				<ownedElement xmi:type="umldi:UMLAssociationEndLabel" xmi:id="EAID_TEL000000_20D0_44fc_9B4E_14BAEC8D9ECA" text="+xalAddress" modelElement="EAID_dst35AFCD_ABFF_4603_9B4E_14BAEC8D9ECA">
+					<bounds xmi:type="dc:bounds" xmi:id="EAID_DBTEL000000_20D0_44fc_9B4E_14BAEC8D9ECA" x="895" y="176" width="55" height="13"/>
+				</ownedElement>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000000_20D0_44fc_9B4E_14BAEC8D9ECA" x="984" y="190"/>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000001_20D0_44fc_9B4E_14BAEC8D9ECA" x="876" y="194"/>
+			</ownedElement>
+		</umldi:Diagram>
+	</uml:Model>
+	<xmi:Extension extender="Enterprise Architect" extenderID="6.5">
+		<connectors>
+			<connector xmi:idref="EAID_98F26EAF_7E3C_48b2_AAE7_4769CF1AAFD6">
+				<source xmi:idref="EAID_60CE61DE_7E88_4e8b_BFED_13500E7DCDEC">
+					<model ea_localid="31" type="Class" name="_CityObject"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="composite" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_481950E3_F288_43f5_BAB6_95EE3A5DA15E">
+					<model ea_localid="141" type="Class" name="ExternalReference"/>
+					<role name="externalReference" visibility="Public" targetScope="instance"/>
+					<type multiplicity="0..*" aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="132"/>
+				<properties ea_type="Association" direction="Source -&gt; Destination"/>
+				<modifiers isRoot="false" isLeaf="false"/>
+				<parameterSubstitutions/>
+				<documentation value="外部への参照。標準製品仕様書では使用しない。"/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels rb="0..*" rt="+externalReference"/>
+				<extendedProperties/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_3235AFCD_ABFF_4603_9B4E_14BAEC8D9ECA">
+				<source xmi:idref="EAID_D76CA9FE_A023_4908_A53C_4AC09E5A521E">
+					<model ea_localid="145" type="Class" name="xAL::AddressDetails"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_2413CDE5_4D0C_4167_8289_43F8DDBEB9BD">
+					<model ea_localid="144" type="Class" name="Address"/>
+					<role name="xalAddress" visibility="Public" targetScope="instance"/>
+					<type aggregation="composite" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="138"/>
+				<properties ea_type="Aggregation" subtype="Strong" direction="Source -&gt; Destination"/>
+				<modifiers isRoot="false" isLeaf="false"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels rt="+xalAddress"/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+		</connectors>
+		<diagrams>
+			<diagram xmi:id="EAID_88D0CB44_20D0_44fc_A6E3_B663332EF401">
+				<model package="EAPK_526A0DDE_1614_4df1_920F_F681125AE7C4" localID="20" owner="EAPK_526A0DDE_1614_4df1_920F_F681125AE7C4" tpos="0"/>
+				<properties name="CityGMLCore" type="Logical"/>
+				<project author="kurokawa" version="1.0" created="2019-03-06 22:31:51" modified="2025-05-30 15:00:22"/>
+				<style1 value="ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;Border=1;HighlightForeign=1;PackageContents=1;SequenceNotes=0;ScalePrintImage=0;PPgs.cx=0;PPgs.cy=0;DocSize.cx=795;DocSize.cy=1138;ShowDetails=0;Orientation=P;Zoom=100;ShowTags=0;OpParams=1;VisibleAttributeDetail=0;ShowOpRetType=1;ShowIcons=1;CollabNums=0;HideProps=0;ShowReqs=0;ShowCons=0;PaperSize=9;HideParents=0;UseAlias=0;HideAtts=0;HideOps=0;HideStereo=0;HideElemStereo=0;ShowTests=0;ShowMaint=0;ConnectorNotation=UML 2.1;ExplicitNavigability=0;ShowShape=1;AllDockable=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;ShowNotes=0;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;"/>
+				<style2 value="ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;KanbanActive=0;MatrixLineWidth=1;MatrixLineClr=0;MatrixLocked=0;TConnectorNotation=UML 2.1;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;MDGDgm=;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;SuppressedCompartments=;Theme=:119;SaveTag=B10DE421;"/>
+				<swimlanes value="locked=false;orientation=0;width=0;inbar=false;names=false;color=-1;bold=false;fcol=0;tcol=-1;ofCol=-1;ufCol=-1;hl=0;ufh=0;hh=0;cls=0;bw=0;hli=0;bro=0;SwimlaneFont=lfh:-13,lfw:0,lfi:0,lfu:0,lfs:0,lfface:Calibri,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;"/>
+				<matrixitems value="locked=false;matrixactive=false;swimlanesactive=true;kanbanactive=false;width=1;clrLine=0;"/>
+				<extendedProperties/>
+				<persistentstyle value="DGS=On=0:CNT=8:W=120:H=40:SG=0:SGH=0:AEB=0:;AR=0;DCL=0;Swimlanes=locked=false;orientation=0;width=0;inbar=false;names=false;color=-1;bold=false;fcol=0;tcol=-1;ofCol=-1;ufCol=-1;hl=0;ufh=0;hh=0;cls=0;bw=0;hli=0;bro=0;SwimlaneFont=lfh:-13,lfw:0,lfi:0,lfu:0,lfs:0,lfface:Calibri,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;;"/>
+				<xrefs/>
+				<elements>
+					<element geometry="Left=939;Top=565;Right=1129;Bottom=635;imgL=939;imgT=565;imgR=1129;imgB=635;" subject="EAID_5EC465D3_14DA_4895_B985_09B3FA5E5E63" seqno="1" style="DUID=787FB439;"/>
+					<element geometry="Left=947;Top=435;Right=1121;Bottom=505;imgL=947;imgT=435;imgR=1121;imgB=505;" subject="EAID_78C3FEC1_6E59_43ea_93F4_33C696CD4673" seqno="2" style="DUID=CC95C421;NSL=0;BCol=-1;BFol=-1;LCol=-1;LWth=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;"/>
+					<element geometry="Left=876;Top=271;Right=1145;Bottom=341;imgL=876;imgT=271;imgR=1145;imgB=341;" subject="EAID_481950E3_F288_43f5_BAB6_95EE3A5DA15E" seqno="3" style="DUID=12D4868B;NSL=0;BCol=-1;BFol=-1;LCol=-1;LWth=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;HideIcon=0;"/>
+					<element geometry="Left=619;Top=451;Right=813;Bottom=542;imgL=619;imgT=451;imgR=813;imgB=542;" subject="EAID_243AC62C_CA55_4b0c_8284_D861AD68708F" seqno="4" style="DUID=3B51B8EA;NSL=0;BFol=-1;LCol=-1;LWth=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;HideIcon=0;BCol=13434828;"/>
+					<element geometry="Left=321;Top=580;Right=571;Bottom=648;imgL=321;imgT=580;imgR=571;imgB=648;" subject="EAID_A9427823_C389_4f88_82C9_DE7C4E30CFE6" seqno="5" style="HideIcon=0;DUID=0BBD04A1;ImageID=0;LWth=0;BCol=14745599;"/>
+					<element geometry="Left=0;Top=451;Right=404;Bottom=556;imgL=0;imgT=451;imgR=404;imgB=556;" subject="EAID_D04B32ED_EF64_4ee3_9D40_122343957C3A" seqno="6" style="DUID=DDC903BE;ImageID=0;BCol=14745599;"/>
+					<element geometry="Left=984;Top=157;Right=1084;Bottom=220;imgL=984;imgT=157;imgR=1084;imgB=220;" subject="EAID_D76CA9FE_A023_4908_A53C_4AC09E5A521E" seqno="7" style="DUID=DC02F870;LWth=0;"/>
+					<element geometry="Left=776;Top=157;Right=876;Bottom=237;imgL=776;imgT=157;imgR=876;imgB=237;" subject="EAID_2413CDE5_4D0C_4167_8289_43F8DDBEB9BD" seqno="8" style="DUID=EC449727;"/>
+					<element geometry="Left=379;Top=36;Right=639;Bottom=141;imgL=379;imgT=36;imgR=639;imgB=141;" subject="EAID_553A3DF9_69B8_4fb4_BF15_EC613B5B74CD" seqno="9" style="NSL=0;BCol=-1;BFol=-1;LCol=-1;LWth=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;DUID=42DF92D1;"/>
+					<element geometry="Left=28;Top=271;Right=137;Bottom=341;imgL=28;imgT=271;imgR=137;imgB=341;" subject="EAID_CBC5092D_58C8_41ac_A16C_139D40DA2EBC" seqno="10" style="DUID=29956A25;"/>
+					<element geometry="Left=344;Top=245;Right=674;Bottom=367;imgL=344;imgT=245;imgR=674;imgB=367;" subject="EAID_60CE61DE_7E88_4e8b_BFED_13500E7DCDEC" seqno="11" style="DUID=B5955BE7;"/>
+					<element geometry="SX=1;SY=0;EX=1;EY=0;EDGE=2;$LLB=;LLT=;LMT=;LMB=;LRT=CX=99:CY=16:OX=-21:OY=-1:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LRB=CX=19:CY=16:OX=-10:OY=-1:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;IRHS=;ILHS=;Path=;" subject="EAID_98F26EAF_7E3C_48b2_AAE7_4769CF1AAFD6" style="Mode=3;EOID=12D4868B;SOID=B5955BE7;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=4;$LLB=;LLT=;LMT=;LMB=;LRT=CX=63:CY=16:OX=16:OY=-1:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_3235AFCD_ABFF_4603_9B4E_14BAEC8D9ECA" style="Mode=3;EOID=EC449727;SOID=DC02F870;Color=-1;LWidth=0;Hidden=0;"/>
+				</elements>
+			</diagram>
+		</diagrams>
+	</xmi:Extension>
+</xmi:XMI>
