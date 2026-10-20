@@ -10,9 +10,12 @@ module Ea
       # inside `<xmi:Extension>/<elements>`. Each carries a
       # `<properties documentation="..."/>` child with the body text.
       #
-      # The xmi gem parses Note elements as part of the extension
-      # block; we walk them and project to Ea::Model::Note.
+      # `uml:Text` elements are projected the same way; those whose
+      # CustomProperties xref carries legend configuration also
+      # get an `Ea::Model::Legend` payload.
       class NoteBuilder
+        NOTE_TYPES = { "uml:Note" => "Note", "uml:Text" => "Text" }.freeze
+
         attr_reader :root
 
         def initialize(root)
@@ -29,16 +32,22 @@ module Ea
         private
 
         def build_one(ext_element)
-          type = ext_element.type
-          return nil unless type == "uml:Note"
+          note_type = NOTE_TYPES[ext_element.type]
+          return nil unless note_type
 
-          props = ext_element.properties
           Ea::Model::Note.new(
             id: ext_element.idref,
             name: ext_element.name,
-            body: props&.documentation,
-            note_type: "Note"
+            body: ext_element.properties&.documentation,
+            note_type: note_type,
+            legend: legend_for(ext_element, note_type)
           )
+        end
+
+        def legend_for(ext_element, note_type)
+          return nil unless note_type == "Text"
+
+          LegendBuilder.new(ext_element.xrefs&.value).build
         end
       end
     end
