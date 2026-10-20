@@ -124,6 +124,7 @@ module Ea
             line_width: style.line_width,
             font_family: style.font_family,
             font_size: style.font_size,
+            font_size_inherited: ExtensionStyleParser.split_pairs(style.raw.to_s)["fontsz"] == "0",
             font_bold: style.bold,
             font_italic: style.italic,
             font_underline: style.underline,
