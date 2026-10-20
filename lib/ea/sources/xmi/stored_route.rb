@@ -26,7 +26,7 @@ module Ea
           finish(points, link, connector, source, target, bends, ports, offsets, edge)
         end
 
-        # Direct custom-line Associations retain mathematical ray origins as
+        # Direct custom-line associations and aggregations retain ray origins as
         # well as their computed boundary ports, just as the QEA builder does.
         def ray_metadata(model, link:, bounds:, offsets:, edge:)
           return {} unless direct_association_ray?(model, bounds, offsets)
@@ -41,7 +41,7 @@ module Ea
         private
 
         def direct_association_ray?(model, bounds, offsets)
-          model.connector_type == "Association" && model.waypoints.size == 2 &&
+          %w[Association Aggregation].include?(model.connector_type) && model.waypoints.size == 2 &&
             model.style.to_h.values_at(:mode, :lwidth, :tree) == ["1", "2", nil] &&
             bounds.values.all? && offsets.values.flatten.none?(&:nil?)
         end
