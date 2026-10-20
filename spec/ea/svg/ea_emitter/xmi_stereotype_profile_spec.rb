@@ -35,3 +35,25 @@ RSpec.describe "XMI standard profile stereotype display" do
     end
   end
 end
+
+RSpec.describe "XMI profiled UMLDI keyword display" do
+  include XmiStereotypeProfileHelpers
+
+  it "canonicalizes the standard Type when the saved UMLDI keyword takes precedence" do
+    document = xmi_stereotype_document("Type", "StandardProfileL2::Type", keyword: "Type")
+
+    expect(xmi_profile_result(document)).to eq([["Type"], ["«type»"]])
+  end
+
+  it "preserves custom, unprofiled and unrelated UMLDI keywords" do
+    [
+      ["GML::Type", "Type"],
+      [nil, "Type"],
+      ["StandardProfileL2::Type", "Other"]
+    ].each do |fqname, keyword|
+      document = xmi_stereotype_document("Type", fqname, keyword: keyword)
+
+      expect(xmi_profile_result(document)).to eq([["Type"], ["«#{keyword}»"]])
+    end
+  end
+end

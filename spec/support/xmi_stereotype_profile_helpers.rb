@@ -7,7 +7,7 @@ module XmiStereotypeProfileHelpers
 
   CLASS_REF = "EAID_D2C7D9D6_79D4_479d_B46A_0F32EC6DB76B"
 
-  def xmi_stereotype_document(name, fqname, application_name: name, prefix: "")
+  def xmi_stereotype_document(name, fqname, application_name: name, prefix: "", keyword: nil)
     xml = Nokogiri::XML(basic_xmi_text)
     element = xml.at_xpath("//*[local-name()='elements']/*[@*[local-name()='idref']='#{CLASS_REF}']")
     element.at_xpath("./properties")["stereotype"] = name
@@ -16,7 +16,16 @@ module XmiStereotypeProfileHelpers
       xrefs["value"] = "#{prefix}$XREFPROP=$NAM=Stereotypes$NAM;$DES=" \
                        "@STEREO;Name=#{application_name};FQName=#{fqname};@ENDSTEREO;$DES;$ENDXREF;"
     end
+    add_stereotype_keyword(xml, keyword) if keyword
     parse_xmi(xml.to_xml)
+  end
+
+  def add_stereotype_keyword(xml, keyword)
+    shape = xml.at_xpath("//*[@modelElement='#{CLASS_REF}']")
+    label = Nokogiri::XML::Node.new("ownedElement", xml)
+    label["xmi:type"] = "umldi:UMLKeywordLabel"
+    label["text"] = keyword
+    shape.add_child(label)
   end
 
   def xmi_profile_result(document)
