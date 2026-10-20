@@ -6,8 +6,8 @@ module Ea
   module Sources
     module Xmi
       class DiagramBuilder
-        # EA stores the association-class reference and proxy classifiers in
-        # extension attributes omitted by the XMI model gem.
+        # EA stores the association-class reference, connector subtype and proxy
+        # classifiers in extension attributes omitted by the XMI model gem.
         class AssociationClassMetadata
           def initialize(xmi_path)
             @xmi_path = xmi_path
@@ -32,7 +32,7 @@ module Ea
 
           def association_class?(connector)
             connector.properties&.ea_type == "Association" &&
-              connector.properties&.subtype == "Class" &&
+              connector_data.dig(connector.idref, :subtype) == "Class" &&
               connector_data.dig(connector.idref, :private_data).to_s.match?(/\A[1-9]\d*\z/)
           end
 
@@ -49,7 +49,7 @@ module Ea
           end
 
           def matching_classifiers?(classifiers)
-            classifiers.all?(&:itself) && classifiers.first == classifiers.last
+            classifiers.none? { |classifier| classifier.to_s.empty? } && classifiers.uniq.one?
           end
 
           def coincident_route?(waypoints)
@@ -105,7 +105,9 @@ module Ea
             return unless id
 
             extended = connector.at_xpath("./*[local-name()='extendedProperties']")
+            properties = connector.at_xpath("./*[local-name()='properties']")
             data[:connectors][id] = {
+              subtype: attr(properties, "subtype"),
               association_class: attr(extended, "associationclass"),
               private_data: attr(extended, "privatedata1")
             }
