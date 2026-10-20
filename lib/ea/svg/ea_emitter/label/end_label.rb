@@ -196,8 +196,11 @@ module Ea
             [x - width - SEAT_X_INSET, y - 7] if width
           end
 
+          # UMLDI routes carry the inferred saved-ray flag; their stored LRT
+          # box keeps the plain target seat.
           def moved_plain_target_ray?(connector, box)
-            saved_target_ray?(connector) && box.values_at("alignment", "cy") == [1, 16] &&
+            saved_target_ray?(connector) && connector.style.to_h[:umldi_route] != true &&
+              box.values_at("alignment", "cy") == [1, 16] &&
               !stored_offsets_zero?(box)
           end
 
