@@ -60,6 +60,7 @@ module Ea
             show_notes: style_ex_for(ext_diagram).to_s.include?("ShowNotes=1"),
             show_package_contents: style_flag?(ext_diagram, "PackageContents"),
             show_foreign: style_flag?(ext_diagram, "HighlightForeign"),
+            show_parents: !style_flag?(ext_diagram, "HideParents"),
             hand_draw: style_flag?(ext_diagram, "HandDraw"),
             elements: build_elements(placed_elements, id, umldi_keywords),
             connectors: build_connectors(placed_connectors,
