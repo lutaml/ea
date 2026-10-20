@@ -41,6 +41,7 @@ RSpec.describe "XMI address overlap source contract 30D62231 output" do
       [[1171, 458], [1051, 458]]
     )
     expect([connector.source_port, connector.target_port]).to eq([nil, nil])
+    expect(connector.umldi_label_bounds).to eq({})
     expect(connector.label_boxes[:llt]).to include("ox" => 18, "oy" => -17, "cx" => 57, "cy" => 31)
     expect(svg.at_xpath("//*[local-name()='path' and @d='M 391 85 L 271 85']")).not_to be_nil
     expect([role["x"], role["y"]]).to eq(["309.00", "61.00"])
