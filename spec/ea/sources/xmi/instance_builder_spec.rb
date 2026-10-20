@@ -3,8 +3,7 @@
 require "spec_helper"
 require "ea"
 
-# Requires shared-hunk.patch (adapter.rb/xmi.rb wiring) applied.
-RSpec.describe Ea::Sources::Xmi::InstanceBuilder do
+RSpec.describe "Sparx XMI instance specifications" do
   let(:document) { Ea::Sources::Xmi::Adapter.from_path(fixtures_path("basic.xmi")) }
   let(:instances) { document.instance_specifications }
 
