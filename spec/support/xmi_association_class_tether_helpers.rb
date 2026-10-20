@@ -9,11 +9,24 @@ module XmiAssociationClassTetherHelpers
   # The saved tether connector of the fixture diagram after the XMI import,
   # with the fixture text rewritten by each [from, to] pair first.
   def tether_connector(*replacements)
+    with_tether_document(*replacements) { |document| document.diagrams.first.connectors.first }
+  end
+
+  def rendered_tether_paths(*replacements)
+    with_tether_document(*replacements) do |document|
+      svg = Ea::Svg::EaEmitter::Document.new(
+        document.diagrams.first, model_index: document.index_by_id, document: document
+      ).render
+      Nokogiri::XML(svg).css("path").map { |node| node["d"] }
+    end
+  end
+
+  def with_tether_document(*replacements)
     xml = replacements.reduce(File.read(TETHER_FIXTURE)) { |text, (from, to)| text.gsub(from, to) }
     Tempfile.create(["tether", ".xmi"]) do |file|
       file.write(xml)
       file.flush
-      Ea::Sources::Xmi::Adapter.from_path(file.path).diagrams.first.connectors.first
+      yield Ea::Sources::Xmi::Adapter.from_path(file.path)
     end
   end
 

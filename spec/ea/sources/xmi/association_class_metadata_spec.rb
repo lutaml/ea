@@ -45,3 +45,22 @@ RSpec.describe "XMI association connectors without a model subtype" do
     expect(Ea::Sources::Xmi::Adapter.from_path(fixtures_path("basic.xmi")).diagrams.size).to eq(22)
   end
 end
+
+RSpec.describe "XMI association-class tether rendering" do
+  include XmiAssociationClassTetherHelpers
+
+  it "renders the D36 collapsed proxy route as a tether to its association class" do
+    connector = tether_connector
+
+    expect([connector.source_anchor&.x, connector.source_anchor&.y]).to eq([522, 644])
+    expect(points(connector)).to eq([[522, 644], [522, 644]])
+    expect(rendered_tether_paths).to include("M 42 83 L 177 84")
+  end
+
+  it "preserves the collapsed UMLDI route for an ordinary association" do
+    replacement = ['subtype="Class"', 'subtype="Strong"']
+
+    expect(tether_connector(replacement).source_anchor).to be_nil
+    expect(rendered_tether_paths(replacement)).to include("M 42 83 L 42 83")
+  end
+end

@@ -194,7 +194,10 @@ module Ea
             placed_subjects: placed_elements.map(&:subject),
             waypoints: connector.waypoints
           )
-          connector.style[:association_class_ref] = reference if reference
+          if reference
+            connector.style[:association_class_ref] = reference
+            connector.source_anchor = connector.waypoints.first.position
+          end
           connector
         end
 
