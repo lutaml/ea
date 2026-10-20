@@ -116,6 +116,9 @@ module Ea
                          target_diagonal_property_role(connector, heading, anchor, text_box, role) ||
                          target_vertical_role(connector, heading, anchor, text_box, role) ||
                          target_rightward_role(heading, anchor, text_box, role) || text_pos
+              if horizontal_aligned_target_baseline?(connector, heading, text_box, role)
+                text_pos = [text_pos[0], seat_corner(anchor, text_box)[1] - 7]
+              end
               face_multiplicity = if target_left_face_multiplicity?(connector, heading, mult_box, mult,
                                                                     target_face)
                                     directional_multiplicity(:left, anchor, mult_box, mult)
@@ -151,6 +154,23 @@ module Ea
           end
 
           private
+
+          # ALN2 single-line target roles retain their horizontal placement
+          # and use the saved corner's baseline on a straight stored ray.
+          def horizontal_aligned_target_baseline?(connector, heading, box, role)
+            return false unless heading && heading[1].zero? && !heading[0].zero?
+            return false unless saved_target_ray?(connector) && !role_empty?(role)
+            return false unless connector_source_dest_stereotype(connector, :target).to_s.empty?
+
+            aligned_target_baseline_box?(box)
+          end
+
+          def aligned_target_baseline_box?(box)
+            return false unless seat_font? && font_weight == 400 && font_style == "normal"
+            return false unless box && box["alignment"] == 2 && [13, 14].include?(box["cy"])
+
+            cambria_box?(box.merge("alignment" => 0))
+          end
 
           def plain_leftward_target_role(connector, heading, anchor, box, role)
             return nil unless heading && heading[0].negative? && heading[1].zero?
