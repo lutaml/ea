@@ -236,16 +236,16 @@ module Ea
           end
         end
 
-        # Stored bends with explicit ports at both ends are routed by
-        # StoredRoute; anything else keeps the generic router.
+        # Stored bends are routed by StoredRoute where a QEA rule claims
+        # them; anything else keeps the generic router.
         def stored_route(geom, style, connector_type, src_bounds, tgt_bounds)
-          offsets = { source: [geom.sx.to_i, geom.sy.to_i], target: [geom.ex.to_i, geom.ey.to_i] }
-          return if geom.bend_points.to_a.empty? || offsets.values.any? { |offset| offset.all?(&:zero?) }
+          offsets = { source: [geom.sx, geom.sy], target: [geom.ex, geom.ey] }
+          return if geom.bend_points.to_a.empty?
 
           points = StoredRoute.new.waypoints(
             link: StoredRoute::Link.new(style.raw, geom.path.tr("$", ";")),
             connector_type: connector_type, source: src_bounds, target: tgt_bounds,
-            bends: geom.bend_points, offsets: offsets
+            bends: geom.bend_points, offsets: offsets, edge: geom.edge
           )
           return unless points
 

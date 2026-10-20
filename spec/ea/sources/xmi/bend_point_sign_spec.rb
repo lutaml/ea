@@ -56,6 +56,10 @@ RSpec.describe "XMI connector bend point sign" do
                                                "{852FF005-A86B-4c4e-B0FB-C08CBDA4CC5A}"],
       "d148 connector 724 (stored stair)" => ["{00C5C772-5A03-434f-BF30-AC37542A1AAC}",
                                               "{86668E1A-8EB0-4b0a-8B88-B0AEDA505BD6}"],
+      "d147 connector 653 (Generalization, missing EX/EY)" => ["{E7AABA98-2450-4986-9736-DCCAF0108C50}",
+                                                               "{EA1781F9-1F59-41f2-9650-C491DE7B69B9}"],
+      "d148 connector 672 (Generalization, zero SX/SY/EX)" => ["{00C5C772-5A03-434f-BF30-AC37542A1AAC}",
+                                                               "{5BEB3B26-2EE2-4cd8-B09B-C8917830092A}"],
       "d147 connector 848 (level entry)" => ["{E7AABA98-2450-4986-9736-DCCAF0108C50}",
                                              "{AD628304-78EA-4E0B-B4AF-39769E39D20E}"]
     }.each do |name, (diagram, connector)|
@@ -71,6 +75,11 @@ RSpec.describe "XMI connector bend point sign" do
 
       expect(native_shift(diagram, "E66C1C01_AE82_4fc8_ACB5_0C3541A6240A")).to eq([dx, dy])
       expect(points[1...-1].map { |x, y| [x + dx, y + dy] }).to eq([[241, 321], [463, 321]])
+    end
+
+    it "keeps a zero-offset bent Association on the generic router" do
+      expect(xmi_connector_points("{13E09C71-99E7-40b4-B72D-48AF6379BC2E}", "{A6B31A84-81F1-491b-930F-2019375C00B1}"))
+        .to eq([[328, 639], [326, 531], [548, 531], [548, 481]])
     end
 
     it "leaves a bendless connector unchanged" do

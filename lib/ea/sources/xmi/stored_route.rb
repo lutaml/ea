@@ -14,20 +14,57 @@ module Ea
           super(nil)
         end
 
-        def waypoints(link:, connector_type:, source:, target:, bends:, offsets:)
+        def waypoints(link:, connector_type:, source:, target:, bends:, offsets:, edge: nil)
           connector = Struct.new(:connector_type).new(connector_type)
           stored_square_route(link, connector, source, target) ||
             stored_stair_route(link, connector, source, target) ||
-            level_entry(link, connector, source, target, bends, offsets)
+            level_entry(link, connector, source, target, bends, offsets) ||
+            generalization(link, connector, source, target, bends, offsets, edge)
         end
 
         private
 
+        # Placements here are already Ea::Model::Bounds.
+        def bounds_from_rect(bounds)
+          bounds
+        end
+
+        def ported?(offset)
+          offset.none?(&:nil?) && offset.any?(&:nonzero?)
+        end
+
         def level_entry(link, connector, source, target, bends, offsets)
           return unless level_entry_style?(link, connector) && bends.any?
+          return unless offsets.values.all? { |offset| ported?(offset) }
 
           points = [port(source, offsets[:source]), *bends, port(target, offsets[:target])]
           level_entry_route(points, link, connector, source, target)
+        end
+
+        # A Generalization with stored bends takes a port where its SX/SY
+        # (EX/EY) are given and the EDGE-code edge point otherwise, then the
+        # QEA parent-above redock and the QEA tree/level-entry routes.
+        def generalization(link, connector, source, target, bends, offsets, edge)
+          return unless connector.connector_type == "Generalization" && bends.any? && edge != 2
+          return if Qea::DiagramStyleParser.parse(link.style)[:mode] == "1"
+
+          ends = { source: [source, offsets[:source]], target: [target, offsets[:target]] }
+          points = ends.map { |kind, (box, offset)| end_point(box, kind, offset, edge) }
+          points = [points.first, *bends, points.last]
+          redock_parent_above(points, link, source, target)
+          route = generalization_tree_route(points, link, connector, source, target, ends)
+          points = route || level_entry_route(points, link, connector, source, target)
+          drop_zero_length_tree_segments(points, link)
+        end
+
+        def generalization_tree_route(points, link, connector, source, target, ends)
+          stored_lateral_route(link, connector, source, target, ported: ends.values.all? { |_, offset| ported?(offset) }) ||
+            derived_lateral_route(link, connector, source, target) ||
+            horizontal_tree_route(points, link, connector, source, target)
+        end
+
+        def end_point(box, kind, offset, edge)
+          ported?(offset) ? port(box, offset) : element_edge_point(box, kind, edge)
         end
 
         # EA's SX/SY (EX/EY) point from the box center toward the port,
