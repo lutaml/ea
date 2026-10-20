@@ -44,7 +44,7 @@ module Ea
 
         def build_one(ext_diagram)
           id = IdNormalizer.from_xmi_id(ext_diagram.id)
-          ext_elements = ExtensionElements.new(ext_diagram)
+          ext_elements = ExtensionElements.new(ext_diagram, connector_subjects: connector_index)
           placed_elements = ext_elements.placed_elements
           placed_connectors = ext_elements.placed_connectors
           props = ext_diagram.properties
@@ -167,7 +167,7 @@ module Ea
         def build_connector(placed, by_duid, by_subject, owner_id, rank)
           geom = placed.geometry
           style = placed.style
-          edge_source, edge_target = umldi_ends(owner_id, placed)
+          edge_source, edge_target = connector_ends(owner_id, placed)
           source = by_duid[style.soid] || sole_placement(by_subject, edge_source)
           target = by_duid[style.eoid] || sole_placement(by_subject, edge_target)
           ext_meta = connector_meta(placed.subject)
@@ -242,7 +242,15 @@ module Ea
           points = native || compute_waypoints(placed.geometry, source, target,
                                                style: placed.style, connector_type: type)
           native ||= umldi_waypoints(owner_id, placed) if points.empty?
-          { waypoints: native || points, style: native ? { umldi_route: true } : {} }
+          { waypoints: native || points, style: connector_route_style(placed, native) }
+        end
+
+        def connector_route_style(placed, native)
+          route_style = native ? { umldi_route: true } : {}
+          # Source-known links without DUIDs use classifier endpoint metadata,
+          # not a saved label box that might refer to the opposite end.
+          route_style[:explicit_end_roles] = true unless placed.style.soid && placed.style.eoid
+          route_style
         end
 
         # EA's unique exported edge supplies bendless routes and recovers
@@ -252,6 +260,15 @@ module Ea
 
           route = umldi_edges.route_for(diagram_id, placed.subject)
           route&.map { |x, y| Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y)) }
+        end
+
+        def connector_ends(diagram_id, placed)
+          umldi_ends(diagram_id, placed) || extension_ends(placed.subject)
+        end
+
+        def extension_ends(subject)
+          connector = connector_index[subject]
+          [connector&.source&.idref, connector&.target&.idref]
         end
 
         def umldi_ends(diagram_id, placed)
