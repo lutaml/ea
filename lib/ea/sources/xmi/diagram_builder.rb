@@ -162,7 +162,7 @@ module Ea
               element.packaged_element.to_a.each { |child| visit.call(child) }
               element.nested_classifier.to_a.each { |child| visit.call(child) }
             end
-            root.model.packaged_element.to_a.each { |element| visit.call(element) }
+            root.model&.packaged_element.to_a.each { |element| visit.call(element) }
             ids
           end
         end
