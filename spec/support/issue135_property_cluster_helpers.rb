@@ -58,7 +58,7 @@ module Issue135PropertyClusterHelpers
   end
 
   def issue135_property_cluster_control(**options)
-    association = Ea::Model::Association.new(id: "association", source_role_name: "extent")
+    association = Ea::Model::Association.new(id: "association", source_role_name: options.fetch(:role, "extent"))
     renderer = issue135_property_cluster_renderer(association, options)
     box = { "ox" => 2, "oy" => -36, "cy" => 35, "alignment" => 1 }.merge(options.fetch(:box, {}))
     texts = renderer.texts(text_box: box, mult_box: nil, anchor: [500, 300],

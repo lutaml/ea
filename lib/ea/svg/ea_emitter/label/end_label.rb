@@ -104,7 +104,7 @@ module Ea
                          plain_vertical_role(connector, direction, anchor, text_box, role) ||
                          source_property_seat(connector, direction, anchor, text_box, role) ||
                          plain_upward_seat(connector, direction, anchor, text_box, role) ||
-                         role_seat(direction, anchor, text_box, role) || text_pos
+                         role_seat(connector, direction, anchor, text_box, role) || text_pos
               mult_pos = directional_multiplicity(direction, anchor, mult_box, mult) ||
                          horizontal_tree_multiplicity(connector, direction, anchor, mult_box, mult) ||
                          mult_seat(direction, anchor, mult_box) || mult_pos
@@ -326,13 +326,13 @@ module Ea
 
           # Role text on a rightward leg is left-aligned at the corner,
           # 7px above it.
-          def role_seat(direction, anchor, box, role)
+          def role_seat(connector, direction, anchor, box, role)
             return nil unless direction == :right
             return nil if box.nil? || role_empty?(role)
             return nil unless default_presentation?(box)
 
             x, y = seat_corner(anchor, box)
-            [x + SEAT_X_INSET, y - 7]
+            [x + SEAT_X_INSET + source_property_centering(connector, direction, box, role), y - 7]
           end
 
           # Property-role clusters use a direction-specific horizontal seat;
@@ -354,16 +354,20 @@ module Ea
           # Center a short role above the wider stereotype without moving
           # the directional cluster's left edge. Other boxes keep their seat.
           def source_property_centering(connector, direction, box, role)
-            return 0 unless %i[left down].include?(direction)
-            return 0 unless seat_font? && font_weight == 400 && font_style == "normal"
             return 0 unless centered_property_box?(connector, direction, box)
+            return 0 unless seat_font? && font_weight == 400 && font_style == "normal"
+            return 0 unless property_label?(connector, :source)
 
             stereo = "«#{connector_source_dest_stereotype(connector, :source)}»"
             -[stereotype_offset(role, stereo, box.merge("alignment" => 1)), 0].min
           end
 
+          # Measured box heights: left/down Property clusters store CY 35,
+          # right-seat clusters CY 31. Phantom outlines leaving down carry a
+          # synthesized zero box that centers the same way.
           def centered_property_box?(connector, direction, box)
-            box.values_at("cy", "alignment") == [35, 1] ||
+            cy = { left: 35, down: 35, right: 31 }[direction]
+            (cy && box.values_at("cy", "alignment") == [cy, 1]) ||
               (direction == :down && phantom_property_box?(connector, direction, box))
           end
 
