@@ -127,6 +127,7 @@ module Ea
                                     directional_multiplicity(:left, anchor, mult_box, mult)
                                   end
               mult_pos = target_multiplicity_seat(connector, heading, anchor, mult_box) ||
+                         target_diagonal_property_multiplicity(connector, heading, anchor, text_box, mult_box) ||
                          face_multiplicity || target_horizontal_multiplicity(heading, anchor, mult_box, mult) ||
                          mult_pos
             end
@@ -632,6 +633,16 @@ module Ea
             return property_role_offsets(:left).first if dx.negative? && dx.abs > dy.abs
 
             property_role_offsets(:down).first if dy.negative? && dy.abs > dx.abs
+          end
+
+          # With no stored multiplicity box, a Property target on a steep
+          # upward diagonal seats it beside the anchor, above the role baseline.
+          def target_diagonal_property_multiplicity(connector, heading, anchor, text_box, mult_box)
+            return nil if mult_box
+            return nil unless diagonal_property_box?(connector, text_box)
+            return nil unless heading && heading[1].negative? && heading[1].abs > heading[0].abs
+
+            [anchor[0] + 8, anchor[1] - 7]
           end
 
           def target_vertical_role(connector, heading, anchor, box, role)
