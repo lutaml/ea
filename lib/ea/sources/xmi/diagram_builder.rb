@@ -158,9 +158,7 @@ module Ea
           source = by_duid[style.soid]
           target = by_duid[style.eoid]
           ext_meta = connector_meta(placed.subject)
-          waypoints = umldi_waypoints(owner_id, placed) ||
-                      compute_waypoints(geom, source, target,
-                                        style: style, connector_type: ext_meta[:ea_type])
+          route = connector_route(placed, source, target, owner_id, ext_meta[:ea_type])
           Ea::Model::DiagramConnector.new(
             id: IdNormalizer.synthetic_id(owner_id, "conn", placed.subject),
             diagram_id: owner_id,
@@ -174,8 +172,8 @@ module Ea
             target_edge: geom.edge,
             connector_type: ext_meta[:ea_type],
             direction: ext_meta[:direction],
-            waypoints: waypoints,
-            style: {},
+            waypoints: route[:waypoints],
+            style: route[:style],
             line_color: style.color,
             line_width: style.line_width,
             hidden: style.hidden,
@@ -219,10 +217,18 @@ module Ea
           IdNormalizer.synthetic_id(owner_id, "elem", placed.subject)
         end
 
-        # A connector with no authored bends is drawn along the route EA
-        # exported for its UMLDI edge.
+        def connector_route(placed, source, target, owner_id, type)
+          native = umldi_waypoints(owner_id, placed) if placed.geometry.bend_points.to_a.empty?
+          points = native || compute_waypoints(placed.geometry, source, target,
+                                               style: placed.style, connector_type: type)
+          native ||= umldi_waypoints(owner_id, placed) if points.empty?
+          { waypoints: native || points, style: native ? { umldi_route: true } : {} }
+        end
+
+        # EA's unique exported edge supplies bendless routes and recovers
+        # routes whose placement endpoints cannot be resolved.
         def umldi_waypoints(diagram_id, placed)
-          return unless xmi_path && placed.geometry.bend_points.to_a.empty?
+          return unless xmi_path
 
           route = umldi_edges.route_for(diagram_id, placed.subject)
           route&.map { |x, y| Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y)) }

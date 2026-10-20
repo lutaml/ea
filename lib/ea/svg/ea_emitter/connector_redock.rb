@@ -16,9 +16,10 @@ module Ea
         # Returns replacement waypoint pairs for direct or lateral tree routes,
         # for the connector, or nil when the connector must keep its
         # parsed waypoints (not direct, not 2-point, unresolved ends,
-        # self-loop, or no drawn bounds for either end).
+        # self-loop, an authoritative UMLDI route, or no drawn bounds for either end).
         def pairs_for(connector, diagram, model_index, bounds_map)
           return nil unless bounds_map
+          return nil if connector.style.to_h[:umldi_route] == true
 
           tether = association_class_pairs(connector, bounds_map)
           return tether if tether
@@ -475,6 +476,7 @@ module Ea
         def row_slot_adjust(pairs, connector, diagram, model_index,
                             bounds_map, divider_y_by_ref)
           return nil unless bounds_map && divider_y_by_ref
+          return nil if connector.style.to_h[:umldi_route] == true
           return nil unless pairs.size == 2
           return nil if flush_overlap_ray?(connector)
           return nil if explicit_association_ray?(pairs, connector)
