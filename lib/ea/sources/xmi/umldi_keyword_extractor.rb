@@ -40,6 +40,14 @@ module Ea
 
         private
 
+        # Text of the shape's UMLKeywordLabel child; name labels and
+        # other labelled children never contribute a keyword.
+        def keyword_text(shape)
+          label = shape.xpath("./ownedElement[@*[local-name()=\"type\"]=\"umldi:UMLKeywordLabel\"]").first
+          text = label && label["text"]
+          text unless text.nil? || text.empty?
+        end
+
         def doc
           @doc ||= Nokogiri::XML(File.read(xmi_path))
         end
@@ -47,34 +55,14 @@ module Ea
         def keywords_by_diagram
           @keywords_by_diagram ||= begin
             result = {}
-            # The Sparx XMI export declares the umldi: namespace
-            # but the elements inside Diagram have lost their
-            # prefix binding once parsed by Nokogiri — the
-            # element name resolves to local-name "ownedElement"
-            # and the umldi:UMLClassifierShape type information
-            # lives in the literal `type` attribute. We therefore
-            # match shape children by the presence of `modelElement`
-            # and the keyword label by its `text` attribute.
             doc.xpath("//*[local-name()=\"Diagram\"]").each do |diagram|
               diagram_id = diagram["id"] || diagram["xmi:id"]
               next unless diagram_id
 
               keywords = {}
               diagram.xpath("./ownedElement[@modelElement]").each do |shape|
-                model_id = shape["modelElement"]
-                next unless model_id
-
-                # Keyword label is the first ownedElement child
-                # with a non-empty `text` attribute. The name
-                # label follows it.
-                shape.xpath("./ownedElement[@text]").each do |child|
-                  text = child["text"]
-                  next if text.nil? || text.empty?
-                  next if text.start_with?("«") # safety
-
-                  keywords[model_id] = text
-                  break
-                end
+                text = keyword_text(shape)
+                keywords[shape["modelElement"]] = text if text
               end
               result[diagram_id] = keywords unless keywords.empty?
             end

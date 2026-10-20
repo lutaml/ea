@@ -52,4 +52,45 @@ RSpec.describe Ea::Sources::Xmi::UmldiKeywordExtractor do
       expect(extractor.keywords_for_diagram("UNKNOWN")).to eq({})
     end
   end
+
+  describe "name labels without a keyword label" do
+    before do
+      File.write(xmi_path, <<~XML)
+        <?xml version="1.0" encoding="UTF-8"?>
+        <xmi:XMI xmlns:xmi="http://www.omg.org/spec/XMI/20131001"
+                 xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI">
+          <umldi:Diagram xmi:type="umldi:UMLClassDiagram" xmi:id="DG1">
+            <ownedElement xmi:type="umldi:UMLClassifierShape"
+                          xmi:id="SH1" modelElement="CLS1">
+              <ownedElement xmi:type="umldi:UMLNameLabel" text="Class A"/>
+            </ownedElement>
+            <ownedElement xmi:type="umldi:UMLClassifierShape"
+                          xmi:id="SH2" modelElement="CLS2">
+              <ownedElement xmi:type="umldi:UMLNameLabel" text="Y"/>
+              <ownedElement xmi:type="umldi:UMLKeywordLabel" text="Type"/>
+            </ownedElement>
+          </umldi:Diagram>
+        </xmi:XMI>
+      XML
+    end
+
+    after { File.delete(xmi_path) if File.exist?(xmi_path) }
+
+    it "ignores name labels and finds the keyword label wherever it is" do
+      expect(extractor.keywords_for_diagram("DG1")).to eq("CLS2" => "Type")
+    end
+  end
+
+  describe "with the basic.xmi example" do
+    let(:basic_path) { fixtures_path("basic.xmi") }
+    let(:extractor) { described_class.new(basic_path) }
+    let(:diagrams) { Nokogiri::XML(File.read(basic_path)).xpath("//*[local-name()='Diagram']") }
+    let(:all_keywords) do
+      diagrams.flat_map { |d| extractor.keywords_for_diagram(d["id"] || d["xmi:id"]).values }
+    end
+
+    it "yields only the two real import keyword labels" do
+      expect(all_keywords).to eq(%w[import import])
+    end
+  end
 end
