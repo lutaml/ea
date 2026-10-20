@@ -68,3 +68,31 @@ RSpec.describe Ea::Svg::EaEmitter::Document, "basic XMI matching text preservati
     end
   end
 end
+
+RSpec.describe Ea::Svg::EaEmitter::Document, "basic XMI instance link text parity" do
+  include_context "basic XMI route label corpus"
+
+  it "matches the complete native instance body plus the diagram frame title" do
+    expected = [
+      "object Objects as Instances of Classes", "Link A", "Link B",
+      "Object 01 / roleOne: Class A", "Object 02 / roleTwo: Class B", "Object 03 / roleTwo: Class B"
+    ] + (["(from Objects)", "attribute One = Value One", "attribute Two = Value Two"] * 3)
+
+    expect(basic_route_label_text("157826AA")).to contain_exactly(*expected)
+  end
+end
+
+RSpec.describe Ea::Svg::EaEmitter::Document, "basic XMI unnamed link text parity" do
+  include_context "basic XMI route label corpus"
+
+  it "matches the complete native value-specification body without phantom association names" do
+    expected = [
+      "object Object with Value Specifications", "attributeTwo <= valueTwo",
+      "Object 01 / roleOne: Class A", "Object 02 / roleTwo: Class B", "Object 03 / roleThree1: Class C",
+      "Object 04 / roleThree2: Class C", "Object 05 / roleThree3: Class C"
+    ] + (["(from Objects)", "attributeOne = valueOne"] * 5)
+    expected += ["attributeThree = valueThree", "attributeTwo = valueTwo"] * 4
+
+    expect(basic_route_label_text("14E9F5FD")).to contain_exactly(*expected)
+  end
+end
