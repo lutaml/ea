@@ -141,8 +141,30 @@ module Ea
             z_order: placed.seqno,
             duid: style.duid,
             umldi_keyword: umldi_keywords[placed.subject],
-            style: (@stereotype_profiles ||= StereotypeProfiles.new(root)).for(placed.subject)
+            style: element_style(placed.subject)
           )
+        end
+
+        # XMI preserves UML member order in ownedAttribute. Carry that
+        # provenance to the renderer so it does not replace it with a name sort.
+        def element_style(subject)
+          style = (@stereotype_profiles ||= StereotypeProfiles.new(root)).for(subject)
+          return style unless source_ordered_classifiers.include?(subject)
+
+          style.merge(stored_attribute_order: true)
+        end
+
+        def source_ordered_classifiers
+          @source_ordered_classifiers ||= begin
+            ids = []
+            visit = lambda do |element|
+              ids << element.id if %w[uml:Class uml:Interface].include?(element.type)
+              element.packaged_element.to_a.each { |child| visit.call(child) }
+              element.nested_classifier.to_a.each { |child| visit.call(child) }
+            end
+            root.model.packaged_element.to_a.each { |element| visit.call(element) }
+            ids
+          end
         end
 
         def build_bounds(left, top, right, bottom)
