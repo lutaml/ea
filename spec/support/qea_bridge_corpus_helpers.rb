@@ -1,12 +1,23 @@
 # frozen_string_literal: true
 
 module QeaBridgeCorpusHelpers
+  # Parse each immutable corpus once per process, but give every example its
+  # own document so rendering or mutations cannot leak into another example.
+  def self.document_for(adapter, path)
+    stat = File.stat(path)
+    key = [adapter, File.expand_path(path), stat.size, stat.mtime]
+    @documents ||= {}
+    bytes = @documents[key] ||= Marshal.dump(adapter.from_path(path))
+    # Only deserialize bytes created above from trusted fixtures in this process.
+    Marshal.load(bytes) # rubocop:disable Security/MarshalLoad
+  end
+
   def plateau_path
     File.expand_path("../../examples/qea/20251010_current_plateau_v5.1.qea", __dir__)
   end
 
   def plateau_diagram(guid)
-    @plateau ||= Ea::Sources::Qea::Adapter.from_path(plateau_path)
+    @plateau ||= QeaBridgeCorpusHelpers.document_for(Ea::Sources::Qea::Adapter, plateau_path)
     id = Ea::Sources::Qea::IdNormalizer.from_guid(guid)
     [@plateau, @plateau.diagrams.find { |diagram| diagram.id == id }]
   end
@@ -35,7 +46,7 @@ module QeaBridgeCorpusHelpers
   end
 
   def plateau_xmi_diagram(guid)
-    @plateau_xmi ||= Ea::Sources::Xmi::Adapter.from_path(plateau_xmi_path)
+    @plateau_xmi ||= QeaBridgeCorpusHelpers.document_for(Ea::Sources::Xmi::Adapter, plateau_xmi_path)
     key = ->(value) { value.to_s.upcase.gsub(/[{}_-]/, "") }
     [@plateau_xmi, @plateau_xmi.diagrams.find { |diagram| key.call(diagram.id).include?(key.call(guid)) }]
   end
