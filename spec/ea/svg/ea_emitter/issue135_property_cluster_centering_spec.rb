@@ -150,3 +150,35 @@ RSpec.describe "Issue 135 Property cluster supported directions and casing" do
                          { text: "«Property»", x: 409, y: 269 }])
   end
 end
+
+RSpec.describe "Issue 135 right-seat Property role centering" do
+  include QeaEndLabelHelpers
+  include Issue135PropertyClusterHelpers
+
+  let(:box) { { "ox" => 26, "oy" => -27, "cy" => 31, "alignment" => 1 } }
+
+  def role_x(role, **options)
+    texts = issue135_property_cluster_control(role: role, heading: [1, 0], box: box, **options)
+    texts.find { |text| text[:text] == "+#{role}" }[:x]
+  end
+
+  it "centers a short role under the Property line (diagram 54 connector 892)" do
+    expect(role_x("district")).to eq(535.0)
+  end
+
+  it "centers a short role under the Property line (diagram 146 connector 629)" do
+    expect(role_x("opening")).to eq(532.0)
+  end
+
+  it "keeps roles as wide as the Property line at the plain seat" do
+    expect([role_x("boundary"), role_x("trafficArea")]).to eq([529.0, 529.0])
+  end
+
+  it "keeps plain source roles at the plain seat" do
+    expect(role_x("district", stereotype: "")).to eq(529.0)
+  end
+
+  it "keeps other box heights at the plain seat" do
+    expect(role_x("district", box: box.merge("cy" => 18))).to eq(529.0)
+  end
+end
