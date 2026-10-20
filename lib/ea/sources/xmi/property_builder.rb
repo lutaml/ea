@@ -9,14 +9,7 @@ module Ea
       # children).
       class PropertyBuilder
         def build_all_for(classifier)
-          classifier.owned_attribute.filter_map do |attr|
-            # Sparx exports unnamed opposite-end member placeholders here.
-            # Saved connector roles/cardinalities describe those ends; a
-            # property would override them with an empty name and default 1.
-            next if !attr.association.to_s.empty? && attr.name.to_s.empty?
-
-            build_one(attr, classifier)
-          end
+          classifier.owned_attribute.map { |attr| build_one(attr, classifier) }
         end
 
         def build_one(attr, owner)
