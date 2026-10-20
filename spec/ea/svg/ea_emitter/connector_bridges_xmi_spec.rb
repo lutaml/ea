@@ -4,6 +4,7 @@ require "spec_helper"
 
 RSpec.describe Ea::Svg::EaEmitter::Connectors, "plateau XMI crossings" do
   include QeaBridgeCorpusHelpers
+  include XmiNativeArcHelpers
 
   before { skip "plateau XMI unavailable" unless File.exist?(plateau_xmi_path) }
 
@@ -26,7 +27,16 @@ RSpec.describe Ea::Svg::EaEmitter::Connectors, "plateau XMI crossings" do
     expect(paths).to all(match(/\AM (\d+) -?\d+ L \1 /))
   end
 
-  it "keeps the diagram 148 crossings unchanged" do
-    expect(xmi_arc_paths("{00C5C772-5A03-434f-BF30-AC37542A1AAC}").sum { |d| d.scan(" A ").size }).to eq(10)
+  it "draws the diagram 148 crossings where the native SVG does" do
+    guid = "{00C5C772-5A03-434f-BF30-AC37542A1AAC}"
+    document, diagram = plateau_xmi_diagram(guid)
+    svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id, document: document).render
+    native = native_svg_text(diagram.id)
+    shifts = rect_anchor_shift(svg, native)
+    dx, dy = shifts.first
+
+    expect(shifts.size).to eq(1)
+    expect(arc_end_seats(native).size).to eq(12)
+    expect(arc_end_seats(svg).map { |x, y| [x + dx, y + dy] }.sort).to eq(arc_end_seats(native))
   end
 end

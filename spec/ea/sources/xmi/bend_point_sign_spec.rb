@@ -22,12 +22,12 @@ RSpec.describe "XMI connector bend point sign" do
   end
 
   describe Ea::Sources::Xmi::StoredRoute do
-    it "declines a bent route no stored-route rule claims, leaving it to the generic router" do
+    it "declines a connector with neither bends nor ports, leaving it to the generic router" do
       expect(stored_route_for("Mode=2;LWidth=1;", "Association")).to be_nil
     end
 
-    it "does not claim a level-entry style on a connector type outside the rule" do
-      expect(stored_route_for("Mode=3;LWidth=2;", "Dependency")).to be_nil
+    it "declines a width-2 Mode 3 connector with neither bends nor ports" do
+      expect(stored_route_for("Mode=3;LWidth=2;", "Aggregation")).to be_nil
     end
   end
 
@@ -60,6 +60,12 @@ RSpec.describe "XMI connector bend point sign" do
                                                                "{EA1781F9-1F59-41f2-9650-C491DE7B69B9}"],
       "d148 connector 672 (Generalization, zero SX/SY/EX)" => ["{00C5C772-5A03-434f-BF30-AC37542A1AAC}",
                                                                "{5BEB3B26-2EE2-4cd8-B09B-C8917830092A}"],
+      "d148 1725DF12 (facing-edge Association)" => ["{00C5C772-5A03-434f-BF30-AC37542A1AAC}",
+                                                    "{1725DF12-B511-4d41-AA74-59C65BDF5C48}"],
+      "d148 0398A9E6 (empty-Path ray)" => ["{00C5C772-5A03-434f-BF30-AC37542A1AAC}",
+                                           "{0398A9E6-E19E-4231-A860-45D0C72E9A0E}"],
+      "d148 9FE940C6 (Mode 1 drops the Path)" => ["{00C5C772-5A03-434f-BF30-AC37542A1AAC}",
+                                                  "{9FE940C6-5F42-4194-9296-BFCCE85A6460}"],
       "d147 connector 848 (level entry)" => ["{E7AABA98-2450-4986-9736-DCCAF0108C50}",
                                              "{AD628304-78EA-4E0B-B4AF-39769E39D20E}"]
     }.each do |name, (diagram, connector)|
@@ -77,14 +83,14 @@ RSpec.describe "XMI connector bend point sign" do
       expect(points[1...-1].map { |x, y| [x + dx, y + dy] }).to eq([[241, 321], [463, 321]])
     end
 
-    it "keeps a zero-offset bent Association on the generic router" do
+    it "docks a zero-offset bent Association where QEA and the native SVG do" do
       expect(xmi_connector_points("{13E09C71-99E7-40b4-B72D-48AF6379BC2E}", "{A6B31A84-81F1-491b-930F-2019375C00B1}"))
-        .to eq([[328, 639], [326, 531], [548, 531], [548, 481]])
+        .to eq([[326, 629], [326, 531], [548, 531], [548, 482]])
     end
 
-    it "leaves a bendless connector unchanged" do
-      expect(xmi_connector_points("{73025C5A-08FC-47ff-AB2F-C7F79CF54B41}", "{E7FFECEB-996C-45b0-8E47-A56B4834C7DF}"))
-        .to eq([[620, 584], [620, 701]])
+    it "leaves a connector without stored geometry on the generic router" do
+      expect(xmi_connector_points("{4881CEEE-792C-4cb0-BEA7-54333B643D0A}", "{351EC738-E01B-45ff-B3E0-395258918C14}"))
+        .to eq([[378, 84], [324, 84]])
     end
   end
 end

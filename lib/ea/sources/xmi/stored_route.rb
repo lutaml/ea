@@ -3,23 +3,27 @@
 module Ea
   module Sources
     module Xmi
-      # Routes a connector that carries stored Path bends the way the QEA
-      # source does, by running the QEA builder's own route helpers over
-      # the same inputs (link style, bends in `x:y;` form, connector type,
-      # endpoint boxes) and the same center-ray ports.
+      # Routes an XMI connector the way the QEA source does: the same
+      # center-ray ports and the same QEA route helpers, over the same
+      # inputs (link style, bends in `x:y;` form, connector type, endpoint
+      # boxes). Returns nil where QEA would fall back to bare SX/SY deltas,
+      # which the generic router keeps handling.
       class StoredRoute < Qea::DiagramBuilder
-        Link = Struct.new(:style, :path)
+        Link = Struct.new(:style, :path, :geometry)
+        Connector = Struct.new(:connector_type)
 
         def initialize
           super(nil)
         end
 
         def waypoints(link:, connector_type:, source:, target:, bends:, offsets:, edge: nil)
-          connector = Struct.new(:connector_type).new(connector_type)
-          stored_square_route(link, connector, source, target) ||
-            stored_stair_route(link, connector, source, target) ||
-            level_entry(link, connector, source, target, bends, offsets) ||
-            generalization(link, connector, source, target, bends, offsets, edge)
+          connector = Connector.new(connector_type)
+          ports = { source: port_for(source, offsets[:source]), target: port_for(target, offsets[:target]) }
+          edge ||= 0
+          points = initial_points(link, connector, source, target, bends, ports, edge)
+          return unless points
+
+          finish(points, link, connector, source, target, bends, ports, offsets, edge)
         end
 
         private
@@ -33,43 +37,95 @@ module Ea
           offset.none?(&:nil?) && offset.any?(&:nonzero?)
         end
 
-        def level_entry(link, connector, source, target, bends, offsets)
-          return unless level_entry_style?(link, connector) && bends.any?
-          return unless offsets.values.all? { |offset| ported?(offset) }
-
-          points = [port(source, offsets[:source]), *bends, port(target, offsets[:target])]
-          level_entry_route(points, link, connector, source, target)
+        def port_for(box, offset)
+          ray_port(box, offset) if ported?(offset)
         end
 
-        # A Generalization with stored bends takes a port where its SX/SY
-        # (EX/EY) are given and the EDGE-code edge point otherwise, then the
-        # QEA parent-above redock and the QEA tree/level-entry routes.
-        def generalization(link, connector, source, target, bends, offsets, edge)
-          return unless connector.connector_type == "Generalization" && bends.any? && edge != 2
-          return if Qea::DiagramStyleParser.parse(link.style)[:mode] == "1"
-
-          ends = { source: [source, offsets[:source]], target: [target, offsets[:target]] }
-          points = ends.map { |kind, (box, offset)| end_point(box, kind, offset, edge) }
-          points = [points.first, *bends, points.last]
-          redock_parent_above(points, link, source, target)
-          route = generalization_tree_route(points, link, connector, source, target, ends)
-          points = route || level_entry_route(points, link, connector, source, target)
-          drop_zero_length_tree_segments(points, link)
+        def initial_points(link, connector, source, target, bends, ports, edge)
+          src = ports[:source] || element_edge_point(source, :source, edge)
+          tgt = ports[:target] || element_edge_point(target, :target, edge)
+          if Qea::DiagramStyleParser.parse(link.style)[:mode] == "1"
+            [src, tgt]
+          elsif edge == 2 && ports.values.all? && !valid_tree_path?(bends, source)
+            [src, [tgt[0], src[1]], tgt]
+          elsif edge == 2 && bends.size == 1
+            tree_points(source, target, bends.first)
+          elsif bends.any?
+            bent_points(src, bends, tgt, link, connector, source, target)
+          elsif ports.values.any?
+            [src, tgt]
+          end
         end
 
-        def generalization_tree_route(points, link, connector, source, target, ends)
-          stored_lateral_route(link, connector, source, target, ported: ends.values.all? { |_, offset| ported?(offset) }) ||
+        def tree_points(src, tgt, bend)
+          target_y = tgt.y + tgt.height <= src.y ? tgt.y + tgt.height : tgt.y
+          [[src.x + src.width, bend[1]], [bend[0], bend[1]], [bend[0], target_y]]
+        end
+
+        def bent_points(src, bends, tgt, link, connector, source, target)
+          points = [src, *bends, tgt]
+          redock_parent_above(points, link, source, target) if connector.connector_type == "Generalization"
+          points
+        end
+
+        def finish(points, link, connector, source, target, bends, ports, offsets, edge)
+          tree_route = stored_tree_route(points, link, connector, source, target, ports)
+          if tree_route
+            points = tree_route
+          elsif %w[Association Aggregation].include?(connector.connector_type) && edge != 2
+            points = facing(points, link, connector, source, target, bends)
+          end
+          points = level_entry_route(points, link, connector, source, target) if bends.any? && !tree_route
+          points = drop_zero_length_tree_segments(points, link)
+          empty_path_ray(points, link, connector, source, target, bends, ports, offsets, edge)
+        end
+
+        # An empty Path has no authored corner to keep: a computed EDGE2 jog
+        # between ports that face across a gap becomes the straight port line.
+        def empty_path_ray(points, link, connector, source, target, bends, ports, offsets, edge)
+          style = Qea::DiagramStyleParser.parse(link.style)
+          return points unless %w[Generalization Aggregation].include?(connector.connector_type) &&
+                               points.size == 3 && bends.empty? && edge == 2 && ports.values.all? &&
+                               style[:mode] == "3" && style[:lwidth] == "2" && !style[:tree]
+          return points unless ray_gap?(source, target, offsets)
+
+          ports.values_at(:source, :target)
+        end
+
+        def ray_gap?(source, target, offsets)
+          return false unless source.x + source.width < target.x
+
+          [[source, offsets[:source]], [target, offsets[:target]]].all? do |box, (x, y)|
+            within_height?(stored_ray_origin(box, x, y).y, source) &&
+              within_height?(stored_ray_origin(box, x, y).y, target)
+          end
+        end
+
+        def stored_tree_route(points, link, connector, source, target, ports)
+          stored_square_route(link, connector, source, target) ||
+            stored_stair_route(link, connector, source, target) ||
+            stored_lateral_route(link, connector, source, target, ported: ports.values.all?) ||
             derived_lateral_route(link, connector, source, target) ||
             horizontal_tree_route(points, link, connector, source, target)
         end
 
-        def end_point(box, kind, offset, edge)
-          ported?(offset) ? port(box, offset) : element_edge_point(box, kind, edge)
+        def facing(points, link, connector, source, target, bends)
+          stored_tree = preserve_stored_tree?(points, link, connector, source, target)
+          unless stored_tree || level_corner_route?(points, link, connector, source, target)
+            points = facing_edge_route(points, source, target)
+          end
+          if connector.connector_type == "Aggregation" && bends.any? && points.size >= 4 &&
+             (generalization_outline_offset(link, points.size) == 1 ||
+              (stored_tree && flush_width_zero_tree?(link)))
+            redock_parent_above(points, link, source, target, strict: true)
+          end
+          redock_vertical_tree_trunk(points, link, connector, source, target) if bends.any?
+          points
         end
 
         # EA's SX/SY (EX/EY) point from the box center toward the port,
         # y up; the port is where that ray leaves the box.
-        def port(bounds, offset)
+        def ray_port(bounds, offset)
           dx = offset[0].to_f
           dy = -offset[1].to_f
           center_x = bounds.x + bounds.width / 2.0

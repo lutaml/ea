@@ -240,18 +240,21 @@ module Ea
         # them; anything else keeps the generic router.
         def stored_route(geom, style, connector_type, src_bounds, tgt_bounds)
           offsets = { source: [geom.sx, geom.sy], target: [geom.ex, geom.ey] }
-          return if geom.bend_points.to_a.empty?
-
           points = StoredRoute.new.waypoints(
-            link: StoredRoute::Link.new(style.raw, geom.path.tr("$", ";")),
+            link: StoredRoute::Link.new(style.raw, geom.path.to_s.tr("$", ";"), offset_geometry(geom)),
             connector_type: connector_type, source: src_bounds, target: tgt_bounds,
-            bends: geom.bend_points, offsets: offsets, edge: geom.edge
+            bends: geom.bend_points.to_a, offsets: offsets, edge: geom.edge
           )
           return unless points
 
           points.map do |x, y|
             Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y))
           end
+        end
+
+        def offset_geometry(geom)
+          { "SX" => geom.sx, "SY" => geom.sy, "EX" => geom.ex, "EY" => geom.ey }
+            .filter_map { |key, value| "#{key}=#{value};" if value }.join
         end
 
         def bounds_from_placed(placed)
