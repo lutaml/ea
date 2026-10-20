@@ -31,7 +31,7 @@ module Ea
             # @return [Array<String>] «name» labels (EA renders one
             # line per applied stereotype)
             def self.label_for(classifier, umldi_keyword, stereotype_fqname = nil)
-              return ["«#{umldi_keyword}»"] if umldi_keyword && !umldi_keyword.empty?
+              return ["«#{canonical(umldi_keyword, stereotype_fqname)}»"] if umldi_keyword && !umldi_keyword.empty?
 
               explicit = explicit_stereotype(classifier, stereotype_fqname)
               return explicit if explicit

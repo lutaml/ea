@@ -40,12 +40,22 @@ module Ea
 
         private
 
-        # Text of the shape's UMLKeywordLabel child; name labels and
-        # other labelled children never contribute a keyword.
+        # EA can save both a built-in keyword and a custom stereotype label.
+        # Prefer the label matching the element's saved stereotype, if present.
         def keyword_text(shape)
-          label = shape.xpath("./ownedElement[@*[local-name()=\"type\"]=\"umldi:UMLKeywordLabel\"]").first
+          labels = shape.xpath("./ownedElement[@*[local-name()=\"type\"]=\"umldi:UMLKeywordLabel\"]")
+          stereotype = stereotypes_by_element[shape["modelElement"]]
+          label = labels.find { |candidate| stereotype && candidate["text"] == stereotype } || labels.first
           text = label && label["text"]
           text unless text.nil? || text.empty?
+        end
+
+        def stereotypes_by_element
+          @stereotypes_by_element ||= doc.xpath("//*[local-name()=\"Extension\"]/elements/element")
+                                         .each_with_object({}) do |element, result|
+                                           stereotype = element.at_xpath("./properties")&.[]("stereotype")
+                                           result[element["idref"] || element["xmi:idref"]] = stereotype if stereotype
+                                         end
         end
 
         def doc
