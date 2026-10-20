@@ -1,0 +1,64 @@
+<!-- Font/placement excerpt from 20251010_current_plateau_v5.1.xmi, diagram 38170608. -->
+<xmi:XMI xmlns:xmi="http://www.omg.org/spec/XMI/20131001">
+  <uml:Model xmlns:uml="http://www.omg.org/spec/UML/20161101" xmi:type="uml:Model" name="EA_Model"/>
+  <xmi:Extension>
+    <elements>
+      <element xmi:idref="EAID_CEA68306_BC83_4809_A89A_9B9E7D45776D">
+        <style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;" styleex="LegendOpts=31;LegendTypeObj=Filter=:;LegendTypeConn=Filter=:;LegendTypeObjV2=Filter&amp;_eq_^&amp;_sc_^;LegendTypeConnV2=Filter&amp;_eq_^&amp;_sc_^;" />
+      </element>
+      <element xmi:idref="EAID_8E4996A7_C42C_4613_A0A4_9A6D855F0CF7">
+        <style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;" />
+      </element>
+      <element xmi:idref="EAID_F3EC493F_F242_4cd1_B267_8EC7EA00AD16">
+        <style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;" />
+      </element>
+      <element xmi:idref="EAID_CED08D2D_0DB0_48da_92F0_294ED56E5615">
+        <style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;" />
+      </element>
+      <element xmi:idref="EAID_09EBE9B4_4F94_4f1b_BD13_AFED32CEFF4D">
+        <style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;" />
+      </element>
+      <element xmi:idref="EAID_21B83B38_B136_475a_AAAA_8761EE9D273D">
+        <style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;" />
+      </element>
+      <element xmi:idref="EAID_B8B71174_9A86_45a6_AB51_204F9C103631">
+        <style appearance="BackColor=-1;BorderColor=-1;BorderWidth=1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;" />
+      </element>
+      <element xmi:idref="EAID_4BB4308C_C686_4e24_862B_C0D2397A5BF5">
+        <style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;" />
+      </element>
+      <element xmi:idref="EAID_613EAA81_0878_4d6d_809B_780F8C5974BB">
+        <style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;" />
+      </element>
+      <element xmi:idref="EAID_162F1789_29D3_4392_9AC5_C3633040FE44">
+        <style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;" />
+      </element>
+    </elements>
+    <diagrams>
+      <diagram xmi:id="EAID_38170608_32B5_4a6f_A68D_A0D7C0C9D019">
+        <model package="EAPK_B74C0013_CB8D_41eb_BB31_D7FB6D9488ED" localID="164" owner="EAPK_B74C0013_CB8D_41eb_BB31_D7FB6D9488ED" tpos="26" />
+        <properties name="災害リスク（浸水面）" type="Logical" />
+        <project author="048827" version="1.0" created="2023-03-24 01:23:54" modified="2025-02-27 16:55:11" />
+        <style1 value="ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;Border=1;HighlightForeign=1;PackageContents=1;SequenceNotes=0;ScalePrintImage=0;PPgs.cx=0;PPgs.cy=0;DocSize.cx=795;DocSize.cy=1138;ShowDetails=0;Orientation=P;Zoom=100;ShowTags=0;OpParams=1;VisibleAttributeDetail=0;ShowOpRetType=1;ShowIcons=1;CollabNums=0;HideProps=0;ShowReqs=0;ShowCons=0;PaperSize=9;HideParents=1;UseAlias=0;HideAtts=0;HideOps=0;HideStereo=0;HideElemStereo=0;ShowTests=0;ShowMaint=0;ConnectorNotation=UML 2.1;ExplicitNavigability=0;ShowShape=1;AllDockable=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;ShowNotes=0;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;" />
+        <style2 value="ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;KanbanActive=0;MatrixLineWidth=1;MatrixLineClr=0;MatrixLocked=0;TConnectorNotation=UML 2.1;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;MDGDgm=;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;SuppressedCompartments=;Theme=:39;SaveTag=8A50C9D8;" />
+        <swimlanes value="locked=false;orientation=0;width=0;inbar=false;names=false;color=0;bold=false;fcol=0;tcol=15852766;ofCol=-1;ufCol=-1;hl=1;ufh=0;hh=0;cls=0;bw=0;hli=0;bro=0;SwimlaneFont=lfh:-13,lfw:0,lfi:0,lfu:0,lfs:0,lfface:Calibri,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;" />
+        <matrixitems value="locked=false;matrixactive=false;swimlanesactive=true;kanbanactive=false;width=1;clrLine=0;" />
+        <extendedProperties />
+        <persistentstyle value="DGS=On=0:CNT=8:W=120:H=40:SG=0:SGH=0:AEB=0:;AR=0;DCL=0;Swimlanes=locked=false;orientation=0;width=0;inbar=false;names=false;color=0;bold=false;fcol=0;tcol=15852766;ofCol=-1;ufCol=-1;hl=1;ufh=0;hh=0;cls=0;bw=0;hli=0;bro=0;SwimlaneFont=lfh:-13,lfw:0,lfi:0,lfu:0,lfs:0,lfface:Calibri,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;;" />
+        <xrefs />
+        <elements>
+          <element geometry="Left=193;Top=467;Right=379;Bottom=562;imgL=193;imgT=467;imgR=379;imgB=562;" subject="EAID_CEA68306_BC83_4809_A89A_9B9E7D45776D" seqno="1" style="DUID=29324527;NSL=0;BCol=-1;BFol=-1;LCol=-1;LWth=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;" />
+          <element geometry="Left=1027;Top=995;Right=1305;Bottom=1096;imgL=1027;imgT=995;imgR=1305;imgB=1096;" subject="EAID_21B83B38_B136_475a_AAAA_8761EE9D273D" seqno="2" style="NSL=0;LCol=-1;bold=0;black=0;italic=0;ul=0;charset=0;HideIcon=0;LWth=2;font=Yu Gothic UI;fontsz=100;pitch=50;BFol=0;BCol=16764159;DUID=275D522C;" />
+          <element geometry="Left=858;Top=652;Right=1158;Bottom=944;imgL=858;imgT=652;imgR=1158;imgB=944;" subject="EAID_8E4996A7_C42C_4613_A0A4_9A6D855F0CF7" seqno="3" style="DUID=A304F6AE;NSL=0;LCol=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;HideIcon=0;BCol=16764159;LWth=2;BFol=0;" />
+          <element geometry="Left=429;Top=972;Right=623;Bottom=1050;imgL=429;imgT=972;imgR=623;imgB=1050;" subject="EAID_CED08D2D_0DB0_48da_92F0_294ED56E5615" seqno="4" style="NSL=0;LCol=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;HideIcon=0;BCol=16764159;LWth=2;DUID=1B72CAC4;BFol=0;" />
+          <element geometry="Left=683;Top=977;Right=918;Bottom=1047;imgL=683;imgT=977;imgR=918;imgB=1047;" subject="EAID_B8B71174_9A86_45a6_AB51_204F9C103631" seqno="5" style="NSL=0;BCol=16764159;LWth=2;DUID=378A485C;BFol=0;" />
+          <element geometry="Left=526;Top=1110;Right=756;Bottom=1187;imgL=526;imgT=1110;imgR=756;imgB=1187;" subject="EAID_09EBE9B4_4F94_4f1b_BD13_AFED32CEFF4D" seqno="6" style="NSL=0;LCol=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;HideIcon=0;BCol=16764159;LWth=2;DUID=57E42285;BFol=0;" />
+          <element geometry="Left=310;Top=1112;Right=504;Bottom=1188;imgL=310;imgT=1112;imgR=504;imgB=1188;" subject="EAID_613EAA81_0878_4d6d_809B_780F8C5974BB" seqno="7" style="NSL=0;LCol=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;HideIcon=0;BCol=16764159;LWth=2;DUID=7B545912;BFol=0;" />
+          <element geometry="Left=157;Top=972;Right=384;Bottom=1077;imgL=157;imgT=972;imgR=384;imgB=1077;" subject="EAID_4BB4308C_C686_4e24_862B_C0D2397A5BF5" seqno="8" style="NSL=0;LCol=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;HideIcon=0;BCol=16764159;LWth=2;DUID=354D69B6;BFol=0;" />
+          <element geometry="Left=431;Top=657;Right=665;Bottom=782;imgL=431;imgT=657;imgR=665;imgB=782;" subject="EAID_F3EC493F_F242_4cd1_B267_8EC7EA00AD16" seqno="9" style="NSL=0;LCol=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;HideIcon=0;BCol=16764159;LWth=2;DUID=83ADBA37;BFol=0;" />
+          <element geometry="Left=442;Top=431;Right=671;Bottom=556;imgL=442;imgT=431;imgR=671;imgB=556;" subject="EAID_162F1789_29D3_4392_9AC5_C3633040FE44" seqno="10" style="DUID=3EEC9DB6;NSL=0;LCol=-1;bold=0;black=0;italic=0;ul=0;charset=0;HideIcon=0;pitch=50;BFol=0;LWth=2;font=Yu Gothic UI;fontsz=100;BCol=13434879;" />
+        </elements>
+      </diagram>
+    </diagrams>
+  </xmi:Extension>
+</xmi:XMI>

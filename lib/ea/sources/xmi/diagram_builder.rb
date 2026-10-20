@@ -131,6 +131,7 @@ module Ea
             line_width: style.line_width,
             font_family: font[:family],
             font_size: font[:size],
+            font_size_unit: "pt",
             font_logical_height: font[:logical_height],
             font_size_inherited: ExtensionStyleParser.split_pairs(style.raw.to_s)["fontsz"] == "0",
             font_bold: style.bold,
