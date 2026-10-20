@@ -46,6 +46,9 @@ module Ea
         # UMLDI fallback. A single stored corner and an empty-path stored ray
         # carry mathematical origins that the generic facing-edge route loses.
         def association_route(model, link:, bounds:, offsets:, edge:)
+          overlap = umldi_overlap_metadata(model, link, bounds, offsets, edge)
+          return overlap unless overlap.empty?
+
           partial = partial_port_metadata(model, link, bounds, offsets, edge)
           return partial unless partial.empty?
 
@@ -60,6 +63,24 @@ module Ea
         end
 
         private
+
+        # UMLDI owns the drawn route; retain QEA's overlap origins only for
+        # interpreting the stored relative end labels against that route.
+        def umldi_overlap_metadata(model, link, bounds, offsets, edge)
+          return {} unless umldi_overlap_candidate?(model, bounds, offsets)
+
+          candidate = association_model(model, bounds, offsets)
+          overlap_ray_origins(candidate, link, bounds, ray_geometry(offsets, edge), false)
+          return {} unless candidate.style[:overlap_ray]
+
+          { source_anchor: candidate.source_anchor, target_anchor: candidate.target_anchor,
+            has_geometry_offsets: true, style: candidate.style.to_h }
+        end
+
+        def umldi_overlap_candidate?(model, bounds, offsets)
+          model.style.to_h.values_at(:umldi_route, :mode, :lwidth) == [true, "2", "0"] &&
+            model.waypoints.size == 2 && bounds.values.all? && offsets.values.flatten.none?(&:nil?)
+        end
 
         # A zero-offset end has no explicit port, but QEA still carries both
         # mathematical origins for the emitter's final boundary redocking.
