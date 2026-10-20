@@ -46,7 +46,7 @@ module Ea
         # UMLDI fallback. A single stored corner and an empty-path stored ray
         # carry mathematical origins that the generic facing-edge route loses.
         def association_route(model, link:, bounds:, offsets:, edge:)
-          overlap = umldi_overlap_metadata(model, link, bounds, offsets, edge)
+          overlap = umldi_association_metadata(model, link, bounds, offsets, edge)
           return overlap unless overlap.empty?
 
           partial = partial_port_metadata(model, link, bounds, offsets, edge)
@@ -63,6 +63,32 @@ module Ea
         end
 
         private
+
+        def umldi_association_metadata(model, link, bounds, offsets, edge)
+          overlap = umldi_overlap_metadata(model, link, bounds, offsets, edge)
+          return overlap unless overlap.empty?
+
+          umldi_stored_ray_metadata(model, link, bounds, offsets, edge)
+        end
+
+        # UMLDI owns the route and ports. Classify a thin saved ray only when
+        # its origins pass the shared unstroked-box checks; XMI has no QEA
+        # database from which to infer a wider element outline.
+        def umldi_stored_ray_metadata(model, link, bounds, offsets, edge)
+          return {} unless umldi_thin_ray_candidate?(model, bounds, offsets)
+
+          candidate = association_model(model, bounds, offsets)
+          return {} unless association_ray_candidate?(candidate, link)
+          return {} unless association_ray_origins(*bounds.values_at(:source, :target),
+                                                   ray_geometry(offsets, edge), "0")
+
+          { style: model.style.to_h.merge(stored_association_ray: true, association_ray_outline: true) }
+        end
+
+        def umldi_thin_ray_candidate?(model, bounds, offsets)
+          model.style[:umldi_route] && model.style[:lwidth] == "0" &&
+            bounds.values.all? && offsets.values.flatten.none?(&:nil?)
+        end
 
         # UMLDI owns the drawn route; retain QEA's overlap origins only for
         # interpreting the stored relative end labels against that route.
