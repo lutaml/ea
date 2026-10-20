@@ -9,6 +9,7 @@ module Ea
       # SOID/EOID, EDGE, label boxes) when present. Falls back to
       # the UML-DI owned_element bounds otherwise.
       class DiagramBuilder
+        autoload :FontSettings, "ea/sources/xmi/diagram_builder/font_settings"
         autoload :UmldiEdges, "ea/sources/xmi/diagram_builder/umldi_edges"
 
         attr_reader :root, :xmi_path
@@ -113,6 +114,7 @@ module Ea
           geom = placed.geometry
           style = placed.style
           bounds = build_bounds(geom.left, geom.top, geom.right, geom.bottom)
+          font = (@font_settings ||= FontSettings.new(xmi_path)).for(placed)
           Ea::Model::DiagramElement.new(
             id: IdNormalizer.synthetic_id(owner_id, "elem", placed.subject),
             diagram_id: owner_id,
@@ -122,8 +124,10 @@ module Ea
             background_color: style.background_color,
             line_color: style.line_color,
             line_width: style.line_width,
-            font_family: style.font_family,
-            font_size: style.font_size,
+            font_family: font[:family],
+            font_size: font[:size],
+            font_logical_height: font[:logical_height],
+            font_size_inherited: ExtensionStyleParser.split_pairs(style.raw.to_s)["fontsz"] == "0",
             font_bold: style.bold,
             font_italic: style.italic,
             font_underline: style.underline,
