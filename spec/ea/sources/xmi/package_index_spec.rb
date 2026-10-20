@@ -27,4 +27,13 @@ RSpec.describe "Sparx XMI package index" do
   it "returns nil for an unknown EAID" do
     expect(index["EAID_00000000_0000_0000_0000_000000000000"]).to be_nil
   end
+
+  it "keeps the document marshalable once the index is built" do
+    index
+
+    copy = Marshal.load(Marshal.dump(document))
+
+    expect(copy.index_by_id["EAID_C8CA047C_8ADC_43a4_B828_E71E1ABFD021"].name)
+      .to eq("Basic Class Diagram with Attributes")
+  end
 end

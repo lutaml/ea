@@ -19,6 +19,7 @@ module Ea
     autoload :Base, "ea/model/base"
     autoload :Metadata, "ea/model/metadata"
     autoload :Point, "ea/model/point"
+    autoload :PackageAliasIndex, "ea/model/package_alias_index"
     autoload :Bounds, "ea/model/bounds"
     autoload :Waypoint, "ea/model/waypoint"
     autoload :Annotation, "ea/model/annotation"
