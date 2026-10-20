@@ -100,6 +100,7 @@ module Ea
                              end_kind: :target, tree: tree && tree[:target],
                              bend: Label::TargetBendSeat.reference(points),
                              heading: (stored_tgt || stored_labels) && target_heading(connector, points),
+                             target_face: target_dock_heading(connector, target_pt, target_heading(connector, points)),
                              stored_labels: stored_labels).each { |t| texts << t }
           texts
         end
@@ -200,6 +201,29 @@ module Ea
           return nil unless drawn_bounds[target]
 
           drawn_bounds[source]
+        end
+
+        def target_dock_bounds(connector)
+          return nil unless model_index && drawn_bounds
+
+          relationship = model_index[connector.relationship_ref]
+          return nil unless relationship
+
+          source, target = ConnectorRedock.end_refs(relationship)
+          return nil if source == target
+          return nil unless drawn_bounds[source]
+
+          drawn_bounds[target]
+        end
+
+        def target_dock_heading(connector, point, heading)
+          return nil unless heading
+
+          box = target_dock_bounds(connector)
+          face = box && dock_face_heading(point, box)
+          return nil unless face&.zip(heading)&.any? { |axis, delta| (axis * delta).positive? }
+
+          face
         end
 
         # Saved rays can start outside the box. Project onto its boundary;

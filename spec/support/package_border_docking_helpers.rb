@@ -4,7 +4,7 @@ module PackageBorderDockingHelpers
   def package_border_emitters(document)
     diagram = document.diagrams.find { |entry| entry.id == "DFBB1072-8EC5-4384-8241-7EDF4B6B888B" }
     options = package_border_options(diagram, document.index_by_id)
-    [diagram, Ea::Svg::EaEmitter::Connectors.new(diagram, **options),
+    [diagram, Ea::Svg::EaEmitter::Connectors.new(diagram, grouped: false, **options),
      Ea::Svg::EaEmitter::Markers.new(diagram, **options)]
   end
 
@@ -19,7 +19,8 @@ module PackageBorderDockingHelpers
   def package_border_geometry(emitters, ref)
     diagram, routes, markers = emitters
     connector = diagram.connectors.find { |entry| entry.relationship_ref == ref }
-    route = Nokogiri::XML(routes.send(:path_for, connector)).at_css("path")["d"]
+    route_index = diagram.connectors.select(&:renderable?).index(connector)
+    route = Nokogiri::XML(routes.layers.fetch(route_index).body).at_css("path")["d"]
     arrowheads = markers.send(:entries_for, connector).map do |entry|
       Nokogiri::XML(entry.body).at_css("path")["d"]
     end

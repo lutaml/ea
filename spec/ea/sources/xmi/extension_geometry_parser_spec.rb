@@ -50,6 +50,20 @@ RSpec.describe Ea::Sources::Xmi::ExtensionGeometryParser do
       expect(llb.oy).to eq(-34)
     end
 
+    it "extracts the label colour, alignment, direction and rotation" do
+      llb = described_class.parse(geom).label_boxes[:llb]
+      expect([llb.color, llb.align, llb.direction, llb.rotation, llb.hidden]).to eq([-1, 1, 0, 0, false])
+    end
+
+    it "reads a hidden flag and a non-default colour" do
+      parsed = described_class.parse(
+        "EDGE=1;LRT=CX=34:CY=14:OX=-4:OY=-2:HDN=1:BLD=0:ITA=0:UND=0:CLR=255:ALN=2:DIR=1:ROT=-90;"
+      )
+      lrt = parsed.label_boxes[:lrt]
+      expect([lrt.hidden, lrt.color, lrt.align, lrt.direction, lrt.rotation])
+        .to eq([true, 255, 2, 1, -90])
+    end
+
     it "ignores empty label slots" do
       parsed = described_class.parse(geom)
       expect(parsed.label_boxes).not_to have_key(:llt)

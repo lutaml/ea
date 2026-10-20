@@ -74,11 +74,14 @@ module Ea
         private
 
         def paths_with_styles
-          visible_connectors.filter_map do |connector|
-            path = path_for(connector)
-            next unless path
-
-            [[self.class.stroke_width_for(connector, stroke_width), dashed?(connector)], path]
+          routes = visible_connectors.filter_map do |connector|
+            points = resolved_points(connector)
+            [connector, points.map { |point| translate_point(point) }] if points.size >= 2
+          end
+          bridges = ConnectorBridges.new(diagram, routes)
+          routes.map do |connector, points|
+            [[self.class.stroke_width_for(connector, stroke_width), dashed?(connector)],
+             path_for(connector, points, bridges)]
           end
         end
 
@@ -103,39 +106,17 @@ module Ea
           (diagram.connectors || []).select(&:renderable?)
         end
 
-        def path_for(connector)
+        def resolved_points(connector)
           pts = ConnectorRedock.pairs_for(connector, diagram, model_index,
                                           drawn_bounds) ||
                 waypoints_for(connector)
-          pts = ConnectorRedock.row_slot_adjust(pts, connector, diagram,
-                                                model_index, drawn_bounds,
-                                                divider_y_by_ref) || pts
-          return nil if pts.size < 2
-
-          # DIRECT (auto-routed straight) connectors: EA writes the
-          # segment TARGET-FIRST with a trailing zero-length repeat —
-          # "M target L source M target" (B6847577, E58034A3,
-          # 8CF27BE8). Same pixels as source-first; only the byte
-          # order differs, so reversal lives here at the emitter and
-          # the marker anchoring (source = first waypoint) is
-          # untouched.
-          if pts.size == 2 && direct?(connector)
-            x1, y1 = translate_point(pts.first)
-            x2, y2 = translate_point(pts.last)
-            d = "M #{Canvas.coord(x2)} #{Canvas.coord(y2)} L #{Canvas.coord(x1)} #{Canvas.coord(y1)} " \
-                "M #{Canvas.coord(x2)} #{Canvas.coord(y2)}"
-          else
-            d = pts.each_with_index.map do |p, idx|
-              x, y = translate_point(p)
-              "#{idx.zero? ? 'M' : 'L'} #{Canvas.coord(x)} #{Canvas.coord(y)}"
-            end.join(" ")
-          end
-          %(<path d="#{d}" shape-rendering="auto"/>)
+          ConnectorRedock.row_slot_adjust(pts, connector, diagram,
+                                          model_index, drawn_bounds,
+                                          divider_y_by_ref) || pts
         end
 
-        def direct?(connector)
-          style = connector.style || {}
-          style.key?(:direct) || style.key?("direct")
+        def path_for(connector, pts, bridges)
+          %(<path d="#{bridges.path_for(connector, pts)}" shape-rendering="auto"/>)
         end
 
         def waypoints_for(connector)
@@ -146,10 +127,10 @@ module Ea
           end
         end
 
-        def translate_point(p)
-          return p unless @canvas
+        def translate_point(point)
+          return point unless @canvas
 
-          [@canvas.translate_x(p[0]), @canvas.translate_y(p[1])]
+          [@canvas.translate_x(point[0]), @canvas.translate_y(point[1])]
         end
       end
     end

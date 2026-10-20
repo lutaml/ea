@@ -49,7 +49,7 @@ module Ea
           id = IdNormalizer.from_xmi_id(element.id)
           {
             id: id,
-            name: element.name || element.type&.split(":")&.last&.downcase,
+            name: element.name,
             qualified_name: element.name,
             annotations: AnnotationBuilder.from_element(element, id)
           }

@@ -30,7 +30,8 @@ module Ea
         "carlito" => "Carlito",
         "arial" => "Arial",
         "arial narrow" => "Arial Narrow",
-        "cambria" => "Cambria"
+        "cambria" => "Cambria",
+        "source sans pro" => "Source Sans Pro"
       }.freeze
 
       # Cambria measurements are in SVG units at 7pt, not em advances.
@@ -63,10 +64,15 @@ module Ea
       CARLITO_GDI_WIDTHS = JSON.parse(File.read(
                                         File.expand_path("carlito_gdi_widths.json", __dir__)
                                       )).fetch("widths").freeze
+      # Source Sans Pro design advances (em) per style, extracted from the
+      # TTF hmtx tables; summed after the same per-glyph GDI quantization.
+      SOURCE_SANS_PRO_ADVANCES = JSON.parse(File.read(
+                                              File.expand_path("source_sans_pro_advances.json", __dir__)
+                                            )).fetch("advance").freeze
       private_constant :CAMBRIA_7_REGULAR_WIDTHS, :CAMBRIA_7_STYLED_WIDTHS,
                        :CAMBRIA_7_GUILLEMET_PAIR_WIDTH, :VERTICAL_METRICS,
                        :CJK_FALLBACK_WIDTHS, :CJK_FALLBACK_FAMILIES,
-                       :CARLITO_GDI_WIDTHS
+                       :CARLITO_GDI_WIDTHS, :SOURCE_SANS_PRO_ADVANCES
 
       # Advance used for codepoints missing from the tables.
       DEFAULT_ADVANCE = 0.25
@@ -234,7 +240,7 @@ module Ea
 
       # Families whose EA driver quantizes per-glyph advances
       # (fitted from published textLengths).
-      GDI_HEIGHT_FAMILIES = %w[Carlito Arial].freeze
+      GDI_HEIGHT_FAMILIES = ["Carlito", "Arial", "Source Sans Pro"].freeze
 
       def supported_family?(family)
         !resolve_family(family).nil?
@@ -276,7 +282,10 @@ module Ea
 
       def table_for(family, weight, style)
         style = STYLE_KEYS.fetch([bold?(weight), italic?(style)], :regular).to_s
-        data["advance"].fetch(resolve_family(family), {}).fetch(style, {})
+        resolved = resolve_family(family)
+        return SOURCE_SANS_PRO_ADVANCES.fetch(style) if resolved == "Source Sans Pro"
+
+        data["advance"].fetch(resolved, {}).fetch(style, {})
       end
 
       def data

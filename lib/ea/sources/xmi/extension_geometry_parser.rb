@@ -38,8 +38,9 @@ module Ea
         end
 
         # EA's Path= field uses the format `x1:y1$x2:y2$...` where
-        # each pair is a bend point. Coordinates are absolute pixel
-        # positions on the diagram canvas.
+        # each pair is a bend point. EA stores Y negated (as in QEA
+        # t_diagramlinks.Path); the result uses screen-positive Y,
+        # like element bounds.
         def parse_bend_path(raw)
           return [] if raw.nil? || raw.empty?
 
@@ -49,7 +50,7 @@ module Ea
             x_str, y_str = pair.split(":", 2)
             x = int(x_str)
             y = int(y_str)
-            [x, y] if x && y
+            [x, -y] if x && y
           end
         end
 
@@ -72,7 +73,7 @@ module Ea
         end
 
         def extract_label_boxes(geometry_string)
-          geometry_string.to_s.scan(/\$?([A-Z]{3})=((?:[A-Za-z]{1,4}=-?\d+:)+)/).each_with_object({}) do |(key, body), acc|
+          geometry_string.to_s.scan(/\$?([A-Z]{3})=((?:[A-Za-z]{1,4}=-?\d+:?)+)/).each_with_object({}) do |(key, body), acc|
             sym = key.downcase.to_sym
             next unless LABEL_BOX_KEYS.include?(sym)
             next if body.nil? || body.empty?
@@ -98,6 +99,7 @@ module Ea
             italic: hash["ITA"] == 1,
             underline: hash["UND"] == 1,
             hidden: hash["HDN"] == 1,
+            color: hash["CLR"],
             align: hash["ALN"],
             direction: hash["DIR"],
             rotation: hash["ROT"]
@@ -114,7 +116,7 @@ module Ea
 
         LabelBox = Struct.new(
           :cx, :cy, :ox, :oy,
-          :bold, :italic, :underline, :hidden,
+          :bold, :italic, :underline, :hidden, :color,
           :align, :direction, :rotation,
           keyword_init: true
         )

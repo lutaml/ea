@@ -9,6 +9,8 @@ module Ea
       # SOID/EOID, EDGE, label boxes) when present. Falls back to
       # the UML-DI owned_element bounds otherwise.
       class DiagramBuilder
+        autoload :UmldiEdges, "ea/sources/xmi/diagram_builder/umldi_edges"
+
         attr_reader :root, :xmi_path
 
         def initialize(root, xmi_path = nil)
@@ -53,6 +55,7 @@ module Ea
             bounds: canvas_bounds(placed_elements),
             style: style_for(ext_diagram),
             style_ex: style_ex_for(ext_diagram),
+            show_notes: style_ex_for(ext_diagram).to_s.include?("ShowNotes=1"),
             elements: build_elements(placed_elements, id, umldi_keywords),
             connectors: build_connectors(placed_connectors,
                                           placed_elements, id),
@@ -144,20 +147,23 @@ module Ea
             acc[pe.style.duid] = pe if pe.style.duid
           end
 
-          placed_connectors.map { |p| build_connector(p, by_duid, owner_id) }
+          placed_connectors.each_with_index.map do |placed, index|
+            build_connector(placed, by_duid, owner_id, index)
+          end
         end
 
-        def build_connector(placed, by_duid, owner_id)
+        def build_connector(placed, by_duid, owner_id, rank)
           geom = placed.geometry
           style = placed.style
           source = by_duid[style.soid]
           target = by_duid[style.eoid]
-          waypoints = compute_waypoints(geom, source, target)
           ext_meta = connector_meta(placed.subject)
+          route = connector_route(placed, source, target, owner_id, ext_meta[:ea_type])
           Ea::Model::DiagramConnector.new(
             id: IdNormalizer.synthetic_id(owner_id, "conn", placed.subject),
             diagram_id: owner_id,
             relationship_ref: placed.subject,
+            paint_order: [rank],
             source_duid: style.soid,
             target_duid: style.eoid,
             source_element_ref: source && synthetic_element_id(owner_id, source),
@@ -166,8 +172,8 @@ module Ea
             target_edge: geom.edge,
             connector_type: ext_meta[:ea_type],
             direction: ext_meta[:direction],
-            waypoints: waypoints,
-            style: {},
+            waypoints: route[:waypoints],
+            style: route[:style],
             line_color: style.color,
             line_width: style.line_width,
             hidden: style.hidden,
@@ -211,10 +217,34 @@ module Ea
           IdNormalizer.synthetic_id(owner_id, "elem", placed.subject)
         end
 
-        def compute_waypoints(geom, source, target)
+        def connector_route(placed, source, target, owner_id, type)
+          native = umldi_waypoints(owner_id, placed) if placed.geometry.bend_points.to_a.empty?
+          points = native || compute_waypoints(placed.geometry, source, target,
+                                               style: placed.style, connector_type: type)
+          native ||= umldi_waypoints(owner_id, placed) if points.empty?
+          { waypoints: native || points, style: native ? { umldi_route: true } : {} }
+        end
+
+        # EA's unique exported edge supplies bendless routes and recovers
+        # routes whose placement endpoints cannot be resolved.
+        def umldi_waypoints(diagram_id, placed)
+          return unless xmi_path
+
+          route = umldi_edges.route_for(diagram_id, placed.subject)
+          route&.map { |x, y| Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y)) }
+        end
+
+        def umldi_edges
+          @umldi_edges ||= UmldiEdges.new(xmi_path)
+        end
+
+        def compute_waypoints(geom, source, target, style:, connector_type:)
           src_bounds = bounds_from_placed(source)
           tgt_bounds = bounds_from_placed(target)
           return [] unless src_bounds && tgt_bounds
+
+          stored = stored_route(geom, style, connector_type, src_bounds, tgt_bounds)
+          return stored if stored
 
           router = Ea::Svg::ConnectorRouter.new(
             source_bounds: src_bounds,
@@ -227,6 +257,27 @@ module Ea
           router.waypoints.map do |x, y|
             Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y))
           end
+        end
+
+        # Stored bends are routed by StoredRoute where a QEA rule claims
+        # them; anything else keeps the generic router.
+        def stored_route(geom, style, connector_type, src_bounds, tgt_bounds)
+          offsets = { source: [geom.sx, geom.sy], target: [geom.ex, geom.ey] }
+          points = StoredRoute.new.waypoints(
+            link: StoredRoute::Link.new(style.raw, geom.path.to_s.tr("$", ";"), offset_geometry(geom)),
+            connector_type: connector_type, source: src_bounds, target: tgt_bounds,
+            bends: geom.bend_points.to_a, offsets: offsets, edge: geom.edge
+          )
+          return unless points
+
+          points.map do |x, y|
+            Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y))
+          end
+        end
+
+        def offset_geometry(geom)
+          { "SX" => geom.sx, "SY" => geom.sy, "EX" => geom.ex, "EY" => geom.ey }
+            .filter_map { |key, value| "#{key}=#{value};" if value }.join
         end
 
         def bounds_from_placed(placed)
@@ -264,12 +315,16 @@ module Ea
 
           label_boxes.transform_values do |box|
             {
-              "cx" => box.cx, "cy" => box.cy,
               "ox" => box.ox, "oy" => box.oy,
+              "cx" => box.cx, "cy" => box.cy,
+              "hidden" => box.hidden,
               "bold" => box.bold,
               "italic" => box.italic,
               "underline" => box.underline,
-              "align" => box.align
+              "color" => box.color,
+              "alignment" => box.align,
+              "direction" => box.direction,
+              "rotation" => box.rotation
             }
           end
         end

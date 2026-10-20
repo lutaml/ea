@@ -54,12 +54,14 @@ module Ea
           #   end_kind   - :source or :target
           #   heading    - [dx, dy] of the first leg leaving the anchor
           #   source_bounds - effective drawn source outline, in anchor coordinates
+          #   target_face - exact drawn target dock face when it leads the emitted leg
           #   bend       - first bend of a saved descending vertical stair
           #   stored_labels - the connector has stored label boxes at
           #                   either end; false keeps the opposite-end
           #                   fallback
           def texts(text_box:, mult_box:, anchor:, connector:, end_kind:,
-                    tree: false, heading: nil, stored_labels: false, bend: nil, source_bounds: nil)
+                    tree: false, heading: nil, stored_labels: false, bend: nil, source_bounds: nil,
+                    target_face: nil)
             from_property, role, mult = role_and_multiplicity(connector, end_kind)
             if role_empty?(role) && mult_empty?(mult)
               other_from_prop, other_role, other_mult = role_and_multiplicity(connector,
@@ -114,13 +116,23 @@ module Ea
                          target_diagonal_property_role(connector, heading, anchor, text_box, role) ||
                          target_vertical_role(connector, heading, anchor, text_box, role) ||
                          target_rightward_role(heading, anchor, text_box, role) || text_pos
+              if horizontal_aligned_target_baseline?(connector, heading, text_box, role)
+                text_pos = [text_pos[0], seat_corner(anchor, text_box)[1] - 7]
+              end
+              face_multiplicity = if target_left_face_multiplicity?(connector, heading, mult_box, mult,
+                                                                    target_face)
+                                    directional_multiplicity(:left, anchor, mult_box, mult)
+                                  end
               mult_pos = target_multiplicity_seat(connector, heading, anchor, mult_box) ||
-                         target_horizontal_multiplicity(heading, anchor, mult_box, mult) || mult_pos
+                         face_multiplicity || target_horizontal_multiplicity(heading, anchor, mult_box, mult) ||
+                         mult_pos
             end
 
             if end_kind == :source
               text_pos = source_top_property_role(connector, heading, anchor, text_box, role) ||
                          source_bottom_property_role(connector, heading, anchor, text_box, role) || text_pos
+              mult_pos = source_top_property_multiplicity(connector, heading, anchor,
+                                                          [text_box, mult_box], mult) || mult_pos
               if external_upward_property_source?(connector, heading, anchor, text_box, source_bounds)
                 text_pos = external_upward_property_role(anchor, role) || text_pos
               end
@@ -142,6 +154,23 @@ module Ea
           end
 
           private
+
+          # ALN2 single-line target roles retain their horizontal placement
+          # and use the saved corner's baseline on a straight stored ray.
+          def horizontal_aligned_target_baseline?(connector, heading, box, role)
+            return false unless heading && heading[1].zero? && !heading[0].zero?
+            return false unless saved_target_ray?(connector) && !role_empty?(role)
+            return false unless connector_source_dest_stereotype(connector, :target).to_s.empty?
+
+            aligned_target_baseline_box?(box)
+          end
+
+          def aligned_target_baseline_box?(box)
+            return false unless seat_font? && font_weight == 400 && font_style == "normal"
+            return false unless box && box["alignment"] == 2 && [13, 14].include?(box["cy"])
+
+            cambria_box?(box.merge("alignment" => 0))
+          end
 
           def plain_leftward_target_role(connector, heading, anchor, box, role)
             return nil unless heading && heading[0].negative? && heading[1].zero?
@@ -339,12 +368,25 @@ module Ea
           # EDGE=1 certifies the top dock independently of the clipped ray's
           # heading. An absent source box uses the upward Property seat.
           def source_top_property_role(connector, heading, anchor, box, role)
-            return nil unless source_seat?(:source, heading) && heading[0].negative? && heading[1].positive?
-            return nil unless zero_source_property_box?(box)
-
-            return nil unless source_top_property_route?(connector.style.to_h)
+            return nil unless source_top_property_box?(connector, heading, box)
 
             source_property_seat(connector, :up, anchor, box, role)
+          end
+
+          def source_top_property_multiplicity(connector, heading, anchor, boxes, mult)
+            return nil if mult_empty?(mult)
+
+            role_box, mult_box = boxes
+            return nil unless source_top_property_box?(connector, heading, role_box)
+            return nil unless source_top_property_box?(connector, heading, mult_box)
+
+            mult_seat(:up, anchor, mult_box)
+          end
+
+          def source_top_property_box?(connector, heading, box)
+            source_seat?(:source, heading) && heading[0].negative? && heading[1].positive? &&
+              zero_source_property_box?(box) && source_top_property_route?(connector.style.to_h) &&
+              source_property_seat?(connector, :up, box)
           end
 
           # A persisted origin above the drawn source outline keeps the
@@ -697,9 +739,19 @@ module Ea
           def target_horizontal_multiplicity(heading, anchor, box, mult)
             return nil unless seat_font? && heading && heading[1].zero? && !heading[0].zero?
             return nil if mult_empty?(mult)
+
             return directional_multiplicity(:left, anchor, box, mult) if heading[0].negative?
 
             mult_seat(:right, anchor, box)
+          end
+
+          def target_left_face_multiplicity?(connector, heading, box, mult, target_face)
+            seat_font? && !mult_empty?(mult) && property_label?(connector, :target) && cambria_box?(box) &&
+              stored_offsets_zero?(box) && target_left_face_heading?(heading, target_face)
+          end
+
+          def target_left_face_heading?(heading, target_face)
+            heading && !heading[1].zero? && heading[0].negative? && target_face == [-1, 0]
           end
 
           def target_multiplicity_seat(connector, heading, anchor, box)
