@@ -8,9 +8,9 @@ RSpec.describe "Trailing compartment font context" do
   it "retains the native point unit on simple.qea diagram2 tagged values" do
     nodes = trailing_tag_public_nodes
 
-    expect(nodes.map(&:text)).to eq(["tags", "noPropertyType = false", "isCollection = false"])
+    expect(nodes.map(&:text)).to eq(["tags", "isCollection = false", "noPropertyType = false"])
     expect(nodes.map { |node| node["style"] }).to all(include("font-family:Cambria;", "font-size:7pt;"))
-    expect(nodes.map { |node| node["textLength"].to_i }).to eq([17, 101, 80])
+    expect(nodes.map { |node| node["textLength"].to_i }).to eq([17, 80, 101])
   end
 
   it "retains the source logical height in tag rows and their italic caption" do
