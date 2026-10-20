@@ -25,6 +25,7 @@ module Ea
       autoload :RelationshipBuilder, "ea/sources/xmi/relationship_builder"
       autoload :AnnotationBuilder, "ea/sources/xmi/annotation_builder"
       autoload :TagBuilder, "ea/sources/xmi/tag_builder"
+      autoload :LegendBuilder, "ea/sources/xmi/legend_builder"
       autoload :NoteBuilder, "ea/sources/xmi/note_builder"
       autoload :StereotypeBuilder, "ea/sources/xmi/stereotype_builder"
       autoload :DiagramBuilder, "ea/sources/xmi/diagram_builder"
