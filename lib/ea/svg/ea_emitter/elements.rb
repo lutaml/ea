@@ -61,6 +61,8 @@ module Ea
           return [] unless context
 
           record_drawn_bounds(element, context)
+          return [] if element.style&.fetch("connector_proxy", false)
+
           Compartment.render_all(context).compact
         end
 

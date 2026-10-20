@@ -24,11 +24,11 @@ module Ea
 
         def build_all
           relationships = []
-          walk(root.model) do |element|
-            next unless RelationshipTypeMap.relationship_type?(element.type)
-
-            rel = build_one(element)
-            relationships << rel if rel
+          root.model.packaged_element.each do |top|
+            walk(top) do |element|
+              relationships << build_one(element) if RelationshipTypeMap.relationship_type?(element.type)
+              relationships.concat(owned_generalizations(element))
+            end
           end
           relationships + package_import_relationships(relationships)
         end
@@ -69,6 +69,17 @@ module Ea
         def walk(element, &block)
           yield element if block
           element.packaged_element.each { |inner| walk(inner, &block) }
+          element.nested_classifier.each { |inner| walk(inner, &block) }
+        end
+
+        def owned_generalizations(element)
+          element.generalization.map do |generalization|
+            Ea::Model::Generalization.new(
+              id: IdNormalizer.from_xmi_id(generalization.id),
+              specific_id: IdNormalizer.from_xmi_id(element.id),
+              general_id: IdNormalizer.from_xmi_id(generalization.general)
+            )
+          end
         end
 
         def common_args(element)

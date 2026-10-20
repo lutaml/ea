@@ -897,8 +897,7 @@ module Ea
             # relationship guid), falling back to the property index
             # lookup by association source/target id.
             if connector&.relationship_ref
-              placed = placed_classifier_id(association, end_kind)
-              prop = assoc_end_property(placed, connector.relationship_ref)
+              prop = placed_end_property(association, end_kind, connector.relationship_ref)
               return prop if prop
             end
 
@@ -910,13 +909,27 @@ module Ea
             fallback_property_lookup(id)
           end
 
+          def placed_end_property(association, end_kind, relationship_ref)
+            placed = placed_classifier_id(association, end_kind)
+            property = assoc_end_property(placed, relationship_ref)
+            property unless property && opposite_role_property?(association, end_kind, property)
+          end
+
+          # A UML attribute belongs to the classifier opposite its role.
+          # Do not draw that same role again at its anonymous owner end.
+          def opposite_role_property?(association, end_kind, property)
+            own = end_kind == :source ? association.source_role_name : association.target_role_name
+            other = end_kind == :source ? association.target_role_name : association.source_role_name
+            role_empty?(own) && other == property.name
+          end
+
           def placed_classifier_id(association, end_kind)
             end_kind == :source ? association.source_id : association.target_id
           end
 
-          # Find the synthesized association-end property on the
-          # placed classifier whose association_id matches the
-          # connector's relationship reference.
+          # Named association-end properties carry typed labels. Unnamed
+          # XMI member-end references defer to the saved association role
+          # and cardinality; direct property-id endpoints are resolved above.
           def assoc_end_property(classifier_id, relationship_ref)
             return nil unless classifier_id
 
@@ -924,7 +937,7 @@ module Ea
             return nil unless classifier.is_a?(Ea::Model::Classifier)
 
             (classifier.properties || []).find do |p|
-              p.association_id == relationship_ref
+              p.association_id == relationship_ref && !p.name.to_s.empty?
             end
           end
 

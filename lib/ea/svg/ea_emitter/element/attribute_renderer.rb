@@ -90,8 +90,8 @@ module Ea
           end
 
           # Builds attribute display lines from classifier properties,
-          # hiding properties that are navigable association ends
-          # (those are rendered as connector lines).
+          # hiding association-end properties even when their connectors
+          # are not drawn on the diagram.
           #
           # When a property carries a stereotype (e.g. «voidable»),
           # EA renders the stereotype label as a separate line above
@@ -171,19 +171,11 @@ module Ea
           end
           private_class_method :build_text
 
-          # Association-end properties render in the box only when
-          # their association is NOT drawn on the diagram (drawn ones
-          # render as connector role labels). exclude_association_ids
-          # carries the diagram's drawn association ids; nil preserves
-          # the legacy hide-all behavior.
-          def self.displayable_properties(classifier, exclude_association_ids)
-            return nil unless classifier.properties
-
-            classifier.properties.reject do |prop|
-              prop.association_id &&
-                (exclude_association_ids.nil? ||
-                 exclude_association_ids.include?(prop.association_id))
-            end
+          # Association ends remain in the model for connector role labels,
+          # but never become class-compartment attribute rows. The public
+          # exclude_association_ids keyword remains accepted for callers.
+          def self.displayable_properties(classifier, _exclude_association_ids)
+            classifier.properties&.reject(&:association_id)
           end
           private_class_method :displayable_properties
 

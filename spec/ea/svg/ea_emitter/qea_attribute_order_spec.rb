@@ -33,7 +33,7 @@ RSpec.describe "QEA attribute display ordering" do
     expect(rendered_attribute_names(document)).to eq(["alpha: String", "zulu: String"])
   end
 
-  it "keeps association end fallback alphabetical after source attributes" do
+  it "excludes undrawn association ends while preserving source attribute order" do
     document = qea_attribute_order_document([["zulu", 0], ["alpha", 1]])
     classifier = document.index_by_id.fetch("class")
     classifier.properties += [
@@ -43,6 +43,6 @@ RSpec.describe "QEA attribute display ordering" do
     lines = Ea::Svg::EaEmitter::Element::AttributeRenderer.lines_for(
       classifier, exclude_association_ids: [], stored_order: true
     )
-    expect(lines).to eq(["+ zulu: String", "+ alpha: String", "+ aEnd: String", "+ zEnd: String"])
+    expect(lines).to eq(["+ zulu: String", "+ alpha: String"])
   end
 end
