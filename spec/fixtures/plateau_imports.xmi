@@ -1,0 +1,394 @@
+<xmi:XMI xmlns:ns2="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:xmi="http://www.omg.org/spec/XMI/20131001">
+  <uml:Model xmi:type="uml:Model" name="EA_Model">
+    <packagedElement xmi:type="uml:Package" xmi:id="EAPK_D0BD0C75_6B1B_4575_9419_A7D39C74DB71" name="3D都市モデル">
+      <elementImport xmi:type="uml:ElementImport" xmi:id="EAID_8F6BFB6E_4246_46f5_A6B7_A5DAB33B520F" importedElement="EAPK_9E3ECCD9_5472_45ce_BE7A_BC004A52B63C" />
+      <elementImport xmi:type="uml:ElementImport" xmi:id="EAID_C928AE98_62FD_487e_9CDA_37875A5449D4" importedElement="EAPK_409D5E16_E64D_4987_8890_CE13E57F5C50" />
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="EAPK_751CA17F_F2ED_47a4_9F56_8036104573A6" name="都市計画データ">
+      <packageImport xmi:type="uml:PackageImport" xmi:id="EAID_558B94E9_0C50_473d_814F_6D95E8095984" importedPackage="EAPK_9E3ECCD9_5472_45ce_BE7A_BC004A52B63C" />
+      <packageImport xmi:type="uml:PackageImport" xmi:id="EAID_F8BC4206_A2CD_4870_BD56_3B1C870DA9F8" importedPackage="EAPK_409D5E16_E64D_4987_8890_CE13E57F5C50" />
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="EAPK_409D5E16_E64D_4987_8890_CE13E57F5C50" name="i-UR">
+      <elementImport xmi:type="uml:ElementImport" xmi:id="EAID_604544F9_149D_40f0_80CE_FCAC7CED4532" importedElement="EAPK_9E3ECCD9_5472_45ce_BE7A_BC004A52B63C" />
+      <packageImport xmi:type="uml:PackageImport" xmi:id="EAID_7BAEBE89_B43D_46dc_971B_4803FA14CDE5" importedPackage="EAPK_939925FF_6235_4286_82FF_7392B33F305C" />
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="EAPK_9E3ECCD9_5472_45ce_BE7A_BC004A52B63C" name="CityGML2.0">
+      <packageImport xmi:type="uml:PackageImport" xmi:id="EAID_B0802E45_AF95_433a_BA7A_93EB62945730" importedPackage="EAPK_939925FF_6235_4286_82FF_7392B33F305C" />
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="EAPK_939925FF_6235_4286_82FF_7392B33F305C" name="gml" />
+    <ns2:Diagram xmi:type="umldi:UMLPackageDiagram" xmi:id="EAID_DFBB1072_8EC5_4384_8241_7EDF4B6B888B" isFrame="false" modelElement="EAPK_41E2FCE7_9854_45cf_B128_0B6A118D14A8">
+      <ownedElement xmi:type="umldi:UMLCompartmentableShape" xmi:id="EAID_DFBB1072_8EC5_4384_9419_A7D39C74DB71" modelElement="EAPK_D0BD0C75_6B1B_4575_9419_A7D39C74DB71">
+        <ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_8EC5_4384_9419_A7D39C74DB71" text="ApplicationSchema" />
+        <ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_8EC5_4384_9419_A7D39C74DB71" text="3D都市モデル" />
+        <bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_8EC5_4384_9419_A7D39C74DB71" x="365" y="60" width="154" height="90" />
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLCompartmentableShape" xmi:id="EAID_DFBB1072_8EC5_4384_8890_CE13E57F5C50" modelElement="EAPK_409D5E16_E64D_4987_8890_CE13E57F5C50">
+        <ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_8EC5_4384_8890_CE13E57F5C50" text="ApplicationSchema" />
+        <ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_8EC5_4384_8890_CE13E57F5C50" text="i-UR" />
+        <bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_8EC5_4384_8890_CE13E57F5C50" x="510" y="220" width="154" height="90" />
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLCompartmentableShape" xmi:id="EAID_DFBB1072_8EC5_4384_BE7A_BC004A52B63C" modelElement="EAPK_9E3ECCD9_5472_45ce_BE7A_BC004A52B63C">
+        <ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_8EC5_4384_BE7A_BC004A52B63C" text="ApplicationSchema" />
+        <ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_8EC5_4384_BE7A_BC004A52B63C" text="CityGML2.0" />
+        <bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_8EC5_4384_BE7A_BC004A52B63C" x="220" y="230" width="154" height="80" />
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLCompartmentableShape" xmi:id="EAID_DFBB1072_8EC5_4384_82FF_7392B33F305C" modelElement="EAPK_939925FF_6235_4286_82FF_7392B33F305C">
+        <ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_8EC5_4384_82FF_7392B33F305C" text="gml" />
+        <bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_8EC5_4384_82FF_7392B33F305C" x="382" y="411" width="140" height="90" />
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLEdge" xmi:id="EAID_DFBB1072_8EC5_4384_A6B7_A5DAB33B520F" source="EAPK_D0BD0C75_6B1B_4575_9419_A7D39C74DB71" target="EAPK_9E3ECCD9_5472_45ce_BE7A_BC004A52B63C" modelElement="EAID_8F6BFB6E_4246_46f5_A6B7_A5DAB33B520F">
+        <ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_8EC5_4384_A6B7_A5DAB33B520F" text="import">
+          <bounds xmi:type="dc:bounds" xmi:id="EAID_DBKL000000_8EC5_4384_A6B7_A5DAB33B520F" x="347" y="180" width="40" height="13" />
+        </ownedElement>
+        <waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000000_8EC5_4384_A6B7_A5DAB33B520F" x="401" y="151" />
+        <waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000001_8EC5_4384_A6B7_A5DAB33B520F" x="333" y="229" />
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLEdge" xmi:id="EAID_DFBB1072_8EC5_4384_9CDA_37875A5449D4" source="EAPK_D0BD0C75_6B1B_4575_9419_A7D39C74DB71" target="EAPK_409D5E16_E64D_4987_8890_CE13E57F5C50" modelElement="EAID_C928AE98_62FD_487e_9CDA_37875A5449D4">
+        <ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_8EC5_4384_9CDA_37875A5449D4" text="import">
+          <bounds xmi:type="dc:bounds" xmi:id="EAID_DBKL000000_8EC5_4384_9CDA_37875A5449D4" x="495" y="173" width="40" height="13" />
+        </ownedElement>
+        <waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000000_8EC5_4384_9CDA_37875A5449D4" x="483" y="151" />
+        <waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000001_8EC5_4384_9CDA_37875A5449D4" x="545" y="219" />
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLEdge" xmi:id="EAID_DFBB1072_8EC5_4384_80CE_FCAC7CED4532" source="EAPK_409D5E16_E64D_4987_8890_CE13E57F5C50" target="EAPK_9E3ECCD9_5472_45ce_BE7A_BC004A52B63C" modelElement="EAID_604544F9_149D_40f0_80CE_FCAC7CED4532">
+        <ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_8EC5_4384_80CE_FCAC7CED4532" text="import">
+          <bounds xmi:type="dc:bounds" xmi:id="EAID_DBKL000000_8EC5_4384_80CE_FCAC7CED4532" x="423" y="270" width="40" height="13" />
+        </ownedElement>
+        <waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000000_8EC5_4384_80CE_FCAC7CED4532" x="509" y="266" />
+        <waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000001_8EC5_4384_80CE_FCAC7CED4532" x="375" y="268" />
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLEdge" xmi:id="EAID_DFBB1072_8EC5_4384_971B_4803FA14CDE5" source="EAPK_409D5E16_E64D_4987_8890_CE13E57F5C50" target="EAPK_939925FF_6235_4286_82FF_7392B33F305C" modelElement="EAID_7BAEBE89_B43D_46dc_971B_4803FA14CDE5">
+        <ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_8EC5_4384_971B_4803FA14CDE5" text="import">
+          <bounds xmi:type="dc:bounds" xmi:id="EAID_DBKL000000_8EC5_4384_971B_4803FA14CDE5" x="500" y="363" width="40" height="13" />
+        </ownedElement>
+        <waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000000_8EC5_4384_971B_4803FA14CDE5" x="554" y="311" />
+        <waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000001_8EC5_4384_971B_4803FA14CDE5" x="484" y="410" />
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLEdge" xmi:id="EAID_DFBB1072_8EC5_4384_BA7A_93EB62945730" source="EAPK_9E3ECCD9_5472_45ce_BE7A_BC004A52B63C" target="EAPK_939925FF_6235_4286_82FF_7392B33F305C" modelElement="EAID_B0802E45_AF95_433a_BA7A_93EB62945730">
+        <ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_8EC5_4384_BA7A_93EB62945730" text="import">
+          <bounds xmi:type="dc:bounds" xmi:id="EAID_DBKL000000_8EC5_4384_BA7A_93EB62945730" x="353" y="363" width="40" height="13" />
+        </ownedElement>
+        <waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000000_8EC5_4384_BA7A_93EB62945730" x="331" y="311" />
+        <waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000001_8EC5_4384_BA7A_93EB62945730" x="413" y="410" />
+      </ownedElement>
+    </ns2:Diagram>
+    <ns2:Diagram xmi:type="umldi:UMLPackageDiagram" xmi:id="EAID_6481E2CC_35A6_43b0_88D4_10A667A2BC2D" isFrame="false" modelElement="EAPK_751CA17F_F2ED_47a4_9F56_8036104573A6">
+      <ownedElement xmi:type="umldi:UMLCompartmentableShape" xmi:id="EAID_6481E2CC_35A6_43b0_9F56_8036104573A6" modelElement="EAPK_751CA17F_F2ED_47a4_9F56_8036104573A6">
+        <ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_35A6_43b0_9F56_8036104573A6" text="ApplicationSchema" />
+        <ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_35A6_43b0_9F56_8036104573A6" text="都市計画データ" />
+        <bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_35A6_43b0_9F56_8036104573A6" x="420" y="70" width="133" height="80" />
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLCompartmentableShape" xmi:id="EAID_6481E2CC_35A6_43b0_8890_CE13E57F5C50" modelElement="EAPK_409D5E16_E64D_4987_8890_CE13E57F5C50">
+        <ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_35A6_43b0_8890_CE13E57F5C50" text="ApplicationSchema" />
+        <ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_35A6_43b0_8890_CE13E57F5C50" text="i-UR" />
+        <bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_35A6_43b0_8890_CE13E57F5C50" x="600" y="220" width="133" height="80" />
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLCompartmentableShape" xmi:id="EAID_6481E2CC_35A6_43b0_BE7A_BC004A52B63C" modelElement="EAPK_9E3ECCD9_5472_45ce_BE7A_BC004A52B63C">
+        <ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_35A6_43b0_BE7A_BC004A52B63C" text="ApplicationSchema" />
+        <ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_35A6_43b0_BE7A_BC004A52B63C" text="CityGML2.0" />
+        <bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_35A6_43b0_BE7A_BC004A52B63C" x="260" y="220" width="133" height="80" />
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLEdge" xmi:id="EAID_6481E2CC_35A6_43b0_814F_6D95E8095984" source="EAPK_751CA17F_F2ED_47a4_9F56_8036104573A6" target="EAPK_9E3ECCD9_5472_45ce_BE7A_BC004A52B63C" modelElement="EAID_558B94E9_0C50_473d_814F_6D95E8095984">
+        <ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_35A6_43b0_814F_6D95E8095984" text="import">
+          <bounds xmi:type="dc:bounds" xmi:id="EAID_DBKL000000_35A6_43b0_814F_6D95E8095984" x="386" y="188" width="40" height="13" />
+        </ownedElement>
+        <waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000000_35A6_43b0_814F_6D95E8095984" x="443" y="150" />
+        <waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000001_35A6_43b0_814F_6D95E8095984" x="368" y="220" />
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLEdge" xmi:id="EAID_6481E2CC_35A6_43b0_BD56_3B1C870DA9F8" source="EAPK_751CA17F_F2ED_47a4_9F56_8036104573A6" target="EAPK_409D5E16_E64D_4987_8890_CE13E57F5C50" modelElement="EAID_F8BC4206_A2CD_4870_BD56_3B1C870DA9F8">
+        <ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_35A6_43b0_BD56_3B1C870DA9F8" text="import">
+          <bounds xmi:type="dc:bounds" xmi:id="EAID_DBKL000000_35A6_43b0_BD56_3B1C870DA9F8" x="557" y="188" width="40" height="13" />
+        </ownedElement>
+        <waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000000_35A6_43b0_BD56_3B1C870DA9F8" x="534" y="150" />
+        <waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000001_35A6_43b0_BD56_3B1C870DA9F8" x="618" y="220" />
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLEdge" xmi:id="EAID_6481E2CC_35A6_43b0_80CE_FCAC7CED4532" source="EAPK_409D5E16_E64D_4987_8890_CE13E57F5C50" target="EAPK_9E3ECCD9_5472_45ce_BE7A_BC004A52B63C" modelElement="EAID_604544F9_149D_40f0_80CE_FCAC7CED4532">
+        <ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_35A6_43b0_80CE_FCAC7CED4532" text="import">
+          <bounds xmi:type="dc:bounds" xmi:id="EAID_DBKL000000_35A6_43b0_80CE_FCAC7CED4532" x="477" y="263" width="40" height="13" />
+        </ownedElement>
+        <waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000000_35A6_43b0_80CE_FCAC7CED4532" x="600" y="260" />
+        <waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000001_35A6_43b0_80CE_FCAC7CED4532" x="393" y="260" />
+      </ownedElement>
+    </ns2:Diagram>
+  </uml:Model>
+  <xmi:Extension extender="Enterprise Architect">
+    <elements />
+    <connectors>
+      <connector xmi:idref="EAID_8F6BFB6E_4246_46f5_A6B7_A5DAB33B520F">
+        <source xmi:idref="EAID_D0BD0C75_6B1B_4575_9419_A7D39C74DB71">
+          <model ea_localid="143" type="Package" name="3D都市モデル" />
+          <role visibility="Public" targetScope="instance" />
+          <type aggregation="none" containment="Unspecified" />
+          <constraints />
+          <modifiers isOrdered="false" changeable="none" isNavigable="false" />
+          <style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;" />
+          <documentation />
+          <xrefs />
+          <tags />
+        </source>
+        <target xmi:idref="EAID_9E3ECCD9_5472_45ce_BE7A_BC004A52B63C">
+          <model ea_localid="146" type="Package" name="CityGML2.0" />
+          <role visibility="Public" targetScope="instance" />
+          <type aggregation="none" containment="Unspecified" />
+          <constraints />
+          <modifiers isOrdered="false" changeable="none" isNavigable="true" />
+          <style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;" />
+          <documentation />
+          <xrefs />
+          <tags />
+        </target>
+        <model ea_localid="134" />
+        <properties ea_type="Dependency" stereotype="import" direction="Source -&gt; Destination" />
+        <documentation />
+        <appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0" />
+        <labels mb="«import»" />
+        <extendedProperties conditional="  ≪import≫" />
+        <style />
+        <xrefs value="$XREFPROP=$XID={9ABA8432-167F-4be8-8F08-C71E3ED9273D}$XID;$NAM=Stereotypes$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=import;GUID={00D80C91-B2ED-4357-8227-6AD34BC1E95B};@ENDSTEREO;$DES;$CLT={8F6BFB6E-4246-46f5-A6B7-A5DAB33B520F}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;" />
+        <tags />
+      </connector>
+      <connector xmi:idref="EAID_C928AE98_62FD_487e_9CDA_37875A5449D4">
+        <source xmi:idref="EAID_D0BD0C75_6B1B_4575_9419_A7D39C74DB71">
+          <model ea_localid="143" type="Package" name="3D都市モデル" />
+          <role visibility="Public" targetScope="instance" />
+          <type aggregation="none" containment="Unspecified" />
+          <constraints />
+          <modifiers isOrdered="false" changeable="none" isNavigable="false" />
+          <style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;" />
+          <documentation />
+          <xrefs />
+          <tags />
+        </source>
+        <target xmi:idref="EAID_409D5E16_E64D_4987_8890_CE13E57F5C50">
+          <model ea_localid="230" type="Package" name="i-UR" />
+          <role visibility="Public" targetScope="instance" />
+          <type aggregation="none" containment="Unspecified" />
+          <constraints />
+          <modifiers isOrdered="false" changeable="none" isNavigable="true" />
+          <style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;" />
+          <documentation />
+          <xrefs />
+          <tags />
+        </target>
+        <model ea_localid="135" />
+        <properties ea_type="Dependency" stereotype="import" direction="Source -&gt; Destination" />
+        <documentation />
+        <appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0" />
+        <labels mb="«import»" />
+        <extendedProperties conditional="  ≪import≫" />
+        <style />
+        <xrefs value="$XREFPROP=$XID={3B259D76-1ADE-4b9f-B435-4C9D645B621A}$XID;$NAM=Stereotypes$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=import;GUID={00D80C91-B2ED-4357-8227-6AD34BC1E95B};@ENDSTEREO;$DES;$CLT={C928AE98-62FD-487e-9CDA-37875A5449D4}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;" />
+        <tags />
+      </connector>
+      <connector xmi:idref="EAID_558B94E9_0C50_473d_814F_6D95E8095984">
+        <source xmi:idref="EAID_751CA17F_F2ED_47a4_9F56_8036104573A6">
+          <model ea_localid="350" type="Package" name="都市計画データ" />
+          <role visibility="Public" targetScope="instance" />
+          <type aggregation="none" containment="Unspecified" />
+          <constraints />
+          <modifiers isOrdered="false" changeable="none" isNavigable="false" />
+          <style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;" />
+          <documentation />
+          <xrefs />
+          <tags />
+        </source>
+        <target xmi:idref="EAID_9E3ECCD9_5472_45ce_BE7A_BC004A52B63C">
+          <model ea_localid="146" type="Package" name="CityGML2.0" />
+          <role visibility="Public" targetScope="instance" />
+          <type aggregation="none" containment="Unspecified" />
+          <constraints />
+          <modifiers isOrdered="false" changeable="none" isNavigable="true" />
+          <style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;" />
+          <documentation />
+          <xrefs />
+          <tags />
+        </target>
+        <model ea_localid="269" />
+        <properties ea_type="Package" stereotype="import" direction="Source -&gt; Destination" />
+        <documentation />
+        <appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0" />
+        <labels mb="«import»" />
+        <extendedProperties conditional="  ≪import≫" virtualInheritance="0" />
+        <style />
+        <xrefs value="$XREFPROP=$XID={0FCC3645-F41F-4594-89B6-7460B60D0E06}$XID;$NAM=Stereotypes$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=import;GUID={6923D7BC-F80E-4fdb-9A9A-1667296211CC};@ENDSTEREO;$DES;$CLT={558B94E9-0C50-473d-814F-6D95E8095984}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;" />
+        <tags />
+      </connector>
+      <connector xmi:idref="EAID_F8BC4206_A2CD_4870_BD56_3B1C870DA9F8">
+        <source xmi:idref="EAID_751CA17F_F2ED_47a4_9F56_8036104573A6">
+          <model ea_localid="350" type="Package" name="都市計画データ" />
+          <role visibility="Public" targetScope="instance" />
+          <type aggregation="none" containment="Unspecified" />
+          <constraints />
+          <modifiers isOrdered="false" changeable="none" isNavigable="false" />
+          <style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;" />
+          <documentation />
+          <xrefs />
+          <tags />
+        </source>
+        <target xmi:idref="EAID_409D5E16_E64D_4987_8890_CE13E57F5C50">
+          <model ea_localid="230" type="Package" name="i-UR" />
+          <role visibility="Public" targetScope="instance" />
+          <type aggregation="none" containment="Unspecified" />
+          <constraints />
+          <modifiers isOrdered="false" changeable="none" isNavigable="true" />
+          <style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;" />
+          <documentation />
+          <xrefs />
+          <tags />
+        </target>
+        <model ea_localid="449" />
+        <properties ea_type="Package" stereotype="import" direction="Source -&gt; Destination" />
+        <documentation />
+        <appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0" />
+        <labels mb="«import»" />
+        <extendedProperties conditional="  ≪import≫" virtualInheritance="0" />
+        <style />
+        <xrefs value="$XREFPROP=$XID={3DEF2421-205B-4b11-B8A1-7445454C969E}$XID;$NAM=Stereotypes$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=import;GUID={6923D7BC-F80E-4fdb-9A9A-1667296211CC};@ENDSTEREO;$DES;$CLT={F8BC4206-A2CD-4870-BD56-3B1C870DA9F8}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;" />
+        <tags />
+      </connector>
+      <connector xmi:idref="EAID_604544F9_149D_40f0_80CE_FCAC7CED4532">
+        <source xmi:idref="EAID_409D5E16_E64D_4987_8890_CE13E57F5C50">
+          <model ea_localid="230" type="Package" name="i-UR" />
+          <role visibility="Public" targetScope="instance" />
+          <type aggregation="none" containment="Unspecified" />
+          <constraints />
+          <modifiers isOrdered="false" changeable="none" isNavigable="false" />
+          <style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;" />
+          <documentation />
+          <xrefs />
+          <tags />
+        </source>
+        <target xmi:idref="EAID_9E3ECCD9_5472_45ce_BE7A_BC004A52B63C">
+          <model ea_localid="146" type="Package" name="CityGML2.0" />
+          <role visibility="Public" targetScope="instance" />
+          <type aggregation="none" containment="Unspecified" />
+          <constraints />
+          <modifiers isOrdered="false" changeable="none" isNavigable="true" />
+          <style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;" />
+          <documentation />
+          <xrefs />
+          <tags />
+        </target>
+        <model ea_localid="136" />
+        <properties ea_type="Dependency" stereotype="import" direction="Source -&gt; Destination" />
+        <documentation />
+        <appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0" />
+        <labels mb="«import»" />
+        <extendedProperties conditional="  ≪import≫" />
+        <style />
+        <xrefs value="$XREFPROP=$XID={3552BA94-4D47-4ec1-A6C1-57371411D99B}$XID;$NAM=Stereotypes$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=import;GUID={00D80C91-B2ED-4357-8227-6AD34BC1E95B};@ENDSTEREO;$DES;$CLT={604544F9-149D-40f0-80CE-FCAC7CED4532}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;" />
+        <tags />
+      </connector>
+      <connector xmi:idref="EAID_7BAEBE89_B43D_46dc_971B_4803FA14CDE5">
+        <source xmi:idref="EAID_409D5E16_E64D_4987_8890_CE13E57F5C50">
+          <model ea_localid="230" type="Package" name="i-UR" />
+          <role visibility="Public" targetScope="instance" />
+          <type aggregation="none" containment="Unspecified" />
+          <constraints />
+          <modifiers isOrdered="false" changeable="none" isNavigable="false" />
+          <style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;" />
+          <documentation />
+          <xrefs />
+          <tags />
+        </source>
+        <target xmi:idref="EAID_939925FF_6235_4286_82FF_7392B33F305C">
+          <model ea_localid="566" type="Package" name="gml" />
+          <role visibility="Public" targetScope="instance" />
+          <type aggregation="none" containment="Unspecified" />
+          <constraints />
+          <modifiers isOrdered="false" changeable="none" isNavigable="true" />
+          <style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;" />
+          <documentation />
+          <xrefs />
+          <tags />
+        </target>
+        <model ea_localid="671" />
+        <properties ea_type="Package" stereotype="import" direction="Source -&gt; Destination" />
+        <documentation />
+        <appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0" />
+        <labels mb="«import»" />
+        <extendedProperties conditional="  ≪import≫" virtualInheritance="0" />
+        <style />
+        <xrefs value="$XREFPROP=$XID={0E3CB4E1-6E51-41ea-81D2-3B44919F7AC4}$XID;$NAM=Stereotypes$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=import;GUID={6923D7BC-F80E-4fdb-9A9A-1667296211CC};@ENDSTEREO;$DES;$CLT={7BAEBE89-B43D-46dc-971B-4803FA14CDE5}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;" />
+        <tags />
+      </connector>
+      <connector xmi:idref="EAID_B0802E45_AF95_433a_BA7A_93EB62945730">
+        <source xmi:idref="EAID_9E3ECCD9_5472_45ce_BE7A_BC004A52B63C">
+          <model ea_localid="146" type="Package" name="CityGML2.0" />
+          <role visibility="Public" targetScope="instance" />
+          <type aggregation="none" containment="Unspecified" />
+          <constraints />
+          <modifiers isOrdered="false" changeable="none" isNavigable="false" />
+          <style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;" />
+          <documentation />
+          <xrefs />
+          <tags />
+        </source>
+        <target xmi:idref="EAID_939925FF_6235_4286_82FF_7392B33F305C">
+          <model ea_localid="566" type="Package" name="gml" />
+          <role visibility="Public" targetScope="instance" />
+          <type aggregation="none" containment="Unspecified" />
+          <constraints />
+          <modifiers isOrdered="false" changeable="none" isNavigable="true" />
+          <style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;" />
+          <documentation />
+          <xrefs />
+          <tags />
+        </target>
+        <model ea_localid="670" />
+        <properties ea_type="Package" stereotype="import" direction="Source -&gt; Destination" />
+        <documentation />
+        <appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0" />
+        <labels mb="«import»" />
+        <extendedProperties conditional="  ≪import≫" virtualInheritance="0" />
+        <style />
+        <xrefs value="$XREFPROP=$XID={1B1958E5-918D-42be-9FA8-39B3E7830AC4}$XID;$NAM=Stereotypes$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=import;GUID={6923D7BC-F80E-4fdb-9A9A-1667296211CC};@ENDSTEREO;$DES;$CLT={B0802E45-AF95-433a-BA7A-93EB62945730}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;" />
+        <tags />
+      </connector>
+    </connectors>
+    <diagrams>
+      <diagram xmi:id="EAID_DFBB1072_8EC5_4384_8241_7EDF4B6B888B">
+        <model package="EAPK_41E2FCE7_9854_45cf_B128_0B6A118D14A8" localID="123" owner="EAPK_41E2FCE7_9854_45cf_B128_0B6A118D14A8" tpos="1" />
+        <properties name="3D都市モデル応用スキーマと他のスキーマとの関係" type="Package" />
+        <project author="048827" version="1.0" created="2020-07-14 13:47:55" modified="2025-01-19 23:24:12" />
+        <style1 value="ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;Border=1;HighlightForeign=0;PackageContents=0;SequenceNotes=0;ScalePrintImage=0;PPgs.cx=0;PPgs.cy=0;DocSize.cx=795;DocSize.cy=1138;ShowDetails=0;Orientation=P;Zoom=100;ShowTags=0;OpParams=1;VisibleAttributeDetail=0;ShowOpRetType=1;ShowIcons=1;CollabNums=0;HideProps=0;ShowReqs=0;ShowCons=0;PaperSize=9;HideParents=0;UseAlias=0;HideAtts=0;HideOps=0;HideStereo=0;HideElemStereo=0;ShowTests=0;ShowMaint=0;ConnectorNotation=UML 2.1;ExplicitNavigability=0;ShowShape=1;AllDockable=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;ShowNotes=0;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;" />
+        <style2 value="ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;KanbanActive=0;MatrixLineWidth=1;MatrixLineClr=0;MatrixLocked=0;TConnectorNotation=UML 2.1;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;MDGDgm=;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;SuppressedCompartments=;Theme=:119;SaveTag=2B15B83B;" />
+        <swimlanes value="locked=false;orientation=0;width=0;inbar=false;names=false;color=-1;bold=false;fcol=0;tcol=-1;ofCol=-1;ufCol=-1;hl=0;ufh=0;hh=0;cls=0;bw=0;hli=0;bro=0;SwimlaneFont=lfh:-13,lfw:0,lfi:0,lfu:0,lfs:0,lfface:Calibri,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;" />
+        <matrixitems value="locked=false;matrixactive=false;swimlanesactive=true;kanbanactive=false;width=1;clrLine=0;" />
+        <extendedProperties />
+        <persistentstyle value="DGS=On=0:CNT=8:W=120:H=40:SG=0:SGH=0:AEB=0:;AR=0;DCL=0;Swimlanes=locked=false;orientation=0;width=0;inbar=false;names=false;color=-1;bold=false;fcol=0;tcol=-1;ofCol=-1;ufCol=-1;hl=0;ufh=0;hh=0;cls=0;bw=0;hli=0;bro=0;SwimlaneFont=lfh:-13,lfw:0,lfi:0,lfu:0,lfs:0,lfface:Calibri,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;;" />
+        <xrefs />
+        <elements>
+          <element geometry="Left=382;Top=411;Right=522;Bottom=501;imgL=382;imgT=411;imgR=522;imgB=501;" subject="EAID_939925FF_6235_4286_82FF_7392B33F305C" seqno="1" style=" DUID=35ACFD14;NSL=0;LCol=-1;bold=0;black=0;italic=0;ul=0;charset=0;BCol=13434828;fontsz=100;BFol=0;font=Yu Gothic UI;pitch=50;LWth=2;" />
+          <element geometry="Left=220;Top=230;Right=374;Bottom=310;imgL=220;imgT=230;imgR=374;imgB=310;" subject="EAID_9E3ECCD9_5472_45ce_BE7A_BC004A52B63C" seqno="2" style=" DUID=5A799530;NSL=0;bold=0;black=0;italic=0;ul=0;charset=0;font=Yu Gothic UI;fontsz=100;pitch=50;BFol=0;LCol=-1;BCol=13434879;LWth=2;" />
+          <element geometry="Left=510;Top=220;Right=664;Bottom=310;imgL=510;imgT=220;imgR=664;imgB=310;" subject="EAID_409D5E16_E64D_4987_8890_CE13E57F5C50" seqno="3" style=" DUID=D86F4350;NSL=0;LCol=-1;bold=0;black=0;italic=0;ul=0;charset=0;BCol=16764159;font=Yu Gothic UI;fontsz=100;pitch=50;BFol=0;LWth=2;" />
+          <element geometry="Left=365;Top=60;Right=519;Bottom=150;imgL=365;imgT=60;imgR=519;imgB=150;" subject="EAID_D0BD0C75_6B1B_4575_9419_A7D39C74DB71" seqno="4" style=" DUID=9A9464A6;BCol=16777215;font=Yu Gothic UI;fontsz=100;bold=0;black=0;italic=0;ul=0;charset=0;pitch=50;BFol=0;LWth=2;" />
+          <element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=CX=54:CY=18:OX=-1:OY=-13:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=0:DIR=0:ROT=0;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_8F6BFB6E_4246_46f5_A6B7_A5DAB33B520F" style="Mode=3;EOID=5A799530;SOID=9A9464A6;Color=0;LWidth=0;Hidden=0;" />
+          <element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=CX=54:CY=18:OX=0:OY=-15:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=0:DIR=0:ROT=0;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_C928AE98_62FD_487e_9CDA_37875A5449D4" style="Mode=3;EOID=D86F4350;SOID=9A9464A6;Color=-1;LWidth=0;Hidden=0;" />
+          <element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=4;$LLB=;LLT=;LMT=;LMB=CX=54:CY=18:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=0:DIR=0:ROT=0;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_604544F9_149D_40f0_80CE_FCAC7CED4532" style="Mode=3;EOID=5A799530;SOID=D86F4350;Color=-1;LWidth=0;Hidden=0;" />
+          <element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=CX=54:CY=18:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_7BAEBE89_B43D_46dc_971B_4803FA14CDE5" style="Mode=3;EOID=35ACFD14;SOID=D86F4350;Color=-1;LWidth=0;Hidden=0;" />
+          <element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=CX=54:CY=18:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_B0802E45_AF95_433a_BA7A_93EB62945730" style="Mode=3;EOID=35ACFD14;SOID=5A799530;Color=-1;LWidth=0;Hidden=0;" />
+        </elements>
+      </diagram>
+      <diagram xmi:id="EAID_6481E2CC_35A6_43b0_88D4_10A667A2BC2D">
+        <model package="EAPK_751CA17F_F2ED_47a4_9F56_8036104573A6" localID="78" owner="EAPK_751CA17F_F2ED_47a4_9F56_8036104573A6" tpos="1" />
+        <properties name="udx" type="Package" />
+        <project author="048827" version="1.0" created="2022-08-18 11:21:39" modified="2022-09-08 17:49:12" />
+        <style1 value="ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;Border=1;HighlightForeign=1;PackageContents=0;SequenceNotes=0;ScalePrintImage=0;PPgs.cx=0;PPgs.cy=0;DocSize.cx=795;DocSize.cy=1138;ShowDetails=0;Orientation=P;Zoom=100;ShowTags=0;OpParams=1;VisibleAttributeDetail=0;ShowOpRetType=1;ShowIcons=1;CollabNums=0;HideProps=0;ShowReqs=0;ShowCons=0;PaperSize=9;HideParents=0;UseAlias=0;HideAtts=1;HideOps=1;HideStereo=0;HideElemStereo=0;ShowTests=0;ShowMaint=0;ConnectorNotation=UML 2.1;ExplicitNavigability=0;ShowShape=1;AllDockable=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;ShowNotes=0;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;" />
+        <style2 value="ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;KanbanActive=0;MatrixLineWidth=1;MatrixLineClr=0;MatrixLocked=0;TConnectorNotation=UML 2.1;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;MDGDgm=;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;SuppressedCompartments=;Theme=:119;SaveTag=73B36839;" />
+        <swimlanes value="locked=false;orientation=0;width=0;inbar=false;names=false;color=-1;bold=false;fcol=0;tcol=-1;ofCol=-1;ufCol=-1;hl=0;ufh=0;hh=0;cls=0;bw=0;hli=0;bro=0;SwimlaneFont=lfh:-10,lfw:0,lfi:0,lfu:0,lfs:0,lfface:Carlito,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;" />
+        <matrixitems value="locked=false;matrixactive=false;swimlanesactive=true;kanbanactive=false;width=1;clrLine=0;" />
+        <extendedProperties />
+        <xrefs />
+        <elements>
+          <element geometry="Left=260;Top=220;Right=393;Bottom=300;imgL=260;imgT=220;imgR=393;imgB=300;" subject="EAID_9E3ECCD9_5472_45ce_BE7A_BC004A52B63C" seqno="1" style=" DUID=755552A3;NSL=0;BFol=-1;LCol=-1;LWth=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;BCol=10092287;" />
+          <element geometry="Left=600;Top=220;Right=733;Bottom=300;imgL=600;imgT=220;imgR=733;imgB=300;" subject="EAID_409D5E16_E64D_4987_8890_CE13E57F5C50" seqno="2" style=" DUID=1BB37377;NSL=0;BFol=-1;LCol=-1;LWth=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;BCol=16764159;" />
+          <element geometry="Left=420;Top=70;Right=553;Bottom=150;imgL=420;imgT=70;imgR=553;imgB=150;" subject="EAID_751CA17F_F2ED_47a4_9F56_8036104573A6" seqno="3" style=" DUID=6DFF0FF4;NSL=0;BFol=-1;LCol=-1;LWth=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;BCol=16777215;" />
+          <element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=CX=44:CY=13:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_558B94E9_0C50_473d_814F_6D95E8095984" style="Mode=3;EOID=755552A3;SOID=6DFF0FF4;Color=-1;LWidth=0;Hidden=0;" />
+          <element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=CX=44:CY=13:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_F8BC4206_A2CD_4870_BD56_3B1C870DA9F8" style="Mode=3;EOID=1BB37377;SOID=6DFF0FF4;Color=-1;LWidth=0;Hidden=0;" />
+          <element geometry="EDGE=4;EX=0;EY=0;$LLB=;LLT=;LMT=;LMB=CX=44:CY=13:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_604544F9_149D_40f0_80CE_FCAC7CED4532" style="Mode=3;EOID=755552A3;SOID=1BB37377;Color=-1;LWidth=0;Hidden=0;" />
+        </elements>
+      </diagram>
+    </diagrams>
+  </xmi:Extension>
+</xmi:XMI>

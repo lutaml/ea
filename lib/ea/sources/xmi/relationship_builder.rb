@@ -45,10 +45,28 @@ module Ea
         def package_import_relationships(built)
           built_ids = built.to_set(&:id)
           connector_index.filter_map do |id, connector|
-            next if built_ids.include?(id) || connector.properties&.ea_type != "Package"
+            next if built_ids.include?(id)
 
-            package_import_relationship(id, connector)
+            extension_import_relationship(id, connector)
           end
+        end
+
+        def extension_import_relationship(id, connector)
+          case connector.properties&.ea_type
+          when "Package" then package_import_relationship(id, connector)
+          when "Dependency"
+            dependency_import_relationship(id, connector) if connector_stereotype(connector) == "import"
+          end
+        end
+
+        # EA exports elementImport outside packagedElement, so the model walk
+        # misses it; the extension retains the importing/imported endpoints.
+        def dependency_import_relationship(id, connector)
+          Ea::Model::Dependency.new(
+            id: id, stereotype: "import",
+            client_id: connector.source&.idref,
+            supplier_id: connector.target&.idref
+          )
         end
 
         def connector_stereotype(connector)
