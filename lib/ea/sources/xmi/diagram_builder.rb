@@ -52,10 +52,12 @@ module Ea
             name: props&.name || ext_diagram.id,
             package_id: ext_diagram.model&.package,
             diagram_type: props&.type&.split(":")&.last&.downcase,
-            bounds: canvas_bounds(placed_elements),
+            bounds: page_bounds(ext_diagram),
             style: style_for(ext_diagram),
             style_ex: style_ex_for(ext_diagram),
             show_notes: style_ex_for(ext_diagram).to_s.include?("ShowNotes=1"),
+            show_package_contents: style_flag?(ext_diagram, "PackageContents"),
+            show_foreign: style_flag?(ext_diagram, "HighlightForeign"),
             elements: build_elements(placed_elements, id, umldi_keywords),
             connectors: build_connectors(placed_connectors,
                                           placed_elements, id),
@@ -89,18 +91,18 @@ module Ea
 
         private
 
-        def canvas_bounds(placed_elements)
-          return nil if placed_elements.empty?
+        def style_flag?(ext_diagram, key)
+          value = style_for(ext_diagram).to_s[/(?:\A|;)#{key}=(\d+)/, 1]
+          value.to_i.nonzero? ? true : false
+        end
 
-          left = placed_elements.map { |e| e.geometry.img_left || e.geometry.left }.compact.min
-          top = placed_elements.map { |e| e.geometry.img_top || e.geometry.top }.compact.min
-          right = placed_elements.map { |e| e.geometry.img_right || e.geometry.right }.compact.max
-          bottom = placed_elements.map { |e| e.geometry.img_bottom || e.geometry.bottom }.compact.max
-          return nil unless left && top && right && bottom
+        def page_bounds(ext_diagram)
+          style = style_for(ext_diagram).to_s
+          width = style[/(?:\A|;)DocSize\.cx=(\d+)/, 1]
+          height = style[/(?:\A|;)DocSize\.cy=(\d+)/, 1]
+          return nil unless width && height
 
-          Ea::Model::Bounds.new(x: 0, y: 0,
-                                 width: right - left,
-                                 height: bottom - top)
+          Ea::Model::Bounds.new(x: 0, y: 0, width: width.to_i, height: height.to_i)
         end
 
         def build_elements(placed, owner_id, umldi_keywords = {})
@@ -110,12 +112,13 @@ module Ea
         def build_element(placed, owner_id, umldi_keywords = {})
           geom = placed.geometry
           style = placed.style
+          bounds = build_bounds(geom.left, geom.top, geom.right, geom.bottom)
           Ea::Model::DiagramElement.new(
             id: IdNormalizer.synthetic_id(owner_id, "elem", placed.subject),
             diagram_id: owner_id,
             model_element_ref: placed.subject,
-            bounds: build_bounds(geom.left, geom.top, geom.right, geom.bottom),
-            image_bounds: build_bounds(geom.img_left, geom.img_top, geom.img_right, geom.img_bottom),
+            bounds: bounds,
+            image_bounds: (build_bounds(geom.img_left, geom.img_top, geom.img_right, geom.img_bottom) unless bounds),
             background_color: style.background_color,
             line_color: style.line_color,
             line_width: style.line_width,
@@ -146,17 +149,19 @@ module Ea
           by_duid = placed_elements.each_with_object({}) do |pe, acc|
             acc[pe.style.duid] = pe if pe.style.duid
           end
+          by_subject = placed_elements.group_by { |pe| guid_key(pe.subject) }
 
           placed_connectors.each_with_index.map do |placed, index|
-            build_connector(placed, by_duid, owner_id, index)
+            build_connector(placed, by_duid, by_subject, owner_id, index)
           end
         end
 
-        def build_connector(placed, by_duid, owner_id, rank)
+        def build_connector(placed, by_duid, by_subject, owner_id, rank)
           geom = placed.geometry
           style = placed.style
-          source = by_duid[style.soid]
-          target = by_duid[style.eoid]
+          edge_source, edge_target = umldi_ends(owner_id, placed)
+          source = by_duid[style.soid] || sole_placement(by_subject, edge_source)
+          target = by_duid[style.eoid] || sole_placement(by_subject, edge_target)
           ext_meta = connector_meta(placed.subject)
           route = connector_route(placed, source, target, owner_id, ext_meta[:ea_type])
           Ea::Model::DiagramConnector.new(
@@ -232,6 +237,23 @@ module Ea
 
           route = umldi_edges.route_for(diagram_id, placed.subject)
           route&.map { |x, y| Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y)) }
+        end
+
+        def umldi_ends(diagram_id, placed)
+          return unless xmi_path
+
+          umldi_edges.ends_for(diagram_id, placed.subject)
+        end
+
+        def sole_placement(by_subject, subject)
+          placements = by_subject[guid_key(subject)]
+          placements.first if placements&.one?
+        end
+
+        # EA spells one GUID with an EAID_ or EAPK_ prefix and mixed case
+        # depending on the element kind.
+        def guid_key(subject)
+          subject&.sub(/\AEA(?:ID|PK)_/, "")&.upcase
         end
 
         def umldi_edges

@@ -9,6 +9,8 @@ module Ea
       class RelationshipBuilder
         # Connector types that imply an aggregation on the source end
         # when the end itself records none.
+        CONNECTOR_STEREOTYPE = /(?<=@STEREO;Name=)[^;]+/
+
         AGGREGATION_FOR_CONNECTOR_TYPE = {
           "Aggregation" => "shared",
           "Composition" => "composite"
@@ -28,7 +30,7 @@ module Ea
             rel = build_one(element)
             relationships << rel if rel
           end
-          relationships
+          relationships + package_import_relationships(relationships)
         end
 
         def build_one(element)
@@ -39,6 +41,30 @@ module Ea
         end
 
         private
+
+        def package_import_relationships(built)
+          built_ids = built.to_set(&:id)
+          connector_index.filter_map do |id, connector|
+            next if built_ids.include?(id) || connector.properties&.ea_type != "Package"
+
+            package_import_relationship(id, connector)
+          end
+        end
+
+        def connector_stereotype(connector)
+          connector&.xrefs&.value.to_s[CONNECTOR_STEREOTYPE]
+        end
+
+        def package_import_relationship(id, connector)
+          Ea::Model::Association.new(
+            id: id,
+            stereotype: connector_stereotype(connector),
+            source_id: connector.source&.idref,
+            target_id: connector.target&.idref,
+            source_navigable: navigable?(id, :source),
+            target_navigable: navigable?(id, :target)
+          )
+        end
 
         def walk(element, &block)
           yield element if block
@@ -51,6 +77,7 @@ module Ea
             id: id,
             name: element.name,
             qualified_name: element.name,
+            stereotype: connector_stereotype(connector_index[id]),
             annotations: AnnotationBuilder.from_element(element, id)
           }
         end
@@ -88,8 +115,8 @@ module Ea
             target_multiplicity_raw: raw_card(target.type&.multiplicity),
             source_aggregation: source_aggregation(connector),
             target_aggregation: target.type&.aggregation || "none",
-            source_navigable: navigable?(element, :source),
-            target_navigable: navigable?(element, :target)
+            source_navigable: navigable?(element.id, :source),
+            target_navigable: navigable?(element.id, :target)
           }
         end
 
@@ -118,8 +145,8 @@ module Ea
             target_multiplicity_upper: parse_upper(target_end),
             source_aggregation: source_end&.aggregation || "none",
             target_aggregation: target_end&.aggregation || "none",
-            source_navigable: navigable?(element, :source),
-            target_navigable: navigable?(element, :target)
+            source_navigable: navigable?(element.id, :source),
+            target_navigable: navigable?(element.id, :target)
           }
         end
 
@@ -197,8 +224,8 @@ module Ea
           end
         end
 
-        def navigable?(element, endpoint)
-          connector = connector_index[element.id]
+        def navigable?(id, endpoint)
+          connector = connector_index[id]
           end_element = connector&.public_send(endpoint)
           flag = end_element&.modifiers&.is_navigable
           flag.nil? || flag

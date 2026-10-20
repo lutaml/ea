@@ -11,6 +11,14 @@ module XmiUmldiEdgeHelpers
     end
   end
 
+  def umldi_ends(edges_xml, connector_id)
+    Dir.mktmpdir do |dir|
+      path = File.join(dir, "model.xmi")
+      File.write(path, umldi_document(edges_xml))
+      Ea::Sources::Xmi::DiagramBuilder::UmldiEdges.new(path).ends_for("D1", connector_id)
+    end
+  end
+
   def umldi_edge(connector_id, points)
     waypoints = points.map { |x, y| %(<waypoint x="#{x}" y="#{y}"/>) }.join
     %(<ownedElement type="umldi:UMLEdge" modelElement="#{connector_id}">#{waypoints}</ownedElement>)

@@ -58,11 +58,8 @@ module Ea
       # `model_element_ref` lookups from diagram elements resolve.
       def index_by_id
         @index_by_id ||= begin
-          idx = {}
-          packages.each do |p|
-            idx[p.id] = p
-            alias_eaid_for_package(idx, p)
-          end
+          idx = PackageAliasIndex.new
+          packages.each { |p| idx[p.id] = p }
           classifiers.each { |c| idx[c.id] = c }
           relationships.each { |r| idx[r.id] = r }
           stereotypes.each { |s| idx[s.id] = s }
@@ -96,12 +93,6 @@ module Ea
         return nil unless id
 
         property_index[id]
-      end
-
-      def alias_eaid_for_package(idx, package)
-        return unless package.id&.start_with?("EAPK_")
-
-        idx["EAID_#{package.id[5..]}"] = package
       end
 
       def root_packages

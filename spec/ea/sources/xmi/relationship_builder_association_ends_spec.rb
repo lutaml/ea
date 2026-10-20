@@ -65,3 +65,29 @@ RSpec.describe Ea::Sources::Xmi::RelationshipBuilder, "association ends" do
     end
   end
 end
+
+RSpec.describe Ea::Sources::Xmi::RelationshipBuilder, "connector stereotypes" do
+  let(:by_id) do
+    Ea::Sources::Xmi::Adapter.from_path(fixtures_path("basic.xmi"))
+                             .relationships.to_h { |item| [item.id, item] }
+  end
+
+  it "builds the package import connector as an «import» association" do
+    rel = by_id.fetch("EAID_12D9B35C_220D_4d31_A3DB_81BCEE4A226B")
+
+    expect(rel).to be_a(Ea::Model::Association).and have_attributes(
+      stereotype: "import", name: nil,
+      source_id: "EAID_B384E7CC_6668_4460_B582_EB0F9E31AABA",
+      target_id: "EAID_4FB8D58C_0C14_4380_81E8_0D743A9919E5",
+      source_navigable: false, target_navigable: true
+    )
+  end
+
+  it "builds the second package import" do
+    expect(by_id.fetch("EAID_70958216_0289_487e_B32F_96CA8B4F1D14").stereotype).to eq("import")
+  end
+
+  it "leaves unstereotyped associations without a stereotype" do
+    expect(by_id.fetch("EAID_12C9D05B_3FBE_4c66_A0C1_1B210B499EB3")).to have_attributes(stereotype: nil, name: "Name A")
+  end
+end
