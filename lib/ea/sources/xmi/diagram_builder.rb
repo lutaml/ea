@@ -247,7 +247,8 @@ module Ea
             line_color: style.color,
             line_width: style.line_width,
             hidden: style.hidden,
-            label_boxes: connector_label_boxes(placed, ext_meta[:ea_type])
+            label_boxes: connector_label_boxes(placed, ext_meta[:ea_type],
+                                               options.fetch(:context) ? nil : owner_id)
           )
           connector.umldi_label_bounds = if options.fetch(:context)
                                            {}
@@ -326,10 +327,14 @@ module Ea
             geom.path.to_s.empty? && geom.label_boxes.to_h.empty?
         end
 
-        def connector_label_boxes(placed, type)
-          return Qea::DiagramBuilder::DEFAULT_LABEL_BOXES if phantom_link?(placed, type)
+        def connector_label_boxes(placed, type, owner_id)
+          return serialize_label_boxes(placed.geometry.label_boxes) unless phantom_link?(placed, type)
 
-          serialize_label_boxes(placed.geometry.label_boxes)
+          # An empty extension placement can still have saved UMLDI labels.
+          # Synthetic phantom offsets must not suppress those authored bounds.
+          return {} if owner_id && xmi_path && umldi_edges.label_bounds_for(owner_id, placed.subject)
+
+          Qea::DiagramBuilder::DEFAULT_LABEL_BOXES
         end
 
         # The saved SOID/EOID can name the model connector's ends in reverse
