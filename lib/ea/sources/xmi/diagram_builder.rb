@@ -158,7 +158,7 @@ module Ea
           @source_ordered_classifiers ||= begin
             ids = []
             visit = lambda do |element|
-              ids << element.id if %w[uml:Class uml:Interface].include?(element.type)
+              ids << element.id if TypeClassifierMap.classifier_type?(element.type)
               element.packaged_element.to_a.each { |child| visit.call(child) }
               element.nested_classifier.to_a.each { |child| visit.call(child) }
             end
