@@ -22,6 +22,14 @@ module Ea
           from_comments(comments, owner_id, kind: kind)
         end
 
+        # Documentation text from the element's Extension properties,
+        # the XMI counterpart of an EA element note.
+        def self.from_documentation(text, owner_id, kind: "documentation")
+          return [] if text.nil? || text.empty?
+
+          [new(owner_id).build(kind, text)]
+        end
+
         def self.from_comments(comments, owner_id, kind: "documentation")
           Array(comments).map { |c| new(owner_id).build(kind, c.body_element || c.body_attribute) }
         end
