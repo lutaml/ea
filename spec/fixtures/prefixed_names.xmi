@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<xmi:XMI xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101">
+	<xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5" exporterID="1624"/>
+	<uml:Model xmi:type="uml:Model" name="EA_Model">
+		<packagedElement xmi:type="uml:Package" xmi:id="EAPK_00000001_0000_4000_8000_000000000001" name="gml">
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_00000002_0000_4000_8000_000000000002" name="gml:CodeType"/>
+		</packagedElement>
+		<packagedElement xmi:type="uml:Package" xmi:id="EAPK_00000003_0000_4000_8000_000000000003" name="urf">
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_00000004_0000_4000_8000_000000000004" name="Zone">
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_00000005_0000_4000_8000_000000000005" name="codeValue">
+					<type xmi:idref="EAID_00000002_0000_4000_8000_000000000002"/>
+				</ownedAttribute>
+			</packagedElement>
+		</packagedElement>
+		<packagedElement xmi:type="uml:Package" xmi:id="EAPK_00000006_0000_4000_8000_000000000006" name="main"/>
+	</uml:Model>
+	<xmi:Extension extender="Enterprise Architect" extenderID="6.5">
+		<elements>
+			<element xmi:idref="EAID_00000002_0000_4000_8000_000000000002" xmi:type="uml:Class" name="gml:CodeType" scope="public">
+				<model package="EAPK_00000001_0000_4000_8000_000000000001" tpos="0" ea_localid="1" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Class" nType="0" scope="public" isRoot="false" isLeaf="false" isAbstract="false" isActive="false"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+			</element>
+			<element xmi:idref="EAID_00000004_0000_4000_8000_000000000004" xmi:type="uml:Class" name="Zone" scope="public">
+				<model package="EAPK_00000003_0000_4000_8000_000000000003" tpos="0" ea_localid="2" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Class" nType="0" scope="public" isRoot="false" isLeaf="false" isAbstract="false" isActive="false"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+			</element>
+		</elements>
+		<diagrams>
+			<diagram xmi:id="EAID_00000007_0000_4000_8000_000000000007">
+				<model package="EAPK_00000006_0000_4000_8000_000000000006" localID="1" owner="EAPK_00000006_0000_4000_8000_000000000006"/>
+				<properties name="ForeignView" type="Logical"/>
+				<style1 value="ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;Border=1;HighlightForeign=1;PackageContents=1;HideParents=0;UseAlias=0;HideAtts=0;HideOps=0;HideStereo=0;HideElemStereo=0;ShowNotes=0;"/>
+				<style2 value="SuppressFOC=1;Theme=:119;"/>
+				<elements>
+					<element geometry="Left=100;Top=100;Right=217;Bottom=171;" subject="EAID_00000004_0000_4000_8000_000000000004" seqno="1" style="ImageID=0;DUID=59E86502;"/>
+				</elements>
+			</diagram>
+			<diagram xmi:id="EAID_00000008_0000_4000_8000_000000000008">
+				<model package="EAPK_00000003_0000_4000_8000_000000000003" localID="1" owner="EAPK_00000003_0000_4000_8000_000000000003"/>
+				<properties name="OwnView" type="Logical"/>
+				<style1 value="ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;Border=1;HighlightForeign=1;PackageContents=1;HideParents=0;UseAlias=0;HideAtts=0;HideOps=0;HideStereo=0;HideElemStereo=0;ShowNotes=0;"/>
+				<style2 value="SuppressFOC=1;Theme=:119;"/>
+				<elements>
+					<element geometry="Left=100;Top=100;Right=217;Bottom=171;" subject="EAID_00000004_0000_4000_8000_000000000004" seqno="1" style="ImageID=0;DUID=59E86502;"/>
+				</elements>
+			</diagram>
+		</diagrams>
+	</xmi:Extension>
+</xmi:XMI>

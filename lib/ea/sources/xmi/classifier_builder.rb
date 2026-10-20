@@ -82,18 +82,14 @@ module Ea
           { literals: literals }
         end
 
+        # A name that already carries a namespace prefix
+        # (e.g. "gml:CodeType") is the qualified name as saved.
         def qualified_name(element, containing_package)
-          # The XMI's `name` attribute may already be in
-          # "ns:Class" form (e.g. "xs:string" lives in the `xs`
-          # package). Forcing the package name in front would
-          # produce "xs::xs:string". Strip the existing namespace
-          # prefix from the simple name before composing the
-          # qualified name.
-          raw = element.name.to_s
-          simple = raw.split(":").last
-          simple = raw if simple.nil? || simple.empty?
+          name = element.name.to_s
+          return name if name.include?(":")
+
           pkg_name = containing_package&.name
-          pkg_name ? "#{pkg_name}::#{simple}" : simple
+          pkg_name ? "#{pkg_name}::#{name}" : name
         end
 
         def boolean(value)
