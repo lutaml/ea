@@ -54,7 +54,8 @@ module Ea
             package_name: package&.name,
             qualified_name: qualified_name(element, package),
             slots: slots_for(id),
-            annotations: AnnotationBuilder.from_element(element, id)
+            annotations: AnnotationBuilder.from_element(element, id) +
+                         AnnotationBuilder.from_documentation(properties&.documentation, id)
           )
         end
 

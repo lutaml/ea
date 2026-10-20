@@ -55,8 +55,18 @@ module Ea
             visibility: element.visibility,
             properties: PropertyBuilder.new.build_all_for(element),
             operations: OperationBuilder.new.build_all_for(element),
-            annotations: AnnotationBuilder.from_element(element, id)
+            annotations: annotations_for(element, id)
           }
+        end
+
+        def annotations_for(element, id)
+          AnnotationBuilder.from_element(element, id) +
+            AnnotationBuilder.from_documentation(documentation_by_id[id], id)
+        end
+
+        def documentation_by_id
+          @documentation_by_id ||=
+            (root.extension&.elements&.element || []).to_h { |e| [e.idref, e.properties&.documentation] }
         end
 
         def enumeration_args(element)
