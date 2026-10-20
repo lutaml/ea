@@ -30,7 +30,10 @@ RSpec.describe Ea::Fonts::Metrics do
         "+roleTwo" => 42,
         "Operation B(int): void" => 96,
         "elements: xs:double [12] {ordered}" => 153,
-        "XYScale = 999999999.99999988" => 148
+        "XYScale = 999999999.99999988" => 148,
+        "+_genericAttribute" => 80,
+        "metadata: MD_Metadata" => 104,
+        "geometry: GM_Point" => 86
       }.each do |text, width|
         expect(described_class.text_length(text, 7, family: "Cambria"))
           .to eq(width)
