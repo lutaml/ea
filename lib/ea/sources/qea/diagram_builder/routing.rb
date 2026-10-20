@@ -182,6 +182,7 @@ module Ea
           def correct_stored_ray_origins(model, link_row, diagram_row, geom, context)
             return model if context
             return notelink_stored_ray(model, link_row, diagram_row, geom) if model.connector_type == "NoteLink"
+            return package_stored_ray(model, link_row, diagram_row, geom) if model.connector_type == "Package"
             return model unless stored_ray_candidate?(model, link_row, geom)
 
             source, target = stored_ray_boxes(link_row, diagram_row)
@@ -195,7 +196,44 @@ module Ea
             set_stored_ray_origins(model, source, target, geom)
             model.style[:association_ray_outline] = true if model.connector_type == "Association"
             model.style[:stored_origin_ray] = true if stored_origin_ray?(model, source, target)
+            model.style[:centered_origin_ray] = true if centered_origin_ray?(model, source, target)
             model
+          end
+
+          # An empty custom-line package import has no authored bend. When
+          # its stored mathematical origins share a row inside both boxes,
+          # clip that ray instead of the computed EDGE2 port jog.
+          def package_stored_ray(model, link_row, diagram_row, geom)
+            return model unless package_ray_candidate?(model, link_row, geom)
+
+            boxes = stored_ray_boxes(link_row, diagram_row)
+            origins = level_package_origins(boxes, geom)
+            return model unless origins
+
+            model.waypoints = package_ray_waypoints(boxes, origins.first.y)
+            model.source_anchor, model.target_anchor = origins
+            model
+          end
+
+          def package_ray_candidate?(model, link_row, geom)
+            model.waypoints.size == 3 && link_row.path.to_s.empty? &&
+              model.style.values_at(:mode, :lwidth, :tree) == ["3", "0", nil] &&
+              geom[:edge] == 2 && geom.values_at(:sx, :sy, :ex, :ey).all?
+          end
+
+          def level_package_origins(boxes, geom)
+            return unless horizontal_ray_gap?(*boxes)
+
+            origins = association_ray_origins(*boxes, geom, "0")
+            origins if origins && origins.first.y == origins.last.y
+          end
+
+          def package_ray_waypoints(boxes, row)
+            rightward = boxes[0].x < boxes[1].x
+            boxes.each_with_index.map do |box, index|
+              x = box.x + (rightward == index.zero? ? box.width : 0)
+              Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: row))
+            end
           end
 
           # A straight top-docked NoteLink uses mathematical saved Y offsets,
@@ -226,9 +264,13 @@ module Ea
           # stored origins lie inside their own outlines. Its clipped row is
           # authored geometry, even when it coincides with a header divider.
           def stored_origin_ray?(model, source, target)
-            style = model.style.to_h
-            return false unless model.connector_type == "Generalization" &&
-                                style[:lwidth] == "2" && association_ray_style?(style)
+            association_ray_style?(model.style.to_h) && centered_origin_ray?(model, source, target)
+          end
+
+          # Direct Generalizations retain offsets from each classifier's center
+          # when rendering grows its stored logical rectangle.
+          def centered_origin_ray?(model, source, target)
+            return false unless model.connector_type == "Generalization" && model.style[:lwidth] == "2"
 
             [model.source_anchor, model.target_anchor].zip([source, target]).all? do |origin, box|
               inside_box?(origin, grown_bounds(box, 1))
