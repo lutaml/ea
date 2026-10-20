@@ -94,8 +94,9 @@ module Ea
           end
 
           def content_x_offset(theme, size, size_unit, family)
-            # EA uses the attribute row point-size increment for literal names.
-            offset = theme.attribute_spec.content_x_offset || 26
+            # EA seats literal names at the attribute-name content x, with the
+            # attribute row point-size increment.
+            offset = theme.attribute_content_x_offset || 26
             offset += 2 * (size - 7) if size_unit == "pt"
             offset -= 1 if Ea::Fonts::Metrics.compact_compartment_font?(size, family: family, unit: size_unit)
             offset

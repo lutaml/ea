@@ -138,8 +138,8 @@ module Ea
         @label_font_size_unit || font_size_unit
       end
 
-      # Attribute cells have a different inherited seat from enum literals,
-      # which continue to consume the legacy attribute_spec default.
+      # Content x of attribute and enum-literal names; a theme's own
+      # attribute_spec overrides the inherited seat.
       def attribute_content_x_offset
         @attribute_spec_override ? attribute_spec.content_x_offset : 22
       end
