@@ -52,7 +52,7 @@ module Ea
             name: props&.name || ext_diagram.id,
             package_id: ext_diagram.model&.package,
             diagram_type: props&.type&.split(":")&.last&.downcase,
-            bounds: canvas_bounds(placed_elements),
+            bounds: page_bounds(ext_diagram),
             style: style_for(ext_diagram),
             style_ex: style_ex_for(ext_diagram),
             show_notes: style_ex_for(ext_diagram).to_s.include?("ShowNotes=1"),
@@ -96,18 +96,13 @@ module Ea
           value.to_i.nonzero? ? true : false
         end
 
-        def canvas_bounds(placed_elements)
-          return nil if placed_elements.empty?
+        def page_bounds(ext_diagram)
+          style = style_for(ext_diagram).to_s
+          width = style[/(?:\A|;)DocSize\.cx=(\d+)/, 1]
+          height = style[/(?:\A|;)DocSize\.cy=(\d+)/, 1]
+          return nil unless width && height
 
-          left = placed_elements.map { |e| e.geometry.img_left || e.geometry.left }.compact.min
-          top = placed_elements.map { |e| e.geometry.img_top || e.geometry.top }.compact.min
-          right = placed_elements.map { |e| e.geometry.img_right || e.geometry.right }.compact.max
-          bottom = placed_elements.map { |e| e.geometry.img_bottom || e.geometry.bottom }.compact.max
-          return nil unless left && top && right && bottom
-
-          Ea::Model::Bounds.new(x: 0, y: 0,
-                                 width: right - left,
-                                 height: bottom - top)
+          Ea::Model::Bounds.new(x: 0, y: 0, width: width.to_i, height: height.to_i)
         end
 
         def build_elements(placed, owner_id, umldi_keywords = {})
@@ -117,12 +112,13 @@ module Ea
         def build_element(placed, owner_id, umldi_keywords = {})
           geom = placed.geometry
           style = placed.style
+          bounds = build_bounds(geom.left, geom.top, geom.right, geom.bottom)
           Ea::Model::DiagramElement.new(
             id: IdNormalizer.synthetic_id(owner_id, "elem", placed.subject),
             diagram_id: owner_id,
             model_element_ref: placed.subject,
-            bounds: build_bounds(geom.left, geom.top, geom.right, geom.bottom),
-            image_bounds: build_bounds(geom.img_left, geom.img_top, geom.img_right, geom.img_bottom),
+            bounds: bounds,
+            image_bounds: (build_bounds(geom.img_left, geom.img_top, geom.img_right, geom.img_bottom) unless bounds),
             background_color: style.background_color,
             line_color: style.line_color,
             line_width: style.line_width,
