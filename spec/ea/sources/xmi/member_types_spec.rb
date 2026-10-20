@@ -5,6 +5,7 @@ require "ea"
 require "xmi"
 
 RSpec.describe "Sparx XMI attribute and operation types" do
+  include XmiUnnamedAssociationHelpers
   let(:path) { fixtures_path("basic.xmi") }
   let(:document) { Ea::Sources::Xmi::Adapter.from_path(path) }
   let(:classifiers) { document.classifiers }
@@ -29,7 +30,8 @@ RSpec.describe "Sparx XMI attribute and operation types" do
 
   describe "attributes typed by a classifier idref" do
     it "keeps the in-model qualified name" do
-      end_property = properties.find { |p| p.id == "EAID_dstCF64D9_3CAA_41e2_862C_8C4A9BA09AC2" }
+      end_property = named_association_document.classifiers.flat_map(&:properties)
+                                               .find { |p| p.id == "EAID_dstCF64D9_3CAA_41e2_862C_8C4A9BA09AC2" }
 
       expect(end_property.type_name).to eq("Classes::Class B")
     end
