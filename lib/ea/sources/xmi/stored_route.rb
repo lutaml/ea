@@ -64,8 +64,35 @@ module Ea
 
         def bent_points(src, bends, tgt, link, connector, source, target)
           points = [src, *bends, tgt]
-          redock_parent_above(points, link, source, target) if connector.connector_type == "Generalization"
+          if connector.connector_type == "Generalization"
+            preserve_side_entry = authored_lateral_side_entry?(points, bends, link, source, target)
+            redock_parent_above(points, link, source, target)
+            points[-1] = [points[-1][0], points[1][1]] if preserve_side_entry
+          end
           points
+        end
+
+        # A single LH tree bend can be the authored side-entry level itself.
+        # Parent-above redocking normally moves a Generalization to the target
+        # bottom, which destroys that horizontal leg and disagrees with QEA.
+        def authored_lateral_side_entry?(points, bends, link, source, target)
+          return false unless bends.one? && points.size == 3 && lateral_side_entry_style?(link) &&
+                              target.y + target.height <= source.y
+
+          level_on_target_side?(points[1], target)
+        end
+
+        def lateral_side_entry_style?(link)
+          style = Qea::DiagramStyleParser.parse(link.style)
+          style[:mode] == "3" && style[:tree] == "LH" && style[:lwidth] == "2"
+        end
+
+        def within_width?(x, bounds)
+          x.between?(bounds.x, bounds.x + bounds.width)
+        end
+
+        def level_on_target_side?(bend, target)
+          bend[1].between?(target.y, target.y + target.height) && !within_width?(bend[0], target)
         end
 
         def finish(points, link, connector, source, target, bends, ports, offsets, edge)

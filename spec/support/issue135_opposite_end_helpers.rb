@@ -26,9 +26,9 @@ module Issue135OppositeEndHelpers
     )
   end
 
-  def opposite_end_texts(document, end_kind, stored_labels: true)
+  def opposite_end_texts(document, end_kind, stored_labels: true, style: {})
     connector = Ea::Model::DiagramConnector.new(
-      id: "connector", relationship_ref: "association", source_stereotype: "property"
+      id: "connector", relationship_ref: "association", source_stereotype: "property", style: style
     )
     svg = opposite_end_renderer(document).texts(
       text_box: { "ox" => 10, "oy" => 10 }, mult_box: { "ox" => 10, "oy" => 30 },

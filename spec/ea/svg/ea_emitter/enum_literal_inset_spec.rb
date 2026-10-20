@@ -24,8 +24,22 @@ RSpec.describe "QEA enumeration literal insets" do
     literals = nodes.select { |node| %w[val1 val2].include?(node.text) }
 
     expect(literals.map { |node| node["style"] }).to all(include("font-family:Calibri;", "font-size:7pt;"))
-    expect(literals.map { |node| node["x"].to_f }).to eq([306, 306])
+    expect(literals.map { |node| node["x"].to_f }).to eq([308, 308])
     expect(literals.map { |node| node["y"].to_f }).to eq([405, 418])
+  end
+end
+
+RSpec.describe "QEA enumeration literal attribute seat" do
+  include EnumAttributeSeatHelpers
+  include QeaContentHelpers
+
+  it "seats literal names at the attribute-name content x of the same diagram" do
+    document = Ea::Sources::Qea::Adapter.from_path("examples/qea/test.qea")
+    diagram = document.diagrams.find { |entry| entry.id.include?("B58D1A53") }
+    offsets = seat_offsets(document, diagram, qea_text_nodes(document, "B58D1A53"),
+                           "Enumeration" => /\Aval\d\z/, "FeatureType2" => /\Aunion: Union\z/)
+
+    expect(offsets["Enumeration"].uniq).to eq(offsets["FeatureType2"].uniq)
   end
 end
 

@@ -19,10 +19,11 @@ module Ea
         # self-loop, an authoritative UMLDI route, or no drawn bounds for either end).
         def pairs_for(connector, diagram, model_index, bounds_map)
           return nil unless bounds_map
-          return nil if connector.style.to_h[:umldi_route] == true
 
           tether = association_class_pairs(connector, bounds_map)
           return tether if tether
+
+          return nil if connector.style.to_h[:umldi_route] == true
 
           points = waypoint_pairs(connector)
           lateral = lateral_tree?(connector, points)

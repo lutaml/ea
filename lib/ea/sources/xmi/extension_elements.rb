@@ -12,8 +12,9 @@ module Ea
       class ExtensionElements
         attr_reader :diagram
 
-        def initialize(diagram)
+        def initialize(diagram, connector_subjects: {})
           @diagram = diagram
+          @connector_subjects = connector_subjects
         end
 
         def placed_elements
@@ -53,9 +54,9 @@ module Ea
 
           placement = ExtensionGeometryParser.parse(row.geometry)
           style = ExtensionStyleParser.parse(row.style)
-          # Connectors carry SOID/EOID in their style; geometry has
-          # only bend routing.
-          return nil unless style.soid && style.eoid
+          # Some EA placements omit both DUIDs. The extension connector
+          # index still identifies these rows without treating shapes as links.
+          return nil unless (style.soid && style.eoid) || @connector_subjects.key?(row.subject)
 
           PlacedConnector.new(
             subject: row.subject,

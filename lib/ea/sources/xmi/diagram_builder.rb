@@ -10,6 +10,7 @@ module Ea
       # the UML-DI owned_element bounds otherwise.
       class DiagramBuilder
         autoload :ConnectorMetadata, "ea/sources/xmi/diagram_builder/connector_metadata"
+        autoload :AssociationClassMetadata, "ea/sources/xmi/diagram_builder/association_class_metadata"
         autoload :FontSettings, "ea/sources/xmi/diagram_builder/font_settings"
         autoload :StereotypeProfiles, "ea/sources/xmi/diagram_builder/stereotype_profiles"
         autoload :UmldiEdges, "ea/sources/xmi/diagram_builder/umldi_edges"
@@ -44,7 +45,7 @@ module Ea
 
         def build_one(ext_diagram)
           id = IdNormalizer.from_xmi_id(ext_diagram.id)
-          ext_elements = ExtensionElements.new(ext_diagram)
+          ext_elements = ExtensionElements.new(ext_diagram, connector_subjects: connector_index)
           placed_elements = ext_elements.placed_elements
           placed_connectors = ext_elements.placed_connectors
           props = ext_diagram.properties
@@ -140,8 +141,30 @@ module Ea
             z_order: placed.seqno,
             duid: style.duid,
             umldi_keyword: umldi_keywords[placed.subject],
-            style: (@stereotype_profiles ||= StereotypeProfiles.new(root)).for(placed.subject)
+            style: element_style(placed.subject)
           )
+        end
+
+        # XMI preserves UML member order in ownedAttribute. Carry that
+        # provenance to the renderer so it does not replace it with a name sort.
+        def element_style(subject)
+          style = (@stereotype_profiles ||= StereotypeProfiles.new(root)).for(subject)
+          return style unless source_ordered_classifiers.include?(subject)
+
+          style.merge(stored_attribute_order: true)
+        end
+
+        def source_ordered_classifiers
+          @source_ordered_classifiers ||= begin
+            ids = []
+            visit = lambda do |element|
+              ids << element.id if TypeClassifierMap.classifier_type?(element.type)
+              element.packaged_element.to_a.each { |child| visit.call(child) }
+              element.nested_classifier.to_a.each { |child| visit.call(child) }
+            end
+            root.model&.packaged_element.to_a.each { |element| visit.call(element) }
+            ids
+          end
         end
 
         def build_bounds(left, top, right, bottom)
@@ -160,14 +183,32 @@ module Ea
           by_subject = placed_elements.group_by { |pe| guid_key(pe.subject) }
 
           placed_connectors.each_with_index.map do |placed, index|
-            build_connector(placed, by_duid, by_subject, owner_id, index)
+            connector = build_connector(placed, by_duid, by_subject, owner_id, index)
+            mark_association_class(connector, placed, placed_elements)
           end
+        end
+
+        def mark_association_class(connector, placed, placed_elements)
+          reference = association_class_metadata.for(
+            connector_index[placed.subject],
+            placed_subjects: placed_elements.map(&:subject),
+            waypoints: connector.waypoints
+          )
+          if reference
+            connector.style[:association_class_ref] = reference
+            connector.source_anchor = connector.waypoints.first.position
+          end
+          connector
+        end
+
+        def association_class_metadata
+          @association_class_metadata ||= AssociationClassMetadata.new(xmi_path)
         end
 
         def build_connector(placed, by_duid, by_subject, owner_id, rank)
           geom = placed.geometry
           style = placed.style
-          edge_source, edge_target = umldi_ends(owner_id, placed)
+          edge_source, edge_target = connector_ends(owner_id, placed)
           source = by_duid[style.soid] || sole_placement(by_subject, edge_source)
           target = by_duid[style.eoid] || sole_placement(by_subject, edge_target)
           ext_meta = connector_meta(placed.subject)
@@ -242,7 +283,18 @@ module Ea
           points = native || compute_waypoints(placed.geometry, source, target,
                                                style: placed.style, connector_type: type)
           native ||= umldi_waypoints(owner_id, placed) if points.empty?
-          { waypoints: native || points, style: native ? { umldi_route: true } : {} }
+          { waypoints: native || points, style: connector_route_style(placed, native) }
+        end
+
+        def connector_route_style(placed, native)
+          route_style = native ? { umldi_route: true } : {}
+          # Label seats use EA's saved routing mode on every route source;
+          # umldi_route still marks UMLDI waypoints as authoritative.
+          route_style.merge!(Qea::DiagramStyleParser.parse(placed.style.raw).slice(:mode, :lwidth, :tree))
+          # Source-known links without DUIDs use classifier endpoint metadata,
+          # not a saved label box that might refer to the opposite end.
+          route_style[:explicit_end_roles] = true unless placed.style.soid && placed.style.eoid
+          route_style
         end
 
         # EA's unique exported edge supplies bendless routes and recovers
@@ -252,6 +304,15 @@ module Ea
 
           route = umldi_edges.route_for(diagram_id, placed.subject)
           route&.map { |x, y| Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y)) }
+        end
+
+        def connector_ends(diagram_id, placed)
+          umldi_ends(diagram_id, placed) || extension_ends(placed.subject)
+        end
+
+        def extension_ends(subject)
+          connector = connector_index[subject]
+          [connector&.source&.idref, connector&.target&.idref]
         end
 
         def umldi_ends(diagram_id, placed)
