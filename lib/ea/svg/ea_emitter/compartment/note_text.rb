@@ -11,7 +11,9 @@ module Ea
         # boundaries to fit the element bounds.
         module NoteText
           X_PADDING = 5
+          HAND_DRAW_X_PADDING = 10
           Y_FIRST_OFFSET = 15
+          HAND_DRAW_Y_FIRST_OFFSET = 11
           LINE_OFFSET = 13
           CHAR_WIDTH_FACTOR = 0.55
 
@@ -24,22 +26,29 @@ module Ea
             notes = note_bodies(context.classifier)
             return nil if notes.empty?
 
-            first_y = context.geometry.attr_first_y + Y_FIRST_OFFSET
+            x_padding, y_offset = note_offsets(context)
+            first_y = context.geometry.attr_first_y + y_offset
             bounds = context.bounds
             fill = context.theme.attribute_text_color
-            usable_width = bounds.width - (X_PADDING * 2)
+            usable_width = bounds.width - (x_padding * 2)
             max_chars = (usable_width / (context.size * CHAR_WIDTH_FACTOR)).floor
 
             texts = []
             y = first_y
             notes.each do |body|
               wrapped_lines(body, max_chars).each do |line|
-                texts << build_text(line, bounds.x + X_PADDING, y, context, fill)
+                texts << build_text(line, bounds.x + x_padding, y, context, fill)
                 y += LINE_OFFSET
               end
             end
             wrap_group(texts.join("\n"), fill)
           end
+
+          # Native hand-drawn classifiers use a wider documentation inset.
+          def note_offsets(context)
+            context.diagram.hand_draw ? [HAND_DRAW_X_PADDING, HAND_DRAW_Y_FIRST_OFFSET] : [X_PADDING, Y_FIRST_OFFSET]
+          end
+          module_function :note_offsets
 
           def show_notes?(context)
             context.diagram && context.diagram.show_notes
