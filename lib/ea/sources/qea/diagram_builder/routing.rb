@@ -195,6 +195,7 @@ module Ea
             set_stored_ray_origins(model, source, target, geom)
             model.style[:association_ray_outline] = true if model.connector_type == "Association"
             model.style[:stored_origin_ray] = true if stored_origin_ray?(model, source, target)
+            model.style[:centered_origin_ray] = true if centered_origin_ray?(model, source, target)
             model
           end
 
@@ -226,9 +227,13 @@ module Ea
           # stored origins lie inside their own outlines. Its clipped row is
           # authored geometry, even when it coincides with a header divider.
           def stored_origin_ray?(model, source, target)
-            style = model.style.to_h
-            return false unless model.connector_type == "Generalization" &&
-                                style[:lwidth] == "2" && association_ray_style?(style)
+            association_ray_style?(model.style.to_h) && centered_origin_ray?(model, source, target)
+          end
+
+          # Direct Generalizations retain offsets from each classifier's center
+          # when rendering grows its stored logical rectangle.
+          def centered_origin_ray?(model, source, target)
+            return false unless model.connector_type == "Generalization" && model.style[:lwidth] == "2"
 
             [model.source_anchor, model.target_anchor].zip([source, target]).all? do |origin, box|
               inside_box?(origin, grown_bounds(box, 1))

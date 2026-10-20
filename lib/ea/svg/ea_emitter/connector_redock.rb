@@ -54,8 +54,8 @@ module Ea
 
           return nil if flush_lateral_line?(connector, points, source_bounds, target_bounds)
 
-          anchors = [connector.source_anchor, connector.target_anchor]
           bounds = [source_bounds, target_bounds]
+          anchors = drawn_center_anchors(connector, diagram, [source_ref, target_ref], bounds)
           original = clipped_pairs(bounds, anchors)
           unless stroke_outline?(connector, bounds) || overlap_ray?(connector) ||
                  bordered_outline?(connector, diagram, [source_ref, target_ref], bounds)
@@ -78,6 +78,38 @@ module Ea
           pairs = stored_top_pairs(connector, source, pairs)
           auto_port_elbow_pairs(connector, source, target, pairs)
         end
+
+        def drawn_center_anchors(connector, diagram, refs, bounds)
+          anchors = [connector.source_anchor, connector.target_anchor]
+          return anchors unless connector.style.to_h[:centered_origin_ray] == true
+
+          duids = connector.style.to_h.values_at(:soid, :eoid)
+          anchors.each_with_index.map do |anchor, index|
+            saved = unique_logical_bounds(diagram, refs[index], duids[index])
+            centered_anchor(anchor, saved, bounds[index])
+          end
+        end
+        private_class_method :drawn_center_anchors
+
+        def unique_logical_bounds(diagram, ref, duid)
+          placements = end_placements(diagram, ref, duid)
+          placements.first.bounds if placements.size == 1
+        end
+        private_class_method :unique_logical_bounds
+
+        def centered_anchor(anchor, saved, drawn)
+          return anchor unless anchor && saved
+
+          Ea::Model::Point.new(x: anchor.x + center_shift(saved, drawn, :x, :width),
+                               y: anchor.y + center_shift(saved, drawn, :y, :height))
+        end
+        private_class_method :centered_anchor
+
+        def center_shift(saved, drawn, coordinate, size)
+          drawn.public_send(coordinate) + drawn.public_send(size) / 2 -
+            saved.public_send(coordinate) - saved.public_send(size) / 2
+        end
+        private_class_method :center_shift
 
         # A tether joins its saved association anchor to the facing
         # side-center of the attached class, rather than to the other proxy.
