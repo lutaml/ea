@@ -55,14 +55,13 @@ module Ea
       # EA XMI stores packages with `EAPK_<guid>` ids inside the
       # uml:Model hierarchy, but diagram element `subject=` refs use
       # `EAID_<guid>`. We alias packages under both prefixes so
-      # `model_element_ref` lookups from diagram elements resolve.
+      # `model_element_ref` lookups from diagram elements resolve. The
+      # EAID_ alias is resolved on lookup so `values` lists each
+      # package once.
       def index_by_id
         @index_by_id ||= begin
-          idx = {}
-          packages.each do |p|
-            idx[p.id] = p
-            alias_eaid_for_package(idx, p)
-          end
+          idx = Hash.new { |index, id| eaid_package_alias(index, id) }
+          packages.each { |p| idx[p.id] = p }
           classifiers.each { |c| idx[c.id] = c }
           relationships.each { |r| idx[r.id] = r }
           stereotypes.each { |s| idx[s.id] = s }
@@ -98,10 +97,10 @@ module Ea
         property_index[id]
       end
 
-      def alias_eaid_for_package(idx, package)
-        return unless package.id&.start_with?("EAPK_")
+      def eaid_package_alias(index, id)
+        return unless id.is_a?(String) && id.start_with?("EAID_")
 
-        idx["EAID_#{package.id[5..]}"] = package
+        index.fetch("EAPK_#{id[5..]}", nil)
       end
 
       def root_packages
