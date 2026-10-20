@@ -19,6 +19,11 @@ RSpec.describe Ea::Sources::Xmi::ClassifierBuilder do
   end
 
   it "leaves classifiers without documentation unannotated" do
-    expect(classifiers.map { |c| c.annotations.size }.tally).to eq(0 => 30, 1 => 3)
+    expect(classifiers.map { |c| c.annotations.size }.tally).to eq(0 => 65, 1 => 3)
+  end
+
+  it "annotates only the three documented concepts" do
+    documented = classifiers.reject { |c| c.annotations.empty? }.map(&:name)
+    expect(documented.sort).to eq(["Concept A", "Concept B", "Concept C"])
   end
 end
