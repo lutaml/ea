@@ -108,12 +108,12 @@ module Ea
           texts
         end
 
-        # A stored target role box yields to the target role bounds the XMI
-        # builder keeps, which belong to this connector's own memberEnd.
+        # Role bounds the XMI builder keeps belong to this connector's own
+        # memberEnd and win over a stored role box; a stored multiplicity box
+        # wins over multiplicity bounds.
         def available_umldi_bounds(bounds, label_boxes, end_kind)
-          role_key, mult_key = end_kind == :source ? %i[llt llb] : %i[lrt lrb]
+          mult_key = end_kind == :source ? :llb : :lrb
           result = bounds.dup
-          result.delete(:source_role) if end_kind == :source && label_boxes.key?(role_key)
           result.delete(end_kind == :source ? :source_multiplicity : :target_multiplicity) if label_boxes.key?(mult_key)
           result
         end

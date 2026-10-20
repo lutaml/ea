@@ -153,7 +153,7 @@ module Ea
             mult_bounds = umldi_bounds[end_kind == :source ? :source_multiplicity : :target_multiplicity]
             text_pos = umldi_label_position(role_bounds) if role_bounds
             mult_pos = umldi_label_position(mult_bounds) if mult_bounds
-            stereo_pos = umldi_stereotype_position(role_bounds) if stereo && role_bounds
+            stereo_pos = umldi_stereotype_position(role_bounds, role, stereo, text_box) if stereo && role_bounds
 
             build_texts(role:, mult:, standalone:,
                         text_pos:, mult_pos:, stereo:, text_box:, stereo_pos:)
@@ -850,8 +850,9 @@ module Ea
             [bounds[:x], bounds[:y] + font_pixel_size.ceil]
           end
 
-          def umldi_stereotype_position(bounds)
-            [bounds[:x], bounds[:y] + font_pixel_size.ceil + (font_pixel_size.ceil + 2)]
+          def umldi_stereotype_position(bounds, role, stereo, text_box)
+            [bounds[:x] + stereotype_offset(role, stereo, text_box),
+             bounds[:y] + font_pixel_size.ceil + (font_pixel_size.ceil + 2)]
           end
 
           def font_pixel_size
