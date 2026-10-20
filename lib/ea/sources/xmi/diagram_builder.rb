@@ -10,6 +10,7 @@ module Ea
       # the UML-DI owned_element bounds otherwise.
       class DiagramBuilder
         autoload :FontSettings, "ea/sources/xmi/diagram_builder/font_settings"
+        autoload :StereotypeProfiles, "ea/sources/xmi/diagram_builder/stereotype_profiles"
         autoload :UmldiEdges, "ea/sources/xmi/diagram_builder/umldi_edges"
 
         attr_reader :root, :xmi_path
@@ -136,7 +137,7 @@ module Ea
             z_order: placed.seqno,
             duid: style.duid,
             umldi_keyword: umldi_keywords[placed.subject],
-            style: {}
+            style: (@stereotype_profiles ||= StereotypeProfiles.new(root)).for(placed.subject)
           )
         end
 
