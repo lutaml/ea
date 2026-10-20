@@ -28,6 +28,12 @@ RSpec.describe "Source Property roles leaving down on a centered box" do
     expect(result.values_at("+parent", "«property»")).to eq([[105, 198], [98, 210]])
   end
 
+  it "seats a saved association ray at the same downward seat" do
+    result = positions(shape, box: centered, style: { mode: "3", lwidth: "0", stored_association_ray: true })
+
+    expect(result.values_at("+shape", "«property»")).to eq([[1029, 196], [1021, 208]])
+  end
+
   it "keeps a width-0 route with moved offsets at its stored offsets" do
     box = centered.merge("ox" => 10, "oy" => -5)
     result = positions(shape, box: box, style: { mode: "3", lwidth: "0" })

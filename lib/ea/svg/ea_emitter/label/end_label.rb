@@ -690,7 +690,7 @@ module Ea
           end
 
           def centered_width_zero_down_box?(box, style)
-            box["alignment"] == 1 && stored_offsets_zero?(box) && style[:stored_association_ray] != true &&
+            box["alignment"] == 1 && stored_offsets_zero?(box) &&
               style.values_at(:mode, :lwidth, :tree) == ["3", "0", nil]
           end
 
