@@ -247,7 +247,7 @@ module Ea
             line_color: style.color,
             line_width: style.line_width,
             hidden: style.hidden,
-            label_boxes: serialize_label_boxes(geom.label_boxes)
+            label_boxes: connector_label_boxes(placed, ext_meta[:ea_type])
           )
           connector.umldi_label_bounds = if options.fetch(:context)
                                            {}
@@ -302,6 +302,27 @@ module Ea
           return unless connector.target_stereotype.to_s.empty?
 
           connector.style[:plain_target_seat] = true
+        end
+
+        PHANTOM_TYPES = %w[Association Aggregation].freeze
+
+        # EA exports a model relationship drawn without a diagram link row as
+        # an Association or Aggregation link with the default style and an
+        # all-zero, EDGE-less, bendless geometry; the QEA source builds it as
+        # a phantom connector.
+        def phantom_link?(placed, type)
+          PHANTOM_TYPES.include?(type) && placed.style.raw == ";Hidden=0;" && default_geometry?(placed.geometry)
+        end
+
+        def default_geometry?(geom)
+          geom.edge.nil? && [geom.sx, geom.sy, geom.ex, geom.ey].all?(&:zero?) &&
+            geom.path.to_s.empty? && geom.label_boxes.to_h.empty?
+        end
+
+        def connector_label_boxes(placed, type)
+          return Qea::DiagramBuilder::DEFAULT_LABEL_BOXES if phantom_link?(placed, type)
+
+          serialize_label_boxes(placed.geometry.label_boxes)
         end
 
         # The saved SOID/EOID can name the model connector's ends in reverse
@@ -362,11 +383,23 @@ module Ea
         end
 
         def connector_route(placed, source, target, owner_id, type)
+          phantom_route(placed, source, target, type) || saved_route(placed, source, target, owner_id, type)
+        end
+
+        def saved_route(placed, source, target, owner_id, type)
           native = umldi_waypoints(owner_id, placed) if placed.geometry.bend_points.to_a.empty?
           points = native || compute_waypoints(placed.geometry, source, target,
                                                style: placed.style, connector_type: type)
           native ||= umldi_waypoints(owner_id, placed) if points.empty?
           { waypoints: native || points, style: connector_route_style(placed, native) }
+        end
+
+        def phantom_route(placed, source, target, type)
+          return unless source && target && phantom_link?(placed, type)
+
+          points = StoredRoute.new.phantom_waypoints(bounds_from_placed(source), bounds_from_placed(target))
+          { waypoints: points.map { |x, y| Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y)) },
+            style: { lwidth: "1", phantom_outline: true } }
         end
 
         def connector_route_style(placed, native)

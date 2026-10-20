@@ -38,6 +38,10 @@ module Ea
           ray_points(source, target, offsets, geom)
         end
 
+        def phantom_waypoints(source, target)
+          [bounds_edge_point(source, target), bounds_edge_point(target, source)]
+        end
+
         private
 
         def direct_association_ray?(model, bounds, offsets)
