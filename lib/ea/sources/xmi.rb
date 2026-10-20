@@ -21,6 +21,7 @@ module Ea
       autoload :InstanceBuilder, "ea/sources/xmi/instance_builder"
       autoload :PropertyBuilder, "ea/sources/xmi/property_builder"
       autoload :OperationBuilder, "ea/sources/xmi/operation_builder"
+      autoload :ReceptionBuilder, "ea/sources/xmi/reception_builder"
       autoload :RelationshipBuilder, "ea/sources/xmi/relationship_builder"
       autoload :AnnotationBuilder, "ea/sources/xmi/annotation_builder"
       autoload :TagBuilder, "ea/sources/xmi/tag_builder"
