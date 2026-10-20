@@ -31,7 +31,8 @@ RSpec.describe Ea::Sources::Xmi::Adapter do
     end
 
     it "harmonizes every uml:Association as a Model::Association" do
-      assoc_count = count_elements(root.model, "uml:Association")
+      package_imports = root.extension.connectors.connector.count { |c| c.properties&.ea_type == "Package" }
+      assoc_count = count_elements(root.model, "uml:Association") + package_imports
       associations = document.relationships.select { |r| r.is_a?(Ea::Model::Association) }
       expect(associations.size).to eq(assoc_count)
     end
