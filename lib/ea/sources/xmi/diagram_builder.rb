@@ -285,6 +285,9 @@ module Ea
 
         def connector_route_style(placed, native)
           route_style = native ? { umldi_route: true } : {}
+          # Label seats use EA's saved routing mode on every route source;
+          # umldi_route still marks UMLDI waypoints as authoritative.
+          route_style.merge!(Qea::DiagramStyleParser.parse(placed.style.raw).slice(:mode, :lwidth, :tree))
           # Source-known links without DUIDs use classifier endpoint metadata,
           # not a saved label box that might refer to the opposite end.
           route_style[:explicit_end_roles] = true unless placed.style.soid && placed.style.eoid
