@@ -35,6 +35,7 @@ module Ea
             instance_specifications: instance_specifications,
             diagrams: diagrams
           )
+          mark_connector_proxies(doc)
           apply_tagged_values(doc)
           apply_receptions(doc)
           apply_stereotypes(doc)
@@ -43,6 +44,23 @@ module Ea
         end
 
         private
+
+        # EA serializes connector anchors as UML class stubs. Keep their
+        # identity and geometry while distinguishing their graphical role.
+        def mark_connector_proxies(doc)
+          proxy_ids = connector_proxy_ids
+          return if proxy_ids.empty?
+
+          doc.diagrams.flat_map(&:elements).each do |element|
+            element.style["connector_proxy"] = true if proxy_ids.include?(element.model_element_ref)
+          end
+        end
+
+        def connector_proxy_ids
+          (root.extension&.elements&.element || []).filter_map do |element|
+            IdNormalizer.from_xmi_id(element.idref) if element.type == "uml:ProxyConnector"
+          end
+        end
 
         def apply_receptions(doc)
           grouped = ReceptionBuilder.new(xmi_path).grouped_by_owner
