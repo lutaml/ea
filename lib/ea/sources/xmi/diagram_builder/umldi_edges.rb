@@ -11,6 +11,8 @@ module Ea
         # drawn by more than one edge in the same diagram has neither; an edge
         # with fewer than two waypoints has no route.
         class UmldiEdges
+          autoload :PropertyRoles, "ea/sources/xmi/diagram_builder/umldi_edges/property_roles"
+
           def initialize(xmi_path)
             @xmi_path = xmi_path
           end
@@ -25,9 +27,16 @@ module Ea
 
           # Absolute saved UMLDI bounds for connector label boxes. These are
           # kept separate from extension label offsets: callers may use them
-          # only when the extension did not save label geometry.
+          # when extension geometry is absent or the association owns the role.
           def label_bounds_for(diagram_id, connector_id)
             label_bounds.dig(diagram_id, connector_id)
+          end
+
+          # Role label keys whose UMLDI label is bound to the property that
+          # the connector's association declares, so the bounds describe that
+          # end's own role label rather than an unrelated label.
+          def property_role_keys_for(diagram_id, connector_id)
+            (@property_roles ||= PropertyRoles.new(doc)).keys_for(diagram_id, connector_id)
           end
 
           private

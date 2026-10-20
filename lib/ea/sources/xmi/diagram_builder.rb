@@ -266,10 +266,11 @@ module Ea
           bounds = umldi_edges.label_bounds_for(owner_id, connector_id)
           return {} unless bounds
 
+          property_roles = umldi_edges.property_role_keys_for(owner_id, connector_id)
           bounds.reject do |key, _|
             extension_key = { source_role: :llt, source_multiplicity: :llb,
                               target_role: :lrt, target_multiplicity: :lrb }.fetch(key)
-            label_boxes.key?(extension_key)
+            label_boxes.key?(extension_key) && !(key == :target_role && property_roles.include?(key))
           end
         end
 
