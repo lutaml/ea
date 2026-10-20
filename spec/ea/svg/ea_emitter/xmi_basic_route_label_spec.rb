@@ -34,7 +34,6 @@ RSpec.describe Ea::Svg::EaEmitter::Document, "basic XMI unresolved extension rou
       ["157826AA", "0273F609", [[182, 180], [182, 135], [329, 135]]],
       ["157826AA", "97A0AE9F", [[178, 255], [178, 302], [329, 302]]],
       ["14E9F5FD", "DBD4BDC6", [[685, 286], [685, 246], [460, 246], [460, 196]]],
-      ["14E9F5FD", "1B5CC9EE", [[460, 282], [460, 246], [460, 246], [460, 196]]],
       ["14E9F5FD", "4901800B", [[231, 279], [231, 246], [460, 246], [460, 196]]]
     ]
 
@@ -44,6 +43,24 @@ RSpec.describe Ea::Svg::EaEmitter::Document, "basic XMI unresolved extension rou
         points = connector.waypoints.map { |point| [point.position.x, point.position.y] }
         expect(points).to eq(expected), "saved route for #{relationship}"
       end
+    end
+  end
+end
+
+RSpec.describe Ea::Svg::EaEmitter::Document, "basic XMI vertical tree trunk" do
+  include_context "basic XMI route label corpus"
+
+  it "omits only the zero-length segment of a resolved vertical tree trunk" do
+    diagram = basic_route_label_diagram("14E9F5FD")
+    connector = basic_route_label_connector("14E9F5FD", "1B5CC9EE")
+    edges = Ea::Sources::Xmi::DiagramBuilder::UmldiEdges.new("spec/fixtures/basic.xmi")
+
+    aggregate_failures do
+      expect(edges.route_for(diagram.id, connector.relationship_ref))
+        .to eq([[460, 282], [460, 246], [460, 246], [460, 196]])
+      # Native's trunk keeps row 246 and both docks, without the repeated vertex.
+      expect(connector.waypoints.map { |point| [point.position.x, point.position.y] })
+        .to eq([[460, 282], [460, 246], [460, 196]])
     end
   end
 end
