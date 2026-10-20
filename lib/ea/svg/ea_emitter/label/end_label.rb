@@ -61,7 +61,7 @@ module Ea
           #                   fallback
           def texts(text_box:, mult_box:, anchor:, connector:, end_kind:,
                     tree: false, heading: nil, stored_labels: false, bend: nil, source_bounds: nil,
-                    target_face: nil)
+                    target_face: nil, umldi_bounds: {})
             from_property, role, mult = role_and_multiplicity(connector, end_kind)
             if role_empty?(role) && mult_empty?(mult)
               other_from_prop, other_role, other_mult = role_and_multiplicity(connector,
@@ -149,8 +149,14 @@ module Ea
               text_pos, mult_pos = stair_positions if stair_positions
             end
 
+            role_bounds = umldi_bounds[end_kind == :source ? :source_role : :target_role]
+            mult_bounds = umldi_bounds[end_kind == :source ? :source_multiplicity : :target_multiplicity]
+            text_pos = umldi_label_position(role_bounds) if role_bounds
+            mult_pos = umldi_label_position(mult_bounds) if mult_bounds
+            stereo_pos = umldi_stereotype_position(role_bounds) if stereo && role_bounds
+
             build_texts(role:, mult:, standalone:,
-                        text_pos:, mult_pos:, stereo:, text_box:)
+                        text_pos:, mult_pos:, stereo:, text_box:, stereo_pos:)
           end
 
           private
@@ -820,13 +826,14 @@ module Ea
           end
 
           def build_texts(role:, mult:, standalone:, text_pos:, mult_pos:,
-                          stereo:, text_box:)
+                          stereo:, text_box:, stereo_pos: nil)
             if role && !role.empty? && text_pos
               x, y = text_pos
               texts = [text_at(x, y, role)]
               if stereo
-                stereo_x = x + stereotype_offset(role, stereo, text_box)
-                texts << text_at(stereo_x, y + property_y_offset(text_box), stereo)
+                stereo_x, stereo_y = stereo_pos || [x + stereotype_offset(role, stereo, text_box),
+                                                    y + property_y_offset(text_box)]
+                texts << text_at(stereo_x, stereo_y, stereo)
               end
               if mult && !mult.empty? && mult_pos
                 texts << text_at(*mult_pos, mult)
@@ -837,6 +844,18 @@ module Ea
             else
               []
             end
+          end
+
+          def umldi_label_position(bounds)
+            [bounds[:x], bounds[:y] + font_pixel_size.ceil]
+          end
+
+          def umldi_stereotype_position(bounds)
+            [bounds[:x], bounds[:y] + font_pixel_size.ceil + (font_pixel_size.ceil + 2)]
+          end
+
+          def font_pixel_size
+            font_unit == "pt" ? font_size * 4.0 / 3 : font_size
           end
 
           def stereotype_offset(role, stereo, text_box)

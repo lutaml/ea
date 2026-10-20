@@ -38,6 +38,9 @@ module Ea
       attribute :hidden, :boolean
       attribute :is_substitutable, :boolean, default: false
       attribute :label_boxes, :hash, default: -> { {} }
+      # Absolute labels saved by UML-DI when the EA extension omits the
+      # corresponding relative label boxes.
+      attribute :umldi_label_bounds, :hash, default: -> { {} }
       attribute :ghost_labels, GhostLabel, collection: true, initialize_empty: true
       # True when the t_diagramlinks.Geometry string carries explicit
       # SX/SY/EX/EY offset fields. EA renders the «import» package_anchor
@@ -86,6 +89,7 @@ module Ea
         map "lineWidth", to: :line_width
         map "hidden", to: :hidden, render_default: true
         map "labelBoxes", to: :label_boxes
+        map "umldiLabelBounds", to: :umldi_label_bounds
         map "ghostLabels", to: :ghost_labels, render_empty: true
         map "hasGeometryOffsets", to: :has_geometry_offsets, render_default: true
       end

@@ -26,7 +26,50 @@ module Ea
           finish(points, link, connector, source, target, bends, ports, offsets, edge)
         end
 
+        # Direct custom-line Associations retain mathematical ray origins as
+        # well as their computed boundary ports, just as the QEA builder does.
+        def ray_metadata(model, link:, bounds:, offsets:, edge:)
+          return {} unless direct_association_ray?(model, bounds, offsets)
+
+          source, target = bounds.values_at(:source, :target)
+          geom = ray_geometry(offsets, edge)
+          return {} unless saved_association_ray?(model, link, source, target, geom)
+
+          ray_points(source, target, offsets, geom)
+        end
+
         private
+
+        def direct_association_ray?(model, bounds, offsets)
+          model.connector_type == "Association" && model.waypoints.size == 2 &&
+            model.style.to_h.values_at(:mode, :lwidth, :tree) == ["1", "2", nil] &&
+            bounds.values.all? && offsets.values.flatten.none?(&:nil?)
+        end
+
+        def ray_geometry(offsets, edge)
+          { sx: offsets[:source][0], sy: offsets[:source][1],
+            ex: offsets[:target][0], ey: offsets[:target][1], edge: edge }
+        end
+
+        def saved_association_ray?(model, link, source, target, geom)
+          (!geom[:sy].zero? || !geom[:ey].zero?) &&
+            stored_ray_gap?(source, target, "1", geom[:edge]) &&
+            stored_association_path?(model, link, source, target, geom)
+        end
+
+        def ray_points(source, target, offsets, geom)
+          ports = [port_for(source, offsets[:source]), port_for(target, offsets[:target])]
+          return {} unless ports.all?
+
+          { source_port: point_for(ports.first), target_port: point_for(ports.last),
+            source_anchor: stored_ray_origin(source, geom[:sx], geom[:sy]),
+            target_anchor: stored_ray_origin(target, geom[:ex], geom[:ey]),
+            has_geometry_offsets: true }
+        end
+
+        def point_for(pair)
+          Ea::Model::Point.new(x: pair[0], y: pair[1])
+        end
 
         # Placements here are already Ea::Model::Bounds.
         def bounds_from_rect(bounds)

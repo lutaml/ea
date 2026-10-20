@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='utf-8'?>
+<xmi:XMI xmlns:dc="http://www.omg.org/spec/UML/20161101/UMLDC" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI">
+  <uml:Model xmi:type="uml:Model" name="C96 direct property source excerpt">
+    <packagedElement xmi:type="uml:Class" xmi:id="EAID_1BD79A3D_C3F1_4809_B6E2_CF5A907027DA" name="ThreeDimensionalExtent">
+      <generalization xmi:type="uml:Generalization" xmi:id="EAID_1FF9C1A5_27CE_4334_BECA_A848B14F269F" general="EAID_ACABD6DC_E4F2_4a04_BBD4_25CECBBDC6F6" isSubstitutable="true" />
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="EAID_91544E65_1225_40fd_B517_4EB271D9F385">
+      <memberEnd xmi:idref="EAID_dst544E65_1225_40fd_B517_4EB271D9F385" />
+      <ownedEnd xmi:type="uml:Property" xmi:id="EAID_dst544E65_1225_40fd_B517_4EB271D9F385" association="EAID_91544E65_1225_40fd_B517_4EB271D9F385">
+        <type xmi:idref="EAID_AB0BC874_0544_4012_A070_E3860F7647B8" />
+      </ownedEnd>
+      <memberEnd xmi:idref="EAID_src544E65_1225_40fd_B517_4EB271D9F385" />
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="EAID_AB0BC874_0544_4012_A070_E3860F7647B8" name="UrbanFacility">
+      <generalization xmi:type="uml:Generalization" xmi:id="EAID_A998D920_6513_4def_9336_DF754850B84D" general="EAID_C344DAF0_B143_409c_BE49_38671B51D4C8" isSubstitutable="true" />
+      </packagedElement>
+    <umldi:Diagram xmi:type="umldi:UMLClassDiagram" xmi:id="EAID_C96CBC24_B20E_459a_8F9D_75B61CDCB89F" isFrame="false" modelElement="EAPK_42058153_A77E_4b5d_B0D6_2589E3ED953A">
+      <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_C96CBC24_B20E_459a_B6E2_CF5A907027DA" modelElement="EAID_1BD79A3D_C3F1_4809_B6E2_CF5A907027DA">
+        <ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_B20E_459a_B6E2_CF5A907027DA" text="FeatureType" />
+        <ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_B20E_459a_B6E2_CF5A907027DA" text="ThreeDimensionalExtent" />
+        <bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_B20E_459a_B6E2_CF5A907027DA" x="236" y="49" width="268" height="88" />
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_C96CBC24_B20E_459a_A070_E3860F7647B8" modelElement="EAID_AB0BC874_0544_4012_A070_E3860F7647B8">
+        <ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_B20E_459a_A070_E3860F7647B8" text="FeatureType" />
+        <ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_B20E_459a_A070_E3860F7647B8" text="UrbanFacility" />
+        <bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_B20E_459a_A070_E3860F7647B8" x="286" y="389" width="167" height="80" />
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLEdge" xmi:id="EAID_C96CBC24_B20E_459a_B517_4EB271D9F385" source="EAID_1BD79A3D_C3F1_4809_B6E2_CF5A907027DA" target="EAID_AB0BC874_0544_4012_A070_E3860F7647B8" modelElement="EAID_91544E65_1225_40fd_B517_4EB271D9F385">
+        <ownedElement xmi:type="umldi:UMLAssociationEndLabel" xmi:id="EAID_SEL000000_B20E_459a_B517_4EB271D9F385" text="+threeDimensionalExtent&#10;«property»" modelElement="EAID_src544E65_1225_40fd_B517_4EB271D9F385">
+          <bounds xmi:type="dc:bounds" xmi:id="EAID_DBSEL000000_B20E_459a_B517_4EB271D9F385" x="411" y="146" width="113" height="25" />
+        </ownedElement>
+        <ownedElement xmi:type="umldi:UMLMultiplicityLabel" xmi:id="EAID_SML000000_B20E_459a_B517_4EB271D9F385" text="0..*" modelElement="EAID_src544E65_1225_40fd_B517_4EB271D9F385">
+          <bounds xmi:type="dc:bounds" xmi:id="EAID_DBSML000000_B20E_459a_B517_4EB271D9F385" x="346" y="151" width="15" height="13" />
+        </ownedElement>
+        <waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000000_B20E_459a_B517_4EB271D9F385" x="321" y="138" />
+        <waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000001_B20E_459a_B517_4EB271D9F385" x="321" y="429" />
+        <waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000002_B20E_459a_B517_4EB271D9F385" x="321" y="388" />
+      </ownedElement>
+    </umldi:Diagram>
+  </uml:Model>
+  <xmi:Extension extender="Enterprise Architect" extenderID="6.5">
+    <diagrams>
+      <diagram xmi:id="EAID_C96CBC24_B20E_459a_8F9D_75B61CDCB89F">
+        <model package="EAPK_42058153_A77E_4b5d_B0D6_2589E3ED953A" localID="168" owner="EAPK_42058153_A77E_4b5d_B0D6_2589E3ED953A" tpos="36" />
+        <properties name="都市施設" type="Logical" />
+        <project author="048827" version="1.0" created="2023-03-28 16:56:56" modified="2025-03-14 09:39:04" />
+        <style1 value="ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;Border=1;HighlightForeign=1;PackageContents=1;SequenceNotes=0;ScalePrintImage=0;PPgs.cx=0;PPgs.cy=0;DocSize.cx=795;DocSize.cy=1138;ShowDetails=0;Orientation=P;Zoom=100;ShowTags=0;OpParams=1;VisibleAttributeDetail=0;ShowOpRetType=1;ShowIcons=1;CollabNums=0;HideProps=0;ShowReqs=0;ShowCons=0;PaperSize=9;HideParents=1;UseAlias=0;HideAtts=0;HideOps=0;HideStereo=0;HideElemStereo=0;ShowTests=0;ShowMaint=0;ConnectorNotation=UML 2.1;ExplicitNavigability=0;ShowShape=1;AllDockable=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;ShowNotes=0;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;" />
+        <style2 value="ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;KanbanActive=0;MatrixLineWidth=1;MatrixLineClr=0;MatrixLocked=0;TConnectorNotation=UML 2.1;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;MDGDgm=;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;SuppressedCompartments=;Theme=:119;SaveTag=494B42D9;" />
+        <swimlanes value="locked=false;orientation=0;width=0;inbar=false;names=false;color=-1;bold=false;fcol=0;tcol=-1;ofCol=-1;ufCol=-1;hl=0;ufh=0;hh=0;cls=0;bw=0;hli=0;bro=0;SwimlaneFont=lfh:-13,lfw:0,lfi:0,lfu:0,lfs:0,lfface:Calibri,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;" />
+        <matrixitems value="locked=false;matrixactive=false;swimlanesactive=true;kanbanactive=false;width=1;clrLine=0;" />
+        <extendedProperties />
+        <persistentstyle value="DGS=On=0:CNT=8:W=120:H=40:SG=0:SGH=0:AEB=0:;AR=0;DCL=0;Swimlanes=locked=false;orientation=0;width=0;inbar=false;names=false;color=-1;bold=false;fcol=0;tcol=-1;ofCol=-1;ufCol=-1;hl=0;ufh=0;hh=0;cls=0;bw=0;hli=0;bro=0;SwimlaneFont=lfh:-13,lfw:0,lfi:0,lfu:0,lfs:0,lfface:Calibri,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;;" />
+        <xrefs />
+        <elements>
+          <element geometry="Left=286;Top=389;Right=453;Bottom=469;imgL=286;imgT=389;imgR=453;imgB=469;" subject="EAID_AB0BC874_0544_4012_A070_E3860F7647B8" seqno="26" style="DUID=73B9B97B;NSL=0;LCol=-1;bold=0;black=0;italic=0;ul=0;charset=0;HideIcon=0;BCol=16764159;font=Yu Gothic UI;fontsz=100;pitch=50;BFol=0;LWth=2;" />
+          <element geometry="Left=236;Top=49;Right=504;Bottom=137;imgL=236;imgT=49;imgR=504;imgB=137;" subject="EAID_1BD79A3D_C3F1_4809_B6E2_CF5A907027DA" seqno="27" style="DUID=48F8237F;NSL=0;LCol=-1;bold=0;black=0;italic=0;ul=0;charset=0;HideIcon=0;BCol=16764159;font=Yu Gothic UI;fontsz=100;pitch=50;BFol=0;LWth=2;" />
+          <element geometry="EDGE=3;EX=-48;EY=7;SX=-49;SY=2;$LLB=CX=19:CY=16:OX=17:OY=8:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LLT=CX=128:CY=31:OX=267:OY=3:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=321:-429$;" subject="EAID_91544E65_1225_40fd_B517_4EB271D9F385" style="Mode=1;EOID=73B9B97B;SOID=48F8237F;Color=-1;LWidth=2;Hidden=0;" />
+        </elements>
+      </diagram>
+    </diagrams>
+    <connectors>
+      <connector xmi:idref="EAID_91544E65_1225_40fd_B517_4EB271D9F385">
+        <source xmi:idref="EAID_1BD79A3D_C3F1_4809_B6E2_CF5A907027DA">
+          <model ea_localid="309" type="Class" name="ThreeDimensionalExtent" />
+          <role name="threeDimensionalExtent" stereotype="property" visibility="Public" targetScope="instance" />
+          <type multiplicity="0..*" aggregation="none" containment="Unspecified" />
+          <constraints />
+          <modifiers isOrdered="false" changeable="none" isNavigable="true" />
+          <style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;" />
+          <documentation />
+          <xrefs value="$XREFPROP=$XID={D679FEFC-BA6E-4a34-92A1-A31A8F6FB107}$XID;$NAM=Stereotypes$NAM;$TYP=connectorSrcEnd property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=property;FQName=GML::property;@ENDSTEREO;$DES;$CLT={91544E65-1225-40fd-B517-4EB271D9F385}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;" />
+          <tags>
+            <tag xmi:id="EAID_08A8199D_34EA_8c34_9103_C35F1E3B7657" name="isMetadata" value="false$ea_notes=Values: true,false&#10;Default: false&#10;Description: If 'true', the property type will extend GML AbstractMetadataPropertyType. Else, it will extend GML AbstractMemberType.&#10;" />
+            <tag xmi:id="EAID_37DFCA0A_33B7_f633_B264_5A0CC8CB4D57" name="inlineOrByReference" value="inline$ea_notes=Values: byReference,inline&#10;Default: inline&#10;Description: Determines whether the property value will be encoded inline or by reference&#10;" />
+            <tag xmi:id="EAID_E810E922_7AEF_c27a_9B4D_7CDEE2B3A73A" name="sequenceNumber" value="1$ea_notes= Unique integer value to order the properties of a class&#10;" />
+          </tags>
+        </source>
+        <target xmi:idref="EAID_AB0BC874_0544_4012_A070_E3860F7647B8">
+          <model ea_localid="285" type="Class" name="UrbanFacility" />
+          <role visibility="Public" targetScope="instance" />
+          <type aggregation="shared" containment="Unspecified" />
+          <constraints />
+          <modifiers isOrdered="false" changeable="none" isNavigable="false" />
+          <style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;" />
+          <documentation />
+          <xrefs />
+          <tags />
+        </target>
+        <model ea_localid="305" />
+        <properties ea_type="Association" direction="Destination -&gt; Source" />
+        <modifiers isRoot="false" isLeaf="false" />
+        <parameterSubstitutions />
+        <documentation value="都市施設に設定された立体的な範囲。立体的な範囲が定められている場合にのみ作成する。" />
+        <appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0" />
+        <labels lb="0..*" lt="+threeDimensionalExtent&#10;«property»" />
+        <extendedProperties />
+        <style />
+        <xrefs />
+        <tags />
+      </connector>
+    </connectors>
+  </xmi:Extension>
+</xmi:XMI>
