@@ -56,6 +56,8 @@ module Ea
             style: style_for(ext_diagram),
             style_ex: style_ex_for(ext_diagram),
             show_notes: style_ex_for(ext_diagram).to_s.include?("ShowNotes=1"),
+            show_package_contents: style_flag?(ext_diagram, "PackageContents"),
+            show_foreign: style_flag?(ext_diagram, "HighlightForeign"),
             elements: build_elements(placed_elements, id, umldi_keywords),
             connectors: build_connectors(placed_connectors,
                                           placed_elements, id),
@@ -88,6 +90,11 @@ module Ea
         end
 
         private
+
+        def style_flag?(ext_diagram, key)
+          value = style_for(ext_diagram).to_s[/(?:\A|;)#{key}=(\d+)/, 1]
+          value.to_i.nonzero? ? true : false
+        end
 
         def canvas_bounds(placed_elements)
           return nil if placed_elements.empty?
