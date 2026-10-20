@@ -53,6 +53,7 @@ module Ea
             bounds: canvas_bounds(placed_elements),
             style: style_for(ext_diagram),
             style_ex: style_ex_for(ext_diagram),
+            show_notes: style_ex_for(ext_diagram).to_s.include?("ShowNotes=1"),
             elements: build_elements(placed_elements, id, umldi_keywords),
             connectors: build_connectors(placed_connectors,
                                           placed_elements, id),
