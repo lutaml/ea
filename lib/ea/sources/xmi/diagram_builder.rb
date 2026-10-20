@@ -10,6 +10,7 @@ module Ea
       # the UML-DI owned_element bounds otherwise.
       class DiagramBuilder
         autoload :ConnectorMetadata, "ea/sources/xmi/diagram_builder/connector_metadata"
+        autoload :AssociationClassMetadata, "ea/sources/xmi/diagram_builder/association_class_metadata"
         autoload :FontSettings, "ea/sources/xmi/diagram_builder/font_settings"
         autoload :StereotypeProfiles, "ea/sources/xmi/diagram_builder/stereotype_profiles"
         autoload :UmldiEdges, "ea/sources/xmi/diagram_builder/umldi_edges"
@@ -160,8 +161,23 @@ module Ea
           by_subject = placed_elements.group_by { |pe| guid_key(pe.subject) }
 
           placed_connectors.each_with_index.map do |placed, index|
-            build_connector(placed, by_duid, by_subject, owner_id, index)
+            connector = build_connector(placed, by_duid, by_subject, owner_id, index)
+            mark_association_class(connector, placed, placed_elements)
           end
+        end
+
+        def mark_association_class(connector, placed, placed_elements)
+          reference = association_class_metadata.for(
+            connector_index[placed.subject],
+            placed_subjects: placed_elements.map(&:subject),
+            waypoints: connector.waypoints
+          )
+          connector.style[:association_class_ref] = reference if reference
+          connector
+        end
+
+        def association_class_metadata
+          @association_class_metadata ||= AssociationClassMetadata.new(xmi_path)
         end
 
         def build_connector(placed, by_duid, by_subject, owner_id, rank)

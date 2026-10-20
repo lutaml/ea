@@ -1,0 +1,14 @@
+<xmi:XMI xmlns:xmi="http://www.omg.org/spec/XMI/20131001">
+  <xmi:Extension>
+    <elements>
+      <element xmi:idref="EAID_CLASS" xmi:type="uml:Class"/>
+      <element xmi:idref="EAID_PROXY_A" xmi:type="uml:ProxyConnector" classifier="EAID_CLASS"/>
+      <element xmi:idref="EAID_PROXY_B" xmi:type="uml:ProxyConnector" classifier="EAID_CLASS"/>
+    </elements>
+    <connectors>
+      <connector xmi:idref="EAID_ASSOC">
+        <extendedProperties associationclass="EAID_CLASS" privatedata1="205"/>
+      </connector>
+    </connectors>
+  </xmi:Extension>
+</xmi:XMI>
