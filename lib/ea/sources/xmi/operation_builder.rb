@@ -19,7 +19,7 @@ module Ea
             owner_id: owner.id,
             qualified_name: "#{owner.name}::#{op.name}",
             return_type_name: return_type_name_for(op),
-            visibility: op.visibility,
+            visibility: op.visibility || "public",
             is_static: boolean(op.is_static),
             is_abstract: boolean(op.is_abstract),
             parameters: build_parameters(op, id),
@@ -30,21 +30,21 @@ module Ea
         private
 
         def build_parameters(op, owner_op_id)
-          op.owned_parameter.map.with_index do |param, idx|
-            direction = param.direction || (idx.zero? ? "return" : "in")
+          op.owned_parameter.reject { |p| p.direction == "return" }.map.with_index do |param, idx|
+            direction = param.direction || "in"
             Ea::Model::Parameter.new(
               id: IdNormalizer.from_xmi_id(param.id) ||
                   IdNormalizer.synthetic_id(owner_op_id, "param", idx.to_s),
               name: param.name || direction,
               ordinal: idx,
               direction: direction,
-              type_name: param.type
+              type_name: param.classifier_type
             )
           end
         end
 
         def return_type_name_for(op)
-          op.owned_parameter.find { |p| p.direction == "return" }&.type
+          op.owned_parameter.find { |p| p.direction == "return" }&.classifier_type
         end
 
         def boolean(value)
