@@ -4,7 +4,7 @@ require "spec_helper"
 
 # Plateau diagram 99 (9400D9BC) connector 438 and diagram 62 (74C974B6)
 # phantom connector 875, measured against native EA output.
-RSpec.describe "Source Property roles leaving down on a centered box" do
+RSpec.shared_context "with a down-leaving source Property role" do
   include LabelUpwardPropertyHelpers
 
   let(:anchor) { [1118, 181] }
@@ -14,6 +14,10 @@ RSpec.describe "Source Property roles leaving down on a centered box" do
   def positions(record, **options)
     upward_property_positions(record, heading: [0, 73], **options)
   end
+end
+
+RSpec.describe "Source Property roles leaving down on a centered box" do
+  include_context "with a down-leaving source Property role"
 
   it "seats a persisted width-0 route at the downward Property seat" do
     result = positions(shape, box: centered, style: { mode: "3", lwidth: "0" })
@@ -33,6 +37,10 @@ RSpec.describe "Source Property roles leaving down on a centered box" do
 
     expect(result.values_at("+shape", "«property»")).to eq([[1029, 196], [1021, 208]])
   end
+end
+
+RSpec.describe "Source Property roles leaving down on a moved or absent box" do
+  include_context "with a down-leaving source Property role"
 
   it "keeps a width-0 route with moved offsets at its stored offsets" do
     box = centered.merge("ox" => 10, "oy" => -5)
