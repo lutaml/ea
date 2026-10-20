@@ -57,3 +57,34 @@ RSpec.describe "XMI profiled UMLDI keyword display" do
     end
   end
 end
+
+RSpec.describe "XMI multiple UMLDI keyword display" do
+  include XmiStereotypeProfileHelpers
+
+  it "selects the saved custom stereotype over the built-in enumeration keyword" do
+    document = xmi_stereotype_document("Enumeration", "GML::Enumeration",
+                                       keyword: %w[enumeration Enumeration])
+
+    expect(xmi_profile_result(document)).to eq([["Enumeration"], ["«Enumeration»"]])
+  end
+
+  it "preserves the first keyword when none matches the saved stereotype" do
+    document = xmi_stereotype_document("Other", "Custom::Other",
+                                       keyword: %w[enumeration Enumeration])
+
+    expect(xmi_profile_result(document)).to eq([["Other"], ["«enumeration»"]])
+  end
+
+  it "keeps matching selection independent of keyword order" do
+    document = xmi_stereotype_document("Enumeration", "GML::Enumeration",
+                                       keyword: %w[Enumeration enumeration])
+
+    expect(xmi_profile_result(document)).to eq([["Enumeration"], ["«Enumeration»"]])
+  end
+
+  it "preserves a sole built-in keyword without synthesizing a custom label" do
+    document = xmi_stereotype_document("Enumeration", "GML::Enumeration", keyword: "enumeration")
+
+    expect(xmi_profile_result(document)).to eq([["Enumeration"], ["«enumeration»"]])
+  end
+end

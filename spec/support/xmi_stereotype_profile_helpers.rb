@@ -16,7 +16,7 @@ module XmiStereotypeProfileHelpers
       xrefs["value"] = "#{prefix}$XREFPROP=$NAM=Stereotypes$NAM;$DES=" \
                        "@STEREO;Name=#{application_name};FQName=#{fqname};@ENDSTEREO;$DES;$ENDXREF;"
     end
-    add_stereotype_keyword(xml, keyword) if keyword
+    Array(keyword).each { |text| add_stereotype_keyword(xml, text) }
     parse_xmi(xml.to_xml)
   end
 
