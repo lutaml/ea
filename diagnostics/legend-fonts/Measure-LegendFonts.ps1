@@ -27,13 +27,13 @@ $fontFiles = @(Get-ChildItem "$env:WINDIR/Fonts" -File | Where-Object {
 })
 Save-Json 'font-files.json' $fontFiles
 $measurements = [System.Collections.Generic.List[object]]::new()
+$substitutedFaces = [System.Collections.Generic.List[object]]::new()
 foreach ($face in $requirements.faces) {
     foreach ($height in $requirements.logical_heights) {
         foreach ($weight in $requirements.weights) {
             foreach ($charset in $requirements.charsets) {
                 foreach ($text in @($requirements.glyph_text) + @($requirements.text_samples)) {
                     $measurement = [GdiProbe]::Measure($face, -[int]$height, [int]$weight, $false, [byte]$charset, $text)
-                    if ($measurement.ActualFace -ne $face) { throw "Face substituted: $face -> $($measurement.ActualFace)" }
                     if ($measurement.DpiX -ne 96 -or $measurement.DpiY -ne 96) { throw '96 DPI required' }
                     # Missing glyphs under Cambria remain diagnostic; MS UI Gothic is measured directly.
                     if ($face -eq 'MS UI Gothic' -and $measurement.MissingUtf16Indices.Count -ne 0) {
@@ -42,15 +42,24 @@ foreach ($face in $requirements.faces) {
                     foreach ($point in $measurement.Codepoints) {
                         if ($point.WidthStatus -ne 'ok') { throw "Advance measurement failed: $($point.Unicode)" }
                     }
-                    $measurements.Add($measurement)
+                    if ($measurement.ActualFace -ne $face) {
+                        if ($face -ne 'Cambria') { throw "Face substituted: $face -> $($measurement.ActualFace)" }
+                        $substitutedFaces.Add($measurement)
+                        Write-Warning "Face substituted: $face -> $($measurement.ActualFace); height=$height weight=$weight charset=$charset"
+                    } else {
+                        $measurements.Add($measurement)
+                    }
                 }
             }
         }
     }
 }
 Save-Json 'measurements.json' $measurements.ToArray()
+Save-Json 'substituted-faces.json' $substitutedFaces.ToArray()
 Save-Json 'manifest.json' ([ordered]@{
-    measurementCount=$measurements.Count
+    measurementCount=$measurements.Count + $substitutedFaces.Count
+    exactFaceMeasurementCount=$measurements.Count
+    substitutedFaceMeasurementCount=$substitutedFaces.Count
     result='complete'
     contract='Exact GDI advances for requested configurations; does not identify original EA exporter fallback face or selected logical height.'
 })

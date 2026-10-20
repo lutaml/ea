@@ -24,9 +24,14 @@ independent control strings. Runtime source baseline is
 The probe records GetCharWidth32W advances, ABC widths, full-string extents,
 DrawText extents, requested and selected faces, glyph coverage, text metrics,
 mapping mode and DPI. Font file hashes/versions and runner metadata accompany the
-numbers. It fails on face substitution, missing MS UI Gothic coverage, non-96-DPI
-execution or failed advance calls. Missing Cambria glyphs remain explicitly
-reported: selected Cambria does not establish per-character fallback identity.
+numbers. `measurements.json` contains only rows whose selected face equals the
+requested face. Cambria requests mapped to another face are preserved separately
+in `substituted-faces.json`, with requested/actual faces and the full measurement;
+they must not be classified as Cambria metrics. The manifest counts both groups.
+The probe fails on MS UI Gothic face substitution or missing coverage, non-96-DPI
+execution or failed advance calls. Missing glyphs on selected Cambria remain
+explicitly reported: selected Cambria does not establish per-character fallback
+identity.
 
 Local verification: copied C# hash/bytes and JSON matrix validated; workflow YAML
 parsed. Native compilation/execution awaits Windows: this macOS host has neither
