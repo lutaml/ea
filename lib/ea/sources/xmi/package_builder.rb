@@ -60,12 +60,16 @@ module Ea
         end
 
         def child_classifier_ids(packaged_element)
-          packaged_element.packaged_element
-                          .filter_map do |pe|
-                            next unless TypeClassifierMap.classifier_type?(pe.type)
+          packaged_element.packaged_element.flat_map do |element|
+            classifier_ids(element)
+          end
+        end
 
-                            IdNormalizer.from_xmi_id(pe.id)
-                          end
+        def classifier_ids(element)
+          return [] unless TypeClassifierMap.classifier_type?(element.type)
+
+          [IdNormalizer.from_xmi_id(element.id),
+           *element.nested_classifier.flat_map { |inner| classifier_ids(inner) }].compact
         end
       end
     end
