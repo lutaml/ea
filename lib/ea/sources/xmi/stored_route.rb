@@ -46,6 +46,9 @@ module Ea
         # UMLDI fallback. A single stored corner and an empty-path stored ray
         # carry mathematical origins that the generic facing-edge route loses.
         def association_route(model, link:, bounds:, offsets:, edge:)
+          partial = partial_port_metadata(model, link, bounds, offsets, edge)
+          return partial unless partial.empty?
+
           return {} unless stored_association_candidate?(model, bounds)
 
           candidate = association_model(model, bounds, offsets)
@@ -57,6 +60,23 @@ module Ea
         end
 
         private
+
+        # A zero-offset end has no explicit port, but QEA still carries both
+        # mathematical origins for the emitter's final boundary redocking.
+        def partial_port_metadata(model, link, bounds, offsets, edge)
+          return {} unless partial_port_candidate?(model, link, bounds, offsets)
+
+          source, target = bounds.values_at(:source, :target)
+          return {} unless saved_association_ray?(model, link, source, target, ray_geometry(offsets, edge))
+
+          association_ends(bounds, offsets).merge(has_geometry_offsets: true)
+        end
+
+        def partial_port_candidate?(model, link, bounds, offsets)
+          model.connector_type == "Aggregation" && !model.style[:umldi_route] && !link.path.to_s.empty? &&
+            direct_association_ray?(model, bounds, offsets) &&
+            offsets.values.count { |offset| offset.all?(&:zero?) } == 1
+        end
 
         def stored_association_candidate?(model, bounds)
           model.connector_type == "Association" && bounds.values.all? &&
