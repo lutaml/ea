@@ -356,10 +356,15 @@ module Ea
           def source_property_centering(connector, direction, box, role)
             return 0 unless %i[left down].include?(direction)
             return 0 unless seat_font? && font_weight == 400 && font_style == "normal"
-            return 0 unless box.values_at("cy", "alignment") == [35, 1]
+            return 0 unless centered_property_box?(connector, direction, box)
 
             stereo = "«#{connector_source_dest_stereotype(connector, :source)}»"
-            -[stereotype_offset(role, stereo, box), 0].min
+            -[stereotype_offset(role, stereo, box.merge("alignment" => 1)), 0].min
+          end
+
+          def centered_property_box?(connector, direction, box)
+            box.values_at("cy", "alignment") == [35, 1] ||
+              (direction == :down && phantom_property_box?(connector, direction, box))
           end
 
           def source_property_seat?(connector, direction, box)
@@ -373,7 +378,7 @@ module Ea
           # Their default Property cluster uses the directional seat with a
           # centered stereotype; persisted or moved boxes keep their own seat.
           def phantom_property_box?(connector, direction, box)
-            %i[up left].include?(direction) && seat_font? && cambria_box?(box) &&
+            %i[up left down].include?(direction) && seat_font? && cambria_box?(box) &&
               box["alignment"].nil? && stored_offsets_zero?(box) &&
               connector.style.to_h[:phantom_outline] == true &&
               property_label?(connector, :source)
@@ -671,11 +676,17 @@ module Ea
 
           def downward_source_route?(style, box)
             [orthogonal_stub_route?(style), lateral_horizontal_route?(style), mode_two_route?(style),
-             downward_property_route?(style), persisted_width_zero_down_box?(box, style)].any?
+             downward_property_route?(style), persisted_width_zero_down_box?(box, style),
+             centered_width_zero_down_box?(box, style)].any?
           end
 
           def persisted_width_zero_down_box?(box, style)
             box["alignment"]&.zero? && !stored_offsets_zero?(box) && style[:stored_association_ray] != true &&
+              style.values_at(:mode, :lwidth, :tree) == ["3", "0", nil]
+          end
+
+          def centered_width_zero_down_box?(box, style)
+            box["alignment"] == 1 && stored_offsets_zero?(box) && style[:stored_association_ray] != true &&
               style.values_at(:mode, :lwidth, :tree) == ["3", "0", nil]
           end
 
