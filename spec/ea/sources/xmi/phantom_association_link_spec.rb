@@ -19,4 +19,10 @@ RSpec.describe "XMI association drawn without a diagram link" do
   it "seats the multiplicity at the QEA position" do
     expect(multiplicity_seats(document)).to eq([["0..1", 206.0, 198.0]])
   end
+
+  it "seats the downward Property role like the native phantom label" do
+    seats = text_seats(document, "+parent", "«property»")
+
+    expect(seats).to eq("+parent" => [105.0, 198.0], "«property»" => [98.0, 210.0])
+  end
 end
