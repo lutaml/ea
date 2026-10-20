@@ -22,6 +22,16 @@ RSpec.describe "XMI connector routes from UMLDI edges" do
       expect(umldi_route(umldi_edge("C1", [[0, 0]]), "C1")).to be_nil
     end
 
+    it "returns the source and target of the connector's only edge" do
+      edge = %(<ownedElement type="umldi:UMLEdge" modelElement="C1" source="S" target="T"/>)
+      expect(umldi_ends(edge, "C1")).to eq(%w[S T])
+    end
+
+    it "has no ends when two edges of the diagram draw the same connector" do
+      edge = %(<ownedElement type="umldi:UMLEdge" modelElement="C1" source="S" target="T"/>)
+      expect(umldi_ends(edge + edge, "C1")).to be_nil
+    end
+
     it "has no route for a connector without an edge" do
       expect(umldi_route(umldi_edge("C1", [[0, 0], [0, 9]]), "C2")).to be_nil
     end

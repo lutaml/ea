@@ -6,9 +6,10 @@ module Ea
   module Sources
     module Xmi
       class DiagramBuilder
-        # Ordered waypoints of the UMLDI edge EA exported for a connector
-        # on a diagram. A connector drawn by more than one edge in the same
-        # diagram, or by an edge with fewer than two waypoints, has no route.
+        # The UMLDI edge EA exported for a connector on a diagram: its
+        # ordered waypoints and its source/target model elements. A connector
+        # drawn by more than one edge in the same diagram has neither; an edge
+        # with fewer than two waypoints has no route.
         class UmldiEdges
           def initialize(xmi_path)
             @xmi_path = xmi_path
@@ -18,7 +19,24 @@ module Ea
             routes.dig(diagram_id, connector_id)
           end
 
+          def ends_for(diagram_id, connector_id)
+            ends.dig(diagram_id, connector_id)
+          end
+
           private
+
+          def ends
+            @ends ||= doc.xpath("//*[local-name()=\"Diagram\"]").to_h do |diagram|
+              [diagram["id"] || diagram["xmi:id"], diagram_ends(diagram)]
+            end
+          end
+
+          def diagram_ends(diagram)
+            edges = diagram.xpath("./ownedElement[@modelElement][@source][@target]")
+            edges.group_by { |edge| edge["modelElement"] }
+                 .select { |_, same| same.one? }
+                 .transform_values { |(edge)| [edge["source"], edge["target"]] }
+          end
 
           def routes
             @routes ||= doc.xpath("//*[local-name()=\"Diagram\"]").to_h do |diagram|

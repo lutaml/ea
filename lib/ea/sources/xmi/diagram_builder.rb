@@ -149,17 +149,19 @@ module Ea
           by_duid = placed_elements.each_with_object({}) do |pe, acc|
             acc[pe.style.duid] = pe if pe.style.duid
           end
+          by_subject = placed_elements.group_by { |pe| guid_key(pe.subject) }
 
           placed_connectors.each_with_index.map do |placed, index|
-            build_connector(placed, by_duid, owner_id, index)
+            build_connector(placed, by_duid, by_subject, owner_id, index)
           end
         end
 
-        def build_connector(placed, by_duid, owner_id, rank)
+        def build_connector(placed, by_duid, by_subject, owner_id, rank)
           geom = placed.geometry
           style = placed.style
-          source = by_duid[style.soid]
-          target = by_duid[style.eoid]
+          edge_source, edge_target = umldi_ends(owner_id, placed)
+          source = by_duid[style.soid] || sole_placement(by_subject, edge_source)
+          target = by_duid[style.eoid] || sole_placement(by_subject, edge_target)
           ext_meta = connector_meta(placed.subject)
           route = connector_route(placed, source, target, owner_id, ext_meta[:ea_type])
           Ea::Model::DiagramConnector.new(
@@ -235,6 +237,23 @@ module Ea
 
           route = umldi_edges.route_for(diagram_id, placed.subject)
           route&.map { |x, y| Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y)) }
+        end
+
+        def umldi_ends(diagram_id, placed)
+          return unless xmi_path
+
+          umldi_edges.ends_for(diagram_id, placed.subject)
+        end
+
+        def sole_placement(by_subject, subject)
+          placements = by_subject[guid_key(subject)]
+          placements.first if placements&.one?
+        end
+
+        # EA spells one GUID with an EAID_ or EAPK_ prefix and mixed case
+        # depending on the element kind.
+        def guid_key(subject)
+          subject&.sub(/\AEA(?:ID|PK)_/, "")&.upcase
         end
 
         def umldi_edges
