@@ -18,6 +18,7 @@ module Ea
       autoload :MetadataBuilder, "ea/sources/xmi/metadata_builder"
       autoload :PackageBuilder, "ea/sources/xmi/package_builder"
       autoload :ClassifierBuilder, "ea/sources/xmi/classifier_builder"
+      autoload :InstanceBuilder, "ea/sources/xmi/instance_builder"
       autoload :PropertyBuilder, "ea/sources/xmi/property_builder"
       autoload :OperationBuilder, "ea/sources/xmi/operation_builder"
       autoload :RelationshipBuilder, "ea/sources/xmi/relationship_builder"
