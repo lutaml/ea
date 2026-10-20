@@ -101,16 +101,15 @@ RSpec.describe Ea::Svg::EaEmitter::Document do
     expect(svg).to include("Integer")
   end
 
-  it "shows undrawn association properties in-box and hides drawn ones" do
-    # The corpus rule: an association-end property renders inside the
-    # attribute compartment only when its association is NOT drawn on
-    # the diagram (drawn ones render as connector role labels).
+  it "hides association properties in-box whether their connectors are drawn or undrawn" do
+    # Native class compartments omit association ends even when their
+    # connectors are absent; ordinary attributes remain visible.
     svg_with_assoc_prop = described_class.new(
       diagram_with_association_property,
       model_index: document_with_association_property.index_by_id
     ).render
     expect(svg_with_assoc_prop).to include("simpleAttr")
-    expect(svg_with_assoc_prop).to include("assocAttr")
+    expect(svg_with_assoc_prop).not_to include("assocAttr")
 
     drawn = diagram_with_association_property
     drawn.connectors = [
