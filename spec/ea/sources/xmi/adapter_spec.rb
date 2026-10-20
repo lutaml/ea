@@ -12,6 +12,7 @@ RSpec.describe Ea::Sources::Xmi::Adapter do
   XMI_FIXTURE = fixtures_path("basic.xmi")
   skip_reason = "XMI fixture not available at #{XMI_FIXTURE}" unless File.exist?(XMI_FIXTURE)
 
+  let(:xml) { Nokogiri::XML(File.read(XMI_FIXTURE)) }
   let(:root) { Xmi::Sparx::Root.parse_xml(File.read(XMI_FIXTURE)) }
   let(:adapter) { described_class.new(root, XMI_FIXTURE) }
   let(:document) { adapter.to_document }
@@ -20,25 +21,25 @@ RSpec.describe Ea::Sources::Xmi::Adapter do
 
   describe "structural harmonization" do
     it "harmonizes every uml:Package as a Model::Package" do
-      package_count = count_elements(root.model, "uml:Package")
+      package_count = xml.xpath("/xmi:XMI/uml:Model//*[@xmi:type='uml:Package']").size
       expect(document.packages.size).to eq(package_count)
     end
 
     it "harmonizes every uml:Class as a Model::Klass" do
-      class_count = count_elements(root.model, "uml:Class")
+      class_count = xml.xpath("/xmi:XMI/uml:Model//*[@xmi:type='uml:Class']").size
       classes = document.classifiers.select { |c| c.is_a?(Ea::Model::Klass) }
       expect(classes.size).to eq(class_count)
     end
 
     it "harmonizes every uml:Association as a Model::Association" do
       package_imports = root.extension.connectors.connector.count { |c| c.properties&.ea_type == "Package" }
-      assoc_count = count_elements(root.model, "uml:Association") + package_imports
+      assoc_count = xml.xpath("/xmi:XMI/uml:Model//*[@xmi:type='uml:Association']").size + package_imports
       associations = document.relationships.select { |r| r.is_a?(Ea::Model::Association) }
       expect(associations.size).to eq(assoc_count)
     end
 
     it "harmonizes every uml:Dependency as a Model::Dependency" do
-      dep_count = count_elements(root.model, "uml:Dependency")
+      dep_count = xml.xpath("/xmi:XMI/uml:Model//*[@xmi:type='uml:Dependency']").size
       deps = document.relationships.select { |r| r.is_a?(Ea::Model::Dependency) }
       expect(deps.size).to eq(dep_count)
     end
@@ -91,15 +92,5 @@ RSpec.describe Ea::Sources::Xmi::Adapter do
       expect(round_trip.classifiers.size).to eq(document.classifiers.size)
       expect(round_trip.relationships.size).to eq(document.relationships.size)
     end
-  end
-
-  # Helper: count packaged elements of a given xmi:type, walking the
-  # tree depth-first.
-  def count_elements(model_element, xmi_type, seen = 0)
-    model_element.packaged_element.each do |pe|
-      seen += 1 if pe.type == xmi_type
-      seen = count_elements(pe, xmi_type, seen)
-    end
-    seen
   end
 end
