@@ -9,6 +9,8 @@ module Ea
       # SOID/EOID, EDGE, label boxes) when present. Falls back to
       # the UML-DI owned_element bounds otherwise.
       class DiagramBuilder
+        autoload :UmldiEdges, "ea/sources/xmi/diagram_builder/umldi_edges"
+
         attr_reader :root, :xmi_path
 
         def initialize(root, xmi_path = nil)
@@ -156,7 +158,8 @@ module Ea
           source = by_duid[style.soid]
           target = by_duid[style.eoid]
           ext_meta = connector_meta(placed.subject)
-          waypoints = compute_waypoints(geom, source, target,
+          waypoints = umldi_waypoints(owner_id, placed) ||
+                      compute_waypoints(geom, source, target,
                                         style: style, connector_type: ext_meta[:ea_type])
           Ea::Model::DiagramConnector.new(
             id: IdNormalizer.synthetic_id(owner_id, "conn", placed.subject),
@@ -214,6 +217,19 @@ module Ea
 
         def synthetic_element_id(owner_id, placed)
           IdNormalizer.synthetic_id(owner_id, "elem", placed.subject)
+        end
+
+        # A connector with no authored bends is drawn along the route EA
+        # exported for its UMLDI edge.
+        def umldi_waypoints(diagram_id, placed)
+          return unless xmi_path && placed.geometry.bend_points.to_a.empty?
+
+          route = umldi_edges.route_for(diagram_id, placed.subject)
+          route&.map { |x, y| Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y)) }
+        end
+
+        def umldi_edges
+          @umldi_edges ||= UmldiEdges.new(xmi_path)
         end
 
         def compute_waypoints(geom, source, target, style:, connector_type:)

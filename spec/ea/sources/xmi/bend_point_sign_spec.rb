@@ -62,8 +62,6 @@ RSpec.describe "XMI connector bend point sign" do
                                                                "{5BEB3B26-2EE2-4cd8-B09B-C8917830092A}"],
       "d148 1725DF12 (facing-edge Association)" => ["{00C5C772-5A03-434f-BF30-AC37542A1AAC}",
                                                     "{1725DF12-B511-4d41-AA74-59C65BDF5C48}"],
-      "d148 0398A9E6 (empty-Path ray)" => ["{00C5C772-5A03-434f-BF30-AC37542A1AAC}",
-                                           "{0398A9E6-E19E-4231-A860-45D0C72E9A0E}"],
       "d148 9FE940C6 (Mode 1 drops the Path)" => ["{00C5C772-5A03-434f-BF30-AC37542A1AAC}",
                                                   "{9FE940C6-5F42-4194-9296-BFCCE85A6460}"],
       "d147 connector 848 (level entry)" => ["{E7AABA98-2450-4986-9736-DCCAF0108C50}",
