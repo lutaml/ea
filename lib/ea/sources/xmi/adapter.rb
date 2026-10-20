@@ -32,15 +32,24 @@ module Ea
             relationships: relationships,
             stereotypes: [],
             notes: notes,
+            instance_specifications: instance_specifications,
             diagrams: diagrams
           )
           apply_tagged_values(doc)
+          apply_receptions(doc)
           apply_stereotypes(doc)
           resolve_type_names(doc)
           doc
         end
 
         private
+
+        def apply_receptions(doc)
+          grouped = ReceptionBuilder.new(xmi_path).grouped_by_owner
+          doc.classifiers.each do |classifier|
+            classifier.operations.concat(grouped.fetch(classifier.id, []))
+          end
+        end
 
         # Attach stereotypes parsed from <xmi:Extension>/<elements>
         # to their owning classifiers and packages.
@@ -90,24 +99,34 @@ module Ea
           end
         end
 
+        # Replaces each type reference with its in-model qualified
+        # name; references that are not classifiers (primitive hrefs,
+        # EA placeholder idrefs) take the type name EA stores in the
+        # extension block.
         def resolve_type_names(doc)
-          # In the XMI, the <type xmi:idref=...> is the type
-          # classifier's GUID. The property's type_name was
-          # pre-populated by PropertyBuilder with the same idref;
-          # we replace it with the in-model qualified name when
-          # the referenced classifier is loaded.
           qualified_by_id = doc.classifiers.each_with_object({}) do |c, acc|
             acc[c.id] = c.qualified_name if c.id && c.qualified_name
           end
+          types = ExtensionTypes.from_path(xmi_path)
 
           doc.classifiers.each do |classifier|
             (classifier.properties || []).each do |prop|
-              ref = prop.type_ref
-              next if ref.nil? || ref.empty?
-
-              resolved = qualified_by_id[ref]
-              prop.type_name = resolved if resolved
+              prop.type_name = qualified_by_id[prop.type_ref] ||
+                               types.attribute_type(prop.id) || prop.type_name
             end
+            (classifier.operations || []).each do |op|
+              resolve_operation_types(op, qualified_by_id, types)
+            end
+          end
+        end
+
+        def resolve_operation_types(operation, qualified_by_id, types)
+          operation.return_type_name = qualified_by_id[operation.return_type_name] ||
+                                       types.return_type(operation.id) ||
+                                       operation.return_type_name
+          operation.parameters.each do |param|
+            param.type_name = qualified_by_id[param.type_name] ||
+                              types.parameter_type(param.id) || param.type_name
           end
         end
 
@@ -121,6 +140,10 @@ module Ea
 
         def classifiers
           @classifiers ||= ClassifierBuilder.new(root).build_all
+        end
+
+        def instance_specifications
+          @instance_specifications ||= InstanceBuilder.new(root, xmi_path, classifiers).build_all
         end
 
         def relationships

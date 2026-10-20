@@ -15,6 +15,7 @@ module Ea
           "uml:PrimitiveType" => "Ea::Model::PrimitiveType",
           "uml:Enumeration" => "Ea::Model::Enumeration",
           "uml:Interface" => "Ea::Model::Interface",
+          "uml:Signal" => "Ea::Model::Signal",
         }.freeze
 
         def class_for(xmi_type)
