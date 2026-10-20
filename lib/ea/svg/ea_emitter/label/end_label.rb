@@ -914,9 +914,9 @@ module Ea
             end_kind == :source ? association.source_id : association.target_id
           end
 
-          # Find the synthesized association-end property on the
-          # placed classifier whose association_id matches the
-          # connector's relationship reference.
+          # Named association-end properties carry typed labels. Unnamed
+          # XMI member-end references defer to the saved association role
+          # and cardinality; direct property-id endpoints are resolved above.
           def assoc_end_property(classifier_id, relationship_ref)
             return nil unless classifier_id
 
@@ -924,7 +924,7 @@ module Ea
             return nil unless classifier.is_a?(Ea::Model::Classifier)
 
             (classifier.properties || []).find do |p|
-              p.association_id == relationship_ref
+              p.association_id == relationship_ref && !p.name.to_s.empty?
             end
           end
 
