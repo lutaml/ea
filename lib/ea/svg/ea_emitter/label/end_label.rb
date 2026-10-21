@@ -334,12 +334,21 @@ module Ea
           end
 
           # Saved bounds seat a source Property role at the stereotype's left
-          # edge; the native label centres the shorter role over it.
+          # edge. A centred stored box (ALN=1), or a phantom's synthesized box
+          # without alignment, centres the shorter role over it; a
+          # left-aligned box keeps both lines on that edge.
           def bounds_role_centering(connector, end_kind, role, stereo, text_box)
             return 0 unless end_kind == :source && stereo && seat_font?
+            return 0 unless centred_bounds_box?(connector, text_box)
             return 0 unless property_label?(connector, :source)
 
-            -[stereotype_offset(role, stereo, text_box.merge("alignment" => 1)), 0].min
+            -[stereotype_offset(role, stereo, { "alignment" => 1 }), 0].min
+          end
+
+          # Phantom outlines have no saved diagram link, so their boxes are
+          # synthesized and EA draws its centred default label.
+          def centred_bounds_box?(connector, text_box)
+            connector.style.to_h[:phantom_outline] == true || text_box.to_h["alignment"] == 1
           end
 
           # Role text on a rightward leg is left-aligned at the corner,
