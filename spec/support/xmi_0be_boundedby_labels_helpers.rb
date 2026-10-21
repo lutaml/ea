@@ -9,10 +9,8 @@ module Xmi0beBoundedByLabelsHelpers
 
   def self.result(path)
     document, diagram, connectors = source(path)
-    legacy_connectors = without_umldi_bounds(connectors)
     [connectors.map(&:umldi_label_bounds), connectors.map(&:label_boxes),
-     render_labels(document, diagram, connectors),
-     render_labels(document, diagram, legacy_connectors)]
+     render_texts(document, diagram, connectors, "+boundedBy")]
   end
 
   def self.source(path)
@@ -24,18 +22,14 @@ module Xmi0beBoundedByLabelsHelpers
     [document, diagram, connectors]
   end
 
-  def self.without_umldi_bounds(connectors)
-    connectors.map { |connector| connector.dup.tap { |copy| copy.umldi_label_bounds = {} } }
-  end
-
-  def self.render_labels(document, diagram, connectors)
+  def self.render_texts(document, diagram, connectors, text)
     render_diagram = diagram.dup
     render_diagram.connectors = connectors
     svg = Ea::Svg::EaEmitter::Document.new(
       render_diagram, model_index: document.index_by_id, document: document
     ).render
     Nokogiri::XML(svg).xpath("//*[local-name()='text']")
-            .select { |node| node.text == "+boundedBy" }
+            .select { |node| node.text == text }
             .map { |node| [node["x"], node["y"]] }
   end
 end
