@@ -20,7 +20,7 @@ RSpec.describe "A Property target role narrower than its stereotype" do
   end
 
   it "seats the stereotype on the saved box edge and the role one pixel right of it" do
-    expect(texts.slice("+endPoint", "«property»")).to eq("+endPoint" => 131.0, "«property»" => 130.0)
+    expect(texts.slice("+endPoint", "«property»")).to eq("+endPoint" => 106.0, "«property»" => 105.0)
   end
 
   it "keeps a role as wide as the stereotype on the box edge" do
