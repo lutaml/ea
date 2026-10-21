@@ -38,8 +38,14 @@ module Ea
             name: obj.name,
             body: obj.note,
             note_type: obj.object_type,
-            legend: legend_for(obj)
+            legend: legend_for(obj),
+            package_id: package_id_for(obj)
           )
+        end
+
+        def package_id_for(obj)
+          pkg = database.find_package(obj.package_id)
+          pkg && IdNormalizer.from_guid(pkg.ea_guid)
         end
 
         def note_type?(object_type)

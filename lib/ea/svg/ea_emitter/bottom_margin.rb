@@ -16,6 +16,7 @@ module Ea
       class BottomMargin
         BARE = 10
         LINE_ALLOWANCE = 21
+        HOME_TEXT_ALLOWANCE = 13
         DEFAULT_POINTS = 7
 
         def self.for(diagram, model_index)
@@ -38,6 +39,7 @@ module Ea
 
         def self.of(element, diagram, model_index)
           model = model_index && model_index[element.model_element_ref]
+          return home_text_margin(element) if home_text?(model, diagram)
           return BARE if plain_note?(model) || bare_package?(model, diagram) ||
                          home_classifier?(model, diagram)
 
@@ -69,6 +71,20 @@ module Ea
             !diagram.package_id.to_s.empty? &&
             model.package_id == diagram.package_id &&
             model.nested_parent_name.to_s.empty?
+        end
+
+        # A Text element of the diagram's own package keeps 13 + its
+        # font size in points (22 at 9pt) instead of the foreign 21 + size.
+        # EMPIRICAL FIT on a single sample (PLATEAU 2E98EA19, fontsz 90,
+        # natively 22); the 8 foreign Text cases (28..30) are unaffected.
+        def self.home_text?(model, diagram)
+          model.is_a?(Ea::Model::Note) && model.note_type == "Text" &&
+            !diagram.package_id.to_s.empty? &&
+            model.package_id == diagram.package_id
+        end
+
+        def self.home_text_margin(element)
+          HOME_TEXT_ALLOWANCE + points(element)
         end
 
         def self.bare_package?(model, diagram)

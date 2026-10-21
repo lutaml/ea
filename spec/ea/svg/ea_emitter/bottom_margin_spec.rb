@@ -59,4 +59,16 @@ RSpec.describe Ea::Svg::EaEmitter::BottomMargin do
 
     expect(margin([placed("a", "c3", 300)], { "c3" => nested })).to eq(28)
   end
+
+  it "keeps 13 plus the point size below a Text element of the own package" do
+    text = Ea::Model::Note.new(id: "t1", note_type: "Text", package_id: "home")
+
+    expect(margin([placed("a", "t1", 300, fontsz: "90")], { "t1" => text })).to eq(22)
+  end
+
+  it "keeps the full margin below a Text element of a foreign package" do
+    text = Ea::Model::Note.new(id: "t2", note_type: "Text", package_id: "other")
+
+    expect(margin([placed("a", "t2", 300, fontsz: "90")], { "t2" => text })).to eq(30)
+  end
 end
