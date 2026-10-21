@@ -366,14 +366,15 @@ module Ea
             nil
           end
 
-          # Saved bounds seat a source Property role at the stereotype's left
-          # edge. A centred stored box (ALN=1), or a phantom's synthesized box
+          # Saved bounds seat a source or target Property role at the stereotype's
+          # left edge (target: +endPoint on 159E9DA0 and 90BCA409, the only
+          # corpus targets narrower than the stereotype). A centred stored box (ALN=1), or a phantom's synthesized box
           # without alignment, centres the shorter role over it; a
           # left-aligned box keeps both lines on that edge.
           def bounds_role_centering(connector, end_kind, role, stereo, text_box)
-            return 0 unless end_kind == :source && stereo && seat_font?
+            return 0 unless stereo && seat_font?
             return 0 unless centred_bounds_box?(connector, text_box)
-            return 0 unless property_label?(connector, :source)
+            return 0 unless property_label?(connector, end_kind)
 
             -[stereotype_offset(role, stereo, { "alignment" => 1 }), 0].min
           end
