@@ -34,36 +34,70 @@ module Ea
         # EA draws each connector (and its markers) with the pen width
         # stored in the diagram link style (`LWidth`); links without
         # the field keep the diagram default.
+        #
+        # A link saved with `LWidth=0` defers to the connector's own saved
+        # pen (`t_connector.IsBold`, XMI `<appearance linewidth>`), which
+        # DiagramConnector#line_width carries. Checked on connector 438 in
+        # 9400D9BC and FEBE5726 (IsBold=2, native stroke-width 2); the 314
+        # LWidth=0 links with IsBold=0 stay one pixel.
         def self.stroke_width_for(connector, default)
           style = connector.style || {}
           raw = style[:lwidth] || style["lwidth"]
           return default if raw.to_s.strip.empty?
+          return connector.line_width if raw.to_i.zero? && connector.line_width.to_i.positive?
 
           [raw.to_i, 1].max
         end
 
+        DEFAULT_STROKE = "#000000"
+
+        # EA strokes a connector and its markers in the colour stored in
+        # the diagram link style (`Color`, a BGR integer; -1 = default).
+        # Checked on the #69738C links of 5DA1E7A7, 73025C5A, C31C1314
+        # and E7AABA98.
+        def self.stroke_color_for(connector)
+          raw = connector.line_color
+          raw = (connector.style || {})[:color] if raw.nil?
+          return DEFAULT_STROKE if raw.nil? || raw.to_s.strip.empty?
+
+          Element::BColDecoder.to_hex(raw.to_i) || DEFAULT_STROKE
+        end
+
         # Layer key for a style group: the plain key at the default
-        # width, suffixed with the width otherwise so layers of
-        # different widths never merge.
-        def self.layer_key(key, width, default)
-          width == default ? key : :"#{key}_w#{width}"
+        # width and colour, suffixed otherwise so layers of different
+        # widths or colours never merge.
+        def self.layer_key(key, width, default, color = DEFAULT_STROKE)
+          key = :"#{key}_w#{width}" unless width == default
+          color == DEFAULT_STROKE ? key : :"#{key}_c#{color.delete("#")}"
         end
 
         def layers
-          styles = paths_with_styles
+          styles = paths_with_styles.map { |_connector, style, path| [style, path] }
 
           if grouped
-            styles.group_by(&:first).map do |(width, dashed), entries|
-              line_layer(width, dashed, entries.map(&:last).join("\n  "))
+            styles.group_by(&:first).map do |(width, dash, color), entries|
+              line_layer(width, dash, color, entries.map(&:last).join("\n  "))
             end
           else
-            styles.map { |(width, dashed), path| line_layer(width, dashed, path) }
+            styles.map { |(width, dash, color), path| line_layer(width, dash, color, path) }
           end
         end
 
-        def line_style(width = stroke_width)
-          "stroke-width:#{width};stroke-linecap:round;stroke-linejoin:bevel; " \
-            "fill:#000000;fill-opacity:0.00; stroke:#000000; stroke-opacity:1.00"
+        # One `[connector, Layer]` pair per drawn connector, in
+        # diagram link order: EA paints each connector (line, then its
+        # heads) in turn, so the sequencer interleaves these with the
+        # marker layers instead of bucketing every line first.
+        def connector_layers
+          paths_with_styles.map do |connector, (width, dash, color), path|
+            [connector, line_layer(width, dash, color, path)]
+          end
+        end
+
+        # EA draws dashed lines with square caps and round joins.
+        def line_style(width = stroke_width, color = DEFAULT_STROKE, dashed: false)
+          cap_join = dashed ? "square;stroke-linejoin:round" : "round;stroke-linejoin:bevel"
+          "stroke-width:#{width};stroke-linecap:#{cap_join}; " \
+            "fill:#000000;fill-opacity:0.00; stroke:#{color}; stroke-opacity:1.00"
         end
 
         # Backwards-compatible render — joins all layers' `<g>`.
@@ -80,17 +114,33 @@ module Ea
           end
           bridges = ConnectorBridges.new(diagram, routes)
           routes.map do |connector, points|
-            [[self.class.stroke_width_for(connector, stroke_width), dashed?(connector)],
+            [connector,
+             [self.class.stroke_width_for(connector, stroke_width), dash_for(connector),
+              self.class.stroke_color_for(connector)],
              path_for(connector, points, bridges)]
           end
         end
 
-        def line_layer(width, dashed, body)
-          key = dashed ? :connector_line_dashed : LINE_STYLE_KEY
-          style = line_style(width)
-          style += ";stroke-dasharray:6,3" if dashed
-          Layer.new(style_key: self.class.layer_key(key, width, stroke_width),
+        def line_layer(width, dash, color, body)
+          key = dash ? :"connector_line_dash_#{dash.tr(",", "_")}" : LINE_STYLE_KEY
+          style = line_style(width, color, dashed: !dash.nil?)
+          style += ";stroke-dasharray:#{dash}" if dash
+          Layer.new(style_key: self.class.layer_key(key, width, stroke_width, color),
                     style: style, body: body)
+        end
+
+        # Dash pattern as "dash,gap", nil when solid. A NoteLink is
+        # dashed at width + 2 (empirical fit, EA native: 4,4 at width 2 in
+        # 676B9C9A and 926AFE38, 3,3 at width 1 in 9DA6C553; no source
+        # field found); every other dashed connector uses 6,3 (23 native
+        # cases at width 1).
+        def dash_for(connector)
+          if connector.connector_type == "NoteLink"
+            n = self.class.stroke_width_for(connector, stroke_width) + 2
+            "#{n},#{n}"
+          elsif dashed?(connector)
+            "6,3"
+          end
         end
 
         def dashed?(connector)

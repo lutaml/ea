@@ -128,6 +128,7 @@ module Ea
           @current_obj_row = obj_row
           style_hash = DiagramStyleParser.parse(obj_row.objectstyle)
           style_hash[:stored_attribute_order] = true
+          style_hash["connector_proxy"] = true if connector_proxy?(obj_row)
           fqname = stereotype_fqname_for(obj_row)
           style_hash[:stereotype_fqname] = fqname if fqname
           font_style = effective_font_style(obj_row, style_hash)
@@ -152,6 +153,12 @@ module Ea
             line_color: effective_line_color(obj_row, style_hash),
             background_color: style_hash[:bcol]&.to_i
           )
+        end
+
+        # EA anchors association-class links on ProxyConnector stubs and
+        # never draws them (the XMI source flags them the same way).
+        def connector_proxy?(obj_row)
+          database.find_object(obj_row.ea_object_id)&.object_type == "ProxyConnector"
         end
 
         # Negative widths inherit; QEA zero widths request a one-pixel cosmetic pen.
@@ -475,6 +482,7 @@ module Ea
             style: context ? { direct: true } :
                      DiagramStyleParser.parse(link_row.style),
             hidden: hidden?(link_row),
+            line_width: connector&.isbold,
             ghost_labels: ghost_labels_for(connector, diagram_row, link_row),
             has_geometry_offsets: geometry_has_offsets?(link_row.geometry),
             is_substitutable: substitutable_connector?(connector)
@@ -494,6 +502,8 @@ module Ea
           model = mark_default_square_ray(model, link_row, geom, context)
           model = restore_stored_square_ports(model, link_row, diagram_row, geom, context)
           model = reversed_stored_corner(model, link_row, diagram_row, geom, context)
+          model = reversed_tree_route(model, link_row, diagram_row, geom, context)
+          model = mark_reversed_lateral_tree(model, link_row, diagram_row, context)
           mark_association_class(model, connector, diagram_row)
         end
 

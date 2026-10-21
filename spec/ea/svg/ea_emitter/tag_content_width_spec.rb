@@ -9,7 +9,7 @@ RSpec.describe Ea::Svg::EaEmitter::Elements, "tag content width" do
   it "matches the native simple class width through the public document renderer" do
     document, diagram = native_tag_document
     element = diagram.elements.find { |entry| entry.model_element_ref == "8BB6E86F-144B-4636-8D32-171755674020" }
-    svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id, document: document).render
+    svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id, document: document, frame: true).render
     nodes = Nokogiri::XML(svg).remove_namespaces!
     box = nodes.css('rect[x="35"][y="40"]').first
 

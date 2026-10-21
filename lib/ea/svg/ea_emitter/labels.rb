@@ -43,6 +43,12 @@ module Ea
           %(<g style="stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#000000;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00">\n#{texts.join("\n")}\n</g>)
         end
 
+        # Right edge of the stored end-label boxes (model coordinates)
+        # of the last render, or nil when none carry a width.
+        def reach
+          end_renderer.reach
+        end
+
         private
 
         def visible_connectors

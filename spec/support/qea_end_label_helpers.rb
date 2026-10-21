@@ -11,7 +11,7 @@ module QeaEndLabelHelpers
     database = build_test_database(**qea_end_label_tables(path, boxes, source, target, ends))
     document = Ea::Sources::Qea::Adapter.new(database, "end-labels.qea").to_document
     svg = Ea::Svg::EaEmitter::Document.new(document.diagrams.first, model_index: document.index_by_id,
-                                                                    document: document, frame: false).render
+                                                                    document: document, frame: false, content_anchor: false).render
     xml = Nokogiri::XML(svg).remove_namespaces!
     qea_end_label_result(xml, ends.fetch(:mult))
   end

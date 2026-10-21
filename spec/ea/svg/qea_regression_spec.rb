@@ -29,7 +29,7 @@ RSpec.describe "EA QEA-direct regression", :qea_regression do
     doc = build_qea_doc
     doc.diagrams.each do |diagram|
       expect {
-        Ea::Svg::EaEmitter::Document.new(diagram, model_index: doc.index_by_id).render
+        Ea::Svg::EaEmitter::Document.new(diagram, model_index: doc.index_by_id, frame: true).render
       }.not_to raise_error
     end
   end
@@ -45,7 +45,7 @@ RSpec.describe "EA QEA-direct regression", :qea_regression do
       ref_path = ref_index[diagram.id]
       next unless ref_path
 
-      ours = Ea::Svg::EaEmitter::Document.new(diagram, model_index: doc.index_by_id).render
+      ours = Ea::Svg::EaEmitter::Document.new(diagram, model_index: doc.index_by_id, frame: true).render
       reference = File.read(ref_path)
       report = Ea::Svg::Parity::Checker.new(ours: ours, reference: reference).report
 

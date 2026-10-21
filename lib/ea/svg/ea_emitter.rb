@@ -26,10 +26,14 @@ module Ea
     #
     module EaEmitter
       autoload :Canvas, "ea/svg/ea_emitter/canvas"
+      autoload :CanvasAnchor, "ea/svg/ea_emitter/canvas_anchor"
+      autoload :BottomMargin, "ea/svg/ea_emitter/bottom_margin"
+      autoload :ContentExtent, "ea/svg/ea_emitter/content_extent"
       autoload :Background, "ea/svg/ea_emitter/background"
       autoload :BoundsCalculator, "ea/svg/ea_emitter/bounds_calculator"
       autoload :Style, "ea/svg/ea_emitter/style"
       autoload :Elements, "ea/svg/ea_emitter/elements"
+      autoload :PaintOrder, "ea/svg/ea_emitter/paint_order"
       autoload :Connectors, "ea/svg/ea_emitter/connectors"
       autoload :ConnectorBridges, "ea/svg/ea_emitter/connector_bridges"
       private_constant :ConnectorBridges

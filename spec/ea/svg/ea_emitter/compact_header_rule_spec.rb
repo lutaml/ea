@@ -14,6 +14,13 @@ RSpec.describe "Compact class header geometry" do
       .to eq([19, 26, 40, 52])
   end
 
+  it "seats the divider of a ghost-led header 7 below its last baseline" do
+    context = compact_source_context("20251010_current_plateau_v5.1", "0114FD24", "AbstractConstruction")
+    expect(context.header_lines.first).to eq(["_CityObject", :italic])
+    expect(context.geometry.divider_y - context.bounds.y).to eq(50)
+    expect(context.geometry.attr_first_y - context.bounds.y).to eq(64)
+  end
+
   it "seats an independent stereotype header above unchanged source attributes" do
     context = compact_source_context("20251010_current_plateau_v5.1", "0016F797", "KeyValuePairAttribute")
     expect(context.header_lines).to eq([["«DataType»", :normal], ["uro::KeyValuePairAttribute", :bold]])
@@ -41,12 +48,16 @@ end
 RSpec.describe "Compact header preservation" do
   include CompactHeaderRuleHelpers
 
+  it "applies the compact offsets to an italic ghost-led header" do
+    geometry = compact_geometry_control({ header_lines: [["Parent", :italic], ["Example", :bold]] })
+    expect([geometry.divider_offset, geometry.attr_first_offset]).to eq([7, 8])
+  end
+
   it "keeps unsupported fonts, units, logical cells and header forms on their existing offsets" do
     controls = [
       { family: "Carlito" }, { family: "Carlito", size: 9 }, { size: 9 }, { size_unit: "px" },
       { logical_height: 10 }, { classifier: Ea::Model::Interface.new(id: "interface") },
       { classifier: Ea::Model::Enumeration.new(id: "enum") },
-      { header_lines: [["Parent", :italic], ["Example", :bold]] },
       { header_lines: [["Parent", :italic_tight], ["Example", :bold]] },
       { marker_count: 1 }, { enum_literals_count: 1 }, { attr_lines: ["«Property»", "+ value: int"] }
     ]

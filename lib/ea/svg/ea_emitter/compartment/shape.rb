@@ -16,7 +16,8 @@ module Ea
                 legend: context.model_element.legend,
                 family: context.family,
                 item_font: { size: legend_item_size(context), unit: context.size_unit,
-                             logical_height: context.logical_height }
+                             logical_height: context.logical_height },
+                first_painted: context.first_painted
               )
             elsif context.model_element.is_a?(Ea::Model::Note)
               Element::NoteShapeRenderer.render(
@@ -24,7 +25,8 @@ module Ea
                 body: "", fill: context.fill, stroke: context.stroke,
                 stroke_width: context.stroke_width,
                 family: context.family, size: context.size,
-                text_fill: context.text_fill
+                text_fill: context.text_fill,
+                pen: context.previous_pen
               )
             elsif context.model_element.is_a?(Ea::Model::Package)
               label = package_label(context.model_element)
@@ -59,11 +61,21 @@ module Ea
             return unless element
             return element.font_size if element.font_size&.nonzero?
 
-            # Parsed source defaults inherit; unspecified callers keep 9pt.
-            inherited = element.font_size_inherited || element.style&.fetch(:fontsz, nil).to_s == "0"
-            context.size if inherited
+            context.size if inherits_context_size?(element)
           end
           private_class_method :legend_item_size
+
+          # Parsed source defaults inherit; unspecified callers keep 9pt.
+          # A parsed element (provenance recorded) that resolved no size
+          # also inherits: XMI legends carry no fontsz at all, and native
+          # EA draws their items at the context size (Cambria 7pt).
+          def inherits_context_size?(element)
+            return true if element.font_size_inherited
+            return true if element.style&.fetch(:fontsz, nil).to_s == "0"
+
+            !element.font_size_inherited.nil? && element.font_size.nil?
+          end
+          private_class_method :inherits_context_size?
 
           # A Text element with LegendOpts= renders as the legend
           # block rather than a folder silhouette. Dispatch on the

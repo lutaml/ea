@@ -49,6 +49,13 @@ RSpec.describe Ea::Svg::EaEmitter::Canvas do
       expect(canvas.width).to eq(1)
       expect(canvas.height).to eq(1)
     end
+
+    it "anchors an unframed empty diagram on EA's blank 210 x 110 canvas" do
+      canvas = described_class.from(Ea::Model::Diagram.new(id: "x", name: "x"),
+                                    content_anchor: true)
+      expect([canvas.width, canvas.height]).to eq([210, 110])
+      expect(canvas.view_box).to eq("0 0 210 110")
+    end
   end
 
   describe "#translate_x / #translate_y" do

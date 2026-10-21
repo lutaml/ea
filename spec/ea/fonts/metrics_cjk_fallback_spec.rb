@@ -31,7 +31,7 @@ RSpec.describe "Ea::Fonts::Metrics CJK fallback advances" do
       .to be_within(0.001).of(2 * 0.709 * 9)
   end
 
-  it "leaves Cambria sizes without a measured table on the fallback path" do
-    expect(Ea::Fonts::Metrics.text_length("凡例", 12, family: "Cambria", weight: "700")).to be_nil
+  it "leaves Cambria Latin outside 7pt on the fallback path" do
+    expect(Ea::Fonts::Metrics.text_length("A凡例", 12, family: "Cambria", weight: "700")).to be_nil
   end
 end

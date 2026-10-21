@@ -19,7 +19,7 @@ module Ea
         :enum_literals, :tagged_values, :constraints, :marker_lines,
         :package_content_lines,
         :geometry, :theme, :canvas, :diagram, :model_index,
-        :off_canvas_parent_name,
+        :off_canvas_parent_name, :first_painted, :previous_pen,
         keyword_init: true
       )
         def note_body
@@ -57,11 +57,22 @@ module Ea
         # roles; the XMI reads them as ownedAttribute), so a class whose
         # only properties are association ends has no feature compartment
         # and no divider (A59065AF urf::Administration).
+        #
+        # A diagram that suppresses a whole feature kind (Style
+        # HideAtts=1 / HideOps=1) has no such compartment to draw, so
+        # that kind never earns a divider: 4881CEEE (HideAtts=1 and
+        # HideOps=1) draws none over classes that own attributes,
+        # 8FD488EF likewise. Per-attribute visibility toggles are a
+        # different mechanism and keep the divider (10E3E08A).
         def hidden_features_present?
           return false unless classifier.respond_to?(:properties)
 
-          classifier.properties.any? { |property| !property.association_id } ||
-            classifier.operations.any?
+          config = diagram&.display_config
+          shows_attributes = config.nil? || config.show_attributes?
+          shows_operations = config.nil? || config.show_operations?
+
+          (shows_attributes && classifier.properties.any? { |property| !property.association_id }) ||
+            (shows_operations && classifier.operations.any?)
         end
       end
     end

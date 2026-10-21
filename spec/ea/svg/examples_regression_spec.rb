@@ -78,7 +78,7 @@ RSpec.describe "EA examples regression", :examples_regression do
           expect {
             Ea::Svg::EaEmitter::Document.new(diagram,
                                               model_index: qea_doc.index_by_id,
-                                              document: qea_doc).render
+                                              document: qea_doc, frame: true).render
           }.not_to raise_error, "render failed for #{diagram.name.inspect}"
         end
       end
@@ -94,7 +94,7 @@ RSpec.describe "EA examples regression", :examples_regression do
 
           ours = Ea::Svg::EaEmitter::Document.new(diagram,
                                                     model_index: qea_doc.index_by_id,
-                                                    document: qea_doc).render
+                                                    document: qea_doc, frame: true).render
           reference = File.read(ref_path)
           report = Ea::Svg::Parity::Checker.new(ours: ours, reference: reference).report
           overlaps << report.text_overlap

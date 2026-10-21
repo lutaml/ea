@@ -10,41 +10,75 @@ module Ea
       class Document
         BUILD_ID = "1624"
 
-        attr_reader :diagram, :model_index, :frame, :document
+        attr_reader :diagram, :model_index, :frame, :document, :content_anchor
 
-        def initialize(diagram, model_index:, frame: nil, document: nil, **_options)
+        # No frame by default, like EA's own export; `frame: true` opts
+        # in. `content_anchor` (unframed only, on by default) sizes and
+        # origins the canvas on the drawn content like EA's native
+        # unframed export; off, it keeps the framed 35/40 content origin.
+        def initialize(diagram, model_index:, frame: false, document: nil,
+                       content_anchor: true, **_options)
           @diagram = diagram
           @model_index = model_index
-          @frame = frame.nil? ? !empty_diagram?(diagram) : frame
+          @frame = frame
           @document = document
+          @content_anchor = content_anchor && !@frame
         end
 
         def render
-          canvas = Canvas.from(diagram, model_index: model_index)
-          seq = LayerSequencer.new(diagram, model_index: model_index,
-                                   canvas: canvas, frame: frame,
-                                   document: document)
-          seq.layers
-          # Second pass over the DRAWN extents: grown classifiers and
-          # autosized packages can exceed the stored-rect canvas EA
-          # sizes from drawn extents. Skip when the first pass already
-          # covers the drawn extents (the common case).
-          grown = seq.drawn_bounds
-          if grown && grown.values.any? &&
-             exceeds?(canvas, grown.values)
-            canvas = Canvas.from_drawn(diagram, grown,
-                                       model_index: model_index)
-            seq = LayerSequencer.new(diagram, model_index: model_index,
-                                     canvas: canvas, frame: frame,
-                                     document: document)
-            seq.layers
-          end
+          canvas, seq = lay_out
           layers = seq.layers.reject { |s| s.nil? || s.empty? }
           image_layer = emit_images
           layers << image_layer if image_layer
 
           %(<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">\n\n<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="#{canvas.width_cm}" height="#{canvas.height_cm}" viewBox="#{canvas.view_box}">\n<title></title>\n<desc>Created with Enterprise Architect (Build: #{BUILD_ID}) 2</desc>\n#{layers.join("\n")}\n</svg>)
         end
+
+        # First pass over the stored rects, then a second pass over the
+        # DRAWN extents: grown classifiers and autosized packages can
+        # exceed the stored-rect canvas EA sizes from drawn extents.
+        # Skipped when the first pass already covers them (the common
+        # case). An unframed export is finally anchored on the content.
+        def lay_out
+          canvas = Canvas.from(diagram, model_index: model_index,
+                             content_anchor: content_anchor)
+          seq = sequence(canvas)
+          canvas, seq = redo_on_drawn(canvas, seq)
+          content_anchor ? anchor_on_content(canvas, seq) : [canvas, seq]
+        end
+        private :lay_out
+
+        def redo_on_drawn(canvas, seq)
+          grown = seq.drawn_bounds
+          return [canvas, seq] unless grown&.values&.any? &&
+                                      exceeds?(canvas, grown.values)
+
+          canvas = Canvas.from_drawn(diagram, grown, model_index: model_index,
+                                                     content_anchor: content_anchor)
+          [canvas, sequence(canvas)]
+        end
+        private :redo_on_drawn
+
+        def sequence(canvas)
+          seq = LayerSequencer.new(diagram, model_index: model_index,
+                                            canvas: canvas, frame: frame,
+                                            document: document)
+          seq.layers
+          seq
+        end
+        private :sequence
+
+        # Re-renders at the canvas anchored on the measured drawn
+        # content when that differs from the stored-rect canvas.
+        def anchor_on_content(canvas, seq)
+          anchored = CanvasAnchor.reanchor(canvas, seq.layers.drop(1),
+                                           seq.label_reach,
+                                           bottom: BottomMargin.for(diagram, model_index))
+          return [canvas, seq] if CanvasAnchor.same_canvas?(canvas, anchored)
+
+          [anchored, sequence(anchored)]
+        end
+        private :anchor_on_content
 
         # Walks t_image rows (when the document carries a Database
         # with an :images collection) and invokes EmfRenderer on
@@ -86,11 +120,6 @@ module Ea
           %(<g>#{svg}</g>)
         end
         private :render_image
-
-        def empty_diagram?(source_diagram)
-          source_diagram.elements.empty? && source_diagram.connectors.empty?
-        end
-        private :empty_diagram?
       end
     end
   end

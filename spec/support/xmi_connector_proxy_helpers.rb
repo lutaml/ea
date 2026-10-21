@@ -43,6 +43,6 @@ module XmiConnectorProxyHelpers
   def connector_proxy_svg(document)
     diagram = document.diagrams.first
     Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
-                                              document: document).render
+                                              document: document, frame: true).render
   end
 end

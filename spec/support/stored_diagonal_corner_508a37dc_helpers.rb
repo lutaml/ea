@@ -8,7 +8,8 @@ module StoredDiagonalCorner508a37dcHelpers
       item.relationship_ref.include?("1FD0A891_13E7_4818_9498_ACF09C480894")
     end
     svg = Ea::Svg::EaEmitter::Document.new(
-      diagram, model_index: document.index_by_id, document: document
+      diagram, model_index: document.index_by_id, document: document,
+      frame: true
     ).render
 
     [connector, Nokogiri::XML(svg)]

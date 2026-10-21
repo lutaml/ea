@@ -35,7 +35,8 @@ RSpec.describe "XMI address overlap source contract 30D62231 output" do
       entry.relationship_ref.end_with?(AddressOverlap30D62231Support::CONNECTOR_ID)
     end
     svg = Nokogiri::XML(Ea::Svg::EaEmitter::Document.new(
-      diagram, model_index: document.index_by_id, document: document
+      diagram, model_index: document.index_by_id, document: document,
+               frame: true
     ).render)
     role = svg.xpath("//*[local-name()='text']").find { |node| node.text.strip == "+address" }
     multiplicity = svg.xpath("//*[local-name()='text']").find { |node| node.text.strip == "0..*" }
@@ -67,9 +68,8 @@ RSpec.describe "XMI address overlap source contract 30D62231 metadata" do
     expect(metadata).not_to have_key(:target_port)
   end
 
-  it "preserves tree, non-UMLDI routes, custom paths and unsupported offset geometry" do
+  it "preserves tree, custom paths and unsupported offset geometry" do
     expect(address_route_metadata(style: { tree: "V" })).to be_empty
-    expect(address_route_metadata(style: { umldi_route: false })).to be_empty
     expect(address_route_metadata(path: "100:200;")).to be_empty
     expect(address_route_metadata(offsets: { source: [8, 12], target: [16, 11] })).to be_empty
     expect(address_route_metadata(offsets: { source: [nil, 12], target: [16, 12] })).to be_empty
@@ -81,5 +81,18 @@ RSpec.describe "XMI address overlap source contract 30D62231 metadata" do
       style: { mode: "3", lwidth: "0", umldi_route: true,
                stored_association_ray: true, association_ray_outline: true }
     )
+  end
+end
+
+RSpec.describe "XMI address overlap source contract 30D62231 non-UMLDI route" do
+  include AddressOverlap30D62231Support
+
+  # A stored (non-UMLDI) Association through the shared overlap row takes QEA's
+  # overlap origins; 30D62231 is exact against native in both formats with it.
+  it "applies the shared overlap origins to a non-UMLDI route" do
+    metadata = address_route_metadata(style: { umldi_route: false })
+
+    expect(metadata.values_at(:source_anchor, :target_anchor).map { |point| [point.x, point.y] })
+      .to eq([[1232, 456], [932, 456]])
   end
 end

@@ -5,25 +5,28 @@ require "spec_helper"
 RSpec.describe "Ordinary QEA note silhouettes" do
   include NoteShapeHelpers
 
-  it "renders all six body-bearing placements with a folded corner and no duplicate body text" do
+  it "renders all six body-bearing placements as native body and fold polygons without duplicate body text" do
     placements = %w[20251010_current_plateau_v5.1 ArcGISWorkspace_template].flat_map do |name|
       qea_note_shapes(Ea::Sources::Qea::Adapter.from_path("examples/qea/#{name}.qea"))
     end
 
     expect(placements.size).to eq(6)
     placements.each do |model, bounds|
-      svg = Ea::Svg::EaEmitter::Compartment::Shape.render(note_shape_context(model, bounds))
+      context = note_shape_context(model, bounds, previous_pen: %w[round bevel])
+      svg = Ea::Svg::EaEmitter::Compartment::Shape.render(context)
       nodes = Nokogiri::XML("<svg>#{svg}</svg>")
       x = bounds.x
       y = bounds.y
       right = x + bounds.width
       bottom = y + bounds.height
 
-      expect(nodes.css("polygon, text")).to be_empty
-      outer = "M #{x} #{y} L #{right - 12} #{y} L #{right} #{y + 12} " \
-              "L #{right} #{bottom} L #{x} #{bottom} L #{x} #{y} Z"
-      fold = "M #{right - 12} #{y} L #{right - 12} #{y + 12} L #{right} #{y + 12}"
-      expect(nodes.css("path").map { |path| path["d"] }).to eq([outer, fold])
+      expect(nodes.css("path, text")).to be_empty
+      body = "#{x} #{y} #{x} #{bottom} #{right} #{bottom} #{right} #{y + 12} #{right - 12} #{y}"
+      fold = "#{right - 12} #{y} #{right - 12} #{y + 12} #{right} #{y + 12}"
+      expect(nodes.css("polygon").map { |polygon| polygon["points"] }).to eq([body, fold])
+      expect(nodes.css("g").map { |g| g["style"][/fill:(#\h+)/, 1] }).to eq(["#FFFFFF", "#DCDCDC"])
+      expect(nodes.css("g").map { |g| g["style"][/linecap:\w+;stroke-linejoin:\w+/] }.uniq)
+        .to eq(["linecap:round;stroke-linejoin:bevel"])
     end
   end
 end

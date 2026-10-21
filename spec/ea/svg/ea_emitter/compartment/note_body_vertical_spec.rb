@@ -38,13 +38,16 @@ module NoteVerticalHelpers
     document = Ea::Sources::Qea::Adapter.from_path(path)
     diagram = document.diagrams.find { |entry| entry.id.include?(guid) }
     svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
-                                                    document: document).render
+                                                    document: document, frame: true).render
     Nokogiri::XML(svg).remove_namespaces!
   end
 
-  # Tops of path shapes whose first edge is horizontal (note outlines among them).
+  # Tops of note outlines: the five-point polygons (the fold triangle has three).
   def shape_tops(xml)
-    xml.xpath("//path").filter_map { |node| node["d"][/\AM \d+ (\d+) L \d+ \1 L/, 1]&.to_i }
+    xml.xpath("//polygon").filter_map do |node|
+      numbers = node["points"].split.map(&:to_i)
+      numbers[1] if numbers.size == 10
+    end
   end
 
   # [shape tops, first two baselines starting at first_line].

@@ -90,7 +90,7 @@ RSpec.describe "Ea::Theme end-to-end lifecycle" do
     before { diagram.theme = "119" }
 
     it "emits themed font in SVG output" do
-      svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: doc.index_by_id).render
+      svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: doc.index_by_id, frame: true).render
       parsed = Nokogiri::XML(svg)
 
       first_text_style = parsed.css("text").first&.attr("style") || ""
@@ -99,7 +99,7 @@ RSpec.describe "Ea::Theme end-to-end lifecycle" do
     end
 
     it "emits themed stroke color" do
-      svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: doc.index_by_id).render
+      svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: doc.index_by_id, frame: true).render
       parsed = Nokogiri::XML(svg)
 
       element_groups = parsed.css('g[style*="stroke:#000000"]')
@@ -107,7 +107,7 @@ RSpec.describe "Ea::Theme end-to-end lifecycle" do
     end
 
     it "emits themed stroke-width" do
-      svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: doc.index_by_id).render
+      svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: doc.index_by_id, frame: true).render
       parsed = Nokogiri::XML(svg)
 
       sw1_groups = parsed.css('g[style*="stroke-width:1"]')
@@ -119,7 +119,7 @@ RSpec.describe "Ea::Theme end-to-end lifecycle" do
     before { diagram.style_ex = nil }
 
     it "emits default font in SVG output" do
-      svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: doc.index_by_id).render
+      svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: doc.index_by_id, frame: true).render
       parsed = Nokogiri::XML(svg)
 
       # Default theme uses element-stored or Calibri fallback

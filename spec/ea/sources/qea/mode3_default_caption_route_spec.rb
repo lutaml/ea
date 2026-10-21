@@ -10,7 +10,8 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
   let(:diagram) { document.diagrams.find { |item| item.name == diagram_name } }
   let(:xml) do
     svg = Ea::Svg::EaEmitter::Document.new(
-      diagram, model_index: document.index_by_id, document: document
+      diagram, model_index: document.index_by_id, document: document,
+      frame: true
     ).render
     Nokogiri::XML(svg).remove_namespaces!
   end

@@ -27,7 +27,7 @@ module Issue135AssociationSourceContractHelpers
   def issue135_source_texts(document, diagram_prefix)
     diagram = document.diagrams.find { |item| item.id.start_with?("EAID_#{diagram_prefix}") }
     svg = Ea::Svg::EaEmitter::Document.new(diagram, document: document,
-                                                    model_index: document.index_by_id).render
+                                                    model_index: document.index_by_id, frame: true).render
     Nokogiri::XML(svg).remove_namespaces!.css("text").map(&:text)
   end
 

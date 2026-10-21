@@ -15,6 +15,7 @@ module Ea
       attribute :body, :string
       attribute :note_type, :string # "Note" | "Text" | "File"
       attribute :legend, Legend
+      attribute :package_id, :string # containing package
 
       json do
         map "id", to: :id
@@ -22,6 +23,7 @@ module Ea
         map "body", to: :body
         map "noteType", to: :note_type
         map "legend", to: :legend
+        map "packageId", to: :package_id
       end
     end
   end

@@ -31,16 +31,24 @@ module Ea
           ICON_LABEL_GAP = 22
           LABEL_BASELINE_FROM_ICON_TOP = 12
           DEFAULT_ITEM_FONT_SIZE = 9
+          # The legend pen is not set explicitly: the panel inherits the pen
+          # left by the previous drawing (round/bevel), or EA's initial pen
+          # (square/miter) when the legend is the first thing painted. Held
+          # across the corpus: 11 of 11 legends painted first are square, 105
+          # of 105 painted later are round.
+          INHERITED_STROKE = "stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel;"
+          INITIAL_STROKE = "stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;"
 
-          def self.render(bounds, legend:, family:, canvas: nil, item_font: {})
-            new(bounds, legend, family, canvas, item_font).to_svg
+          def self.render(bounds, legend:, family:, canvas: nil, item_font: {}, first_painted: false)
+            new(bounds, legend, family, canvas, item_font, first_painted: first_painted).to_svg
           end
 
-          def initialize(bounds, legend, family, canvas, item_font = {})
+          def initialize(bounds, legend, family, canvas, item_font = {}, first_painted: false)
             @bounds = bounds
             @legend = legend
             @family = family
             @canvas = canvas
+            @pen = first_painted ? INITIAL_STROKE : INHERITED_STROKE
             @item_font = item_font[:size]&.nonzero? ? item_font : {}
           end
 
@@ -82,19 +90,19 @@ module Ea
           end
 
           def container_style
-            "stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; " \
+            "#{@pen} " \
               "fill:#{container_fill};fill-opacity:1.00; " \
               "stroke:#{container_stroke}; stroke-opacity:1.00"
           end
 
           def icon_style(item)
-            "stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; " \
+            "#{@pen} " \
               "fill:#{icon_fill(item)};fill-opacity:1.00; " \
               "stroke:#000000; stroke-opacity:1.00"
           end
 
           def label_style
-            "stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; " \
+            "#{@pen} " \
               "fill:#{label_fill};fill-opacity:1.00; " \
               "stroke:#000000; stroke-opacity:0.00"
           end

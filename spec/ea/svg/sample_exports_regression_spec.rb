@@ -48,7 +48,7 @@ RSpec.describe "EA sample exports regression", :sample_exports_regression do
       diagram = doc.diagrams.find { |d| d.id == s[:diagram_id] }
       next unless diagram
 
-      ours = Ea::Svg::EaEmitter::Document.new(diagram, model_index: doc.index_by_id).render
+      ours = Ea::Svg::EaEmitter::Document.new(diagram, model_index: doc.index_by_id, frame: true).render
       reference = File.read(s[:ref_svg])
       report = Ea::Svg::Parity::Checker.new(ours: ours, reference: reference).report
 
@@ -87,7 +87,7 @@ RSpec.describe "EA sample exports regression", :sample_exports_regression do
       expect(diagram).not_to be_nil, "diagram #{s[:diagram_id]} missing from #{s[:name]}"
 
       expect {
-        Ea::Svg::EaEmitter::Document.new(diagram, model_index: doc.index_by_id).render
+        Ea::Svg::EaEmitter::Document.new(diagram, model_index: doc.index_by_id, frame: true).render
       }.not_to raise_error
     end
   end
@@ -105,7 +105,7 @@ RSpec.describe "EA sample exports regression", :sample_exports_regression do
       doc = build_plateau_doc
       doc.diagrams.each do |diagram|
         expect {
-          Ea::Svg::EaEmitter::Document.new(diagram, model_index: doc.index_by_id).render
+          Ea::Svg::EaEmitter::Document.new(diagram, model_index: doc.index_by_id, frame: true).render
         }.not_to raise_error
       end
     end

@@ -28,6 +28,6 @@ RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do
     expect(phantom_route(type: "Aggregation", id: "pc:1:2")).to eq(["M 20 100 L 20 40"])
     expect(phantom_route(type: "Association", id: "pc:1:2", style: { mode: "3" })).to eq(["M 20 100 L 20 40"])
     flagged = { phantom_outline: true }
-    expect(phantom_route(type: "Dependency", id: "pc:1:2", style: flagged)).to eq(["M 20 100 L 20 40"])
+    expect(phantom_route(type: "Dependency", id: "pc:1:2", style: flagged)).to eq(["M 20 40 L 20 100 M 20 40"])
   end
 end

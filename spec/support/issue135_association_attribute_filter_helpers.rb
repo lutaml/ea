@@ -62,7 +62,7 @@ module Issue135AssociationAttributeFilterHelpers
 
   def issue135_attribute_filter_texts(document)
     emitter = Ea::Svg::EaEmitter::Document.new(document.diagrams.first, document: document,
-                                                                        model_index: document.index_by_id, frame: false)
+                                                                        model_index: document.index_by_id, frame: false, content_anchor: false)
     svg = emitter.render
     Nokogiri::XML(svg).remove_namespaces!.css("text").map(&:text)
   end

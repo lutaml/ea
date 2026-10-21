@@ -16,7 +16,7 @@ RSpec.describe "Classifier documentation word separators" do
       expect(rows.map(&:text)).to eq(["[Detailed notes that describe the ", "concept.]"] * 3)
       expect(rows.map { |node| node["textLength"].to_i }).to eq([wrapped_length, 36] * 3)
       expect(rows.map { |node| [node["x"].to_f, node["y"].to_f] })
-        .to eq([[45, 262], [45, 275], [362, 92], [362, 105], [45, 92], [45, 105]])
+        .to eq([[45, 92], [45, 105], [362, 92], [362, 105], [45, 262], [45, 275]])
       expect(rows.each_slice(2).map { |first, last| last["y"].to_f - first["y"].to_f }).to eq([13] * 3)
       expect(rows.map { |node| node["space"] }).to all(eq("preserve"))
       expect(rows.map { |node| node["style"] }).to all(include("font-family:#{family};", "font-size:7pt;"))

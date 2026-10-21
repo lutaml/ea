@@ -57,7 +57,8 @@ module UmlDiLabelBoundsFallbackHelpers
     render_diagram = diagram.dup
     render_diagram.connectors = [connector]
     svg = Ea::Svg::EaEmitter::Document.new(
-      render_diagram, model_index: document.index_by_id, document: document
+      render_diagram, model_index: document.index_by_id, document: document,
+      frame: true
     ).render
     Nokogiri::XML(svg).xpath("//*[local-name()='text']")
   end

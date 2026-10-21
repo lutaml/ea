@@ -14,7 +14,7 @@ RSpec.shared_context "a QEA connector pen" do
   let(:connector) { diagram.connectors.first }
   let(:xml) do
     svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
-                                                    document: document, frame: false).render
+                                                    document: document, frame: false, content_anchor: false).render
     Nokogiri::XML(svg).remove_namespaces!
   end
 end

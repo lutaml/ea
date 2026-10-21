@@ -38,7 +38,7 @@ module Ea
           @model_index = model_index
         end
 
-        attr_reader :effective_inset_left
+        attr_reader :effective_inset_left, :max_x, :max_y
 
         def compute
           points = element_points
@@ -48,6 +48,8 @@ module Ea
           ys = points.map(&:last)
           min_x = xs.min || 0
           min_y = ys.min || 0
+          @max_x = xs.max
+          @max_y = ys.max
           # Left inset scales from 30 up to the 35 cap with the
           # stored leftmost x: leftmost drawn x = 30 + min_x capped
           # at 35 (corpus: min_x 0 -> 30, 2 -> 32, 4 -> 34, >=5 -> 35).

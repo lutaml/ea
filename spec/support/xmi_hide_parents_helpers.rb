@@ -37,7 +37,8 @@ module XmiHideParentsHelpers
   end
 
   def ghost_count(diagram, document)
-    svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id, document: document).render
-    svg.scan(%r{<text[^>]*>([^<]*)</text>}).flatten.count("Class B")
+    svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id, document: document,
+                                                    frame: true).render
+    svg.scan(%r{<text(?:\s+[^\s"<>=]+="[^"<>]*")*\s*>([^<]*)</text>}).flatten.count("Class B")
   end
 end

@@ -21,7 +21,7 @@ RSpec.describe "QEA source-height baseline anchors" do
     records.each do |id, shift, expected|
       diagram = document.diagrams.find { |entry| entry.id == id }
       svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
-                                                      document: document).render
+                                                      document: document, frame: true).render
       texts = Nokogiri::XML(svg).remove_namespaces!.css("text")
       expected.each do |text, position|
         rows = texts.select { |node| node.text == text }

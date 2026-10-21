@@ -11,7 +11,7 @@ module XmiLandpriceAttributeOrderHelpers
   def landprice_rendered_property_names(document)
     diagram = document.diagrams.first
     svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
-                                                    document: document, frame: false).render
+                                                    document: document, frame: false, content_anchor: false).render
     Nokogiri::XML(svg).remove_namespaces!.css("text").map(&:text)
             .select { |text| ORDERED_PROPERTY_NAMES.any? { |name| text.include?(name) } }
             .map { |text| text.split(":", 2).first }

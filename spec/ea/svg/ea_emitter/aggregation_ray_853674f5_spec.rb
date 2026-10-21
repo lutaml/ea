@@ -45,7 +45,8 @@ module AggregationRay853674F5Support
     Ea::Svg::EaEmitter::Document.new(
       diagram,
       model_index: document.index_by_id,
-      document: document
+      document: document,
+      frame: true
     ).render
   end
 

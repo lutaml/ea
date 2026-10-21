@@ -33,7 +33,14 @@ module Ea
         def groups
           @drawn_bounds = {}
           @divider_y = {}
-          ordered_elements.flat_map { |e| groups_for(e) }
+          @painted_any = false
+          @previous_pen = nil
+          ordered_elements.flat_map do |e|
+            groups = groups_for(e)
+            @painted_any ||= groups.any?
+            @previous_pen = Element::NoteShapeRenderer.pen_of(groups.last) || @previous_pen
+            groups
+          end
         end
 
         # Final drawn Bounds per model element reference, captured
@@ -50,8 +57,10 @@ module Ea
 
         private
 
+        # EA paints placements by descending Sequence (the lowest
+        # Sequence is on top); equal keys keep their stored order.
         def ordered_elements
-          (diagram.elements || []).sort_by { |e| e.z_order || 0 }
+          (diagram.elements || []).sort_by.with_index { |e, i| [-(e.z_order || 0), i] }
         end
 
         def groups_for(element)
@@ -300,7 +309,9 @@ module Ea
             canvas: canvas,
             diagram: diagram,
             model_index: model_index,
-            off_canvas_parent_name: parent_name
+            off_canvas_parent_name: parent_name,
+            first_painted: !@painted_any,
+            previous_pen: @previous_pen
           )
         end
 
@@ -380,10 +391,16 @@ module Ea
                                    attr_group_lead: attr_group_lead)
         end
 
+        # A ghost-led header (italic parent label above the stereotype /
+        # name) takes the same compact offsets: EA seats its divider at
+        # the last header baseline + 7 (empirical fit, 21 QEA dividers
+        # that were +1: 0114FD24 uro::AbstractConstruction etc.; 20 of
+        # 21 now exact, no other compared item moved). The tight ghost
+        # variant has no corpus case and keeps the default offsets.
         def compact_header_offsets?(classifier, header_lines, size, **options)
           classifier.is_a?(Ea::Model::Klass) &&
             Ea::Fonts::Metrics.compact_compartment_font?(size, family: options[:family], unit: options[:size_unit]) &&
-            !%i[italic italic_tight].include?(header_lines.dig(0, 1)) &&
+            header_lines.dig(0, 1) != :italic_tight &&
             options.values_at(:logical_height, :marker_count, :enum_literals_count,
                               :divider_offset, :attr_first_offset) == [nil, 0, 0, 8, 7] &&
             theme.compartments.header_line_offset == 6 && theme.compartments.attr_line_offset == 6

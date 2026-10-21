@@ -12,6 +12,7 @@ module Ea
         autoload :ConnectorMetadata, "ea/sources/xmi/diagram_builder/connector_metadata"
         autoload :AssociationClassMetadata, "ea/sources/xmi/diagram_builder/association_class_metadata"
         autoload :FontSettings, "ea/sources/xmi/diagram_builder/font_settings"
+        autoload :ElementBorders, "ea/sources/xmi/diagram_builder/element_borders"
         autoload :StereotypeProfiles, "ea/sources/xmi/diagram_builder/stereotype_profiles"
         autoload :UmldiEdges, "ea/sources/xmi/diagram_builder/umldi_edges"
 
@@ -135,7 +136,7 @@ module Ea
             image_bounds: (build_bounds(geom.img_left, geom.img_top, geom.img_right, geom.img_bottom) unless bounds),
             background_color: style.background_color,
             line_color: style.line_color,
-            line_width: style.line_width,
+            line_width: placed_line_width(style, placed.subject),
             font_family: font[:family],
             font_size: font[:size],
             font_size_unit: "pt",
@@ -155,6 +156,17 @@ module Ea
 
         # XMI preserves UML member order in ownedAttribute. Carry that
         # provenance to the renderer so it does not replace it with a name sort.
+        # LWth on the placement, else the model element's saved border width.
+        # A negative LWth (-1) inherits; zero requests the one-pixel cosmetic
+        # pen, as in the QEA source. Checked on 01661E1B (LWth=-1 over
+        # BorderWidth=2) and 1A10EB6D (LWth=0, native stroke-width 1).
+        def placed_line_width(style, subject)
+          own = style.line_width
+          return [own, 1].max if own && own >= 0
+
+          (@element_borders ||= ElementBorders.new(root)).width_for(subject)
+        end
+
         def element_style(subject)
           style = (@stereotype_profiles ||= StereotypeProfiles.new(root)).for(subject)
           return style unless source_ordered_classifiers.include?(subject)
@@ -179,8 +191,8 @@ module Ea
           return nil unless left && top && right && bottom
 
           Ea::Model::Bounds.new(x: left, y: top,
-                                 width: right - left,
-                                 height: bottom - top)
+                                width: right - left,
+                                height: bottom - top)
         end
 
         def build_connectors(placed_connectors, placed_elements, owner_id, context)
@@ -245,7 +257,7 @@ module Ea
             waypoints: route[:waypoints],
             style: route[:style],
             line_color: style.color,
-            line_width: style.line_width,
+            line_width: ext_meta[:line_width],
             hidden: style.hidden,
             label_boxes: connector_label_boxes(placed, ext_meta[:ea_type],
                                                options.fetch(:context) ? nil : owner_id)
@@ -257,7 +269,10 @@ module Ea
                                                                   connector.label_boxes)
                                          end
           mark_stored_ray(connector, placed, source, target) unless options.fetch(:context)
-          mark_association_route(connector, placed, source, target) unless options.fetch(:context)
+          unless options.fetch(:context)
+            reversed = reversed_placement?(style, by_duid, edge_source, edge_target)
+            mark_association_route(connector, placed, source, target, reversed)
+          end
           connector
         end
 
@@ -293,9 +308,20 @@ module Ea
           StoredRoute.new.public_send(stage, connector, link: link, bounds: bounds, offsets: offsets, edge: geom.edge)
         end
 
-        def mark_association_route(connector, placed, source, target)
+        def mark_association_route(connector, placed, source, target, reversed)
+          connector.style[:reversed_ends] = true if reversed
           metadata = stored_ray_metadata(connector, placed, source, target, stage: :association_route)
           metadata.each { |name, value| connector.public_send("#{name}=", value) }
+          connector.style.delete(:reversed_ends)
+        end
+
+        # Mirrors QEA placement_order_reversed?: SOID and EOID must both name
+        # placements on this diagram and be crossed against the relationship's
+        # ends. A stale DUID resolves to nothing and is not a reversal.
+        def reversed_placement?(style, by_duid, edge_source, edge_target)
+          source = by_duid[style.soid]
+          target = by_duid[style.eoid]
+          source && target && reversed_ends?(source, target, edge_source, edge_target)
         end
 
         def mark_plain_source_seat(connector, placed, context)
@@ -358,12 +384,13 @@ module Ea
 
         def connector_meta(subject_id)
           connector = connector_index[subject_id]
-          return { ea_type: nil, direction: nil } unless connector
+          return { ea_type: nil, direction: nil, line_width: nil } unless connector
 
           props = connector.properties
           {
             ea_type: props&.ea_type,
-            direction: props&.direction
+            direction: props&.direction,
+            line_width: connector.appearance&.linewidth
           }.merge(connector_metadata.for(connector))
         end
 
@@ -515,8 +542,8 @@ module Ea
           return nil unless g.left && g.top && g.right && g.bottom
 
           Ea::Model::Bounds.new(x: g.left, y: g.top,
-                                 width: g.right - g.left,
-                                 height: g.bottom - g.top)
+                                width: g.right - g.left,
+                                height: g.bottom - g.top)
         end
 
         def edge_point(placed, edge_code, _end_kind)

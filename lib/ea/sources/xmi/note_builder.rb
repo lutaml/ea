@@ -40,7 +40,8 @@ module Ea
             name: ext_element.name,
             body: ext_element.properties&.documentation,
             note_type: note_type,
-            legend: legend_for(ext_element, note_type)
+            legend: legend_for(ext_element, note_type),
+            package_id: IdNormalizer.from_xmi_id(ext_element.model&.package)
           )
         end
 

@@ -16,7 +16,7 @@ module QeaBorderWidthHelpers
 
   def rendered_border_width(document)
     svg = Ea::Svg::EaEmitter::Document.new(document.diagrams.first, model_index: document.index_by_id,
-                                                                    document: document, frame: false).render
+                                                                    document: document, frame: false, content_anchor: false).render
     rectangle = Nokogiri::XML(svg).remove_namespaces!.at_css("rect[rx]")
     rectangle.parent["style"][/stroke-width:([^;]+)/, 1].to_i
   end

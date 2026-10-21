@@ -45,6 +45,15 @@ module Ea
             @font_unit = font_unit
             @font_weight = font_weight
             @font_style = font_style
+            @reach = []
+          end
+
+          # [right, bottom] edge, in model coordinates, of the label boxes
+          # (position + stored CX/CY) emitted so far; nil before any.
+          def reach
+            return nil if @reach.empty?
+
+            [@reach.map(&:first).max, @reach.map(&:last).max]
           end
 
           # Returns an Array of `<text>` SVG strings for one endpoint.
@@ -102,6 +111,10 @@ module Ea
             stereo = connector_source_dest_stereotype(connector, end_kind)
             stereo = stereo.nil? || stereo.empty? ? nil : "«#{stereo}»"
             direction = leg_direction(end_kind, heading)
+            if left_seated_source?(connector, end_kind)
+              text_pos, mult_pos = left_seated_positions(anchor, role, mult)
+              direction = nil
+            end
             if direction && !(tree && zero_offset?(text_box, mult_box))
               text_pos = plain_leftward_source_role(connector, direction, anchor, text_box, role) ||
                          plain_vertical_role(connector, direction, anchor, text_box, role) ||
@@ -127,6 +140,7 @@ module Ea
                                     directional_multiplicity(:left, anchor, mult_box, mult)
                                   end
               mult_pos = target_multiplicity_seat(connector, heading, anchor, mult_box) ||
+                         target_diagonal_property_multiplicity(connector, heading, anchor, text_box, mult_box) ||
                          face_multiplicity || target_horizontal_multiplicity(heading, anchor, mult_box, mult) ||
                          mult_pos
             end
@@ -168,7 +182,8 @@ module Ea
             end
 
             build_texts(role:, mult:, standalone:,
-                        text_pos:, mult_pos:, stereo:, text_box:, stereo_pos:)
+                        text_pos:, mult_pos:, stereo:, text_box:, stereo_pos:,
+                        mult_box:)
           end
 
           private
@@ -345,6 +360,24 @@ module Ea
             end
           end
 
+          def left_seated_source?(connector, end_kind)
+            end_kind == :source && connector.style.to_h[:left_seated_source] == true
+          end
+
+          # EMPIRICAL FIT (5038EEE3 connectors 207 and 212, the only reversed
+          # links the builder flags): the source cluster sits left of the
+          # anchor like a source leaving left, whichever way the route leaves:
+          # role right edge 60px out, 7px above; multiplicity ends 3px short
+          # of the anchor, 15px below.
+          def left_seated_positions(anchor, role, mult)
+            role_width = Ea::Fonts::Metrics.text_length(role.to_s, font_size, family: font_family) ||
+                         role.to_s.length * 6
+            mult_width = Ea::Fonts::Metrics.text_length(mult.to_s, font_size, family: font_family) ||
+                         mult.to_s.length * 6
+            [[anchor[0] - 60 - role_width, anchor[1] - 7],
+             [anchor[0] - mult_width - 3, anchor[1] + 15]]
+          end
+
           # Stored source-end boxes on a 7pt label whose first leg
           # leaves straight up or straight right are seated at the box
           # corner, anchor + (OX, OY) with no sign flip, 3px to its
@@ -365,14 +398,15 @@ module Ea
             nil
           end
 
-          # Saved bounds seat a source Property role at the stereotype's left
-          # edge. A centred stored box (ALN=1), or a phantom's synthesized box
+          # Saved bounds seat a source or target Property role at the stereotype's
+          # left edge (target: +endPoint on 159E9DA0 and 90BCA409, the only
+          # corpus targets narrower than the stereotype). A centred stored box (ALN=1), or a phantom's synthesized box
           # without alignment, centres the shorter role over it; a
           # left-aligned box keeps both lines on that edge.
           def bounds_role_centering(connector, end_kind, role, stereo, text_box)
-            return 0 unless end_kind == :source && stereo && seat_font?
+            return 0 unless stereo && seat_font?
             return 0 unless centred_bounds_box?(connector, text_box)
-            return 0 unless property_label?(connector, :source)
+            return 0 unless property_label?(connector, end_kind)
 
             -[stereotype_offset(role, stereo, { "alignment" => 1 }), 0].min
           end
@@ -632,6 +666,16 @@ module Ea
             return property_role_offsets(:left).first if dx.negative? && dx.abs > dy.abs
 
             property_role_offsets(:down).first if dy.negative? && dy.abs > dx.abs
+          end
+
+          # With no stored multiplicity box, a Property target on a steep
+          # upward diagonal seats it beside the anchor, above the role baseline.
+          def target_diagonal_property_multiplicity(connector, heading, anchor, text_box, mult_box)
+            return nil if mult_box
+            return nil unless diagonal_property_box?(connector, text_box)
+            return nil unless heading && heading[1].negative? && heading[1].abs > heading[0].abs
+
+            [anchor[0] + 8, anchor[1] - 7]
           end
 
           def target_vertical_role(connector, heading, anchor, box, role)
@@ -905,9 +949,11 @@ module Ea
           end
 
           def build_texts(role:, mult:, standalone:, text_pos:, mult_pos:,
-                          stereo:, text_box:, stereo_pos: nil)
+                          stereo:, text_box:, stereo_pos: nil, mult_box: nil)
             if role && !role.empty? && text_pos
               x, y = text_pos
+              note_reach(text_pos, text_box)
+              note_reach(mult_pos, mult_box) if mult && !mult.empty? && mult_pos
               texts = [text_at(x, y, role)]
               if stereo
                 stereo_x, stereo_y = stereo_pos || [x + stereotype_offset(role, stereo, text_box),
@@ -919,10 +965,22 @@ module Ea
               end
               texts
             elsif standalone && !standalone.empty? && mult_pos
+              note_reach(mult_pos, mult_box)
               [text_at(*mult_pos, standalone)]
             else
               []
             end
+          end
+
+          # A label box starts at the text's x and at its first baseline
+          # less the rounded font height (EA's text top).
+          def note_reach(position, box)
+            width = box && box["cx"]
+            height = box && box["cy"]
+            return unless width && height
+
+            @reach << [position[0] + width,
+                       position[1] - font_pixel_size.ceil + height]
           end
 
           def umldi_label_position(bounds)

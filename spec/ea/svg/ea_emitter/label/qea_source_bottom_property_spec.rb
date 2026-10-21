@@ -24,7 +24,7 @@ module QeaSourceBottomPropertyHelpers
   def render_bottom_property(tables)
     document = Ea::Sources::Qea::Adapter.new(build_test_database(**tables), "bottom-property.qea").to_document
     svg = Ea::Svg::EaEmitter::Document.new(document.diagrams.first, model_index: document.index_by_id,
-                                                                    document: document, frame: false).render
+                                                                    document: document, frame: false, content_anchor: false).render
     qea_end_label_result(Nokogiri::XML(svg).remove_namespaces!, "0..1")
   end
 end

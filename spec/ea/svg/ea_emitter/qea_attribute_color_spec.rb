@@ -10,7 +10,7 @@ RSpec.describe "QEA attribute text color" do
 
   let(:svg) do
     Ea::Svg::EaEmitter::Document.new(document.diagrams.first, model_index: document.index_by_id,
-                                                              document: document, frame: false).render
+                                                              document: document, frame: false, content_anchor: false).render
   end
 
   let(:attribute_fills) do

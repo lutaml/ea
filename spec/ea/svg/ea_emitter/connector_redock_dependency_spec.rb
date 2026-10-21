@@ -23,19 +23,19 @@ RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do
     end
 
     it "clips at the edges of the boxes named by the relationship's own ids" do
-      %w[Dependency Realization].each do |type|
-        expect(dependency_end_route(type, %w[s t])).to eq(["M 600 260 L 393 260"]), type
-      end
+      expect(dependency_end_route("Realization", %w[s t])).to eq(["M 600 260 L 393 260"])
+      expect(dependency_end_route("Dependency", %w[s t])).to eq(["M 393 260 L 600 260 M 393 260"])
     end
 
     it "follows the named ends, not the boxes under the anchors" do
-      expect(dependency_end_route("Dependency", %w[t s])).to eq(["M 393 260 L 600 260"])
+      expect(dependency_end_route("Dependency", %w[t s])).to eq(["M 600 260 L 393 260 M 600 260"])
     end
 
     it "keeps the stored route when an end id is missing, for every type" do
       relationships.each_key do |type|
+        expected = type == "Dependency" ? "M 260 260 L 600 260 M 260 260" : "M 600 260 L 260 260"
         [[nil, "t"], ["s", nil], [nil, nil]].each do |ids|
-          expect(dependency_end_route(type, ids)).to eq(["M 600 260 L 260 260"]), "#{type} #{ids}"
+          expect(dependency_end_route(type, ids)).to eq([expected]), "#{type} #{ids}"
         end
       end
     end
@@ -52,12 +52,12 @@ RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do
 
     it "stops on the outer edge of 2px element borders like the other thin connectors" do
       expect(render_qea_route(**thin, object_styles: [bordered, bordered])[:paths].first)
-        .to eq("M 227 601 L 227 506")
+        .to eq("M 227 506 L 227 601 M 227 506")
     end
 
     it "keeps default borders on the geometric edge" do
       expect(render_qea_route(**thin, object_styles: [default, default])[:paths].first)
-        .to eq("M 227 602 L 227 505")
+        .to eq("M 227 505 L 227 602 M 227 505")
     end
   end
 

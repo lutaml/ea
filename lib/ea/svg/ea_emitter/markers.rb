@@ -52,17 +52,28 @@ module Ea
           entries = visible_connectors.flat_map { |c| entries_for(c) }
 
           if grouped
-            entries.group_by { |e| [e.style_key, e.stroke_width] }.map do |(key, width), grouped_entries|
+            entries.group_by { |e| [e.style_key, e.stroke_width, e.stroke_color] }.map do |(key, width, color), grouped_entries|
               # EA emits ONE marker per connector regardless of
               # anchor overlap. Verified against plateau Bridge
               # diagram: 9 generalizations fanning from the same
               # parent anchor produce 9 distinct triangle polygons
               # at the same coordinates. The earlier "dedup by
               # anchor" hypothesis is disproven by reference SVGs.
-              marker_layer(key, width, grouped_entries.map(&:body).join("\n  "))
+              marker_layer(key, width, color, grouped_entries.map(&:body).join("\n  "))
             end
           else
-            entries.map { |e| marker_layer(e.style_key, e.stroke_width, e.body) }
+            entries.map { |e| marker_layer(e.style_key, e.stroke_width, e.stroke_color, e.body) }
+          end
+        end
+
+        # One `[connector, Layer]` pair per marker, in diagram link
+        # order, so the sequencer can paint each connector's heads right
+        # after its line like EA does.
+        def connector_layers
+          visible_connectors.flat_map do |connector|
+            entries_for(connector).map do |e|
+              [connector, marker_layer(e.style_key, e.stroke_width, e.stroke_color, e.body)]
+            end
           end
         end
 
@@ -86,7 +97,7 @@ module Ea
         # drives dedup — EA emits one marker per connector.
         Entry = Struct.new(:style_key, :body, :anchor,
                            :connector_waypoint_count, :stroke_width,
-                           keyword_init: true) do
+                           :stroke_color, keyword_init: true) do
           def hash
             anchor.hash
           end
@@ -140,18 +151,18 @@ module Ea
           connector_line: { fill: "#000000", opacity: "0.00" }
         }.freeze
 
-        def marker_layer(key, width, body)
-          Layer.new(style_key: Connectors.layer_key(key, width, stroke_width),
-                    style: style_for(key, width), body: body)
+        def marker_layer(key, width, color, body)
+          Layer.new(style_key: Connectors.layer_key(key, width, stroke_width, color),
+                    style: style_for(key, width, color), body: body)
         end
 
-        def style_for(key, width = stroke_width)
+        def style_for(key, width = stroke_width, color = Connectors::DEFAULT_STROKE)
           spec = STYLE_MAP[key]
           return nil unless spec
 
           "stroke-width:#{width};stroke-linecap:round;stroke-linejoin:bevel; " \
             "fill:#{spec[:fill]};fill-opacity:#{spec[:opacity]}; " \
-            "stroke:#000000; stroke-opacity:1.00"
+            "stroke:#{color}; stroke-opacity:1.00"
         end
 
         def visible_connectors
@@ -171,7 +182,8 @@ module Ea
                       body: body,
                       anchor: anchor_for(spec),
                       connector_waypoint_count: waypoint_count,
-                      stroke_width: Connectors.stroke_width_for(connector, stroke_width))
+                      stroke_width: Connectors.stroke_width_for(connector, stroke_width),
+                      stroke_color: Connectors.stroke_color_for(connector))
           end
         end
 

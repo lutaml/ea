@@ -38,7 +38,7 @@ RSpec.describe "Legend CJK fallback extents" do
 
     centered_x = ((bounds.x + 10 + item["x"].to_f + item["textLength"].to_i - title["textLength"].to_i) / 2).floor
     expect(title["x"].to_f).to eq(centered_x)
-    expect([title["x"], title["y"], title["textLength"]]).to eq(["150.00", "70.00", "15"])
+    expect([title["x"], title["y"], title["textLength"]]).to eq(["141.00", "70.00", "34"])
     expect([item["x"], item["y"], item["textLength"]]).to eq(["132.00", "92.00", "74"])
   end
 end

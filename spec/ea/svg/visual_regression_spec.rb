@@ -32,7 +32,7 @@ RSpec.describe "EA SVG visual regression", :visual_regression do
     target = document.diagrams.find { |d| File.exist?(File.join(VISUAL_REF_DIR, "#{d.id}.svg")) }
     skip "no overlapping diagram IDs between XMI and reference SVGs" unless target
 
-    svg = Ea::Svg::EaEmitter::Document.new(target, model_index: document.index_by_id).render
+    svg = Ea::Svg::EaEmitter::Document.new(target, model_index: document.index_by_id, frame: true).render
     reference = File.read(File.join(VISUAL_REF_DIR, "#{target.id}.svg"))
 
     # At minimum, our SVG should parse as valid XML.
@@ -52,7 +52,7 @@ RSpec.describe "EA SVG visual regression", :visual_regression do
     sample = document.diagrams.first(10)
     sample.each do |diagram|
       expect {
-        Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id).render
+        Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id, frame: true).render
       }.not_to raise_error
     end
   end
