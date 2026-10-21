@@ -12,8 +12,8 @@ RSpec.describe "QEA package import border docking" do
 
   it "seats both import routes and arrowheads on the outer package borders", :aggregate_failures do
     {
-      "B0802E45-AF95-433a-BA7A-93EB62945730" => ["M 146 291 L 228 390", "M 215 382 L 228 390 L 222 375"],
-      "7BAEBE89-B43D-46dc-971B-4803FA14CDE5" => ["M 369 291 L 299 390", "M 304 375 L 299 390 L 312 381"]
+      "B0802E45-AF95-433a-BA7A-93EB62945730" => ["M 228 390 L 146 291 M 228 390", "M 215 382 L 228 390 L 222 375"],
+      "7BAEBE89-B43D-46dc-971B-4803FA14CDE5" => ["M 299 390 L 369 291 M 299 390", "M 304 375 L 299 390 L 312 381"]
     }.each do |ref, (route, marker)|
       expect(package_border_geometry(emitters, ref)).to eq([route, marker])
     end
@@ -46,7 +46,7 @@ RSpec.describe "Package border docking guards" do
       [thin.merge(style: "Mode=3;LWidth=1;"), ["LWth=2;", "LWth=2;"]]
     ].each do |input, borders|
       expect(render_qea_route(**input, object_styles: borders)).to eq(
-        paths: ["M 227 602 L 227 505", "M 232 520 L 227 505 L 222 520"], markers: []
+        paths: ["M 227 505 L 227 602 M 227 505", "M 232 520 L 227 505 L 222 520"], markers: []
       )
     end
   end

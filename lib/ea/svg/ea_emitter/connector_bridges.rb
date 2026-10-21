@@ -42,9 +42,15 @@ module Ea
           end
         end
 
+        # EA also draws NoteLink and Package lines target-first with the
+        # repeat (9DA6C553 NoteLink; 2A5E0832 and DFBB1072 Package), the
+        # opposite of the stored source-to-target waypoint order.
+        TARGET_FIRST_TYPES = %w[NoteLink Package].freeze
+
         def direct?(connector)
           style = connector.style || {}
-          style.key?(:direct) || style.key?("direct")
+          style.key?(:direct) || style.key?("direct") ||
+            TARGET_FIRST_TYPES.include?(connector.connector_type)
         end
 
         def serialize(points, segments)

@@ -37,7 +37,7 @@ RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do
     fixture = notelink_fixture
     fixture[:drawn_bounds] = nil
     expect(notelink_pairs(fixture)).to be_nil
-    expect(redock_output(fixture).first).to eq(["M 310 730 L 830 643"])
+    expect(redock_output(fixture).first).to eq(["M 830 643 L 310 730 M 830 643"])
   end
 
   it "preserves diagonal Association and Dependency geometric edges" do

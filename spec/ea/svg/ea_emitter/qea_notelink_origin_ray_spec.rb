@@ -6,7 +6,7 @@ RSpec.describe "QEA NoteLink origin rays" do # rubocop:disable Metrics/BlockLeng
   include QeaCompartmentFontHelpers
   include QeaRoutingHelpers
 
-  { "dc:28:108" => "M 113 459 L 116 421", "dc:70:467" => "M 121 459 L 119 421" }.each do |id, path|
+  { "dc:28:108" => "M 116 421 L 113 459 M 116 421", "dc:70:467" => "M 119 421 L 121 459 M 119 421" }.each do |id, path|
     it "clips #{id} using mathematical saved Y offsets" do
       document = public_compartment_document
       diagram = document.diagrams.find { |entry| entry.connectors.any? { |connector| connector.id == id } }
