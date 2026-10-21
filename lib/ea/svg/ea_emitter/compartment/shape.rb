@@ -60,7 +60,11 @@ module Ea
             return element.font_size if element.font_size&.nonzero?
 
             # Parsed source defaults inherit; unspecified callers keep 9pt.
-            inherited = element.font_size_inherited || element.style&.fetch(:fontsz, nil).to_s == "0"
+            # A parsed element (provenance recorded) that resolved no size
+            # also inherits: XMI legends carry no fontsz at all, and native
+            # EA draws their items at the context size (Cambria 7pt).
+            inherited = element.font_size_inherited || element.style&.fetch(:fontsz, nil).to_s == "0" ||
+                        (!element.font_size_inherited.nil? && element.font_size.nil?)
             context.size if inherited
           end
           private_class_method :legend_item_size

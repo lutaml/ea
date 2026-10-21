@@ -14,7 +14,7 @@ RSpec.describe "QEA legend heading families" do
 
       expect(labels.map { |node| node["style"] }).to all(include("font-family:Calibri;", "font-size:9pt;"))
       expect(title["style"]).to include("font-family:Cambria;", "font-size:12pt;", "font-weight:700;")
-      expect(title["textLength"]).to eq("15")
+      expect(title["textLength"]).to eq("34")
     end
   end
 end

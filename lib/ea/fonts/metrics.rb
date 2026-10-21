@@ -59,6 +59,8 @@ module Ea
                                          File.expand_path("cjk_fallback_widths.json", __dir__)
                                        )).fetch("widths").freeze
       CJK_FALLBACK_FAMILIES = %w[Carlito Cambria].freeze
+      # Logical height from which a bold Cambria CJK run uses regular advances.
+      CAMBRIA_REGULAR_BOLD_MIN_HEIGHT = 17
       # Carlito ASCII advances measured on Windows per "height:weight:style";
       # they take precedence over the quantized design advances.
       CARLITO_GDI_WIDTHS = JSON.parse(File.read(
@@ -71,7 +73,7 @@ module Ea
                                             )).fetch("advance").freeze
       private_constant :CAMBRIA_7_REGULAR_WIDTHS, :CAMBRIA_7_STYLED_WIDTHS,
                        :CAMBRIA_7_GUILLEMET_PAIR_WIDTH, :VERTICAL_METRICS,
-                       :CJK_FALLBACK_WIDTHS, :CJK_FALLBACK_FAMILIES,
+                       :CJK_FALLBACK_WIDTHS, :CJK_FALLBACK_FAMILIES, :CAMBRIA_REGULAR_BOLD_MIN_HEIGHT,
                        :CARLITO_GDI_WIDTHS, :SOURCE_SANS_PRO_ADVANCES
 
       # Advance used for codepoints missing from the tables.
@@ -205,7 +207,7 @@ module Ea
       private_class_method :measured_carlito_widths
 
       def cambria_text_length(text, size_pt, weight, style)
-        return nil unless size_pt.to_f.to_r == 7
+        return cambria_cjk_only_length(text, size_pt, weight, style) unless size_pt.to_f.to_r == 7
         return nil unless ["", "0", "400", "normal", "700", "bold"].include?(weight.to_s)
         return nil unless ["", "normal", "italic"].include?(style.to_s)
 
@@ -219,6 +221,24 @@ module Ea
         inner_width + CAMBRIA_7_GUILLEMET_PAIR_WIDTH if inner_width
       end
       private_class_method :cambria_text_length
+
+      # Cambria has no Latin table outside 7pt, but a run made only of
+      # characters in the measured MS UI Gothic table is exact at any
+      # measured height. EMPIRICAL FIT (decision a): EA draws a bold
+      # Cambria CJK run at logical height >= 17 with the regular-weight
+      # advances (no synthetic-bold pixel), although the Windows table
+      # records one. Checked on the 116 native legend titles "凡例"
+      # (Cambria bold 12pt, H17): native textLength 34 = 2 x 17, where
+      # the 17:700 entry would give 36. Below H17 bold keeps the bold
+      # table (native 7pt bold "都市計画データ" = 70).
+      def cambria_cjk_only_length(text, size_pt, weight, style)
+        height = gdi_logical_height(size_pt)
+        bold = bold?(weight) && height < CAMBRIA_REGULAR_BOLD_MIN_HEIGHT
+        widths = cjk_fallback_widths("Cambria", height, bold ? 700 : 400, style)
+        advances = text.each_char.map { |char| widths[char] }
+        advances.sum unless advances.include?(nil)
+      end
+      private_class_method :cambria_cjk_only_length
 
       def cambria_cjk_widths(weight, style)
         cjk_fallback_widths("Cambria", gdi_logical_height(7), weight, style)

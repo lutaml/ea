@@ -25,12 +25,15 @@ RSpec.describe "XMI legend placement font inheritance" do
       .to eq([78, 32, 186, 95])
   end
 
-  it "retains the unspecified legend default without a saved marker" do
+  # Native EA draws the items of the nine XMI legends that save no fontsz
+  # (1B2D9309, 34FF671B, 6807F4EE, A24E2778, AB281AC1, E9CDAD85, EFBF5F0F,
+  # F46E8F19, FEBE5726) at the context size, Cambria 7pt, not 9pt.
+  it "inherits the context size when a parsed placement saves no fontsz" do
     element = xmi_legend_placement("DUID=FDCEA217;")
     svg = source_default_legend_svg(element: element)
 
-    expect(svg.css("text").first["style"]).to include("font-size:9pt;")
-    expect(element.font_size_inherited).not_to be(true)
+    expect(svg.css("text").first["style"]).to include("font-size:7pt;")
+    expect(element.font_size).to be_nil
   end
 end
 

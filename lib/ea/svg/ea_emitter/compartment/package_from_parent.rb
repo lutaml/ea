@@ -37,9 +37,16 @@ module Ea
 
           module_function :render
 
-          # EA draws the subtitle 15px BELOW the body bottom (outside
-          # the box) — verified against EA-published package SVGs.
-          Y_OFFSET_FROM_BOTTOM = 15
+          # EA draws the subtitle BELOW the body bottom (outside the
+          # box): GAP_BELOW_BODY plus the GDI text ascent of the caption
+          # font. Cambria 7pt (H10, ascent 10) gives the 15px seen in
+          # every Cambria native package SVG (14E9F5FD, 157826AA,
+          # 2A5E0832, 6481E2CC); Carlito 9pt (H13, ascent 12) gives the
+          # 17px of 37AC19B9. The 5px gap is fitted on the Cambria cases,
+          # the Carlito case is the held-out check. Fonts or units with
+          # no GDI cell data keep the legacy 15px.
+          GAP_BELOW_BODY = 5
+          LEGACY_Y_OFFSET_FROM_BOTTOM = 15
 
           LINE_PITCH = 13
           WRAP_PADDING = 15
@@ -47,7 +54,7 @@ module Ea
           def subtitle(text, context)
             bounds = context.bounds
             fill = context.theme.attribute_text_color
-            y = bounds.y + bounds.height + Y_OFFSET_FROM_BOTTOM
+            y = bounds.y + bounds.height + offset_from_bottom(context)
             # EA word-wraps the subtitle to the package BODY width
             # (minus padding), centers each line by its integer
             # textLength inside the body, and floors x; successive
@@ -71,6 +78,14 @@ module Ea
             wrap(bodies.join("\n"), fill)
           end
           module_function :subtitle
+
+          def offset_from_bottom(context)
+            height = context.logical_height
+            height ||= Ea::Fonts::Metrics.gdi_logical_height(context.size) if context.size_unit == "pt"
+            ascent, = Ea::Fonts::Metrics.gdi_cell_metrics(context.family, height)
+            ascent ? GAP_BELOW_BODY + ascent : LEGACY_Y_OFFSET_FROM_BOTTOM
+          end
+          module_function :offset_from_bottom
 
           # EA carries the break space onto the broken line: line 1
           # is "(from ... Metadata - " with the trailing space, and
