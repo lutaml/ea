@@ -269,7 +269,10 @@ module Ea
                                                                   connector.label_boxes)
                                          end
           mark_stored_ray(connector, placed, source, target) unless options.fetch(:context)
-          mark_association_route(connector, placed, source, target) unless options.fetch(:context)
+          unless options.fetch(:context)
+            reversed = reversed_placement?(style, by_duid, edge_source, edge_target)
+            mark_association_route(connector, placed, source, target, reversed)
+          end
           connector
         end
 
@@ -305,17 +308,20 @@ module Ea
           StoredRoute.new.public_send(stage, connector, link: link, bounds: bounds, offsets: offsets, edge: geom.edge)
         end
 
-        def mark_association_route(connector, placed, source, target)
-          connector.style[:reversed_ends] = true if reversed_placement?(placed, source)
+        def mark_association_route(connector, placed, source, target, reversed)
+          connector.style[:reversed_ends] = true if reversed
           metadata = stored_ray_metadata(connector, placed, source, target, stage: :association_route)
           metadata.each { |name, value| connector.public_send("#{name}=", value) }
           connector.style.delete(:reversed_ends)
         end
 
-        # SOID names a placement other than the relationship's source end.
-        def reversed_placement?(placed, source)
-          soid = placed.style.soid
-          soid && source&.style&.duid && source.style.duid != soid
+        # Mirrors QEA placement_order_reversed?: SOID and EOID must both name
+        # placements on this diagram and be crossed against the relationship's
+        # ends. A stale DUID resolves to nothing and is not a reversal.
+        def reversed_placement?(style, by_duid, edge_source, edge_target)
+          source = by_duid[style.soid]
+          target = by_duid[style.eoid]
+          source && target && reversed_ends?(source, target, edge_source, edge_target)
         end
 
         def mark_plain_source_seat(connector, placed, context)

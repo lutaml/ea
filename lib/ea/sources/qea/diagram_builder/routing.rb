@@ -69,7 +69,9 @@ module Ea
           # reverse as if the source leg left to the left, whichever way the
           # route leaves the box. Measured on the only such link in the
           # plateau corpus, 5038EEE3 connector 207 (+lod1MultiSurface).
-          def mark_reversed_lateral_tree(model, link_row, diagram_row)
+          def mark_reversed_lateral_tree(model, link_row, diagram_row, context)
+            return model if context
+
             style = DiagramStyleParser.parse(link_row.style)
             return model unless style[:tree] == "LV" && model.connector_type == "Association"
             return model unless placement_order_reversed?(style, diagram_row,

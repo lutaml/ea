@@ -24,34 +24,8 @@ module Ea
             geom = ray_geometry(offsets, edge)
             first = reversed_tree_leg(start, geom[:sx], geom[:sy], start_edge, finish)
             last = reversed_tree_leg(finish, geom[:ex], geom[:ey], finish_edge, start)
-            return {} if saved_tree_agrees?(model, first, last, bus)
 
             reversed_tree_fields(model, first, last, bus, first[1] != start_edge)
-          end
-
-          # EMPIRICAL FIT: a saved UMLDI trunk that already sits on the computed
-          # bus with both legs within TREE_ROUNDING px of the computed legs is
-          # EA's own route; the leg-pull fit is only for saved routes that
-          # disagree (5038EEE3). Checked on the three basic.xmi 14E9F5FD trunks,
-          # where native keeps the saved legs at 685, 460 and 231.
-          TREE_ROUNDING = 2
-
-          def saved_tree_agrees?(model, first, last, bus)
-            saved = saved_points(model)
-            return false if saved.size < 3
-
-            saved.map(&:last).uniq.sort == [first[1], bus, last[1]].uniq.sort &&
-              near_leg?(saved.first, first) && near_leg?(saved.last, last)
-          end
-
-          def saved_points(model)
-            (model.waypoints || []).filter_map do |waypoint|
-              waypoint.position && [waypoint.position.x, waypoint.position.y]
-            end
-          end
-
-          def near_leg?(saved, computed)
-            (saved[0] - computed[0]).abs <= TREE_ROUNDING
           end
 
           def reversed_tree_fields(model, first, last, bus, beside)

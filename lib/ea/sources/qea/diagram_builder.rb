@@ -503,7 +503,7 @@ module Ea
           model = restore_stored_square_ports(model, link_row, diagram_row, geom, context)
           model = reversed_stored_corner(model, link_row, diagram_row, geom, context)
           model = reversed_tree_route(model, link_row, diagram_row, geom, context)
-          model = mark_reversed_lateral_tree(model, link_row, diagram_row)
+          model = mark_reversed_lateral_tree(model, link_row, diagram_row, context)
           mark_association_class(model, connector, diagram_row)
         end
 
