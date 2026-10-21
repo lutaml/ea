@@ -25,9 +25,9 @@ module XmiEndOrientationHelpers
   def multiplicity_seats(document)
     svg = Ea::Svg::EaEmitter::Document.new(
       document.diagrams.first, model_index: document.index_by_id, document: document,
-      frame: true
+                               frame: true
     ).render
-    svg.scan(%r{<text x="([-\d.]+)" y="([-\d.]+)"[^>]*>(1|0\.\.1)</text>}).map do |x, y, text|
+    svg.scan(%r{<text x="([-\d.]+)" y="([-\d.]+)"(?:\s+[^\s"<>=]+="[^"<>]*")*\s*>(1|0\.\.1)</text>}).map do |x, y, text|
       [text, x.to_f, y.to_f]
     end
   end
@@ -36,7 +36,7 @@ module XmiEndOrientationHelpers
   def text_seats(document, *texts)
     svg = Ea::Svg::EaEmitter::Document.new(
       document.diagrams.first, model_index: document.index_by_id, document: document,
-      frame: true
+                               frame: true
     ).render
     texts.to_h do |text|
       x, y = svg.scan(%r{<text x="([-\d.]+)" y="([-\d.]+)"[^>]*>#{Regexp.escape(text)}</text>}).last
