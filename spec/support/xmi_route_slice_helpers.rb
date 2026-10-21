@@ -41,6 +41,16 @@ module XmiRouteSliceHelpers
       offsets: { source: offsets[0], target: offsets[1] }, edge: edge }
   end
 
+  def route(style, link_style, path, boxes, offsets, edge)
+    args = slice(type: "Association", style: style, link_style: link_style, path: path,
+                 boxes: boxes, offsets: offsets, edge: edge, waypoints: [[0, 0], [1, 1]])
+    run_stage(:association_route, args)
+  end
+
+  def vertices(metadata)
+    metadata[:waypoints].map { |waypoint| xy(waypoint.position) }
+  end
+
   def run_stage(stage, args)
     Ea::Sources::Xmi::StoredRoute.new.public_send(stage, args[:model], link: args[:link], bounds: args[:bounds],
                                                                        offsets: args[:offsets], edge: args[:edge])

@@ -136,7 +136,7 @@ module Ea
             image_bounds: (build_bounds(geom.img_left, geom.img_top, geom.img_right, geom.img_bottom) unless bounds),
             background_color: style.background_color,
             line_color: style.line_color,
-            line_width: style.line_width || (@element_borders ||= ElementBorders.new(root)).width_for(placed.subject),
+            line_width: placed_line_width(style, placed.subject),
             font_family: font[:family],
             font_size: font[:size],
             font_size_unit: "pt",
@@ -156,6 +156,11 @@ module Ea
 
         # XMI preserves UML member order in ownedAttribute. Carry that
         # provenance to the renderer so it does not replace it with a name sort.
+        # LWth on the placement, else the model element's saved border width.
+        def placed_line_width(style, subject)
+          style.line_width || (@element_borders ||= ElementBorders.new(root)).width_for(subject)
+        end
+
         def element_style(subject)
           style = (@stereotype_profiles ||= StereotypeProfiles.new(root)).for(subject)
           return style unless source_ordered_classifiers.include?(subject)
@@ -180,8 +185,8 @@ module Ea
           return nil unless left && top && right && bottom
 
           Ea::Model::Bounds.new(x: left, y: top,
-                                 width: right - left,
-                                 height: bottom - top)
+                                width: right - left,
+                                height: bottom - top)
         end
 
         def build_connectors(placed_connectors, placed_elements, owner_id, context)
@@ -295,8 +300,16 @@ module Ea
         end
 
         def mark_association_route(connector, placed, source, target)
+          connector.style[:reversed_ends] = true if reversed_placement?(placed, source)
           metadata = stored_ray_metadata(connector, placed, source, target, stage: :association_route)
           metadata.each { |name, value| connector.public_send("#{name}=", value) }
+          connector.style.delete(:reversed_ends)
+        end
+
+        # SOID names a placement other than the relationship's source end.
+        def reversed_placement?(placed, source)
+          soid = placed.style.soid
+          soid && source&.style&.duid && source.style.duid != soid
         end
 
         def mark_plain_source_seat(connector, placed, context)
@@ -516,8 +529,8 @@ module Ea
           return nil unless g.left && g.top && g.right && g.bottom
 
           Ea::Model::Bounds.new(x: g.left, y: g.top,
-                                 width: g.right - g.left,
-                                 height: g.bottom - g.top)
+                                width: g.right - g.left,
+                                height: g.bottom - g.top)
         end
 
         def edge_point(placed, edge_code, _end_kind)

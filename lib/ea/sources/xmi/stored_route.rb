@@ -9,6 +9,9 @@ module Ea
       # boxes). Returns nil where QEA would fall back to bare SX/SY deltas,
       # which the generic router keeps handling.
       class StoredRoute < Qea::DiagramBuilder
+        autoload :ReversedRoutes, "ea/sources/xmi/stored_route/reversed_routes"
+        include ReversedRoutes
+
         Link = Struct.new(:style, :path, :geometry)
         Connector = Struct.new(:connector_type)
 
@@ -70,7 +73,8 @@ module Ea
         private
 
         ROUTE_STAGES = %i[umldi_association_metadata shared_overlap_metadata
-                          source_row_metadata partial_port_metadata].freeze
+                          source_row_metadata auto_port_elbow_metadata reversed_tree_metadata
+                          reversed_corner_metadata reversed_lateral_tree_metadata partial_port_metadata].freeze
 
         # Overlap rules need both end boxes and every end offset.
         def ray_inputs?(bounds, offsets)
@@ -114,6 +118,19 @@ module Ea
           candidate = association_model(model, bounds, offsets)
           source_row_association_ray(candidate, link, bounds, ray_geometry(offsets, edge), false)
           return {} unless candidate.style[:overlap_ray]
+
+          association_metadata(candidate)
+        end
+
+        # A Mode 2 Association with uniform offsets, EDGE 4 and no Path keeps its
+        # physical ports and takes QEA's elbow, even when UMLDI saved a straight
+        # route (30D62231, 934F4502).
+        def auto_port_elbow_metadata(model, link, bounds, offsets, edge)
+          return {} unless ray_inputs?(bounds, offsets)
+
+          candidate = association_model(model, bounds, offsets)
+          auto_port_elbow(candidate, link, bounds, ray_geometry(offsets, edge), false)
+          return {} unless candidate.style[:auto_port_elbow]
 
           association_metadata(candidate)
         end
