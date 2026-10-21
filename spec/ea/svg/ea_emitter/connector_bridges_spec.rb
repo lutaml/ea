@@ -327,3 +327,25 @@ RSpec.describe Ea::Svg::EaEmitter::Connectors, "slanted bridge endpoint clearanc
     end
   end
 end
+
+RSpec.describe Ea::Svg::EaEmitter::Connectors, "overlapping slanted bridge chords" do
+  include ConnectorBridgesHelpers
+
+  it "preserves the diagonal when distinct crossings would reverse the decorated path" do
+    carrier = bridge_connector("a", [[0, 0], [100, 100]], paint_order: [30])
+    lower = bridge_connector("b", [[45, 0], [45, 100]], paint_order: [10])
+    other = bridge_connector("c", [[55, 0], [55, 100]], paint_order: [20])
+    model = bridge_diagram([carrier, lower, other])
+    expect(bridge_paths(model).first).to eq("M 0 0 L 100 100")
+  end
+
+  it "retains distinct diagonal arcs when their chords only touch" do
+    carrier = bridge_connector("a", [[0, 0], [100, 100]], paint_order: [30])
+    lower = bridge_connector("b", [[44, 0], [44, 100]], paint_order: [10])
+    other = bridge_connector("c", [[56, 0], [56, 100]], paint_order: [20])
+    model = bridge_diagram([carrier, lower, other])
+    expect(bridge_paths(model).first).to eq(
+      "M 0 0 L 38 38 A 6 6 180 0 0 50 50 L 50 50 A 6 6 180 0 0 62 62 L 100 100"
+    )
+  end
+end

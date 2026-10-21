@@ -74,7 +74,7 @@ module Ea
               crossing(first, last, start, finish)
             end
           end
-          separate_crossings(crossings).sort_by { |point| distance(point, first) }
+          separate_crossings(crossings, first, last).sort_by { |point| distance(point, first) }
         end
 
         # The order key is only proven across different start placements, so
@@ -100,12 +100,19 @@ module Ea
         # arc for three coincident verticals). Distinct crossings whose spans
         # overlap are all suppressed so route order cannot select one of
         # several ambiguous arcs.
-        def separate_crossings(crossings)
+        def separate_crossings(crossings, first, last)
           crossings = crossings.uniq { |point| point.map { |value| value.round(6) } }
-          crossings.reject.with_index do |point, index|
-            crossings.each_with_index.any? do |other, other_index|
-              index != other_index && distance(point, other) < 2 * RADIUS
-            end
+          axis = SegmentGeometry.dominant_axis(first, last)
+          spans = crossings.map do |point|
+            SegmentGeometry.chord(first, last, point, RADIUS).map { |seat| seat[axis] }.minmax
+          end
+          crossings.reject.with_index { |_point, index| overlapping_span?(spans, index) }
+        end
+
+        def overlapping_span?(spans, index)
+          minimum, maximum = spans[index]
+          spans.each_with_index.any? do |(other_minimum, other_maximum), other_index|
+            index != other_index && minimum < other_maximum && other_minimum < maximum
           end
         end
 
