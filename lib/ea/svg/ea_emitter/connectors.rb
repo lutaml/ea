@@ -72,7 +72,7 @@ module Ea
         end
 
         def layers
-          styles = paths_with_styles
+          styles = paths_with_styles.map { |_connector, style, path| [style, path] }
 
           if grouped
             styles.group_by(&:first).map do |(width, dashed, color), entries|
@@ -83,8 +83,20 @@ module Ea
           end
         end
 
-        def line_style(width = stroke_width, color = DEFAULT_STROKE)
-          "stroke-width:#{width};stroke-linecap:round;stroke-linejoin:bevel; " \
+        # One `[connector, Layer]` pair per drawn connector, in
+        # diagram link order: EA paints each connector (line, then its
+        # heads) in turn, so the sequencer interleaves these with the
+        # marker layers instead of bucketing every line first.
+        def connector_layers
+          paths_with_styles.map do |connector, (width, dashed, color), path|
+            [connector, line_layer(width, dashed, color, path)]
+          end
+        end
+
+        # EA draws dashed lines with square caps and round joins.
+        def line_style(width = stroke_width, color = DEFAULT_STROKE, dashed: false)
+          cap_join = dashed ? "square;stroke-linejoin:round" : "round;stroke-linejoin:bevel"
+          "stroke-width:#{width};stroke-linecap:#{cap_join}; " \
             "fill:#000000;fill-opacity:0.00; stroke:#{color}; stroke-opacity:1.00"
         end
 
@@ -102,7 +114,8 @@ module Ea
           end
           bridges = ConnectorBridges.new(diagram, routes)
           routes.map do |connector, points|
-            [[self.class.stroke_width_for(connector, stroke_width), dashed?(connector),
+            [connector,
+             [self.class.stroke_width_for(connector, stroke_width), dashed?(connector),
               self.class.stroke_color_for(connector)],
              path_for(connector, points, bridges)]
           end
@@ -110,7 +123,7 @@ module Ea
 
         def line_layer(width, dashed, color, body)
           key = dashed ? :connector_line_dashed : LINE_STYLE_KEY
-          style = line_style(width, color)
+          style = line_style(width, color, dashed: dashed)
           style += ";stroke-dasharray:6,3" if dashed
           Layer.new(style_key: self.class.layer_key(key, width, stroke_width, color),
                     style: style, body: body)

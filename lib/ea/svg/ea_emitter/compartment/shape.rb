@@ -16,7 +16,8 @@ module Ea
                 legend: context.model_element.legend,
                 family: context.family,
                 item_font: { size: legend_item_size(context), unit: context.size_unit,
-                             logical_height: context.logical_height }
+                             logical_height: context.logical_height },
+                first_painted: context.first_painted
               )
             elsif context.model_element.is_a?(Ea::Model::Note)
               Element::NoteShapeRenderer.render(

@@ -33,7 +33,12 @@ module Ea
         def groups
           @drawn_bounds = {}
           @divider_y = {}
-          ordered_elements.flat_map { |e| groups_for(e) }
+          @painted_any = false
+          ordered_elements.flat_map do |e|
+            groups = groups_for(e)
+            @painted_any ||= groups.any?
+            groups
+          end
         end
 
         # Final drawn Bounds per model element reference, captured
@@ -50,8 +55,10 @@ module Ea
 
         private
 
+        # EA paints placements by descending Sequence (the lowest
+        # Sequence is on top); equal keys keep their stored order.
         def ordered_elements
-          (diagram.elements || []).sort_by { |e| e.z_order || 0 }
+          (diagram.elements || []).sort_by.with_index { |e, i| [-(e.z_order || 0), i] }
         end
 
         def groups_for(element)
@@ -300,7 +307,8 @@ module Ea
             canvas: canvas,
             diagram: diagram,
             model_index: model_index,
-            off_canvas_parent_name: parent_name
+            off_canvas_parent_name: parent_name,
+            first_painted: !@painted_any
           )
         end
 

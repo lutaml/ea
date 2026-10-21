@@ -71,19 +71,24 @@ module Ea
           @elements.groups
         end
 
+        # EA paints connector by connector: each line is followed by
+        # its own heads, and only adjacent same-style groups merge.
         def connector_layers
-          connector_layers_raw = Connectors.new(diagram, canvas: canvas,
-                                                  grouped: true,
-                                                  stroke_width: DEFAULT_STROKE_WIDTH,
-                                                  drawn_bounds: drawn_bounds,
-                                                  divider_y_by_ref: divider_y_by_ref,
-                                                  model_index: model_index).layers
-          marker_layers_raw = Markers.new(diagram, model_index: model_index,
-                                           canvas: canvas, grouped: true,
-                                           stroke_width: DEFAULT_STROKE_WIDTH,
-                                           drawn_bounds: drawn_bounds,
-                                           divider_y_by_ref: divider_y_by_ref).layers
-          merge_layers_by_style(connector_layers_raw + marker_layers_raw).map(&:to_svg)
+          lines = Connectors.new(diagram, canvas: canvas,
+                                          grouped: true,
+                                          stroke_width: DEFAULT_STROKE_WIDTH,
+                                          drawn_bounds: drawn_bounds,
+                                          divider_y_by_ref: divider_y_by_ref,
+                                          model_index: model_index).connector_layers
+          markers = Markers.new(diagram, model_index: model_index,
+                                         canvas: canvas, grouped: true,
+                                         stroke_width: DEFAULT_STROKE_WIDTH,
+                                         drawn_bounds: drawn_bounds,
+                                         divider_y_by_ref: divider_y_by_ref).connector_layers
+          by_owner = {}.compare_by_identity
+          (lines + markers).each { |owner, layer| (by_owner[owner] ||= []) << layer }
+          ordered = PaintOrder.connectors(diagram).flat_map { |connector| by_owner.fetch(connector, []) }
+          merge_adjacent_by_style(ordered).map(&:to_svg)
         end
 
         def labels_layer
@@ -98,20 +103,16 @@ module Ea
           GhostLabels.new(diagram, canvas: canvas).render
         end
 
-        def merge_layers_by_style(layers)
-          merged = {}
-          layers.each do |layer|
-            if merged[layer.style_key]
-              merged[layer.style_key] = Layer.new(
-                style_key: layer.style_key,
-                style: layer.style,
-                body: "#{merged[layer.style_key].body}\n  #{layer.body}"
-              )
+        def merge_adjacent_by_style(layers)
+          layers.each_with_object([]) do |layer, merged|
+            last = merged.last
+            if last && last.style_key == layer.style_key
+              merged[-1] = Layer.new(style_key: last.style_key, style: last.style,
+                                     body: "#{last.body}\n  #{layer.body}")
             else
-              merged[layer.style_key] = layer
+              merged << layer
             end
           end
-          merged.values
         end
       end
     end

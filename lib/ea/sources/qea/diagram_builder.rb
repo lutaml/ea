@@ -128,6 +128,7 @@ module Ea
           @current_obj_row = obj_row
           style_hash = DiagramStyleParser.parse(obj_row.objectstyle)
           style_hash[:stored_attribute_order] = true
+          style_hash["connector_proxy"] = true if connector_proxy?(obj_row)
           fqname = stereotype_fqname_for(obj_row)
           style_hash[:stereotype_fqname] = fqname if fqname
           font_style = effective_font_style(obj_row, style_hash)
@@ -152,6 +153,12 @@ module Ea
             line_color: effective_line_color(obj_row, style_hash),
             background_color: style_hash[:bcol]&.to_i
           )
+        end
+
+        # EA anchors association-class links on ProxyConnector stubs and
+        # never draws them (the XMI source flags them the same way).
+        def connector_proxy?(obj_row)
+          database.find_object(obj_row.ea_object_id)&.object_type == "ProxyConnector"
         end
 
         # Negative widths inherit; QEA zero widths request a one-pixel cosmetic pen.

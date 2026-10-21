@@ -66,6 +66,17 @@ module Ea
           end
         end
 
+        # One `[connector, Layer]` pair per marker, in diagram link
+        # order, so the sequencer can paint each connector's heads right
+        # after its line like EA does.
+        def connector_layers
+          visible_connectors.flat_map do |connector|
+            entries_for(connector).map do |e|
+              [connector, marker_layer(e.style_key, e.stroke_width, e.body)]
+            end
+          end
+        end
+
         def render
           layers.map(&:to_svg).join("\n")
         end
