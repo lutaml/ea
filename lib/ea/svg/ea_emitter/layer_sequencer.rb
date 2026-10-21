@@ -49,8 +49,15 @@ module Ea
           @elements&.drawn_bounds
         end
 
+        # Row-slot seating stays off. Elements records each divider in canvas
+        # space, so it only matched logical connector ends when the canvas
+        # origin was 0 (the content-anchored default) and then moved one end
+        # 13 px in all four corpus cases it matched (5D6DB5A0 Aggregation and
+        # Generalization, ADC8773C, F46E8F19), none of which EA seats on a
+        # row; it never matched an XMI route. Under the framed canvas it was
+        # inert, which is the behaviour native parity was measured against.
         def divider_y_by_ref
-          @elements&.divider_y
+          nil
         end
 
         # Right edge of the connector end-label boxes, model coordinates.
