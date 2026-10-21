@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # frozen_string: true
 
 require "spec_helper"
@@ -11,34 +13,35 @@ RSpec.describe "QEA + MDG integration", :qea_regression do
     <<~XML
       <?xml version="1.0" encoding="UTF-8"?>
       <XMI xmi.version="1.1" xmlns:UML="omg.org/UML1.3">
-        <XMI.content>
-          <UML:Model name="EA Model" xmi.id="MX_root">
-            <UML:Namespace.ownedElement>
-              <UML:Package name="MDG Test" xmi.id="EAPK_test">
-                <UML:Namespace.ownedElement>
-                  <UML:Class name="Parent" xmi.id="EAID_PARENT">
-                    <UML:Classifier.feature>
-                      <UML:Attribute name="inheritedAttr" visibility="public"/>
-                    </UML:Classifier.feature>
-                  </UML:Class>
-                  <UML:Class name="Base" xmi.id="EAID_BASE">
-                    <UML:Classifier.feature>
-                      <UML:Attribute name="ownBaseAttr" visibility="public"/>
-                    </UML:Classifier.feature>
-                  </UML:Class>
-                  <UML:Generalization subtype="EAID_BASE" supertype="EAID_PARENT" xmi.id="EAID_GEN1"/>
-                </UML:Namespace.ownedElement>
-              </UML:Package>
-            </UML:Namespace.ownedElement>
-          </UML:Model>
-        </XMI.content>
+        <XMI.content><UML:Model name="MDG Test" xmi.id="MX_root"/></XMI.content>
       </XMI>
     XML
   end
 
   let(:registry) do
     registry = Ea::Mdg::Registry.new
-    registry.register(Ea::Mdg::Loader.from_xml(mdg_xml).document)
+    registry.register(
+      Ea::Mdg::Document.new(
+        technology_name: "MDG Test",
+        classifiers: [
+          Ea::Mdg::Document::ClassifierEntry.new(
+            id: "EAID_PARENT", name: "Parent",
+            properties: [Ea::Mdg::Document::PropertyEntry.new(
+              name: "inheritedAttr", visibility: "public"
+            )]
+          ),
+          Ea::Mdg::Document::ClassifierEntry.new(
+            id: "EAID_BASE", name: "Base", properties: []
+          )
+        ],
+        generalizations: [
+          Ea::Mdg::Document::GeneralizationEntry.new(
+            specific_id: "EAID_BASE", general_id: "EAID_PARENT"
+          )
+        ],
+        packages: []
+      )
+    )
     registry
   end
 
@@ -54,22 +57,38 @@ RSpec.describe "QEA + MDG integration", :qea_regression do
     expect(doc.classifiers).not_to be_empty
   end
 
+  it "loads an XMI MDG without raising" do
+    expect { Ea::Mdg::Loader.from_xml(mdg_xml).document }.not_to raise_error
+  end
+
   it "merges MDG-inherited attributes when a classifier's stereotype matches an MDG class" do
     # Drive the merge through ClassifierBuilder#properties_for directly
     # to avoid needing a full database stub for the surrounding build_one.
     stub_object = Struct.new(:ea_guid, :name, :object_type, :scope, :abstract,
                              :stereotype, :package_id, :parentid, :note,
                              :ea_object_id, keyword_init: true).new(
-      ea_guid: "{TEST_GUID}", name: "TestClass", object_type: "Class",
-      scope: "Public", abstract: "0", stereotype: "Base",
-      package_id: nil, parentid: nil, note: "", ea_object_id: 999
+                               ea_guid: "{TEST_GUID}", name: "TestClass",
+                               object_type: "Class", scope: "Public",
+                               abstract: "0", stereotype: "Base",
+                               package_id: nil, parentid: nil, note: "",
+                               ea_object_id: 999
+                             )
+    own_attribute = Ea::Qea::Models::EaAttribute.new(
+      ea_guid: "{OWN_GUID}", name: "ownBaseAttr", type: "String",
+      lowerbound: "1", upperbound: "1", scope: "Public", pos: 0
     )
     stub_database = Class.new do
-      def attributes_for_object(*) = []
+      define_method(:attributes_for_object) { |_object_id| [own_attribute] }
+      define_method(:tagged_values_for_element) { |_element_id| [] }
     end.new
-    builder = Ea::Sources::Qea::ClassifierBuilder.new(stub_database,
-                                                       mdg_registry: registry)
+    builder = Ea::Sources::Qea::ClassifierBuilder.new(
+      stub_database, mdg_registry: registry
+    )
+    base = registry.find_classifier_by_name("Base")
+    expect(base).not_to be_nil
+    expect(registry.inherited_properties_for(base.id).map(&:name)).to contain_exactly("inheritedAttr")
+
     properties = builder.properties_for(stub_object)
-    expect(properties.map(&:name)).to include("inheritedAttr")
+    expect(properties.map(&:name)).to contain_exactly("ownBaseAttr", "inheritedAttr")
   end
 end
