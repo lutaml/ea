@@ -45,6 +45,15 @@ module Ea
             @font_unit = font_unit
             @font_weight = font_weight
             @font_style = font_style
+            @reach = []
+          end
+
+          # [right, bottom] edge, in model coordinates, of the label boxes
+          # (position + stored CX/CY) emitted so far; nil before any.
+          def reach
+            return nil if @reach.empty?
+
+            [@reach.map(&:first).max, @reach.map(&:last).max]
           end
 
           # Returns an Array of `<text>` SVG strings for one endpoint.
@@ -173,7 +182,8 @@ module Ea
             end
 
             build_texts(role:, mult:, standalone:,
-                        text_pos:, mult_pos:, stereo:, text_box:, stereo_pos:)
+                        text_pos:, mult_pos:, stereo:, text_box:, stereo_pos:,
+                        mult_box:)
           end
 
           private
@@ -939,9 +949,11 @@ module Ea
           end
 
           def build_texts(role:, mult:, standalone:, text_pos:, mult_pos:,
-                          stereo:, text_box:, stereo_pos: nil)
+                          stereo:, text_box:, stereo_pos: nil, mult_box: nil)
             if role && !role.empty? && text_pos
               x, y = text_pos
+              note_reach(text_pos, text_box)
+              note_reach(mult_pos, mult_box) if mult && !mult.empty? && mult_pos
               texts = [text_at(x, y, role)]
               if stereo
                 stereo_x, stereo_y = stereo_pos || [x + stereotype_offset(role, stereo, text_box),
@@ -953,10 +965,22 @@ module Ea
               end
               texts
             elsif standalone && !standalone.empty? && mult_pos
+              note_reach(mult_pos, mult_box)
               [text_at(*mult_pos, standalone)]
             else
               []
             end
+          end
+
+          # A label box starts at the text's x and at its first baseline
+          # less the rounded font height (EA's text top).
+          def note_reach(position, box)
+            width = box && box["cx"]
+            height = box && box["cy"]
+            return unless width && height
+
+            @reach << [position[0] + width,
+                       position[1] - font_pixel_size.ceil + height]
           end
 
           def umldi_label_position(bounds)

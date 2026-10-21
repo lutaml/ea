@@ -72,7 +72,7 @@ module Ea
         # content when that differs from the stored-rect canvas.
         def anchor_on_content(canvas, seq)
           anchored = CanvasAnchor.reanchor(canvas, seq.layers.drop(1),
-                                           seq.layers.last(2),
+                                           seq.label_reach,
                                            bottom: BottomMargin.for(diagram, model_index))
           return [canvas, seq] if CanvasAnchor.same_canvas?(canvas, anchored)
 

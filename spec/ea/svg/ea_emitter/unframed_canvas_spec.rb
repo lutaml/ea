@@ -80,8 +80,19 @@ RSpec.describe Ea::Svg::EaEmitter::CanvasAnchor do
 
   it "widens the canvas to a label that overhangs the shapes" do
     narrow = described_class.measured(shapes, nil, nil)
-    wide = described_class.measured(shapes, nil, [200, 100, 400, 110])
+    wide = described_class.measured(shapes, nil, [400, 0])
 
-    expect([narrow.width, wide.width]).to eq([220, 333])
+    expect([narrow.width, wide.width]).to eq([220, 315])
+  end
+
+  it "keeps the canvas open 5 px below a label box that hangs under the shapes" do
+    plain = described_class.measured(shapes, nil, [200, 150])
+    low = described_class.measured(shapes, nil, [200, 400])
+
+    expect([plain.height, low.height]).to eq([141, 315])
+  end
+
+  it "never narrows a canvas the shapes already set" do
+    expect(described_class.measured(shapes, nil, [150, 150]).width).to eq(220)
   end
 end

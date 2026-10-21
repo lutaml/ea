@@ -53,6 +53,11 @@ module Ea
           @elements&.divider_y
         end
 
+        # Right edge of the connector end-label boxes, model coordinates.
+        def label_reach
+          @labels&.reach
+        end
+
         private
 
         def frame_layers
@@ -82,10 +87,11 @@ module Ea
         end
 
         def labels_layer
-          Labels.new(diagram, canvas: canvas, model_index: model_index,
+          @labels = Labels.new(diagram, canvas: canvas, model_index: model_index,
                               theme: theme, document: document,
                               drawn_bounds: drawn_bounds,
-                              divider_y_by_ref: divider_y_by_ref).render
+                              divider_y_by_ref: divider_y_by_ref)
+          @labels.render
         end
 
         def ghost_labels_layer

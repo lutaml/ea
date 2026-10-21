@@ -18,15 +18,19 @@ module Ea
       #
       # EMPIRICAL FITS (no saved selector was found in any QEA table):
       # BOTTOM_MARGIN 31 is only the fallback; BottomMargin picks the
-      # margin from the lowest element; LABEL_RIGHT_MARGIN 23 is the label text
-      # right edge + 21..23 seen on 4 diagrams whose labels overhang
-      # the shapes.
+      # margin from the lowest element. The right edge also reaches
+      # every connector end-label box (its position plus the stored
+      # CX width) + LABEL_BOX_MARGIN 5, exact on the 7 PLATEAU diagrams
+      # whose labels overhang the shapes (30D62231, 47E4600F,
+      # 4881CEEE, 70C77F92, 846DD800, 88AF6BD7, AC2191E3). Below, the
+      # same box (its top is the first baseline less the font height,
+      # its height the stored CY) + 5 holds the canvas open on 95246DCF.
       module CanvasAnchor
         CONTENT_MARGIN = 10
         TEXT_MARGIN = 5
         ORIGIN_FLOOR = -5
         BOTTOM_MARGIN = 31
-        LABEL_RIGHT_MARGIN = 23
+        LABEL_BOX_MARGIN = 5
 
         module_function
 
@@ -47,20 +51,25 @@ module Ea
         end
 
         # Canvas for measured content, each box [min_x, min_y, max_x,
-        # max_y] in model coordinates (nil when absent). `labels` is the
-        # connector-label subset of `texts`.
-        def measured(shapes, texts, labels, bottom: BOTTOM_MARGIN)
+        # max_y] in model coordinates (nil when absent). `label_reach` is
+        # the [right, bottom] edge of the connector end-label boxes.
+        def measured(shapes, texts, label_reach, bottom: BOTTOM_MARGIN)
           origin_x = origin(shapes && shapes[0], texts && texts[0])
           origin_y = origin(shapes && shapes[1], texts && texts[1])
           Canvas.new(min_x: origin_x, min_y: origin_y,
-                     width: right_edge(shapes, labels) - origin_x,
-                     height: shapes[3] + bottom - origin_y,
+                     width: right_edge(shapes, label_reach) - origin_x,
+                     height: bottom_edge(shapes, label_reach, bottom) - origin_y,
                      insets: [0, 0])
         end
 
-        def right_edge(shapes, labels)
+        def right_edge(shapes, label_reach)
           [shapes && shapes[2] + CONTENT_MARGIN,
-           labels && labels[2] + LABEL_RIGHT_MARGIN].compact.max
+           label_reach && label_reach[0] + LABEL_BOX_MARGIN].compact.max
+        end
+
+        def bottom_edge(shapes, label_reach, bottom)
+          [shapes[3] + bottom,
+           label_reach && label_reach[1] + LABEL_BOX_MARGIN].compact.max
         end
 
         def origin(shape_min, text_min)
@@ -70,16 +79,16 @@ module Ea
         end
 
         # The canvas anchored on the content drawn into `layers` (the
-        # background excluded) and `label_layers`, or `canvas` itself
+        # background excluded) and `label_reach`, or `canvas` itself
         # when there is nothing to measure.
-        def reanchor(canvas, layers, label_layers, bottom: BOTTOM_MARGIN)
+        def reanchor(canvas, layers, label_reach, bottom: BOTTOM_MARGIN)
           extent = ContentExtent.measure(layers)
           return canvas unless extent.shapes
 
           shift = [canvas.origin_x, canvas.origin_y]
-          measured(*[extent.shapes, extent.texts,
-                     ContentExtent.measure(label_layers).texts]
-                     .map { |box| model_box(box, shift) }, bottom: bottom)
+          measured(*[extent.shapes, extent.texts]
+                     .map { |box| model_box(box, shift) }, label_reach,
+                   bottom: bottom)
         end
 
         def model_box(box, shift)
