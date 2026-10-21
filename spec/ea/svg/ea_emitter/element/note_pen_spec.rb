@@ -45,4 +45,14 @@ RSpec.describe Ea::Svg::EaEmitter::Element::NoteShapeRenderer do # rubocop:disab
   it "inherits the square/miter pen left by a first-painted legend" do
     expect(note_pens(render("legend", "note"))).to eq([%w[square miter]])
   end
+
+  it "draws the note text group with the note pen" do
+    svg = render("note")
+    text_pen = /<g style="[^"]*?linecap:(\w+);stroke-linejoin:(\w+);[^"]*fill:#000000;[^"]*stroke-opacity:0.00/
+    expect(svg.scan(text_pen).uniq).to eq([%w[square miter]])
+  end
+
+  it "keeps a second note square/miter after a first-painted note" do
+    expect(note_pens(render("note", "note"))).to eq([%w[square miter]])
+  end
 end

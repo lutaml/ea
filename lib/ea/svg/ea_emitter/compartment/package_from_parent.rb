@@ -45,6 +45,8 @@ module Ea
           # 17px of 37AC19B9. The 5px gap is fitted on the Cambria cases,
           # the Carlito case is the held-out check. Fonts or units with
           # no GDI cell data keep the legacy 15px.
+          # Only families with native evidence use the ascent offset.
+          ASCENT_FAMILIES = %w[cambria carlito].freeze
           GAP_BELOW_BODY = 5
           LEGACY_Y_OFFSET_FROM_BOTTOM = 15
 
@@ -82,6 +84,8 @@ module Ea
           def offset_from_bottom(context)
             height = context.logical_height
             height ||= Ea::Fonts::Metrics.gdi_logical_height(context.size) if context.size_unit == "pt"
+            return LEGACY_Y_OFFSET_FROM_BOTTOM unless ASCENT_FAMILIES.include?(context.family.to_s.downcase)
+
             ascent, = Ea::Fonts::Metrics.gdi_cell_metrics(context.family, height)
             ascent ? GAP_BELOW_BODY + ascent : LEGACY_Y_OFFSET_FROM_BOTTOM
           end

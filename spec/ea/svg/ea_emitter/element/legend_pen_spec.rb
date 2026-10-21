@@ -2,7 +2,6 @@
 
 require "spec_helper"
 require "ea"
-require "ea/svg/ea_emitter/element/legend_renderer"
 
 # EA leaves the legend pen to whatever was drawn before it: square/miter
 # when the legend is the first thing painted, round/bevel otherwise.

@@ -117,8 +117,12 @@ module Ea
           end
           module_function :cjk_char?
 
+          # The text group keeps the pen the note outline was drawn with
+          # (EA never sets a note pen; 7C44AC09 square/miter, 7D960BD8
+          # square/bevel), so the next element inherits the right pen.
           def group_style(context)
-            "stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; " \
+            cap, join = context.previous_pen || Element::NoteShapeRenderer::INITIAL_PEN
+            "stroke-width:1;stroke-linecap:#{cap};stroke-linejoin:#{join}; " \
               "fill:#{context.theme.text_color};fill-opacity:1.00; " \
               "stroke:#000000; stroke-opacity:0.00"
           end
