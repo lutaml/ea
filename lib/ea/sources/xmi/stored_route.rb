@@ -26,9 +26,12 @@ module Ea
           finish(points, link, connector, source, target, bends, ports, offsets, edge)
         end
 
-        # Direct custom-line associations and aggregations retain ray origins as
-        # well as their computed boundary ports, just as the QEA builder does.
+        # Saved rays retain origins and computed boundary ports, matching QEA.
         def ray_metadata(model, link:, bounds:, offsets:, edge:)
+          if model.connector_type == "Generalization"
+            return generalization_ray_metadata(model, link, bounds, offsets, edge)
+          end
+
           return {} unless direct_association_ray?(model, bounds, offsets)
 
           source, target = bounds.values_at(:source, :target)
@@ -167,6 +170,39 @@ module Ea
           %w[Association Aggregation].include?(model.connector_type) && model.waypoints.size == 2 &&
             model.style.to_h.values_at(:mode, :lwidth, :tree) == ["1", "2", nil] &&
             bounds.values.all? && offsets.values.flatten.none?(&:nil?)
+        end
+
+        # A direct Generalization clips its saved mathematical origins rather
+        # than treating boundary ports as the origins of the final drawn ray.
+        def generalization_ray_metadata(model, link, bounds, offsets, edge)
+          geom = ray_geometry(offsets, edge)
+          return {} unless generalization_ray_candidate?(model, link, bounds, offsets, geom)
+
+          source, target = bounds.values_at(:source, :target)
+          return {} unless stored_ray_gap?(source, target, model.style[:mode], edge)
+
+          points = ray_points(source, target, offsets, geom)
+          return {} if points.empty?
+
+          points.merge(style: generalization_ray_style(model, points, source, target))
+        end
+
+        def generalization_ray_candidate?(model, link, bounds, offsets, geom)
+          model.waypoints.size == 2 && stored_ray_style?(model.style, link) &&
+            bounds.values.all? && offsets.values.flatten.none?(&:nil?) &&
+            (!geom[:sy].zero? || !geom[:ey].zero?)
+        end
+
+        def generalization_ray_style(model, points, source, target)
+          candidate = Ea::Model::DiagramConnector.new(
+            connector_type: model.connector_type, style: model.style.to_h.dup,
+            source_anchor: points[:source_anchor], target_anchor: points[:target_anchor]
+          )
+          return model.style.to_h unless centered_origin_ray?(candidate, source, target)
+
+          flags = { centered_origin_ray: true }
+          flags[:stored_origin_ray] = true if stored_origin_ray?(candidate, source, target)
+          model.style.to_h.merge(flags)
         end
 
         def ray_geometry(offsets, edge)
