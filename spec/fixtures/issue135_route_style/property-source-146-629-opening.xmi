@@ -2,20 +2,10 @@
 <xmi:XMI xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/UML/20161101/UMLDC" xmlns:thecustomprofile="http://www.sparxsystems.com/profiles/thecustomprofile/1.0" xmlns:GML="http://www.sparxsystems.com/profiles/GML/1.0" xmlns:StandardProfileL2="http://www.omg.org/spec/UML/20110701/StandardProfileL2.xmi">
 	<xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5" exporterID="1624"/>
 	<uml:Model xmi:type="uml:Model" name="EA_Model">
-					<packagedElement xmi:type="uml:Class" xmi:id="EAID_31ADEE92_A536_4a6c_8CDB_F39FAFC392D4" name="_Opening" isAbstract="true">
-						<generalization xmi:type="uml:Generalization" xmi:id="EAID_B309D52B_00C1_4ff3_B794_1C2D1386CA82" general="EAID_60CE61DE_7E88_4e8b_BFED_13500E7DCDEC" isSubstitutable="true"/>
-						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src2F3E4A_7AD6_4086_B76F_5B6055BBB903" name="lod3MultiSurface" association="EAID_532F3E4A_7AD6_4086_B76F_5B6055BBB903">
-							<type xmi:idref="EAID_9CD87EC7_BBC1_4503_B284_14860C27C0BF"/>
-							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003573__7AD6_4086_B76F_5B6055BBB903" value="0"/>
-							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003574__7AD6_4086_B76F_5B6055BBB903" value="1"/>
-						</ownedAttribute>
-						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src7B1903_6932_4394_9582_1A186DBB5D4A" name="lod4MultiSurface" association="EAID_877B1903_6932_4394_9582_1A186DBB5D4A">
-							<type xmi:idref="EAID_9CD87EC7_BBC1_4503_B284_14860C27C0BF"/>
-							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003575__6932_4394_9582_1A186DBB5D4A" value="0"/>
-							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003576__6932_4394_9582_1A186DBB5D4A" value="1"/>
-						</ownedAttribute>
-					</packagedElement>
-					<packagedElement xmi:type="uml:Class" xmi:id="EAID_7FAA00A1_062E_4e51_8B1B_2B69DA559EC5" name="_BoundarySurface" isAbstract="true">
+<packagedElement xmi:type="uml:Package" xmi:id="EAPK_7B6B28E9_C583_4363_9E9C_F37A37AE06C9" name="Conceptual Models">
+<packagedElement xmi:type="uml:Package" xmi:id="EAPK_9E3ECCD9_5472_45ce_BE7A_BC004A52B63C" name="CityGML2.0">
+<packagedElement xmi:type="uml:Package" xmi:id="EAPK_D13F9655_87C9_40da_88DB_662F687AA460" name="brid">
+<packagedElement xmi:type="uml:Class" xmi:id="EAID_7FAA00A1_062E_4e51_8B1B_2B69DA559EC5" name="_BoundarySurface" isAbstract="true">
 						<generalization xmi:type="uml:Generalization" xmi:id="EAID_F12572D5_E205_493c_98A1_81B803CD3857" general="EAID_60CE61DE_7E88_4e8b_BFED_13500E7DCDEC" isSubstitutable="true"/>
 						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_srcB1E400_FDCF_4c31_83BE_27166CC35A35" name="lod2MultiSurface" association="EAID_10B1E400_FDCF_4c31_83BE_27166CC35A35">
 							<type xmi:idref="EAID_9CD87EC7_BBC1_4503_B284_14860C27C0BF"/>
@@ -38,13 +28,32 @@
 							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003572__C044_4e51_A398_6D7E4C99693D" value="1"/>
 						</ownedAttribute>
 					</packagedElement>
-					<packagedElement xmi:type="uml:Association" xmi:id="EAID_7C5F9D22_2C12_418b_B3A2_BCA11BAC2361">
+<packagedElement xmi:type="uml:Association" xmi:id="EAID_7C5F9D22_2C12_418b_B3A2_BCA11BAC2361">
 						<memberEnd xmi:idref="EAID_dst5F9D22_2C12_418b_B3A2_BCA11BAC2361"/>
 						<memberEnd xmi:idref="EAID_src5F9D22_2C12_418b_B3A2_BCA11BAC2361"/>
 						<ownedEnd xmi:type="uml:Property" xmi:id="EAID_dst5F9D22_2C12_418b_B3A2_BCA11BAC2361" association="EAID_7C5F9D22_2C12_418b_B3A2_BCA11BAC2361">
 							<type xmi:idref="EAID_7FAA00A1_062E_4e51_8B1B_2B69DA559EC5"/>
 						</ownedEnd>
 					</packagedElement>
+<packagedElement xmi:type="uml:Class" xmi:id="EAID_31ADEE92_A536_4a6c_8CDB_F39FAFC392D4" name="_Opening" isAbstract="true">
+						<generalization xmi:type="uml:Generalization" xmi:id="EAID_B309D52B_00C1_4ff3_B794_1C2D1386CA82" general="EAID_60CE61DE_7E88_4e8b_BFED_13500E7DCDEC" isSubstitutable="true"/>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src2F3E4A_7AD6_4086_B76F_5B6055BBB903" name="lod3MultiSurface" association="EAID_532F3E4A_7AD6_4086_B76F_5B6055BBB903">
+							<type xmi:idref="EAID_9CD87EC7_BBC1_4503_B284_14860C27C0BF"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003573__7AD6_4086_B76F_5B6055BBB903" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003574__7AD6_4086_B76F_5B6055BBB903" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src7B1903_6932_4394_9582_1A186DBB5D4A" name="lod4MultiSurface" association="EAID_877B1903_6932_4394_9582_1A186DBB5D4A">
+							<type xmi:idref="EAID_9CD87EC7_BBC1_4503_B284_14860C27C0BF"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003575__6932_4394_9582_1A186DBB5D4A" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003576__6932_4394_9582_1A186DBB5D4A" value="1"/>
+						</ownedAttribute>
+					</packagedElement>
+</packagedElement>
+<packagedElement xmi:type="uml:Package" xmi:id="EAPK_526A0DDE_1614_4df1_920F_F681125AE7C4" name="core">
+<packagedElement xmi:type="uml:Class" xmi:id="EAID_60CE61DE_7E88_4e8b_BFED_13500E7DCDEC" name="_CityObject" isAbstract="true"></packagedElement>
+</packagedElement>
+</packagedElement>
+</packagedElement>
 		<umldi:Diagram xmi:type="umldi:UMLClassDiagram" xmi:id="EAID_30D62231_110F_44e8_9C06_6FCDCBA53A09" isFrame="false" modelElement="EAPK_88A09B3F_6D48_450d_94A2_7BB5D01DC7DE">
 			<ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_30D62231_110F_44e8_BFD4_74CD44E7029C" modelElement="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C">
 				<ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_110F_44e8_BFD4_74CD44E7029C" text="FeatureType"/>
