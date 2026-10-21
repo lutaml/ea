@@ -66,9 +66,8 @@ end
 RSpec.describe Ea::Svg::EaEmitter::Connectors, "source-owner crossing bridges" do
   include_context "connector bridge diagram"
 
-  it "preserves paths with missing, tied or unresolved order keys" do
+  it "preserves paths with empty, tied or unresolved order keys" do
     [
-      ->(model) { model.connectors.first.paint_order = nil },
       ->(model) { model.connectors.last.paint_order = [] },
       ->(model) { model.connectors.last.paint_order = [25] },
       ->(model) { model.connectors.first.paint_order = [9, 1] }
@@ -84,9 +83,8 @@ end
 RSpec.describe Ea::Svg::EaEmitter::Connectors, "source-owner crossing bridges" do
   include_context "connector bridge diagram"
 
-  it "preserves diagonals, collinear, shared ends, near bends and overlapping arc spans" do
+  it "preserves collinear, shared ends, near bends and overlapping arc spans" do
     [
-      [[[0, 0], [100, 100]]],
       [[[50, 20], [50, 80]]],
       [[[0, 0], [50, 0]]],
       [[[0, 5], [100, 5]]],
@@ -235,5 +233,70 @@ RSpec.describe Ea::Svg::EaEmitter::Connectors, "shared start placement" do
     expect(bridge_paths(bridge_diagram([vertical, horizontal]))).to eq(["M 50 0 L 50 100", "M 0 50 L 100 50"])
     horizontal.source_element_ref = "other"
     expect(bridge_paths(bridge_diagram([vertical, horizontal])).last).to include(" A ")
+  end
+end
+
+RSpec.describe Ea::Svg::EaEmitter::Connectors, "phantom carrier bridges" do
+  include ConnectorBridgesHelpers
+
+  def phantom_model(carrier_order, partner_order)
+    carrier = bridge_connector("a", [[50, 0], [50, 100]])
+    partner = bridge_connector("b", [[0, 50], [100, 50]])
+    model = bridge_diagram([carrier, partner])
+    carrier.paint_order = carrier_order
+    partner.paint_order = partner_order
+    model
+  end
+
+  it "passes an unordered phantom over a keyed connector" do
+    bridged = "M 50 0 L 50 44 A 6 6 180 0 0 50 56 L 50 100"
+    expect(bridge_paths(phantom_model(nil, [9]))).to eq([bridged, "M 0 50 L 100 50"])
+  end
+
+  it "never bridges a keyed connector over a phantom, nor two phantoms" do
+    bridged = "M 0 50 L 44 50 A 6 6 180 0 0 56 50 L 100 50"
+    expect(bridge_paths(phantom_model([25], nil))).to eq(["M 50 0 L 50 100", bridged])
+    expect(bridge_paths(phantom_model(nil, nil))).to eq(["M 50 0 L 50 100", "M 0 50 L 100 50"])
+  end
+end
+
+RSpec.describe Ea::Svg::EaEmitter::Connectors, "coincident crossing bridges" do
+  include ConnectorBridgesHelpers
+
+  it "draws one arc where several partners cross at the same point" do
+    carrier = bridge_connector("a", [[0, 0], [100, 40]])
+    partners = %w[b c].map { |id| bridge_connector(id, [[50, 0], [50, 60]]) }
+    partners.last.paint_order = [3]
+    partners.first.paint_order = [4]
+    model = bridge_diagram([carrier, *partners])
+    carrier.paint_order = [30]
+    expect(bridge_paths(model).first).to eq("M 0 0 L 44 17 A 6 6 180 0 0 56 22 L 100 40")
+  end
+end
+
+RSpec.describe Ea::Svg::EaEmitter::Connectors, "slanted carrier crossing bridges" do
+  include ConnectorBridgesHelpers
+
+  let(:slanted) { bridge_connector("41", [[390, 352], [450, 332], [510, 303], [546, 291]]) }
+  let(:horizontal) { bridge_connector("22", [[300, 342], [540, 342]]) }
+  let(:vertical) { bridge_connector("16", [[528, 200], [528, 340]]) }
+  let(:diagram) { bridge_diagram([slanted, horizontal, vertical]) }
+
+  it "seats native arcs along the slanted line, as in the 0BE81AC5 export" do
+    expected = "M 390 352 L 414 344 A 6 6 180 0 0 426 340 L 450 332 L 510 303 " \
+               "L 522 299 A 6 6 180 0 0 534 295 L 546 291"
+    expect(bridge_paths(diagram)).to eq([expected, "M 300 342 L 540 342", "M 528 200 L 528 340"])
+  end
+
+  it "bridges a vertical carrier over a 45 degree partner on the vertical axis" do
+    connectors = [bridge_connector("a", [[50, 0], [50, 100]]), bridge_connector("0", [[0, 0], [100, 100]])]
+    expect(bridge_paths(bridge_diagram(connectors)).first).to eq("M 50 0 L 50 44 A 6 6 180 0 0 50 56 L 50 100")
+  end
+
+  it "leaves a parallel or non-crossing slanted pair unbridged" do
+    clear = bridge_connector("22", [[300, 372], [540, 360]])
+    paths = bridge_paths(bridge_diagram([slanted, clear, vertical]))
+    expect(paths.first).to include("A 6 6 180 0 0 534 295")
+    expect(paths.first.scan(" A ").size).to eq(1)
   end
 end

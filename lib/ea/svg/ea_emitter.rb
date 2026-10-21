@@ -33,6 +33,8 @@ module Ea
       autoload :Connectors, "ea/svg/ea_emitter/connectors"
       autoload :ConnectorBridges, "ea/svg/ea_emitter/connector_bridges"
       private_constant :ConnectorBridges
+      autoload :SegmentGeometry, "ea/svg/ea_emitter/segment_geometry"
+      private_constant :SegmentGeometry
       autoload :Markers, "ea/svg/ea_emitter/markers"
       autoload :Labels, "ea/svg/ea_emitter/labels"
       autoload :GhostLabels, "ea/svg/ea_emitter/ghost_labels"

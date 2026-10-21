@@ -9,6 +9,7 @@ module Ea
       # connector passes over a crossing.
       class ConnectorBridges
         RADIUS = 6
+        PHANTOM = :phantom
 
         def initialize(_diagram, routes)
           @routes = routes.map { |connector, points| [connector, points, priority_for(connector)] }
@@ -56,78 +57,68 @@ module Ea
 
         # nil or empty: no bridge decision for this connector.
         def priority_for(connector)
+          return PHANTOM if phantom?(connector)
+
           connector.paint_order if connector.paint_order&.any?
         end
 
-        def crossings_for(connector, priority, first, last)
-          axis = axis_for(first, last)
-          return [] unless axis
+        # A phantom (relationship without a link row) has no stored order; it
+        # is appended after every link in the export, so it passes over them.
+        def phantom?(connector)
+          connector.paint_order.nil?
+        end
 
+        def crossings_for(connector, priority, first, last)
           crossings = lower_routes(connector, priority).flat_map do |_partner, points, _order|
             points.each_cons(2).filter_map do |start, finish|
-              crossing(first, last, start, finish, axis)
+              crossing(first, last, start, finish)
             end
           end
-          separate_crossings(crossings, axis).sort_by { |point| (point[axis] - first[axis]).abs }
+          separate_crossings(crossings).sort_by { |point| distance(point, first) }
         end
 
         # The order key is only proven across different start placements, so
         # connectors leaving the same placement make no carrier decision.
         def lower_routes(connector, priority)
+          return keyed_routes(connector) if priority == PHANTOM
+
           @routes.select do |partner, _points, order|
-            !partner.equal?(connector) && order && order.size == priority.size &&
+            !partner.equal?(connector) && order.is_a?(Array) && order.size == priority.size &&
               !same_source?(connector, partner) && (order <=> priority).negative?
           end
+        end
+
+        def keyed_routes(connector)
+          @routes.select { |partner, _points, order| !partner.equal?(connector) && order.is_a?(Array) }
         end
 
         def same_source?(connector, partner)
           connector.source_element_ref && connector.source_element_ref == partner.source_element_ref
         end
 
-        # Suppress both overlapping spans, including coincident crossings,
-        # so route order cannot select one of several ambiguous arcs.
-        def separate_crossings(crossings, axis)
+        # Partners crossing at one point share a single arc (0BE81AC5 draws one
+        # arc for three coincident verticals). Distinct crossings whose spans
+        # overlap are all suppressed so route order cannot select one of
+        # several ambiguous arcs.
+        def separate_crossings(crossings)
+          crossings = crossings.uniq { |point| point.map { |value| value.round(6) } }
           crossings.reject.with_index do |point, index|
             crossings.each_with_index.any? do |other, other_index|
-              index != other_index && (point[axis] - other[axis]).abs < 2 * RADIUS
+              index != other_index && distance(point, other) < 2 * RADIUS
             end
           end
         end
 
-        def crossing(first, last, start, finish, axis)
-          return unless axis_for(start, finish) == 1 - axis
-
-          point = axis.zero? ? [start[0], first[1]] : [first[0], start[1]]
-          return unless segment_interior?(point, first, last, axis) &&
-                        segment_interior?(point, start, finish, 1 - axis)
-
-          point
+        def crossing(first, last, start, finish)
+          SegmentGeometry.crossing(first, last, start, finish, RADIUS)
         end
 
-        def segment_interior?(point, first, last, axis)
-          interior?(point[axis], first[axis], last[axis])
-        end
-
-        def interior?(value, first, last)
-          minimum, maximum = [first, last].minmax
-          value > minimum && value < maximum &&
-            value - minimum >= RADIUS && maximum - value >= RADIUS
-        end
-
-        def axis_for(first, last)
-          return 0 if first[1] == last[1] && first[0] != last[0]
-          return 1 if first[0] == last[0] && first[1] != last[1]
-
-          nil
+        def distance(point, other)
+          SegmentGeometry.distance(point, other)
         end
 
         def arc_commands(first, last, crossing)
-          axis = axis_for(first, last)
-          direction = last[axis] > first[axis] ? 1 : -1
-          start = crossing.dup
-          finish = crossing.dup
-          start[axis] -= direction * RADIUS
-          finish[axis] += direction * RADIUS
+          start, finish = SegmentGeometry.chord(first, last, crossing, RADIUS)
           ["L #{coordinates(start)}", "A #{RADIUS} #{RADIUS} 180 0 0 #{coordinates(finish)}"]
         end
 
