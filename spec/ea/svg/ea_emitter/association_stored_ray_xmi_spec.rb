@@ -29,7 +29,7 @@ RSpec.describe "XMI stored Association ray" do
       .to eq([[487, 283], [486, 236], [380, 236], [261, 56]])
 
     svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
-                                                    document: document).render
+                                                    document: document, frame: true).render
     texts = Nokogiri::XML(svg).css("text").map(&:text)
     expect(texts).to include("+lod0Geometry", "«property»", "0..1")
   end

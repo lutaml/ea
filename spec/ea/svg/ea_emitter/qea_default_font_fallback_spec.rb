@@ -27,7 +27,7 @@ RSpec.describe "QEA production constraint font" do
     document.diagrams.find { |entry| entry.id.casecmp?("B58D1A53-E860-41a3-8352-11C274093E83") }
   end
   let(:xml) do
-    svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id, document: document).render
+    svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id, document: document, frame: true).render
     Nokogiri::XML(svg).remove_namespaces!
   end
 
@@ -73,7 +73,8 @@ RSpec.describe "QEA fallback font connector preservation" do
       entry.id.casecmp?("B58D1A53-E860-41a3-8352-11C274093E83")
     end
     svg = Ea::Svg::EaEmitter::Document.new(
-      diagram, model_index: document.index_by_id, document: document
+      diagram, model_index: document.index_by_id, document: document,
+      frame: true
     ).render
     paths = Nokogiri::XML(svg).remove_namespaces!.xpath("//path").map { |node| node["d"] }
 

@@ -12,14 +12,15 @@ module Ea
 
         attr_reader :diagram, :model_index, :frame, :document, :content_anchor
 
-        # `content_anchor: true` (unframed only) sizes and origins the
-        # canvas on the drawn content like EA's native unframed export;
-        # off, an unframed canvas keeps the framed 35/40 content origin.
-        def initialize(diagram, model_index:, frame: nil, document: nil,
-                       content_anchor: false, **_options)
+        # No frame by default, like EA's own export; `frame: true` opts
+        # in. `content_anchor` (unframed only, on by default) sizes and
+        # origins the canvas on the drawn content like EA's native
+        # unframed export; off, it keeps the framed 35/40 content origin.
+        def initialize(diagram, model_index:, frame: false, document: nil,
+                       content_anchor: true, **_options)
           @diagram = diagram
           @model_index = model_index
-          @frame = frame.nil? ? !empty_diagram?(diagram) : frame
+          @frame = frame
           @document = document
           @content_anchor = content_anchor && !@frame
         end
@@ -118,11 +119,6 @@ module Ea
           %(<g>#{svg}</g>)
         end
         private :render_image
-
-        def empty_diagram?(source_diagram)
-          source_diagram.elements.empty? && source_diagram.connectors.empty?
-        end
-        private :empty_diagram?
       end
     end
   end

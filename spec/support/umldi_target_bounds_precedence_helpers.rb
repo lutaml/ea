@@ -20,7 +20,8 @@ module UmldiTargetBoundsPrecedenceHelpers
 
   def self.role_positions(document)
     svg = Ea::Svg::EaEmitter::Document.new(
-      document.diagrams.first, model_index: document.index_by_id, document: document
+      document.diagrams.first, model_index: document.index_by_id, document: document,
+      frame: true
     ).render
     Nokogiri::XML(svg).xpath("//*[local-name()='text']").to_h do |node|
       [node.text, [node["x"].to_f, node["y"].to_f]]
@@ -35,7 +36,8 @@ module UmldiTargetBoundsPrecedenceHelpers
 
   def self.route_paths(document)
     svg = Ea::Svg::EaEmitter::Document.new(
-      document.diagrams.first, model_index: document.index_by_id, document: document
+      document.diagrams.first, model_index: document.index_by_id, document: document,
+      frame: true
     ).render
     Nokogiri::XML(svg).xpath("//*[local-name()='path']").map { |node| node["d"] }
   end

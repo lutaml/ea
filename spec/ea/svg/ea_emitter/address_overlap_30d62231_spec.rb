@@ -35,7 +35,8 @@ RSpec.describe "XMI address overlap source contract 30D62231 output" do
       entry.relationship_ref.end_with?(AddressOverlap30D62231Support::CONNECTOR_ID)
     end
     svg = Nokogiri::XML(Ea::Svg::EaEmitter::Document.new(
-      diagram, model_index: document.index_by_id, document: document
+      diagram, model_index: document.index_by_id, document: document,
+      frame: true
     ).render)
     role = svg.xpath("//*[local-name()='text']").find { |node| node.text.strip == "+address" }
     multiplicity = svg.xpath("//*[local-name()='text']").find { |node| node.text.strip == "0..*" }

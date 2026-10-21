@@ -38,7 +38,7 @@ module XmiStereotypeProfileHelpers
       candidate.elements.any? { |element| element.model_element_ref == CLASS_REF }
     end
     svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
-                                                    document: document).render
+                                                    document: document, frame: true).render
     texts = Nokogiri::XML(svg).remove_namespaces!.xpath("//text").map(&:text)
     texts.grep(/«/)
   end

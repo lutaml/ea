@@ -11,7 +11,7 @@ RSpec.describe "QEA straight origin rays" do # rubocop:disable Metrics/BlockLeng
     diagram = document.diagrams.find { |entry| entry.connectors.any? { |connector| connector.id == "dc:190:1475" } }
     connector = diagram.connectors.find { |entry| entry.id == "dc:190:1475" }
     svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
-                                                    document: document).render
+                                                    document: document, frame: true).render
 
     # Native (780,130)/(715,130), translated by the diagram frame.
     expect(Nokogiri::XML(svg).css("path").map { |node| node["d"] }).to include("M 808 162 L 743 162")
@@ -23,7 +23,7 @@ RSpec.describe "QEA straight origin rays" do # rubocop:disable Metrics/BlockLeng
     diagram = document.diagrams.find { |entry| entry.connectors.any? { |connector| connector.id == "dc:117:642" } }
     connector = diagram.connectors.find { |entry| entry.id == "dc:117:642" }
     svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
-                                                    document: document).render
+                                                    document: document, frame: true).render
 
     expect(connector.has_geometry_offsets).to be(false)
     # Native (702,215)/(590,214), translated by the diagram frame.

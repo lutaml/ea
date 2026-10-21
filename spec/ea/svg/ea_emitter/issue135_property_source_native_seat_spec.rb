@@ -33,7 +33,7 @@ module Issue135NativeSeatCases
   def self.emitted_svg(path)
     document = Ea::Sources::Xmi::Adapter.from_path(path)
     parse_svg(Ea::Svg::EaEmitter::Document.new(document.diagrams.first, model_index: document.index_by_id,
-                                                                        document: document, frame: false).render)
+                                                                        document: document, frame: false, content_anchor: false).render)
   end
 
   def self.numbers(node, *names)

@@ -10,7 +10,7 @@ RSpec.describe "QEA stored Association ray docking" do
     diagram = document.diagrams.find { |entry| entry.connectors.any? { |c| c.id == "dc:93:500" } }
     connector = diagram.connectors.find { |entry| entry.id == "dc:93:500" }
     svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
-                                                    document: document).render
+                                                    document: document, frame: true).render
     paths = Nokogiri::XML(svg).css("path").map { |node| node["d"] }
 
     expect(connector.style[:stored_association_ray]).to be(true)

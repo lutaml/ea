@@ -21,7 +21,7 @@ module Issue135PropertyClusterHelpers
     tables = issue135_property_cluster_tables(role, source, target, geometry, options)
     document = Ea::Sources::Qea::Adapter.new(build_test_database(**tables), "property-cluster.qea").to_document
     svg = Ea::Svg::EaEmitter::Document.new(document.diagrams.first, model_index: document.index_by_id,
-                                                                    document: document, frame: false).render
+                                                                    document: document, frame: false, content_anchor: false).render
     issue135_property_cluster_positions(Nokogiri::XML(svg).remove_namespaces!, source)
   end
 

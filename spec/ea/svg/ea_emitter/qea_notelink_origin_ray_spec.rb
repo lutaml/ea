@@ -11,7 +11,7 @@ RSpec.describe "QEA NoteLink origin rays" do # rubocop:disable Metrics/BlockLeng
       document = public_compartment_document
       diagram = document.diagrams.find { |entry| entry.connectors.any? { |connector| connector.id == id } }
       svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
-                                                      document: document).render
+                                                      document: document, frame: true).render
       expect(Nokogiri::XML(svg).css("path").map { |node| node["d"] }).to include(path), id
     end
   end

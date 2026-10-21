@@ -8,7 +8,7 @@ RSpec.describe "Adapter-built UMLDI source roles on 348EE46E" do
   let(:document) { Ea::Sources::Xmi::Adapter.from_path(path) }
   let(:diagram) { document.diagrams.first }
   let(:texts) do
-    svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id, document: document).render
+    svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id, document: document, frame: true).render
     Nokogiri::XML(svg).xpath("//*[local-name()='text']").map { |node| [node.text, [node["x"].to_f, node["y"].to_f]] }
   end
 

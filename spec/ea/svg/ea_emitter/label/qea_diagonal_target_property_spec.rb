@@ -12,7 +12,7 @@ RSpec.describe "QEA diagonal target Property seats through the public adapter" d
      ["A081C63E-D6F2-41a7-A99C-307836754AFA", [590, 633]]].each do |id, expected|
       diagram = document.diagrams.find { |candidate| candidate.id == id }
       svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
-                                                      document: document).render
+                                                      document: document, frame: true).render
       texts = Nokogiri::XML(svg).remove_namespaces!.css("text")
       role = texts.find { |text| text.text == "+referencePoint" }
       stereotype = role.next_element

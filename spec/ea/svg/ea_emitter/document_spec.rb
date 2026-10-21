@@ -76,7 +76,7 @@ RSpec.describe Ea::Svg::EaEmitter::Document do
     expect(svg).to match(/width="\d+\.\d{2}cm"/)
     expect(svg).to match(/height="\d+\.\d{2}cm"/)
     expect(svg).to include("viewBox=")
-    expect(svg).to include("class Overview")
+    expect(svg).not_to include("class Overview")
   end
 
   it "includes the EA build marker in <desc>" do
@@ -132,7 +132,8 @@ RSpec.describe Ea::Svg::EaEmitter::Document do
   it "renders Package model elements as polygon body+tab" do
     svg_with_package = described_class.new(
       diagram_with_package,
-      model_index: document_with_package.index_by_id
+      model_index: document_with_package.index_by_id,
+      frame: true
     ).render
     polygons = svg_with_package.scan(/<polygon\b/).size
     expect(polygons).to be >= 3

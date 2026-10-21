@@ -13,7 +13,8 @@ RSpec.describe "XMI classifier member order" do
       document = Ea::Sources::Xmi::Adapter.new(root).to_document
       diagram = document.diagrams.find { |candidate| candidate.id.include?("D351FC34") }
       svg = Ea::Svg::EaEmitter::Document.new(
-        diagram, model_index: document.index_by_id, document: document
+        diagram, model_index: document.index_by_id, document: document,
+        frame: true
       ).render
       lines = Nokogiri::XML(svg).remove_namespaces!.xpath("//text").map(&:text)
       [document, lines]
@@ -39,7 +40,8 @@ RSpec.describe "XMI DataType member order" do
     document = Ea::Sources::Xmi::Adapter.new(root).to_document
     diagram = document.diagrams.find { |candidate| candidate.id.include?("D351FC34") }
     svg = Ea::Svg::EaEmitter::Document.new(
-      diagram, model_index: document.index_by_id, document: document
+      diagram, model_index: document.index_by_id, document: document,
+      frame: true
     ).render
     lines = Nokogiri::XML(svg).remove_namespaces!.xpath("//text").map(&:text)
 

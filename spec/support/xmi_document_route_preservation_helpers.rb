@@ -4,7 +4,8 @@ module XmiDocumentRoutePreservationHelpers
   def xmi_route_scene(guid)
     document, diagram = plateau_xmi_diagram(guid)
     svg = Ea::Svg::EaEmitter::Document.new(
-      diagram, model_index: document.index_by_id, document: document
+      diagram, model_index: document.index_by_id, document: document,
+      frame: true
     ).render
     native = native_svg_text(diagram.id)
     shifts = rect_anchor_shift(svg, native)

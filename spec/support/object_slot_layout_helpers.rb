@@ -6,7 +6,8 @@ module ObjectSlotLayoutHelpers
     document = Ea::Sources::Qea::Adapter.new(cached_qea_database(path), path).to_document
     diagram = document.diagrams.find { |entry| entry.id == diagram_id }
     svg = Ea::Svg::EaEmitter::Document.new(
-      diagram, model_index: document.index_by_id, document: document
+      diagram, model_index: document.index_by_id, document: document,
+      frame: true
     ).render
     Nokogiri::XML(svg).remove_namespaces!.css("text")
   end

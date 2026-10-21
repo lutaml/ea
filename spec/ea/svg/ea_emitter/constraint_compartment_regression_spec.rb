@@ -10,7 +10,7 @@ RSpec.shared_context "QEA constraint diagram" do
   end
   let(:svg) do
     Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
-                                              document: document).render
+                                              document: document, frame: true).render
   end
   let(:texts) { Nokogiri::XML(svg).remove_namespaces!.xpath("//text") }
   let(:box) do

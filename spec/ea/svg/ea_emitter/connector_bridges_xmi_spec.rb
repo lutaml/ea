@@ -30,7 +30,7 @@ RSpec.describe Ea::Svg::EaEmitter::Connectors, "plateau XMI crossings" do
   it "draws the diagram 148 crossings where the native SVG does" do
     guid = "{00C5C772-5A03-434f-BF30-AC37542A1AAC}"
     document, diagram = plateau_xmi_diagram(guid)
-    svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id, document: document).render
+    svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id, document: document, frame: true).render
     native = native_svg_text(diagram.id)
     shifts = rect_anchor_shift(svg, native)
     dx, dy = shifts.first

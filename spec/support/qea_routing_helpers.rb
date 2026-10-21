@@ -42,7 +42,7 @@ module QeaRoutingHelpers
     yield document if block_given?
     svg = Ea::Svg::EaEmitter::Document.new(
       document.diagrams.first, model_index: document.index_by_id,
-                               document: document, frame: false
+                               document: document, frame: false, content_anchor: false
     ).render
     xml = Nokogiri::XML(svg).remove_namespaces!
     {
@@ -79,7 +79,7 @@ module QeaRoutingHelpers
     )
     document = Ea::Sources::Qea::Adapter.new(database, "phantom.qea").to_document
     svg = Ea::Svg::EaEmitter::Document.new(document.diagrams.first, model_index: document.index_by_id,
-                                                                    document: document, frame: false).render
+                                                                    document: document, frame: false, content_anchor: false).render
     Nokogiri::XML(svg).remove_namespaces!.css("path").map { |node| node["d"] }.first
   end
 end

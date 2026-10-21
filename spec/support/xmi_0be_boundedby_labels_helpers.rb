@@ -26,7 +26,8 @@ module Xmi0beBoundedByLabelsHelpers
     render_diagram = diagram.dup
     render_diagram.connectors = connectors
     svg = Ea::Svg::EaEmitter::Document.new(
-      render_diagram, model_index: document.index_by_id, document: document
+      render_diagram, model_index: document.index_by_id, document: document,
+      frame: true
     ).render
     Nokogiri::XML(svg).xpath("//*[local-name()='text']")
             .select { |node| node.text == text }

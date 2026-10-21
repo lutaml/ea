@@ -21,7 +21,7 @@ RSpec.describe "XMI width-zero Association ray labels" do
     expect(connector.label_boxes[:lrt]).to include("cx" => 127, "cy" => 35, "ox" => 0, "oy" => 8, "alignment" => 1)
 
     svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
-                                                    document: document).render
+                                                    document: document, frame: true).render
     role = Nokogiri::XML(svg).css("text").find { |text| text.text == "+relativeGMLGeometry" }
     expect([role["x"].to_f, role["y"].to_f]).to eq([56, 183])
   end

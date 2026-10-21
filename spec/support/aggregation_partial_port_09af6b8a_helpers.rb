@@ -19,7 +19,8 @@ module AggregationPartialPort09AF6B8ASupport
 
   def render_xml(document, diagram)
     Nokogiri::XML(Ea::Svg::EaEmitter::Document.new(
-      diagram, model_index: document.index_by_id, document: document
+      diagram, model_index: document.index_by_id, document: document,
+      frame: true
     ).render)
   end
 

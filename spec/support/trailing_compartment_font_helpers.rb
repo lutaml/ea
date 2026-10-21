@@ -42,7 +42,7 @@ module TrailingCompartmentFontHelpers
 
   def trailing_public_text_nodes(document, diagram)
     svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
-                                                    document: document).render
+                                                    document: document, frame: true).render
     Nokogiri::XML(svg).remove_namespaces!.css("text")
   end
 end

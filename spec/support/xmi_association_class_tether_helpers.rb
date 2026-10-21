@@ -15,7 +15,8 @@ module XmiAssociationClassTetherHelpers
   def rendered_tether_paths(*replacements)
     with_tether_document(*replacements) do |document|
       svg = Ea::Svg::EaEmitter::Document.new(
-        document.diagrams.first, model_index: document.index_by_id, document: document
+        document.diagrams.first, model_index: document.index_by_id, document: document,
+        frame: true
       ).render
       Nokogiri::XML(svg).css("path").map { |node| node["d"] }
     end

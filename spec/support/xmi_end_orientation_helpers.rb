@@ -24,7 +24,8 @@ module XmiEndOrientationHelpers
 
   def multiplicity_seats(document)
     svg = Ea::Svg::EaEmitter::Document.new(
-      document.diagrams.first, model_index: document.index_by_id, document: document
+      document.diagrams.first, model_index: document.index_by_id, document: document,
+      frame: true
     ).render
     svg.scan(%r{<text x="([-\d.]+)" y="([-\d.]+)"[^>]*>(1|0\.\.1)</text>}).map do |x, y, text|
       [text, x.to_f, y.to_f]
@@ -34,7 +35,8 @@ module XmiEndOrientationHelpers
   # The last occurrence: later connectors draw after earlier ones.
   def text_seats(document, *texts)
     svg = Ea::Svg::EaEmitter::Document.new(
-      document.diagrams.first, model_index: document.index_by_id, document: document
+      document.diagrams.first, model_index: document.index_by_id, document: document,
+      frame: true
     ).render
     texts.to_h do |text|
       x, y = svg.scan(%r{<text x="([-\d.]+)" y="([-\d.]+)"[^>]*>#{Regexp.escape(text)}</text>}).last
