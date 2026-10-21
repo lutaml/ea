@@ -134,4 +134,35 @@ RSpec.describe Ea::Svg::EaEmitter::RenderContext do
     )
     expect(ctx2.content_below_header?).to be(true)
   end
+
+  describe "#content_below_header? with hidden features" do
+    def context_for(classifier)
+      described_class.new(
+        element: nil, bounds: bounds, model_element: classifier, classifier: classifier,
+        fill: "#FFF", stroke: "#000", stroke_width: 2,
+        text_fill: "#000", family: "Carlito", size: 7, size_unit: "pt",
+        header_lines: [], attr_lines: [], op_lines: [], enum_literals: [], tagged_values: [],
+        geometry: nil, theme: theme, canvas: nil
+      )
+    end
+
+    it "gives no divider to a class owning only association-end properties" do
+      end_property = Ea::Model::Property.new(id: "p1", name: "urfDmAttribute", association_id: "assoc")
+      klass = Ea::Model::Klass.new(id: "k", name: "Administration", properties: [end_property])
+      expect(context_for(klass).content_below_header?).to be(false)
+    end
+
+    it "keeps the divider for a class owning a real (hidden) attribute" do
+      attribute = Ea::Model::Property.new(id: "p2", name: "code")
+      klass = Ea::Model::Klass.new(id: "k", name: "CodeList", properties: [attribute])
+      expect(context_for(klass).content_below_header?).to be(true)
+    end
+
+    it "keeps the divider for a class mixing a real attribute and an association end" do
+      props = [Ea::Model::Property.new(id: "p3", name: "x", association_id: "a"),
+               Ea::Model::Property.new(id: "p4", name: "y")]
+      klass = Ea::Model::Klass.new(id: "k", name: "Mixed", properties: props)
+      expect(context_for(klass).content_below_header?).to be(true)
+    end
+  end
 end
