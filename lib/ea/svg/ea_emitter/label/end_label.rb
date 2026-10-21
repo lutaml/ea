@@ -414,10 +414,15 @@ module Ea
           # the directional cluster's left edge. Other boxes keep their seat.
           def source_property_centering(connector, direction, box, role)
             return 0 unless centered_property_box?(connector, direction, box)
-            return 0 unless seat_font? && font_weight == 400 && font_style == "normal"
-            return 0 unless property_label?(connector, :source)
 
-            stereo = "«#{connector_source_dest_stereotype(connector, :source)}»"
+            property_role_centering(connector, :source, box, role)
+          end
+
+          def property_role_centering(connector, end_kind, box, role)
+            return 0 unless seat_font? && font_weight == 400 && font_style == "normal"
+            return 0 unless property_label?(connector, end_kind)
+
+            stereo = "«#{connector_source_dest_stereotype(connector, end_kind)}»"
             -[stereotype_offset(role, stereo, box.merge("alignment" => 1)), 0].min
           end
 
@@ -596,7 +601,7 @@ module Ea
 
             x, y = seat_corner(anchor, box)
             inset, = property_role_offsets(:down)
-            [x - inset - width, y - 7]
+            [x - inset - width + property_role_centering(connector, :target, box, role), y - 7]
           end
 
           def upward_target_property?(connector, heading)
