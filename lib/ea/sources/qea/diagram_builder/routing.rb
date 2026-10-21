@@ -783,8 +783,7 @@ module Ea
               return nil
             end
 
-            first = outline_dock(corners[0], corners[1], source)
-            last = outline_dock(corners[-1], corners[-2], target)
+            first, last = stair_docks(link_row, corners, source, target)
             return nil unless distinct_stair_docks?(corners, first, last)
 
             [first, *corners, last]
@@ -814,6 +813,46 @@ module Ea
             return :vertical if from[0] == to[0] && from[1] != to[1]
 
             :horizontal if from[1] == to[1] && from[0] != to[0]
+          end
+
+          def stair_docks(link_row, corners, source, target)
+            geom = parse_geometry_fields(link_row.geometry)
+            [stair_dock(corners[0], corners[1], source, geom.values_at(:sx, :sy)),
+             stair_dock(corners[-1], corners[-2], target, geom.values_at(:ex, :ey))]
+          end
+
+          # A corner level with its box docks on the outline the leg points at.
+          # When the stored origin sits off that row, EA aims the last leg at
+          # the origin instead and the dock slants onto the same outline
+          # (30D62231 connector 601: bend row 430, origin row 425, dock row 428).
+          def stair_dock(corner, neighbour, box, offsets)
+            dock = outline_dock(corner, neighbour, box)
+            return dock unless dock && offsets.none?(&:nil?)
+
+            origin = stored_ray_origin(box, *offsets)
+            return dock unless inside_box?(origin, grown_bounds(box, 1))
+
+            slanted_dock([origin.x, origin.y], corner, dock) || dock
+          end
+
+          # Where the line from the stored origin to the corner meets the
+          # outline row/column of the orthogonal dock; the other axis floors.
+          def slanted_dock(origin, corner, dock)
+            axis = dock[0] == corner[0] ? 1 : 0
+            other = intercept(origin, corner, axis, dock[axis])
+            return unless other
+
+            axis.zero? ? [dock[0], other] : [other, dock[1]]
+          end
+
+          def intercept(origin, corner, axis, face)
+            run = corner[axis] - origin[axis]
+            return if run.zero?
+
+            fraction = Rational(face - origin[axis], run)
+            return unless fraction.between?(0, 1)
+
+            (origin[1 - axis] + fraction * (corner[1 - axis] - origin[1 - axis])).floor
           end
 
           # The dock runs perpendicular to the corner's own leg.
