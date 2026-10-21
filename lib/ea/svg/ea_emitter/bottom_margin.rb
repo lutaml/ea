@@ -40,9 +40,17 @@ module Ea
           model = model_index && model_index[element.model_element_ref]
           return BARE if plain_note?(model) || bare_package?(model, diagram)
 
+          LINE_ALLOWANCE + points(element)
+        end
+
+        # QEA keeps the raw objectstyle fontsz; XMI keeps only the GDI
+        # pixel height it was rendered at (tenths * 96 / 720, floored).
+        def self.points(element)
           tenths = element.style && element.style[:fontsz].to_i
-          points = tenths.to_i.positive? ? tenths / 10 : DEFAULT_POINTS
-          LINE_ALLOWANCE + points
+          return tenths / 10 if tenths.to_i.positive?
+
+          pixels = element.font_logical_height.to_i.abs
+          pixels.positive? ? (pixels * 0.75).round : DEFAULT_POINTS
         end
 
         def self.plain_note?(model)
