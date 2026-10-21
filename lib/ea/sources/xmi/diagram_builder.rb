@@ -157,8 +157,14 @@ module Ea
         # XMI preserves UML member order in ownedAttribute. Carry that
         # provenance to the renderer so it does not replace it with a name sort.
         # LWth on the placement, else the model element's saved border width.
+        # A negative LWth (-1) inherits; zero requests the one-pixel cosmetic
+        # pen, as in the QEA source. Checked on 01661E1B (LWth=-1 over
+        # BorderWidth=2) and 1A10EB6D (LWth=0, native stroke-width 1).
         def placed_line_width(style, subject)
-          style.line_width || (@element_borders ||= ElementBorders.new(root)).width_for(subject)
+          own = style.line_width
+          return [own, 1].max if own && own >= 0
+
+          (@element_borders ||= ElementBorders.new(root)).width_for(subject)
         end
 
         def element_style(subject)
@@ -251,7 +257,7 @@ module Ea
             waypoints: route[:waypoints],
             style: route[:style],
             line_color: style.color,
-            line_width: style.line_width,
+            line_width: ext_meta[:line_width],
             hidden: style.hidden,
             label_boxes: connector_label_boxes(placed, ext_meta[:ea_type],
                                                options.fetch(:context) ? nil : owner_id)
@@ -372,12 +378,13 @@ module Ea
 
         def connector_meta(subject_id)
           connector = connector_index[subject_id]
-          return { ea_type: nil, direction: nil } unless connector
+          return { ea_type: nil, direction: nil, line_width: nil } unless connector
 
           props = connector.properties
           {
             ea_type: props&.ea_type,
-            direction: props&.direction
+            direction: props&.direction,
+            line_width: connector.appearance&.linewidth
           }.merge(connector_metadata.for(connector))
         end
 

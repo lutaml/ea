@@ -1,0 +1,28 @@
+<!-- Pen-width excerpt modelled on Plateau diagrams 01661E1B (LWth=-1 over BorderWidth=2) and 1A10EB6D (LWth=0). -->
+<xmi:XMI xmlns:xmi="http://www.omg.org/spec/XMI/20131001">
+  <uml:Model xmlns:uml="http://www.omg.org/spec/UML/20161101" xmi:type="uml:Model" name="EA_Model"/>
+  <xmi:Extension>
+    <elements>
+      <element xmi:idref="EAID_AAAAAAAA_0000_0000_0000_000000000001">
+        <style appearance="BackColor=-1;BorderColor=-1;BorderWidth=2;FontColor=0;" />
+      </element>
+      <element xmi:idref="EAID_AAAAAAAA_0000_0000_0000_000000000002">
+        <style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=0;" />
+      </element>
+      <element xmi:idref="EAID_AAAAAAAA_0000_0000_0000_000000000003">
+        <style appearance="BackColor=-1;BorderColor=-1;BorderWidth=2;FontColor=0;" />
+      </element>
+    </elements>
+    <diagrams>
+      <diagram xmi:id="EAID_BBBBBBBB_0000_0000_0000_000000000001">
+        <model package="EAPK_CCCCCCCC_0000_0000_0000_000000000001" localID="1" owner="EAPK_CCCCCCCC_0000_0000_0000_000000000001" tpos="1" />
+        <properties name="pen width" type="Logical" />
+        <elements>
+          <element geometry="Left=10;Top=10;Right=130;Bottom=90;" subject="EAID_AAAAAAAA_0000_0000_0000_000000000001" seqno="1" style="DUID=00000001;LCol=-1;LWth=-1;BCol=-1;" />
+          <element geometry="Left=150;Top=10;Right=270;Bottom=90;" subject="EAID_AAAAAAAA_0000_0000_0000_000000000002" seqno="2" style="DUID=00000002;LCol=-1;LWth=0;BCol=-1;" />
+          <element geometry="Left=290;Top=10;Right=410;Bottom=90;" subject="EAID_AAAAAAAA_0000_0000_0000_000000000003" seqno="3" style="DUID=00000003;LCol=-1;LWth=3;BCol=-1;" />
+        </elements>
+      </diagram>
+    </diagrams>
+  </xmi:Extension>
+</xmi:XMI>
