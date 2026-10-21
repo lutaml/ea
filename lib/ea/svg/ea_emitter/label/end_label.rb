@@ -152,6 +152,10 @@ module Ea
             role_bounds = umldi_bounds[end_kind == :source ? :source_role : :target_role]
             mult_bounds = umldi_bounds[end_kind == :source ? :source_multiplicity : :target_multiplicity]
             text_pos = umldi_label_position(role_bounds) if role_bounds
+            if role_bounds && direction == :down
+              text_pos = [text_pos[0] + phantom_bounds_centering(connector, end_kind, role, stereo, text_box),
+                          text_pos[1]]
+            end
             mult_pos = umldi_label_position(mult_bounds) if mult_bounds
             stereo_pos = umldi_stereotype_position(role_bounds, role, stereo, text_box) if stereo && role_bounds
 
@@ -325,6 +329,15 @@ module Ea
             return :down if dx.zero? && dy.positive?
 
             nil
+          end
+
+          # Saved bounds seat a phantom Property role at the stereotype's left
+          # edge; the native label centres the shorter role over it.
+          def phantom_bounds_centering(connector, end_kind, role, stereo, text_box)
+            return 0 unless end_kind == :source && stereo && seat_font?
+            return 0 unless connector.style.to_h[:phantom_outline] == true && property_label?(connector, :source)
+
+            -[stereotype_offset(role, stereo, text_box.merge("alignment" => 1)), 0].min
           end
 
           # Role text on a rightward leg is left-aligned at the corner,
