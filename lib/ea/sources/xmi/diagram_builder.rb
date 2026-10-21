@@ -12,6 +12,7 @@ module Ea
         autoload :ConnectorMetadata, "ea/sources/xmi/diagram_builder/connector_metadata"
         autoload :AssociationClassMetadata, "ea/sources/xmi/diagram_builder/association_class_metadata"
         autoload :FontSettings, "ea/sources/xmi/diagram_builder/font_settings"
+        autoload :ElementBorders, "ea/sources/xmi/diagram_builder/element_borders"
         autoload :StereotypeProfiles, "ea/sources/xmi/diagram_builder/stereotype_profiles"
         autoload :UmldiEdges, "ea/sources/xmi/diagram_builder/umldi_edges"
 
@@ -135,7 +136,7 @@ module Ea
             image_bounds: (build_bounds(geom.img_left, geom.img_top, geom.img_right, geom.img_bottom) unless bounds),
             background_color: style.background_color,
             line_color: style.line_color,
-            line_width: style.line_width,
+            line_width: style.line_width || (@element_borders ||= ElementBorders.new(root)).width_for(placed.subject),
             font_family: font[:family],
             font_size: font[:size],
             font_size_unit: "pt",

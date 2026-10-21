@@ -29,6 +29,9 @@ module Ea
         # Saved rays retain origins and computed boundary ports, matching QEA.
         def ray_metadata(model, link:, bounds:, offsets:, edge:)
           if model.connector_type == "Generalization"
+            overlap = mode2_overlap_metadata(model, link, bounds, offsets, edge)
+            return overlap unless overlap.empty?
+
             return generalization_ray_metadata(model, link, bounds, offsets, edge)
           end
 
@@ -49,11 +52,10 @@ module Ea
         # UMLDI fallback. A single stored corner and an empty-path stored ray
         # carry mathematical origins that the generic facing-edge route loses.
         def association_route(model, link:, bounds:, offsets:, edge:)
-          overlap = umldi_association_metadata(model, link, bounds, offsets, edge)
-          return overlap unless overlap.empty?
-
-          partial = partial_port_metadata(model, link, bounds, offsets, edge)
-          return partial unless partial.empty?
+          ROUTE_STAGES.each do |stage|
+            found = method(stage).call(model, link, bounds, offsets, edge)
+            return found unless found.empty?
+          end
 
           return {} unless stored_association_candidate?(model, bounds)
 
@@ -66,6 +68,55 @@ module Ea
         end
 
         private
+
+        ROUTE_STAGES = %i[umldi_association_metadata shared_overlap_metadata
+                          source_row_metadata partial_port_metadata].freeze
+
+        # Overlap rules need both end boxes and every end offset.
+        def ray_inputs?(bounds, offsets)
+          bounds.values.all? && offsets.values.flatten.none?(&:nil?)
+        end
+
+        # A Mode 2 Generalization whose stored Path is a horizontal jog is EA's
+        # auto-route: QEA replaces the stored bends with one vertical ray, and
+        # the same QEA rule decides it here.
+        def mode2_overlap_metadata(model, link, bounds, offsets, edge)
+          return {} if link.path.to_s.empty? || !ray_inputs?(bounds, offsets)
+
+          candidate = association_model(model, bounds, offsets)
+          initial = candidate.waypoints
+          mode2_overlap_ray(candidate, link, bounds, ray_geometry(offsets, edge), false)
+          return {} if candidate.waypoints.equal?(initial)
+
+          { waypoints: candidate.waypoints, source_anchor: candidate.source_anchor,
+            target_anchor: candidate.target_anchor, has_geometry_offsets: true }
+        end
+
+        # A stored (non-UMLDI) Association through the shared overlap row takes
+        # QEA's overlap origins and flush ports, decided by the same QEA rule.
+        def shared_overlap_metadata(model, link, bounds, offsets, edge)
+          return {} if model.style[:umldi_route] || !ray_inputs?(bounds, offsets)
+
+          candidate = association_model(model, bounds, offsets)
+          geom = ray_geometry(offsets, edge)
+          association_stored_ray(candidate, link, bounds, geom, false) if association_ray_style?(model.style.to_h)
+          overlap_ray_origins(candidate, link, bounds, geom, false)
+          return {} unless candidate.style[:overlap_ray]
+
+          association_metadata(candidate)
+        end
+
+        # A Mode 2 Association with unequal end offsets and no (or a stale) Path
+        # rides the source row, as QEA's source_row_association_ray decides.
+        def source_row_metadata(model, link, bounds, offsets, edge)
+          return {} if model.style[:umldi_route] || !ray_inputs?(bounds, offsets)
+
+          candidate = association_model(model, bounds, offsets)
+          source_row_association_ray(candidate, link, bounds, ray_geometry(offsets, edge), false)
+          return {} unless candidate.style[:overlap_ray]
+
+          association_metadata(candidate)
+        end
 
         def umldi_association_metadata(model, link, bounds, offsets, edge)
           overlap = umldi_overlap_metadata(model, link, bounds, offsets, edge)
@@ -99,7 +150,9 @@ module Ea
           return {} unless umldi_overlap_candidate?(model, bounds, offsets)
 
           candidate = association_model(model, bounds, offsets)
-          overlap_ray_origins(candidate, link, bounds, ray_geometry(offsets, edge), false)
+          geom = ray_geometry(offsets, edge)
+          association_stored_ray(candidate, link, bounds, geom, false) if association_ray_style?(model.style.to_h)
+          overlap_ray_origins(candidate, link, bounds, geom, false)
           return {} unless candidate.style[:overlap_ray]
 
           { source_anchor: candidate.source_anchor, target_anchor: candidate.target_anchor,
@@ -160,6 +213,13 @@ module Ea
         def association_anchor(box, offset)
           Ea::Model::Point.new(x: box.x + box.width / 2 + offset[0].to_i,
                                y: box.y + box.height / 2 + offset[1].to_i)
+        end
+
+        # XMI has no QEA database from which to infer a wider element outline,
+        # so the saved connector width stands. A border-aware variant changed no
+        # connector in the PLATEAU census.
+        def association_outline_width(model, _link, _bounds)
+          model.style[:lwidth]
         end
 
         def stored_ray_boxes(_link, bounds)
