@@ -17,8 +17,8 @@ module Ea
       # from the shapes.
       #
       # EMPIRICAL FITS (no saved selector was found in any QEA table):
-      # BOTTOM_MARGIN 31 is the commonest of 31 (79 diagrams), 28 (73),
-      # 30 (10) and 10 (13); LABEL_RIGHT_MARGIN 23 is the label text
+      # BOTTOM_MARGIN 31 is only the fallback; BottomMargin picks the
+      # margin from the lowest element; LABEL_RIGHT_MARGIN 23 is the label text
       # right edge + 21..23 seen on 4 diagrams whose labels overhang
       # the shapes.
       module CanvasAnchor
@@ -37,24 +37,24 @@ module Ea
 
         # Canvas for shapes spanning the given model-space extent (the
         # stored element rects, before any drawn content is measured).
-        def stored(min_x, min_y, max_x, max_y)
+        def stored(min_x, min_y, max_x, max_y, bottom: BOTTOM_MARGIN)
           left = inset(min_x)
           top = inset(min_y)
           Canvas.new(min_x: min_x, min_y: min_y,
                      width: (max_x - min_x) + left + CONTENT_MARGIN,
-                     height: (max_y - min_y) + top + BOTTOM_MARGIN,
+                     height: (max_y - min_y) + top + bottom,
                      insets: [left, top])
         end
 
         # Canvas for measured content, each box [min_x, min_y, max_x,
         # max_y] in model coordinates (nil when absent). `labels` is the
         # connector-label subset of `texts`.
-        def measured(shapes, texts, labels)
+        def measured(shapes, texts, labels, bottom: BOTTOM_MARGIN)
           origin_x = origin(shapes && shapes[0], texts && texts[0])
           origin_y = origin(shapes && shapes[1], texts && texts[1])
           Canvas.new(min_x: origin_x, min_y: origin_y,
                      width: right_edge(shapes, labels) - origin_x,
-                     height: shapes[3] + BOTTOM_MARGIN - origin_y,
+                     height: shapes[3] + bottom - origin_y,
                      insets: [0, 0])
         end
 
@@ -72,14 +72,14 @@ module Ea
         # The canvas anchored on the content drawn into `layers` (the
         # background excluded) and `label_layers`, or `canvas` itself
         # when there is nothing to measure.
-        def reanchor(canvas, layers, label_layers)
+        def reanchor(canvas, layers, label_layers, bottom: BOTTOM_MARGIN)
           extent = ContentExtent.measure(layers)
           return canvas unless extent.shapes
 
           shift = [canvas.origin_x, canvas.origin_y]
           measured(*[extent.shapes, extent.texts,
                      ContentExtent.measure(label_layers).texts]
-                     .map { |box| model_box(box, shift) })
+                     .map { |box| model_box(box, shift) }, bottom: bottom)
         end
 
         def model_box(box, shift)
