@@ -56,6 +56,13 @@ RSpec.describe "Unframed canvas origin" do
     expect(class_rect(svg).first(2)).to eq([5.0, 5.0])
   end
 
+  it "keeps a shape left of the model origin on the canvas with its 10 px margin" do
+    svg = render(left: -100, top: -50, frame: false)
+
+    expect(class_rect(svg).first(2)).to eq([10.0, 10.0])
+    expect(view_box(svg).first(2)).to eq([220, 138])
+  end
+
   it "keeps the 10 px margin once the shape is 5 px or more from the origin" do
     expect(class_rect(render(left: 3, top: 5, frame: false)).first(2)).to eq([8.0, 10.0])
   end

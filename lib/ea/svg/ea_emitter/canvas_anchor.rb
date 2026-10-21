@@ -39,7 +39,7 @@ module Ea
 
         # Where content starting at `content_min` lands on the canvas.
         def inset(content_min)
-          content_min - [content_min - CONTENT_MARGIN, ORIGIN_FLOOR].max
+          content_min - floored(content_min - CONTENT_MARGIN)
         end
 
         # Canvas of a diagram that places no element.
@@ -84,7 +84,14 @@ module Ea
         def origin(shape_min, text_min)
           lead = [shape_min && shape_min - CONTENT_MARGIN,
                   text_min && text_min - TEXT_MARGIN].compact.min
-          [lead, ORIGIN_FLOOR].max
+          floored(lead)
+        end
+
+        # The floor encodes only "a shape at 0 draws at 5" (the corpus
+        # has no shape left of 0). Content starting further out keeps
+        # its full margin so nothing is drawn off the canvas.
+        def floored(lead)
+          lead >= ORIGIN_FLOOR - CONTENT_MARGIN ? [lead, ORIGIN_FLOOR].max : lead
         end
 
         # The canvas anchored on the content drawn into `layers` (the

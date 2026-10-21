@@ -16,10 +16,10 @@ module Ea
           (diagram.connectors || []).each_with_index.sort_by do |connector, index|
             order = connector.paint_order
             rank = if order.nil?
-                   2
-                 else
-                   order.empty? ? 1 : 0
-                 end
+                     2
+                   else
+                     order.empty? ? 1 : 0
+                   end
             [rank, order || [], index]
           end.map(&:first)
         end

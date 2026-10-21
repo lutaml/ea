@@ -68,7 +68,7 @@ module Ea
         # widths or colours never merge.
         def self.layer_key(key, width, default, color = DEFAULT_STROKE)
           key = :"#{key}_w#{width}" unless width == default
-          color == DEFAULT_STROKE ? key : :"#{key}_c#{color.delete('#')}"
+          color == DEFAULT_STROKE ? key : :"#{key}_c#{color.delete("#")}"
         end
 
         def layers
