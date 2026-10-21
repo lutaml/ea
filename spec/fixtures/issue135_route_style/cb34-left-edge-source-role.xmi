@@ -1,0 +1,744 @@
+<?xml  version='1.0' encoding='UTF-8' ?>
+<xmi:XMI xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/UML/20161101/UMLDC" xmlns:thecustomprofile="http://www.sparxsystems.com/profiles/thecustomprofile/1.0" xmlns:GML="http://www.sparxsystems.com/profiles/GML/1.0" xmlns:StandardProfileL2="http://www.omg.org/spec/UML/20110701/StandardProfileL2.xmi">
+	<xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5" exporterID="1624"/>
+	<uml:Model xmi:type="uml:Model" name="EA_Model">
+						<packagedElement xmi:type="uml:Class" xmi:id="EAID_7C9666FA_BBDF_435a_8627_02FD981E3173" name="ConstructionBaseAttribute">
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_8BEBD442_570C_41e4_AF5B_62F8F7BF57B1" name="adminType">
+								<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001287_570C_41e4_AF5B_62F8F7BF57B1" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001288_570C_41e4_AF5B_62F8F7BF57B1" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_2AC5F626_D30E_47d0_955E_2A033DB48C29" name="administrator">
+								<type xmi:idref="EAID_29F1CA63_CA0A_4c4e_80D1_DA97B683B7CA"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001289_D30E_47d0_955E_2A033DB48C29" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001290_D30E_47d0_955E_2A033DB48C29" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_22566071_65DB_4faf_8C8D_7388C55D7B95" name="adminOffice">
+								<type xmi:idref="EAID_29F1CA63_CA0A_4c4e_80D1_DA97B683B7CA"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001291_65DB_4faf_8C8D_7388C55D7B95" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001292_65DB_4faf_8C8D_7388C55D7B95" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_0087200E_6F3C_49b6_803E_8BE1B84BF1FC" name="operatorType">
+								<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001293_6F3C_49b6_803E_8BE1B84BF1FC" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001294_6F3C_49b6_803E_8BE1B84BF1FC" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_A8EE4B67_68B9_4359_8E69_6B674F84C3D7" name="installerType">
+								<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001295_68B9_4359_8E69_6B674F84C3D7" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001296_68B9_4359_8E69_6B674F84C3D7" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_75A75E3F_141B_4ba2_86CF_913539ACD3EA" name="installer">
+								<type xmi:idref="EAID_29F1CA63_CA0A_4c4e_80D1_DA97B683B7CA"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001297_141B_4ba2_86CF_913539ACD3EA" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001298_141B_4ba2_86CF_913539ACD3EA" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_5CEE0D71_1A0A_45fc_9C9C_3BA4AE4C8CD2" name="structureOrdinance">
+								<type xmi:idref="EAID_29F1CA63_CA0A_4c4e_80D1_DA97B683B7CA"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001299_1A0A_45fc_9C9C_3BA4AE4C8CD2" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001300_1A0A_45fc_9C9C_3BA4AE4C8CD2" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_3B11E4E0_E7DD_4d96_8E0A_2413B3AE2937" name="specification">
+								<type xmi:idref="EAID_29F1CA63_CA0A_4c4e_80D1_DA97B683B7CA"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001301_E7DD_4d96_8E0A_2413B3AE2937" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001302_E7DD_4d96_8E0A_2413B3AE2937" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_04D2ED9E_C973_421d_B2B7_167A31018AD7" name="kana">
+								<type xmi:idref="EAID_29F1CA63_CA0A_4c4e_80D1_DA97B683B7CA"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001303_C973_421d_B2B7_167A31018AD7" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001304_C973_421d_B2B7_167A31018AD7" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_F44F5D37_02BF_45f8_ACC7_7D59F998A3FC" name="constructionStartYear">
+								<type xmi:idref="EAID_26471952_5D84_4d1e_8369_09C92F9FBE90"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001305_02BF_45f8_ACC7_7D59F998A3FC" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001306_02BF_45f8_ACC7_7D59F998A3FC" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_FC5A18C0_A98A_4eb6_9183_221FE7CAEBBB" name="completionYear">
+								<type xmi:idref="EAID_26471952_5D84_4d1e_8369_09C92F9FBE90"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001307_A98A_4eb6_9183_221FE7CAEBBB" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001308_A98A_4eb6_9183_221FE7CAEBBB" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_619230F1_424D_49b0_BDC6_1400DC04DEC7" name="facilityAge">
+								<type xmi:idref="EAID_116BF66A_864A_4164_B420_627A61840E90"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001309_424D_49b0_BDC6_1400DC04DEC7" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001310_424D_49b0_BDC6_1400DC04DEC7" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_19F1BFB3_9850_45b0_9078_3A187B63450B" name="update">
+								<type xmi:idref="EAID_50273C23_2C34_46fe_A14F_EAE0A1174EF7"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001311_9850_45b0_9078_3A187B63450B" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001312_9850_45b0_9078_3A187B63450B" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_5CE72112_B214_4eeb_856F_FFA78E92A548" name="purpose">
+								<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001313_B214_4eeb_856F_FFA78E92A548" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001314_B214_4eeb_856F_FFA78E92A548" value="1"/>
+							</ownedAttribute>
+						</packagedElement>
+						<packagedElement xmi:type="uml:Association" xmi:id="EAID_58C92B78_5364_429c_AACD_612AD97BF4B5">
+							<memberEnd xmi:idref="EAID_dstC92B78_5364_429c_AACD_612AD97BF4B5"/>
+							<ownedEnd xmi:type="uml:Property" xmi:id="EAID_dstC92B78_5364_429c_AACD_612AD97BF4B5" association="EAID_58C92B78_5364_429c_AACD_612AD97BF4B5">
+								<type xmi:idref="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+							</ownedEnd>
+							<memberEnd xmi:idref="EAID_srcC92B78_5364_429c_AACD_612AD97BF4B5"/>
+						</packagedElement>
+					<packagedElement xmi:type="uml:Class" xmi:id="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C" name="_AbstractBridge" isAbstract="true">
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_E168B8CB_8D91_4565_ADC0_0E93C025D519" name="class">
+							<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003487_8D91_4565_ADC0_0E93C025D519" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003488_8D91_4565_ADC0_0E93C025D519" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_EC03960B_CC8D_4a1f_AE01_CA50D00FCD19" name="function">
+							<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003489_CC8D_4a1f_AE01_CA50D00FCD19" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003490_CC8D_4a1f_AE01_CA50D00FCD19" value="*"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_F158EEB9_F767_4d38_81BE_9504874CCDB2" name="usage">
+							<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003491_F767_4d38_81BE_9504874CCDB2" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003492_F767_4d38_81BE_9504874CCDB2" value="*"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_92CB30F5_0B47_4ab6_A217_9091AE3AFE2F" name="yearOfConstruction">
+							<type xmi:idref="EAID_26471952_5D84_4d1e_8369_09C92F9FBE90"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003493_0B47_4ab6_A217_9091AE3AFE2F" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003494_0B47_4ab6_A217_9091AE3AFE2F" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_A2760D53_1DFD_4215_B0C7_254FB8D86432" name="yearOfDemolition">
+							<type xmi:idref="EAID_26471952_5D84_4d1e_8369_09C92F9FBE90"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003495_1DFD_4215_B0C7_254FB8D86432" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003496_1DFD_4215_B0C7_254FB8D86432" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_482B5E32_2A0E_4b37_80CC_C8C6DD19FF38" name="isMovable">
+							<type xmi:idref="EAID_3AAAA612_D4B4_441a_B0B5_F36D8601C4E2"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003497_2A0E_4b37_80CC_C8C6DD19FF38" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003498_2A0E_4b37_80CC_C8C6DD19FF38" value="1"/>
+						</ownedAttribute>
+						<generalization xmi:type="uml:Generalization" xmi:id="EAID_E7C424B9_8F51_4537_8ADF_65D23DEA9FDC" general="EAID_E92132F9_2CB7_4ff7_8A78_20B03B928DAF" isSubstitutable="true"/>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src4D808A_F0A0_41b5_8C65_2C6CE066BC96" name="lod4MultiCurve" association="EAID_014D808A_F0A0_41b5_8C65_2C6CE066BC96">
+							<type xmi:idref="EAID_B326682E_0384_443a_A119_96FD046071A2"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003499__F0A0_41b5_8C65_2C6CE066BC96" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003500__F0A0_41b5_8C65_2C6CE066BC96" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_srcB1607E_D42E_43fa_BBAA_2E50AFC93620" name="lod1Solid" association="EAID_0AB1607E_D42E_43fa_BBAA_2E50AFC93620">
+							<type xmi:idref="EAID_1A109613_4F82_4f16_9338_EB0F87289E43"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003501__D42E_43fa_BBAA_2E50AFC93620" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003502__D42E_43fa_BBAA_2E50AFC93620" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_srcF5DFE2_0264_4f32_96D8_00309E64BCFA" name="lod2TerrainIntersection" association="EAID_17F5DFE2_0264_4f32_96D8_00309E64BCFA">
+							<type xmi:idref="EAID_B326682E_0384_443a_A119_96FD046071A2"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003503__0264_4f32_96D8_00309E64BCFA" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003504__0264_4f32_96D8_00309E64BCFA" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_srcB9D153_143D_46c7_A8CE_DE2101D11544" name="lod4MultiSurface" association="EAID_1CB9D153_143D_46c7_A8CE_DE2101D11544">
+							<type xmi:idref="EAID_9CD87EC7_BBC1_4503_B284_14860C27C0BF"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003505__143D_46c7_A8CE_DE2101D11544" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003506__143D_46c7_A8CE_DE2101D11544" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_srcA500FE_DF7E_466a_B6BA_4D099640A0F0" name="interiorBridgeInstallation" association="EAID_20A500FE_DF7E_466a_B6BA_4D099640A0F0" aggregation="shared">
+							<type xmi:idref="EAID_59681D36_BFE9_4513_BA97_133D39C01F34"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003507__DF7E_466a_B6BA_4D099640A0F0" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003508__DF7E_466a_B6BA_4D099640A0F0" value="*"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src4C13E6_6F94_49ae_8E13_1174894320DF" name="address" association="EAID_274C13E6_6F94_49ae_8E13_1174894320DF">
+							<type xmi:idref="EAID_2413CDE5_4D0C_4167_8289_43F8DDBEB9BD"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003509__6F94_49ae_8E13_1174894320DF" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003510__6F94_49ae_8E13_1174894320DF" value="*"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src36B083_C2F0_40da_B2D9_C2AEC12C4145" name="lod4Solid" association="EAID_3536B083_C2F0_40da_B2D9_C2AEC12C4145">
+							<type xmi:idref="EAID_1A109613_4F82_4f16_9338_EB0F87289E43"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003511__C2F0_40da_B2D9_C2AEC12C4145" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003512__C2F0_40da_B2D9_C2AEC12C4145" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src44AC58_C8B5_4aba_A55D_D87EF6140505" name="bridDisasterRiskAttribute" association="EAID_3F44AC58_C8B5_4aba_A55D_D87EF6140505" aggregation="composite">
+							<type xmi:idref="EAID_C10479E1_7804_407d_ADF1_CB78E5F970F4"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003513__C8B5_4aba_A55D_D87EF6140505" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003514__C8B5_4aba_A55D_D87EF6140505" value="*"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_srcE1EC08_170A_4193_A8B4_6D61577F1BC8" name="consistsOfBridgePart" association="EAID_4DE1EC08_170A_4193_A8B4_6D61577F1BC8" aggregation="shared">
+							<type xmi:idref="EAID_EE1339A3_9BBA_47aa_8A41_1653A68968A9"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003515__170A_4193_A8B4_6D61577F1BC8" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003516__170A_4193_A8B4_6D61577F1BC8" value="*"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src352C76_F4BA_4161_A777_E91A2AD26083" name="bridDataQualityAttribute" association="EAID_53352C76_F4BA_4161_A777_E91A2AD26083" aggregation="composite">
+							<type xmi:idref="EAID_8E4996A7_C42C_4613_A0A4_9A6D855F0CF7"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003517__F4BA_4161_A777_E91A2AD26083" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003518__F4BA_4161_A777_E91A2AD26083" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_srcC92B78_5364_429c_AACD_612AD97BF4B5" name="bridBaseAttribute" association="EAID_58C92B78_5364_429c_AACD_612AD97BF4B5" aggregation="composite">
+							<type xmi:idref="EAID_7C9666FA_BBDF_435a_8627_02FD981E3173"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003519__5364_429c_AACD_612AD97BF4B5" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003520__5364_429c_AACD_612AD97BF4B5" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src775A91_E789_4d56_BBE8_566F95C77536" name="bridFacilityTypeAttribute" association="EAID_60775A91_E789_4d56_BBE8_566F95C77536" aggregation="composite">
+							<type xmi:idref="EAID_0D84639F_7E62_4824_B70E_58121A43C064"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003521__E789_4d56_BBE8_566F95C77536" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003522__E789_4d56_BBE8_566F95C77536" value="*"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src9D7FFF_6AAF_4031_A628_AF48519A713F" name="bridKeyValuePairAttribute" association="EAID_6B9D7FFF_6AAF_4031_A628_AF48519A713F" aggregation="composite">
+							<type xmi:idref="EAID_21B83B38_B136_475a_AAAA_8761EE9D273D"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003523__6AAF_4031_A628_AF48519A713F" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003524__6AAF_4031_A628_AF48519A713F" value="*"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src375E02_913A_4479_81E1_9AB958745F1E" name="outerBridgeInstallation" association="EAID_78375E02_913A_4479_81E1_9AB958745F1E" aggregation="shared">
+							<type xmi:idref="EAID_8BECD2E5_6C4C_42d0_88BB_1CC6BF947BE4"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003525__913A_4479_81E1_9AB958745F1E" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003526__913A_4479_81E1_9AB958745F1E" value="*"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src6AAA8B_5D74_49de_86DC_95E6AB0B0AD7" name="lod3MultiSurface" association="EAID_8F6AAA8B_5D74_49de_86DC_95E6AB0B0AD7">
+							<type xmi:idref="EAID_9CD87EC7_BBC1_4503_B284_14860C27C0BF"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003527__5D74_49de_86DC_95E6AB0B0AD7" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003528__5D74_49de_86DC_95E6AB0B0AD7" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src4E0013_D650_4312_B33F_D8BF175D041E" name="bridFacilityIdAttribute" association="EAID_944E0013_D650_4312_B33F_D8BF175D041E" aggregation="composite">
+							<type xmi:idref="EAID_E66C1C01_AE82_4fc8_ACB5_0C3541A6240A"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003529__D650_4312_B33F_D8BF175D041E" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003530__D650_4312_B33F_D8BF175D041E" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src48B3F5_A158_4a77_B2C4_FDE913B955AE" name="lod2MultiSurface" association="EAID_9748B3F5_A158_4a77_B2C4_FDE913B955AE">
+							<type xmi:idref="EAID_9CD87EC7_BBC1_4503_B284_14860C27C0BF"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003531__A158_4a77_B2C4_FDE913B955AE" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003532__A158_4a77_B2C4_FDE913B955AE" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src10F85B_50A9_4942_BB10_F485D476487C" name="outerBridgeConstruction" association="EAID_A510F85B_50A9_4942_BB10_F485D476487C" aggregation="shared">
+							<type xmi:idref="EAID_4FE254C3_3809_4a04_9A5B_6BE9A8B2F47E"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003533__50A9_4942_BB10_F485D476487C" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003534__50A9_4942_BB10_F485D476487C" value="*"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src5DF4CB_82A0_4be3_BA54_D6FCA14199FA" name="lod3Solid" association="EAID_A95DF4CB_82A0_4be3_BA54_D6FCA14199FA">
+							<type xmi:idref="EAID_1A109613_4F82_4f16_9338_EB0F87289E43"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003535__82A0_4be3_BA54_D6FCA14199FA" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003536__82A0_4be3_BA54_D6FCA14199FA" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_srcD6E7E6_9D69_417c_9FAA_E4BA85B6D780" name="lod2Solid" association="EAID_BFD6E7E6_9D69_417c_9FAA_E4BA85B6D780">
+							<type xmi:idref="EAID_1A109613_4F82_4f16_9338_EB0F87289E43"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003537__9D69_417c_9FAA_E4BA85B6D780" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003538__9D69_417c_9FAA_E4BA85B6D780" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src8B8319_BB00_45be_BFD4_06F0A1BC8369" name="lod3MultiCurve" association="EAID_C08B8319_BB00_45be_BFD4_06F0A1BC8369">
+							<type xmi:idref="EAID_B326682E_0384_443a_A119_96FD046071A2"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003539__BB00_45be_BFD4_06F0A1BC8369" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003540__BB00_45be_BFD4_06F0A1BC8369" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src0505FD_6B45_4207_94C1_5FB943A4309E" name="bridStructureAttribute" association="EAID_C10505FD_6B45_4207_94C1_5FB943A4309E" aggregation="composite">
+							<type xmi:idref="EAID_8840E7E6_7521_48b6_8BF6_F9B4CD0AC1FA"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003541__6B45_4207_94C1_5FB943A4309E" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003542__6B45_4207_94C1_5FB943A4309E" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src744190_1F86_44cd_B6E0_F9A442FB839E" name="bridDmAttribute" association="EAID_D0744190_1F86_44cd_B6E0_F9A442FB839E" aggregation="composite">
+							<type xmi:idref="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003543__1F86_44cd_B6E0_F9A442FB839E" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003544__1F86_44cd_B6E0_F9A442FB839E" value="*"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src4447AC_1B17_4279_8797_6E56D28C08A4" name="boundedBy" association="EAID_D34447AC_1B17_4279_8797_6E56D28C08A4" aggregation="shared">
+							<type xmi:idref="EAID_7FAA00A1_062E_4e51_8B1B_2B69DA559EC5"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003545__1B17_4279_8797_6E56D28C08A4" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003546__1B17_4279_8797_6E56D28C08A4" value="*"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src89DA46_AACB_48b3_99A0_2727233ABAC9" name="bridFunctionalAttribute" association="EAID_DB89DA46_AACB_48b3_99A0_2727233ABAC9" aggregation="composite">
+							<type xmi:idref="EAID_65D5FD18_3F61_44ed_BD2A_7EA7FCEB610B"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003547__AACB_48b3_99A0_2727233ABAC9" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003548__AACB_48b3_99A0_2727233ABAC9" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_srcBEB1AF_E7B6_40b7_8554_67DEE9C2D571" name="lod1MultiSurface" association="EAID_DDBEB1AF_E7B6_40b7_8554_67DEE9C2D571">
+							<type xmi:idref="EAID_9CD87EC7_BBC1_4503_B284_14860C27C0BF"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003549__E7B6_40b7_8554_67DEE9C2D571" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003550__E7B6_40b7_8554_67DEE9C2D571" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src020CC5_B26D_4977_B4F5_74B0F312F862" name="lod1TerrainIntersection" association="EAID_E1020CC5_B26D_4977_B4F5_74B0F312F862">
+							<type xmi:idref="EAID_B326682E_0384_443a_A119_96FD046071A2"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003551__B26D_4977_B4F5_74B0F312F862" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003552__B26D_4977_B4F5_74B0F312F862" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_srcACBCFB_ED6D_46bb_B7F2_C2DE54FD14FF" name="bridFacilityAttribute" association="EAID_E6ACBCFB_ED6D_46bb_B7F2_C2DE54FD14FF" aggregation="composite">
+							<type xmi:idref="EAID_E93090C4_A8F1_4c8b_86CA_0D4E72D5722B"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003553__ED6D_46bb_B7F2_C2DE54FD14FF" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003554__ED6D_46bb_B7F2_C2DE54FD14FF" value="*"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_srcC2E645_ED36_48dd_A797_2F8D1DFD2504" name="lod4TerrainIntersection" association="EAID_EFC2E645_ED36_48dd_A797_2F8D1DFD2504">
+							<type xmi:idref="EAID_B326682E_0384_443a_A119_96FD046071A2"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003555__ED36_48dd_A797_2F8D1DFD2504" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003556__ED36_48dd_A797_2F8D1DFD2504" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_srcCDB4B5_7C95_44ea_9F29_DCC7A4421E14" name="interiorBridgeRoom" association="EAID_F4CDB4B5_7C95_44ea_9F29_DCC7A4421E14" aggregation="shared">
+							<type xmi:idref="EAID_1E74EDB4_DB17_4472_98E5_16399BDD9169"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003557__7C95_44ea_9F29_DCC7A4421E14" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003558__7C95_44ea_9F29_DCC7A4421E14" value="*"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src3742A0_C78B_4a2f_8C02_1C4144199FAE" name="bridRiskAssessmentAttribute" association="EAID_F63742A0_C78B_4a2f_8C02_1C4144199FAE" aggregation="composite">
+							<type xmi:idref="EAID_3737444F_4BFA_487c_B1BE_76A4484A7F66"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003559__C78B_4a2f_8C02_1C4144199FAE" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003560__C78B_4a2f_8C02_1C4144199FAE" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_srcA5551E_F5DF_44e3_8F65_6FA14CA50363" name="lod2MultiCurve" association="EAID_F9A5551E_F5DF_44e3_8F65_6FA14CA50363">
+							<type xmi:idref="EAID_B326682E_0384_443a_A119_96FD046071A2"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003561__F5DF_44e3_8F65_6FA14CA50363" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003562__F5DF_44e3_8F65_6FA14CA50363" value="1"/>
+						</ownedAttribute>
+						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src0497B0_6E03_4cc6_981E_86CDC5CF3EED" name="lod3TerrainIntersection" association="EAID_FA0497B0_6E03_4cc6_981E_86CDC5CF3EED">
+							<type xmi:idref="EAID_B326682E_0384_443a_A119_96FD046071A2"/>
+							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI003563__6E03_4cc6_981E_86CDC5CF3EED" value="0"/>
+							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI003564__6E03_4cc6_981E_86CDC5CF3EED" value="1"/>
+						</ownedAttribute>
+					</packagedElement>
+		<umldi:Diagram xmi:type="umldi:UMLClassDiagram" xmi:id="EAID_CB34B578_101B_48b4_9271_214FFEA6A83A" isFrame="false" modelElement="EAPK_9F1481D8_A93A_41b3_9F35_B24D8E837859">
+			<ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_CB34B578_101B_48b4_8627_02FD981E3173" modelElement="EAID_7C9666FA_BBDF_435a_8627_02FD981E3173">
+				<ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_101B_48b4_8627_02FD981E3173" text="DataType"/>
+				<ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_101B_48b4_8627_02FD981E3173" text="ConstructionBaseAttribute"/>
+				<bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_101B_48b4_8627_02FD981E3173" x="13" y="300" width="247" height="292"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_CB34B578_101B_48b4_BFD4_74CD44E7029C" modelElement="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C">
+				<ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_101B_48b4_BFD4_74CD44E7029C" text="FeatureType"/>
+				<ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_101B_48b4_BFD4_74CD44E7029C" text="_AbstractBridge"/>
+				<bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_101B_48b4_BFD4_74CD44E7029C" x="575" y="12" width="235" height="176"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLEdge" xmi:id="EAID_CB34B578_101B_48b4_AACD_612AD97BF4B5" source="EAID_7C9666FA_BBDF_435a_8627_02FD981E3173" target="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C" modelElement="EAID_58C92B78_5364_429c_AACD_612AD97BF4B5">
+				<ownedElement xmi:type="umldi:UMLAssociationEndLabel" xmi:id="EAID_SEL000000_101B_48b4_AACD_612AD97BF4B5" text="+bridBaseAttribute&#xA;«property»" modelElement="EAID_srcC92B78_5364_429c_AACD_612AD97BF4B5">
+					<bounds xmi:type="dc:bounds" xmi:id="EAID_DBSEL000000_101B_48b4_AACD_612AD97BF4B5" x="-6" y="257" width="83" height="25"/>
+				</ownedElement>
+				<ownedElement xmi:type="umldi:UMLMultiplicityLabel" xmi:id="EAID_SML000000_101B_48b4_AACD_612AD97BF4B5" text="0..1" modelElement="EAID_srcC92B78_5364_429c_AACD_612AD97BF4B5">
+					<bounds xmi:type="dc:bounds" xmi:id="EAID_DBSML000000_101B_48b4_AACD_612AD97BF4B5" x="144" y="270" width="17" height="13"/>
+				</ownedElement>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000000_101B_48b4_AACD_612AD97BF4B5" x="136" y="299"/>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000001_101B_48b4_AACD_612AD97BF4B5" x="136" y="238"/>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000002_101B_48b4_AACD_612AD97BF4B5" x="692" y="238"/>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000003_101B_48b4_AACD_612AD97BF4B5" x="692" y="189"/>
+			</ownedElement>
+		</umldi:Diagram>
+	</uml:Model>
+	<xmi:Extension extender="Enterprise Architect" extenderID="6.5">
+		<elements>
+			<element xmi:idref="EAID_7C9666FA_BBDF_435a_8627_02FD981E3173" xmi:type="uml:Class" name="ConstructionBaseAttribute" scope="public">
+				<model package="EAPK_BCC79C61_EB22_4305_B574_693E41527057" tpos="0" ea_localid="478" ea_eleType="element"/>
+				<properties documentation="構造物の管理に必要となる基本的な情報及び、構造物の規模に関する基本的な情報を記述するためのデータ型。 +&#xA;構造物が橋梁、トンネル、護岸、床止め、堰、水門・閘門・陸閘、樋門・樋管、伏せ越し及び水制の場合に本データ型を用いて記述する。 +&#xA;構造物がダム及び堤防の場合は、これを継承するデータ型を用いて記述する。" isSpecification="false" sType="Class" nType="0" scope="public" stereotype="DataType" isRoot="false" isLeaf="false" isAbstract="false" isActive="false"/>
+				<project author="kurokawa" version="1.0" phase="1.0" created="2023-02-04 14:37:40" modified="2024-11-05 13:50:48" complexity="1" status="Proposed"/>
+				<code product_name="Java" gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags>
+					<tag xmi:id="EAID_26B33348_88EC_9d88_99FC_F6D469DCEC0A" name="isCollection" value="false#NOTES#Values: true,false&#xA;Default: false&#xA;Description: Identifies the class as a collection&#xA;" modelElement="EAID_7C9666FA_BBDF_435a_8627_02FD981E3173"/>
+					<tag xmi:id="EAID_F9638764_49E8_2849_A2F3_B88C443D45F2" name="noPropertyType" value="false#NOTES#Values: true,false&#xA;Default: false&#xA;Description: Suppress creation of a named complex type ( property type ) that supports inline or byReference encoding&#xA;" modelElement="EAID_7C9666FA_BBDF_435a_8627_02FD981E3173"/>
+				</tags>
+				<xrefs value="$XREFPROP=$XID={DDD886E4-7321-42d3-AEEF-5E5E4FC22424}$XID;$NAM=Stereotypes$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=DataType;FQName=GML::DataType;@ENDSTEREO;$DES;$CLT={7C9666FA-BBDF-435a-8627-02FD981E3173}$CLT;$ENDXREF;"/>
+				<extendedProperties tagged="0" package_name="uro"/>
+				<attributes>
+					<attribute xmi:idref="EAID_8BEBD442_570C_41e4_AF5B_62F8F7BF57B1" name="adminType" scope="Public">
+						<initial/>
+						<documentation value="構造物の管理者の区分。コードリスト（&amp;lt;&amp;lt;ConstructionBaseAttribute_adminType.xml,ConstructionBaseAttribute_adminType.xml&amp;gt;&amp;gt;）から選択する。"/>
+						<model ea_localid="1125" ea_guid="{8BEBD442-570C-41e4-AF5B-62F8F7BF57B1}"/>
+						<properties type="gml:CodeType" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="0"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_2AC5F626_D30E_47d0_955E_2A033DB48C29" name="administrator" scope="Public">
+						<initial/>
+						<documentation value="構造物の管理者の名称。"/>
+						<model ea_localid="1126" ea_guid="{2AC5F626-D30E-47d0-955E-2A033DB48C29}"/>
+						<properties type="xs:string" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="1"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_22566071_65DB_4faf_8C8D_7388C55D7B95" name="adminOffice" scope="Public">
+						<initial/>
+						<documentation value="構造物の管理事務所所在地。"/>
+						<model ea_localid="1127" ea_guid="{22566071-65DB-4faf-8C8D-7388C55D7B95}"/>
+						<properties type="xs:string" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="2"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_0087200E_6F3C_49b6_803E_8BE1B84BF1FC" name="operatorType" scope="Public">
+						<initial/>
+						<documentation value="構造物の運用者の区分。コードリストから選択する。この属性を使用する場合は、コードリスト（ConstructionBaseAttribute_operatorType.xml）を作成すること。"/>
+						<model ea_localid="102" ea_guid="{0087200E-6F3C-49b6-803E-8BE1B84BF1FC}"/>
+						<properties type="gml:CodeType" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="3"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_A8EE4B67_68B9_4359_8E69_6B674F84C3D7" name="installerType" scope="Public">
+						<initial/>
+						<documentation value="構造物の設置者の区分。コードリスト（&amp;lt;&amp;lt;ConstructionBaseAttribute_installerType.xml,ConstructionBaseAttribute_installerType.xml&amp;gt;&amp;gt;）から選択する。"/>
+						<model ea_localid="1130" ea_guid="{A8EE4B67-68B9-4359-8E69-6B674F84C3D7}"/>
+						<properties type="gml:CodeType" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="4"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_75A75E3F_141B_4ba2_86CF_913539ACD3EA" name="installer" scope="Public">
+						<initial/>
+						<documentation value="構造物の設置者の名称。"/>
+						<model ea_localid="1131" ea_guid="{75A75E3F-141B-4ba2-86CF-913539ACD3EA}"/>
+						<properties type="xs:string" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="5"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_5CEE0D71_1A0A_45fc_9C9C_3BA4AE4C8CD2" name="structureOrdinance" scope="Public">
+						<initial/>
+						<documentation value="構造物が適用された構造令の名称。"/>
+						<model ea_localid="1128" ea_guid="{5CEE0D71-1A0A-45fc-9C9C-3BA4AE4C8CD2}"/>
+						<properties type="xs:string" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="6"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_3B11E4E0_E7DD_4d96_8E0A_2413B3AE2937" name="specification" scope="Public">
+						<initial/>
+						<documentation value="構造物が適用された示方書の名称。"/>
+						<model ea_localid="1129" ea_guid="{3B11E4E0-E7DD-4d96-8E0A-2413B3AE2937}"/>
+						<properties type="xs:string" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="7"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_04D2ED9E_C973_421d_B2B7_167A31018AD7" name="kana" scope="Public">
+						<initial/>
+						<documentation value="構造物の名称のふりがな。"/>
+						<model ea_localid="1744" ea_guid="{04D2ED9E-C973-421d-B2B7-167A31018AD7}"/>
+						<properties type="xs:string" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="8"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_F44F5D37_02BF_45f8_ACC7_7D59F998A3FC" name="constructionStartYear" scope="Public">
+						<initial/>
+						<documentation value="構造物の建設開始年度。"/>
+						<model ea_localid="1132" ea_guid="{F44F5D37-02BF-45f8-ACC7-7D59F998A3FC}"/>
+						<properties type="xs:gYear" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="9"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_FC5A18C0_A98A_4eb6_9183_221FE7CAEBBB" name="completionYear" scope="Public">
+						<initial/>
+						<documentation value="構造物の完成年度。"/>
+						<model ea_localid="1133" ea_guid="{FC5A18C0-A98A-4eb6-9183-221FE7CAEBBB}"/>
+						<properties type="xs:gYear" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="10"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_619230F1_424D_49b0_BDC6_1400DC04DEC7" name="facilityAge" scope="Public">
+						<initial/>
+						<documentation value="工事完成年度からの年数。"/>
+						<model ea_localid="1134" ea_guid="{619230F1-424D-49b0-BDC6-1400DC04DEC7}"/>
+						<properties type="xs:integer" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="11"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_19F1BFB3_9850_45b0_9078_3A187B63450B" name="update" scope="Public">
+						<initial/>
+						<documentation value="更新年月日。"/>
+						<model ea_localid="1135" ea_guid="{19F1BFB3-9850-45b0-9078-3A187B63450B}"/>
+						<properties type="xs:date" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="12"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_5CE72112_B214_4eeb_856F_FFA78E92A548" name="purpose" scope="Public">
+						<initial/>
+						<documentation value="構造物の建設の目的。コードリスト（&amp;lt;&amp;lt;ConstructionBaseAttribute_purpose.xml,ConstructionBaseAttribute_purpose.xml&amp;gt;&amp;gt;）から選択する。コードリストに無い場合は文字列により記述する。"/>
+						<model ea_localid="1146" ea_guid="{5CE72112-B214-4eeb-856F-FFA78E92A548}"/>
+						<properties type="gml:CodeType" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="13"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+				</attributes>
+				<links>
+					<Aggregation xmi:id="EAID_58C92B78_5364_429c_AACD_612AD97BF4B5" start="EAID_7C9666FA_BBDF_435a_8627_02FD981E3173" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Aggregation xmi:id="EAID_EED32272_1512_406f_8576_DECD83D6A65E" start="EAID_7C9666FA_BBDF_435a_8627_02FD981E3173" end="EAID_E82076B9_A433_4e3c_8A7E_588940128669"/>
+					<Aggregation xmi:id="EAID_F05D549F_2B91_49b6_ACAC_12E6FDD6CEAF" start="EAID_7C9666FA_BBDF_435a_8627_02FD981E3173" end="EAID_4FD70EE3_146B_4b39_BEF3_6246F2F0DD4D"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C" xmi:type="uml:Class" name="_AbstractBridge" scope="public">
+				<model package="EAPK_D13F9655_87C9_40da_88DB_662F687AA460" tpos="0" ea_localid="543" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Class" nType="0" scope="public" stereotype="FeatureType" isRoot="false" isLeaf="false" isAbstract="true" isActive="false"/>
+				<project author="kurokawa" version="1.0" phase="1.0" created="2023-03-10 13:53:31" modified="2023-03-10 13:53:31" complexity="1" status="Proposed"/>
+				<code product_name="Java" gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags>
+					<tag xmi:id="EAID_ED33D65F_DF35_1ddf_AF0B_8F5F675918DF" name="byValuePropertyType" value="false#NOTES#Values: true,false&#xA;Default: false&#xA;Description: Create a named complex type ( property type ) that requires the instance to be encoded inline&#xA;" modelElement="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<tag xmi:id="EAID_26B33348_211E_5f21_9BF5_058052746D3C" name="isCollection" value="false#NOTES#Values: true,false&#xA;Default: false&#xA;Description: Identifies the class as a collection&#xA;" modelElement="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<tag xmi:id="EAID_F9638764_B69A_b0b6_8699_F6CD69613A6E" name="noPropertyType" value="false#NOTES#Values: true,false&#xA;Default: false&#xA;Description: Suppress creation of a named complex type ( property type ) that supports inline or byReference encoding&#xA;" modelElement="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+				</tags>
+				<xrefs value="$XREFPROP=$XID={39F6672B-A27E-482b-9294-48BA2406F235}$XID;$NAM=Stereotypes$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=FeatureType;FQName=GML::FeatureType;@ENDSTEREO;$DES;$CLT={D488DE9E-5E94-46e5-BFD4-74CD44E7029C}$CLT;$ENDXREF;"/>
+				<extendedProperties tagged="0" package_name="brid"/>
+				<attributes>
+					<attribute xmi:idref="EAID_E168B8CB_8D91_4565_ADC0_0E93C025D519" name="class" scope="Public">
+						<initial/>
+						<documentation value="橋梁の形態による区分。コードリスト（&amp;lt;&amp;lt;Bridge_class.xml,Bridge_class.xml&amp;gt;&amp;gt;）より選択する。 +&#xA;多重度は任意となっているが、運用上必須とする。"/>
+						<model ea_localid="983" ea_guid="{E168B8CB-8D91-4565-ADC0-0E93C025D519}"/>
+						<properties type="gml:CodeType" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="0"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_EC03960B_CC8D_4a1f_AE01_CA50D00FCD19" name="function" scope="Public">
+						<initial/>
+						<documentation value="橋梁の主たる機能による区分。コードリスト（&amp;lt;&amp;lt;Bridge_function.xml,Bridge_function.xml&amp;gt;&amp;gt;）より選択する。 +&#xA;多重度は任意となっているが、運用上必須とする。"/>
+						<model ea_localid="1450" ea_guid="{EC03960B-CC8D-4a1f-AE01-CA50D00FCD19}"/>
+						<properties type="gml:CodeType" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="1"/>
+						<stereotype/>
+						<bounds lower="0" upper="*"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_F158EEB9_F767_4d38_81BE_9504874CCDB2" name="usage" scope="Public">
+						<initial/>
+						<documentation value="橋梁の用途。brid:functionで指定された機能と異なる場合に実際の用途を示すためにこの属性を用いる。 +&#xA;標準製品仕様書では使用しない。"/>
+						<model ea_localid="1451" ea_guid="{F158EEB9-F767-4d38-81BE-9504874CCDB2}"/>
+						<properties type="gml:CodeType" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="2"/>
+						<stereotype/>
+						<bounds lower="0" upper="*"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_92CB30F5_0B47_4ab6_A217_9091AE3AFE2F" name="yearOfConstruction" scope="Public">
+						<initial/>
+						<documentation value="橋梁が建築された年度。完成した年度とする。 +&#xA;多重度は任意となっているが、運用上必須とする。"/>
+						<model ea_localid="1452" ea_guid="{92CB30F5-0B47-4ab6-A217-9091AE3AFE2F}"/>
+						<properties type="xs:gYear" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="3"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_A2760D53_1DFD_4215_B0C7_254FB8D86432" name="yearOfDemolition" scope="Public">
+						<initial/>
+						<documentation value="橋梁が解体された年度。"/>
+						<model ea_localid="1453" ea_guid="{A2760D53-1DFD-4215-B0C7-254FB8D86432}"/>
+						<properties type="xs:gYear" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="4"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_482B5E32_2A0E_4b37_80CC_C8C6DD19FF38" name="isMovable" scope="Public">
+						<initial/>
+						<documentation value="可動橋か否かの別。 +&#xA;1：可動橋である +&#xA;0：可動橋ではない"/>
+						<model ea_localid="1454" ea_guid="{482B5E32-2A0E-4b37-80CC-C8C6DD19FF38}"/>
+						<properties type="xs:boolean" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="9"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+				</attributes>
+				<links>
+					<Generalization xmi:id="EAID_E7C424B9_8F51_4537_8ADF_65D23DEA9FDC" start="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C" end="EAID_E92132F9_2CB7_4ff7_8A78_20B03B928DAF"/>
+					<Association xmi:id="EAID_014D808A_F0A0_41b5_8C65_2C6CE066BC96" start="EAID_B326682E_0384_443a_A119_96FD046071A2" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Association xmi:id="EAID_0AB1607E_D42E_43fa_BBAA_2E50AFC93620" start="EAID_1A109613_4F82_4f16_9338_EB0F87289E43" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Association xmi:id="EAID_17F5DFE2_0264_4f32_96D8_00309E64BCFA" start="EAID_B326682E_0384_443a_A119_96FD046071A2" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Association xmi:id="EAID_1CB9D153_143D_46c7_A8CE_DE2101D11544" start="EAID_9CD87EC7_BBC1_4503_B284_14860C27C0BF" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Aggregation xmi:id="EAID_20A500FE_DF7E_466a_B6BA_4D099640A0F0" start="EAID_59681D36_BFE9_4513_BA97_133D39C01F34" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Association xmi:id="EAID_274C13E6_6F94_49ae_8E13_1174894320DF" start="EAID_2413CDE5_4D0C_4167_8289_43F8DDBEB9BD" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Generalization xmi:id="EAID_2B2B2B01_9400_4d52_83A8_999A7A016C90" start="EAID_56716339_7E0E_4b23_8A55_93CFAB84C84D" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Association xmi:id="EAID_3536B083_C2F0_40da_B2D9_C2AEC12C4145" start="EAID_1A109613_4F82_4f16_9338_EB0F87289E43" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Aggregation xmi:id="EAID_3F44AC58_C8B5_4aba_A55D_D87EF6140505" start="EAID_C10479E1_7804_407d_ADF1_CB78E5F970F4" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Aggregation xmi:id="EAID_4DE1EC08_170A_4193_A8B4_6D61577F1BC8" start="EAID_EE1339A3_9BBA_47aa_8A41_1653A68968A9" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Aggregation xmi:id="EAID_53352C76_F4BA_4161_A777_E91A2AD26083" start="EAID_8E4996A7_C42C_4613_A0A4_9A6D855F0CF7" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Aggregation xmi:id="EAID_58C92B78_5364_429c_AACD_612AD97BF4B5" start="EAID_7C9666FA_BBDF_435a_8627_02FD981E3173" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Aggregation xmi:id="EAID_60775A91_E789_4d56_BBE8_566F95C77536" start="EAID_0D84639F_7E62_4824_B70E_58121A43C064" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Aggregation xmi:id="EAID_6B9D7FFF_6AAF_4031_A628_AF48519A713F" start="EAID_21B83B38_B136_475a_AAAA_8761EE9D273D" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Aggregation xmi:id="EAID_78375E02_913A_4479_81E1_9AB958745F1E" start="EAID_8BECD2E5_6C4C_42d0_88BB_1CC6BF947BE4" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Association xmi:id="EAID_8F6AAA8B_5D74_49de_86DC_95E6AB0B0AD7" start="EAID_9CD87EC7_BBC1_4503_B284_14860C27C0BF" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Aggregation xmi:id="EAID_944E0013_D650_4312_B33F_D8BF175D041E" start="EAID_E66C1C01_AE82_4fc8_ACB5_0C3541A6240A" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Association xmi:id="EAID_9748B3F5_A158_4a77_B2C4_FDE913B955AE" start="EAID_9CD87EC7_BBC1_4503_B284_14860C27C0BF" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Aggregation xmi:id="EAID_A510F85B_50A9_4942_BB10_F485D476487C" start="EAID_4FE254C3_3809_4a04_9A5B_6BE9A8B2F47E" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Association xmi:id="EAID_A95DF4CB_82A0_4be3_BA54_D6FCA14199FA" start="EAID_1A109613_4F82_4f16_9338_EB0F87289E43" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Association xmi:id="EAID_BFD6E7E6_9D69_417c_9FAA_E4BA85B6D780" start="EAID_1A109613_4F82_4f16_9338_EB0F87289E43" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Association xmi:id="EAID_C08B8319_BB00_45be_BFD4_06F0A1BC8369" start="EAID_B326682E_0384_443a_A119_96FD046071A2" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Aggregation xmi:id="EAID_C10505FD_6B45_4207_94C1_5FB943A4309E" start="EAID_8840E7E6_7521_48b6_8BF6_F9B4CD0AC1FA" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Aggregation xmi:id="EAID_D0744190_1F86_44cd_B6E0_F9A442FB839E" start="EAID_C957C9A8_14C3_43ac_93F5_DCC06A1FB3A8" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Aggregation xmi:id="EAID_D34447AC_1B17_4279_8797_6E56D28C08A4" start="EAID_7FAA00A1_062E_4e51_8B1B_2B69DA559EC5" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Aggregation xmi:id="EAID_DB89DA46_AACB_48b3_99A0_2727233ABAC9" start="EAID_65D5FD18_3F61_44ed_BD2A_7EA7FCEB610B" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Association xmi:id="EAID_DDBEB1AF_E7B6_40b7_8554_67DEE9C2D571" start="EAID_9CD87EC7_BBC1_4503_B284_14860C27C0BF" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Association xmi:id="EAID_E1020CC5_B26D_4977_B4F5_74B0F312F862" start="EAID_B326682E_0384_443a_A119_96FD046071A2" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Aggregation xmi:id="EAID_E6ACBCFB_ED6D_46bb_B7F2_C2DE54FD14FF" start="EAID_E93090C4_A8F1_4c8b_86CA_0D4E72D5722B" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Association xmi:id="EAID_EFC2E645_ED36_48dd_A797_2F8D1DFD2504" start="EAID_B326682E_0384_443a_A119_96FD046071A2" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Generalization xmi:id="EAID_F4BB127A_7655_486e_A6EE_9BFB6BECA554" start="EAID_EE1339A3_9BBA_47aa_8A41_1653A68968A9" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Aggregation xmi:id="EAID_F4CDB4B5_7C95_44ea_9F29_DCC7A4421E14" start="EAID_1E74EDB4_DB17_4472_98E5_16399BDD9169" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Aggregation xmi:id="EAID_F63742A0_C78B_4a2f_8C02_1C4144199FAE" start="EAID_3737444F_4BFA_487c_B1BE_76A4484A7F66" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Association xmi:id="EAID_F9A5551E_F5DF_44e3_8F65_6FA14CA50363" start="EAID_B326682E_0384_443a_A119_96FD046071A2" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+					<Association xmi:id="EAID_FA0497B0_6E03_4cc6_981E_86CDC5CF3EED" start="EAID_B326682E_0384_443a_A119_96FD046071A2" end="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C"/>
+				</links>
+			</element>
+		</elements>
+		<connectors>
+			<connector xmi:idref="EAID_58C92B78_5364_429c_AACD_612AD97BF4B5">
+				<source xmi:idref="EAID_7C9666FA_BBDF_435a_8627_02FD981E3173">
+					<model ea_localid="478" type="Class" name="ConstructionBaseAttribute"/>
+					<role name="bridBaseAttribute" stereotype="property" visibility="Public" targetScope="instance"/>
+					<type multiplicity="0..1" aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;"/>
+					<documentation/>
+					<xrefs value="$XREFPROP=$XID={78AFFAE9-A26A-4fdf-8100-7877696F3C70}$XID;$NAM=Stereotypes$NAM;$TYP=connectorSrcEnd property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=property;FQName=GML::property;@ENDSTEREO;$DES;$CLT={58C92B78-5364-429c-AACD-612AD97BF4B5}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
+					<tags>
+						<tag xmi:id="EAID_08A8199D_34EA_8c34_8033_D166A5FA25FF" name="isMetadata" value="false$ea_notes=Values: true,false&#xA;Default: false&#xA;Description: If 'true', the property type will extend GML AbstractMetadataPropertyType. Else, it will extend GML AbstractMemberType.&#xA;"/>
+						<tag xmi:id="EAID_37DFCA0A_33B7_f633_A9D6_8B73199D9DE9" name="inlineOrByReference" value="inline$ea_notes=Values: byReference,inline&#xA;Default: inline&#xA;Description: Determines whether the property value will be encoded inline or by reference&#xA;"/>
+						<tag xmi:id="EAID_E810E922_7AEF_c27a_A722_61CF82E32D24" name="sequenceNumber" value="1$ea_notes= Unique integer value to order the properties of a class&#xA;"/>
+					</tags>
+				</source>
+				<target xmi:idref="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C">
+					<model ea_localid="543" type="Class" name="_AbstractBridge"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="composite" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="579"/>
+				<properties ea_type="Aggregation" subtype="Strong" direction="Destination -&gt; Source"/>
+				<modifiers isRoot="false" isLeaf="false"/>
+				<documentation value="橋梁の管理に関する基本的な情報。"/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels lb="0..1" lt="+bridBaseAttribute&#xA;«property»"/>
+				<extendedProperties/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+		</connectors>
+		<diagrams>
+			<diagram xmi:id="EAID_CB34B578_101B_48b4_9271_214FFEA6A83A">
+				<model package="EAPK_9F1481D8_A93A_41b3_9F35_B24D8E837859" localID="177" owner="EAPK_9F1481D8_A93A_41b3_9F35_B24D8E837859" tpos="5"/>
+				<properties name="brid_1" type="Logical"/>
+				<project author="048827" version="1.0" created="2023-09-07 07:33:37" modified="2025-03-13 13:24:24"/>
+				<style1 value="ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;Border=1;HighlightForeign=1;PackageContents=1;SequenceNotes=0;ScalePrintImage=0;PPgs.cx=0;PPgs.cy=0;DocSize.cx=795;DocSize.cy=1138;ShowDetails=0;Orientation=P;Zoom=100;ShowTags=0;OpParams=1;VisibleAttributeDetail=0;ShowOpRetType=1;ShowIcons=1;CollabNums=0;HideProps=0;ShowReqs=0;ShowCons=0;PaperSize=9;HideParents=0;UseAlias=0;HideAtts=0;HideOps=0;HideStereo=0;HideElemStereo=0;ShowTests=0;ShowMaint=0;ConnectorNotation=UML 2.1;ExplicitNavigability=0;ShowShape=1;AllDockable=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;ShowNotes=0;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;"/>
+				<style2 value="ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;KanbanActive=0;MatrixLineWidth=1;MatrixLineClr=0;MatrixLocked=0;TConnectorNotation=UML 2.1;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;MDGDgm=;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;SuppressedCompartments=;Theme=:119;SaveTag=DDDB139E;"/>
+				<swimlanes value="locked=false;orientation=0;width=0;inbar=false;names=false;color=-1;bold=false;fcol=0;tcol=-1;ofCol=-1;ufCol=-1;hl=1;ufh=0;hh=0;cls=0;bw=0;hli=0;bro=0;SwimlaneFont=lfh:-13,lfw:0,lfi:0,lfu:0,lfs:0,lfface:Calibri,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;"/>
+				<matrixitems value="locked=false;matrixactive=false;swimlanesactive=true;kanbanactive=false;width=1;clrLine=0;"/>
+				<extendedProperties/>
+				<persistentstyle value="DGS=On=0:CNT=8:W=120:H=40:SG=0:SGH=0:AEB=0:;AR=0;DCL=0;Swimlanes=locked=false;orientation=0;width=0;inbar=false;names=false;color=-1;bold=false;fcol=0;tcol=-1;ofCol=-1;ufCol=-1;hl=1;ufh=0;hh=0;cls=0;bw=0;hli=0;bro=0;SwimlaneFont=lfh:-13,lfw:0,lfi:0,lfu:0,lfs:0,lfface:Calibri,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;;"/>
+				<xrefs/>
+				<elements>
+					<element geometry="Left=575;Top=12;Right=810;Bottom=188;imgL=575;imgT=12;imgR=810;imgB=188;" subject="EAID_D488DE9E_5E94_46e5_BFD4_74CD44E7029C" seqno="4" style="NSL=0;BFol=-1;LCol=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;HideIcon=0;LWth=2;DUID=51026832;BCol=16777215;"/>
+					<element geometry="Left=13;Top=300;Right=260;Bottom=592;imgL=13;imgT=300;imgR=260;imgB=592;" subject="EAID_7C9666FA_BBDF_435a_8627_02FD981E3173" seqno="8" style="NSL=0;BFol=-1;LCol=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;HideIcon=0;LWth=2;DUID=567B679B;BCol=16777215;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=1;$LLB=CX=21:CY=18:OX=5:OY=-13:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LLT=CX=111:CY=35:OX=0:OY=-26:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=136:-238$692:-238$;" subject="EAID_58C92B78_5364_429c_AACD_612AD97BF4B5" style="Mode=3;EOID=51026832;SOID=567B679B;Color=-1;LWidth=2;TREE=V;Hidden=0;"/>
+				</elements>
+			</diagram>
+		</diagrams>
+	</xmi:Extension>
+</xmi:XMI>

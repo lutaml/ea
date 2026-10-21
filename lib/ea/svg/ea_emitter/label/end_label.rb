@@ -22,9 +22,11 @@ module Ea
           SEAT_FONT_SIZE = 7
           SEAT_X_INSET = 3
           SEAT_STEREOTYPE_GAP = 12
-          # EA keeps an upward property seat's left edge at diagram x >= 3;
-          # the stereotype line moves with the role. Measured only for the
-          # default Cambria 7pt boxed cluster.
+          # EA keeps an end-label role's left edge at diagram x >= 3; the
+          # stereotype line moves with the role. Measured on the Plateau
+          # v5.1 export: of 776 saved end labels, the only three whose
+          # UMLDI bounds start left of 3 (47E4600F, CB34B578, 159E9DA0) are
+          # drawn at x = 3, and no label is drawn left of it.
           MIN_ROLE_X = 3
 
           attr_reader :canvas, :model_index, :document, :theme,
@@ -161,11 +163,34 @@ module Ea
               stereo_pos = [role_bounds[:x], stereo_pos[1]] if centering.positive?
             end
 
+            if text_pos && !role_empty?(role) && min_role_x_cluster?(connector, end_kind, heading, text_box)
+              text_pos, stereo_pos = clamp_role_x(text_pos, stereo_pos)
+            end
+
             build_texts(role:, mult:, standalone:,
                         text_pos:, mult_pos:, stereo:, text_box:, stereo_pos:)
           end
 
           private
+
+          # Measured only for default Cambria 7pt Property roles on a vertical
+          # leg rising from the end; other fonts, boxes and legs keep their
+          # unclamped seats.
+          def min_role_x_cluster?(connector, end_kind, heading, text_box)
+            heading && heading[0].zero? && heading[1].negative? &&
+              seat_font? && font_weight == 400 && font_style == "normal" &&
+              cambria_box?(text_box) && property_label?(connector, end_kind)
+          end
+
+          # Shift the role and its stereotype line together when the role
+          # would start left of EA's minimum label x.
+          def clamp_role_x(text_pos, stereo_pos)
+            shift = MIN_ROLE_X - text_pos[0]
+            return [text_pos, stereo_pos] unless shift.positive?
+
+            [[text_pos[0] + shift, text_pos[1]],
+             stereo_pos && [stereo_pos[0] + shift, stereo_pos[1]]]
+          end
 
           # ALN2 single-line target roles retain their horizontal placement
           # and use the saved corner's baseline on a straight stored ray.
