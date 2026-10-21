@@ -847,12 +847,11 @@ module Ea
 
           def intercept(origin, corner, axis, face)
             run = corner[axis] - origin[axis]
-            return if run.zero?
+            fraction = Rational(face - origin[axis], run) unless run.zero?
+            return unless fraction&.between?(0, 1)
 
-            fraction = Rational(face - origin[axis], run)
-            return unless fraction.between?(0, 1)
-
-            (origin[1 - axis] + fraction * (corner[1 - axis] - origin[1 - axis])).floor
+            other = 1 - axis
+            (origin[other] + fraction * (corner[other] - origin[other])).floor
           end
 
           # The dock runs perpendicular to the corner's own leg.
