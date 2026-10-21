@@ -22,8 +22,8 @@ module Ea
             return {} unless bus
 
             geom = ray_geometry(offsets, edge)
-            first = reversed_tree_leg(start, geom[:sx], geom[:sy], start_edge)
-            last = reversed_tree_leg(finish, geom[:ex], geom[:ey], finish_edge)
+            first = reversed_tree_leg(start, geom[:sx], geom[:sy], start_edge, finish)
+            last = reversed_tree_leg(finish, geom[:ex], geom[:ey], finish_edge, start)
             reversed_tree_fields(model, first, last, bus, first[1] != start_edge)
           end
 

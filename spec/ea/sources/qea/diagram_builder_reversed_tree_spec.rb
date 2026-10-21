@@ -40,6 +40,22 @@ RSpec.describe "QEA width-0 vertical tree Associations with reversed SOID/EOID" 
     expect(result[:paths].first).to eq("M 52 500 L 52 348 L 189 348 L 189 298")
   end
 
+  it "pulls a far-offset Start leg toward the box centre (connector 211, fit)" do
+    result = render_reversed(geometry: "SX=41;SY=-125;EX=0;EY=0;EDGE=3;", path: "805:-670;876:-670;")
+
+    # Native M 904 650 (unpulled centre + SX would be 917)
+
+    expect(result[:paths].first).to eq("M 309 500 L 309 348 L 169 348 L 169 298")
+  end
+
+  it "pulls a slightly offset Start leg by two pixels (connector 902, fit)" do
+    result = render_reversed(geometry: "SX=64;SY=-13;EX=0;EY=0;EDGE=3;", path: "828:-670;876:-670;")
+
+    # Native M 938 650 (unpulled would be 940)
+
+    expect(result[:paths].first).to eq("M 343 500 L 343 348 L 169 348 L 169 298")
+  end
+
   it "keeps the stored bus when SOID and EOID follow Start and End" do
     result = render_qea_route(connector_type: "Association", source: plant_cover, target: multi_solid,
                               object_styles: ["DUID=PCPC;", "DUID=MSMS;"],

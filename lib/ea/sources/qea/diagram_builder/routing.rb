@@ -43,8 +43,7 @@ module Ea
           # bus in the corpus keeps from its End box, 600+ links), the Start
           # leg at center + SX and the End leg at center + EX. Checked on
           # plateau diagram 5038EEE3 connectors 208, 209 and 212 (exact);
-          # 211 and 902 draw their Start leg 13px and 2px further right than
-          # native, which the saved geometry does not explain.
+          # 211 and 902 follow the leg pull documented on reversed_tree_leg.
           def reversed_tree_route(model, link_row, diagram_row, geom, context)
             return model if context || !reversed_tree_link?(model, link_row, diagram_row, geom)
 
@@ -52,8 +51,8 @@ module Ea
             bus, start_edge, finish_edge = reversed_tree_levels(start, finish)
             return model unless bus
 
-            first = reversed_tree_leg(start, geom[:sx], geom[:sy], start_edge)
-            last = reversed_tree_leg(finish, geom[:ex], geom[:ey], finish_edge)
+            first = reversed_tree_leg(start, geom[:sx], geom[:sy], start_edge, finish)
+            last = reversed_tree_leg(finish, geom[:ex], geom[:ey], finish_edge, start)
             model.waypoints = [first, [first[0], bus], [last[0], bus], last].map do |x, y|
               Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y))
             end
@@ -110,8 +109,19 @@ module Ea
           # A leg runs vertically at the stored origin's x. It starts on the
           # facing edge, unless the origin lies beside the box (outside its
           # x-span but level with it), where the origin itself is kept.
-          def reversed_tree_leg(box, offset_x, offset_y, edge_y)
-            origin = stored_ray_origin(box, offset_x, offset_y)
+          #
+          # EMPIRICAL FIT (decision a): the leg's x is pulled toward the box
+          # centre by |offset_y| / (vertical centre distance to the other box).
+          # Checked on 5038EEE3 connectors 211 (SX 41, SY -125: native 13px
+          # left of centre+SX), 902 (SX 64, SY -13: 2px) and 212, 208, 209
+          # (SY within 5: the rounded-up pull leaves centre + SX unchanged);
+          # the offset is rounded away from zero, as all five require.
+          # Derived from these five SX/SY pairs, not from EA documentation.
+          def reversed_tree_leg(box, offset_x, offset_y, edge_y, other)
+            span = ((other.y + other.height / 2.0) - (box.y + box.height / 2.0)).abs
+            pull = span.positive? ? 1 - [offset_y.to_i.abs / span, 1].min : 1
+            pulled = (offset_x.to_i.abs * pull).ceil * (offset_x.to_i.negative? ? -1 : 1)
+            origin = stored_ray_origin(box, pulled, offset_y)
             beside = !origin.x.between?(box.x, box.x + box.width) && origin.y.between?(box.y, box.y + box.height)
             [origin.x, beside ? origin.y : edge_y]
           end

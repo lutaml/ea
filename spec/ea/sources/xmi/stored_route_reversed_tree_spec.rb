@@ -13,7 +13,7 @@ RSpec.describe Ea::Sources::Xmi::StoredRoute, "reversed vertical trees" do
   it "routes a reversed vertical tree through the bus 50px past the End box" do
     metadata = route(tree_style, "Mode=3;EOID=CC91A3FC;SOID=E9A8AB7A;LWidth=0;TREE=V;", "904:-568;764:-568;",
                      [lower, upper], [[41, -125], [0, 0]], 3)
-    expect(vertices(metadata)).to eq([[917, 720], [917, 568], [764, 568], [764, 518]])
+    expect(vertices(metadata)).to eq([[904, 720], [904, 568], [764, 568], [764, 518]])
     expect(metadata[:style]).not_to include(:reversed_ends)
   end
 
