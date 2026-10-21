@@ -280,7 +280,9 @@ module Ea
 
           metadata = stored_ray_metadata(connector, placed, source, target)
           metadata.each { |name, value| connector.public_send("#{name}=", value) }
-          connector.style[:association_ray_outline] = true unless metadata.empty?
+          return if metadata.empty? || connector.connector_type == "Generalization"
+
+          connector.style[:association_ray_outline] = true
         end
 
         def stored_ray_metadata(connector, placed, source, target, stage: :ray_metadata)

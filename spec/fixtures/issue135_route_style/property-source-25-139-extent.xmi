@@ -2,20 +2,13 @@
 <xmi:XMI xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/UML/20161101/UMLDC" xmlns:thecustomprofile="http://www.sparxsystems.com/profiles/thecustomprofile/1.0" xmlns:GML="http://www.sparxsystems.com/profiles/GML/1.0" xmlns:StandardProfileL2="http://www.omg.org/spec/UML/20110701/StandardProfileL2.xmi">
 	<xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5" exporterID="1624"/>
 	<uml:Model xmi:type="uml:Model" name="EA_Model">
-				<packagedElement xmi:type="uml:Class" xmi:id="EAID_C9CBBBD8_47EB_447f_930C_22803660E549" name="Polygon">
-					<generalization xmi:type="uml:Generalization" xmi:id="EAID_2F1B33A5_09CF_4c04_9A7A_F1A6CC632DB4" general="EAID_330D521F_7403_4804_B06C_7CF8F84B4D6A" isSubstitutable="true"/>
-					<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src1C8BFF_EC23_4315_8C7D_5649CEE2FC75" name="interior" association="EAID_1D1C8BFF_EC23_4315_8C7D_5649CEE2FC75">
-						<type xmi:idref="EAID_3B32AE6A_59DF_41fb_A9F9_47E30A17362D"/>
-						<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI004421__EC23_4315_8C7D_5649CEE2FC75" value="0"/>
-						<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI004422__EC23_4315_8C7D_5649CEE2FC75" value="*"/>
-					</ownedAttribute>
-					<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_srcD0A891_13E7_4818_9498_ACF09C480894" name="exterior" association="EAID_1FD0A891_13E7_4818_9498_ACF09C480894">
-						<type xmi:idref="EAID_3B32AE6A_59DF_41fb_A9F9_47E30A17362D"/>
-						<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI004423__13E7_4818_9498_ACF09C480894" value="1"/>
-						<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI004424__13E7_4818_9498_ACF09C480894" value="1"/>
-					</ownedAttribute>
-				</packagedElement>
-					<packagedElement xmi:type="uml:Class" xmi:id="EAID_3EA549ED_B7DB_4947_939C_DD33689C7E42" name="_ReliefComponent" isAbstract="true">
+<packagedElement xmi:type="uml:Package" xmi:id="EAPK_7B6B28E9_C583_4363_9E9C_F37A37AE06C9" name="Conceptual Models">
+<packagedElement xmi:type="uml:Package" xmi:id="EAPK_9E3ECCD9_5472_45ce_BE7A_BC004A52B63C" name="CityGML2.0">
+<packagedElement xmi:type="uml:Package" xmi:id="EAPK_526A0DDE_1614_4df1_920F_F681125AE7C4" name="core">
+<packagedElement xmi:type="uml:Class" xmi:id="EAID_60CE61DE_7E88_4e8b_BFED_13500E7DCDEC" name="_CityObject" isAbstract="true"></packagedElement>
+</packagedElement>
+<packagedElement xmi:type="uml:Package" xmi:id="EAPK_F63E8324_97AB_4723_B55D_799EC71EC8AA" name="dem">
+<packagedElement xmi:type="uml:Class" xmi:id="EAID_3EA549ED_B7DB_4947_939C_DD33689C7E42" name="_ReliefComponent" isAbstract="true">
 						<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_38E8468E_ACED_4815_A0F9_3F21661AC17C" name="lod">
 							<type xmi:idref="EAID_1BAF0402_6EFF_4b8e_BE1A_090931DDA5B1"/>
 							<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI004243_ACED_4815_A0F9_3F21661AC17C" value="1"/>
@@ -34,13 +27,32 @@
 							<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI004248__1DF6_43b6_AFC6_0339C04029FA" value="1"/>
 						</ownedAttribute>
 					</packagedElement>
-					<packagedElement xmi:type="uml:Association" xmi:id="EAID_3CF59171_1DF6_43b6_AFC6_0339C04029FA">
+<packagedElement xmi:type="uml:Association" xmi:id="EAID_3CF59171_1DF6_43b6_AFC6_0339C04029FA">
 						<memberEnd xmi:idref="EAID_dstF59171_1DF6_43b6_AFC6_0339C04029FA"/>
 						<memberEnd xmi:idref="EAID_srcF59171_1DF6_43b6_AFC6_0339C04029FA"/>
 						<ownedEnd xmi:type="uml:Property" xmi:id="EAID_dstF59171_1DF6_43b6_AFC6_0339C04029FA" association="EAID_3CF59171_1DF6_43b6_AFC6_0339C04029FA">
 							<type xmi:idref="EAID_3EA549ED_B7DB_4947_939C_DD33689C7E42"/>
 						</ownedEnd>
 					</packagedElement>
+</packagedElement>
+</packagedElement>
+<packagedElement xmi:type="uml:Package" xmi:id="EAPK_939925FF_6235_4286_82FF_7392B33F305C" name="gml">
+<packagedElement xmi:type="uml:Class" xmi:id="EAID_330D521F_7403_4804_B06C_7CF8F84B4D6A" name="_Surface"></packagedElement>
+<packagedElement xmi:type="uml:Class" xmi:id="EAID_C9CBBBD8_47EB_447f_930C_22803660E549" name="Polygon">
+					<generalization xmi:type="uml:Generalization" xmi:id="EAID_2F1B33A5_09CF_4c04_9A7A_F1A6CC632DB4" general="EAID_330D521F_7403_4804_B06C_7CF8F84B4D6A" isSubstitutable="true"/>
+					<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src1C8BFF_EC23_4315_8C7D_5649CEE2FC75" name="interior" association="EAID_1D1C8BFF_EC23_4315_8C7D_5649CEE2FC75">
+						<type xmi:idref="EAID_3B32AE6A_59DF_41fb_A9F9_47E30A17362D"/>
+						<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI004421__EC23_4315_8C7D_5649CEE2FC75" value="0"/>
+						<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI004422__EC23_4315_8C7D_5649CEE2FC75" value="*"/>
+					</ownedAttribute>
+					<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_srcD0A891_13E7_4818_9498_ACF09C480894" name="exterior" association="EAID_1FD0A891_13E7_4818_9498_ACF09C480894">
+						<type xmi:idref="EAID_3B32AE6A_59DF_41fb_A9F9_47E30A17362D"/>
+						<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI004423__13E7_4818_9498_ACF09C480894" value="1"/>
+						<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI004424__13E7_4818_9498_ACF09C480894" value="1"/>
+					</ownedAttribute>
+				</packagedElement>
+</packagedElement>
+</packagedElement>
 		<umldi:Diagram xmi:type="umldi:UMLClassDiagram" xmi:id="EAID_70C77F92_5614_4b22_8C8E_67859F59D8FD" isFrame="false" modelElement="EAPK_3768B2C3_20C6_4254_9D1B_A3D7823D7331">
 			<ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_70C77F92_5614_4b22_A119_96FD046071A2" modelElement="EAID_B326682E_0384_443a_A119_96FD046071A2">
 				<ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_5614_4b22_A119_96FD046071A2" text="Type"/>

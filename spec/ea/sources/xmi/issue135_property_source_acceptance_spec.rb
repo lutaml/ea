@@ -60,6 +60,20 @@ Issue135PropertySourceAcceptanceHelpers::CASES.each do |name, data|
     let(:association_model) { document.relationships.find { |item| item.id == data[:association] } }
     let(:connector) { diagram.connectors.find { |item| item.relationship_ref == data[:association] } }
 
+    it "retains the source package ancestry and off-canvas generalization parents" do
+      [data[:source], data[:target]].each do |id|
+        classifier = xml.at_xpath("//*[@xmi:id='#{id}']")
+        expect(classifier.parent["xmi:type"]).to eq("uml:Package")
+        classifier.xpath("./generalization").each do |generalization|
+          parent = xml.at_xpath("//*[@xmi:id='#{generalization["general"]}']")
+          expect(parent).not_to be_nil
+          expect(parent["xmi:type"]).to eq("uml:Class")
+          expect(parent.parent["xmi:type"]).to eq("uml:Package")
+          expect(document.index_by_id[parent["xmi:id"]].name).to eq(parent["name"])
+        end
+      end
+    end
+
     include_examples "actual Property identity", name, data
     include_examples "authored Property geometry", name, data
     include_examples "Property identity exclusions", name, data

@@ -2,15 +2,11 @@
 <xmi:XMI xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/UML/20161101/UMLDC" xmlns:thecustomprofile="http://www.sparxsystems.com/profiles/thecustomprofile/1.0" xmlns:GML="http://www.sparxsystems.com/profiles/GML/1.0" xmlns:StandardProfileL2="http://www.omg.org/spec/UML/20110701/StandardProfileL2.xmi">
 	<xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5" exporterID="1624"/>
 	<uml:Model xmi:type="uml:Model" name="EA_Model">
-				<packagedElement xmi:type="uml:Class" xmi:id="EAID_B326682E_0384_443a_A119_96FD046071A2" name="MultiCurve">
-					<generalization xmi:type="uml:Generalization" xmi:id="EAID_0E649461_3A72_4592_A18D_6FA8746D1103" general="EAID_0D9C5B75_B368_4989_93DB_8DD90879B637" isSubstitutable="true"/>
-					<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src192687_3A64_4b1c_A68E_C5B1D1BB7E8A" name="curveMember" association="EAID_35192687_3A64_4b1c_A68E_C5B1D1BB7E8A">
-						<type xmi:idref="EAID_83B2B411_0579_4e2d_823D_D22BF0F06064"/>
-						<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI004405__3A64_4b1c_A68E_C5B1D1BB7E8A" value="0"/>
-						<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI004406__3A64_4b1c_A68E_C5B1D1BB7E8A" value="*"/>
-					</ownedAttribute>
-				</packagedElement>
-						<packagedElement xmi:type="uml:Class" xmi:id="EAID_ACABD6DC_E4F2_4a04_BBD4_25CECBBDC6F6" name="_UrbanFunction" isAbstract="true">
+<packagedElement xmi:type="uml:Package" xmi:id="EAPK_7B6B28E9_C583_4363_9E9C_F37A37AE06C9" name="Conceptual Models">
+<packagedElement xmi:type="uml:Package" xmi:id="EAPK_409D5E16_E64D_4987_8890_CE13E57F5C50" name="i-UR">
+<packagedElement xmi:type="uml:Package" xmi:id="EAPK_31384D0D_8386_49c8_8B3A_E8D7433B2DEC" name="Urban Planning ADE 3.2">
+<packagedElement xmi:type="uml:Package" xmi:id="EAPK_703CD7E4_9939_4370_8AEB_B5B48ACC572F" name="urf">
+<packagedElement xmi:type="uml:Class" xmi:id="EAID_ACABD6DC_E4F2_4a04_BBD4_25CECBBDC6F6" name="_UrbanFunction" isAbstract="true">
 							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_B6FA3020_E307_4f76_AB0D_49A09B7D08C4" name="class">
 								<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
 								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000437_E307_4f76_AB0D_49A09B7D08C4" value="0"/>
@@ -198,13 +194,33 @@
 								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI000510__0DEC_4498_B512_6368A9220B14" value="1"/>
 							</ownedAttribute>
 						</packagedElement>
-						<packagedElement xmi:type="uml:Association" xmi:id="EAID_69408358_DF5F_4031_B454_BA9B873976CF">
+<packagedElement xmi:type="uml:Association" xmi:id="EAID_69408358_DF5F_4031_B454_BA9B873976CF">
 							<memberEnd xmi:idref="EAID_dst408358_DF5F_4031_B454_BA9B873976CF"/>
 							<memberEnd xmi:idref="EAID_src408358_DF5F_4031_B454_BA9B873976CF"/>
 							<ownedEnd xmi:type="uml:Property" xmi:id="EAID_dst408358_DF5F_4031_B454_BA9B873976CF" association="EAID_69408358_DF5F_4031_B454_BA9B873976CF">
 								<type xmi:idref="EAID_ACABD6DC_E4F2_4a04_BBD4_25CECBBDC6F6"/>
 							</ownedEnd>
 						</packagedElement>
+</packagedElement>
+</packagedElement>
+</packagedElement>
+<packagedElement xmi:type="uml:Package" xmi:id="EAPK_9E3ECCD9_5472_45ce_BE7A_BC004A52B63C" name="CityGML2.0">
+<packagedElement xmi:type="uml:Package" xmi:id="EAPK_526A0DDE_1614_4df1_920F_F681125AE7C4" name="core">
+<packagedElement xmi:type="uml:Class" xmi:id="EAID_60CE61DE_7E88_4e8b_BFED_13500E7DCDEC" name="_CityObject" isAbstract="true"></packagedElement>
+</packagedElement>
+</packagedElement>
+<packagedElement xmi:type="uml:Package" xmi:id="EAPK_939925FF_6235_4286_82FF_7392B33F305C" name="gml">
+<packagedElement xmi:type="uml:Class" xmi:id="EAID_0D9C5B75_B368_4989_93DB_8DD90879B637" name="_AbstractGeometricAggregate" isAbstract="true"></packagedElement>
+<packagedElement xmi:type="uml:Class" xmi:id="EAID_B326682E_0384_443a_A119_96FD046071A2" name="MultiCurve">
+					<generalization xmi:type="uml:Generalization" xmi:id="EAID_0E649461_3A72_4592_A18D_6FA8746D1103" general="EAID_0D9C5B75_B368_4989_93DB_8DD90879B637" isSubstitutable="true"/>
+					<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src192687_3A64_4b1c_A68E_C5B1D1BB7E8A" name="curveMember" association="EAID_35192687_3A64_4b1c_A68E_C5B1D1BB7E8A">
+						<type xmi:idref="EAID_83B2B411_0579_4e2d_823D_D22BF0F06064"/>
+						<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI004405__3A64_4b1c_A68E_C5B1D1BB7E8A" value="0"/>
+						<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI004406__3A64_4b1c_A68E_C5B1D1BB7E8A" value="*"/>
+					</ownedAttribute>
+				</packagedElement>
+</packagedElement>
+</packagedElement>
 		<umldi:Diagram xmi:type="umldi:UMLClassDiagram" xmi:id="EAID_B53E76CD_A0F2_4e2f_B3AB_796D85964EF2" isFrame="false" modelElement="EAPK_0187F655_9AFA_464d_99AE_1C00D779E48C">
 			<ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_B53E76CD_A0F2_4e2f_BBD4_25CECBBDC6F6" modelElement="EAID_ACABD6DC_E4F2_4a04_BBD4_25CECBBDC6F6">
 				<ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_A0F2_4e2f_BBD4_25CECBBDC6F6" text="FeatureType"/>

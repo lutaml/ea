@@ -2,7 +2,57 @@
 <xmi:XMI xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/UML/20161101/UMLDC" xmlns:thecustomprofile="http://www.sparxsystems.com/profiles/thecustomprofile/1.0" xmlns:GML="http://www.sparxsystems.com/profiles/GML/1.0" xmlns:StandardProfileL2="http://www.omg.org/spec/UML/20110701/StandardProfileL2.xmi">
 	<xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5" exporterID="1624"/>
 	<uml:Model xmi:type="uml:Model" name="EA_Model">
-						<packagedElement xmi:type="uml:Class" xmi:id="EAID_A8826BD2_3776_467e_B956_B64652029AD8" name="District">
+<packagedElement xmi:type="uml:Package" xmi:id="EAPK_7B6B28E9_C583_4363_9E9C_F37A37AE06C9" name="Conceptual Models">
+<packagedElement xmi:type="uml:Package" xmi:id="EAPK_409D5E16_E64D_4987_8890_CE13E57F5C50" name="i-UR">
+<packagedElement xmi:type="uml:Package" xmi:id="EAPK_31384D0D_8386_49c8_8B3A_E8D7433B2DEC" name="Urban Planning ADE 3.2">
+<packagedElement xmi:type="uml:Package" xmi:id="EAPK_703CD7E4_9939_4370_8AEB_B5B48ACC572F" name="urf">
+<packagedElement xmi:type="uml:Class" xmi:id="EAID_C344DAF0_B143_409c_BE49_38671B51D4C8" name="Zone"></packagedElement>
+<packagedElement xmi:type="uml:Class" xmi:id="EAID_331E7FB3_1C91_4c86_8ADD_49AA4ECD32A0" name="DistrictDevelopmentPlan">
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_4C1DB101_99F2_4925_8B07_3894F8F9D9C8" name="districtFacilitiesAllocation">
+								<type xmi:idref="EAID_65A37EFA_1F0B_4c78_885C_27FCFF2762A5"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001013_99F2_4925_8B07_3894F8F9D9C8" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001014_99F2_4925_8B07_3894F8F9D9C8" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_31473F5C_666B_4957_8AB8_251B9B78A2B4" name="buildingRestrictions">
+								<type xmi:idref="EAID_65A37EFA_1F0B_4c78_885C_27FCFF2762A5"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001015_666B_4957_8AB8_251B9B78A2B4" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001016_666B_4957_8AB8_251B9B78A2B4" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_8A85D43B_1412_4935_92CA_0594919D2814" name="urbanGreenSpaceConservation">
+								<type xmi:idref="EAID_65A37EFA_1F0B_4c78_885C_27FCFF2762A5"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001017_1412_4935_92CA_0594919D2814" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001018_1412_4935_92CA_0594919D2814" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_19713F7E_40F1_4f2e_BAA3_5D8F62397167" name="activityRestrictionInFarmland">
+								<type xmi:idref="EAID_65A37EFA_1F0B_4c78_885C_27FCFF2762A5"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001019_40F1_4f2e_BAA3_5D8F62397167" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001020_40F1_4f2e_BAA3_5D8F62397167" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_B845C691_9DEF_46eb_AC92_408478B1FF1C" name="landuseRestrictions">
+								<type xmi:idref="EAID_65A37EFA_1F0B_4c78_885C_27FCFF2762A5"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001021_9DEF_46eb_AC92_408478B1FF1C" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001022_9DEF_46eb_AC92_408478B1FF1C" value="1"/>
+							</ownedAttribute>
+							<generalization xmi:type="uml:Generalization" xmi:id="EAID_2426C22A_F2EA_4c87_8A89_75F3F52FB6C3" general="EAID_C344DAF0_B143_409c_BE49_38671B51D4C8" isSubstitutable="true"/>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src3C0404_0C88_460c_95D2_28F3C008D875" name="districtFacility" association="EAID_233C0404_0C88_460c_95D2_28F3C008D875" aggregation="shared">
+								<type xmi:idref="EAID_891CB4B3_606F_4e0b_AB85_C84D4CEC3E88"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001023__0C88_460c_95D2_28F3C008D875" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001024__0C88_460c_95D2_28F3C008D875" value="*"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_srcD760D5_57F4_4860_8A3B_6CD500FAA873" name="district" association="EAID_96D760D5_57F4_4860_8A3B_6CD500FAA873" aggregation="shared">
+								<type xmi:idref="EAID_A8826BD2_3776_467e_B956_B64652029AD8"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001025__57F4_4860_8A3B_6CD500FAA873" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001026__57F4_4860_8A3B_6CD500FAA873" value="*"/>
+							</ownedAttribute>
+						</packagedElement>
+<packagedElement xmi:type="uml:Association" xmi:id="EAID_96D760D5_57F4_4860_8A3B_6CD500FAA873">
+							<memberEnd xmi:idref="EAID_dstD760D5_57F4_4860_8A3B_6CD500FAA873"/>
+							<memberEnd xmi:idref="EAID_srcD760D5_57F4_4860_8A3B_6CD500FAA873"/>
+							<ownedEnd xmi:type="uml:Property" xmi:id="EAID_dstD760D5_57F4_4860_8A3B_6CD500FAA873" association="EAID_96D760D5_57F4_4860_8A3B_6CD500FAA873">
+								<type xmi:idref="EAID_331E7FB3_1C91_4c86_8ADD_49AA4ECD32A0"/>
+							</ownedEnd>
+						</packagedElement>
+<packagedElement xmi:type="uml:Class" xmi:id="EAID_A8826BD2_3776_467e_B956_B64652029AD8" name="District">
 							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_B3BAAD66_4762_4146_9460_A1CA78572D25" name="buildingRestrictions">
 								<type xmi:idref="EAID_65A37EFA_1F0B_4c78_885C_27FCFF2762A5"/>
 								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001031_4762_4146_9460_A1CA78572D25" value="0"/>
@@ -105,51 +155,10 @@
 							</ownedAttribute>
 							<generalization xmi:type="uml:Generalization" xmi:id="EAID_D7B68D21_269A_4590_B824_18C891654EFF" general="EAID_C344DAF0_B143_409c_BE49_38671B51D4C8" isSubstitutable="true"/>
 						</packagedElement>
-						<packagedElement xmi:type="uml:Class" xmi:id="EAID_331E7FB3_1C91_4c86_8ADD_49AA4ECD32A0" name="DistrictDevelopmentPlan">
-							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_4C1DB101_99F2_4925_8B07_3894F8F9D9C8" name="districtFacilitiesAllocation">
-								<type xmi:idref="EAID_65A37EFA_1F0B_4c78_885C_27FCFF2762A5"/>
-								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001013_99F2_4925_8B07_3894F8F9D9C8" value="0"/>
-								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001014_99F2_4925_8B07_3894F8F9D9C8" value="1"/>
-							</ownedAttribute>
-							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_31473F5C_666B_4957_8AB8_251B9B78A2B4" name="buildingRestrictions">
-								<type xmi:idref="EAID_65A37EFA_1F0B_4c78_885C_27FCFF2762A5"/>
-								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001015_666B_4957_8AB8_251B9B78A2B4" value="0"/>
-								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001016_666B_4957_8AB8_251B9B78A2B4" value="1"/>
-							</ownedAttribute>
-							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_8A85D43B_1412_4935_92CA_0594919D2814" name="urbanGreenSpaceConservation">
-								<type xmi:idref="EAID_65A37EFA_1F0B_4c78_885C_27FCFF2762A5"/>
-								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001017_1412_4935_92CA_0594919D2814" value="0"/>
-								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001018_1412_4935_92CA_0594919D2814" value="1"/>
-							</ownedAttribute>
-							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_19713F7E_40F1_4f2e_BAA3_5D8F62397167" name="activityRestrictionInFarmland">
-								<type xmi:idref="EAID_65A37EFA_1F0B_4c78_885C_27FCFF2762A5"/>
-								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001019_40F1_4f2e_BAA3_5D8F62397167" value="0"/>
-								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001020_40F1_4f2e_BAA3_5D8F62397167" value="1"/>
-							</ownedAttribute>
-							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_B845C691_9DEF_46eb_AC92_408478B1FF1C" name="landuseRestrictions">
-								<type xmi:idref="EAID_65A37EFA_1F0B_4c78_885C_27FCFF2762A5"/>
-								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001021_9DEF_46eb_AC92_408478B1FF1C" value="0"/>
-								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001022_9DEF_46eb_AC92_408478B1FF1C" value="1"/>
-							</ownedAttribute>
-							<generalization xmi:type="uml:Generalization" xmi:id="EAID_2426C22A_F2EA_4c87_8A89_75F3F52FB6C3" general="EAID_C344DAF0_B143_409c_BE49_38671B51D4C8" isSubstitutable="true"/>
-							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_src3C0404_0C88_460c_95D2_28F3C008D875" name="districtFacility" association="EAID_233C0404_0C88_460c_95D2_28F3C008D875" aggregation="shared">
-								<type xmi:idref="EAID_891CB4B3_606F_4e0b_AB85_C84D4CEC3E88"/>
-								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001023__0C88_460c_95D2_28F3C008D875" value="0"/>
-								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001024__0C88_460c_95D2_28F3C008D875" value="*"/>
-							</ownedAttribute>
-							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_srcD760D5_57F4_4860_8A3B_6CD500FAA873" name="district" association="EAID_96D760D5_57F4_4860_8A3B_6CD500FAA873" aggregation="shared">
-								<type xmi:idref="EAID_A8826BD2_3776_467e_B956_B64652029AD8"/>
-								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001025__57F4_4860_8A3B_6CD500FAA873" value="0"/>
-								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001026__57F4_4860_8A3B_6CD500FAA873" value="*"/>
-							</ownedAttribute>
-						</packagedElement>
-						<packagedElement xmi:type="uml:Association" xmi:id="EAID_96D760D5_57F4_4860_8A3B_6CD500FAA873">
-							<memberEnd xmi:idref="EAID_dstD760D5_57F4_4860_8A3B_6CD500FAA873"/>
-							<memberEnd xmi:idref="EAID_srcD760D5_57F4_4860_8A3B_6CD500FAA873"/>
-							<ownedEnd xmi:type="uml:Property" xmi:id="EAID_dstD760D5_57F4_4860_8A3B_6CD500FAA873" association="EAID_96D760D5_57F4_4860_8A3B_6CD500FAA873">
-								<type xmi:idref="EAID_331E7FB3_1C91_4c86_8ADD_49AA4ECD32A0"/>
-							</ownedEnd>
-						</packagedElement>
+</packagedElement>
+</packagedElement>
+</packagedElement>
+</packagedElement>
 		<umldi:Diagram xmi:type="umldi:UMLClassDiagram" xmi:id="EAID_2C8DD882_8DEA_4065_89F8_DDA796AA0C85" isFrame="false" modelElement="EAPK_42058153_A77E_4b5d_B0D6_2589E3ED953A">
 			<ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_2C8DD882_8DEA_4065_BE49_38671B51D4C8" modelElement="EAID_C344DAF0_B143_409c_BE49_38671B51D4C8">
 				<ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_8DEA_4065_BE49_38671B51D4C8" text="FeatureType"/>
