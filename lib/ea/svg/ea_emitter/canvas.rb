@@ -24,25 +24,40 @@ module Ea
         INSET_TOUCHING_ORIGIN = 30
         FRAME_INSET_TOP = 40
 
-        attr_reader :min_x, :min_y, :width, :height, :inset_left
+        attr_reader :min_x, :min_y, :width, :height, :inset_left, :inset_top
 
-        def initialize(min_x:, min_y:, width:, height:, inset_left: FRAME_INSET_LEFT)
+        # `insets` is [left, top]: where model (min_x, min_y) lands on
+        # the canvas.
+        def initialize(min_x:, min_y:, width:, height:,
+                       insets: [FRAME_INSET_LEFT, FRAME_INSET_TOP])
           @min_x = min_x
           @min_y = min_y
           @width = width
           @height = height
-          @inset_left = inset_left
+          @inset_left, @inset_top = insets
+        end
+
+        # Model-space origin of this canvas.
+        def origin_x
+          min_x - inset_left
+        end
+
+        def origin_y
+          min_y - inset_top
         end
 
         # Build a Canvas for a diagram by running the bound
         # calculator. Defaults model_index to nil (no canvas-aware
         # element bounds needed) for callers that only need a
         # frame-size estimate.
-        def self.from(diagram, model_index: nil)
+        def self.from(diagram, model_index: nil, content_anchor: false)
           bc = BoundsCalculator.new(diagram, model_index: model_index)
           min_x, min_y, width, height = bc.compute
+          return CanvasAnchor.stored(min_x, min_y, bc.max_x, bc.max_y) if content_anchor && bc.max_x
+
           new(min_x: min_x, min_y: min_y, width: width, height: height,
-              inset_left: bc.effective_inset_left || FRAME_INSET_LEFT)
+              insets: [bc.effective_inset_left || FRAME_INSET_LEFT,
+                       FRAME_INSET_TOP])
         end
 
         # Second-pass canvas over the DRAWN extents captured by the
@@ -51,7 +66,8 @@ module Ea
         # canvas from drawn extents, so diagrams whose lowest/rightmost
         # element grew get a taller/wider canvas than the stored-rect
         # first pass provides.
-        def self.from_drawn(diagram, drawn_bounds, model_index: nil)
+        def self.from_drawn(diagram, drawn_bounds, model_index: nil,
+                            content_anchor: false)
           base = BoundsCalculator.new(diagram, model_index: model_index)
           pts = []
           drawn_bounds.each_value do |b|
@@ -63,7 +79,11 @@ module Ea
           min_y = (pts + extra).map(&:last).min || 0
           max_x = (pts + extra).map(&:first).max || 0
           max_y = (pts + extra).map(&:last).max || 0
-          return from(diagram, model_index: model_index) if pts.empty?
+          if pts.empty?
+            return from(diagram, model_index: model_index,
+                                 content_anchor: content_anchor)
+          end
+          return CanvasAnchor.stored(min_x, min_y, max_x, max_y) if content_anchor
 
           # Same scaled rule as BoundsCalculator: drawn leftmost =
           # min(35, 30 + min_x).
@@ -74,7 +94,7 @@ module Ea
                      BoundsCalculator::INSET_RIGHT,
               height: (max_y - min_y) + BoundsCalculator::INSET_TOP +
                       BoundsCalculator::INSET_BOTTOM,
-              inset_left: inset_left)
+              insets: [inset_left, FRAME_INSET_TOP])
         end
 
         def view_box
@@ -97,7 +117,7 @@ module Ea
         end
 
         def translate_y(y)
-          y - min_y + FRAME_INSET_TOP
+          y - min_y + inset_top
         end
 
         # Compact coordinate formatter. Integers lose the decimal

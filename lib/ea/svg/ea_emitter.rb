@@ -26,6 +26,8 @@ module Ea
     #
     module EaEmitter
       autoload :Canvas, "ea/svg/ea_emitter/canvas"
+      autoload :CanvasAnchor, "ea/svg/ea_emitter/canvas_anchor"
+      autoload :ContentExtent, "ea/svg/ea_emitter/content_extent"
       autoload :Background, "ea/svg/ea_emitter/background"
       autoload :BoundsCalculator, "ea/svg/ea_emitter/bounds_calculator"
       autoload :Style, "ea/svg/ea_emitter/style"
