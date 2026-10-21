@@ -28,6 +28,7 @@ module Ea
           point = axis_crossing(first, last, start, finish) ||
                   slanted_crossing(first, last, start, finish)
           return unless point && room?(point, first, last, radius) && room?(point, start, finish, radius)
+          return unless chord_fits?(first, last, point, radius)
 
           point
         end
@@ -64,6 +65,13 @@ module Ea
           start[major] -= step
           finish[major] += step
           [start, finish]
+        end
+
+        # Integer seating must not extend the decorated carrier past an end.
+        def chord_fits?(first, last, point, radius)
+          chord(first, last, point, radius).all? do |seat|
+            [0, 1].all? { |axis| within?(seat[axis], first[axis], last[axis]) }
+          end
         end
 
         def dominant_axis(first, last)

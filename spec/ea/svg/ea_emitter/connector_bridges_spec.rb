@@ -314,3 +314,16 @@ RSpec.describe Ea::Svg::EaEmitter::Connectors, "native seats on a slanted carrie
     expect(bridge_paths(bridge_diagram([carrier, horizontal, vertical])).first).to eq(expected)
   end
 end
+
+RSpec.describe Ea::Svg::EaEmitter::Connectors, "slanted bridge endpoint clearance" do
+  include ConnectorBridgesHelpers
+
+  it "keeps a short diagonal intact when its integer arc chord would overrun both ends" do
+    [[[0, 0], [10, 10]], [[10, 10], [0, 0]]].each do |points|
+      carrier = bridge_connector("a", points)
+      partner = bridge_connector("b", [[5, -20], [5, 20]])
+      expected = "M #{points.first.join(" ")} L #{points.last.join(" ")}"
+      expect(bridge_paths(bridge_diagram([carrier, partner])).first).to eq(expected)
+    end
+  end
+end
