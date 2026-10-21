@@ -1,0 +1,1213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/UML/20161101/UMLDC" xmlns:thecustomprofile="http://www.sparxsystems.com/profiles/thecustomprofile/1.0" xmlns:GML="http://www.sparxsystems.com/profiles/GML/1.0" xmlns:StandardProfileL2="http://www.omg.org/spec/UML/20110701/StandardProfileL2.xmi">
+  <xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5" exporterID="1624"/>
+  <uml:Model xmi:type="uml:Model" name="EA_Model">
+    <packagedElement xmi:type="uml:Package" xmi:id="EAPK_7B6B28E9_C583_4363_9E9C_F37A37AE06C9" name="Conceptual Models">
+      <packagedElement xmi:type="uml:Package" xmi:id="EAPK_409D5E16_E64D_4987_8890_CE13E57F5C50" name="i-UR">
+        <elementImport xmi:type="uml:ElementImport" xmi:id="EAID_604544F9_149D_40f0_80CE_FCAC7CED4532" importedElement="EAPK_9E3ECCD9_5472_45ce_BE7A_BC004A52B63C"/>
+        <packageImport xmi:type="uml:PackageImport" xmi:id="EAID_7BAEBE89_B43D_46dc_971B_4803FA14CDE5" importedPackage="EAPK_939925FF_6235_4286_82FF_7392B33F305C"/>
+        <packagedElement xmi:type="uml:Package" xmi:id="EAPK_31384D0D_8386_49c8_8B3A_E8D7433B2DEC" name="Urban Planning ADE 3.2">
+          <packageMerge xmi:type="uml:PackageMerge" xmi:id="EAID_23BC7F14_63AA_4c79_B872_9108C2D9F6C0" mergedPackage="EAPK_AD519217_CF77_4c6d_BAB1_A57952CFB136"/>
+          <packageMerge xmi:type="uml:PackageMerge" xmi:id="EAID_A0CE132C_07B4_4abd_A97B_208509670321" mergedPackage="EAPK_703CD7E4_9939_4370_8AEB_B5B48ACC572F"/>
+          <packageMerge xmi:type="uml:PackageMerge" xmi:id="EAID_CF6D106B_9FF0_4b8f_8B7B_D4D8831B3D36" mergedPackage="EAPK_0DD01F00_6C7A_4cfb_B742_7B764076C820"/>
+          <packageMerge xmi:type="uml:PackageMerge" xmi:id="EAID_F0ADF426_1F42_4981_855F_7C5292580CFE" mergedPackage="EAPK_BCC79C61_EB22_4305_B574_693E41527057"/>
+          <packagedElement xmi:type="uml:Package" xmi:id="EAPK_703CD7E4_9939_4370_8AEB_B5B48ACC572F" name="urf">
+            <packagedElement xmi:type="uml:Class" xmi:id="EAID_50677994_5E27_4418_BF4C_6DB571748AEA" name="ObservationPoint">
+
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="EAID_21A72D71_3FFD_4c21_8F07_FFA11658A8B5">
+              <memberEnd xmi:idref="EAID_dstA72D71_3FFD_4c21_8F07_FFA11658A8B5"/>
+              <memberEnd xmi:idref="EAID_srcA72D71_3FFD_4c21_8F07_FFA11658A8B5"/>
+              <ownedEnd xmi:type="uml:Property" xmi:id="EAID_srcA72D71_3FFD_4c21_8F07_FFA11658A8B5" association="EAID_21A72D71_3FFD_4c21_8F07_FFA11658A8B5">
+                <type xmi:idref="EAID_50677994_5E27_4418_BF4C_6DB571748AEA"/>
+              </ownedEnd>
+            </packagedElement>
+          </packagedElement>
+        </packagedElement>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Package" xmi:id="EAPK_939925FF_6235_4286_82FF_7392B33F305C" name="gml">
+        <packagedElement xmi:type="uml:Class" xmi:id="EAID_78F13906_DAA9_46d1_8050_E1EFD18DBC03" name="MultiPoint">
+          <generalization xmi:type="uml:Generalization" xmi:id="EAID_A1BC07D1_BBA6_4bc8_B209_3B57E338C59C" general="EAID_0D9C5B75_B368_4989_93DB_8DD90879B637" isSubstitutable="true"/>
+
+        </packagedElement>
+      </packagedElement>
+    </packagedElement>
+    <umldi:Diagram xmi:type="umldi:UMLClassDiagram" xmi:id="EAID_785226C1_12B1_4104_A4C1_F19B70B9FB71" isFrame="false" modelElement="EAPK_9F1481D8_A93A_41b3_9F35_B24D8E837859">
+      <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_785226C1_12B1_4104_BF4C_6DB571748AEA" modelElement="EAID_50677994_5E27_4418_BF4C_6DB571748AEA">
+        <ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_12B1_4104_BF4C_6DB571748AEA" text="DataType"/>
+        <ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_12B1_4104_BF4C_6DB571748AEA" text="ObservationPoint"/>
+        <bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_12B1_4104_BF4C_6DB571748AEA" x="1281" y="2359" width="145" height="70"/>
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_785226C1_12B1_4104_8050_E1EFD18DBC03" modelElement="EAID_78F13906_DAA9_46d1_8050_E1EFD18DBC03">
+        <ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_12B1_4104_8050_E1EFD18DBC03" text="Type"/>
+        <ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_12B1_4104_8050_E1EFD18DBC03" text="MultiPoint"/>
+        <bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_12B1_4104_8050_E1EFD18DBC03" x="1559" y="2365" width="180" height="85"/>
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLEdge" xmi:id="EAID_785226C1_12B1_4104_8F07_FFA11658A8B5" source="EAID_50677994_5E27_4418_BF4C_6DB571748AEA" target="EAID_78F13906_DAA9_46d1_8050_E1EFD18DBC03" modelElement="EAID_21A72D71_3FFD_4c21_8F07_FFA11658A8B5">
+        <ownedElement xmi:type="umldi:UMLAssociationEndLabel" xmi:id="EAID_TEL000000_12B1_4104_8F07_FFA11658A8B5" text="+lod0MultiPoint" modelElement="EAID_dstA72D71_3FFD_4c21_8F07_FFA11658A8B5">
+          <bounds xmi:type="dc:bounds" xmi:id="EAID_DBTEL000000_12B1_4104_8F07_FFA11658A8B5" x="1483" y="2375" width="73" height="13"/>
+        </ownedElement>
+        <ownedElement xmi:type="umldi:UMLMultiplicityLabel" xmi:id="EAID_TML000000_12B1_4104_8F07_FFA11658A8B5" text="1" modelElement="EAID_dstA72D71_3FFD_4c21_8F07_FFA11658A8B5">
+          <bounds xmi:type="dc:bounds" xmi:id="EAID_DBTML000000_12B1_4104_8F07_FFA11658A8B5" x="1549" y="2397" width="7" height="13"/>
+        </ownedElement>
+        <waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000000_12B1_4104_8F07_FFA11658A8B5" x="1427" y="2392"/>
+        <waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000001_12B1_4104_8F07_FFA11658A8B5" x="1558" y="2392"/>
+      </ownedElement>
+    </umldi:Diagram>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="profileap_thecustomprofile">
+      <appliedProfile xmi:type="uml:Profile" href="http://www.sparxsystems.com/profiles/thecustomprofile/1.0#thecustomprofile"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="profileap_1BE46C37-5">
+      <appliedProfile xmi:type="uml:Profile" href="http://www.sparxsystems.com/profiles/GML/1.0#1BE46C37-5"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="profileap_D21A8EAD-F">
+      <appliedProfile xmi:type="uml:Profile" href="http://www.omg.org/spec/UML/20110701/StandardProfileL2.xmi#D21A8EAD-F"/>
+    </profileApplication>
+  </uml:Model>
+  <xmi:Extension extender="Enterprise Architect" extenderID="6.5">
+    <connectors>
+      <connector xmi:idref="EAID_21A72D71_3FFD_4c21_8F07_FFA11658A8B5">
+        <source xmi:idref="EAID_50677994_5E27_4418_BF4C_6DB571748AEA">
+          <model ea_localid="414" type="Class" name="ObservationPoint"/>
+          <role visibility="Public" targetScope="instance"/>
+          <type aggregation="none" containment="Unspecified"/>
+          <constraints/>
+          <modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+          <style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;"/>
+          <documentation/>
+          <xrefs/>
+          <tags/>
+        </source>
+        <target xmi:idref="EAID_78F13906_DAA9_46d1_8050_E1EFD18DBC03">
+          <model ea_localid="15" type="Class" name="MultiPoint"/>
+          <role name="lod0MultiPoint" visibility="Public" targetScope="instance"/>
+          <type multiplicity="1" aggregation="none" containment="Unspecified"/>
+          <constraints/>
+          <modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+          <style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;"/>
+          <documentation/>
+          <xrefs/>
+          <tags/>
+        </target>
+        <model ea_localid="459"/>
+        <properties ea_type="Association" direction="Source -&gt; Destination"/>
+        <modifiers isRoot="false" isLeaf="false"/>
+        <parameterSubstitutions/>
+        <documentation/>
+        <appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+        <labels rb="1" rt="+lod0MultiPoint"/>
+        <extendedProperties/>
+        <style/>
+        <xrefs/>
+        <tags/>
+      </connector>
+    </connectors>
+    <diagrams>
+      <diagram xmi:id="EAID_785226C1_12B1_4104_A4C1_F19B70B9FB71">
+        <model package="EAPK_9F1481D8_A93A_41b3_9F35_B24D8E837859" localID="158" owner="EAPK_9F1481D8_A93A_41b3_9F35_B24D8E837859" tpos="37"/>
+        <properties name="urf_3" type="Logical"/>
+        <project author="048827" version="1.0" created="2023-03-13 02:33:51" modified="2025-03-13 20:57:39"/>
+        <style1 value="ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;Border=1;HighlightForeign=1;PackageContents=1;SequenceNotes=0;ScalePrintImage=0;PPgs.cx=0;PPgs.cy=0;DocSize.cx=795;DocSize.cy=1138;ShowDetails=0;Orientation=P;Zoom=100;ShowTags=0;OpParams=1;VisibleAttributeDetail=0;ShowOpRetType=1;ShowIcons=1;CollabNums=0;HideProps=0;ShowReqs=0;ShowCons=0;PaperSize=9;HideParents=0;UseAlias=0;HideAtts=0;HideOps=0;HideStereo=0;HideElemStereo=0;ShowTests=0;ShowMaint=0;ConnectorNotation=UML 2.1;ExplicitNavigability=0;ShowShape=1;AllDockable=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;ShowNotes=0;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;"/>
+        <style2 value="ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;KanbanActive=0;MatrixLineWidth=1;MatrixLineClr=0;MatrixLocked=0;TConnectorNotation=UML 2.1;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;MDGDgm=;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;SuppressedCompartments=;Theme=:119;SaveTag=8AC17F55;"/>
+        <swimlanes value="locked=false;orientation=0;width=0;inbar=false;names=false;color=-1;bold=false;fcol=0;tcol=-1;ofCol=-1;ufCol=-1;hl=0;ufh=0;hh=0;cls=0;bw=0;hli=0;bro=0;SwimlaneFont=lfh:-13,lfw:0,lfi:0,lfu:0,lfs:0,lfface:Calibri,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;"/>
+        <matrixitems value="locked=false;matrixactive=false;swimlanesactive=true;kanbanactive=false;width=1;clrLine=0;"/>
+        <extendedProperties/>
+        <persistentstyle value="DGS=On=0:CNT=8:W=120:H=40:SG=0:SGH=0:AEB=0:;AR=0;DCL=0;Swimlanes=locked=false;orientation=0;width=0;inbar=false;names=false;color=-1;bold=false;fcol=0;tcol=-1;ofCol=-1;ufCol=-1;hl=0;ufh=0;hh=0;cls=0;bw=0;hli=0;bro=0;SwimlaneFont=lfh:-13,lfw:0,lfi:0,lfu:0,lfs:0,lfface:Calibri,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;;"/>
+        <xrefs/>
+        <elements>
+          <element geometry="Left=1559;Top=2365;Right=1739;Bottom=2450;imgL=1559;imgT=2365;imgR=1739;imgB=2450;" subject="EAID_78F13906_DAA9_46d1_8050_E1EFD18DBC03" seqno="1" style="NSL=0;BFol=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;HideIcon=0;LCol=-1;BCol=16777215;LWth=2;DUID=9C65CD1B;"/>
+          <element geometry="Left=1281;Top=2359;Right=1426;Bottom=2429;imgL=1281;imgT=2359;imgR=1426;imgB=2429;" subject="EAID_50677994_5E27_4418_BF4C_6DB571748AEA" seqno="10" style="DUID=9D6C0650;NSL=0;LWth=2;BCol=16777215;"/>
+          <element geometry="EDGE=2;SX=72;SY=2;EX=12;EY=15;$LLB=;LLT=;LMT=;LMB=;LRT=CX=94:CY=18:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LRB=CX=8:CY=18:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;IRHS=;ILHS=;Path=;" subject="EAID_21A72D71_3FFD_4c21_8F07_FFA11658A8B5" style="Mode=3;EOID=9C65CD1B;SOID=9D6C0650;Color=-1;LWidth=2;Hidden=0;"/>
+        </elements>
+      </diagram>
+    </diagrams>
+  </xmi:Extension>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</xmi:XMI>

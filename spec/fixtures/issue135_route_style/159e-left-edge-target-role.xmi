@@ -1,0 +1,260 @@
+<?xml  version='1.0' encoding='UTF-8' ?>
+<xmi:XMI xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/UML/20161101/UMLDC" xmlns:thecustomprofile="http://www.sparxsystems.com/profiles/thecustomprofile/1.0" xmlns:GML="http://www.sparxsystems.com/profiles/GML/1.0" xmlns:StandardProfileL2="http://www.omg.org/spec/UML/20110701/StandardProfileL2.xmi">
+	<xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5" exporterID="1624"/>
+	<uml:Model xmi:type="uml:Model" name="EA_Model">
+						<packagedElement xmi:type="uml:Class" xmi:id="EAID_73FEC978_744D_409f_8BB7_6168EBCA0168" name="ControlPoint">
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_E6E9215C_49D3_45d7_8998_1BE414BBE902" name="startPost">
+								<type xmi:idref="EAID_29F1CA63_CA0A_4c4e_80D1_DA97B683B7CA"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001349_49D3_45d7_8998_1BE414BBE902" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001350_49D3_45d7_8998_1BE414BBE902" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_81BF3064_7919_40fd_B10E_B4E86F3C81E9" name="endPost">
+								<type xmi:idref="EAID_29F1CA63_CA0A_4c4e_80D1_DA97B683B7CA"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001351_7919_40fd_B10E_B4E86F3C81E9" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001352_7919_40fd_B10E_B4E86F3C81E9" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_0157F53E_F26D_478a_998E_19458DE3113F" name="function">
+								<type xmi:idref="EAID_0F5E62CD_5DD3_4fc0_94FD_7FB26CD0807D"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001353_F26D_478a_998E_19458DE3113F" value="1"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001354_F26D_478a_998E_19458DE3113F" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_626B5E67_9087_482c_A6A3_3B56D027F670" name="parameter">
+								<type xmi:idref="EAID_E7E7A9AF_849E_4797_8186_23CE9AE9703C"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001355_9087_482c_A6A3_3B56D027F670" value="1"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001356_9087_482c_A6A3_3B56D027F670" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_dst687A80_A69F_40d2_901E_31EBAAD70F42" name="endPoint" association="EAID_76687A80_A69F_40d2_901E_31EBAAD70F42">
+								<type xmi:idref="EAID_243AC62C_CA55_4b0c_8284_D861AD68708F"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001357__A69F_40d2_901E_31EBAAD70F42" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001358__A69F_40d2_901E_31EBAAD70F42" value="1"/>
+							</ownedAttribute>
+							<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_dst19AD53_B42D_4ba1_AE53_1F37F229748F" name="startPoint" association="EAID_E219AD53_B42D_4ba1_AE53_1F37F229748F">
+								<type xmi:idref="EAID_243AC62C_CA55_4b0c_8284_D861AD68708F"/>
+								<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI001359__B42D_4ba1_AE53_1F37F229748F" value="0"/>
+								<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI001360__B42D_4ba1_AE53_1F37F229748F" value="1"/>
+							</ownedAttribute>
+						</packagedElement>
+						<packagedElement xmi:type="uml:Association" xmi:id="EAID_E219AD53_B42D_4ba1_AE53_1F37F229748F">
+							<memberEnd xmi:idref="EAID_dst19AD53_B42D_4ba1_AE53_1F37F229748F"/>
+							<memberEnd xmi:idref="EAID_src19AD53_B42D_4ba1_AE53_1F37F229748F"/>
+							<ownedEnd xmi:type="uml:Property" xmi:id="EAID_src19AD53_B42D_4ba1_AE53_1F37F229748F" association="EAID_E219AD53_B42D_4ba1_AE53_1F37F229748F">
+								<type xmi:idref="EAID_73FEC978_744D_409f_8BB7_6168EBCA0168"/>
+							</ownedEnd>
+						</packagedElement>
+				<packagedElement xmi:type="uml:Class" xmi:id="EAID_243AC62C_CA55_4b0c_8284_D861AD68708F" name="Point">
+					<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_AF3617BA_036C_4cf7_AE59_B1AF16E2755D" name="position">
+						<type xmi:idref="EAID_995FFC01_D0EA_4e4c_8A49_241ECAB7084A"/>
+						<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI004419_036C_4cf7_AE59_B1AF16E2755D" value="1"/>
+						<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI004420_036C_4cf7_AE59_B1AF16E2755D" value="1"/>
+					</ownedAttribute>
+					<generalization xmi:type="uml:Generalization" xmi:id="EAID_2F720204_D9D9_4c03_A34E_F876DC378B00" general="EAID_7FAB8425_4E7D_42e8_94F2_901B0F0C0300" isSubstitutable="true"/>
+				</packagedElement>
+		<umldi:Diagram xmi:type="umldi:UMLClassDiagram" xmi:id="EAID_159E9DA0_7A54_4817_B72A_401C750F675D" isFrame="false" modelElement="EAPK_9F1481D8_A93A_41b3_9F35_B24D8E837859">
+			<ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_159E9DA0_7A54_4817_8284_D861AD68708F" modelElement="EAID_243AC62C_CA55_4b0c_8284_D861AD68708F">
+				<ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_7A54_4817_8284_D861AD68708F" text="Type"/>
+				<ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_7A54_4817_8284_D861AD68708F" text="Point"/>
+				<bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_7A54_4817_8284_D861AD68708F" x="60" y="565" width="194" height="91"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_159E9DA0_7A54_4817_8BB7_6168EBCA0168" modelElement="EAID_73FEC978_744D_409f_8BB7_6168EBCA0168">
+				<ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_7A54_4817_8BB7_6168EBCA0168" text="DataType"/>
+				<ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_7A54_4817_8BB7_6168EBCA0168" text="ControlPoint"/>
+				<bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_7A54_4817_8BB7_6168EBCA0168" x="40" y="375" width="227" height="122"/>
+			</ownedElement>
+			<ownedElement xmi:type="umldi:UMLEdge" xmi:id="EAID_159E9DA0_7A54_4817_AE53_1F37F229748F" source="EAID_73FEC978_744D_409f_8BB7_6168EBCA0168" target="EAID_243AC62C_CA55_4b0c_8284_D861AD68708F" modelElement="EAID_E219AD53_B42D_4ba1_AE53_1F37F229748F">
+				<ownedElement xmi:type="umldi:UMLAssociationEndLabel" xmi:id="EAID_TEL000000_7A54_4817_AE53_1F37F229748F" text="+startPoint&#xA;«property»" modelElement="EAID_dst19AD53_B42D_4ba1_AE53_1F37F229748F">
+					<bounds xmi:type="dc:bounds" xmi:id="EAID_DBTEL000000_7A54_4817_AE53_1F37F229748F" x="-1" y="511" width="49" height="25"/>
+				</ownedElement>
+				<ownedElement xmi:type="umldi:UMLMultiplicityLabel" xmi:id="EAID_TML000000_7A54_4817_AE53_1F37F229748F" text="0..1" modelElement="EAID_dst19AD53_B42D_4ba1_AE53_1F37F229748F">
+					<bounds xmi:type="dc:bounds" xmi:id="EAID_DBTML000000_7A54_4817_AE53_1F37F229748F" x="110" y="529" width="17" height="13"/>
+				</ownedElement>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000000_7A54_4817_AE53_1F37F229748F" x="98" y="498"/>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000001_7A54_4817_AE53_1F37F229748F" x="98" y="564"/>
+			</ownedElement>
+		</umldi:Diagram>
+	</uml:Model>
+	<xmi:Extension extender="Enterprise Architect" extenderID="6.5">
+		<elements>
+			<element xmi:idref="EAID_73FEC978_744D_409f_8BB7_6168EBCA0168" xmi:type="uml:Class" name="ControlPoint" scope="public">
+				<model package="EAPK_BCC79C61_EB22_4305_B574_693E41527057" tpos="0" ea_localid="519" ea_eleType="element"/>
+				<properties documentation="軌道中心線上の変化点。平面線形の変化点、縦断線形の変化点及び勾配変化点を含む。 +&#xA;線形の変化点は、開始点と終了点の対となり、勾配変化点の場合は変化した点1点を指す。" isSpecification="false" sType="Class" nType="0" scope="public" stereotype="DataType" isRoot="false" isLeaf="false" isAbstract="false" isActive="false"/>
+				<project author="kurokawa" version="1.0" phase="1.0" created="2023-02-15 10:07:20" modified="2025-02-18 16:41:17" complexity="1" status="Proposed"/>
+				<code product_name="Java" gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags>
+					<tag xmi:id="EAID_26B33348_88EC_9d88_A29A_AC1EEC9D7AE2" name="isCollection" value="false#NOTES#Values: true,false&#xA;Default: false&#xA;Description: Identifies the class as a collection&#xA;" modelElement="EAID_73FEC978_744D_409f_8BB7_6168EBCA0168"/>
+					<tag xmi:id="EAID_F9638764_49E8_2849_BFF7_6E9F4EC84E4E" name="noPropertyType" value="false#NOTES#Values: true,false&#xA;Default: false&#xA;Description: Suppress creation of a named complex type ( property type ) that supports inline or byReference encoding&#xA;" modelElement="EAID_73FEC978_744D_409f_8BB7_6168EBCA0168"/>
+				</tags>
+				<xrefs value="$XREFPROP=$XID={D31AB494-7761-41c3-ACA7-FFF2BC08A1FC}$XID;$NAM=Stereotypes$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=DataType;FQName=GML::DataType;@ENDSTEREO;$DES;$CLT={73FEC978-744D-409f-8BB7-6168EBCA0168}$CLT;$ENDXREF;"/>
+				<extendedProperties tagged="0" package_name="uro"/>
+				<attributes>
+					<attribute xmi:idref="EAID_E6E9215C_49D3_45d7_8998_1BE414BBE902" name="startPost" scope="Public">
+						<initial/>
+						<documentation value="平面線形の変化点及び縦断線形の変化点の場合は、円曲線、緩和曲線、縦曲線の開始点の起点からのキロ程。 +&#xA;勾配変化点の場合は、勾配変化点の起点からのキロ程。"/>
+						<model ea_localid="1405" ea_guid="{E6E9215C-49D3-45d7-8998-1BE414BBE902}"/>
+						<properties type="xs:string" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="0"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_81BF3064_7919_40fd_B10E_B4E86F3C81E9" name="endPost" scope="Public">
+						<initial/>
+						<documentation value="平面線形の変化点及び縦断線形の変化点の場合は、円曲線、緩和曲線、縦曲線の終了点の起点からのキロ程。 +&#xA;勾配変化点の場合は不要とする。"/>
+						<model ea_localid="1406" ea_guid="{81BF3064-7919-40fd-B10E-B4E86F3C81E9}"/>
+						<properties type="xs:string" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="1"/>
+						<stereotype/>
+						<bounds lower="0" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_0157F53E_F26D_478a_998E_19458DE3113F" name="function" scope="Public">
+						<initial/>
+						<documentation value="変化点の種類。コードリスト（&amp;lt;&amp;lt;ControlPoint_function.xml,ControlPoint_function.xml&amp;gt;&amp;gt;）から選択する。"/>
+						<model ea_localid="1407" ea_guid="{0157F53E-F26D-478a-998E-19458DE3113F}"/>
+						<properties type="gml:CodeType" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="2"/>
+						<stereotype/>
+						<bounds lower="1" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+					<attribute xmi:idref="EAID_626B5E67_9087_482c_A6A3_3B56D027F670" name="parameter" scope="Public">
+						<initial/>
+						<documentation value="変化点のパラメータ。 +&#xA;変化点の種類に応じて、uro:ControlPointTypeの選択肢から一つを選択する。"/>
+						<model ea_localid="1412" ea_guid="{626B5E67-9087-482c-A6A3-3B56D027F670}"/>
+						<properties type="ControlPointType" derived="0" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="3"/>
+						<stereotype/>
+						<bounds lower="1" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+				</attributes>
+				<links>
+					<Association xmi:id="EAID_76687A80_A69F_40d2_901E_31EBAAD70F42" start="EAID_73FEC978_744D_409f_8BB7_6168EBCA0168" end="EAID_243AC62C_CA55_4b0c_8284_D861AD68708F"/>
+					<Aggregation xmi:id="EAID_8D3AC6EE_0F88_4674_90B1_283E8F07DE10" start="EAID_73FEC978_744D_409f_8BB7_6168EBCA0168" end="EAID_EB2A2324_3351_4dd9_A47D_8C73C1F752BC"/>
+					<Association xmi:id="EAID_E219AD53_B42D_4ba1_AE53_1F37F229748F" start="EAID_73FEC978_744D_409f_8BB7_6168EBCA0168" end="EAID_243AC62C_CA55_4b0c_8284_D861AD68708F"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_243AC62C_CA55_4b0c_8284_D861AD68708F" xmi:type="uml:Class" name="Point" scope="public">
+				<model package="EAPK_939925FF_6235_4286_82FF_7392B33F305C" tpos="0" ea_localid="32" ea_eleType="element"/>
+				<properties documentation="点。" isSpecification="false" sType="Class" nType="0" scope="public" stereotype="Type" isRoot="false" isLeaf="false" isAbstract="false" isActive="false"/>
+				<project author="048827" version="1.0" phase="1.0" created="2019-12-17 10:12:27" modified="2024-09-24 14:50:39" complexity="1" status="Proposed"/>
+				<code product_name="Java" gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags>
+					<tag xmi:id="EAID_ED33D65F_DE49_98de_B609_B33446E8D1C6" name="byValuePropertyType" value="false#NOTES#Values: true,false&#xA;Default: false&#xA;Description: Create a named complex type ( property type ) that requires the instance to be encoded inline&#xA;" modelElement="EAID_243AC62C_CA55_4b0c_8284_D861AD68708F"/>
+					<tag xmi:id="EAID_26B33348_AEB2_0bae_9A61_C682C2718B7B" name="isCollection" value="false#NOTES#Values: true,false&#xA;Default: false&#xA;Description: Identifies the class as a collection&#xA;" modelElement="EAID_243AC62C_CA55_4b0c_8284_D861AD68708F"/>
+					<tag xmi:id="EAID_F9638764_F92E_b6f9_933A_288C6C54233C" name="noPropertyType" value="false#NOTES#Values: true,false&#xA;Default: false&#xA;Description: Suppress creation of a named complex type ( property type ) that supports inline or byReference encoding&#xA;" modelElement="EAID_243AC62C_CA55_4b0c_8284_D861AD68708F"/>
+					<tag xmi:id="EAID_8AFE49E4_2A6E_992a_B4E4_958732D8C317" name="xmlSchemaType" value="#NOTES#Description: XML Schema typename, corresponding to the data type, if the class has a canonical XML Schema encoding&#xA;" modelElement="EAID_243AC62C_CA55_4b0c_8284_D861AD68708F"/>
+				</tags>
+				<xrefs value="$XREFPROP=$XID={252F097B-51C5-4e13-9E4B-A20AB1A4531A}$XID;$NAM=Stereotypes$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=Type;FQName=GML::Type;@ENDSTEREO;$DES;$CLT={243AC62C-CA55-4b0c-8284-D861AD68708F}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
+				<extendedProperties tagged="0" package_name="gml"/>
+				<attributes>
+					<attribute xmi:idref="EAID_AF3617BA_036C_4cf7_AE59_B1AF16E2755D" name="position" scope="Public">
+						<initial/>
+						<documentation value="座標値。"/>
+						<model ea_localid="980" ea_guid="{AF3617BA-036C-4cf7-AE59-B1AF16E2755D}"/>
+						<properties type="gml:DirectPosition" precision="0" collection="false" length="0" static="0" duplicates="0" changeability="changeable"/>
+						<coords ordered="0" scale="0"/>
+						<containment containment="Not Specified" position="0"/>
+						<stereotype/>
+						<bounds lower="1" upper="1"/>
+						<options/>
+						<style/>
+						<styleex value="volatile=0;union=0;"/>
+						<tags/>
+						<xrefs/>
+					</attribute>
+				</attributes>
+				<links>
+					<Generalization xmi:id="EAID_2F720204_D9D9_4c03_A34E_F876DC378B00" start="EAID_243AC62C_CA55_4b0c_8284_D861AD68708F" end="EAID_7FAB8425_4E7D_42e8_94F2_901B0F0C0300"/>
+					<Association xmi:id="EAID_92072D54_33C7_40e8_84F7_F28A6BCCC96B" start="EAID_243AC62C_CA55_4b0c_8284_D861AD68708F" end="EAID_78F13906_DAA9_46d1_8050_E1EFD18DBC03"/>
+					<Association xmi:id="EAID_140847E2_8253_47e7_B187_7E08CC8F41DF" start="EAID_D04B32ED_EF64_4ee3_9D40_122343957C3A" end="EAID_243AC62C_CA55_4b0c_8284_D861AD68708F"/>
+					<Association xmi:id="EAID_2E087CF6_B6FF_45c3_A541_B012D7AFA487" start="EAID_8870D961_690C_48bb_8735_1F753852EB9E" end="EAID_243AC62C_CA55_4b0c_8284_D861AD68708F"/>
+					<Association xmi:id="EAID_76687A80_A69F_40d2_901E_31EBAAD70F42" start="EAID_73FEC978_744D_409f_8BB7_6168EBCA0168" end="EAID_243AC62C_CA55_4b0c_8284_D861AD68708F"/>
+					<Association xmi:id="EAID_A2DA8AEB_134B_4dab_A154_833583F65372" start="EAID_FDE84877_37AE_4281_B93C_AE5AA55F9811" end="EAID_243AC62C_CA55_4b0c_8284_D861AD68708F"/>
+					<Association xmi:id="EAID_E219AD53_B42D_4ba1_AE53_1F37F229748F" start="EAID_73FEC978_744D_409f_8BB7_6168EBCA0168" end="EAID_243AC62C_CA55_4b0c_8284_D861AD68708F"/>
+				</links>
+			</element>
+		</elements>
+		<connectors>
+			<connector xmi:idref="EAID_E219AD53_B42D_4ba1_AE53_1F37F229748F">
+				<source xmi:idref="EAID_73FEC978_744D_409f_8BB7_6168EBCA0168">
+					<model ea_localid="519" type="Class" name="ControlPoint"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_243AC62C_CA55_4b0c_8284_D861AD68708F">
+					<model ea_localid="32" type="Class" name="Point"/>
+					<role name="startPoint" stereotype="property" visibility="Public" targetScope="instance"/>
+					<type multiplicity="0..1" aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;"/>
+					<documentation/>
+					<xrefs value="$XREFPROP=$XID={E95A15A8-6814-4160-8221-FE3D235BAE81}$XID;$NAM=Stereotypes$NAM;$TYP=connectorDestEnd property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=property;FQName=GML::property;@ENDSTEREO;$DES;$CLT={E219AD53-B42D-4ba1-AE53-1F37F229748F}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
+					<tags>
+						<tag xmi:id="EAID_08A8199D_34EA_8c34_A285_5E17E07CA4D1" name="isMetadata" value="false$ea_notes=Values: true,false&#xA;Default: false&#xA;Description: If 'true', the property type will extend GML AbstractMetadataPropertyType. Else, it will extend GML AbstractMemberType.&#xA;"/>
+						<tag xmi:id="EAID_37DFCA0A_33B7_f633_92CA_59FDEBF097DB" name="inlineOrByReference" value="inline$ea_notes=Values: byReference,inline&#xA;Default: inline&#xA;Description: Determines whether the property value will be encoded inline or by reference&#xA;"/>
+						<tag xmi:id="EAID_E810E922_7AEF_c27a_AE0D_5D0512D92F7F" name="sequenceNumber" value="1$ea_notes= Unique integer value to order the properties of a class&#xA;"/>
+					</tags>
+				</target>
+				<model ea_localid="588"/>
+				<properties ea_type="Association" direction="Source -&gt; Destination"/>
+				<modifiers isRoot="false" isLeaf="false"/>
+				<parameterSubstitutions/>
+				<documentation value="円曲線、緩和曲線、縦曲線の開始点又は勾配変化点の座標値。軌道中心線上に存在しなければならない。"/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels rb="0..1" rt="+startPoint&#xA;«property»"/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+		</connectors>
+		<diagrams>
+			<diagram xmi:id="EAID_159E9DA0_7A54_4817_B72A_401C750F675D">
+				<model package="EAPK_9F1481D8_A93A_41b3_9F35_B24D8E837859" localID="182" owner="EAPK_9F1481D8_A93A_41b3_9F35_B24D8E837859" tpos="10"/>
+				<properties name="tran4" type="Logical"/>
+				<project author="048827" version="1.0" created="2023-09-07 07:47:56" modified="2025-03-13 13:24:13"/>
+				<style1 value="ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;Border=1;HighlightForeign=1;PackageContents=1;SequenceNotes=0;ScalePrintImage=0;PPgs.cx=0;PPgs.cy=0;DocSize.cx=795;DocSize.cy=1138;ShowDetails=0;Orientation=P;Zoom=100;ShowTags=0;OpParams=1;VisibleAttributeDetail=0;ShowOpRetType=1;ShowIcons=1;CollabNums=0;HideProps=0;ShowReqs=0;ShowCons=0;PaperSize=9;HideParents=0;UseAlias=0;HideAtts=0;HideOps=0;HideStereo=0;HideElemStereo=0;ShowTests=0;ShowMaint=0;ConnectorNotation=UML 2.1;ExplicitNavigability=0;ShowShape=1;AllDockable=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;ShowNotes=0;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;"/>
+				<style2 value="ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;KanbanActive=0;MatrixLineWidth=1;MatrixLineClr=0;MatrixLocked=0;TConnectorNotation=UML 2.1;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;MDGDgm=;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;SuppressedCompartments=;Theme=:119;SaveTag=B9A22AFA;"/>
+				<swimlanes value="locked=false;orientation=0;width=0;inbar=false;names=false;color=-1;bold=false;fcol=0;tcol=-1;ofCol=-1;ufCol=-1;hl=1;ufh=0;hh=0;cls=0;bw=0;hli=0;bro=0;SwimlaneFont=lfh:-13,lfw:0,lfi:0,lfu:0,lfs:0,lfface:Calibri,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;"/>
+				<matrixitems value="locked=false;matrixactive=false;swimlanesactive=true;kanbanactive=false;width=1;clrLine=0;"/>
+				<extendedProperties/>
+				<persistentstyle value="DGS=On=0:CNT=8:W=120:H=40:SG=0:SGH=0:AEB=0:;AR=0;DCL=0;Swimlanes=locked=false;orientation=0;width=0;inbar=false;names=false;color=-1;bold=false;fcol=0;tcol=-1;ofCol=-1;ufCol=-1;hl=1;ufh=0;hh=0;cls=0;bw=0;hli=0;bro=0;SwimlaneFont=lfh:-13,lfw:0,lfi:0,lfu:0,lfs:0,lfface:Calibri,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;;"/>
+				<xrefs/>
+				<elements>
+					<element geometry="Left=40;Top=375;Right=267;Bottom=497;imgL=40;imgT=375;imgR=267;imgB=497;" subject="EAID_73FEC978_744D_409f_8BB7_6168EBCA0168" seqno="4" style="NSL=0;LCol=-1;bold=0;black=0;italic=0;ul=0;charset=0;HideIcon=0;LWth=2;font=Yu Gothic UI;fontsz=100;pitch=50;BFol=0;DUID=D3BB70A9;BCol=16777215;"/>
+					<element geometry="Left=60;Top=565;Right=254;Bottom=656;imgL=60;imgT=565;imgR=254;imgB=656;" subject="EAID_243AC62C_CA55_4b0c_8284_D861AD68708F" seqno="5" style="NSL=0;LCol=-1;bold=0;black=0;italic=0;ul=0;charset=0;HideIcon=0;LWth=2;font=Yu Gothic UI;fontsz=100;pitch=50;BFol=0;DUID=4AA983C8;BCol=16777215;"/>
+					<element geometry="SX=-55;SY=-44;EX=-59;EY=27;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=CX=66:CY=35:OX=14:OY=-36:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LRB=CX=21:CY=18:OX=4:OY=-18:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;IRHS=;ILHS=;Path=;" subject="EAID_E219AD53_B42D_4ba1_AE53_1F37F229748F" style="Mode=3;EOID=4AA983C8;SOID=D3BB70A9;Color=-1;LWidth=2;Hidden=0;"/>
+				</elements>
+			</diagram>
+		</diagrams>
+	</xmi:Extension>
+</xmi:XMI>

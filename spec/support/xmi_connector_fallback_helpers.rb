@@ -25,7 +25,7 @@ module XmiConnectorFallbackHelpers
     doc = Nokogiri::XML(xmi_text)
     doc.xpath("//*[local-name()='element'][@subject='#{connector_id}']").each do |row|
       row["style"] = ";Hidden=0;"
-      row["geometry"] = "SX=0;SY=0;EX=0;EY=0;Path=;"
+      row["geometry"] = "SX=0;SY=0;EX=0;EY=0;EDGE=1;Path=;"
     end
     doc.xpath("//ownedElement[@modelElement='#{connector_id}']").remove if remove_edge
     doc.to_xml

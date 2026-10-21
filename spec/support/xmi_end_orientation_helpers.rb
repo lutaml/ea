@@ -31,6 +31,17 @@ module XmiEndOrientationHelpers
     end
   end
 
+  # The last occurrence: later connectors draw after earlier ones.
+  def text_seats(document, *texts)
+    svg = Ea::Svg::EaEmitter::Document.new(
+      document.diagrams.first, model_index: document.index_by_id, document: document
+    ).render
+    texts.to_h do |text|
+      x, y = svg.scan(%r{<text x="([-\d.]+)" y="([-\d.]+)"[^>]*>#{Regexp.escape(text)}</text>}).last
+      [text, [x.to_f, y.to_f]]
+    end
+  end
+
   def self_association_xml
     File.read(FIXTURE)
         .sub(/(<connector xmi:idref="EAID_07034165.*?<target xmi:idref=")[^"]+/m,

@@ -660,6 +660,24 @@ RSpec.describe Ea::Svg::EaEmitter::Label::EndLabel do
       end
     end
 
+    it "centres a role narrower than the stereotype over it, keeping the stereotype edge" do
+      # Plateau 159E9DA0/90BCA409 +endPoint (46 wide under the 48 wide stereotype)
+      # sit one pixel right of the plain right-aligned seat; wider roles do not move.
+      records = [
+        { role: "endPoint", anchor: [210, 564], box: { "ox" => 64, "oy" => -35, "alignment" => 1 },
+          expected: [164, 522], stereotype_x: 163 },
+        { role: "startPoint", anchor: [225, 674], box: { "ox" => 42, "oy" => -32, "alignment" => 1 },
+          expected: [154, 635], stereotype_x: 154 }
+      ]
+      records.each do |record|
+        positions = upward_property_positions(record, end_kind: :target, target_stereotype: "property",
+                                                      style: { mode: "3", lwidth: "2" })
+
+        expect(positions["+#{record[:role]}"]).to eq(record[:expected])
+        expect(positions["«property»"][0]).to eq(record[:stereotype_x])
+      end
+    end
+
     it "preserves unsupported upward target property presentations" do
       record = { role: "referencePoint", anchor: [813, 700],
                  box: { "ox" => 63, "oy" => -31, "alignment" => 1 } }

@@ -52,11 +52,16 @@ module Ea
         # feature compartment — even one whose rows are all hidden
         # by visibility flags (10E3E08A: CodeList with 3 attributes
         # toggled off still renders the divider over an empty body;
-        # only feature-less elements omit it).
+        # only feature-less elements omit it). Association-end
+        # properties are not EA attributes (QEA keeps them as connector
+        # roles; the XMI reads them as ownedAttribute), so a class whose
+        # only properties are association ends has no feature compartment
+        # and no divider (A59065AF urf::Administration).
         def hidden_features_present?
           return false unless classifier.respond_to?(:properties)
 
-          classifier.properties.any? || classifier.operations.any?
+          classifier.properties.any? { |property| !property.association_id } ||
+            classifier.operations.any?
         end
       end
     end

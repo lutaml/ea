@@ -11,6 +11,8 @@ module Ea
         # drawn by more than one edge in the same diagram has neither; an edge
         # with fewer than two waypoints has no route.
         class UmldiEdges
+          autoload :PropertyRoles, "ea/sources/xmi/diagram_builder/umldi_edges/property_roles"
+
           def initialize(xmi_path)
             @xmi_path = xmi_path
           end
@@ -23,12 +25,66 @@ module Ea
             ends.dig(diagram_id, connector_id)
           end
 
+          # Absolute saved UMLDI bounds for connector label boxes. These are
+          # kept separate from extension label offsets: callers may use them
+          # when extension geometry is absent or the association owns the role.
+          def label_bounds_for(diagram_id, connector_id)
+            label_bounds.dig(diagram_id, connector_id)
+          end
+
+          # Role label keys whose UMLDI label is bound to the property that
+          # the connector's association declares, so the bounds describe that
+          # end's own role label rather than an unrelated label.
+          def property_role_keys_for(diagram_id, connector_id)
+            (@property_roles ||= PropertyRoles.new(doc)).keys_for(diagram_id, connector_id)
+          end
+
           private
 
           def ends
             @ends ||= doc.xpath("//*[local-name()=\"Diagram\"]").to_h do |diagram|
               [diagram["id"] || diagram["xmi:id"], diagram_ends(diagram)]
             end
+          end
+
+          def label_bounds
+            @label_bounds ||= doc.xpath("//*[local-name()=\"Diagram\"]").to_h do |diagram|
+              [diagram["id"] || diagram["xmi:id"], diagram_label_bounds(diagram)]
+            end
+          end
+
+          def diagram_label_bounds(diagram)
+            boxes_by_connector = unique_edges(diagram).to_h do |connector_id, edge|
+              [connector_id, edge_label_bounds(edge)]
+            end
+            boxes_by_connector.reject { |_, boxes| boxes.empty? }
+          end
+
+          def edge_label_bounds(edge)
+            edge.xpath("./ownedElement[@modelElement]").each_with_object({}) do |label, found|
+              bounds = label.at_xpath("./*[local-name()=\"bounds\"]")
+              key = label_key(label)
+              next unless key && bounds
+
+              found[key] = bounds_values(bounds)
+            rescue ArgumentError, TypeError
+              next
+            end
+          end
+
+          def bounds_values(bounds)
+            %w[x y width height].to_h { |attribute| [attribute.to_sym, Integer(bounds[attribute])] }
+          end
+
+          def label_key(label)
+            type = label.attributes["type"]&.value.to_s
+            role = (label["id"] || label["xmi:id"]).to_s
+            end_name = { "EAID_SEL" => "source", "EAID_SML" => "source",
+                         "EAID_TEL" => "target", "EAID_TML" => "target" }
+            side = end_name.find { |prefix, _| role.start_with?(prefix) }&.last
+            suffix = { "UMLAssociationEndLabel" => "role", "UMLMultiplicityLabel" => "multiplicity" }
+            label_kind = suffix[type.split(":").last]
+            "#{side}_#{label_kind}".to_sym if side && label_kind
           end
 
           def diagram_ends(diagram)

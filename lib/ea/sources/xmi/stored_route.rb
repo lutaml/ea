@@ -26,7 +26,173 @@ module Ea
           finish(points, link, connector, source, target, bends, ports, offsets, edge)
         end
 
+        # Direct custom-line associations and aggregations retain ray origins as
+        # well as their computed boundary ports, just as the QEA builder does.
+        def ray_metadata(model, link:, bounds:, offsets:, edge:)
+          return {} unless direct_association_ray?(model, bounds, offsets)
+
+          source, target = bounds.values_at(:source, :target)
+          geom = ray_geometry(offsets, edge)
+          return {} unless saved_association_ray?(model, link, source, target, geom)
+
+          ray_points(source, target, offsets, geom)
+        end
+
+        def phantom_waypoints(source, target)
+          [bounds_edge_point(source, target), bounds_edge_point(target, source)]
+        end
+
+        # Apply QEA's saved Association stages after the initial route, including
+        # UMLDI fallback. A single stored corner and an empty-path stored ray
+        # carry mathematical origins that the generic facing-edge route loses.
+        def association_route(model, link:, bounds:, offsets:, edge:)
+          overlap = umldi_association_metadata(model, link, bounds, offsets, edge)
+          return overlap unless overlap.empty?
+
+          partial = partial_port_metadata(model, link, bounds, offsets, edge)
+          return partial unless partial.empty?
+
+          return {} unless stored_association_candidate?(model, bounds)
+
+          candidate = association_model(model, bounds, offsets)
+          initial = candidate.waypoints
+          association_stored_ray(candidate, link, bounds, ray_geometry(offsets, edge), false)
+          return {} if candidate.waypoints.equal?(initial)
+
+          association_metadata(candidate)
+        end
+
         private
+
+        def umldi_association_metadata(model, link, bounds, offsets, edge)
+          overlap = umldi_overlap_metadata(model, link, bounds, offsets, edge)
+          return overlap unless overlap.empty?
+
+          umldi_stored_ray_metadata(model, link, bounds, offsets, edge)
+        end
+
+        # UMLDI owns the route and ports. Classify a thin saved ray only when
+        # its origins pass the shared unstroked-box checks; XMI has no QEA
+        # database from which to infer a wider element outline.
+        def umldi_stored_ray_metadata(model, link, bounds, offsets, edge)
+          return {} unless umldi_thin_ray_candidate?(model, bounds, offsets)
+
+          candidate = association_model(model, bounds, offsets)
+          return {} unless association_ray_candidate?(candidate, link)
+          return {} unless association_ray_origins(*bounds.values_at(:source, :target),
+                                                   ray_geometry(offsets, edge), "0")
+
+          { style: model.style.to_h.merge(stored_association_ray: true, association_ray_outline: true) }
+        end
+
+        def umldi_thin_ray_candidate?(model, bounds, offsets)
+          model.style[:umldi_route] && model.style[:lwidth] == "0" &&
+            bounds.values.all? && offsets.values.flatten.none?(&:nil?)
+        end
+
+        # UMLDI owns the drawn route; retain QEA's overlap origins only for
+        # interpreting the stored relative end labels against that route.
+        def umldi_overlap_metadata(model, link, bounds, offsets, edge)
+          return {} unless umldi_overlap_candidate?(model, bounds, offsets)
+
+          candidate = association_model(model, bounds, offsets)
+          overlap_ray_origins(candidate, link, bounds, ray_geometry(offsets, edge), false)
+          return {} unless candidate.style[:overlap_ray]
+
+          { source_anchor: candidate.source_anchor, target_anchor: candidate.target_anchor,
+            has_geometry_offsets: true, style: candidate.style.to_h }
+        end
+
+        def umldi_overlap_candidate?(model, bounds, offsets)
+          model.style.to_h.values_at(:umldi_route, :mode, :lwidth) == [true, "2", "0"] &&
+            model.waypoints.size == 2 && bounds.values.all? && offsets.values.flatten.none?(&:nil?)
+        end
+
+        # A zero-offset end has no explicit port, but QEA still carries both
+        # mathematical origins for the emitter's final boundary redocking.
+        def partial_port_metadata(model, link, bounds, offsets, edge)
+          return {} unless partial_port_candidate?(model, link, bounds, offsets)
+
+          source, target = bounds.values_at(:source, :target)
+          return {} unless saved_association_ray?(model, link, source, target, ray_geometry(offsets, edge))
+
+          association_ends(bounds, offsets).merge(has_geometry_offsets: true)
+        end
+
+        def partial_port_candidate?(model, link, bounds, offsets)
+          model.connector_type == "Aggregation" && !model.style[:umldi_route] && !link.path.to_s.empty? &&
+            direct_association_ray?(model, bounds, offsets) &&
+            offsets.values.count { |offset| offset.all?(&:zero?) } == 1
+        end
+
+        def stored_association_candidate?(model, bounds)
+          model.connector_type == "Association" && bounds.values.all? &&
+            association_ray_style?(model.style.to_h) && model.style[:lwidth] == "2"
+        end
+
+        def association_metadata(model)
+          fields = %i[waypoints source_anchor target_anchor source_port target_port has_geometry_offsets]
+          fields.to_h { |name| [name, model.public_send(name)] }.merge(
+            style: model.style.to_h.reject { |key, _| key == :umldi_route }
+          )
+        end
+
+        def association_model(model, bounds, offsets)
+          Ea::Model::DiagramConnector.new(
+            { connector_type: model.connector_type, style: model.style.to_h.dup, waypoints: model.waypoints,
+              has_geometry_offsets: !offsets[:source][0].nil? }.merge(association_ends(bounds, offsets))
+          )
+        end
+
+        def association_ends(bounds, offsets)
+          %i[source target].each_with_object({}) do |kind, result|
+            box = bounds.fetch(kind)
+            offset = offsets.fetch(kind)
+            port = port_for(box, offset)
+            result["#{kind}_port".to_sym] = point_for(port) if port
+            result["#{kind}_anchor".to_sym] = association_anchor(box, offset)
+          end
+        end
+
+        def association_anchor(box, offset)
+          Ea::Model::Point.new(x: box.x + box.width / 2 + offset[0].to_i,
+                               y: box.y + box.height / 2 + offset[1].to_i)
+        end
+
+        def stored_ray_boxes(_link, bounds)
+          bounds.values_at(:source, :target)
+        end
+
+        def direct_association_ray?(model, bounds, offsets)
+          %w[Association Aggregation].include?(model.connector_type) && model.waypoints.size == 2 &&
+            model.style.to_h.values_at(:mode, :lwidth, :tree) == ["1", "2", nil] &&
+            bounds.values.all? && offsets.values.flatten.none?(&:nil?)
+        end
+
+        def ray_geometry(offsets, edge)
+          { sx: offsets[:source][0], sy: offsets[:source][1],
+            ex: offsets[:target][0], ey: offsets[:target][1], edge: edge }
+        end
+
+        def saved_association_ray?(model, link, source, target, geom)
+          (!geom[:sy].zero? || !geom[:ey].zero?) &&
+            stored_ray_gap?(source, target, "1", geom[:edge]) &&
+            stored_association_path?(model, link, source, target, geom)
+        end
+
+        def ray_points(source, target, offsets, geom)
+          ports = [port_for(source, offsets[:source]), port_for(target, offsets[:target])]
+          return {} unless ports.all?
+
+          { source_port: point_for(ports.first), target_port: point_for(ports.last),
+            source_anchor: stored_ray_origin(source, geom[:sx], geom[:sy]),
+            target_anchor: stored_ray_origin(target, geom[:ex], geom[:ey]),
+            has_geometry_offsets: true }
+        end
+
+        def point_for(pair)
+          Ea::Model::Point.new(x: pair[0], y: pair[1])
+        end
 
         # Placements here are already Ea::Model::Bounds.
         def bounds_from_rect(bounds)

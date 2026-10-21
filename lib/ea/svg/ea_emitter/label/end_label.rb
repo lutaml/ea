@@ -22,9 +22,11 @@ module Ea
           SEAT_FONT_SIZE = 7
           SEAT_X_INSET = 3
           SEAT_STEREOTYPE_GAP = 12
-          # EA keeps an upward property seat's left edge at diagram x >= 3;
-          # the stereotype line moves with the role. Measured only for the
-          # default Cambria 7pt boxed cluster.
+          # EA keeps an end-label role's left edge at diagram x >= 3; the
+          # stereotype line moves with the role. Measured on the Plateau
+          # v5.1 export: of 776 saved end labels, the only three whose
+          # UMLDI bounds start left of 3 (47E4600F, CB34B578, 159E9DA0) are
+          # drawn at x = 3, and no label is drawn left of it.
           MIN_ROLE_X = 3
 
           attr_reader :canvas, :model_index, :document, :theme,
@@ -61,12 +63,13 @@ module Ea
           #                   fallback
           def texts(text_box:, mult_box:, anchor:, connector:, end_kind:,
                     tree: false, heading: nil, stored_labels: false, bend: nil, source_bounds: nil,
-                    target_face: nil)
+                    target_face: nil, umldi_bounds: {})
             from_property, role, mult = role_and_multiplicity(connector, end_kind)
             if role_empty?(role) && mult_empty?(mult)
               other_from_prop, other_role, other_mult = role_and_multiplicity(connector,
                                                               opposite(end_kind))
-              if stored_labels || connector.style.to_h[:explicit_end_roles]
+              if stored_labels || connector.style.to_h[:explicit_end_roles] ||
+                 connector.style.to_h[:phantom_outline] == true
                 return [] if role_empty?(other_role) && mult_empty?(other_mult)
 
                 return own_stereotype_only(text_box, anchor, connector,
@@ -104,7 +107,7 @@ module Ea
                          plain_vertical_role(connector, direction, anchor, text_box, role) ||
                          source_property_seat(connector, direction, anchor, text_box, role) ||
                          plain_upward_seat(connector, direction, anchor, text_box, role) ||
-                         role_seat(direction, anchor, text_box, role) || text_pos
+                         role_seat(connector, direction, anchor, text_box, role) || text_pos
               mult_pos = directional_multiplicity(direction, anchor, mult_box, mult) ||
                          horizontal_tree_multiplicity(connector, direction, anchor, mult_box, mult) ||
                          mult_seat(direction, anchor, mult_box) || mult_pos
@@ -149,11 +152,52 @@ module Ea
               text_pos, mult_pos = stair_positions if stair_positions
             end
 
+            role_bounds = umldi_bounds[end_kind == :source ? :source_role : :target_role]
+            mult_bounds = umldi_bounds[end_kind == :source ? :source_multiplicity : :target_multiplicity]
+            text_pos = umldi_label_position(role_bounds) if role_bounds
+            centering = role_bounds ? bounds_role_centering(connector, end_kind, role, stereo, text_box) : 0
+            text_pos = [text_pos[0] + centering, text_pos[1]] if centering.positive?
+            mult_pos = umldi_label_position(mult_bounds) if mult_bounds
+            if stereo && role_bounds
+              stereo_pos = umldi_stereotype_position(role_bounds, role, stereo, text_box)
+              stereo_pos = [role_bounds[:x], stereo_pos[1]] if centering.positive?
+            end
+
+            if text_pos && !role_empty?(role) && min_role_x_cluster?(connector, end_kind, heading, text_box)
+              text_pos, stereo_pos = clamp_role_x(text_pos, stereo_pos)
+            end
+
             build_texts(role:, mult:, standalone:,
-                        text_pos:, mult_pos:, stereo:, text_box:)
+                        text_pos:, mult_pos:, stereo:, text_box:, stereo_pos:)
           end
 
           private
+
+          # Measured only for default Cambria 7pt Property roles on a vertical
+          # leg rising from the end; other fonts, boxes and legs keep their
+          # unclamped seats.
+          def min_role_x_cluster?(connector, end_kind, heading, text_box)
+            rising_vertical?(heading) && plain_seat_font? &&
+              cambria_box?(text_box) && property_label?(connector, end_kind)
+          end
+
+          def rising_vertical?(heading)
+            heading && heading[0].zero? && heading[1].negative?
+          end
+
+          def plain_seat_font?
+            seat_font? && font_weight == 400 && font_style == "normal"
+          end
+
+          # Shift the role and its stereotype line together when the role
+          # would start left of EA's minimum label x.
+          def clamp_role_x(text_pos, stereo_pos)
+            shift = MIN_ROLE_X - text_pos[0]
+            return [text_pos, stereo_pos] unless shift.positive?
+
+            [[text_pos[0] + shift, text_pos[1]],
+             stereo_pos && [stereo_pos[0] + shift, stereo_pos[1]]]
+          end
 
           # ALN2 single-line target roles retain their horizontal placement
           # and use the saved corner's baseline on a straight stored ray.
@@ -190,8 +234,11 @@ module Ea
             [x - width - SEAT_X_INSET, y - 7] if width
           end
 
+          # UMLDI routes carry the inferred saved-ray flag; their stored LRT
+          # box keeps the plain target seat.
           def moved_plain_target_ray?(connector, box)
-            saved_target_ray?(connector) && box.values_at("alignment", "cy") == [1, 16] &&
+            saved_target_ray?(connector) && connector.style.to_h[:umldi_route] != true &&
+              box.values_at("alignment", "cy") == [1, 16] &&
               !stored_offsets_zero?(box)
           end
 
@@ -318,15 +365,33 @@ module Ea
             nil
           end
 
+          # Saved bounds seat a source Property role at the stereotype's left
+          # edge. A centred stored box (ALN=1), or a phantom's synthesized box
+          # without alignment, centres the shorter role over it; a
+          # left-aligned box keeps both lines on that edge.
+          def bounds_role_centering(connector, end_kind, role, stereo, text_box)
+            return 0 unless end_kind == :source && stereo && seat_font?
+            return 0 unless centred_bounds_box?(connector, text_box)
+            return 0 unless property_label?(connector, :source)
+
+            -[stereotype_offset(role, stereo, { "alignment" => 1 }), 0].min
+          end
+
+          # Phantom outlines have no saved diagram link, so their boxes are
+          # synthesized and EA draws its centred default label.
+          def centred_bounds_box?(connector, text_box)
+            connector.style.to_h[:phantom_outline] == true || text_box.to_h["alignment"] == 1
+          end
+
           # Role text on a rightward leg is left-aligned at the corner,
           # 7px above it.
-          def role_seat(direction, anchor, box, role)
+          def role_seat(connector, direction, anchor, box, role)
             return nil unless direction == :right
             return nil if box.nil? || role_empty?(role)
             return nil unless default_presentation?(box)
 
             x, y = seat_corner(anchor, box)
-            [x + SEAT_X_INSET, y - 7]
+            [x + SEAT_X_INSET + source_property_centering(connector, direction, box, role), y - 7]
           end
 
           # Property-role clusters use a direction-specific horizontal seat;
@@ -348,12 +413,26 @@ module Ea
           # Center a short role above the wider stereotype without moving
           # the directional cluster's left edge. Other boxes keep their seat.
           def source_property_centering(connector, direction, box, role)
-            return 0 unless %i[left down].include?(direction)
-            return 0 unless seat_font? && font_weight == 400 && font_style == "normal"
-            return 0 unless box.values_at("cy", "alignment") == [35, 1]
+            return 0 unless centered_property_box?(connector, direction, box)
 
-            stereo = "«#{connector_source_dest_stereotype(connector, :source)}»"
-            -[stereotype_offset(role, stereo, box), 0].min
+            property_role_centering(connector, :source, box, role)
+          end
+
+          def property_role_centering(connector, end_kind, box, role)
+            return 0 unless seat_font? && font_weight == 400 && font_style == "normal"
+            return 0 unless property_label?(connector, end_kind)
+
+            stereo = "«#{connector_source_dest_stereotype(connector, end_kind)}»"
+            -[stereotype_offset(role, stereo, box.merge("alignment" => 1)), 0].min
+          end
+
+          # Measured box heights: left/down Property clusters store CY 35,
+          # right-seat clusters CY 31. Phantom outlines leaving down carry a
+          # synthesized zero box that centers the same way.
+          def centered_property_box?(connector, direction, box)
+            cy = { left: 35, down: 35, right: 31 }[direction]
+            (cy && box.values_at("cy", "alignment") == [cy, 1]) ||
+              (direction == :down && phantom_property_box?(connector, direction, box))
           end
 
           def source_property_seat?(connector, direction, box)
@@ -367,7 +446,7 @@ module Ea
           # Their default Property cluster uses the directional seat with a
           # centered stereotype; persisted or moved boxes keep their own seat.
           def phantom_property_box?(connector, direction, box)
-            %i[up left].include?(direction) && seat_font? && cambria_box?(box) &&
+            %i[up left down].include?(direction) && seat_font? && cambria_box?(box) &&
               box["alignment"].nil? && stored_offsets_zero?(box) &&
               connector.style.to_h[:phantom_outline] == true &&
               property_label?(connector, :source)
@@ -522,7 +601,7 @@ module Ea
 
             x, y = seat_corner(anchor, box)
             inset, = property_role_offsets(:down)
-            [x - inset - width, y - 7]
+            [x - inset - width + property_role_centering(connector, :target, box, role), y - 7]
           end
 
           def upward_target_property?(connector, heading)
@@ -665,11 +744,17 @@ module Ea
 
           def downward_source_route?(style, box)
             [orthogonal_stub_route?(style), lateral_horizontal_route?(style), mode_two_route?(style),
-             downward_property_route?(style), persisted_width_zero_down_box?(box, style)].any?
+             downward_property_route?(style), persisted_width_zero_down_box?(box, style),
+             centered_width_zero_down_box?(box, style)].any?
           end
 
           def persisted_width_zero_down_box?(box, style)
             box["alignment"]&.zero? && !stored_offsets_zero?(box) && style[:stored_association_ray] != true &&
+              style.values_at(:mode, :lwidth, :tree) == ["3", "0", nil]
+          end
+
+          def centered_width_zero_down_box?(box, style)
+            box["alignment"] == 1 && stored_offsets_zero?(box) &&
               style.values_at(:mode, :lwidth, :tree) == ["3", "0", nil]
           end
 
@@ -820,13 +905,14 @@ module Ea
           end
 
           def build_texts(role:, mult:, standalone:, text_pos:, mult_pos:,
-                          stereo:, text_box:)
+                          stereo:, text_box:, stereo_pos: nil)
             if role && !role.empty? && text_pos
               x, y = text_pos
               texts = [text_at(x, y, role)]
               if stereo
-                stereo_x = x + stereotype_offset(role, stereo, text_box)
-                texts << text_at(stereo_x, y + property_y_offset(text_box), stereo)
+                stereo_x, stereo_y = stereo_pos || [x + stereotype_offset(role, stereo, text_box),
+                                                    y + property_y_offset(text_box)]
+                texts << text_at(stereo_x, stereo_y, stereo)
               end
               if mult && !mult.empty? && mult_pos
                 texts << text_at(*mult_pos, mult)
@@ -837,6 +923,19 @@ module Ea
             else
               []
             end
+          end
+
+          def umldi_label_position(bounds)
+            [bounds[:x], bounds[:y] + font_pixel_size.ceil]
+          end
+
+          def umldi_stereotype_position(bounds, role, stereo, text_box)
+            [bounds[:x] + stereotype_offset(role, stereo, text_box),
+             bounds[:y] + font_pixel_size.ceil + (font_pixel_size.ceil + 2)]
+          end
+
+          def font_pixel_size
+            font_unit == "pt" ? font_size * 4.0 / 3 : font_size
           end
 
           def stereotype_offset(role, stereo, text_box)

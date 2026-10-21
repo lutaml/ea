@@ -1,0 +1,144 @@
+<?xml version="1.0"?>
+<xmi:XMI xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/UML/20161101/UMLDC" xmlns:thecustomprofile="http://www.sparxsystems.com/profiles/thecustomprofile/1.0" xmlns:GML="http://www.sparxsystems.com/profiles/GML/1.0" xmlns:StandardProfileL2="http://www.omg.org/spec/UML/20110701/StandardProfileL2.xmi">
+  <xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5" exporterID="1624"/>
+  <uml:Model xmi:type="uml:Model" name="EA-135 D159 plain source seat fixture">
+    <packagedElement xmi:type="uml:Class" xmi:id="EAID_CBC8C84D_03F0_4384_9024_71E4AD40F9EE" name="GlobalHubCityDevelopmentProject" isAbstract="true">
+
+						</packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="EAID_9D679A9C_1EFC_4b72_9438_8BF4D1D6B0DB" name="SpecifiedUrgentUrbanRenewalArea" isAbstract="true">
+
+
+
+
+
+					</packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="EAID_52793652_96F1_47a6_BC9A_B55F4E739CA8">
+							<memberEnd xmi:idref="EAID_dst793652_96F1_47a6_BC9A_B55F4E739CA8"/>
+							<ownedEnd xmi:type="uml:Property" xmi:id="EAID_dst793652_96F1_47a6_BC9A_B55F4E739CA8" association="EAID_52793652_96F1_47a6_BC9A_B55F4E739CA8">
+								<type xmi:idref="EAID_9D679A9C_1EFC_4b72_9438_8BF4D1D6B0DB"/>
+							</ownedEnd>
+							<memberEnd xmi:idref="EAID_src793652_96F1_47a6_BC9A_B55F4E739CA8"/>
+						</packagedElement>
+    <umldi:Diagram xmi:type="umldi:UMLClassDiagram" xmi:id="EAID_039FE004_5408_4fc0_89AA_EB319E4F61C7" isFrame="false" modelElement="EAPK_A8924CC0_FD07_4529_83B5_CBC98C7342F2">
+      <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_039FE004_5408_4fc0_9024_71E4AD40F9EE" modelElement="EAID_CBC8C84D_03F0_4384_9024_71E4AD40F9EE">
+				<ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_B31D_4f2c_ABA9_0366ECF81C09" text="DataType"/>
+				<ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_B31D_4f2c_ABA9_0366ECF81C09" text="GlobalHubCityDevelopmentProject"/>
+				<bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_B31D_4f2c_ABA9_0366ECF81C09" x="820" y="731" width="197" height="80"/>
+			</ownedElement>
+      <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="EAID_039FE004_5408_4fc0_9438_8BF4D1D6B0DB" modelElement="EAID_9D679A9C_1EFC_4b72_9438_8BF4D1D6B0DB">
+				<ownedElement xmi:type="umldi:UMLKeywordLabel" xmi:id="EAID_KL000000_B31D_4f2c_920A_29CC244E0A4D" text="FeatureType"/>
+				<ownedElement xmi:type="umldi:UMLNameLabel" xmi:id="EAID_NL000000_B31D_4f2c_920A_29CC244E0A4D" text="SpecifiedUrgentUrbanRenewalArea"/>
+				<bounds xmi:type="dc:bounds" xmi:id="EAID_DB000000_B31D_4f2c_920A_29CC244E0A4D" x="1100" y="190" width="120" height="80"/>
+			</ownedElement>
+      <ownedElement xmi:type="umldi:UMLEdge" xmi:id="EAID_039FE004_5408_4fc0_BC9A_B55F4E739CA8" source="EAID_039FE004_5408_4fc0_9024_71E4AD40F9EE" target="EAID_039FE004_5408_4fc0_9438_8BF4D1D6B0DB" modelElement="EAID_52793652_96F1_47a6_BC9A_B55F4E739CA8">
+				<ownedElement xmi:type="umldi:UMLAssociationEndLabel" xmi:id="EAID_SEL000000_B31D_4f2c_9651_5D1D972FBCD6" text="+developmentProject&#10;&#xAB;property&#xBB;" modelElement="EAID_src793652_96F1_47a6_BC9A_B55F4E739CA8">
+					<bounds xmi:type="dc:bounds" xmi:id="EAID_DBSEL000000_B31D_4f2c_9651_5D1D972FBCD6" x="970" y="245" width="112" height="25"/>
+				</ownedElement>
+				<ownedElement xmi:type="umldi:UMLMultiplicityLabel" xmi:id="EAID_SML000000_B31D_4f2c_9651_5D1D972FBCD6" text="0..*" modelElement="EAID_src793652_96F1_47a6_BC9A_B55F4E739CA8">
+					<bounds xmi:type="dc:bounds" xmi:id="EAID_DBSML000000_B31D_4f2c_9651_5D1D972FBCD6" x="940" y="328" width="15" height="13"/>
+				</ownedElement>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000000_B31D_4f2c_9651_5D1D972FBCD6" x="970" y="536"/>
+				<waypoint xmi:type="dc:waypoint" xmi:id="EAID_WP000001_B31D_4f2c_9651_5D1D972FBCD6" x="835" y="536"/>
+			</ownedElement>
+    </umldi:Diagram>
+  </uml:Model>
+  <xmi:Extension extender="Enterprise Architect" extenderID="6.5">
+    <diagrams>
+      <diagram xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmi:id="EAID_039FE004_5408_4fc0_89AA_EB319E4F61C7">
+				<model package="EAPK_A8924CC0_FD07_4529_83B5_CBC98C7342F2" localID="159" owner="EAPK_A8924CC0_FD07_4529_83B5_CBC98C7342F2" tpos="13"/>
+				<properties name="UrgentUrbanRenewalprogram" type="Logical"/>
+				<project author="048827" version="1.0" created="2023-03-11 00:32:16" modified="2025-01-21 14:59:23"/>
+				<style1 value="ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;Border=1;HighlightForeign=1;PackageContents=1;SequenceNotes=0;ScalePrintImage=0;PPgs.cx=0;PPgs.cy=0;DocSize.cx=795;DocSize.cy=1138;ShowDetails=0;Orientation=P;Zoom=100;ShowTags=0;OpParams=1;VisibleAttributeDetail=0;ShowOpRetType=1;ShowIcons=1;CollabNums=0;HideProps=0;ShowReqs=0;ShowCons=0;PaperSize=9;HideParents=1;UseAlias=0;HideAtts=0;HideOps=0;HideStereo=0;HideElemStereo=0;ShowTests=0;ShowMaint=0;ConnectorNotation=UML 2.1;ExplicitNavigability=0;ShowShape=1;AllDockable=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;ShowNotes=0;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;"/>
+				<style2 value="ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;KanbanActive=0;MatrixLineWidth=1;MatrixLineClr=0;MatrixLocked=0;TConnectorNotation=UML 2.1;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;MDGDgm=;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;SuppressedCompartments=;Theme=:119;SaveTag=9178E25D;"/>
+				<swimlanes value="locked=false;orientation=0;width=0;inbar=false;names=false;color=0;bold=false;fcol=0;tcol=16777215;ofCol=-1;ufCol=-1;hl=1;ufh=0;hh=0;cls=0;bw=0;hli=0;bro=1;SwimlaneFont=lfh:-16,lfw:0,lfi:0,lfu:0,lfs:0,lfface:Calibri,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;"/>
+				<matrixitems value="locked=false;matrixactive=false;swimlanesactive=true;kanbanactive=false;width=1;clrLine=0;"/>
+				<extendedProperties/>
+				<persistentstyle value="DGS=On=0:CNT=8:W=120:H=40:SG=0:SGH=0:AEB=0:;AR=0;DCL=0;Swimlanes=locked=false;orientation=0;width=0;inbar=false;names=false;color=0;bold=false;fcol=0;tcol=16777215;ofCol=-1;ufCol=-1;hl=1;ufh=0;hh=0;cls=0;bw=0;hli=0;bro=1;SwimlaneFont=lfh:-16,lfw:0,lfi:0,lfu:0,lfs:0,lfface:Calibri,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;;"/>
+				<xrefs/>
+				<elements>
+
+
+
+
+
+
+
+					<element geometry="Left=1100;Top=190;Right=1220;Bottom=270;imgL=1100;imgT=190;imgR=1220;imgB=270;" subject="EAID_9D679A9C_1EFC_4b72_9438_8BF4D1D6B0DB" seqno="8" style="DUID=80A4408B;NSL=0;LCol=-1;bold=0;black=0;italic=0;ul=0;charset=0;HideIcon=0;BCol=13434879;LWth=2;font=Yu Gothic UI;fontsz=100;pitch=50;BFol=0;"/>
+
+
+
+
+
+
+
+
+					<element geometry="Left=820;Top=731;Right=1017;Bottom=811;imgL=820;imgT=731;imgR=1017;imgB=811;" subject="EAID_CBC8C84D_03F0_4384_9024_71E4AD40F9EE" seqno="17" style="NSL=0;LCol=-1;bold=0;black=0;italic=0;ul=0;charset=0;HideIcon=0;DUID=00FAF7A2;LWth=2;BCol=16764159;font=Yu Gothic UI;fontsz=100;pitch=50;BFol=0;"/>
+
+
+
+
+
+
+
+
+
+
+					<element geometry="EDGE=4;SX=-125;SY=-1;EX=3;EY=12;$LLB=CX=19:CY=18:OX=-55:OY=-3:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LLT=CX=126:CY=18:OX=-10:OY=-22:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_52793652_96F1_47a6_BC9A_B55F4E739CA8" style="Mode=3;EOID=B8B8C3BD;SOID=8AC7A6F5;Color=-1;LWidth=2;Hidden=0;"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+				</elements>
+			</diagram>
+    </diagrams>
+    <connectors>
+      <connector xmi:idref="EAID_52793652_96F1_47a6_BC9A_B55F4E739CA8">
+				<source xmi:idref="EAID_CBC8C84D_03F0_4384_9024_71E4AD40F9EE">
+					<model ea_localid="628" type="Class" name="GlobalHubCityDevelopmentProject"/>
+					<role name="developmentProject" visibility="Public" targetScope="instance"/>
+					<type multiplicity="0..*" aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;"/>
+					<documentation/>
+					<xrefs value="$XREFPROP=$XID={A7B66F6D-D47B-4dd7-8612-BFC26D70A52E}$XID;$NAM=Stereotypes$NAM;$TYP=connectorSrcEnd property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=property;FQName=GML::property;@ENDSTEREO;$DES;$CLT={3677D889-F04B-4fb8-9651-5D1D972FBCD6}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
+					<tags>
+						<tag xmi:id="EAID_08A8199D_34EA_8c34_BDCC_B6064B77F3C3" name="isMetadata" value="false$ea_notes=Values: true,false&#10;Default: false&#10;Description: If 'true', the property type will extend GML AbstractMetadataPropertyType. Else, it will extend GML AbstractMemberType.&#10;"/>
+						<tag xmi:id="EAID_37DFCA0A_33B7_f633_A5AE_83B232FA52CE" name="inlineOrByReference" value="inline$ea_notes=Values: byReference,inline&#10;Default: inline&#10;Description: Determines whether the property value will be encoded inline or by reference&#10;"/>
+						<tag xmi:id="EAID_E810E922_7AEF_c27a_95E4_9318EF648F47" name="sequenceNumber" value="$ea_notes=Description: Unique integer value to order the properties of a class&#10;"/>
+					</tags>
+				</source>
+				<target xmi:idref="EAID_9D679A9C_1EFC_4b72_9438_8BF4D1D6B0DB">
+					<model ea_localid="548" type="Class" name="SpecifiedUrgentUrbanRenewalArea"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="composite" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="798"/>
+				<properties ea_type="Aggregation" subtype="Strong" direction="Destination -&gt; Source"/>
+				<modifiers isRoot="false" isLeaf="false"/>
+				<documentation value="&#x5C4B;&#x5185;&#x30CA;&#x30D3;&#x30B2;&#x30FC;&#x30B7;&#x30E7;&#x30F3;&#x306B;&#x5FC5;&#x8981;&#x306A;&#x60C5;&#x5831;&#x3002;&#10;&#10;* bldg:Window&#x306B;&#x4ED8;&#x4E0E;&#x53EF;&#x80FD;&#x306A;&#x30C7;&#x30FC;&#x30BF;&#x578B;&#x306F;&#x4EE5;&#x4E0B;&#x3068;&#x3059;&#x308B;&#x3002;&#10;** uro:IndoorZoneAttribute&#10;** uro:IndoorUserDefinedAttribute&#10;&#10;* bldg:Door&#x306B;&#x4ED8;&#x4E0E;&#x53EF;&#x80FD;&#x306A;&#x30C7;&#x30FC;&#x30BF;&#x578B;&#x306F;&#x4EE5;&#x4E0B;&#x3068;&#x3059;&#x308B;&#x3002;&#10;** uro:IndoorZoneAttribute&#10;** uro:IndoorUserDefinedAttribute&#10;"/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels lb="0..*" lt="+developmentProject&#10;&#xAB;property&#xBB;"/>
+				<extendedProperties/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+    </connectors>
+  </xmi:Extension>
+</xmi:XMI>

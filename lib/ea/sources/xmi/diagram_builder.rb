@@ -50,6 +50,7 @@ module Ea
           placed_connectors = ext_elements.placed_connectors
           props = ext_diagram.properties
           umldi_keywords = keywords_for(id)
+          context = context_diagram?(ext_diagram)
 
           Ea::Model::Diagram.new(
             id: id,
@@ -65,8 +66,7 @@ module Ea
             show_parents: !style_flag?(ext_diagram, "HideParents"),
             hand_draw: style_flag?(ext_diagram, "HandDraw"),
             elements: build_elements(placed_elements, id, umldi_keywords),
-            connectors: build_connectors(placed_connectors,
-                                          placed_elements, id),
+            connectors: build_connectors(placed_connectors, placed_elements, id, context),
             annotations: []
           )
         end
@@ -100,6 +100,13 @@ module Ea
         def style_flag?(ext_diagram, key)
           value = style_for(ext_diagram).to_s[/(?:\A|;)#{key}=(\d+)/, 1]
           value.to_i.nonzero? ? true : false
+        end
+
+        def context_diagram?(ext_diagram)
+          name = ext_diagram.properties&.name.to_s
+          return true if name.match?(/\AContext Diagram: Package (Clients|Suppliers) of /i)
+
+          style_ex_for(ext_diagram).to_s.match(/(?:\A|;)SuppressFOC=(\d)/)&.public_send(:[], 1) != "1"
         end
 
         def page_bounds(ext_diagram)
@@ -176,7 +183,7 @@ module Ea
                                  height: bottom - top)
         end
 
-        def build_connectors(placed_connectors, placed_elements, owner_id)
+        def build_connectors(placed_connectors, placed_elements, owner_id, context)
           # Index elements by DUID so we can resolve SOID/EOID.
           by_duid = placed_elements.each_with_object({}) do |pe, acc|
             acc[pe.style.duid] = pe if pe.style.duid
@@ -184,40 +191,46 @@ module Ea
           by_subject = placed_elements.group_by { |pe| guid_key(pe.subject) }
 
           placed_connectors.each_with_index.map do |placed, index|
-            connector = build_connector(placed, by_duid, by_subject, owner_id, index)
-            mark_association_class(connector, placed, placed_elements)
+            connector = build_connector(placed, by_duid, by_subject, owner_id, rank: index, context: context)
+            mark_association_class(connector, placed, placed_elements, context)
           end
         end
 
-        def mark_association_class(connector, placed, placed_elements)
+        def mark_association_class(connector, placed, placed_elements, context)
+          mark_plain_end_seats(connector, placed, context)
           reference = association_class_metadata.for(
             connector_index[placed.subject],
             placed_subjects: placed_elements.map(&:subject),
             waypoints: connector.waypoints
           )
-          if reference
-            connector.style[:association_class_ref] = reference
-            connector.source_anchor = connector.waypoints.first.position
-          end
+          return connector unless reference
+
+          connector.style[:association_class_ref] = reference
+          connector.source_anchor = connector.waypoints.first.position
           connector
+        end
+
+        def mark_plain_end_seats(connector, placed, context)
+          mark_plain_source_seat(connector, placed, context)
+          mark_plain_target_seat(connector, placed, context)
         end
 
         def association_class_metadata
           @association_class_metadata ||= AssociationClassMetadata.new(xmi_path)
         end
 
-        def build_connector(placed, by_duid, by_subject, owner_id, rank)
+        def build_connector(placed, by_duid, by_subject, owner_id, options)
           geom = placed.geometry
           style = placed.style
           edge_source, edge_target = connector_ends(owner_id, placed)
           source, target = placed_ends(style, by_duid, by_subject, edge_source, edge_target)
           ext_meta = connector_meta(placed.subject)
           route = connector_route(placed, source, target, owner_id, ext_meta[:ea_type])
-          Ea::Model::DiagramConnector.new(
+          connector = Ea::Model::DiagramConnector.new(
             id: IdNormalizer.synthetic_id(owner_id, "conn", placed.subject),
             diagram_id: owner_id,
             relationship_ref: placed.subject,
-            paint_order: [rank],
+            paint_order: [options.fetch(:rank)],
             source_duid: style.soid,
             target_duid: style.eoid,
             source_element_ref: source && synthetic_element_id(owner_id, source),
@@ -234,8 +247,94 @@ module Ea
             line_color: style.color,
             line_width: style.line_width,
             hidden: style.hidden,
-            label_boxes: serialize_label_boxes(geom.label_boxes)
+            label_boxes: connector_label_boxes(placed, ext_meta[:ea_type],
+                                               options.fetch(:context) ? nil : owner_id)
           )
+          connector.umldi_label_bounds = if options.fetch(:context)
+                                           {}
+                                         else
+                                           umldi_label_bounds_for(owner_id, placed.subject,
+                                                                  connector.label_boxes)
+                                         end
+          mark_stored_ray(connector, placed, source, target) unless options.fetch(:context)
+          mark_association_route(connector, placed, source, target) unless options.fetch(:context)
+          connector
+        end
+
+        def umldi_label_bounds_for(owner_id, connector_id, label_boxes)
+          return {} unless xmi_path
+
+          bounds = umldi_edges.label_bounds_for(owner_id, connector_id)
+          return {} unless bounds
+
+          property_roles = umldi_edges.property_role_keys_for(owner_id, connector_id)
+          bounds.reject do |key, _|
+            extension_key = { source_role: :llt, source_multiplicity: :llb,
+                              target_role: :lrt, target_multiplicity: :lrb }.fetch(key)
+            label_boxes.key?(extension_key) && !property_roles.include?(key)
+          end
+        end
+
+        def mark_stored_ray(connector, placed, source, target)
+          return if connector.style[:umldi_route]
+
+          metadata = stored_ray_metadata(connector, placed, source, target)
+          metadata.each { |name, value| connector.public_send("#{name}=", value) }
+          connector.style[:association_ray_outline] = true unless metadata.empty?
+        end
+
+        def stored_ray_metadata(connector, placed, source, target, stage: :ray_metadata)
+          geom = placed.geometry
+          link = StoredRoute::Link.new(placed.style.raw, geom.path.to_s.tr("$", ";"))
+          bounds = { source: bounds_from_placed(source), target: bounds_from_placed(target) }
+          offsets = { source: [geom.sx, geom.sy], target: [geom.ex, geom.ey] }
+          StoredRoute.new.public_send(stage, connector, link: link, bounds: bounds, offsets: offsets, edge: geom.edge)
+        end
+
+        def mark_association_route(connector, placed, source, target)
+          metadata = stored_ray_metadata(connector, placed, source, target, stage: :association_route)
+          metadata.each { |name, value| connector.public_send("#{name}=", value) }
+        end
+
+        def mark_plain_source_seat(connector, placed, context)
+          return if context || !placed.geometry.path.to_s.empty? || connector.connector_type != "Aggregation"
+          return unless connector.style.to_h.values_at(:mode, :lwidth, :tree) == ["3", "2", nil]
+          return unless connector.source_stereotype.to_s.empty?
+
+          connector.style[:plain_source_seat] = true
+        end
+
+        def mark_plain_target_seat(connector, placed, context)
+          return if context || !placed.geometry.path.to_s.empty? || connector.connector_type != "Association"
+          return unless connector.style.to_h.values_at(:mode, :lwidth, :tree) == ["3", "2", nil]
+          return unless connector.target_stereotype.to_s.empty?
+
+          connector.style[:plain_target_seat] = true
+        end
+
+        PHANTOM_TYPES = %w[Association Aggregation].freeze
+
+        # EA exports a model relationship drawn without a diagram link row as
+        # an Association or Aggregation link with the default style and an
+        # all-zero, EDGE-less, bendless geometry; the QEA source builds it as
+        # a phantom connector.
+        def phantom_link?(placed, type)
+          PHANTOM_TYPES.include?(type) && placed.style.raw == ";Hidden=0;" && default_geometry?(placed.geometry)
+        end
+
+        def default_geometry?(geom)
+          geom.edge.nil? && [geom.sx, geom.sy, geom.ex, geom.ey].all?(&:zero?) &&
+            geom.path.to_s.empty? && geom.label_boxes.to_h.empty?
+        end
+
+        def connector_label_boxes(placed, type, owner_id)
+          return serialize_label_boxes(placed.geometry.label_boxes) unless phantom_link?(placed, type)
+
+          # An empty extension placement can still have saved UMLDI labels.
+          # Synthetic phantom offsets must not suppress those authored bounds.
+          return {} if owner_id && xmi_path && umldi_edges.label_bounds_for(owner_id, placed.subject)
+
+          Qea::DiagramBuilder::DEFAULT_LABEL_BOXES
         end
 
         # The saved SOID/EOID can name the model connector's ends in reverse
@@ -296,11 +395,23 @@ module Ea
         end
 
         def connector_route(placed, source, target, owner_id, type)
+          phantom_route(placed, source, target, type) || saved_route(placed, source, target, owner_id, type)
+        end
+
+        def saved_route(placed, source, target, owner_id, type)
           native = umldi_waypoints(owner_id, placed) if placed.geometry.bend_points.to_a.empty?
           points = native || compute_waypoints(placed.geometry, source, target,
                                                style: placed.style, connector_type: type)
           native ||= umldi_waypoints(owner_id, placed) if points.empty?
           { waypoints: native || points, style: connector_route_style(placed, native) }
+        end
+
+        def phantom_route(placed, source, target, type)
+          return unless source && target && phantom_link?(placed, type)
+
+          points = StoredRoute.new.phantom_waypoints(bounds_from_placed(source), bounds_from_placed(target))
+          { waypoints: points.map { |x, y| Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y)) },
+            style: { lwidth: "1", phantom_outline: true } }
         end
 
         def connector_route_style(placed, native)
