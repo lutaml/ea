@@ -17,6 +17,9 @@ RSpec.describe "XMI address overlap source contract 30D62231" do
     box = label.at_xpath("./bounds")
 
     expect(property["association"]).to eq(connector_id)
+    association = xml.at_xpath("//*[local-name()='packagedElement' and @*[local-name()='id']='#{connector_id}']")
+    expect(association.xpath("./*[local-name()='memberEnd']/@*[local-name()='idref']").map(&:value))
+      .to include(AddressOverlap30D62231Support::PROPERTY_ID)
     expect(label["modelElement"]).to eq(AddressOverlap30D62231Support::PROPERTY_ID)
     expect(%w[x y width height].map { |key| box[key] }).to eq(%w[1089 424 49 25])
   end
@@ -41,7 +44,7 @@ RSpec.describe "XMI address overlap source contract 30D62231 output" do
       [[1171, 458], [1051, 458]]
     )
     expect([connector.source_port, connector.target_port]).to eq([nil, nil])
-    expect(connector.umldi_label_bounds).to eq({})
+    expect(connector.umldi_label_bounds).to eq(source_role: { x: 1089, y: 424, width: 49, height: 25 })
     expect(connector.label_boxes[:llt]).to include("ox" => 18, "oy" => -17, "cx" => 57, "cy" => 31)
     expect(svg.at_xpath("//*[local-name()='path' and @d='M 391 85 L 271 85']")).not_to be_nil
     expect([role["x"], role["y"]]).to eq(["309.00", "61.00"])
@@ -63,13 +66,19 @@ RSpec.describe "XMI address overlap source contract 30D62231 metadata" do
     expect(metadata).not_to have_key(:target_port)
   end
 
-  it "preserves tree, other modes, custom paths and unsupported offset geometry" do
+  it "preserves tree, non-UMLDI routes, custom paths and unsupported offset geometry" do
     expect(address_route_metadata(style: { tree: "V" })).to be_empty
-    expect(address_route_metadata(style: { mode: "3" })).to be_empty
     expect(address_route_metadata(style: { umldi_route: false })).to be_empty
     expect(address_route_metadata(path: "100:200;")).to be_empty
     expect(address_route_metadata(offsets: { source: [8, 12], target: [16, 11] })).to be_empty
     expect(address_route_metadata(offsets: { source: [nil, 12], target: [16, 12] })).to be_empty
     expect(address_route_metadata(edge: 0)).to be_empty
+  end
+
+  it "classifies a thin Mode 3 ray without applying Mode 2 overlap geometry" do
+    expect(address_route_metadata(style: { mode: "3" })).to eq(
+      style: { mode: "3", lwidth: "0", umldi_route: true,
+               stored_association_ray: true, association_ray_outline: true }
+    )
   end
 end

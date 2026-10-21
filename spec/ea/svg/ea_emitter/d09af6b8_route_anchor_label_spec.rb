@@ -38,15 +38,21 @@ RSpec.describe "D09AF6B8 stored aggregation ray preservation" do
   let(:document) { d09_xmi_document(d09_fixture_xml) }
   let(:umldi) { d09_umldi_route(document, d09_connector(document)) }
 
-  it "preserves the authoritative UMLDI route when Path is empty" do
+  it "preserves UMLDI geometry and the identified source role seat when Path is empty" do
     pathless = d09_xmi_document(d09_fixture_xml.sub("Path=781:-132$;", "Path=;"))
     connector = d09_connector(pathless)
     rendered = d09_render_document(pathless)
 
     expect(connector.style).to include(umldi_route: true)
     expect(connector.source_anchor).to be_nil
+    expect([connector.target_anchor, connector.source_port, connector.target_port]).to eq([nil, nil, nil])
     expect(connector.waypoints.map { |waypoint| [waypoint.position.x, waypoint.position.y] }).to eq(umldi)
-    expect(d09_label_position(rendered, "+reliefComponent")).to eq(["501.00", "119.00"])
+    expect(connector.umldi_label_bounds).to eq(source_role: { x: 704, y: 104, width: 80, height: 25 })
+    expect(connector.label_boxes).to include(
+      llt: include("ox" => -31, "oy" => -21, "cx" => 91, "cy" => 31),
+      llb: include("ox" => -46, "oy" => -1, "cx" => 19, "cy" => 16)
+    )
+    expect(d09_label_position(rendered, "+reliefComponent")).to eq(["362.00", "70.00"])
   end
 
   it "leaves other routing modes without mathematical ray metadata" do
