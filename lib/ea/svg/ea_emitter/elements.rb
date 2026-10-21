@@ -380,10 +380,16 @@ module Ea
                                    attr_group_lead: attr_group_lead)
         end
 
+        # A ghost-led header (italic parent label above the stereotype /
+        # name) takes the same compact offsets: EA seats its divider at
+        # the last header baseline + 7 (empirical fit, 21 QEA dividers
+        # that were +1: 0114FD24 uro::AbstractConstruction etc.; 20 of
+        # 21 now exact, no other compared item moved). The tight ghost
+        # variant has no corpus case and keeps the default offsets.
         def compact_header_offsets?(classifier, header_lines, size, **options)
           classifier.is_a?(Ea::Model::Klass) &&
             Ea::Fonts::Metrics.compact_compartment_font?(size, family: options[:family], unit: options[:size_unit]) &&
-            !%i[italic italic_tight].include?(header_lines.dig(0, 1)) &&
+            header_lines.dig(0, 1) != :italic_tight &&
             options.values_at(:logical_height, :marker_count, :enum_literals_count,
                               :divider_offset, :attr_first_offset) == [nil, 0, 0, 8, 7] &&
             theme.compartments.header_line_offset == 6 && theme.compartments.attr_line_offset == 6
