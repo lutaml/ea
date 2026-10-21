@@ -26,11 +26,27 @@ module Ea
           TEXT_Y_OFFSET = 12
           LINE_HEIGHT = 12
 
-          def self.render(bounds, body:, fill:, stroke:, stroke_width:, family:, size:, text_fill:)
-            new(bounds, body, fill, stroke, stroke_width, family, size, text_fill).to_svg
+          # EA never sets the note pen: the outline takes the cap and join
+          # left by the previous drawing, or the initial pen (square/miter)
+          # when the note is the first thing painted. Checked on all six
+          # native notes: 7C44AC09 first (square/miter), 7D960BD8 after
+          # square/bevel icons (square/bevel), 676B9C9A, 926AFE38, 9DA6C553
+          # and C028B286 after round/bevel shapes (round/bevel).
+          INITIAL_PEN = %w[square miter].freeze
+          PEN_PATTERN = /stroke-linecap:(\w+);stroke-linejoin:(\w+)/
+
+          # The [cap, join] a rendered group leaves behind, or nil.
+          def self.pen_of(group)
+            match = PEN_PATTERN.match(group.to_s)
+            match&.captures
           end
 
-          def initialize(bounds, body, fill, stroke, stroke_width, family, size, text_fill)
+          def self.render(bounds, body:, fill:, stroke:, stroke_width:, family:, size:, text_fill:, pen: nil)
+            new(bounds, body, fill, stroke, stroke_width, family, size, text_fill, pen || INITIAL_PEN).to_svg
+          end
+
+          def initialize(bounds, body, fill, stroke, stroke_width, family, size, text_fill, pen)
+            @pen = pen
             @bounds = bounds
             @body = body.to_s
             @fill = fill
@@ -51,7 +67,7 @@ module Ea
                       :family, :size, :text_fill
 
           def group_style(layer_fill)
-            "stroke-width:#{stroke_width};stroke-linecap:round;stroke-linejoin:bevel; " \
+            "stroke-width:#{stroke_width};stroke-linecap:#{@pen[0]};stroke-linejoin:#{@pen[1]}; " \
               "fill:#{layer_fill};fill-opacity:1.00; stroke:#{stroke}; stroke-opacity:1.00"
           end
 

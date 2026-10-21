@@ -34,9 +34,11 @@ module Ea
           @drawn_bounds = {}
           @divider_y = {}
           @painted_any = false
+          @previous_pen = nil
           ordered_elements.flat_map do |e|
             groups = groups_for(e)
             @painted_any ||= groups.any?
+            @previous_pen = Element::NoteShapeRenderer.pen_of(groups.last) || @previous_pen
             groups
           end
         end
@@ -308,7 +310,8 @@ module Ea
             diagram: diagram,
             model_index: model_index,
             off_canvas_parent_name: parent_name,
-            first_painted: !@painted_any
+            first_painted: !@painted_any,
+            previous_pen: @previous_pen
           )
         end
 

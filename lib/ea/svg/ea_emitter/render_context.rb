@@ -19,7 +19,7 @@ module Ea
         :enum_literals, :tagged_values, :constraints, :marker_lines,
         :package_content_lines,
         :geometry, :theme, :canvas, :diagram, :model_index,
-        :off_canvas_parent_name, :first_painted,
+        :off_canvas_parent_name, :first_painted, :previous_pen,
         keyword_init: true
       )
         def note_body

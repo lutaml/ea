@@ -25,7 +25,8 @@ module Ea
                 body: "", fill: context.fill, stroke: context.stroke,
                 stroke_width: context.stroke_width,
                 family: context.family, size: context.size,
-                text_fill: context.text_fill
+                text_fill: context.text_fill,
+                pen: context.previous_pen
               )
             elsif context.model_element.is_a?(Ea::Model::Package)
               label = package_label(context.model_element)

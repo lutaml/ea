@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 module NoteShapeHelpers
-  def note_shape_context(model, bounds)
+  def note_shape_context(model, bounds, **overrides)
     Ea::Svg::EaEmitter::RenderContext.new(
       model_element: model, bounds: bounds,
       fill: "#FFFFFF", stroke: "#000000", stroke_width: 2,
       text_fill: "#000000", family: "Carlito", size: 9, size_unit: "pt",
-      theme: Ea::Theme::Registry.default
+      theme: Ea::Theme::Registry.default, **overrides
     )
   end
 

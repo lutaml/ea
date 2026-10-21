@@ -12,7 +12,8 @@ RSpec.describe "Ordinary QEA note silhouettes" do
 
     expect(placements.size).to eq(6)
     placements.each do |model, bounds|
-      svg = Ea::Svg::EaEmitter::Compartment::Shape.render(note_shape_context(model, bounds))
+      context = note_shape_context(model, bounds, previous_pen: %w[round bevel])
+      svg = Ea::Svg::EaEmitter::Compartment::Shape.render(context)
       nodes = Nokogiri::XML("<svg>#{svg}</svg>")
       x = bounds.x
       y = bounds.y
