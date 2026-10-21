@@ -6,6 +6,8 @@ module Ea
       class DiagramBuilder
         # Internal geometry for choosing the facing edges of stored routes.
         module Routing
+          REVERSED_TREE_BUS_OFFSET = 50
+
           private
 
           # Offsets stay attached to semantic Start/End IDs even when the
@@ -32,6 +34,88 @@ module Ea
             model
           end
 
+          # EMPIRICAL FIT (decision a), not a source-backed rule. A width-0
+          # Mode 3 vertical-tree Association whose saved SOID/EOID name the
+          # relationship's ends in reverse keeps a Path (bus height and
+          # bend order) that EA no longer draws: its native export routes
+          # from the semantic Start box to the End box, with the bus 50px
+          # beyond the End box's facing edge (the distance every stored tree
+          # bus in the corpus keeps from its End box, 600+ links), the Start
+          # leg at center + SX and the End leg at center + EX. Checked on
+          # plateau diagram 5038EEE3 connectors 208, 209 and 212 (exact);
+          # 211 and 902 draw their Start leg 13px and 2px further right than
+          # native, which the saved geometry does not explain.
+          def reversed_tree_route(model, link_row, diagram_row, geom, context)
+            return model if context || !reversed_tree_link?(model, link_row, diagram_row, geom)
+
+            start, finish = stored_ray_boxes(link_row, diagram_row)
+            bus, start_edge, finish_edge = reversed_tree_levels(start, finish)
+            return model unless bus
+
+            first = reversed_tree_leg(start, geom[:sx], geom[:sy], start_edge)
+            last = reversed_tree_leg(finish, geom[:ex], geom[:ey], finish_edge)
+            model.waypoints = [first, [first[0], bus], [last[0], bus], last].map do |x, y|
+              Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y))
+            end
+            model.source_anchor = model.source_port = model.waypoints.first.position
+            model.target_anchor = model.target_port = model.waypoints.last.position
+            # EMPIRICAL FIT: a leg that starts beside its box (5038EEE3
+            # connector 212) seats its source labels like a leftward leg.
+            model.style = model.style.to_h.merge(left_seated_source: true) if first[1] != start_edge
+            model
+          end
+
+          # EMPIRICAL FIT (decision a). EA seats the source labels of a
+          # vertical lateral tree ("LV") whose SOID/EOID name the ends in
+          # reverse as if the source leg left to the left, whichever way the
+          # route leaves the box. Measured on the only such link in the
+          # plateau corpus, 5038EEE3 connector 207 (+lod1MultiSurface).
+          def mark_reversed_lateral_tree(model, link_row, diagram_row)
+            style = DiagramStyleParser.parse(link_row.style)
+            return model unless style[:tree] == "LV" && model.connector_type == "Association"
+            return model unless placement_order_reversed?(style, diagram_row,
+                                                          database.find_connector(link_row.connectorid))
+
+            model.style = model.style.to_h.merge(left_seated_source: true)
+            model
+          end
+
+          def reversed_tree_link?(model, link_row, diagram_row, geom)
+            style = DiagramStyleParser.parse(link_row.style)
+            model.connector_type == "Association" &&
+              style.values_at(:mode, :lwidth, :tree) == %w[3 0 V] &&
+              geom.values_at(:sx, :sy, :ex, :ey).all? &&
+              stored_bus_levels(link_row) &&
+              placement_order_reversed?(style, diagram_row, database.find_connector(link_row.connectorid))
+          end
+
+          def stored_bus_levels(link_row)
+            bends = intermediate_waypoints(link_row)
+            bends.size == 2 && bends.first[1] == bends.last[1]
+          end
+
+          # [bus height, Start facing edge, End facing edge] for vertically
+          # separated boxes: the bus sits 50px past the End box's edge and
+          # must stay inside the gap. Nil otherwise.
+          def reversed_tree_levels(start, finish)
+            if finish.y + finish.height < start.y
+              bus = finish.y + finish.height + REVERSED_TREE_BUS_OFFSET
+              [bus, start.y, finish.y + finish.height] if bus < start.y
+            elsif start.y + start.height < finish.y
+              bus = finish.y - REVERSED_TREE_BUS_OFFSET
+              [bus, start.y + start.height, finish.y] if bus > start.y + start.height
+            end
+          end
+
+          # A leg runs vertically at the stored origin's x. It starts on the
+          # facing edge, unless the origin lies beside the box (outside its
+          # x-span but level with it), where the origin itself is kept.
+          def reversed_tree_leg(box, offset_x, offset_y, edge_y)
+            origin = stored_ray_origin(box, offset_x, offset_y)
+            beside = !origin.x.between?(box.x, box.x + box.width) && origin.y.between?(box.y, box.y + box.height)
+            [origin.x, beside ? origin.y : edge_y]
+          end
+
           # Path follows SOID/EOID placement order, independently of the
           # relationship's Start/End IDs. Only a complete, unique DUID pair
           # can reverse the authored single-corner route.
@@ -42,6 +126,10 @@ module Ea
                                 parse_geometry_fields(link_row.geometry)[:edge] == 2 &&
                                 intermediate_waypoints(link_row).size == 1
 
+            placement_order_reversed?(style, diagram_row, connector)
+          end
+
+          def placement_order_reversed?(style, diagram_row, connector)
             ids = style.values_at(:soid, :eoid)
             return false if ids.any? { |id| id.to_s.empty? } || ids.uniq.size != 2
 

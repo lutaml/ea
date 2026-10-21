@@ -102,6 +102,10 @@ module Ea
             stereo = connector_source_dest_stereotype(connector, end_kind)
             stereo = stereo.nil? || stereo.empty? ? nil : "«#{stereo}»"
             direction = leg_direction(end_kind, heading)
+            if left_seated_source?(connector, end_kind)
+              text_pos, mult_pos = left_seated_positions(anchor, role, mult)
+              direction = nil
+            end
             if direction && !(tree && zero_offset?(text_box, mult_box))
               text_pos = plain_leftward_source_role(connector, direction, anchor, text_box, role) ||
                          plain_vertical_role(connector, direction, anchor, text_box, role) ||
@@ -344,6 +348,24 @@ module Ea
               [[anchor[0] + 7 - width, anchor[1] - 8],
                [anchor[0] + 8, anchor[1] - 8]]
             end
+          end
+
+          def left_seated_source?(connector, end_kind)
+            end_kind == :source && connector.style.to_h[:left_seated_source] == true
+          end
+
+          # EMPIRICAL FIT (5038EEE3 connectors 207 and 212, the only reversed
+          # links the builder flags): the source cluster sits left of the
+          # anchor like a source leaving left, whichever way the route leaves:
+          # role right edge 60px out, 7px above; multiplicity ends 3px short
+          # of the anchor, 15px below.
+          def left_seated_positions(anchor, role, mult)
+            role_width = Ea::Fonts::Metrics.text_length(role.to_s, font_size, family: font_family) ||
+                         role.to_s.length * 6
+            mult_width = Ea::Fonts::Metrics.text_length(mult.to_s, font_size, family: font_family) ||
+                         mult.to_s.length * 6
+            [[anchor[0] - 60 - role_width, anchor[1] - 7],
+             [anchor[0] - mult_width - 3, anchor[1] + 15]]
           end
 
           # Stored source-end boxes on a 7pt label whose first leg
