@@ -72,7 +72,7 @@ module Ea
         def connector_layers
           visible_connectors.flat_map do |connector|
             entries_for(connector).map do |e|
-              [connector, marker_layer(e.style_key, e.stroke_width, e.body)]
+              [connector, marker_layer(e.style_key, e.stroke_width, e.stroke_color, e.body)]
             end
           end
         end
