@@ -42,10 +42,11 @@ module Ea
           end
         end
 
-        # EA also draws NoteLink and Package lines target-first with the
-        # repeat (9DA6C553 NoteLink; 2A5E0832 and DFBB1072 Package), the
-        # opposite of the stored source-to-target waypoint order.
-        TARGET_FIRST_TYPES = %w[NoteLink Package].freeze
+        # EA also draws NoteLink, Package and two-point Dependency lines
+        # target-first with the repeat (9DA6C553 NoteLink; 2A5E0832 and
+        # DFBB1072 Package; 6481E2CC and DFBB1072 Dependency), the opposite
+        # of the stored source-to-target waypoint order.
+        TARGET_FIRST_TYPES = %w[NoteLink Package Dependency].freeze
 
         def direct?(connector)
           style = connector.style || {}

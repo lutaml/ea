@@ -24,6 +24,11 @@ RSpec.describe Ea::Svg::EaEmitter::Connectors, "NoteLink path direction" do
       .to eq("M 341 233 L 139 322 M 341 233")
   end
 
+  it "draws a two-point Dependency the same way (6481E2CC, DFBB1072)" do
+    expect(path_for_type("Dependency", [[139, 322], [341, 233]]))
+      .to eq("M 341 233 L 139 322 M 341 233")
+  end
+
   it "keeps source-first single lines for other connector types" do
     expect(path_for_type("Association", [[199, 621], [338, 591]]))
       .to eq("M 199 621 L 338 591")

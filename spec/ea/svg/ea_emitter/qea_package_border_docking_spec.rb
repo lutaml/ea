@@ -21,9 +21,9 @@ RSpec.describe "QEA package import border docking" do
 
   it "preserves the three neighboring Dependency routes and arrowheads" do
     {
-      "8F6BFB6E-4246-46f5-A6B7-A5DAB33B520F" => ["M 216 131 L 148 209", "M 154 194 L 148 209 L 162 201"],
-      "C928AE98-62FD-487e-9CDA-37875A5449D4" => ["M 298 131 L 360 199", "M 346 191 L 360 199 L 354 185"],
-      "604544F9-149D-40f0-80CE-FCAC7CED4532" => ["M 324 246 L 190 248", "M 205 243 L 190 248 L 205 253"]
+      "8F6BFB6E-4246-46f5-A6B7-A5DAB33B520F" => ["M 148 209 L 216 131 M 148 209", "M 154 194 L 148 209 L 162 201"],
+      "C928AE98-62FD-487e-9CDA-37875A5449D4" => ["M 360 199 L 298 131 M 360 199", "M 346 191 L 360 199 L 354 185"],
+      "604544F9-149D-40f0-80CE-FCAC7CED4532" => ["M 190 248 L 324 246 M 190 248", "M 205 243 L 190 248 L 205 253"]
     }.each do |ref, (route, marker)|
       expect(package_border_geometry(emitters, ref)).to eq([route, marker])
     end

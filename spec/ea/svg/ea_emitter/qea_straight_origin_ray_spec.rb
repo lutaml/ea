@@ -43,7 +43,7 @@ RSpec.describe "QEA straight origin rays" do # rubocop:disable Metrics/BlockLeng
       [{ style: "Mode=3;LWidth=2;Direct=1;" }, "M 423 162 L 488 162 M 423 162"],
       [{ style: "Mode=3;LWidth=2;Regenerated=1;" }, "M 488 162 L 423 162"],
       [{ path: "650:-200;" }, "M 489 168 L 358 232 L 214 233"],
-      [{ connector_type: "Dependency" }, "M 489 127 L 422 123"]
+      [{ connector_type: "Dependency" }, "M 422 123 L 489 127 M 422 123"]
     ]
     cases.each do |changes, path|
       result = render_qea_route(**input.merge(changes)) do |document|
@@ -60,7 +60,7 @@ RSpec.describe "QEA straight origin rays" do # rubocop:disable Metrics/BlockLeng
       { style: "Mode=1;LWidth=2;" }, { style: "Mode=2;LWidth=2;" },
       { style: "Mode=3;LWidth=0;" }, { style: "Mode=3;LWidth=1;" },
       { style: "Mode=3;LWidth=2;TREE=V;" }, { style: "Mode=3;LWidth=2;Regenerated=1;" },
-      { path: "650:-200;" }, { connector_type: "Dependency" }
+      { path: "650:-200;" }
     ]
     cases.each do |changes|
       result = render_qea_route(**input.merge(changes)) do |document|
@@ -68,5 +68,12 @@ RSpec.describe "QEA straight origin rays" do # rubocop:disable Metrics/BlockLeng
       end
       expect(result[:paths].first).to eq("M 418 235 L 304 234"), changes.inspect
     end
+  end
+
+  it "draws the same offset-free route target-first as a Dependency" do
+    input = { source: [703, 177, 190, 80], target: [320, 20, 269, 387], geometry: "EDGE=4;",
+              path: nil, style: "Mode=3;LWidth=2;", connector_type: "Dependency" }
+
+    expect(render_qea_route(**input)[:paths].first).to eq("M 304 234 L 418 235 M 304 234")
   end
 end
