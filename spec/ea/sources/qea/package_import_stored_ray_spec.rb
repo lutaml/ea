@@ -20,13 +20,13 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
       expect([connector.source_anchor.y, connector.target_anchor.y]).to eq([78, 78])
     end
 
-    expect(result[:paths].first).to eq("M 165 88 L 261 88")
+    expect(result[:paths].first).to eq("M 261 88 L 165 88 M 261 88")
   end
 
   it "clips a reverse import on the same stored row" do
     result = render_qea_route(**package_ray.merge(source: [482, 30, 130, 80], target: [256, 30, 130, 80]))
 
-    expect(result[:paths]).to eq(["M 261 88 L 165 88", "M 180 83 L 165 88 L 180 93"])
+    expect(result[:paths]).to eq(["M 165 88 L 261 88 M 165 88", "M 180 83 L 165 88 L 180 93"])
   end
 
   [
