@@ -270,7 +270,7 @@ RSpec.describe Ea::Svg::EaEmitter::Connectors, "coincident crossing bridges" do
     partners.first.paint_order = [4]
     model = bridge_diagram([carrier, *partners])
     carrier.paint_order = [30]
-    expect(bridge_paths(model).first).to eq("M 0 0 L 44 17 A 6 6 180 0 0 56 22 L 100 40")
+    expect(bridge_paths(model).first).to eq("M 0 0 L 44 18 A 6 6 180 0 0 56 22 L 100 40")
   end
 end
 
@@ -298,5 +298,19 @@ RSpec.describe Ea::Svg::EaEmitter::Connectors, "slanted carrier crossing bridges
     paths = bridge_paths(bridge_diagram([slanted, clear, vertical]))
     expect(paths.first).to include("A 6 6 180 0 0 534 295")
     expect(paths.first.scan(" A ").size).to eq(1)
+  end
+end
+
+RSpec.describe Ea::Svg::EaEmitter::Connectors, "native seats on a slanted carrier" do
+  include ConnectorBridgesHelpers
+
+  it "seats the 0BE81AC5 arcs at the native coordinates, registered by (25, 30)" do
+    carrier = bridge_connector("41", [[246, 454], [734, 253]])
+    horizontal = bridge_connector("22", [[300, 372], [600, 372]])
+    vertical = bridge_connector("16", [[553, 250], [553, 400]])
+    native = [[414, 344, 426, 340], [522, 299, 534, 295]].map { |x1, y1, x2, y2| [x1 + 25, y1 + 30, x2 + 25, y2 + 30] }
+    expected = "M 246 454 L #{native[0][0]} #{native[0][1]} A 6 6 180 0 0 #{native[0][2]} #{native[0][3]} " \
+               "L #{native[1][0]} #{native[1][1]} A 6 6 180 0 0 #{native[1][2]} #{native[1][3]} L 734 253"
+    expect(bridge_paths(bridge_diagram([carrier, horizontal, vertical])).first).to eq(expected)
   end
 end

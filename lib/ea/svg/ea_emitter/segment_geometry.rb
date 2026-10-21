@@ -32,14 +32,38 @@ module Ea
           point
         end
 
-        # The arc chord: one radius either side of the crossing along the
-        # carrier's dominant axis. On a slanted carrier the other coordinate
-        # follows the line, truncated to the integer grid (opening: 1157.49 and
-        # 1157.82 both seat at 1157 in EA's export).
+        # The arc chord, one radius either side of the crossing along the
+        # carrier's dominant axis. A horizontal/vertical carrier keeps the
+        # exact crossing. On a slanted carrier EA seats the centre on the
+        # integer grid at floor(crossing) and offsets it by the half-chord
+        # (radius, truncated radius * slope), signed with the line direction.
         def chord(first, last, crossing, radius)
           major = dominant_axis(first, last)
           step = last[major] > first[major] ? radius : -radius
-          [crossing[major] - step, crossing[major] + step].map { |value| seat(first, last, major, value) }
+          return axis_chord(first, crossing, major, step) if first[1 - major] == last[1 - major]
+
+          slanted_chord(first, last, crossing, major, step)
+        end
+
+        def slanted_chord(first, last, crossing, major, step)
+          centre = crossing.map { |value| (value + EPSILON).floor }
+          half = half_chord(first, last, major, step)
+          [-1, 1].map { |sign| centre.zip(half).map { |c, h| c + sign * h } }
+        end
+
+        def half_chord(first, last, major, step)
+          minor = 1 - major
+          slope = (last[minor] - first[minor]).fdiv(last[major] - first[major])
+          major.zero? ? [step, (step * slope).truncate] : [(step * slope).truncate, step]
+        end
+
+        def axis_chord(first, crossing, major, step)
+          start = crossing.dup
+          finish = crossing.dup
+          start[1 - major] = finish[1 - major] = first[1 - major]
+          start[major] -= step
+          finish[major] += step
+          [start, finish]
         end
 
         def dominant_axis(first, last)
@@ -84,20 +108,6 @@ module Ea
         def within?(value, from, to)
           minimum, maximum = [from, to].minmax
           value >= minimum - EPSILON && value <= maximum + EPSILON
-        end
-
-        def seat(first, last, major, value)
-          minor = 1 - major
-          point = [first[0], first[1]]
-          point[major] = value
-          point[minor] = minor_at(first, last, major, value) unless first[minor] == last[minor]
-          point
-        end
-
-        def minor_at(first, last, major, value)
-          minor = 1 - major
-          slope = (last[minor] - first[minor]).fdiv(last[major] - first[major])
-          (first[minor] + (value - first[major]) * slope + EPSILON).floor
         end
       end
     end
