@@ -529,8 +529,8 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
       end[:paths].first
     end
     expect(paths)
-      .to eq(["M 501 144 L 348 144", "M 502 146 L 348 400",
-              "M 502 146 L 349 400", "M 501 143 L 348 143"])
+      .to eq(["M 501 144 L 348 144", "M 502 133 L 348 400",
+              "M 502 133 L 349 400", "M 501 143 L 348 143"])
   end
 
   it "marks only produced stored Association rays for the emitter" do
@@ -586,9 +586,9 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
       offset_line.merge(geometry: "SX=0;SY=0;EX=0;EY=0;EDGE=4;"),
       offset_line.merge(geometry: "SX=-89;SY=-6;EX=43;EY=300;EDGE=4;")
     ]
-    expected = ["M 501 143 L 348 143", "M 502 146 L 347 288",
-                "M 502 146 L 347 288", "M 502 146 L 347 288", "M 502 168 L 347 219",
-                "M 502 146 L 274 505"]
+    expected = ["M 501 143 L 348 143", "M 502 133 L 347 288",
+                "M 502 133 L 347 288", "M 502 133 L 347 288", "M 502 168 L 347 219",
+                "M 502 133 L 274 505"]
     paths = controls.map do |input|
       render_qea_route(**input.merge(object_styles: ["font=Arial;", "font=Arial;"])) do |document|
         expect(qea_route_dividers(document).fetch("child")).to eq(118)
