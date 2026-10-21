@@ -67,7 +67,7 @@ module Ea
               other_from_prop, other_role, other_mult = role_and_multiplicity(connector,
                                                               opposite(end_kind))
               if stored_labels || connector.style.to_h[:explicit_end_roles] ||
-                  connector.style.to_h[:phantom_outline] == true
+                 connector.style.to_h[:phantom_outline] == true
                 return [] if role_empty?(other_role) && mult_empty?(other_mult)
 
                 return own_stereotype_only(text_box, anchor, connector,
