@@ -177,9 +177,16 @@ module Ea
           # leg rising from the end; other fonts, boxes and legs keep their
           # unclamped seats.
           def min_role_x_cluster?(connector, end_kind, heading, text_box)
-            heading && heading[0].zero? && heading[1].negative? &&
-              seat_font? && font_weight == 400 && font_style == "normal" &&
+            rising_vertical?(heading) && plain_seat_font? &&
               cambria_box?(text_box) && property_label?(connector, end_kind)
+          end
+
+          def rising_vertical?(heading)
+            heading && heading[0].zero? && heading[1].negative?
+          end
+
+          def plain_seat_font?
+            seat_font? && font_weight == 400 && font_style == "normal"
           end
 
           # Shift the role and its stereotype line together when the role
