@@ -6,7 +6,7 @@ require "ea/svg/ea_emitter/element/legend_renderer"
 
 # EA leaves the legend pen to whatever was drawn before it: square/miter
 # when the legend is the first thing painted, round/bevel otherwise.
-RSpec.describe Ea::Svg::EaEmitter::Element::LegendRenderer do
+RSpec.describe Ea::Svg::EaEmitter::Element::LegendRenderer do # rubocop:disable Metrics/BlockLength
   let(:bounds) { Ea::Model::Bounds.new(x: 100, y: 50, width: 194, height: 120) }
   let(:legend) do
     Ea::Model::Legend.new(

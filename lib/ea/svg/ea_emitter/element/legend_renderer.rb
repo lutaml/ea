@@ -40,10 +40,10 @@ module Ea
           INITIAL_STROKE = "stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;"
 
           def self.render(bounds, legend:, family:, canvas: nil, item_font: {}, first_painted: false)
-            new(bounds, legend, family, canvas, item_font, first_painted).to_svg
+            new(bounds, legend, family, canvas, item_font, first_painted: first_painted).to_svg
           end
 
-          def initialize(bounds, legend, family, canvas, item_font = {}, first_painted = false)
+          def initialize(bounds, legend, family, canvas, item_font = {}, first_painted: false)
             @bounds = bounds
             @legend = legend
             @family = family

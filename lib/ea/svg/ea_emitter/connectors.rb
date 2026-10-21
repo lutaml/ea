@@ -75,11 +75,11 @@ module Ea
           styles = paths_with_styles.map { |_connector, style, path| [style, path] }
 
           if grouped
-            styles.group_by(&:first).map do |(width, dashed, color), entries|
-              line_layer(width, dashed, color, entries.map(&:last).join("\n  "))
+            styles.group_by(&:first).map do |(width, dash, color), entries|
+              line_layer(width, dash, color, entries.map(&:last).join("\n  "))
             end
           else
-            styles.map { |(width, dashed, color), path| line_layer(width, dashed, color, path) }
+            styles.map { |(width, dash, color), path| line_layer(width, dash, color, path) }
           end
         end
 
@@ -88,8 +88,8 @@ module Ea
         # heads) in turn, so the sequencer interleaves these with the
         # marker layers instead of bucketing every line first.
         def connector_layers
-          paths_with_styles.map do |connector, (width, dashed, color), path|
-            [connector, line_layer(width, dashed, color, path)]
+          paths_with_styles.map do |connector, (width, dash, color), path|
+            [connector, line_layer(width, dash, color, path)]
           end
         end
 
@@ -115,18 +115,32 @@ module Ea
           bridges = ConnectorBridges.new(diagram, routes)
           routes.map do |connector, points|
             [connector,
-             [self.class.stroke_width_for(connector, stroke_width), dashed?(connector),
+             [self.class.stroke_width_for(connector, stroke_width), dash_for(connector),
               self.class.stroke_color_for(connector)],
              path_for(connector, points, bridges)]
           end
         end
 
-        def line_layer(width, dashed, color, body)
-          key = dashed ? :connector_line_dashed : LINE_STYLE_KEY
-          style = line_style(width, color, dashed: dashed)
-          style += ";stroke-dasharray:6,3" if dashed
+        def line_layer(width, dash, color, body)
+          key = dash ? :"connector_line_dash_#{dash.tr(",", "_")}" : LINE_STYLE_KEY
+          style = line_style(width, color, dashed: !dash.nil?)
+          style += ";stroke-dasharray:#{dash}" if dash
           Layer.new(style_key: self.class.layer_key(key, width, stroke_width, color),
                     style: style, body: body)
+        end
+
+        # Dash pattern as "dash,gap", nil when solid. A NoteLink is
+        # dashed at width + 2 (empirical fit, EA native: 4,4 at width 2 in
+        # 676B9C9A and 926AFE38, 3,3 at width 1 in 9DA6C553; no source
+        # field found); every other dashed connector uses 6,3 (23 native
+        # cases at width 1).
+        def dash_for(connector)
+          if connector.connector_type == "NoteLink"
+            n = self.class.stroke_width_for(connector, stroke_width) + 2
+            "#{n},#{n}"
+          elsif dashed?(connector)
+            "6,3"
+          end
         end
 
         def dashed?(connector)
