@@ -9,6 +9,8 @@ module Ea
         # dog-eared rectangle (top-right corner folded in) with the
         # note text wrapped inside.
         #
+        # Native EA emits the body and the folded corner as two polygons.
+        #
         # Layout:
         #
         #   ┌──────────────────┐
@@ -19,6 +21,7 @@ module Ea
         #
         class NoteShapeRenderer
           FOLD_SIZE = 12
+          FOLD_FILL = "#DCDCDC"
           TEXT_X_OFFSET = 5
           TEXT_Y_OFFSET = 12
           LINE_HEIGHT = 12
@@ -39,7 +42,7 @@ module Ea
           end
 
           def to_svg
-            %(<g style="#{group_style}">\n  #{path_body}\n  #{fold_line}\n  #{text_block}\n</g>)
+            [body_layer, fold_layer, text_layer].reject(&:empty?).join("\n")
           end
 
           private
@@ -47,39 +50,52 @@ module Ea
           attr_reader :bounds, :body, :fill, :stroke, :stroke_width,
                       :family, :size, :text_fill
 
-          def group_style
-            "stroke-width:#{stroke_width};stroke-linecap:square;stroke-linejoin:bevel; " \
-              "fill:#{fill};fill-opacity:1.00; stroke:#{stroke}; stroke-opacity:1.00"
+          def group_style(layer_fill)
+            "stroke-width:#{stroke_width};stroke-linecap:round;stroke-linejoin:bevel; " \
+              "fill:#{layer_fill};fill-opacity:1.00; stroke:#{stroke}; stroke-opacity:1.00"
           end
 
-          # Folded-corner body emitted as a closed <path> matching
-          # EA's encoding (not <polygon>). EA uses M..L..L..Z with
-          # stroke-linejoin=bevel for the dog-eared silhouette.
-          def path_body
-            x = bounds.x
-            y = bounds.y
-            w = bounds.width
-            h = bounds.height
-            fold = [FOLD_SIZE, w / 3, h / 3].min
-            d = "M #{Canvas.coord(x)} #{Canvas.coord(y)} " \
-                "L #{Canvas.coord(x + w - fold)} #{Canvas.coord(y)} " \
-                "L #{Canvas.coord(x + w)} #{Canvas.coord(y + fold)} " \
-                "L #{Canvas.coord(x + w)} #{Canvas.coord(y + h)} " \
-                "L #{Canvas.coord(x)} #{Canvas.coord(y + h)} " \
-                "L #{Canvas.coord(x)} #{Canvas.coord(y)} Z"
-            %(<path d="#{d}" shape-rendering="auto"/>)
+          def body_layer
+            %(<g style="#{group_style(fill)}">\n  #{polygon(body_points)}\n</g>)
           end
 
-          # Inner edges of the folded corner; the outer path supplies the diagonal.
-          def fold_line
-            x = bounds.x
+          def fold_layer
+            %(<g style="#{group_style(FOLD_FILL)}">\n  #{polygon(fold_points)}\n</g>)
+          end
+
+          def text_layer
+            text = text_block
+            text.empty? ? "" : %(<g style="#{group_style(fill)}">\n  #{text}\n</g>)
+          end
+
+          # EA encodes the note silhouette as a <polygon> (all six
+          # native Note placements in the PLATEAU and ArcGIS corpora),
+          # starting at the top-left corner and running down first.
+          def body_points
+            left, top, right, bottom = edges
+            [[left, top], [left, bottom], [right, bottom],
+             [right, top + fold_size], [right - fold_size, top]]
+          end
+
+          def edges
+            [bounds.x, bounds.y, bounds.x + bounds.width, bounds.y + bounds.height]
+          end
+
+          # The folded corner is a separate triangle, filled light
+          # grey regardless of the note's own fill.
+          def fold_points
+            r = bounds.x + bounds.width
             y = bounds.y
-            w = bounds.width
-            fold = [FOLD_SIZE, w / 3, bounds.height / 3].min
-            d = "M #{Canvas.coord(x + w - fold)} #{Canvas.coord(y)} " \
-                "L #{Canvas.coord(x + w - fold)} #{Canvas.coord(y + fold)} " \
-                "L #{Canvas.coord(x + w)} #{Canvas.coord(y + fold)}"
-            %(<path d="#{d}" shape-rendering="auto"/>)
+            [[r - fold_size, y], [r - fold_size, y + fold_size], [r, y + fold_size]]
+          end
+
+          def fold_size
+            [FOLD_SIZE, bounds.width / 3, bounds.height / 3].min
+          end
+
+          def polygon(points)
+            list = points.map { |px, py| "#{Canvas.coord(px)} #{Canvas.coord(py)}" }.join(" ")
+            %(<polygon points="#{list}" shape-rendering="auto"   style="fill-rule:evenodd;"/>)
           end
 
           def text_block
