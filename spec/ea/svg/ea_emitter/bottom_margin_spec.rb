@@ -12,7 +12,8 @@ RSpec.describe Ea::Svg::EaEmitter::BottomMargin do
   end
 
   def margin(elements, index)
-    diagram = Ea::Model::Diagram.new(id: "d", name: "D", elements: elements)
+    diagram = Ea::Model::Diagram.new(id: "d", name: "D", package_id: "home",
+                                     elements: elements)
     described_class.for(diagram, index)
   end
 
@@ -44,5 +45,18 @@ RSpec.describe Ea::Svg::EaEmitter::BottomMargin do
 
   it "keeps the bare 10 margin below a plain note" do
     expect(margin([placed("a", "n1", 300)], index)).to eq(10)
+  end
+
+  it "keeps the bare 10 margin below a classifier of the diagram's own package" do
+    home = Ea::Model::Klass.new(id: "c2", name: "Road", package_id: "home")
+
+    expect(margin([placed("a", "c2", 300)], { "c2" => home })).to eq(10)
+  end
+
+  it "keeps the owner-qualified classifier of the own package on the full margin" do
+    nested = Ea::Model::Klass.new(id: "c3", name: "Inner", package_id: "home",
+                                  nested_parent_name: "Outer")
+
+    expect(margin([placed("a", "c3", 300)], { "c3" => nested })).to eq(28)
   end
 end

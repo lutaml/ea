@@ -53,7 +53,9 @@ module Ea
         def self.from(diagram, model_index: nil, content_anchor: false)
           bc = BoundsCalculator.new(diagram, model_index: model_index)
           min_x, min_y, width, height = bc.compute
-          if content_anchor && bc.max_x
+          if content_anchor
+            return CanvasAnchor.blank unless bc.max_x
+
             return CanvasAnchor.stored(min_x, min_y, bc.max_x, bc.max_y,
                                        bottom: BottomMargin.for(diagram, model_index))
           end

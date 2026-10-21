@@ -11,8 +11,8 @@ module Ea
       # points (the objectstyle fontsz is in tenths of a point, 0 meaning
       # the 7pt default): 31 for fontsz 100, 30 for 90, 28 for the
       # default. A plain Note, and a Package that draws no "(from
-      # Parent)" subtitle, keep the bare 10 margin. Misses: 13 diagrams
-      # whose lowest class natively keeps only 10, and 2 outliers.
+      # Parent)" subtitle, keep the bare 10 margin, as does a classifier
+      # of the diagram's own package. Misses: 2 outliers.
       class BottomMargin
         BARE = 10
         LINE_ALLOWANCE = 21
@@ -38,7 +38,8 @@ module Ea
 
         def self.of(element, diagram, model_index)
           model = model_index && model_index[element.model_element_ref]
-          return BARE if plain_note?(model) || bare_package?(model, diagram)
+          return BARE if plain_note?(model) || bare_package?(model, diagram) ||
+                         home_classifier?(model, diagram)
 
           LINE_ALLOWANCE + points(element)
         end
@@ -55,6 +56,19 @@ module Ea
 
         def self.plain_note?(model)
           model.is_a?(Ea::Model::Note) && model.note_type != "Text"
+        end
+
+        # A classifier that lives in the diagram's own package draws no
+        # "(from Package)" row under its name (nor an owner-class
+        # qualifier), so EA keeps only the bare margin below it. Checked
+        # on the 7 PLATEAU diagrams whose lowest class is in the
+        # diagram's package (all natively 10) against the 84 that are
+        # foreign (all 28..31).
+        def self.home_classifier?(model, diagram)
+          model.is_a?(Ea::Model::Classifier) &&
+            !diagram.package_id.to_s.empty? &&
+            model.package_id == diagram.package_id &&
+            model.nested_parent_name.to_s.empty?
         end
 
         def self.bare_package?(model, diagram)

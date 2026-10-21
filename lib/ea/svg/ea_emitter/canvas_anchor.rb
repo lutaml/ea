@@ -31,12 +31,21 @@ module Ea
         ORIGIN_FLOOR = -5
         BOTTOM_MARGIN = 31
         LABEL_BOX_MARGIN = 5
+        # EMPIRICAL FIT: the one PLATEAU diagram with nothing on it
+        # (29DD0967) exports a 210 x 110 white canvas.
+        BLANK_SIZE = [210, 110].freeze
 
         module_function
 
         # Where content starting at `content_min` lands on the canvas.
         def inset(content_min)
           content_min - [content_min - CONTENT_MARGIN, ORIGIN_FLOOR].max
+        end
+
+        # Canvas of a diagram that places no element.
+        def blank
+          Canvas.new(min_x: 0, min_y: 0, width: BLANK_SIZE[0],
+                     height: BLANK_SIZE[1], insets: [0, 0])
         end
 
         # Canvas for shapes spanning the given model-space extent (the
