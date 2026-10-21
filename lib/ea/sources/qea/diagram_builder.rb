@@ -475,6 +475,7 @@ module Ea
             style: context ? { direct: true } :
                      DiagramStyleParser.parse(link_row.style),
             hidden: hidden?(link_row),
+            line_width: connector&.isbold,
             ghost_labels: ghost_labels_for(connector, diagram_row, link_row),
             has_geometry_offsets: geometry_has_offsets?(link_row.geometry),
             is_substitutable: substitutable_connector?(connector)
