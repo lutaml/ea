@@ -55,9 +55,19 @@ RSpec.describe "XMI connector routes from UMLDI edges" do
   end
 
   context "with the plateau corpus" do
-    it "routes E7FFECEB along its UMLDI edge" do
-      expect(plateau_xmi_points("73025C5A-08FC-47ff-AB2F-C7F79CF54B41", "E7FFECEB-996C-45b0-8E47-A56B4834C7DF"))
-        .to eq([[620, 640], [620, 700]])
+    # E7FFECEB carries a stored association ray, so its model waypoints are
+    # the QEA ray ports, not the UMLDI edge ([[620, 640], [620, 700]]); the
+    # edge's x=620 survives as the ray anchors. The drawn route is the native
+    # EAID_73025C5A SVG path "M 625 165 L 625 225" (checked in
+    # xmi_document_route_preservation_spec), and the QEA source gives the
+    # same ports.
+    it "keeps E7FFECEB on the QEA ray ports whose anchors sit on its UMLDI edge" do
+      diagram = "73025C5A-08FC-47ff-AB2F-C7F79CF54B41"
+      connector = "E7FFECEB-996C-45b0-8E47-A56B4834C7DF"
+      points = plateau_xmi_points(diagram, connector)
+
+      expect(points).to eq([[598, 639], [660, 731]])
+      expect(points).to eq(qea_connector_points(diagram, connector))
     end
 
     it "routes d147 connector 485 along its UMLDI edge" do
