@@ -67,9 +67,10 @@ module Ea
             return nil unless box && box["direction"] == 1
             return nil unless connector.direction == "Unspecified"
 
-            x, y = stored_name_position(connector, points)
-            width = Ea::Fonts::Metrics.text_length(midpoint_content(connector), font_size, family: font_family)
-            return nil unless x && width
+            # A name with an unmeasured glyph is drawn at the default seat, so
+            # the triangle follows where the name is drawn, by its printed width.
+            x, y = stored_name_position(connector, points) || label_position(connector, points)
+            width = TextRenderer.estimate_width(midpoint_content(connector), font_size, family: font_family)
 
             tri = direction_triangle(x, y, width, travel(points))
             coords = tri.flat_map { |px, py| [translate_x(px), translate_y(py)] }

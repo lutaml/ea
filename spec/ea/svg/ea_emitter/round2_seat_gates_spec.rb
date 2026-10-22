@@ -49,6 +49,22 @@ RSpec.describe "EA emitter seat widths and direction gate" do
       expect(triangles(source).size).to eq(2)
     end
 
+    ["Job 7", "role J"].each do |name|
+      it "still draws the triangle beside the unmeasured name #{name.inspect}" do
+        Dir.mktmpdir do |dir|
+          path = edited_copy(dir, "update t_connector set Name='#{name}' where Connector_ID = 30")
+          xml = render(path, "2AAB709F")
+          text = xml.css("text").find { |node| node.text == name }
+          tips = triangles(path).map { |p| p["points"].split.map(&:to_f).first(2) }
+          printed = text["x"].to_f + text["textLength"].to_f
+          seats = [printed + 16, text["x"].to_f + (text["textLength"].to_f / 2)]
+          near = tips.any? { |x, _| seats.any? { |v| (x - v).abs <= 1 } }
+
+          expect(near).to be(true)
+        end
+      end
+    end
+
     ["Bi-Directional", "Destination -> Source", "Source -> Destination"].each do |direction|
       it "draws no triangle for #{direction}" do
         Dir.mktmpdir do |dir|
