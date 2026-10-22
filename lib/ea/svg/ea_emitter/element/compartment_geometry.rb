@@ -206,6 +206,15 @@ module Ea
             content_bottom_y ? content_bottom_y + size + 5 : raw_attr_first_y
           end
 
+          # Bottom edge of the tags compartment: the last tag row plus one
+          # row of trailing space (204F4ACC: last baseline 83, EA bottom 95).
+          def tagged_values_bottom_y
+            return nil unless tagged_value_first_y
+
+            tagged_value_first_y +
+              (tagged_values_count.to_i + 1) * line_height(@size_unit == "pt" ? 6 : 4)
+          end
+
           # The lowest content edge among attributes, enum literals,
           # operations, and constraints — the anchor for trailing
           # compartments and the autosize height.

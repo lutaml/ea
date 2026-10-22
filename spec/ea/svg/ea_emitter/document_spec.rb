@@ -215,3 +215,17 @@ RSpec.describe Ea::Svg::EaEmitter::Document do
     )
   end
 end
+
+RSpec.describe Ea::Svg::EaEmitter::Document, "options" do
+  let(:diagram) { Ea::Model::Diagram.new(id: "d1", name: "D", diagram_type: "logical") }
+
+  it "rejects unknown keywords instead of silently ignoring them" do
+    expect { described_class.new(diagram, model_index: {}, fram: true) }
+      .to raise_error(ArgumentError, /unknown keyword: :fram/)
+  end
+
+  it "accepts every option the callers pass" do
+    expect { described_class.new(diagram, model_index: {}, frame: true, document: nil, content_anchor: false) }
+      .not_to raise_error
+  end
+end
