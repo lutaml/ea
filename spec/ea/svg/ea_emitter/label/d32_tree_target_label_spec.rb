@@ -15,7 +15,9 @@ RSpec.describe "D32 plain upward LV target labels" do
 
     expect(result[:last]).to eq([395, 500])
     expect(result[:texts]).to include({ text: "+lod4Geometry", x: 294, y: 370 })
-    expect(result[:mult]).to eq([343, 531])
+    # The multiplicity sits at the unflipped saved corner + (8,-7), anchor (395,500)
+    # + (-52,-31) + (8,-7); native 5038EEE3 0..1 confirms it.
+    expect(result[:mult]).to eq([351, 462])
   end
 
   it "preserves adjacent styles, headings and nonplain presentations" do
