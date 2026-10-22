@@ -12,7 +12,7 @@ module Ea
       # the 7pt default): 31 for fontsz 100, 30 for 90, 28 for the
       # default. A plain Note, and a Package that draws no "(from
       # Parent)" subtitle, keep the bare 10 margin, as does a classifier
-      # of the diagram's own package. Misses: 2 outliers.
+      # or instance of the diagram's own package. Misses: 2 outliers.
       class BottomMargin
         BARE = 10
         LINE_ALLOWANCE = 21
@@ -41,7 +41,7 @@ module Ea
           model = model_index && model_index[element.model_element_ref]
           return home_text_margin(element) if home_text?(model, diagram)
           return BARE if plain_note?(model) || bare_package?(model, diagram) ||
-                         home_classifier?(model, diagram)
+                         home_element?(model, diagram)
 
           LINE_ALLOWANCE + points(element)
         end
@@ -60,17 +60,21 @@ module Ea
           model.is_a?(Ea::Model::Note) && model.note_type != "Text"
         end
 
-        # A classifier that lives in the diagram's own package draws no
-        # "(from Package)" row under its name (nor an owner-class
-        # qualifier), so EA keeps only the bare margin below it. Checked
-        # on the 7 PLATEAU diagrams whose lowest class is in the
-        # diagram's package (all natively 10) against the 84 that are
-        # foreign (all 28..31).
-        def self.home_classifier?(model, diagram)
-          model.is_a?(Ea::Model::Classifier) &&
+        # An element of the diagram's own package (a classifier, nested
+        # in an owner class or not, or an instance) draws no "(from
+        # Package)" row under its name, so EA keeps only the bare margin
+        # below it. EMPIRICAL FIT, checked on: the 7 PLATEAU diagrams
+        # whose lowest class is in the diagram's package (all natively
+        # 10) against the 84 foreign ones (all 28..31); basic.qea
+        # 3B8BD087 and D14AA320 (lowest an own-package "Object B"
+        # instance) and 372F7F7B, 4FC1D352, 6D0349D5 (lowest a Klass
+        # nested in "Class A.x" / "Class B" of the own package), all
+        # natively 10; and the foreign basic instances, natively 28.
+        def self.home_element?(model, diagram)
+          (model.is_a?(Ea::Model::Classifier) ||
+            model.is_a?(Ea::Model::InstanceSpecification)) &&
             !diagram.package_id.to_s.empty? &&
-            model.package_id == diagram.package_id &&
-            model.nested_parent_name.to_s.empty?
+            model.package_id == diagram.package_id
         end
 
         # A Text element of the diagram's own package keeps 13 + its
