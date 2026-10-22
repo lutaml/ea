@@ -32,14 +32,11 @@ module Ea
           @document = document
         end
 
+        # Emitted once per sequencer: the canvas, diagram and options
+        # are fixed at construction, so a re-layout builds a new
+        # sequencer rather than re-emitting this one.
         def layers
-          layers = [Background.render(canvas)]
-          layers += frame_layers if frame_enabled
-          layers += element_layers
-          layers += connector_layers
-          layers << labels_layer
-          layers << ghost_labels_layer
-          layers
+          @layers ||= build_layers.freeze
         end
 
         # Final drawn Bounds per model element ref (grown heights,
@@ -66,6 +63,16 @@ module Ea
         end
 
         private
+
+        def build_layers
+          layers = [Background.render(canvas)]
+          layers += frame_layers if frame_enabled
+          layers += element_layers
+          layers += connector_layers
+          layers << labels_layer
+          layers << ghost_labels_layer
+          layers
+        end
 
         def frame_layers
           DiagramFrame.new(canvas: canvas, theme: theme).layers(diagram).map(&:to_svg)

@@ -22,6 +22,12 @@ module Ea
 
         private
 
+        # `--format` names the image format here (svg|png|pdf), not the
+        # table/json output formatter, so the result listing is a table.
+        def formatter
+          Ea::Cli::Output.instance_for(:table)
+        end
+
         def render_one
           diagram = find_diagram
           write_diagram(diagram, resolve_output_path(diagram))
@@ -57,7 +63,8 @@ module Ea
         def render_svg(diagram)
           emitter_for_mode.new(diagram,
                                model_index: document.index_by_id,
-                               document: document).render
+                               document: document,
+                               frame: options[:frame] ? true : false).render
         end
 
         def svg_to_png(svg)

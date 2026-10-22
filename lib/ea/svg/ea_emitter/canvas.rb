@@ -91,7 +91,7 @@ module Ea
             pts << [b.x, b.y]
             pts << [b.x + b.width, b.y + b.height]
           end
-          extra = base.send(:subtitle_points)
+          extra = base.subtitle_points
           min_x = (pts + extra).map(&:first).min || 0
           min_y = (pts + extra).map(&:last).min || 0
           max_x = (pts + extra).map(&:first).max || 0

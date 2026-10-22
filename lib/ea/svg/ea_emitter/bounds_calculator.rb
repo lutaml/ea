@@ -69,19 +69,7 @@ module Ea
           ]
         end
 
-        private
-
-        # Element x-extent: logical bounds only (matches EA's canvas
-        # left/right exactly).
-        # Element y-extent: union of logical + image_bounds (image
-        # extends below bounds for shadow / image padding), plus the
-        # "(from Parent)" subtitle extent: EA draws the subtitle 15px
-        # below the body and its text descent adds ~4 more, reserving
-        # 19px of canvas below subtitle-bearing packages (the +19
-        # height family: 05DF5000 Main, Metadata All, package
-        # Clients/Suppliers contexts).
-        SUBTITLE_CANVAS_EXTRA = 19
-
+        # Canvas points reserved below "(from Parent)" subtitles.
         def subtitle_points
           pts = []
           (diagram.elements || []).each do |e|
@@ -94,6 +82,19 @@ module Ea
           end
           pts
         end
+
+        private
+
+        # Element x-extent: logical bounds only (matches EA's canvas
+        # left/right exactly).
+        # Element y-extent: union of logical + image_bounds (image
+        # extends below bounds for shadow / image padding), plus the
+        # "(from Parent)" subtitle extent: EA draws the subtitle 15px
+        # below the body and its text descent adds ~4 more, reserving
+        # 19px of canvas below subtitle-bearing packages (the +19
+        # height family: 05DF5000 Main, Metadata All, package
+        # Clients/Suppliers contexts).
+        SUBTITLE_CANVAS_EXTRA = 19
 
         def element_points
           pts = []

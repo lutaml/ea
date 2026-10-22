@@ -26,9 +26,7 @@ module Ea
 
         def render_one
           diagram = find_diagram
-          svg = emitter_for_mode.new(diagram,
-                                       model_index: document.index_by_id,
-                                       document: document).render
+          svg = render_svg(diagram)
 
           output_path = resolve_output_path(diagram)
           FileUtils.mkdir_p(File.dirname(output_path))
@@ -41,15 +39,20 @@ module Ea
           out_dir = options[:output_dir] || default_output_dir
           FileUtils.mkdir_p(out_dir)
           paths = document.diagrams.map do |diagram|
-            svg = emitter_for_mode.new(diagram,
-                                         model_index: document.index_by_id,
-                                         document: document).render
+            svg = render_svg(diagram)
             path = File.join(out_dir, "#{diagram.id}.svg")
             File.write(path, svg)
             path
           end
 
           formatter.render(paths.map { |p| [p] }, columns: [:written_to])
+        end
+
+        def render_svg(diagram)
+          emitter_for_mode.new(diagram,
+                               model_index: document.index_by_id,
+                               document: document,
+                               frame: options[:frame] ? true : false).render
         end
 
         def default_output_dir
