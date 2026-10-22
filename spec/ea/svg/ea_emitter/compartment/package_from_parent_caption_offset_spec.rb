@@ -3,10 +3,10 @@
 require "spec_helper"
 
 RSpec.describe Ea::Svg::EaEmitter::Compartment::PackageFromParent do
-  def caption_y(family, size)
+  def caption_y(family, size, logical_height: nil)
     context = Ea::Svg::EaEmitter::RenderContext.new(
       bounds: Ea::Model::Bounds.new(x: 400, y: 20, width: 100, height: 80),
-      family: family, size: size, size_unit: "pt",
+      family: family, size: size, size_unit: "pt", logical_height: logical_height,
       theme: Ea::Theme::Registry.default
     )
     svg = described_class.subtitle("(from 3D都市モデル)", context)
@@ -19,5 +19,13 @@ RSpec.describe Ea::Svg::EaEmitter::Compartment::PackageFromParent do
 
   it "keeps the 15px offset for Cambria 7pt captions (native 14E9F5FD, 2A5E0832, 6481E2CC)" do
     expect(caption_y("Cambria", 7)).to eq(115.0)
+  end
+
+  it "treats a zero logical height as absent (same offset as no height)" do
+    expect(caption_y("Cambria", 9, logical_height: 0)).to eq(caption_y("Cambria", 9))
+  end
+
+  it "keeps the legacy 15px offset for an absurd logical height instead of moving the caption away" do
+    expect(caption_y("Cambria", 9, logical_height: 500)).to eq(115.0)
   end
 end

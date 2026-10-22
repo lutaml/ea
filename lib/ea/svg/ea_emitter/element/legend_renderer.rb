@@ -162,10 +162,11 @@ module Ea
             (block_left + (block_right - block_left - title_text_width.round) / 2.0).floor
           end
 
-          def estimated_width(text, size, weight: nil, logical_height: nil, text_family: family)
+          def estimated_width(text, size, weight: nil, logical_height: nil, text_family: family,
+                              legend_title: false)
             TextRenderer.estimate_width(
               text, size, family: text_family, weight: weight,
-                          logical_height: logical_height
+                          logical_height: logical_height, legend_title: legend_title
             ).round
           end
 
@@ -193,7 +194,8 @@ module Ea
           end
 
           def title_text_width
-            estimated_width(legend.title, title_font_size, weight: 700, text_family: heading_family)
+            estimated_width(legend.title, title_font_size, weight: 700, text_family: heading_family,
+                                       legend_title: true)
           end
 
           def heading_family
@@ -206,7 +208,8 @@ module Ea
             TextRenderer.new(
               content: content.to_s, x: tx, y: ty,
               family: weight.zero? ? family : heading_family, size: size, size_unit: size_unit,
-              weight: weight, fill: label_fill, logical_height: weight.zero? ? item_font[:logical_height] : nil
+              weight: weight, fill: label_fill, logical_height: weight.zero? ? item_font[:logical_height] : nil,
+              legend_title: !weight.zero?
             ).to_svg
           end
 

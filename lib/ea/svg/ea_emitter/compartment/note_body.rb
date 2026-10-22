@@ -63,7 +63,7 @@ module Ea
           # [pitch, first-baseline offset] for the note font.
           def vertical_layout(context)
             size = context.size
-            height = context.logical_height
+            height = Ea::Fonts::Metrics.source_logical_height(context.logical_height)
             height ||= Ea::Fonts::Metrics.gdi_logical_height(size) if context.size_unit == "pt"
             ascent, descent = Ea::Fonts::Metrics.gdi_cell_metrics(context.family, height)
             return [size + 7, size + 9] unless ascent

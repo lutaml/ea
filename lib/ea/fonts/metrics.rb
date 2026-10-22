@@ -105,6 +105,7 @@ module Ea
         # Source sizes 90 and 100 both export as 9pt but retain
         # distinct 12px and 13px logical heights. Apply that same
         # source-height delta to the existing compartment spacing.
+        logical_height = source_logical_height(logical_height)
         adjustment = if logical_height && unit == "pt" &&
                         GDI_HEIGHT_FAMILIES.include?(resolve_family(family))
                        logical_height - gdi_logical_height(size)
@@ -112,6 +113,13 @@ module Ea
                        0
                      end
         size + offset + adjustment
+      end
+
+      # A source logical height of 0 or less (QEA floors tiny fontsz to
+      # 0) carries no information: treat it as absent.
+      def source_logical_height(height)
+        height = height.to_i
+        height if height.positive?
       end
 
       def gdi_logical_height(size)
@@ -152,11 +160,17 @@ module Ea
       # textLength is the SUM of those per-glyph integers - corpus
       # fitted to 97-100% exact on 10k Carlito texts (bold 7pt
       # 1666/1671). The legacy sum-then-round model matched only 27%.
-      def text_length(text, size_pt, family: nil, weight: nil, style: nil, logical_height: nil)
+      #
+      # `legend_title` marks a diagram-legend title, the only context in
+      # which a bold Cambria CJK run takes regular-weight advances.
+      def text_length(text, size_pt, family: nil, weight: nil, style: nil, logical_height: nil,
+                      legend_title: false)
         return nil unless supported_family?(family)
         return nil if text.nil? || text.empty?
 
-        return cambria_text_length(text, size_pt, weight, style) if resolve_family(family) == "Cambria"
+        if resolve_family(family) == "Cambria"
+          return cambria_text_length(text, size_pt, weight, style, logical_height, legend_title: legend_title)
+        end
 
         advance_text_length(text, size_pt, family, weight, style, logical_height)
       end
@@ -164,7 +178,7 @@ module Ea
       def advance_text_length(text, size_pt, family, weight, style, logical_height)
         resolved = resolve_family(family)
         if GDI_HEIGHT_FAMILIES.include?(resolved)
-          height = logical_height || gdi_logical_height(size_pt)
+          height = source_logical_height(logical_height) || gdi_logical_height(size_pt)
           table = table_for(family, weight, style)
           fallback = cjk_fallback_widths(resolved, height, weight, style)
           measured_latin = measured_carlito_widths(resolved, height, weight, style)
@@ -206,8 +220,16 @@ module Ea
       end
       private_class_method :measured_carlito_widths
 
-      def cambria_text_length(text, size_pt, weight, style)
-        return cambria_cjk_only_length(text, size_pt, weight, style) unless size_pt.to_f.to_r == 7
+      # True for Cambria outside the 7pt tables, where a run is measured
+      # character by character when it is not wholly in the CJK table.
+      def piecewise_family?(family, size_pt)
+        resolve_family(family) == "Cambria" && size_pt.to_f.to_r != 7
+      end
+
+      def cambria_text_length(text, size_pt, weight, style, logical_height = nil, legend_title: false)
+        unless size_pt.to_f.to_r == 7
+          return cambria_cjk_only_length(text, size_pt, weight, style, logical_height, legend_title: legend_title)
+        end
         return nil unless ["", "0", "400", "normal", "700", "bold"].include?(weight.to_s)
         return nil unless ["", "normal", "italic"].include?(style.to_s)
 
@@ -223,17 +245,23 @@ module Ea
       private_class_method :cambria_text_length
 
       # Cambria has no Latin table outside 7pt, but a run made only of
-      # characters in the measured MS UI Gothic table is exact at any
-      # measured height. EMPIRICAL FIT (decision a): EA draws a bold
-      # Cambria CJK run at logical height >= 17 with the regular-weight
-      # advances (no synthetic-bold pixel), although the Windows table
-      # records one. Checked on the 116 native legend titles "凡例"
-      # (Cambria bold 12pt, H17): native textLength 34 = 2 x 17, where
-      # the 17:700 entry would give 36. Below H17 bold keeps the bold
-      # table (native 7pt bold "都市計画データ" = 70).
-      def cambria_cjk_only_length(text, size_pt, weight, style)
-        height = gdi_logical_height(size_pt)
-        bold = bold?(weight) && height < CAMBRIA_REGULAR_BOLD_MIN_HEIGHT
+      # characters in the measured MS UI Gothic table is exact at the
+      # measured height (the source logical height when it is positive,
+      # else the one derived from the point size). A run with any other
+      # character is nil here; TextRenderer.estimate_width then prices
+      # the characters one at a time.
+      #
+      # EMPIRICAL FIT (decision a), legend titles only: EA draws a bold
+      # Cambria legend title at logical height >= 17 with the
+      # regular-weight advances (no synthetic-bold pixel), although the
+      # Windows table records one. Checked on the 116 native legend
+      # titles "凡例" (Cambria bold 12pt, H17): native textLength 34 =
+      # 2 x 17, where the 17:700 entry would give 36. Every other bold
+      # run, and a title below H17, keeps the bold table (native 7pt
+      # bold "都市計画データ" = 70).
+      def cambria_cjk_only_length(text, size_pt, weight, style, logical_height = nil, legend_title: false)
+        height = source_logical_height(logical_height) || gdi_logical_height(size_pt)
+        bold = bold?(weight) && !(legend_title && height >= CAMBRIA_REGULAR_BOLD_MIN_HEIGHT)
         widths = cjk_fallback_widths("Cambria", height, bold ? 700 : 400, style)
         advances = text.each_char.map { |char| widths[char] }
         advances.sum unless advances.include?(nil)
