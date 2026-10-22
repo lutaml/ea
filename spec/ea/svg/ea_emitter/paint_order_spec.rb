@@ -68,4 +68,29 @@ RSpec.describe "EA paint order" do # rubocop:disable Metrics/BlockLength
 
     expect(lines.map { |node| node["d"][/M (\d+)/, 1].to_i }).to eq([225, 85])
   end
+
+  it "paints a placement with no Sequence first, as before the descending order" do
+    diagram = Ea::Model::Diagram.new(elements: [placement("a", 2, 10), placement("b", nil, 200)])
+    xs = svg_for(diagram, index).xpath("//*[local-name()='rect'][@height='40']").map { |rect| rect["x"].to_i }
+
+    expect(xs).to eq([200, 10].map { |x| x + xs.min - 10 })
+  end
+
+  it "paints a missing Sequence first, then the positive ones, then a Sequence of 0" do
+    diagram = Ea::Model::Diagram.new(elements: [placement("a", 0, 10), placement("b", nil, 200),
+                                                placement("a", 3, 400)])
+    xs = svg_for(diagram, index).xpath("//*[local-name()='rect'][@height='40']").map { |rect| rect["x"].to_i }
+
+    expect(xs).to eq([200, 400, 10].map { |x| x + xs.min - 10 })
+  end
+
+  it "treats a paint key with a nil part as unresolved instead of failing to compare" do
+    unresolved = generalization("r1", [nil, 1], 60)
+    keyed = generalization("r2", [1, 1], 90)
+    diagram = Ea::Model::Diagram.new(elements: [placement("a", 1, 10), placement("b", 2, 200)],
+                                     connectors: [unresolved, keyed])
+    lines = svg_for(diagram, index).xpath("//*[local-name()='path']")
+
+    expect(lines.map { |node| node["d"][/M (\d+)/, 1].to_i }).to eq([225, 85])
+  end
 end

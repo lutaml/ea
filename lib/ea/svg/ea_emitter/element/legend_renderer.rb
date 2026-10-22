@@ -32,23 +32,24 @@ module Ea
           LABEL_BASELINE_FROM_ICON_TOP = 12
           DEFAULT_ITEM_FONT_SIZE = 9
           # The legend pen is not set explicitly: the panel inherits the pen
-          # left by the previous drawing (round/bevel), or EA's initial pen
-          # (square/miter) when the legend is the first thing painted. Held
-          # across the corpus: 11 of 11 legends painted first are square, 105
-          # of 105 painted later are round.
-          INHERITED_STROKE = "stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel;"
-          INITIAL_STROKE = "stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;"
+          # left by the previous drawing, or EA's initial pen (square/miter)
+          # when nothing was drawn before it - the same rule notes follow.
+          # Held across the corpus: 11 of 11 legends painted first are
+          # square/miter, 105 of 105 painted later follow a class-like
+          # drawing that leaves round/bevel.
+          INITIAL_PEN = Element::NoteShapeRenderer::INITIAL_PEN
 
-          def self.render(bounds, legend:, family:, canvas: nil, item_font: {}, first_painted: false)
-            new(bounds, legend, family, canvas, item_font, first_painted: first_painted).to_svg
+          def self.render(bounds, legend:, family:, canvas: nil, item_font: {}, pen: nil)
+            new(bounds, legend, family, canvas, item_font, pen: pen).to_svg
           end
 
-          def initialize(bounds, legend, family, canvas, item_font = {}, first_painted: false)
+          def initialize(bounds, legend, family, canvas, item_font = {}, pen: nil)
             @bounds = bounds
             @legend = legend
             @family = family
             @canvas = canvas
-            @pen = first_painted ? INITIAL_STROKE : INHERITED_STROKE
+            cap, join = pen || INITIAL_PEN
+            @pen = "stroke-width:1;stroke-linecap:#{cap};stroke-linejoin:#{join};"
             @item_font = item_font[:size]&.nonzero? ? item_font : {}
           end
 

@@ -374,8 +374,8 @@ module Ea
                          role.to_s.length * 6
             mult_width = Ea::Fonts::Metrics.text_length(mult.to_s, font_size, family: font_family) ||
                          mult.to_s.length * 6
-            [[anchor[0] - 60 - role_width, anchor[1] - 7],
-             [anchor[0] - mult_width - 3, anchor[1] + 15]]
+            [[[anchor[0] - 60 - role_width, MIN_ROLE_X].max, anchor[1] - 7],
+             [[anchor[0] - mult_width - 3, MIN_ROLE_X].max, anchor[1] + 15]]
           end
 
           # Stored source-end boxes on a 7pt label whose first leg
