@@ -24,13 +24,18 @@ RSpec.describe "XMI connector endpoint references from UMLDI edges" do
             connectors.count { |c| c.waypoints.empty? }]).to eq([72, 72, 0])
   end
 
-  it "keeps the end resolved by an existing DUID" do
+  it "never seats both ends on one box when only one DUID is stale" do
     xmi = basic_with_source_duid_of(link_a, "F11A61F4")
-    expect(connector_end_models(xmi, link_a)).to eq([object_b, object_b])
+    expect(connector_end_models(xmi, link_a)).to eq([object_a, object_b])
   end
 
   it "leaves an end unresolved when the edge's element is placed twice" do
     xmi = basic_with_duplicate_placement(object_a)
     expect(connector_end_models(xmi, link_a)).to eq([nil, object_b])
+  end
+
+  it "does not let a duplicated DUID name a placement" do
+    xmi = basic_with_duplicate_placement(object_b)
+    expect(connector_end_models(xmi, link_a)).to eq([object_a, nil])
   end
 end

@@ -22,12 +22,18 @@ module Ea
           priority = priority_for(connector)
           return centerline(connector, points) unless priority
 
+          # Direct lines are written target-first like their centerline, so
+          # the bridges are walked in that travel direction (arc sweeps are
+          # relative to it) and the target repeat closes the path.
+          direct = points.size == 2 && direct?(connector)
+          points = points.reverse if direct
           segments = points.each_cons(2).map do |first, last|
             crossings_for(connector, priority, first, last)
           end
-          return centerline(connector, points) if segments.all?(&:empty?)
+          return centerline(connector, direct ? points.reverse : points) if segments.all?(&:empty?)
 
-          serialize(points, segments)
+          path = serialize(points, segments)
+          direct ? "#{path} M #{coordinates(points.first)}" : path
         end
 
         private

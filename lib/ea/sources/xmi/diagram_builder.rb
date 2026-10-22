@@ -197,9 +197,11 @@ module Ea
 
         def build_connectors(placed_connectors, placed_elements, owner_id, context)
           # Index elements by DUID so we can resolve SOID/EOID.
-          by_duid = placed_elements.each_with_object({}) do |pe, acc|
-            acc[pe.style.duid] = pe if pe.style.duid
-          end
+          # A DUID shared by several placements names none of them (QEA
+          # placement_order_reversed? needs a unique match too).
+          by_duid = placed_elements.select { |pe| pe.style.duid }.group_by { |pe| pe.style.duid }
+                                   .select { |_duid, placements| placements.one? }
+                                   .transform_values(&:first)
           by_subject = placed_elements.group_by { |pe| guid_key(pe.subject) }
 
           placed_connectors.each_with_index.map do |placed, index|
@@ -368,12 +370,26 @@ module Ea
         # The saved SOID/EOID can name the model connector's ends in reverse
         # order; the model connector decides which placement is the source.
         def placed_ends(style, by_duid, by_subject, edge_source, edge_target)
-          source = by_duid[style.soid] || sole_placement(by_subject, edge_source)
-          target = by_duid[style.eoid] || sole_placement(by_subject, edge_target)
+          named = [by_duid[style.soid], by_duid[style.eoid]]
+          source = named[0] || sole_placement(by_subject, edge_source)
+          target = named[1] || sole_placement(by_subject, edge_target)
+          if source.equal?(target) && named.one?
+            source, target = subject_placements(by_subject, named, edge_source, edge_target)
+          end
           return [source, target] unless source && target &&
                                          reversed_ends?(source, target, edge_source, edge_target)
 
           [target, source]
+        end
+
+        # One stale DUID falls back to the relationship's own end, which can
+        # be the very placement the other DUID named; two distinct ends never
+        # share a box, so each end then takes its own subject's placement. A
+        # link whose SOID and EOID are one DUID is a genuine self link.
+        def subject_placements(by_subject, named, edge_source, edge_target)
+          [edge_source, edge_target].zip(named).map do |subject, placement|
+            sole_placement(by_subject, subject) || (placement if guid_key(placement&.subject) == guid_key(subject))
+          end
         end
 
         def reversed_ends?(source, target, edge_source, edge_target)
