@@ -32,8 +32,8 @@ module Ea
                        insets: [FRAME_INSET_LEFT, FRAME_INSET_TOP])
           @min_x = min_x
           @min_y = min_y
-          @width = width
-          @height = height
+          @width = whole(width)
+          @height = whole(height)
           @inset_left, @inset_top = insets
         end
 
@@ -138,6 +138,12 @@ module Ea
         end
 
         private
+
+        # Measured extents arrive as Floats ("508.0"); EA writes whole
+        # pixels into the viewBox and background rect.
+        def whole(pixels)
+          pixels.is_a?(Float) && pixels == pixels.to_i ? pixels.to_i : pixels
+        end
 
         def format_cm(px)
           return "0cm" if px.nil? || px.zero?

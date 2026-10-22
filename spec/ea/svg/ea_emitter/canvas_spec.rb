@@ -102,3 +102,11 @@ RSpec.describe Ea::Svg::EaEmitter::Canvas do
     end
   end
 end
+
+RSpec.describe Ea::Svg::EaEmitter::Canvas, "whole-pixel size" do
+  it "writes an integral measured size without a fractional part" do
+    canvas = described_class.new(min_x: 0, min_y: 0, width: 508.0, height: 278.0)
+
+    expect(canvas.view_box).to eq("0 0 508 278")
+  end
+end

@@ -53,11 +53,36 @@ RSpec.describe Ea::Svg::EaEmitter::BottomMargin do
     expect(margin([placed("a", "c2", 300)], { "c2" => home })).to eq(10)
   end
 
-  it "keeps the owner-qualified classifier of the own package on the full margin" do
+  it "keeps the bare 10 margin below an own-package classifier nested in an owner class" do
     nested = Ea::Model::Klass.new(id: "c3", name: "Inner", package_id: "home",
                                   nested_parent_name: "Outer")
 
-    expect(margin([placed("a", "c3", 300)], { "c3" => nested })).to eq(28)
+    expect(margin([placed("a", "c3", 300)], { "c3" => nested })).to eq(10)
+  end
+
+  it "keeps the bare 10 margin below an instance of the own package" do
+    own = Ea::Model::InstanceSpecification.new(id: "i1", name: "Object B", package_id: "home")
+
+    expect(margin([placed("a", "i1", 300)], { "i1" => own })).to eq(10)
+  end
+
+  it "keeps the full margin below an instance of a foreign package" do
+    foreign = Ea::Model::InstanceSpecification.new(id: "i2", name: "Object B", package_id: "other")
+
+    expect(margin([placed("a", "i2", 300)], { "i2" => foreign })).to eq(28)
+  end
+
+  context "with the basic.qea diagrams natively 10 below the lowest element" do
+    let(:path) { File.expand_path("../../../../examples/qea/basic.qea", __dir__) }
+    let(:document) { Ea::Sources::Qea::Adapter.new(cached_qea_database(path), path).to_document }
+
+    %w[3B8BD087 D14AA320 372F7F7B 4FC1D352 6D0349D5].each do |prefix|
+      it "gives diagram #{prefix} the bare margin" do
+        diagram = document.diagrams.find { |entry| entry.id.to_s.upcase.start_with?(prefix) }
+
+        expect(described_class.for(diagram, document.index_by_id)).to eq(10)
+      end
+    end
   end
 
   it "keeps 13 plus the point size below a Text element of the own package" do
