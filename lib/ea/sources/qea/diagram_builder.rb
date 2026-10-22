@@ -202,7 +202,10 @@ module Ea
         end
 
         def build_connectors(diagram_row)
-          links = database.diagram_links_for(diagram_row.diagram_id) || []
+          # A link row whose connector no longer exists (EA leaves them
+          # behind when a connector is deleted) has nothing to draw.
+          links = (database.diagram_links_for(diagram_row.diagram_id) || [])
+                  .select { |link_row| database.find_connector(link_row.connectorid) }
           context = ContextDiagramSupport.context?(diagram_row)
           # EA regenerates context diagrams at draw time; their
           # Hidden link rows are stale and never render.

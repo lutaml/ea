@@ -11,21 +11,43 @@ RSpec.describe Ea::Sources::Xmi::StoredRoute, "reversed vertical trees" do
   let(:upper) { [630, 260, 268, 258] }
 
   it "routes a reversed vertical tree through the bus 50px past the End box" do
-    metadata = route(tree_style, "Mode=3;EOID=CC91A3FC;SOID=E9A8AB7A;LWidth=0;TREE=V;", "904:-568;764:-568;",
+    metadata = route(tree_style, "Mode=3;EOID=CC91A3FC;SOID=E9A8AB7A;LWidth=0;TREE=V;", "904:-670;764:-670;",
                      [lower, upper], [[41, -125], [0, 0]], 3)
     expect(vertices(metadata)).to eq([[904, 720], [904, 568], [764, 568], [764, 518]])
     expect(metadata[:style]).not_to include(:reversed_ends)
   end
 
+  it "also fits a Path already stored at the End bus (plateau XMI connector 211)" do
+    metadata = route(tree_style, "Mode=3;EOID=CC91A3FC;SOID=E9A8AB7A;LWidth=0;TREE=V;", "904:-568;764:-568;",
+                     [lower, upper], [[41, -125], [0, 0]], 3)
+    expect(vertices(metadata)).to eq([[904, 720], [904, 568], [764, 568], [764, 518]])
+  end
+
   it "keeps the authored route when the ends are not reversed" do
-    expect(route(tree_style.except(:reversed_ends), "Mode=3;LWidth=0;TREE=V;", "904:-568;764:-568;",
+    expect(route(tree_style.except(:reversed_ends), "Mode=3;LWidth=0;TREE=V;", "904:-670;764:-670;",
                  [lower, upper], [[41, -125], [0, 0]], 3)).to eq({})
   end
 
   it "seats source labels left when the leg starts beside its box" do
-    metadata = route(tree_style, "Mode=3;EOID=CC91A3FC;SOID=E9A8AB7A;LWidth=0;TREE=V;", "962:-568;764:-568;",
+    metadata = route(tree_style, "Mode=3;EOID=CC91A3FC;SOID=E9A8AB7A;LWidth=0;TREE=V;", "962:-670;764:-670;",
                      [lower, upper], [[86, -4], [0, 0]], 3)
     expect(metadata[:style]).to include(left_seated_source: true)
+  end
+
+  it "keeps a stored bus that is not the one EA discards" do
+    expect(route(tree_style, "Mode=3;EOID=CC91A3FC;SOID=E9A8AB7A;LWidth=0;TREE=V;", "904:-600;764:-600;",
+                 [lower, upper], [[41, -125], [0, 0]], 3)).to eq({})
+  end
+
+  it "yields when an out-of-box offset would detach the leg" do
+    expect(route(tree_style, "Mode=3;EOID=CC91A3FC;SOID=E9A8AB7A;LWidth=0;TREE=V;", "904:-670;764:-670;",
+                 [lower, upper], [[500, -10], [0, 0]], 3)).to eq({})
+  end
+
+  it "drops the repeated vertex of a straight reversed tree" do
+    metadata = route(tree_style, "Mode=3;EOID=CC91A3FC;SOID=E9A8AB7A;LWidth=0;TREE=V;", "746:-670;746:-670;",
+                     [[610, 720, 153, 80], upper], [[60, 0], [-18, 0]], 3)
+    expect(vertices(metadata)).to eq([[746, 720], [746, 568], [746, 518]])
   end
 
   it "seats the source labels of a reversed lateral tree left" do

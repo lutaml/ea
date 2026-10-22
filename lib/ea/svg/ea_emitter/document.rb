@@ -44,9 +44,24 @@ module Ea
                              content_anchor: content_anchor)
           seq = sequence(canvas)
           canvas, seq = redo_on_drawn(canvas, seq)
-          content_anchor ? anchor_on_content(canvas, seq) : [canvas, seq]
+          return anchor_on_content(canvas, seq) if content_anchor
+
+          frame ? grow_to_drawn_shapes(canvas, seq) : [canvas, seq]
         end
         private :lay_out
+
+        # A framed canvas is sized from element rects, so a stored
+        # connector bend beyond them is drawn outside the viewBox. Grows
+        # the canvas to hold every drawn shape; a diagram whose shapes
+        # already fit keeps its canvas untouched.
+        def grow_to_drawn_shapes(canvas, seq)
+          shapes = ContentExtent.measure(seq.layers.drop(1)).shapes
+          return [canvas, seq] unless shapes
+
+          grown = canvas.holding(shapes)
+          grown.equal?(canvas) ? [canvas, seq] : [grown, sequence(grown)]
+        end
+        private :grow_to_drawn_shapes
 
         def redo_on_drawn(canvas, seq)
           grown = seq.drawn_bounds

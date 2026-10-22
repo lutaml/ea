@@ -18,21 +18,17 @@ module Ea
             return {} unless reversed_tree_candidate?(model, link, bounds, offsets)
 
             start, finish = bounds.values_at(:source, :target)
-            bus, start_edge, finish_edge = reversed_tree_levels(start, finish)
-            return {} unless bus
+            route = reversed_tree_points(start, finish, ray_geometry(offsets, edge), stored_bus_levels(link))
+            return {} unless route
 
-            geom = ray_geometry(offsets, edge)
-            first = reversed_tree_leg(start, geom[:sx], geom[:sy], start_edge, finish)
-            last = reversed_tree_leg(finish, geom[:ex], geom[:ey], finish_edge, start)
-
-            reversed_tree_fields(model, first, last, bus, first[1] != start_edge)
+            reversed_tree_fields(model, route[0], route[1])
           end
 
-          def reversed_tree_fields(model, first, last, bus, beside)
+          def reversed_tree_fields(model, points, beside)
             style = model.style.to_h.except(:umldi_route, :reversed_ends)
             style[:left_seated_source] = true if beside
-            ends = [point_for(first), point_for(last)]
-            { waypoints: points_to_waypoints([first, [first[0], bus], [last[0], bus], last]),
+            ends = [point_for(points.first), point_for(points.last)]
+            { waypoints: points_to_waypoints(points),
               source_anchor: ends[0], target_anchor: ends[1], source_port: ends[0], target_port: ends[1],
               style: style }
           end
@@ -49,24 +45,12 @@ module Ea
           def reversed_corner_metadata(model, link, bounds, offsets, edge)
             return {} unless reversed_corner_candidate?(model, link, bounds, offsets, edge)
 
-            boxes = bounds.values_at(:source, :target)
-            origins = corner_origins(boxes, ray_geometry(offsets, edge))
-            bend = Ea::Model::Point.new(**%i[x y].zip(intermediate_waypoints(link).first).to_h)
-            ends = origins.zip(boxes).map { |origin, box| corner_exit(origin, bend, box) }
-            ends.all? ? corner_fields(origins, bend, ends) : {}
-          end
+            origins, points = reversed_corner_points(bounds.values_at(:source, :target), ray_geometry(offsets, edge),
+                                                     intermediate_waypoints(link).first)
+            return {} unless points
 
-          def corner_fields(origins, bend, ends)
-            { waypoints: points_to_waypoints([ends[0], bend, ends[1]].map { |point| [point.x, point.y] }),
+            { waypoints: points_to_waypoints(points.map { |point| [point.x, point.y] }),
               source_anchor: origins[0], target_anchor: origins[1] }
-          end
-
-          def corner_origins(boxes, geom)
-            [stored_ray_origin(boxes[0], geom[:sx], geom[:sy]), stored_ray_origin(boxes[1], geom[:ex], geom[:ey])]
-          end
-
-          def corner_exit(origin, bend, box)
-            inside_box?(origin, box) ? diagonal_corner_exit(origin, bend, box) : origin
           end
 
           def reversed_corner_candidate?(model, link, bounds, offsets, edge)

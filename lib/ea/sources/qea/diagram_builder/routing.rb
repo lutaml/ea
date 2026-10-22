@@ -7,6 +7,10 @@ module Ea
         # Internal geometry for choosing the facing edges of stored routes.
         module Routing
           REVERSED_TREE_BUS_OFFSET = 50
+          # A leg may start beside its box only this far from it (the one native
+          # case, 5038EEE3 connector 212, is 9px away); any other leg that
+          # leaves the box's x-span would be detached, so the fit yields.
+          REVERSED_TREE_BESIDE_REACH = 10
 
           private
 
@@ -19,19 +23,26 @@ module Ea
             connector = database.find_connector(link_row.connectorid)
             return model unless connector && reversed_corner_link?(link_row, diagram_row, connector)
 
-            boxes = stored_ray_boxes(link_row, diagram_row)
+            origins, points = reversed_corner_points(stored_ray_boxes(link_row, diagram_row), geom,
+                                                     intermediate_waypoints(link_row).first)
+            return model unless points
+
+            model.waypoints = points.map { |point| Ea::Model::Waypoint.new(position: point) }
+            model.source_anchor, model.target_anchor = origins
+            model
+          end
+
+          # Shared by QEA and XMI: clip each leg of the single saved bend from
+          # its stored origin, retaining origins outside their box. Returns
+          # [origins, [start, bend, end]], or nil when a leg cannot be clipped.
+          def reversed_corner_points(boxes, geom, corner)
             origins = [stored_ray_origin(boxes[0], geom[:sx], geom[:sy]),
                        stored_ray_origin(boxes[1], geom[:ex], geom[:ey])]
-            x, y = intermediate_waypoints(link_row).first
-            bend = Ea::Model::Point.new(x: x, y: y)
+            bend = Ea::Model::Point.new(x: corner[0], y: corner[1])
             ends = origins.zip(boxes).map do |origin, box|
               inside_box?(origin, box) ? diagonal_corner_exit(origin, bend, box) : origin
             end
-            return model unless ends.all?
-
-            model.waypoints = [ends[0], bend, ends[1]].map { |point| Ea::Model::Waypoint.new(position: point) }
-            model.source_anchor, model.target_anchor = origins
-            model
+            [origins, [ends[0], bend, ends[1]]] if ends.all?
           end
 
           # EMPIRICAL FIT (decision a), not a source-backed rule. A width-0
@@ -48,20 +59,35 @@ module Ea
             return model if context || !reversed_tree_link?(model, link_row, diagram_row, geom)
 
             start, finish = stored_ray_boxes(link_row, diagram_row)
-            bus, start_edge, finish_edge = reversed_tree_levels(start, finish)
-            return model unless bus
+            route = reversed_tree_points(start, finish, geom, stored_bus_levels(link_row))
+            return model unless route
 
-            first = reversed_tree_leg(start, geom[:sx], geom[:sy], start_edge, finish)
-            last = reversed_tree_leg(finish, geom[:ex], geom[:ey], finish_edge, start)
-            model.waypoints = [first, [first[0], bus], [last[0], bus], last].map do |x, y|
+            points, beside = route
+            model.waypoints = points.map do |x, y|
               Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y))
             end
             model.source_anchor = model.source_port = model.waypoints.first.position
             model.target_anchor = model.target_port = model.waypoints.last.position
             # EMPIRICAL FIT: a leg that starts beside its box (5038EEE3
             # connector 212) seats its source labels like a leftward leg.
-            model.style = model.style.to_h.merge(left_seated_source: true) if first[1] != start_edge
+            model.style = model.style.to_h.merge(left_seated_source: true) if beside
             model
+          end
+
+          # The reversed-tree route points and whether the Start leg starts
+          # beside its box, or nil when the fit does not apply: no usable bus
+          # level, a stored bus that is not the discarded one (see
+          # reversed_tree_levels), or a leg that cannot stay attached to its box.
+          def reversed_tree_points(start, finish, geom, stored_bus)
+            bus, start_edge, finish_edge = reversed_tree_levels(start, finish, stored_bus)
+            return unless bus
+
+            first = reversed_tree_leg(start, geom[:sx], geom[:sy], start_edge, finish)
+            last = reversed_tree_leg(finish, geom[:ex], geom[:ey], finish_edge, start)
+            return unless first && last
+
+            points = [first, [first[0], bus], [last[0], bus], last].chunk_while { |a, b| a == b }.map(&:first)
+            [points, first[1] != start_edge]
           end
 
           # EMPIRICAL FIT (decision a). EA seats the source labels of a
@@ -92,25 +118,37 @@ module Ea
 
           def stored_bus_levels(link_row)
             bends = intermediate_waypoints(link_row)
-            bends.size == 2 && bends.first[1] == bends.last[1]
+            bends.first[1] if bends.size == 2 && bends.first[1] == bends.last[1]
           end
 
           # [bus height, Start facing edge, End facing edge] for vertically
           # separated boxes: the bus sits 50px past the End box's edge and
           # must stay inside the gap. Nil otherwise.
-          def reversed_tree_levels(start, finish)
+          #
+          # EMPIRICAL FIT (decision a): a stored bus is replaced only when it
+          # is a 50px tree bus off one of the two facing edges, as EA lays
+          # them out: 50px past the Start box (the Path follows SOID/EOID
+          # order; the QEA y670 = Start edge 720 - 50 of all five 5038EEE3
+          # links) or already 50px past the End box (the XMI Path of three
+          # of them, y568). A stored bus anywhere else is a real route.
+          def reversed_tree_levels(start, finish, stored_bus)
             if finish.y + finish.height < start.y
               bus = finish.y + finish.height + REVERSED_TREE_BUS_OFFSET
-              [bus, start.y, finish.y + finish.height] if bus < start.y
+              discarded = start.y - REVERSED_TREE_BUS_OFFSET
+              edges = [start.y, finish.y + finish.height]
+              [bus, *edges] if bus < start.y && [bus, discarded].include?(stored_bus)
             elsif start.y + start.height < finish.y
               bus = finish.y - REVERSED_TREE_BUS_OFFSET
-              [bus, start.y + start.height, finish.y] if bus > start.y + start.height
+              discarded = start.y + start.height + REVERSED_TREE_BUS_OFFSET
+              edges = [start.y + start.height, finish.y]
+              [bus, *edges] if bus > edges.first && [bus, discarded].include?(stored_bus)
             end
           end
 
           # A leg runs vertically at the stored origin's x. It starts on the
-          # facing edge, unless the origin lies beside the box (outside its
-          # x-span but level with it), where the origin itself is kept.
+          # facing edge, unless the origin lies beside the box (just outside its
+          # x-span but level with it), where the origin itself is kept. Nil
+          # for an origin that would leave the leg detached.
           #
           # EMPIRICAL FIT (decision a): the leg's x is pulled toward the box
           # centre by |offset_y| / (vertical centre distance to the other box).
@@ -124,8 +162,12 @@ module Ea
             pull = span.positive? ? 1 - [offset_y.to_i.abs / span, 1].min : 1
             pulled = (offset_x.to_i.abs * pull).ceil * (offset_x.to_i.negative? ? -1 : 1)
             origin = stored_ray_origin(box, pulled, offset_y)
-            beside = !origin.x.between?(box.x, box.x + box.width) && origin.y.between?(box.y, box.y + box.height)
-            [origin.x, beside ? origin.y : edge_y]
+            return [origin.x, edge_y] if origin.x.between?(box.x, box.x + box.width)
+
+            reach = REVERSED_TREE_BESIDE_REACH
+            beside = origin.y.between?(box.y, box.y + box.height) &&
+                     origin.x.between?(box.x - reach, box.x + box.width + reach)
+            [origin.x, origin.y] if beside
           end
 
           # Path follows SOID/EOID placement order, independently of the

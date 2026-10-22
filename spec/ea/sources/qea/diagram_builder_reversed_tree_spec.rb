@@ -9,18 +9,12 @@ require "spec_helper"
 # rubocop:disable Metrics/BlockLength
 RSpec.describe "QEA width-0 vertical tree Associations with reversed SOID/EOID" do
   include QeaRoutingHelpers
+  include QeaReversedTreeHelpers
 
   # Expected paths are in the frameless canvas: stored x - 595, y - 220
   # (x - 575 when the MultiSurface box at x=610 sets the left edge).
   let(:multi_solid) { [800, 720, 153, 80] }
   let(:plant_cover) { [630, 260, 268, 258] }
-
-  def render_reversed(geometry:, path:, source: multi_solid)
-    render_qea_route(connector_type: "Association", source: source, target: plant_cover,
-                     object_styles: ["DUID=MSMS;", "DUID=PCPC;"],
-                     style: "Mode=3;EOID=MSMS;SOID=PCPC;Color=-1;LWidth=0;TREE=V;",
-                     geometry: geometry, path: path)
-  end
 
   it "routes from the Start leg to a bus 50px past the End box (connector 212)" do
     # The saved origin lies right of the box, level with it: kept literally.
@@ -65,6 +59,20 @@ RSpec.describe "QEA width-0 vertical tree Associations with reversed SOID/EOID" 
     # Stored bus y 670 kept
 
     expect(result[:paths].first).to eq("M 169 298 L 169 450 L 281 450 L 281 500")
+  end
+
+  it "keeps a stored bus that is not 50px past the Start box (basic.qea slice)" do
+    result = render_reversed(geometry: "SX=86;SY=-4;EX=0;EY=0;EDGE=3;", path: "850:-600;876:-600;")
+
+    # Stored bus y 600 kept: the fit only replaces the discarded y670 bus
+
+    expect(result[:paths].first).not_to include("L 169 348")
+  end
+
+  it "yields to the stored route when an out-of-box offset would detach the leg" do
+    result = render_reversed(geometry: "SX=500;SY=-10;EX=0;EY=0;EDGE=3;", path: "850:-670;876:-670;")
+
+    expect(result[:paths].first).not_to include("L 169 348")
   end
 
   it "leaves a reversed link without two level bends on its existing route" do

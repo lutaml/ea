@@ -67,4 +67,11 @@ RSpec.describe Ea::Sources::Xmi::ExtensionStyleParser do
       expect(parsed.hidden).to be(true)
     end
   end
+
+  describe ".parse with a key preceded by a space" do
+    it "reads the key like the QEA style parser" do
+      parsed = described_class.parse(" DUID=AB12CD34;SOID=11111111;")
+      expect([parsed.duid, parsed.soid]).to eq(%w[AB12CD34 11111111])
+    end
+  end
 end
