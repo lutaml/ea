@@ -3,8 +3,6 @@
 require "spec_helper"
 require "ea"
 require "nokogiri"
-require "open3"
-require "tmpdir"
 
 # Content drawn right of / below / left of the stored element rects must
 # stay on the canvas, and a framed export of an empty diagram must hold
@@ -112,23 +110,6 @@ RSpec.describe "canvas edges" do
       width = svg[/viewBox="0 0 ([\d.]+)/, 1].to_f
       tab_right = svg[/<polygon points="([^"]*)"/, 1].split.map(&:to_f).each_slice(2).map(&:first).max
       expect(width).to be > tab_right
-    end
-  end
-
-  describe "ea diagrams extract without --output" do
-    it "writes the SVG next to the source without preloaded fileutils" do
-      Dir.mktmpdir do |dir|
-        FileUtils.cp(fixtures_path("basic.qea"), dir)
-        script = <<~RUBY
-          require "ea"
-          require "ea/cli"
-          Ea::Cli::Command::Diagrams.new(action: "extract",
-            file: #{File.join(dir, "basic.qea").inspect}, name: "Domain Model").call
-        RUBY
-        out, status = Open3.capture2e(RbConfig.ruby, "-Ilib", "-e", script)
-        expect(status.success?).to be(true), out
-        expect(Dir[File.join(dir, "*.svg")]).not_to be_empty
-      end
     end
   end
 end

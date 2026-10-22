@@ -2,6 +2,8 @@
 
 require "spec_helper"
 require "ea/cli/app"
+require "open3"
+require "rbconfig"
 require "tmpdir"
 
 RSpec.describe "ea svg CLI command" do
@@ -54,7 +56,10 @@ end
 RSpec.describe "ea svg/render CLI corrections" do
   let(:qea_fixture) { fixtures_path("basic.qea") }
   let(:name) { "Starter Object Diagram" }
-  let(:unframed_box) { "0 0 325 89" }
+  # Unframed height is 71, not 89: EA keeps no extra bottom margin below the
+  # drawn content (X1 bottom-margin rule, confirmed against native EA exports:
+  # basic canvas exact 16/22 -> 22/22). Framed output keeps its own padding.
+  let(:unframed_box) { "0 0 325 71" }
   let(:framed_box) { "0 0 390 127" }
 
   around do |example|
@@ -112,5 +117,22 @@ RSpec.describe "ea svg/render CLI corrections" do
     expect(File.read(plain)).to include(unframed_box)
     expect(File.read(plain)).not_to include(framed_box)
     expect(File.read(framed)).to include(framed_box)
+  end
+end
+
+RSpec.describe "ea diagrams extract CLI without --output" do
+  it "writes the SVG next to the source without preloaded fileutils" do
+    Dir.mktmpdir do |dir|
+      FileUtils.cp(fixtures_path("basic.qea"), dir)
+      script = <<~RUBY
+        require "ea"
+        require "ea/cli"
+        Ea::Cli::Command::Diagrams.new(action: "extract",
+          file: #{File.join(dir, "basic.qea").inspect}, name: "Domain Model").call
+      RUBY
+      out, status = Open3.capture2e(RbConfig.ruby, "-Ilib", "-e", script)
+      expect(status.success?).to be(true), out
+      expect(Dir[File.join(dir, "*.svg")]).not_to be_empty
+    end
   end
 end
