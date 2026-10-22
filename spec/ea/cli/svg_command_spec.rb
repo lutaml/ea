@@ -24,12 +24,12 @@ RSpec.describe "ea svg CLI command" do
   end
 
   it "raises Ea::Cli::Error for an unknown diagram name" do
-    expect {
+    expect do
       capture_stdout do
         app.invoke(:svg, ["Does Not Exist", xmi_fixture],
                    output: "/tmp/ea_svg_unknown.svg")
       end
-    }.to raise_error(Ea::Cli::Error, /not found/)
+    end.to raise_error(Ea::Cli::Error, /not found/)
   end
 end
 
@@ -63,7 +63,8 @@ RSpec.describe "ea svg/render CLI corrections" do
   let(:framed_box) { "0 0 390 127" }
 
   around do |example|
-    Dir.mktmpdir { |dir| @dir = dir; example.run }
+    Dir.mktmpdir do |dir| @dir = dir
+ example.run end
   end
 
   def run_cli(*args)
