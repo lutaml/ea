@@ -33,6 +33,13 @@ module Ea
 
         attr_reader :diagram, :model_index
 
+        # Where the leftmost model x lands: 30 + min_x capped at 35. A
+        # negative min_x keeps the 30 of min_x 0 (the corpus has none),
+        # so content left of the origin is not drawn off the canvas.
+        def self.inset_left_for(min_x)
+          [[INSET_LEFT - 5 + min_x, INSET_LEFT - 5].max, INSET_LEFT].min
+        end
+
         def initialize(diagram, model_index: nil)
           @diagram = diagram
           @model_index = model_index
@@ -53,7 +60,7 @@ module Ea
           # Left inset scales from 30 up to the 35 cap with the
           # stored leftmost x: leftmost drawn x = 30 + min_x capped
           # at 35 (corpus: min_x 0 -> 30, 2 -> 32, 4 -> 34, >=5 -> 35).
-          @effective_inset_left = [INSET_LEFT - 5 + min_x, INSET_LEFT].min
+          @effective_inset_left = self.class.inset_left_for(min_x)
           [
             min_x,
             min_y,

@@ -48,6 +48,13 @@ module Ea
           ].compact
         end
 
+        # Narrowest canvas that holds the name tab inside the border
+        # (the border inset on both sides of the tab).
+        def min_width(diagram)
+          2 * theme.frame.inset + tab_label_width(diagram) +
+            theme.frame.tab_slant
+        end
+
         private
 
         def border_layer(canvas)
