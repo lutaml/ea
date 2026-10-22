@@ -96,4 +96,31 @@ RSpec.describe Ea::Svg::EaEmitter::BottomMargin do
 
     expect(margin([placed("a", "t2", 300, fontsz: "90")], { "t2" => text })).to eq(30)
   end
+
+  describe "a Package as the lowest element" do
+    def package_margin(parent_id:, show_foreign:)
+      package = Ea::Model::Package.new(id: "pk", name: "Sub", parent_id: parent_id)
+      diagram = Ea::Model::Diagram.new(
+        id: "d", name: "D", package_id: "home", show_foreign: show_foreign,
+        elements: [placed("a", "pk", 300)]
+      )
+      described_class.for(diagram, { "pk" => package })
+    end
+
+    it "keeps the full margin when foreign packages are shown and its parent is another package" do
+      expect(package_margin(parent_id: "other", show_foreign: true)).to eq(28)
+    end
+
+    it "keeps the bare 10 margin when the diagram does not show foreign elements" do
+      expect(package_margin(parent_id: "other", show_foreign: false)).to eq(10)
+    end
+
+    it "keeps the bare 10 margin for a child of the diagram's own package" do
+      expect(package_margin(parent_id: "home", show_foreign: true)).to eq(10)
+    end
+
+    it "keeps the bare 10 margin for a root package" do
+      expect(package_margin(parent_id: nil, show_foreign: true)).to eq(10)
+    end
+  end
 end
