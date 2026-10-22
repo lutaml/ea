@@ -7,26 +7,26 @@ RSpec.describe "Basic ALN2 horizontal target role baseline" do
   include TestDatabaseHelper
   include QeaEndLabelHelpers
 
-  it "uses the saved corner baseline in both independently joined directions without changing x" do
+  it "uses the saved corner baseline in both independently joined directions and seats x by the native ALN2 offsets" do
     left = remaining_target_baseline
     right = remaining_target_baseline(heading: [148, 0], anchor: [235, 130],
                                       box: { "ox" => 5, "oy" => 1, "cx" => 41, "cy" => 13 })
 
-    expect(left.fetch("+role b")).to eq([394.0, 128.0])
-    expect(right.fetch("+role b")).to eq([240.0, 124.0])
+    expect(left.fetch("+role b")).to eq([362.0, 128.0])
+    expect(right.fetch("+role b")).to eq([244.0, 124.0])
     expect(left.fetch("0..1")).to eq([380.0, 152.0])
   end
 
   it "applies the baseline through the public QEA adapter and labels layer" do
-    expect(remaining_target_baseline_qea.fetch("+role b")).to eq([529.0, 128.0])
+    expect(remaining_target_baseline_qea.fetch("+role b")).to eq([497.0, 128.0])
   end
 
   it "uses only the target stereotype to select the plain target baseline" do
-    expect(remaining_target_baseline(source_stereotype: "property").fetch("+role b")).to eq([394.0, 128.0])
+    expect(remaining_target_baseline(source_stereotype: "property").fetch("+role b")).to eq([362.0, 128.0])
   end
 
   it "keeps the baseline independent of the saved horizontal extent" do
-    expect(remaining_target_baseline(box: { "cx" => 90 }).fetch("+role b")).to eq([394.0, 128.0])
+    expect(remaining_target_baseline(box: { "cx" => 90 }).fetch("+role b")).to eq([362.0, 128.0])
   end
 end
 

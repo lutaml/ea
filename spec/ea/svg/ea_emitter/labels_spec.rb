@@ -137,7 +137,7 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
       themes = [Ea::Theme::Registry.default, Ea::Theme::Registry.lookup("unknown-label-theme"),
                 Ea::Theme::Definition.new(id: "custom-labels", font_family: "Arial",
                                           font_size: 11, font_size_unit: "px")]
-      expected = [["Yu Gothic UI", "13px"], ["Yu Gothic UI", "13px"], ["Arial", "11px"]]
+      expected = [["Cambria", "7pt"], ["Cambria", "7pt"], ["Arial", "11px"]]
       themes.zip(expected).each do |theme, (family, size)|
         svg = described_class.new(diagram, model_index: document.index_by_id, theme: theme).render
 

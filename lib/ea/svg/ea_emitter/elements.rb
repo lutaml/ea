@@ -413,12 +413,18 @@ module Ea
         # that were +1: 0114FD24 uro::AbstractConstruction etc.; 20 of
         # 21 now exact, no other compared item moved). The tight ghost
         # variant has no corpus case and keeps the default offsets.
+        #
+        # An Enumeration with literals takes it too (EMPIRICAL FIT, test
+        # B58D1A53 Enumeration: divider 346 = name 339 + 7; the only Cambria 7pt
+        # enumeration with literals in the small corpora).
         def compact_header_offsets?(classifier, header_lines, size, **options)
-          classifier.is_a?(Ea::Model::Klass) &&
+          literals = options[:enum_literals_count]
+          kind_fits = (classifier.is_a?(Ea::Model::Klass) && literals.zero?) ||
+                      (classifier.is_a?(Ea::Model::Enumeration) && literals.positive?)
+          kind_fits &&
             Ea::Fonts::Metrics.compact_compartment_font?(size, family: options[:family], unit: options[:size_unit]) &&
             header_lines.dig(0, 1) != :italic_tight &&
-            options.values_at(:logical_height, :marker_count, :enum_literals_count,
-                              :divider_offset, :attr_first_offset) == [nil, 0, 0, 8, 7] &&
+            options.values_at(:logical_height, :marker_count, :divider_offset, :attr_first_offset) == [nil, 0, 8, 7] &&
             theme.compartments.header_line_offset == 6 && theme.compartments.attr_line_offset == 6
         end
 

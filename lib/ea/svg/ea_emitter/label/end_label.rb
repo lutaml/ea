@@ -131,7 +131,8 @@ module Ea
                          saved_ray_target_property_role(connector, heading, anchor, text_box, role) ||
                          target_diagonal_property_role(connector, heading, anchor, text_box, role) ||
                          target_vertical_role(connector, heading, anchor, text_box, role) ||
-                         target_rightward_role(heading, anchor, text_box, role) || text_pos
+                         target_rightward_role(heading, anchor, text_box, role) ||
+                         aligned_target_role(connector, heading, text_pos, text_box, role) || text_pos
               if horizontal_aligned_target_baseline?(connector, heading, text_box, role)
                 text_pos = [text_pos[0], seat_corner(anchor, text_box)[1] - 7]
               end
@@ -167,8 +168,11 @@ module Ea
             end
 
             role_bounds = umldi_bounds[end_kind == :source ? :source_role : :target_role]
+            # Unmoved lateral roles keep their measured seat: the saved UMLDI
+            # rectangle is stale for them (test B58D1A53 +role2 saved 24px low).
+            role_bounds = nil if PlainTargetSeat.unmoved_lateral_role?(connector, text_box)
             mult_bounds = umldi_bounds[end_kind == :source ? :source_multiplicity : :target_multiplicity]
-            text_pos = umldi_label_position(role_bounds) if role_bounds
+            text_pos = umldi_label_position(role_bounds, text_box) if role_bounds
             centering = role_bounds ? bounds_role_centering(connector, end_kind, role, stereo, text_box) : 0
             text_pos = [text_pos[0] + centering, text_pos[1]] if centering.positive?
             mult_pos = umldi_label_position(mult_bounds) if mult_bounds
@@ -286,7 +290,8 @@ module Ea
           end
 
           def plain_leftward_source_role(connector, direction, anchor, box, role)
-            return nil unless direction == :left && seat_font? && cambria_box?(box) && !role_empty?(role)
+            return nil unless direction == :left && seat_font? && !role_empty?(role)
+            return nil unless box && cambria_box?(box.merge("alignment" => 1))
             return nil unless connector_source_dest_stereotype(connector, :source).to_s.empty?
 
             PlainSourceSeat.position(
@@ -678,6 +683,29 @@ module Ea
             [anchor[0] + 8, anchor[1] - 7]
           end
 
+          # Stored ALN=2 role boxes sit outside their corner; see
+          # PlainTargetSeat.aligned_position.
+          def aligned_target_role(connector, heading, text_pos, box, role)
+            return nil unless aligned_target_regime?(connector, box, role)
+            return nil unless cambria_box?(box.merge("alignment" => 0))
+
+            PlainTargetSeat.aligned_position(
+              heading: heading, text_pos: text_pos, box: box,
+              width: Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
+            )
+          end
+
+          # Plain Association, mode 3 / width 0 stored ray, 7pt regular
+          # Cambria, a single-line (CY 13/14) ALN=2 box, no target stereotype.
+          def aligned_target_regime?(connector, box, role)
+            style = connector.style.to_h
+            connector.connector_type == "Association" &&
+              connector_source_dest_stereotype(connector, :target).to_s.empty? &&
+              style.values_at(:mode, :lwidth, :tree) == %w[3 0] + [nil] && style[:stored_association_ray] &&
+              box && box["alignment"] == 2 && [13, 14].include?(box["cy"]) &&
+              seat_font? && font_weight == 400 && font_style == "normal" && !role_empty?(role)
+          end
+
           def target_vertical_role(connector, heading, anchor, box, role)
             return nil unless heading && heading[0].zero? && !heading[1].zero?
 
@@ -983,8 +1011,11 @@ module Ea
                        position[1] - font_pixel_size.ceil + height]
           end
 
-          def umldi_label_position(bounds)
-            [bounds[:x], bounds[:y] + font_pixel_size.ceil]
+          # EA draws an ALN=2 role 1px right of its saved UMLDI bounds
+          # (basic: 9 roles in 8 diagrams, all exactly +1).
+          def umldi_label_position(bounds, box = nil)
+            inset = box && box["alignment"] == 2 ? 1 : 0
+            [bounds[:x] + inset, bounds[:y] + font_pixel_size.ceil]
           end
 
           def umldi_stereotype_position(bounds, role, stereo, text_box)

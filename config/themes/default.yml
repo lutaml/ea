@@ -4,6 +4,13 @@ font:
   family:
   size:
   unit: px
+# Unthemed diagrams draw connector labels in Cambria 7pt, like the
+# themed ones (test B58D1A53 native; 0 of 220 published SVGs carry the
+# former Yu Gothic UI 13px fallback).
+label_font:
+  family: Cambria
+  size: 7
+  unit: pt
 text:
   color: "#000000"
   weight_normal: 400

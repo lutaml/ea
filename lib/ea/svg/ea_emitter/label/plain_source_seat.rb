@@ -7,10 +7,29 @@ module Ea
         # Plain leftward roles end before the stored corner, mirroring
         # the 3px gutter and baseline of the rightward role seat.
         module PlainSourceSeat
-          def self.position(connector:, anchor:, box:, width:)
-            return nil unless width && eligible_connector?(connector) && moved_role_box?(box)
+          # EMPIRICAL FIT, stored 13px role boxes moved left of a leftward
+          # straight source on mode 3, width 0: ALN=0 ends 3px before the
+          # corner (basic D351FC34, F32E5AFE roleTwo, Association), ALN=2
+          # 2px before it (basic 6D0349D5 role b, Aggregation); both sit
+          # 7px above the corner like the Aggregation case below.
+          STORED_INSETS = { 0 => 3, 2 => 2 }.freeze
 
-            [anchor[0] + box["ox"].to_i - width - 3, anchor[1] + box["oy"].to_i - 7]
+          def self.position(connector:, anchor:, box:, width:)
+            return nil unless width
+
+            inset = stored_inset(connector, box)
+            inset = 3 if inset.nil? && eligible_connector?(connector) && moved_role_box?(box)
+            return nil unless inset
+
+            [anchor[0] + box["ox"].to_i - width - inset, anchor[1] + box["oy"].to_i - 7]
+          end
+
+          def self.stored_inset(connector, box)
+            return nil unless %w[Association Aggregation].include?(connector.connector_type)
+            return nil unless connector.style.to_h.values_at(:mode, :lwidth, :tree) == ["3", "0", nil]
+            return nil unless box["cy"] == 13 && box["ox"].to_i.negative?
+
+            STORED_INSETS[box["alignment"]]
           end
 
           def self.eligible_connector?(connector)

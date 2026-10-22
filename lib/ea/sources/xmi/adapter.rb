@@ -142,11 +142,19 @@ module Ea
             (classifier.properties || []).each do |prop|
               prop.type_name = types.attribute_type(prop.id) ||
                                qualified_by_id[prop.type_ref] || prop.type_name
+              apply_attribute_stereotype(prop, types)
             end
             (classifier.operations || []).each do |op|
               resolve_operation_types(op, qualified_by_id, types)
             end
           end
+        end
+
+        def apply_attribute_stereotype(prop, types)
+          stereotype = types.attribute_stereotype(prop.id)
+          return if stereotype.nil? || prop.stereotype_refs.to_a.any?
+
+          prop.stereotype_refs = [stereotype]
         end
 
         def resolve_operation_types(operation, qualified_by_id, types)
