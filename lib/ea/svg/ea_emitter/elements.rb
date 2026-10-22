@@ -33,13 +33,11 @@ module Ea
         def groups
           @drawn_bounds = {}
           @divider_y = {}
-          @painted_any = false
           @previous_pen = nil
           ordered_elements.flat_map do |e|
-            groups = groups_for(e)
-            @painted_any ||= groups.any?
-            @previous_pen = Element::NoteShapeRenderer.pen_of(groups.last) || @previous_pen
-            groups
+            painted = groups_for(e)
+            @previous_pen = painted.last&.pen || @previous_pen
+            painted.map(&:svg)
           end
         end
 
@@ -58,9 +56,14 @@ module Ea
         private
 
         # EA paints placements by descending Sequence (the lowest
-        # Sequence is on top); equal keys keep their stored order.
+        # Sequence is on top); equal keys keep their stored order. A
+        # placement with no Sequence (no such row in the corpus, so EA's
+        # treatment is unmeasured) is painted first, as before the
+        # descending order, rather than ahead of the numbered ones.
         def ordered_elements
-          (diagram.elements || []).sort_by.with_index { |e, i| [-(e.z_order || 0), i] }
+          (diagram.elements || []).sort_by.with_index do |e, i|
+            e.z_order ? [1, -e.z_order, i] : [0, 0, i]
+          end
         end
 
         def groups_for(element)
@@ -72,7 +75,7 @@ module Ea
           record_drawn_bounds(element, context)
           return [] if element.style&.fetch("connector_proxy", false)
 
-          Compartment.render_all(context).compact
+          Compartment.paint_all(context)
         end
 
         # Logical-space drawn bounds: stored x/y with the RENDERED
@@ -310,7 +313,6 @@ module Ea
             diagram: diagram,
             model_index: model_index,
             off_canvas_parent_name: parent_name,
-            first_painted: !@painted_any,
             previous_pen: @previous_pen
           )
         end

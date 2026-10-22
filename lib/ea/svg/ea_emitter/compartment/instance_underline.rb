@@ -8,6 +8,11 @@ module Ea
         # short horizontal line below each instance name to denote
         # that it is an instance (UML convention).
         module InstanceUnderline
+          # The pen the first group of this compartment leaves behind.
+          def self.pen(_context)
+            Pen::SQUARE_MITER
+          end
+
           Y_OFFSET = 1
 
           module_function

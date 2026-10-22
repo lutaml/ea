@@ -68,7 +68,9 @@ module Ea
         end
 
         def logical_height_for(element)
-          element&.font_logical_height if size_unit_for(element) == "pt"
+          return nil unless size_unit_for(element) == "pt"
+
+          Ea::Fonts::Metrics.source_logical_height(element&.font_logical_height)
         end
 
         def weight_for(element)

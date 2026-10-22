@@ -24,14 +24,15 @@ module Ea
 
         attr_reader :content, :x, :y, :family, :size, :weight, :style,
                     :fill, :text_length, :rotation, :size_unit,
-                    :stroke_in_text, :width_factor, :logical_height
+                    :stroke_in_text, :width_factor, :logical_height, :legend_title
 
         def initialize(content:, x:, y:, family:, size:, weight: 400,
                        style: "normal", fill: DEFAULT_FILL,
                        text_length: nil, rotation: DEFAULT_ROTATION,
                        size_unit: "px", logical_height: nil,
                        stroke_in_text: DEFAULT_STROKE_IN_TEXT,
-                       width_factor: DEFAULT_WIDTH_FACTOR)
+                       width_factor: DEFAULT_WIDTH_FACTOR, legend_title: false)
+          @legend_title = legend_title
           @content = content.to_s
           @x = x
           @y = y
@@ -155,15 +156,29 @@ module Ea
         GLYPH_FALLBACK = 0.61
 
         def self.estimate_width(text, size, _width_factor = nil, family: nil,
-                                weight: nil, style: nil, logical_height: nil)
-          real = Ea::Fonts::Metrics.text_length(text, size, family: family,
-                                                            weight: weight,
-                                                            style: style, logical_height: logical_height)
+                                weight: nil, style: nil, logical_height: nil,
+                                legend_title: false)
+          opts = { family: family, weight: weight, style: style,
+                   logical_height: logical_height, legend_title: legend_title }
+          real = Ea::Fonts::Metrics.text_length(text, size, **opts)
           return real if real
+          return piecewise_width(text, size, opts) if Ea::Fonts::Metrics.piecewise_family?(family, size)
 
+          text.to_s.each_char.sum { |ch| glyph_estimate(ch, size) }
+        end
+
+        # A Cambria run outside 7pt that is not wholly in the measured
+        # table: table characters are exact, the rest are estimated one
+        # at a time with the glyph fallback, so the
+        # width never shrinks when a character is appended.
+        def self.piecewise_width(text, size, opts)
           text.to_s.each_char.sum do |ch|
-            (GLYPH_WIDTHS[ch] || GLYPH_FALLBACK) * size.to_f
+            Ea::Fonts::Metrics.text_length(ch, size, **opts) || glyph_estimate(ch, size)
           end
+        end
+
+        def self.glyph_estimate(char, size)
+          (GLYPH_WIDTHS[char] || GLYPH_FALLBACK) * size.to_f
         end
 
         def formatted_text_length
@@ -171,7 +186,8 @@ module Ea
 
           width = self.class.estimate_width(content, size, width_factor,
                                             family: family, weight: weight,
-                                            style: style, logical_height: logical_height)
+                                            style: style, logical_height: logical_height,
+                                            legend_title: legend_title)
           width.round.to_s
         end
 

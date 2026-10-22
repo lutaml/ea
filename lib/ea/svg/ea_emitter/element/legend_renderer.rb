@@ -32,23 +32,24 @@ module Ea
           LABEL_BASELINE_FROM_ICON_TOP = 12
           DEFAULT_ITEM_FONT_SIZE = 9
           # The legend pen is not set explicitly: the panel inherits the pen
-          # left by the previous drawing (round/bevel), or EA's initial pen
-          # (square/miter) when the legend is the first thing painted. Held
-          # across the corpus: 11 of 11 legends painted first are square, 105
-          # of 105 painted later are round.
-          INHERITED_STROKE = "stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel;"
-          INITIAL_STROKE = "stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;"
+          # left by the previous drawing, or EA's initial pen (square/miter)
+          # when nothing was drawn before it - the same rule notes follow.
+          # Held across the corpus: 11 of 11 legends painted first are
+          # square/miter, 105 of 105 painted later follow a class-like
+          # drawing that leaves round/bevel.
+          INITIAL_PEN = Element::NoteShapeRenderer::INITIAL_PEN
 
-          def self.render(bounds, legend:, family:, canvas: nil, item_font: {}, first_painted: false)
-            new(bounds, legend, family, canvas, item_font, first_painted: first_painted).to_svg
+          def self.render(bounds, legend:, family:, canvas: nil, item_font: {}, pen: nil)
+            new(bounds, legend, family, canvas, item_font, pen: pen).to_svg
           end
 
-          def initialize(bounds, legend, family, canvas, item_font = {}, first_painted: false)
+          def initialize(bounds, legend, family, canvas, item_font = {}, pen: nil)
             @bounds = bounds
             @legend = legend
             @family = family
             @canvas = canvas
-            @pen = first_painted ? INITIAL_STROKE : INHERITED_STROKE
+            cap, join = pen || INITIAL_PEN
+            @pen = "stroke-width:1;stroke-linecap:#{cap};stroke-linejoin:#{join};"
             @item_font = item_font[:size]&.nonzero? ? item_font : {}
           end
 
@@ -162,10 +163,11 @@ module Ea
             (block_left + (block_right - block_left - title_text_width.round) / 2.0).floor
           end
 
-          def estimated_width(text, size, weight: nil, logical_height: nil, text_family: family)
+          def estimated_width(text, size, weight: nil, logical_height: nil, text_family: family,
+                              legend_title: false)
             TextRenderer.estimate_width(
               text, size, family: text_family, weight: weight,
-                          logical_height: logical_height
+                          logical_height: logical_height, legend_title: legend_title
             ).round
           end
 
@@ -193,7 +195,8 @@ module Ea
           end
 
           def title_text_width
-            estimated_width(legend.title, title_font_size, weight: 700, text_family: heading_family)
+            estimated_width(legend.title, title_font_size, weight: 700, text_family: heading_family,
+                                       legend_title: true)
           end
 
           def heading_family
@@ -206,7 +209,8 @@ module Ea
             TextRenderer.new(
               content: content.to_s, x: tx, y: ty,
               family: weight.zero? ? family : heading_family, size: size, size_unit: size_unit,
-              weight: weight, fill: label_fill, logical_height: weight.zero? ? item_font[:logical_height] : nil
+              weight: weight, fill: label_fill, logical_height: weight.zero? ? item_font[:logical_height] : nil,
+              legend_title: !weight.zero?
             ).to_svg
           end
 

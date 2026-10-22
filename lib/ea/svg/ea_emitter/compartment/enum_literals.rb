@@ -8,6 +8,11 @@ module Ea
         # italic header + each literal name. Skipped when the
         # classifier has no literals or no content geometry.
         module EnumLiterals
+          # The pen the first group of this compartment leaves behind.
+          def self.pen(_context)
+            Pen::ROUND_BEVEL
+          end
+
           module_function
 
           # Caption and literal rows share the same baseline spacing.

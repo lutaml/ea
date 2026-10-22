@@ -13,6 +13,12 @@ module Ea
         # Rendered after the header so the icon sits inside the
         # element body below the stereotype label.
         module StereotypeIcon
+          # ShapeScript output sets no stroke pen, so the icon leaves the
+          # previous pen in force.
+          def self.pen(_context)
+            nil
+          end
+
           module_function
 
           def render(context)

@@ -3,9 +3,12 @@
 require "spec_helper"
 require "ea"
 
-# EA leaves the legend pen to whatever was drawn before it: square/miter
-# when the legend is the first thing painted, round/bevel otherwise.
+# EA leaves the legend pen to whatever was drawn before it, exactly as it
+# does for notes: square/miter when the legend is the first thing painted,
+# otherwise the pen the previous drawing left behind.
 RSpec.describe Ea::Svg::EaEmitter::Element::LegendRenderer do # rubocop:disable Metrics/BlockLength
+  include NotePenPaintHelpers
+
   let(:bounds) { Ea::Model::Bounds.new(x: 100, y: 50, width: 194, height: 120) }
   let(:legend) do
     Ea::Model::Legend.new(
@@ -14,20 +17,16 @@ RSpec.describe Ea::Svg::EaEmitter::Element::LegendRenderer do # rubocop:disable 
     )
   end
 
-  def caps(svg)
-    svg.scan(/stroke-linecap:(\w+);stroke-linejoin:(\w+)/).uniq
-  end
-
   it "uses the square/miter pen when painted first" do
-    svg = described_class.render(bounds, legend: legend, family: "Carlito", first_painted: true)
-
-    expect(caps(svg)).to eq([%w[square miter]])
-  end
-
-  it "uses the round/bevel pen when painted after another shape" do
     svg = described_class.render(bounds, legend: legend, family: "Carlito")
 
-    expect(caps(svg)).to eq([%w[round bevel]])
+    expect(pen_pairs(svg)).to eq([%w[square miter]])
+  end
+
+  it "uses the pen left by the previous drawing" do
+    svg = described_class.render(bounds, legend: legend, family: "Carlito", pen: %w[round bevel])
+
+    expect(pen_pairs(svg)).to eq([%w[round bevel]])
   end
 
   it "derives the pen from paint position through the document render path" do
@@ -45,7 +44,31 @@ RSpec.describe Ea::Svg::EaEmitter::Element::LegendRenderer do # rubocop:disable 
     first = render.call([placement.call("legend", 1, {})])
     later = render.call([placement.call("legend", 1, {}), placement.call("a", 2, {})])
 
-    expect(caps(first)).to include(%w[square miter])
-    expect(caps(later)).not_to include(%w[square miter])
+    expect(pen_pairs(first)).to include(%w[square miter])
+    expect(pen_pairs(later)).not_to include(%w[square miter])
+  end
+
+  describe "pen left by a preceding note or legend" do
+    let(:note_model) { Ea::Model::Note.new(id: "note", name: "N", body: "text") }
+    let(:index) do
+      { "legend" => Ea::Model::Note.new(id: "legend", name: "L", legend: legend), "note" => note_model,
+        "a" => Ea::Model::Klass.new(id: "a", name: "Alpha") }
+    end
+
+    it "gives a legend after a first-painted note the note's square/miter pen" do
+      expect(pen_pairs(painted_svg(index, *%w[note legend]))).to eq([%w[square miter]])
+    end
+
+    it "gives a legend after a first-painted legend the square/miter pen" do
+      expect(pen_pairs(painted_svg(index, *%w[legend legend]))).to eq([%w[square miter]])
+    end
+
+    it "keeps the round/bevel pen for a legend after a class" do
+      expect(pen_pairs(painted_svg(index, *%w[a legend]))).to eq([%w[round bevel]])
+    end
+
+    it "keeps the pen a legend leaves for the note after it" do
+      expect(pen_pairs(painted_svg(index, *%w[legend note]))).to eq([%w[square miter]])
+    end
   end
 end

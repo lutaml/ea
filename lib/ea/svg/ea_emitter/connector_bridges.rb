@@ -94,7 +94,7 @@ module Ea
 
           @routes.select do |partner, _points, order|
             !partner.equal?(connector) && order.is_a?(Array) && order.size == priority.size &&
-              !same_source?(connector, partner) && (order <=> priority).negative?
+              !same_source?(connector, partner) && (order <=> priority)&.negative?
           end
         end
 

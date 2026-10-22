@@ -7,6 +7,11 @@ module Ea
         # Tagged value compartment. Skipped when no tagged values
         # or when geometry cannot fit them.
         module TaggedValues
+          # The pen the first group of this compartment leaves behind.
+          def self.pen(_context)
+            Pen::ROUND_BEVEL
+          end
+
           DEFAULT_TEXT_COLOR = "#000000"
 
           module_function

@@ -7,8 +7,9 @@ module Ea
       # start element's placement row, then the connector id: the
       # `paint_order` key the diagram builders store. Verified without a
       # single inversion over 12785 connector pairs of the QEA corpus.
-      # Connectors with an unresolvable key follow the keyed ones, and
-      # phantoms (no stored key) come last, each in link order.
+      # Connectors with an unresolvable key (empty, or with a nil part)
+      # follow the keyed ones, and phantoms (no stored key) come last, each
+      # in link order.
       module PaintOrder
         module_function
 
@@ -18,9 +19,9 @@ module Ea
             rank = if order.nil?
                      2
                    else
-                     order.empty? ? 1 : 0
+                     order.empty? || order.any?(&:nil?) ? 1 : 0
                    end
-            [rank, order || [], index]
+            [rank, rank.zero? ? order : [], index]
           end.map(&:first)
         end
       end

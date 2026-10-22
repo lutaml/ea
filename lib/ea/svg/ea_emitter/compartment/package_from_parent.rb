@@ -13,6 +13,11 @@ module Ea
         # (379 diagrams, 378 exact): classifiers never render the
         # subtitle, and ShowForeign=0 diagrams render none.
         module PackageFromParent
+          # The pen the first group of this compartment leaves behind.
+          def self.pen(_context)
+            Pen::ROUND_BEVEL
+          end
+
           module_function
 
           def render(context)
@@ -49,6 +54,10 @@ module Ea
           ASCENT_FAMILIES = %w[cambria carlito].freeze
           GAP_BELOW_BODY = 5
           LEGACY_Y_OFFSET_FROM_BOTTOM = 15
+          # Heights above this (a 100pt caption is H143) are corrupt
+          # input; they keep the legacy offset instead of pushing the
+          # caption far off the element.
+          MAX_CAPTION_HEIGHT = 60
 
           LINE_PITCH = 13
           WRAP_PADDING = 15
@@ -82,9 +91,11 @@ module Ea
           module_function :subtitle
 
           def offset_from_bottom(context)
-            height = context.logical_height
+            height = Ea::Fonts::Metrics.source_logical_height(context.logical_height)
             height ||= Ea::Fonts::Metrics.gdi_logical_height(context.size) if context.size_unit == "pt"
             return LEGACY_Y_OFFSET_FROM_BOTTOM unless ASCENT_FAMILIES.include?(context.family.to_s.downcase)
+
+            return LEGACY_Y_OFFSET_FROM_BOTTOM unless height.nil? || height <= MAX_CAPTION_HEIGHT
 
             ascent, = Ea::Fonts::Metrics.gdi_cell_metrics(context.family, height)
             ascent ? GAP_BELOW_BODY + ascent : LEGACY_Y_OFFSET_FROM_BOTTOM

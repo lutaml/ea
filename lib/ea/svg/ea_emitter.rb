@@ -32,6 +32,7 @@ module Ea
       autoload :Background, "ea/svg/ea_emitter/background"
       autoload :BoundsCalculator, "ea/svg/ea_emitter/bounds_calculator"
       autoload :Style, "ea/svg/ea_emitter/style"
+      autoload :Pen, "ea/svg/ea_emitter/pen"
       autoload :Elements, "ea/svg/ea_emitter/elements"
       autoload :PaintOrder, "ea/svg/ea_emitter/paint_order"
       autoload :Connectors, "ea/svg/ea_emitter/connectors"

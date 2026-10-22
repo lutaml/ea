@@ -8,6 +8,11 @@ module Ea
         # compartment (attributes / operations / literals / tagged
         # values). Skipped when there is no content below.
         module HeaderDivider
+          # The pen the first group of this compartment leaves behind.
+          def self.pen(_context)
+            Pen::ROUND_BEVEL
+          end
+
           module_function
 
           def render(context)

@@ -22,6 +22,9 @@ module Ea
           SEAT_FONT_SIZE = 7
           SEAT_X_INSET = 3
           SEAT_STEREOTYPE_GAP = 12
+          SEAT_STEREOTYPE_ONLY_INSET = 8
+          SEAT_STEREOTYPE_ONLY_DROP = 15
+          SEAT_MULT_DROP = 15
           # EA keeps an end-label role's left edge at diagram x >= 3; the
           # stereotype line moves with the role. Measured on the Plateau
           # v5.1 export: of 776 saved end labels, the only three whose
@@ -142,6 +145,7 @@ module Ea
               mult_pos = target_multiplicity_seat(connector, heading, anchor, mult_box) ||
                          target_diagonal_property_multiplicity(connector, heading, anchor, text_box, mult_box) ||
                          face_multiplicity || target_horizontal_multiplicity(heading, anchor, mult_box, mult) ||
+                         target_sloped_rightward_multiplicity(connector, heading, anchor, mult_box, role, mult) ||
                          mult_pos
             end
 
@@ -152,10 +156,14 @@ module Ea
                                                           [text_box, mult_box], mult) || mult_pos
               if external_upward_property_source?(connector, heading, anchor, text_box, source_bounds)
                 text_pos = external_upward_property_role(anchor, role) || text_pos
+                mult_pos = external_upward_property_multiplicity(anchor, mult) || mult_pos
               end
             end
 
-            text_box = text_box.merge("alignment" => 1) if phantom_property_box?(connector, direction, text_box)
+            if phantom_property_box?(connector, direction, text_box) ||
+               rightward_phantom_property_box?(connector, direction, text_box)
+              text_box = text_box.merge("alignment" => 1)
+            end
 
             if end_kind == :target && !from_property
               bend_positions = target_bend_positions(connector, bend, text_box, mult_box, role)
@@ -325,10 +333,28 @@ module Ea
           # fallback.
           def own_stereotype_only(text_box, anchor, connector, end_kind)
             stereo = connector_source_dest_stereotype(connector, end_kind)
-            pos = position_at(text_box, anchor)
+            pos = stereotype_only_seat(text_box, anchor, connector, end_kind, stereo) ||
+                  position_at(text_box, anchor)
             return [] if stereo.nil? || stereo.empty? || pos.nil?
 
             [text_at(pos[0], pos[1], "«#{stereo}»")]
+          end
+
+          # EMPIRICAL FIT (34FF671B and 5038EEE3, the only two ends in the
+          # Plateau v5.1 corpus that draw a Property stereotype with no role
+          # or multiplicity): a one-line centred target box is seated at its
+          # corner, anchor + (OX, OY) with no sign flip, like the source-end
+          # corner seat; the stereotype ends 8px left of the corner and its
+          # baseline sits 15px below it. Both reproduce the native SVG exactly.
+          def stereotype_only_seat(text_box, anchor, connector, end_kind, stereo)
+            return nil unless end_kind == :target && property_label?(connector, end_kind)
+            return nil unless seat_font? && cambria_box?(text_box) && text_box.values_at("alignment", "cy") == [1, 16]
+
+            width = Ea::Fonts::Metrics.text_length("«#{stereo}»", font_size, family: font_family)
+            return nil unless width
+
+            x, y = seat_corner(anchor, text_box)
+            [x - width - SEAT_STEREOTYPE_ONLY_INSET, y + SEAT_STEREOTYPE_ONLY_DROP]
           end
 
           # EA's tree-route label clusters (hand-verified against the
@@ -374,8 +400,8 @@ module Ea
                          role.to_s.length * 6
             mult_width = Ea::Fonts::Metrics.text_length(mult.to_s, font_size, family: font_family) ||
                          mult.to_s.length * 6
-            [[anchor[0] - 60 - role_width, anchor[1] - 7],
-             [anchor[0] - mult_width - 3, anchor[1] + 15]]
+            [[[anchor[0] - 60 - role_width, MIN_ROLE_X].max, anchor[1] - 7],
+             [[anchor[0] - mult_width - 3, MIN_ROLE_X].max, anchor[1] + 15]]
           end
 
           # Stored source-end boxes on a 7pt label whose first leg
@@ -461,10 +487,10 @@ module Ea
           end
 
           # Measured box heights: left/down Property clusters store CY 35,
-          # right-seat clusters CY 31. Phantom outlines leaving down carry a
-          # synthesized zero box that centers the same way.
+          # right-seat and up clusters CY 31. Phantom outlines leaving down
+          # carry a synthesized zero box that centers the same way.
           def centered_property_box?(connector, direction, box)
-            cy = { left: 35, down: 35, right: 31 }[direction]
+            cy = { left: 35, down: 35, right: 31, up: 31 }[direction]
             (cy && box.values_at("cy", "alignment") == [cy, 1]) ||
               (direction == :down && phantom_property_box?(connector, direction, box))
           end
@@ -481,6 +507,16 @@ module Ea
           # centered stereotype; persisted or moved boxes keep their own seat.
           def phantom_property_box?(connector, direction, box)
             %i[up left down].include?(direction) && seat_font? && cambria_box?(box) &&
+              box["alignment"].nil? && stored_offsets_zero?(box) &&
+              connector.style.to_h[:phantom_outline] == true &&
+              property_label?(connector, :source)
+          end
+
+          # A rightward phantom keeps the plain role seat; only its stereotype
+          # is centred under the role (0BE81AC5: native stereotype 4px right of
+          # the role for a 52px role over a 44px stereotype).
+          def rightward_phantom_property_box?(connector, direction, box)
+            direction == :right && seat_font? && cambria_box?(box) &&
               box["alignment"].nil? && stored_offsets_zero?(box) &&
               connector.style.to_h[:phantom_outline] == true &&
               property_label?(connector, :source)
@@ -524,6 +560,17 @@ module Ea
             inset, = property_role_offsets(:up)
             _, baseline = property_role_offsets(:left)
             [[anchor[0] - inset - width, MIN_ROLE_X].max, anchor[1] + baseline]
+          end
+
+          # Multiplicity of a floating upward source (5038EEE3: both such
+          # ends, QEA; native "0..1" at anchor.x - width - 3, anchor.y + 15).
+          def external_upward_property_multiplicity(anchor, mult)
+            return nil if mult_empty?(mult)
+
+            width = Ea::Fonts::Metrics.text_length(mult, font_size, family: font_family)
+            return nil unless width
+
+            [anchor[0] - width - SEAT_X_INSET, anchor[1] + SEAT_MULT_DROP]
           end
 
           def external_upward_property_source?(connector, heading, anchor, box, bounds)
@@ -886,6 +933,18 @@ module Ea
             mult_seat(:right, anchor, box)
           end
 
+          # EMPIRICAL FIT (5038EEE3, the only connector in the Plateau v5.1
+          # corpus with a Property source and a role-less target whose leg
+          # arrives sloped from the right):
+          # the multiplicity takes the rightward corner seat, as on a
+          # horizontal rightward leg. Reproduces the native SVG exactly.
+          def target_sloped_rightward_multiplicity(connector, heading, anchor, box, role, mult)
+            return nil unless seat_font? && role_empty?(role) && !mult_empty?(mult)
+            return nil unless heading && heading[0] > heading[1].abs && property_label?(connector, :source)
+
+            mult_seat(:right, anchor, box)
+          end
+
           def target_left_face_multiplicity?(connector, heading, box, mult, target_face)
             seat_font? && !mult_empty?(mult) && property_label?(connector, :target) && cambria_box?(box) &&
               stored_offsets_zero?(box) && target_left_face_heading?(heading, target_face)
@@ -905,9 +964,12 @@ module Ea
           end
 
           def target_multiplicity_box?(connector, box)
-            # Property targets seat at the stored corner; plain moved labels
-            # retain their explicit offsets.
-            cambria_box?(box) && (stored_offsets_zero?(box) || property_label?(connector, :target))
+            # Property targets and vertical tree targets (5038EEE3) seat at
+            # the stored corner; plain moved labels retain their explicit
+            # offsets.
+            cambria_box?(box) &&
+              (stored_offsets_zero?(box) || property_label?(connector, :target) ||
+               connector.style.to_h[:tree] == "LV")
           end
 
           def cambria_box?(box)
