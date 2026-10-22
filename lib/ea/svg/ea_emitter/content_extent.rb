@@ -60,11 +60,20 @@ module Ea
           path_data.scan(PATH_COMMAND).flat_map do |command, body|
             numbers = body.scan(NUMBER).map(&:to_f)
             case command
-            when "M", "L", "C" then numbers.each_slice(2).select { |pair| pair.size == 2 }
-            when "A" then numbers.each_slice(7).map { |a| a.last(2) }
+            when "M", "L" then numbers.each_slice(2).select { |pair| pair.size == 2 }
+            when "C" then end_points(numbers, 6)
+            when "A" then end_points(numbers, 7)
             else []
             end
           end
+        end
+
+        # The segment end point only: a Bezier's control points lie
+        # outside the drawn curve and EA does not count them (basic
+        # E325B9D8, hand-drawn style: 504 x 274 natively, 508 x 278
+        # with the control points).
+        def self.end_points(numbers, stride)
+          numbers.each_slice(stride).select { |a| a.size == stride }.map { |a| a.last(2) }
         end
 
         def self.text_box(attrs)

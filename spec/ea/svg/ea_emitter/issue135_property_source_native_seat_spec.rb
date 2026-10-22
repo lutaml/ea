@@ -67,7 +67,10 @@ end
 
 RSpec.describe "Issue 135 Property source native seats (XMI)" do
   fixtures = File.expand_path("../../../fixtures/issue135_route_style", __dir__)
-  native_dir = "/Users/umerhassan/lutaml/lutaml/examples/xmi/Images"
+  # Directory of EA's native EAID_<GUID>.svg exports for the PLATEAU model.
+  native_dir = ENV.fetch("EA_PLATEAU_NATIVE_SVG_DIR") do
+    File.expand_path("../../../../../lutaml/examples/xmi/Images", __dir__)
+  end
 
   Issue135NativeSeatCases::CASES.each do |name, data|
     describe name do

@@ -53,11 +53,36 @@ RSpec.describe Ea::Svg::EaEmitter::BottomMargin do
     expect(margin([placed("a", "c2", 300)], { "c2" => home })).to eq(10)
   end
 
-  it "keeps the owner-qualified classifier of the own package on the full margin" do
+  it "keeps the bare 10 margin below an own-package classifier nested in an owner class" do
     nested = Ea::Model::Klass.new(id: "c3", name: "Inner", package_id: "home",
                                   nested_parent_name: "Outer")
 
-    expect(margin([placed("a", "c3", 300)], { "c3" => nested })).to eq(28)
+    expect(margin([placed("a", "c3", 300)], { "c3" => nested })).to eq(10)
+  end
+
+  it "keeps the bare 10 margin below an instance of the own package" do
+    own = Ea::Model::InstanceSpecification.new(id: "i1", name: "Object B", package_id: "home")
+
+    expect(margin([placed("a", "i1", 300)], { "i1" => own })).to eq(10)
+  end
+
+  it "keeps the full margin below an instance of a foreign package" do
+    foreign = Ea::Model::InstanceSpecification.new(id: "i2", name: "Object B", package_id: "other")
+
+    expect(margin([placed("a", "i2", 300)], { "i2" => foreign })).to eq(28)
+  end
+
+  context "with the basic.qea diagrams natively 10 below the lowest element" do
+    let(:path) { File.expand_path("../../../../examples/qea/basic.qea", __dir__) }
+    let(:document) { Ea::Sources::Qea::Adapter.new(cached_qea_database(path), path).to_document }
+
+    %w[3B8BD087 D14AA320 372F7F7B 4FC1D352 6D0349D5].each do |prefix|
+      it "gives diagram #{prefix} the bare margin" do
+        diagram = document.diagrams.find { |entry| entry.id.to_s.upcase.start_with?(prefix) }
+
+        expect(described_class.for(diagram, document.index_by_id)).to eq(10)
+      end
+    end
   end
 
   it "keeps 13 plus the point size below a Text element of the own package" do
@@ -70,5 +95,32 @@ RSpec.describe Ea::Svg::EaEmitter::BottomMargin do
     text = Ea::Model::Note.new(id: "t2", note_type: "Text", package_id: "other")
 
     expect(margin([placed("a", "t2", 300, fontsz: "90")], { "t2" => text })).to eq(30)
+  end
+
+  describe "a Package as the lowest element" do
+    def package_margin(parent_id:, show_foreign:)
+      package = Ea::Model::Package.new(id: "pk", name: "Sub", parent_id: parent_id)
+      diagram = Ea::Model::Diagram.new(
+        id: "d", name: "D", package_id: "home", show_foreign: show_foreign,
+        elements: [placed("a", "pk", 300)]
+      )
+      described_class.for(diagram, { "pk" => package })
+    end
+
+    it "keeps the full margin when foreign packages are shown and its parent is another package" do
+      expect(package_margin(parent_id: "other", show_foreign: true)).to eq(28)
+    end
+
+    it "keeps the bare 10 margin when the diagram does not show foreign elements" do
+      expect(package_margin(parent_id: "other", show_foreign: false)).to eq(10)
+    end
+
+    it "keeps the bare 10 margin for a child of the diagram's own package" do
+      expect(package_margin(parent_id: "home", show_foreign: true)).to eq(10)
+    end
+
+    it "keeps the bare 10 margin for a root package" do
+      expect(package_margin(parent_id: nil, show_foreign: true)).to eq(10)
+    end
   end
 end

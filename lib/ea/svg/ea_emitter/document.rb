@@ -103,13 +103,14 @@ module Ea
           %(<g id="images">\n#{fragments.join("\n")}\n</g>)
         end
 
-        # True when any drawn bound falls outside the stored-rect
-        # canvas content area.
+        # True when any drawn bound falls outside the canvas content
+        # area; the far edges are measured from the canvas' model-space
+        # origin (its insets included).
         def exceeds?(canvas, bounds)
           bounds.any? do |b|
             b.x < canvas.min_x || b.y < canvas.min_y ||
-              b.x + b.width > canvas.min_x + canvas.width ||
-              b.y + b.height > canvas.min_y + canvas.height
+              b.x + b.width > canvas.origin_x + canvas.width ||
+              b.y + b.height > canvas.origin_y + canvas.height
           end
         end
 

@@ -25,6 +25,12 @@ module Ea
       # 4881CEEE, 70C77F92, 846DD800, 88AF6BD7, AC2191E3). Below, the
       # same box (its top is the first baseline less the font height,
       # its height the stored CY) + 5 holds the canvas open on 95246DCF.
+      #
+      # Drawn text also holds the right and bottom edges open (text
+      # right/bottom + TEXT_MARGIN, symmetric with the origin rule), so
+      # a name wider than its box is not clipped. Checked on the 188
+      # PLATEAU natives: widths/heights unchanged (185/188, 188/188);
+      # 8DAB169F moves 13 closer; no native contradicts it.
       module CanvasAnchor
         CONTENT_MARGIN = 10
         TEXT_MARGIN = 5
@@ -66,18 +72,20 @@ module Ea
           origin_x = origin(shapes && shapes[0], texts && texts[0])
           origin_y = origin(shapes && shapes[1], texts && texts[1])
           Canvas.new(min_x: origin_x, min_y: origin_y,
-                     width: right_edge(shapes, label_reach) - origin_x,
-                     height: bottom_edge(shapes, label_reach, bottom) - origin_y,
+                     width: right_edge(shapes, texts, label_reach) - origin_x,
+                     height: bottom_edge(shapes, texts, label_reach, bottom) - origin_y,
                      insets: [0, 0])
         end
 
-        def right_edge(shapes, label_reach)
+        def right_edge(shapes, texts, label_reach)
           [shapes && shapes[2] + CONTENT_MARGIN,
+           texts && (texts[2] + TEXT_MARGIN).ceil,
            label_reach && label_reach[0] + LABEL_BOX_MARGIN].compact.max
         end
 
-        def bottom_edge(shapes, label_reach, bottom)
+        def bottom_edge(shapes, texts, label_reach, bottom)
           [shapes[3] + bottom,
+           texts && (texts[3] + TEXT_MARGIN).ceil,
            label_reach && label_reach[1] + LABEL_BOX_MARGIN].compact.max
         end
 
