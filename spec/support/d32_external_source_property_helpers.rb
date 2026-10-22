@@ -28,7 +28,8 @@ module D32ExternalSourcePropertyHelpers
   end
 
   def d32_external_guard_text(**options)
-    association = Ea::Model::Association.new(id: "association", source_role_name: "lod1Geometry")
+    association = Ea::Model::Association.new(id: "association", source_role_name: "lod1Geometry",
+                                             source_multiplicity_raw: options[:mult])
     renderer = d32_external_renderer(association, options)
     arguments = d32_external_arguments(association, options)
     xml = Nokogiri::XML("<svg>#{renderer.texts(**arguments).join}</svg>")
@@ -46,7 +47,7 @@ module D32ExternalSourcePropertyHelpers
   def d32_external_arguments(association, options)
     bounds = Ea::Model::Bounds.new(x: 410, y: 720, width: 100, height: 80)
     arguments = { text_box: { "ox" => 0, "oy" => 0, "alignment" => 0 }.merge(options.fetch(:box, {})),
-                  mult_box: nil, anchor: [501, 685], connector: d32_external_connector(association, options),
+                  mult_box: options[:mult_box], anchor: [501, 685], connector: d32_external_connector(association, options),
                   end_kind: :source, heading: options.fetch(:heading, [-41, -365]) }
     arguments[:source_bounds] = options.fetch(:bounds, bounds) unless options[:omit_bounds]
     arguments

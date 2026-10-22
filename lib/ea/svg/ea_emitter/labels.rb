@@ -91,8 +91,8 @@ module Ea
           stored_tgt = end_boxes(boxes, :lrt, :lrb)
           umldi_bounds = connector.umldi_label_bounds || {}
           stored_labels = !(stored_src.nil? && stored_tgt.nil?) || !umldi_bounds.empty?
-          src_tb, src_mb = stored_src || unstored_label_boxes(points, :source, stored_labels)
-          tgt_tb, tgt_mb = stored_tgt || unstored_label_boxes(points, :target, stored_labels)
+          src_tb, src_mb = stored_src || unstored_label_boxes(points, :source, stored_labels, connector)
+          tgt_tb, tgt_mb = stored_tgt || unstored_label_boxes(points, :target, stored_labels, connector)
 
           texts = []
           end_renderer.texts(text_box: src_tb, mult_box: src_mb,
@@ -126,8 +126,15 @@ module Ea
 
         # A connector that stores label boxes for only one end seats the
         # other end's labels at its anchor, like a stored zero offset.
-        def unstored_label_boxes(points, end_kind, stored_labels)
+        #
+        # A phantom outline has no saved link row, so EA draws its default
+        # (centred) label: the synthesized zero box carries no alignment,
+        # exactly like the QEA phantom's DEFAULT_LABEL_BOXES. Measured on
+        # the Plateau v5.1 export (A081C63E: 4 «property» lines, centred
+        # under the role in the native SVG, left-aligned from XMI).
+        def unstored_label_boxes(points, end_kind, stored_labels, connector)
           return default_label_boxes(points, end_kind) unless stored_labels
+          return [{ "ox" => 0, "oy" => 0 }, { "ox" => 0, "oy" => 0 }] if connector.style.to_h[:phantom_outline] == true
 
           [{ "ox" => 0, "oy" => 0, "alignment" => 0 }, { "ox" => 0, "oy" => 0, "alignment" => 0 }]
         end

@@ -59,3 +59,23 @@ RSpec.describe "D32 external upward source seat scope" do
       .to include({ text: "+lod1Geometry", x: 503, y: 682 })
   end
 end
+
+RSpec.describe "Issue 135 multiplicity of an upward Property source above its outline" do
+  include QeaEndLabelHelpers
+  include D32ExternalSourcePropertyHelpers
+
+  let(:zero_box) { { "ox" => 0, "oy" => 0, "alignment" => 0 } }
+
+  # 5038EEE3: native "0..1" sits left of and 15px below the floating anchor.
+  it "right-aligns the multiplicity 3px left of the anchor, 15px below it" do
+    expect(d32_external_guard_text(mult: "0..1", mult_box: zero_box))
+      .to include({ text: "0..1", x: 501 - 16 - 3, y: 685 + 15 })
+  end
+
+  it "keeps the box seat when the anchor sits on the source face" do
+    face = Ea::Model::Bounds.new(x: 410, y: 685, width: 100, height: 80)
+
+    expect(d32_external_guard_text(mult: "0..1", mult_box: zero_box, bounds: face))
+      .not_to include({ text: "0..1", x: 501 - 16 - 3, y: 685 + 15 })
+  end
+end
