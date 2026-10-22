@@ -49,6 +49,30 @@ module Ea
             render_text(mx, my, content)
           end
 
+          # Returns the name-direction triangle `<polygon>` for a connector
+          # whose stored LMT box carries DIR=1, or nil. EA seats it beside
+          # the name, pointing along the source-to-target direction at the
+          # midpoint (reversed for "Destination -> Source"). Right/down
+          # geometry is measured on basic.qea's native SVGs (2AAB709F,
+          # 4DBDAB9E, 4F421236, D2FA55D3 and 6E95B74E: tip 16px past the
+          # name, 10px long, 6px wide; below the name for a vertical leg).
+          # Left/up are the mirrored extrapolation: no corpus case.
+          def direction_marker(connector, points)
+            return nil unless midpoint_content(connector)
+
+            box = stored_name_box(connector, points)
+            return nil unless box && box["direction"] == 1
+
+            x, y = stored_name_position(connector, points)
+            width = Ea::Fonts::Metrics.text_length(midpoint_content(connector), font_size, family: font_family)
+            return nil unless x && width
+
+            tri = direction_triangle(x, y, width, travel(points, connector))
+            coords = tri.flat_map { |px, py| [translate_x(px), translate_y(py)] }
+            %(<polygon points="#{coords.map { |v| Canvas.coord(v) }.join(" ")}" ) +
+              %(shape-rendering="auto"   style="fill-rule:evenodd;"/>)
+          end
+
           # Returns the formatted «stereotype» string or nil. Used
           # by Label::Registry to dispatch end-label vs midpoint.
           def stereotype_label(connector)
@@ -192,6 +216,44 @@ module Ea
             source[0] == first_bend[0] && first_bend[1] == last_bend[1] &&
               last_bend[0] == target[0] && source[1] > first_bend[1] &&
               target[1] < last_bend[1]
+          end
+
+          # Unit travel direction [dx, dy] at the midpoint: dominant axis only.
+          def travel(points, connector)
+            mid_idx = points.size / 2
+            from, to = if points.size.odd?
+                         [points[mid_idx - 1], points[mid_idx + 1]]
+                       else
+                         [points[mid_idx - 1], points[mid_idx]]
+                       end
+            dx = to[0] - from[0]
+            dy = to[1] - from[1]
+            sign = connector.direction == "Destination -> Source" ? -1 : 1
+            return [sign * (dx.negative? ? -1 : 1), 0] if dx.abs >= dy.abs
+
+            [0, sign * (dy.negative? ? -1 : 1)]
+          end
+
+          def direction_triangle(x, y, width, travel)
+            dx, dy = travel
+            if dy.zero?
+              tip_x = dx.positive? ? x + width + 16 : x - 16
+              base_x = tip_x - (dx * 10)
+              [[tip_x, y - 4], [base_x, y - 7], [base_x, y - 1]]
+            else
+              center_x = x + (width / 2.0).floor
+              tip_y = dy.positive? ? y + 13 : y - 21
+              base_y = tip_y - (dy * 10)
+              [[center_x, tip_y], [center_x - 3, base_y], [center_x + 3, base_y]]
+            end
+          end
+
+          def translate_x(value)
+            canvas ? canvas.translate_x(value) : value
+          end
+
+          def translate_y(value)
+            canvas ? canvas.translate_y(value) : value
           end
 
           def midpoint(points)
