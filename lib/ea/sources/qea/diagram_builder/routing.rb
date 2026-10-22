@@ -118,22 +118,23 @@ module Ea
           # separated boxes: the bus sits 50px past the End box's edge and
           # must stay inside the gap. Nil otherwise.
           #
-          # EMPIRICAL FIT (decision a): the fit replaces only the bus EA no
-          # longer draws, which is the stored Path laid out from the Start
-          # box (50px past the Start box's facing edge, the Path following
-          # SOID/EOID order). Checked on the five 5038EEE3 links, all stored
-          # at y670 = Start edge 720 - 50 (the End bus is 568); a stored bus
-          # anywhere else is a real route and is kept.
+          # EMPIRICAL FIT (decision a): a stored bus is replaced only when it
+          # is a 50px tree bus off one of the two facing edges, as EA lays
+          # them out: 50px past the Start box (the Path follows SOID/EOID
+          # order; the QEA y670 = Start edge 720 - 50 of all five 5038EEE3
+          # links) or already 50px past the End box (the XMI Path of three
+          # of them, y568). A stored bus anywhere else is a real route.
           def reversed_tree_levels(start, finish, stored_bus)
             if finish.y + finish.height < start.y
               bus = finish.y + finish.height + REVERSED_TREE_BUS_OFFSET
               discarded = start.y - REVERSED_TREE_BUS_OFFSET
-              [bus, start.y, finish.y + finish.height] if bus < start.y && stored_bus == discarded
+              edges = [start.y, finish.y + finish.height]
+              [bus, *edges] if bus < start.y && [bus, discarded].include?(stored_bus)
             elsif start.y + start.height < finish.y
               bus = finish.y - REVERSED_TREE_BUS_OFFSET
-              if bus > start.y + start.height && stored_bus == start.y + start.height + REVERSED_TREE_BUS_OFFSET
-                [bus, start.y + start.height, finish.y]
-              end
+              discarded = start.y + start.height + REVERSED_TREE_BUS_OFFSET
+              edges = [start.y + start.height, finish.y]
+              [bus, *edges] if bus > edges.first && [bus, discarded].include?(stored_bus)
             end
           end
 

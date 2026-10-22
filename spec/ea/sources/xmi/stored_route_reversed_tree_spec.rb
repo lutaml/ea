@@ -17,6 +17,12 @@ RSpec.describe Ea::Sources::Xmi::StoredRoute, "reversed vertical trees" do
     expect(metadata[:style]).not_to include(:reversed_ends)
   end
 
+  it "also fits a Path already stored at the End bus (plateau XMI connector 211)" do
+    metadata = route(tree_style, "Mode=3;EOID=CC91A3FC;SOID=E9A8AB7A;LWidth=0;TREE=V;", "904:-568;764:-568;",
+                     [lower, upper], [[41, -125], [0, 0]], 3)
+    expect(vertices(metadata)).to eq([[904, 720], [904, 568], [764, 568], [764, 518]])
+  end
+
   it "keeps the authored route when the ends are not reversed" do
     expect(route(tree_style.except(:reversed_ends), "Mode=3;LWidth=0;TREE=V;", "904:-670;764:-670;",
                  [lower, upper], [[41, -125], [0, 0]], 3)).to eq({})

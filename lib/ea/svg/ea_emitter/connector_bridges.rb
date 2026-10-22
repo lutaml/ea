@@ -21,22 +21,30 @@ module Ea
         def path_for(connector, points)
           priority = priority_for(connector)
           return centerline(connector, points) unless priority
+          return direct_path(connector, priority, points) if points.size == 2 && direct?(connector)
 
-          # Direct lines are written target-first like their centerline, so
-          # the bridges are walked in that travel direction (arc sweeps are
-          # relative to it) and the target repeat closes the path.
-          direct = points.size == 2 && direct?(connector)
-          points = points.reverse if direct
-          segments = points.each_cons(2).map do |first, last|
-            crossings_for(connector, priority, first, last)
-          end
-          return centerline(connector, direct ? points.reverse : points) if segments.all?(&:empty?)
+          segments = bridge_segments(connector, priority, points)
+          return centerline(connector, points) if segments.all?(&:empty?)
 
-          path = serialize(points, segments)
-          direct ? "#{path} M #{coordinates(points.first)}" : path
+          serialize(points, segments)
         end
 
         private
+
+        # Direct lines are written target-first like their centerline, so the
+        # bridges are walked in that travel direction (arc sweeps are relative
+        # to it) and the target repeat closes the path.
+        def direct_path(connector, priority, points)
+          travel = points.reverse
+          segments = bridge_segments(connector, priority, travel)
+          return centerline(connector, points) if segments.all?(&:empty?)
+
+          "#{serialize(travel, segments)} M #{coordinates(travel.first)}"
+        end
+
+        def bridge_segments(connector, priority, points)
+          points.each_cons(2).map { |first, last| crossings_for(connector, priority, first, last) }
+        end
 
         def centerline(connector, points)
           seats = points.map { |point| coordinates(point) }
