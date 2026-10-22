@@ -103,3 +103,23 @@ RSpec.describe Ea::Svg::EaEmitter::CanvasAnchor do
     expect(described_class.measured(shapes, nil, [150, 150]).width).to eq(220)
   end
 end
+
+# A hand-drawn style diagram draws Bezier edges; EA sizes its canvas on
+# the curve end points (native 504 x 274), not the control points.
+RSpec.describe "Unframed canvas of a hand-drawn diagram" do
+  let(:path) { File.expand_path("../../../../examples/qea/basic.qea", __dir__) }
+  let(:document) { Ea::Sources::Qea::Adapter.new(cached_qea_database(path), path).to_document }
+  let(:diagram) { document.diagrams.find { |entry| entry.id.to_s.upcase.start_with?("E325B9D8") } }
+  let(:svg) do
+    Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
+                                              document: document).render
+  end
+
+  it "measures 504 x 274 in whole pixels like the native export" do
+    expect(svg[/viewBox="([^"]*)"/, 1]).to eq("0 0 504 274")
+  end
+
+  it "draws the background rect in whole pixels" do
+    expect(svg).to include(%(<rect x="0" y="0" width="504" height="274"))
+  end
+end
