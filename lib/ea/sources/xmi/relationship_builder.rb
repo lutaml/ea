@@ -53,7 +53,7 @@ module Ea
 
         def extension_import_relationship(id, connector)
           case connector.properties&.ea_type
-          when "Package" then package_import_relationship(id, connector)
+          when "Package", "Nesting" then package_import_relationship(id, connector)
           when "Dependency"
             dependency_import_relationship(id, connector) if connector_stereotype(connector) == "import"
           end
@@ -73,6 +73,8 @@ module Ea
           connector&.xrefs&.value.to_s[CONNECTOR_STEREOTYPE]
         end
 
+        # Nesting connectors, like package imports, exist only in the
+        # extension; QEA models both as an Association between the ends.
         def package_import_relationship(id, connector)
           Ea::Model::Association.new(
             id: id,

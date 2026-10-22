@@ -1072,12 +1072,13 @@ module Ea
             property unless property && opposite_role_property?(association, end_kind, property)
           end
 
-          # A UML attribute belongs to the classifier opposite its role.
-          # Do not draw that same role again at its anonymous owner end.
+          # A UML attribute belongs to the classifier opposite its role: a
+          # property named after the opposite end's role, and not after this
+          # end's own, is that end's label. Do not draw it again here.
           def opposite_role_property?(association, end_kind, property)
             own = end_kind == :source ? association.source_role_name : association.target_role_name
             other = end_kind == :source ? association.target_role_name : association.source_role_name
-            role_empty?(own) && other == property.name
+            other == property.name && own != property.name
           end
 
           def placed_classifier_id(association, end_kind)

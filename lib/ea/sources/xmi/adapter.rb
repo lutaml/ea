@@ -37,6 +37,7 @@ module Ea
           )
           mark_connector_proxies(doc)
           apply_tagged_values(doc)
+          apply_constraints(doc)
           apply_receptions(doc)
           apply_stereotypes(doc)
           resolve_type_names(doc)
@@ -90,6 +91,17 @@ module Ea
             next unless refs
 
             p.stereotype_refs = refs
+          end
+        end
+
+        # Attach the extension's element constraints to their classifiers,
+        # as the QEA adapter does from t_objectconstraint.
+        def apply_constraints(doc)
+          grouped = ConstraintBuilder.new(xmi_path).grouped_by_element
+          return if grouped.empty?
+
+          doc.classifiers.each do |c|
+            c.constraints = grouped[c.id] if c.id && grouped[c.id]
           end
         end
 

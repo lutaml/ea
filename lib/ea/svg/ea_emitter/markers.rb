@@ -270,7 +270,7 @@ module Ea
         end
 
         def object_diagram?
-          diagram.diagram_type == "Object"
+          diagram.object_diagram?
         end
 
         # Rounded [x, y] of the marker's tip (anchor) in canvas
