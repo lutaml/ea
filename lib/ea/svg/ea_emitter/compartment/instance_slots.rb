@@ -12,6 +12,11 @@ module Ea
         # InstanceSpecification or has neither slots nor a
         # classifier.
         module InstanceSlots
+          # The pen the first group of this compartment leaves behind.
+          def self.pen(_context)
+            Pen::ROUND_BEVEL
+          end
+
           ROW_OFFSET = 13
           SUBTITLE_OFFSET_FROM_BOTTOM = 15
 

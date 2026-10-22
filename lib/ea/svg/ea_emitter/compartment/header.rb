@@ -7,6 +7,11 @@ module Ea
         # Header compartment: stereotype label + class name. Skips
         # rendering when the classifier produces no header lines.
         module Header
+          # The pen the first group of this compartment leaves behind.
+          def self.pen(_context)
+            Pen::ROUND_BEVEL
+          end
+
           module_function
 
           def render(context)

@@ -11,6 +11,11 @@ module Ea
         # content and suppresses them when they would overflow the
         # stored box height (never truncates rows).
         module Constraints
+          # The pen the first group of this compartment leaves behind.
+          def self.pen(_context)
+            Pen::ROUND_BEVEL
+          end
+
           module_function
 
           def render(context)

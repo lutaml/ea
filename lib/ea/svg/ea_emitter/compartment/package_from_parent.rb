@@ -13,6 +13,11 @@ module Ea
         # (379 diagrams, 378 exact): classifiers never render the
         # subtitle, and ShowForeign=0 diagrams render none.
         module PackageFromParent
+          # The pen the first group of this compartment leaves behind.
+          def self.pen(_context)
+            Pen::ROUND_BEVEL
+          end
+
           module_function
 
           def render(context)

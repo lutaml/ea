@@ -15,6 +15,11 @@ module Ea
 
           module_function
 
+          # The text group keeps the pen the note outline was drawn with.
+          def pen(context)
+            context.previous_pen || Pen::INITIAL
+          end
+
           def render(context)
             return nil if context.model_element.is_a?(Ea::Model::Note) &&
                           context.model_element.legend
@@ -121,7 +126,7 @@ module Ea
           # (EA never sets a note pen; 7C44AC09 square/miter, 7D960BD8
           # square/bevel), so the next element inherits the right pen.
           def group_style(context)
-            cap, join = context.previous_pen || Element::NoteShapeRenderer::INITIAL_PEN
+            cap, join = pen(context)
             "stroke-width:1;stroke-linecap:#{cap};stroke-linejoin:#{join}; " \
               "fill:#{context.theme.text_color};fill-opacity:1.00; " \
               "stroke:#000000; stroke-opacity:0.00"

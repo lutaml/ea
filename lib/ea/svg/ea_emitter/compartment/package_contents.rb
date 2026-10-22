@@ -11,6 +11,11 @@ module Ea
         # text (Enumeration gets a list-style icon; other classifiers
         # get the "folded paper" silhouette).
         module PackageContents
+          # The pen the first group of this compartment leaves behind.
+          def self.pen(_context)
+            Pen::SQUARE_BEVEL
+          end
+
           ROW_HEIGHT = 16
           ICON_X_OFFSET = 5
           TEXT_X_OFFSET = 23

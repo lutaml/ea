@@ -10,6 +10,11 @@ module Ea
         # Real OCL constraints render trailing, after the content —
         # the two are distinct compartments.
         module Marker
+          # The pen the first group of this compartment leaves behind.
+          def self.pen(_context)
+            Pen::ROUND_BEVEL
+          end
+
           module_function
 
           def render(context)

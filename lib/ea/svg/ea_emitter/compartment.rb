@@ -49,6 +49,10 @@ module Ea
           InstanceUnderline
         ].freeze
 
+        # One rendered compartment and the pen its first group leaves behind
+        # (nil when it sets none, leaving the previous pen in force).
+        Painted = Struct.new(:svg, :pen)
+
         module_function
 
         # Renders every applicable compartment for the context.
@@ -56,6 +60,15 @@ module Ea
         # caller compacts).
         def render_all(context)
           ALL.map { |compartment| compartment.render(context) }
+        end
+
+        # Like render_all, but each applicable compartment comes with the
+        # pen it leaves behind; compartments that do not apply are dropped.
+        def paint_all(context)
+          ALL.filter_map do |compartment|
+            svg = compartment.render(context)
+            Painted.new(svg, compartment.pen(context)) if svg
+          end
         end
       end
     end

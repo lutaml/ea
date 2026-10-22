@@ -32,14 +32,7 @@ module Ea
           # native notes: 7C44AC09 first (square/miter), 7D960BD8 after
           # square/bevel icons (square/bevel), 676B9C9A, 926AFE38, 9DA6C553
           # and C028B286 after round/bevel shapes (round/bevel).
-          INITIAL_PEN = %w[square miter].freeze
-          PEN_PATTERN = /stroke-linecap:(\w+);stroke-linejoin:(\w+)/
-
-          # The [cap, join] a rendered group leaves behind, or nil.
-          def self.pen_of(group)
-            match = PEN_PATTERN.match(group.to_s)
-            match&.captures
-          end
+          INITIAL_PEN = Pen::INITIAL
 
           def self.render(bounds, body:, fill:, stroke:, stroke_width:, family:, size:, text_fill:, pen: nil)
             new(bounds, body, fill, stroke, stroke_width, family, size, text_fill, pen || INITIAL_PEN).to_svg

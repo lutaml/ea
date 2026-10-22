@@ -10,6 +10,11 @@ module Ea
         # Lines are estimated by character width and split at word
         # boundaries to fit the element bounds.
         module NoteText
+          # The pen the first group of this compartment leaves behind.
+          def self.pen(_context)
+            Pen::ROUND_BEVEL
+          end
+
           X_PADDING = 5
           HAND_DRAW_X_PADDING = 10
           Y_FIRST_OFFSET = 15

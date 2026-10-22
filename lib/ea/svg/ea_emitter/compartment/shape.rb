@@ -9,6 +9,19 @@ module Ea
         module Shape
           module_function
 
+          # Notes and legends take the pen the previous drawing left; every
+          # other shape draws its own round/bevel pen.
+          def pen(context)
+            return Pen::ROUND_BEVEL unless pen_inheriting?(context)
+
+            context.previous_pen || Pen::INITIAL
+          end
+
+          def pen_inheriting?(context)
+            legend?(context) || context.model_element.is_a?(Ea::Model::Note)
+          end
+          private_class_method :pen_inheriting?
+
           def render(context)
             if legend?(context)
               Element::LegendRenderer.render(

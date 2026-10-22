@@ -6,6 +6,11 @@ module Ea
       module Compartment
         # Attribute compartment. Skipped when no attribute lines.
         module Attributes
+          # The pen the first group of this compartment leaves behind.
+          def self.pen(_context)
+            Pen::ROUND_BEVEL
+          end
+
           module_function
 
           def render(context)

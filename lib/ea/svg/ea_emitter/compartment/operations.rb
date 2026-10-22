@@ -7,6 +7,11 @@ module Ea
         # Operation compartment: divider line + operation signatures.
         # Skipped when no operations or when geometry cannot fit them.
         module Operations
+          # The pen the first group of this compartment leaves behind.
+          def self.pen(_context)
+            Pen::ROUND_BEVEL
+          end
+
           module_function
 
           def render(context)

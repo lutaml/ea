@@ -35,9 +35,9 @@ module Ea
           @divider_y = {}
           @previous_pen = nil
           ordered_elements.flat_map do |e|
-            groups = groups_for(e)
-            @previous_pen = Element::NoteShapeRenderer.pen_of(groups.last) || @previous_pen
-            groups
+            painted = groups_for(e)
+            @previous_pen = painted.last&.pen || @previous_pen
+            painted.map(&:svg)
           end
         end
 
@@ -75,7 +75,7 @@ module Ea
           record_drawn_bounds(element, context)
           return [] if element.style&.fetch("connector_proxy", false)
 
-          Compartment.render_all(context).compact
+          Compartment.paint_all(context)
         end
 
         # Logical-space drawn bounds: stored x/y with the RENDERED
