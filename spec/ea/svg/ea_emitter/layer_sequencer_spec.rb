@@ -24,6 +24,19 @@ RSpec.describe Ea::Svg::EaEmitter::LayerSequencer do
   let(:canvas) { Ea::Svg::EaEmitter::Canvas.from(diagram, model_index: model_index) }
 
   describe "#layers" do
+    it "emits once per sequencer and returns the same layers on every call" do
+      seq = described_class.new(diagram, model_index: model_index, canvas: canvas)
+      first = seq.layers
+      expect(seq.layers).to equal(first)
+      expect(first).to be_frozen
+    end
+
+    it "emits identical layers from a fresh sequencer on another canvas of equal size" do
+      a = described_class.new(diagram, model_index: model_index, canvas: canvas).layers
+      b = described_class.new(diagram, model_index: model_index, canvas: canvas).layers
+      expect(b).to eq(a)
+    end
+
     it "always includes a background layer" do
       seq = described_class.new(diagram, model_index: model_index, canvas: canvas)
       layers = seq.layers

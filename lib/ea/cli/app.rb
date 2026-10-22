@@ -41,6 +41,8 @@ module Ea
            "Diagram operations: list FILE | extract NAME FILE"
       option :format, type: :string, default: "table"
       option :output, **OUTPUT_OPTION, desc: "Output path (extract only)"
+      option :frame, type: :boolean, default: false,
+                     desc: "Draw EA's diagram frame (border, tab, label); default is unframed"
       def diagrams(action, file = nil, name = nil)
         Command::Diagrams
           .new(action: action, file: file, name: name, **symbolize(options))
@@ -81,6 +83,8 @@ module Ea
              desc: "Path to SPA YAML config (overrides model metadata: title, description, etc.)"
       option :mode, type: :string, default: "single_file",
                     desc: "Output mode: single_file | sharded"
+      option :frame, type: :boolean, default: false,
+                     desc: "Draw EA's diagram frame (border, tab, label); default is unframed"
       def spa(file)
         Command::Spa.new(file: file, **symbolize(options)).call
       end
@@ -92,7 +96,10 @@ module Ea
                    desc: "Render every diagram in the source file (NAME ignored)"
       option :output_dir, type: :string,
                           desc: "Directory for --all output (default: <basename>.svgs/)"
+      option :frame, type: :boolean, default: false,
+                     desc: "Draw EA's diagram frame (border, tab, label); default is unframed"
       def svg(name = nil, file = nil)
+        name, file = nil, name if options[:all] && file.nil?
         Command::Svg.new(name: name, file: file, **symbolize(options)).call
       end
 
@@ -113,7 +120,10 @@ module Ea
                       desc: "Output format: svg | png | pdf"
       option :output_dir, type: :string,
                           desc: "Directory for --all output (default: <basename>.renders/)"
+      option :frame, type: :boolean, default: false,
+                     desc: "Draw EA's diagram frame (border, tab, label); default is unframed"
       def render(name = nil, file = nil)
+        name, file = nil, name if options[:all] && file.nil?
         Command::Render.new(name: name, file: file, **symbolize(options)).call
       end
 

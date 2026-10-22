@@ -15,8 +15,9 @@ module Ea
     class Projector
       attr_reader :document, :shard_url_for, :configuration
 
-      def initialize(document, shard_url_for: nil, configuration: nil)
+      def initialize(document, shard_url_for: nil, configuration: nil, frame: false)
         @document = document
+        @frame = frame
         @shard_url_for = shard_url_for || default_shard_url
         @configuration = configuration
       end
@@ -288,7 +289,8 @@ module Ea
         payload["svg"] = Ea::Svg::EaEmitter::Document.new(
           diagram,
           model_index: document.index_by_id,
-          document: document
+          document: document,
+          frame: @frame
         ).render
         payload
       rescue StandardError => e

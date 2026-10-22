@@ -63,4 +63,8 @@ RSpec.describe Ea::Svg::EaEmitter::BoundsCalculator do
     out = described_class.new(Ea::Model::Diagram.new(id: "x", name: "x")).compute
     expect(out).to eq([0, 0, 1, 1])
   end
+
+  it "exposes subtitle_points publicly (no subtitle-bearing elements -> none)" do
+    expect(described_class.new(diagram_with_bounds).subtitle_points).to eq([])
+  end
 end

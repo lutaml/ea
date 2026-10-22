@@ -51,7 +51,8 @@ module Ea
 
           svg = Ea::Svg::EaEmitter::Document.new(diagram,
                                                    model_index: document.index_by_id,
-                                                   document: document).render
+                                                   document: document,
+                                                   frame: options[:frame] ? true : false).render
           path = options[:output] || begin
             base = File.basename(file_path, ".*")
             dir = File.dirname(file_path)

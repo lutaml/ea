@@ -17,7 +17,8 @@ module Ea
       attr_reader :document, :mode, :output_path, :shard_url_for, :configuration
 
       def initialize(document, output:, mode: nil, shard_url_for: nil,
-                     configuration: nil)
+                     configuration: nil, frame: false)
+        @frame = frame
         @document = document
         @output_path = output
         @mode = (mode || DEFAULT_MODE).to_sym
@@ -32,7 +33,8 @@ module Ea
       def projector
         @projector ||= Projector.new(document,
                                       shard_url_for: shard_url_for,
-                                      configuration: configuration)
+                                      configuration: configuration,
+                                      frame: @frame)
       end
 
       def strategy_class

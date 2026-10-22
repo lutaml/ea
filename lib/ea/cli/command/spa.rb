@@ -22,7 +22,8 @@ module Ea
             document,
             output: output_path,
             mode: mode,
-            configuration: spa_configuration
+            configuration: spa_configuration,
+            frame: options[:frame] ? true : false
           ).generate
 
           formatter.render([[output_path]], columns: [:written_to])

@@ -2,6 +2,7 @@
 
 require "spec_helper"
 require "ea/cli/app"
+require "tmpdir"
 
 RSpec.describe "ea svg CLI command" do
   let(:app) { Ea::Cli::App.new }
@@ -47,5 +48,69 @@ RSpec.describe "ea svg --all CLI mode" do
     sample = File.read(files.first)
     expect(sample).to start_with("<?xml")
     expect(sample).to include("<svg")
+  end
+end
+
+RSpec.describe "ea svg/render CLI corrections" do
+  let(:qea_fixture) { fixtures_path("basic.qea") }
+  let(:name) { "Starter Object Diagram" }
+  let(:unframed_box) { "0 0 325 89" }
+  let(:framed_box) { "0 0 390 127" }
+
+  around do |example|
+    Dir.mktmpdir { |dir| @dir = dir; example.run }
+  end
+
+  def run_cli(*args)
+    capture_stdout { Ea::Cli::App.start(args) }
+  end
+
+  it "accepts the documented `svg --all FILE` shape" do
+    run_cli("svg", "--all", qea_fixture, "--output-dir=#{@dir}")
+    expect(Dir.glob(File.join(@dir, "*.svg")).size).to be > 1
+  end
+
+  it "accepts `render --all FILE` and lists the written files without an output-formatter error" do
+    listing = run_cli("render", "--all", qea_fixture, "--output-dir=#{@dir}")
+    files = Dir.glob(File.join(@dir, "*.svg"))
+    expect(files.size).to be > 1
+    expect(listing).to include(files.first)
+  end
+
+  it "renders unframed by default and framed with --frame (svg)" do
+    plain = File.join(@dir, "plain.svg")
+    framed = File.join(@dir, "framed.svg")
+    run_cli("svg", name, qea_fixture, "--output=#{plain}")
+    run_cli("svg", name, qea_fixture, "--output=#{framed}", "--frame")
+    expect(File.read(plain)).to include(%(viewBox="#{unframed_box}"))
+    expect(File.read(framed)).to include(%(viewBox="#{framed_box}"))
+  end
+
+  it "renders framed with --frame (render)" do
+    framed = File.join(@dir, "framed.svg")
+    plain = File.join(@dir, "plain.svg")
+    run_cli("render", name, qea_fixture, "--output=#{plain}")
+    run_cli("render", name, qea_fixture, "--output=#{framed}", "--frame")
+    expect(File.read(plain)).to include(%(viewBox="#{unframed_box}"))
+    expect(File.read(framed)).to include(%(viewBox="#{framed_box}"))
+  end
+
+  it "renders framed with --frame (diagrams extract)" do
+    plain = File.join(@dir, "plain.svg")
+    framed = File.join(@dir, "framed.svg")
+    run_cli("diagrams", "extract", qea_fixture, name, "--output=#{plain}")
+    run_cli("diagrams", "extract", qea_fixture, name, "--output=#{framed}", "--frame")
+    expect(File.read(plain)).to include(%(viewBox="#{unframed_box}"))
+    expect(File.read(framed)).to include(%(viewBox="#{framed_box}"))
+  end
+
+  it "embeds framed SVGs in the SPA with --frame" do
+    plain = File.join(@dir, "plain.html")
+    framed = File.join(@dir, "framed.html")
+    run_cli("spa", qea_fixture, "--output=#{plain}")
+    run_cli("spa", qea_fixture, "--output=#{framed}", "--frame")
+    expect(File.read(plain)).to include(unframed_box)
+    expect(File.read(plain)).not_to include(framed_box)
+    expect(File.read(framed)).to include(framed_box)
   end
 end

@@ -44,7 +44,7 @@ module Ea
         private
 
         def load_qea
-          raise NotImplementedError, "QEA Document loading not yet wired into bench"
+          Ea::Sources::Qea::Adapter.from_path(path)
         end
 
         def load_xmi
