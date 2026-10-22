@@ -116,6 +116,23 @@ module Ea
               insets: [inset_left, FRAME_INSET_TOP])
         end
 
+        # This canvas when every point of `shapes` ([min_x, min_y, max_x,
+        # max_y] in canvas coordinates) lies inside it, otherwise a canvas
+        # grown by CONTENT_MARGIN past the overflowing sides.
+        def holding(shapes)
+          left, top, right, bottom = shapes
+          grow_left = left.negative? ? CanvasAnchor::CONTENT_MARGIN - left : 0
+          grow_top = top.negative? ? CanvasAnchor::CONTENT_MARGIN - top : 0
+          new_width = right > width ? right + CanvasAnchor::CONTENT_MARGIN : width
+          new_height = bottom > height ? bottom + CanvasAnchor::CONTENT_MARGIN : height
+          return self if [grow_left, grow_top].all?(&:zero?) &&
+                         new_width == width && new_height == height
+
+          Canvas.new(min_x: min_x - grow_left, min_y: min_y - grow_top,
+                     width: new_width + grow_left, height: new_height + grow_top,
+                     insets: [inset_left, inset_top])
+        end
+
         def view_box
           "0 0 #{width} #{height}"
         end
