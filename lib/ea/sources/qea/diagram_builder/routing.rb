@@ -23,19 +23,26 @@ module Ea
             connector = database.find_connector(link_row.connectorid)
             return model unless connector && reversed_corner_link?(link_row, diagram_row, connector)
 
-            boxes = stored_ray_boxes(link_row, diagram_row)
+            origins, points = reversed_corner_points(stored_ray_boxes(link_row, diagram_row), geom,
+                                                     intermediate_waypoints(link_row).first)
+            return model unless points
+
+            model.waypoints = points.map { |point| Ea::Model::Waypoint.new(position: point) }
+            model.source_anchor, model.target_anchor = origins
+            model
+          end
+
+          # Shared by QEA and XMI: clip each leg of the single saved bend from
+          # its stored origin, retaining origins outside their box. Returns
+          # [origins, [start, bend, end]], or nil when a leg cannot be clipped.
+          def reversed_corner_points(boxes, geom, corner)
             origins = [stored_ray_origin(boxes[0], geom[:sx], geom[:sy]),
                        stored_ray_origin(boxes[1], geom[:ex], geom[:ey])]
-            x, y = intermediate_waypoints(link_row).first
-            bend = Ea::Model::Point.new(x: x, y: y)
+            bend = Ea::Model::Point.new(x: corner[0], y: corner[1])
             ends = origins.zip(boxes).map do |origin, box|
               inside_box?(origin, box) ? diagonal_corner_exit(origin, bend, box) : origin
             end
-            return model unless ends.all?
-
-            model.waypoints = [ends[0], bend, ends[1]].map { |point| Ea::Model::Waypoint.new(position: point) }
-            model.source_anchor, model.target_anchor = origins
-            model
+            [origins, [ends[0], bend, ends[1]]] if ends.all?
           end
 
           # EMPIRICAL FIT (decision a), not a source-backed rule. A width-0

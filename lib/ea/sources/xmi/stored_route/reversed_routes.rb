@@ -45,24 +45,12 @@ module Ea
           def reversed_corner_metadata(model, link, bounds, offsets, edge)
             return {} unless reversed_corner_candidate?(model, link, bounds, offsets, edge)
 
-            boxes = bounds.values_at(:source, :target)
-            origins = corner_origins(boxes, ray_geometry(offsets, edge))
-            bend = Ea::Model::Point.new(**%i[x y].zip(intermediate_waypoints(link).first).to_h)
-            ends = origins.zip(boxes).map { |origin, box| corner_exit(origin, bend, box) }
-            ends.all? ? corner_fields(origins, bend, ends) : {}
-          end
+            origins, points = reversed_corner_points(bounds.values_at(:source, :target), ray_geometry(offsets, edge),
+                                                     intermediate_waypoints(link).first)
+            return {} unless points
 
-          def corner_fields(origins, bend, ends)
-            { waypoints: points_to_waypoints([ends[0], bend, ends[1]].map { |point| [point.x, point.y] }),
+            { waypoints: points_to_waypoints(points.map { |point| [point.x, point.y] }),
               source_anchor: origins[0], target_anchor: origins[1] }
-          end
-
-          def corner_origins(boxes, geom)
-            [stored_ray_origin(boxes[0], geom[:sx], geom[:sy]), stored_ray_origin(boxes[1], geom[:ex], geom[:ey])]
-          end
-
-          def corner_exit(origin, bend, box)
-            inside_box?(origin, box) ? diagonal_corner_exit(origin, bend, box) : origin
           end
 
           def reversed_corner_candidate?(model, link, bounds, offsets, edge)

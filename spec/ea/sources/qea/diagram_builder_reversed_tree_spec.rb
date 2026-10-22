@@ -9,18 +9,12 @@ require "spec_helper"
 # rubocop:disable Metrics/BlockLength
 RSpec.describe "QEA width-0 vertical tree Associations with reversed SOID/EOID" do
   include QeaRoutingHelpers
+  include QeaReversedTreeHelpers
 
   # Expected paths are in the frameless canvas: stored x - 595, y - 220
   # (x - 575 when the MultiSurface box at x=610 sets the left edge).
   let(:multi_solid) { [800, 720, 153, 80] }
   let(:plant_cover) { [630, 260, 268, 258] }
-
-  def render_reversed(geometry:, path:, source: multi_solid)
-    render_qea_route(connector_type: "Association", source: source, target: plant_cover,
-                     object_styles: ["DUID=MSMS;", "DUID=PCPC;"],
-                     style: "Mode=3;EOID=MSMS;SOID=PCPC;Color=-1;LWidth=0;TREE=V;",
-                     geometry: geometry, path: path)
-  end
 
   it "routes from the Start leg to a bus 50px past the End box (connector 212)" do
     # The saved origin lies right of the box, level with it: kept literally.
