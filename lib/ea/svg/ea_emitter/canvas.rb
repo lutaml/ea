@@ -32,8 +32,8 @@ module Ea
                        insets: [FRAME_INSET_LEFT, FRAME_INSET_TOP])
           @min_x = min_x
           @min_y = min_y
-          @width = width
-          @height = height
+          @width = whole(width)
+          @height = whole(height)
           @inset_left, @inset_top = insets
         end
 
@@ -60,9 +60,21 @@ module Ea
                                        bottom: BottomMargin.for(diagram, model_index))
           end
 
+          return empty_framed(diagram, min_x, min_y) unless bc.max_x
+
           new(min_x: min_x, min_y: min_y, width: width, height: height,
               insets: [bc.effective_inset_left || FRAME_INSET_LEFT,
                        FRAME_INSET_TOP])
+        end
+
+        # No element to size on: the frame alone, wide enough for its
+        # name tab.
+        def self.empty_framed(diagram, min_x, min_y)
+          width = [INSET_TOUCHING_ORIGIN + BoundsCalculator::INSET_RIGHT,
+                   DiagramFrame.new(canvas: nil).min_width(diagram)].max
+          new(min_x: min_x, min_y: min_y, width: width,
+              height: BoundsCalculator::INSET_TOP + BoundsCalculator::INSET_BOTTOM,
+              insets: [BoundsCalculator.inset_left_for(min_x), FRAME_INSET_TOP])
         end
 
         # Second-pass canvas over the DRAWN extents captured by the
@@ -95,8 +107,7 @@ module Ea
 
           # Same scaled rule as BoundsCalculator: drawn leftmost =
           # min(35, 30 + min_x).
-          inset_left = [BoundsCalculator::INSET_LEFT - 5 + min_x,
-                        BoundsCalculator::INSET_LEFT].min
+          inset_left = BoundsCalculator.inset_left_for(min_x)
           new(min_x: min_x, min_y: min_y,
               width: (max_x - min_x) + inset_left +
                      BoundsCalculator::INSET_RIGHT,
@@ -138,6 +149,12 @@ module Ea
         end
 
         private
+
+        # Measured extents arrive as Floats ("508.0"); EA writes whole
+        # pixels into the viewBox and background rect.
+        def whole(pixels)
+          pixels.is_a?(Float) && pixels == pixels.to_i ? pixels.to_i : pixels
+        end
 
         def format_cm(px)
           return "0cm" if px.nil? || px.zero?

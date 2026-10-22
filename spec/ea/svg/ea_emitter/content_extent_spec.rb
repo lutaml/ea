@@ -15,6 +15,12 @@ RSpec.describe Ea::Svg::EaEmitter::ContentExtent do
 
   subject(:extent) { described_class.measure(fragments) }
 
+  it "counts only the end point of a Bezier segment, not its control points" do
+    curve = described_class.measure([%(<g><path d="M 10 10 C 80 8 128 12 177 10"/></g>)])
+
+    expect(curve.shapes).to eq([10.0, 10.0, 177.0, 10.0])
+  end
+
   it "spans the shape points of rects, paths (arc end points) and polygons" do
     expect(extent.shapes).to eq([20.0, 35.0, 210.0, 90.0])
   end
