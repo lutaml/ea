@@ -44,10 +44,10 @@ RSpec.describe Ea::Svg::EaEmitter::Canvas do
   end
 
   describe ".from with empty diagram" do
-    it "returns a minimal canvas" do
+    it "returns the bare frame canvas, wide enough for the name tab" do
       canvas = described_class.from(Ea::Model::Diagram.new(id: "x", name: "x"))
-      expect(canvas.width).to eq(1)
-      expect(canvas.height).to eq(1)
+      expect(canvas.width).to be >= 80
+      expect(canvas.height).to eq(76)
     end
 
     it "anchors an unframed empty diagram on EA's blank 210 x 110 canvas" do
