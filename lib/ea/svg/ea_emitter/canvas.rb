@@ -23,6 +23,8 @@ module Ea
         FRAME_INSET_LEFT = 35
         INSET_TOUCHING_ORIGIN = 30
         FRAME_INSET_TOP = 40
+        # Where the diagram frame's border line sits from the canvas edge.
+        FRAME_BORDER_INSET = 6
 
         attr_reader :min_x, :min_y, :width, :height, :inset_left, :inset_top
 
@@ -117,14 +119,16 @@ module Ea
         end
 
         # This canvas when every point of `shapes` ([min_x, min_y, max_x,
-        # max_y] in canvas coordinates) lies inside it, otherwise a canvas
-        # grown by CONTENT_MARGIN past the overflowing sides.
+        # max_y] in canvas coordinates) lies inside its frame border (the
+        # FRAME_BORDER_INSET line), otherwise a canvas grown so the shapes
+        # sit CONTENT_MARGIN inside the border on the overflowing sides.
         def holding(shapes)
           left, top, right, bottom = shapes
-          grow_left = left.negative? ? CanvasAnchor::CONTENT_MARGIN - left : 0
-          grow_top = top.negative? ? CanvasAnchor::CONTENT_MARGIN - top : 0
-          new_width = right > width ? right + CanvasAnchor::CONTENT_MARGIN : width
-          new_height = bottom > height ? bottom + CanvasAnchor::CONTENT_MARGIN : height
+          reach = CanvasAnchor::CONTENT_MARGIN
+          grow_left = left < FRAME_BORDER_INSET ? reach - left : 0
+          grow_top = top < FRAME_BORDER_INSET ? reach - top : 0
+          new_width = right > width - FRAME_BORDER_INSET ? right + reach : width
+          new_height = bottom > height - FRAME_BORDER_INSET ? bottom + reach : height
           return self if [grow_left, grow_top].all?(&:zero?) &&
                          new_width == width && new_height == height
 

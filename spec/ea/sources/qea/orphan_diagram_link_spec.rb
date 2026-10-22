@@ -47,13 +47,24 @@ RSpec.describe "QEA diagram links and canvas on edited fixture copies" do
   end
 
   describe "a framed canvas with a stored bend outside the elements" do
+    def vertices(path)
+      path["d"].to_s.scan(/(-?[\d.]+) (-?[\d.]+)/).map { |x, y| [x.to_f, y.to_f] }
+    end
+
+    # Connector vertices outside the frame border (the first path drawn).
+    def outside_border(svg)
+      border, *drawn = Nokogiri::XML(svg).xpath("//*[local-name()='path']")
+      xs, ys = vertices(border).transpose
+      drawn.flat_map { |path| vertices(path) }
+           .reject { |x, y| x.between?(xs.min, xs.max) && y.between?(ys.min, ys.max) }
+    end
+
     def overflow(svg)
       doc = Nokogiri::XML(svg)
       _x, _y, width, height = doc.root["viewBox"].split.map(&:to_f)
-      vertices = doc.xpath("//*[local-name()='path']").flat_map do |path|
-        path["d"].to_s.scan(/(-?[\d.]+) (-?[\d.]+)/).map { |x, y| [x.to_f, y.to_f] }
-      end
-      vertices.reject { |x, y| x.between?(0, width) && y.between?(0, height) }
+      all = doc.xpath("//*[local-name()='path']").flat_map { |path| vertices(path) }
+      all.reject { |x, y| x.between?(0, width) && y.between?(0, height) } +
+        outside_border(svg)
     end
 
     it "holds a bend left of every object" do
