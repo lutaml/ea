@@ -82,43 +82,33 @@ end
 # used here (role-less target end, leg arriving sloped from the right).
 RSpec.describe "Issue 135 sloped rightward role-less target multiplicity" do
   include LabelUpwardPropertyHelpers
+  include Issue135X5bLabelHelpers
 
   let(:text_box) { { "ox" => -26, "oy" => -72, "cx" => 79, "cy" => 16, "alignment" => 1 } }
   let(:mult_box) { { "ox" => -54, "oy" => -85, "cx" => 19, "cy" => 16, "alignment" => 1 } }
 
-  def target_mult(stereotype)
-    upward_property_positions({ role: nil, anchor: [350, 367], box: text_box },
-                              end_kind: :target, stereotype: stereotype, style: {},
-                              heading: [110, -24], mult_box: mult_box).fetch("0..1")
-  end
-
   it "takes the rightward corner seat for a Property source (5038EEE3)" do
-    expect(target_mult("property")).to eq([299.0, 297.0])
+    expect(sloped_target_mult("property", text_box, mult_box)).to eq([299.0, 297.0])
   end
 
   it "keeps the previous seat when the source is not a Property" do
-    expect(target_mult(nil)).not_to eq([299.0, 297.0])
+    expect(sloped_target_mult(nil, text_box, mult_box)).not_to eq([299.0, 297.0])
   end
 end
 
 # 5038EEE3 native 386,612 in the diagram frame, 416,682 in the canvas frame.
 RSpec.describe "Issue 135 vertical tree target multiplicity" do
   include LabelUpwardPropertyHelpers
+  include Issue135X5bLabelHelpers
 
   let(:text_box) { { "ox" => -26, "oy" => -123, "cx" => 71, "cy" => 31, "alignment" => 1 } }
   let(:mult_box) { { "ox" => -52, "oy" => -31, "cx" => 19, "cy" => 16, "alignment" => 1 } }
 
-  def target_mult(style)
-    upward_property_positions({ role: "+lod4Geometry", anchor: [460, 720], box: text_box },
-                              end_kind: :target, style: style,
-                              heading: [0, -325], mult_box: mult_box).fetch("0..1")
-  end
-
   it "seats a moved LV tree target at its unflipped corner" do
-    expect(target_mult({ tree: "LV" })).to eq([416.0, 682.0])
+    expect(tree_target_mult({ tree: "LV" }, text_box, mult_box)).to eq([416.0, 682.0])
   end
 
   it "keeps the flipped moved-label seat for other routes" do
-    expect(target_mult({})).not_to eq([416.0, 682.0])
+    expect(tree_target_mult({}, text_box, mult_box)).not_to eq([416.0, 682.0])
   end
 end

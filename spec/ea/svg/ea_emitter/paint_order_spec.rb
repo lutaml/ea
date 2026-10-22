@@ -5,27 +5,7 @@ require "spec_helper"
 # EA paints placements by descending Sequence and connectors by their
 # stored paint key, each line directly followed by its own heads.
 RSpec.describe "EA paint order" do # rubocop:disable Metrics/BlockLength
-  def waypoints(*points)
-    points.map { |x, y| Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y)) }
-  end
-
-  def placement(ref, z_order, x)
-    Ea::Model::DiagramElement.new(
-      model_element_ref: ref, z_order: z_order,
-      bounds: Ea::Model::Bounds.new(x: x, y: 0, width: 50, height: 40)
-    )
-  end
-
-  def generalization(ref, paint_order, y)
-    Ea::Model::DiagramConnector.new(
-      relationship_ref: ref, connector_type: "Generalization", paint_order: paint_order,
-      waypoints: waypoints([100, y], [300, y])
-    )
-  end
-
-  def svg_for(diagram, index)
-    Nokogiri::XML(Ea::Svg::EaEmitter::Document.new(diagram, model_index: index, content_anchor: false).render)
-  end
+  include PaintOrderHelpers
 
   let(:index) do
     { "a" => Ea::Model::Klass.new(id: "a", name: "Alpha"), "b" => Ea::Model::Klass.new(id: "b", name: "Beta"),

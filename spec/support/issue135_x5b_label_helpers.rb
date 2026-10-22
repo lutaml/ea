@@ -27,4 +27,16 @@ module Issue135X5bLabelHelpers
     upward_property_positions({ role: "boundedBy", anchor: [912, 1377], box: zero },
                               style: style, heading: [1, 0], mult_box: zero)
   end
+
+  def sloped_target_mult(stereotype, text_box, mult_box)
+    upward_property_positions({ role: nil, anchor: [350, 367], box: text_box },
+                              end_kind: :target, stereotype: stereotype, style: {},
+                              heading: [110, -24], mult_box: mult_box).fetch("0..1")
+  end
+
+  def tree_target_mult(style, text_box, mult_box)
+    upward_property_positions({ role: "+lod4Geometry", anchor: [460, 720], box: text_box },
+                              end_kind: :target, style: style,
+                              heading: [0, -325], mult_box: mult_box).fetch("0..1")
+  end
 end

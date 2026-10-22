@@ -4,17 +4,7 @@ require "spec_helper"
 
 # Native legend titles are Cambria bold 12pt (logical height 17).
 RSpec.describe "Ea::Fonts::Metrics Cambria CJK-only runs outside 7pt" do
-  def width(text, size, weight, legend_title: false)
-    Ea::Svg::EaEmitter::TextRenderer.estimate_width(text, size, family: "Cambria", weight: weight,
-                                                                legend_title: legend_title).round
-  end
-
-  # Windows GDI advances (MS UI Gothic) the Cambria CJK fallback is read from.
-  def table_width(key, text)
-    table = JSON.parse(File.read(File.expand_path("../../../lib/ea/fonts/cjk_fallback_widths.json", __dir__)))
-                .fetch("widths").fetch(key)
-    text.each_char.sum { |char| table.fetch(char) }
-  end
+  include CambriaCjkTitleHelpers
 
   it "measures the native legend title 凡例 (Cambria bold 12pt) as 34" do
     expect(width("凡例", 12, "700", legend_title: true)).to eq(34)
@@ -32,15 +22,15 @@ RSpec.describe "Ea::Fonts::Metrics Cambria CJK-only runs outside 7pt" do
     expect(Ea::Fonts::Metrics.text_length("Aあ", 12, family: "Cambria", weight: "700")).to be_nil
   end
 
-  it "draws a bold CJK run at 12pt with the regular logical-17 advances, not the bold ones" do
+  it "draws a bold CJK legend title at 12pt with the regular logical-17 advances, not the bold ones" do
     %w[都市計画データ 土石流].each do |text|
-      expect(width(text, 12, "700")).to eq(table_width("17:400:normal", text))
-      expect(width(text, 12, "700")).not_to eq(table_width("17:700:normal", text))
+      expect(width(text, 12, "700", legend_title: true)).to eq(table_width("17:400:normal", text))
+      expect(width(text, 12, "700", legend_title: true)).not_to eq(table_width("17:700:normal", text))
     end
   end
 
-  it "measures a longer bold 12pt title exactly (都市計画データ = 108)" do
-    expect(width("都市計画データ", 12, "700")).to eq(108)
+  it "measures a longer bold 12pt legend title exactly (都市計画データ = 108)" do
+    expect(width("都市計画データ", 12, "700", legend_title: true)).to eq(108)
   end
 
   it "keeps the bold table for bold CJK below logical height 17 (9pt 凡例 = 28)" do
