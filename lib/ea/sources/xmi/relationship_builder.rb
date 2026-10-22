@@ -51,12 +51,21 @@ module Ea
           end
         end
 
+        # Extension connector type => handler; a nil-returning handler skips
+        # the connector (Dependency counts only when stereotyped import).
+        EXTENSION_IMPORTS = {
+          "Package" => :package_import_relationship,
+          "Nesting" => :package_import_relationship,
+          "Dependency" => :stereotyped_dependency_import
+        }.freeze
+
         def extension_import_relationship(id, connector)
-          case connector.properties&.ea_type
-          when "Package", "Nesting" then package_import_relationship(id, connector)
-          when "Dependency"
-            dependency_import_relationship(id, connector) if connector_stereotype(connector) == "import"
-          end
+          handler = EXTENSION_IMPORTS[connector.properties&.ea_type]
+          handler && method(handler).call(id, connector)
+        end
+
+        def stereotyped_dependency_import(id, connector)
+          dependency_import_relationship(id, connector) if connector_stereotype(connector) == "import"
         end
 
         # EA exports elementImport outside packagedElement, so the model walk

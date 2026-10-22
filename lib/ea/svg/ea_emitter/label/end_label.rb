@@ -686,24 +686,18 @@ module Ea
           # Stored ALN=2 role boxes sit outside their corner; see
           # PlainTargetSeat.aligned_position.
           def aligned_target_role(connector, heading, text_pos, box, role)
-            return nil unless aligned_target_regime?(connector, box, role)
-            return nil unless cambria_box?(box.merge("alignment" => 0))
-
-            PlainTargetSeat.aligned_position(
-              heading: heading, text_pos: text_pos, box: box,
-              width: Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
+            PlainTargetSeat.aligned_role(
+              connector: connector, heading: heading, text_pos: text_pos,
+              box: box, role: role, font_eligible: aligned_seat_font?,
+              width: Ea::Fonts::Metrics.text_length(role.to_s, font_size, family: font_family),
+              target_stereotype: connector_source_dest_stereotype(connector, :target)
             )
           end
 
-          # Plain Association, mode 3 / width 0 stored ray, 7pt regular
-          # Cambria, a single-line (CY 13/14) ALN=2 box, no target stereotype.
-          def aligned_target_regime?(connector, box, role)
-            style = connector.style.to_h
-            connector.connector_type == "Association" &&
-              connector_source_dest_stereotype(connector, :target).to_s.empty? &&
-              style.values_at(:mode, :lwidth, :tree) == %w[3 0] + [nil] && style[:stored_association_ray] &&
-              box && box["alignment"] == 2 && [13, 14].include?(box["cy"]) &&
-              seat_font? && font_weight == 400 && font_style == "normal" && !role_empty?(role)
+          # 7pt regular Cambria, the only face the ALN=2 samples were taken in.
+          def aligned_seat_font?
+            seat_font? && font_family.to_s.casecmp("Cambria").zero? &&
+              font_weight == 400 && font_style == "normal"
           end
 
           def target_vertical_role(connector, heading, anchor, box, role)

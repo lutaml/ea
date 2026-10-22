@@ -39,6 +39,31 @@ module Ea
           # corner (7 samples in basic: 6E95B74E, 4F421236, 2AAB709F,
           # 4DBDAB9E, D2FA55D3 x2, width 30); a rightward arrival (OX > 0)
           # starts 4px past it (basic D351FC34, F32E5AFE roleOne, width 41).
+          # Eligibility and placement of a stored ALN=2 target role: a plain
+          # Association, mode 3 / width 0 stored ray, a single-line (CY 13/14)
+          # unstyled ALN=2 box, no target stereotype, in the eligible font.
+          def self.aligned_role(connector:, heading:, text_pos:, box:, role:, width:,
+                                font_eligible:, target_stereotype:)
+            return nil unless font_eligible && !role.to_s.empty? && target_stereotype.to_s.empty?
+            return nil unless aligned_connector?(connector) && aligned_box?(box)
+
+            aligned_position(heading: heading, text_pos: text_pos, box: box, width: width)
+          end
+
+          def self.aligned_connector?(connector)
+            style = connector.style.to_h
+            connector.connector_type == "Association" &&
+              style.values_at(:mode, :lwidth, :tree) == ["3", "0", nil] && style[:stored_association_ray]
+          end
+
+          def self.aligned_box?(box)
+            return false unless box && box["alignment"] == 2 && [13, 14].include?(box["cy"])
+            return false unless box["ox"] && box["oy"] && [nil, -1].include?(box["color"])
+
+            box["rotation"].to_i.zero? && box["direction"].to_i.zero? &&
+              box.values_at("hidden", "bold", "italic", "underline").none?
+          end
+
           def self.aligned_position(heading:, text_pos:, box:, width:)
             return nil unless width && text_pos && heading && heading[1].zero?
 
