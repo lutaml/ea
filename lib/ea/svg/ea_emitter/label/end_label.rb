@@ -145,6 +145,7 @@ module Ea
               mult_pos = target_multiplicity_seat(connector, heading, anchor, mult_box) ||
                          target_diagonal_property_multiplicity(connector, heading, anchor, text_box, mult_box) ||
                          face_multiplicity || target_horizontal_multiplicity(heading, anchor, mult_box, mult) ||
+                         target_sloped_rightward_multiplicity(connector, heading, anchor, mult_box, role, mult) ||
                          mult_pos
             end
 
@@ -932,6 +933,18 @@ module Ea
             mult_seat(:right, anchor, box)
           end
 
+          # EMPIRICAL FIT (5038EEE3, the only connector in the Plateau v5.1
+          # corpus with a Property source and a role-less target whose leg
+          # arrives sloped from the right):
+          # the multiplicity takes the rightward corner seat, as on a
+          # horizontal rightward leg. Reproduces the native SVG exactly.
+          def target_sloped_rightward_multiplicity(connector, heading, anchor, box, role, mult)
+            return nil unless seat_font? && role_empty?(role) && !mult_empty?(mult)
+            return nil unless heading && heading[0] > heading[1].abs && property_label?(connector, :source)
+
+            mult_seat(:right, anchor, box)
+          end
+
           def target_left_face_multiplicity?(connector, heading, box, mult, target_face)
             seat_font? && !mult_empty?(mult) && property_label?(connector, :target) && cambria_box?(box) &&
               stored_offsets_zero?(box) && target_left_face_heading?(heading, target_face)
@@ -951,9 +964,12 @@ module Ea
           end
 
           def target_multiplicity_box?(connector, box)
-            # Property targets seat at the stored corner; plain moved labels
-            # retain their explicit offsets.
-            cambria_box?(box) && (stored_offsets_zero?(box) || property_label?(connector, :target))
+            # Property targets and vertical tree targets (5038EEE3) seat at
+            # the stored corner; plain moved labels retain their explicit
+            # offsets.
+            cambria_box?(box) &&
+              (stored_offsets_zero?(box) || property_label?(connector, :target) ||
+               connector.style.to_h[:tree] == "LV")
           end
 
           def cambria_box?(box)
