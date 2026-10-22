@@ -192,6 +192,12 @@ module Ea
 
           private
 
+          # The width the renderer prints (real metrics, else its glyph estimate),
+          # so seats do not vanish for glyphs the metrics table lacks.
+          def seat_width(text)
+            TextRenderer.estimate_width(text, font_size, family: font_family)
+          end
+
           # Measured only for default Cambria 7pt Property roles on a vertical
           # leg rising from the end; other fonts, boxes and legs keep their
           # unclamped seats.
@@ -296,7 +302,7 @@ module Ea
 
             PlainSourceSeat.position(
               connector: connector, anchor: anchor, box: box,
-              width: Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
+              width: seat_width(role)
             )
           end
 
@@ -689,7 +695,7 @@ module Ea
             PlainTargetSeat.aligned_role(
               connector: connector, heading: heading, text_pos: text_pos,
               box: box, role: role, font_eligible: aligned_seat_font?,
-              width: Ea::Fonts::Metrics.text_length(role.to_s, font_size, family: font_family),
+              width: seat_width(role.to_s),
               target_stereotype: connector_source_dest_stereotype(connector, :target)
             )
           end

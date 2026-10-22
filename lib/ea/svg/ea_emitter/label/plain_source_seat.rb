@@ -12,6 +12,10 @@ module Ea
           # corner (basic D351FC34, F32E5AFE roleTwo, Association), ALN=2
           # 2px before it (basic 6D0349D5 role b, Aggregation); both sit
           # 7px above the corner like the Aggregation case below.
+          # Only cy=13 boxes are measured: every negative-OX LLT box with ALN 0 or
+          # 2 in basic, test, simple, ArcGIS and PLATEAU has cy=13 (cy=14 occurs
+          # only with ALN=1), so the ALN=2 target seat's 13-or-14 tolerance is
+          # not extended to the source.
           STORED_INSETS = { 0 => 3, 2 => 2 }.freeze
 
           def self.position(connector:, anchor:, box:, width:)

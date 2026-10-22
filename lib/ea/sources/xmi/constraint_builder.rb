@@ -29,6 +29,9 @@ module Ea
           @path = []
           @owner = nil
           @grouped = {}
+          @seen_owners = {}
+          @blocks_seen = {}
+          @skip_block = false
           File.open(xmi_path) { |io| Nokogiri::XML::Reader(io).each { |node| visit(node) } }
           @grouped
         end
@@ -45,10 +48,22 @@ module Ea
 
         def enter(node)
           if node.local_name == "element" && @path.last == "elements" && !node.self_closing?
-            @owner = node.attribute("xmi:idref")
-          elsif node.local_name == "constraint" && @owner && @path.last(2) == %w[element constraints]
+            @owner = first_block_owner(node.attribute("xmi:idref"))
+          elsif node.local_name == "constraints" && @owner && @path.last == "element"
+            @skip_block = @blocks_seen.key?(@owner)
+            @blocks_seen[@owner] = true
+          elsif node.local_name == "constraint" && @owner && !@skip_block && @path.last(2) == %w[element constraints]
             (@grouped[@owner] ||= []) << constraint(node)
           end
+        end
+
+        # A repeated `<element xmi:idref="X">` or `<constraints>` block would
+        # append X's constraints again, so only the first of each is read.
+        def first_block_owner(idref)
+          return nil if @seen_owners.key?(idref)
+
+          @seen_owners[idref] = true
+          idref
         end
 
         def constraint(node)

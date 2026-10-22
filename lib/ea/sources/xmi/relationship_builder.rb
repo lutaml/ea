@@ -256,12 +256,7 @@ module Ea
         end
 
         def connector_index
-          @connector_index ||= begin
-            connectors = root.extension&.connectors&.connector || []
-            connectors.each_with_object({}) do |connector, index|
-              index[connector.idref] = connector if connector.idref
-            end
-          end
+          @connector_index ||= ConnectorIndex.build(root)
         end
 
         def navigable?(id, endpoint)

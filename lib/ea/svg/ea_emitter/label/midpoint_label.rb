@@ -52,7 +52,10 @@ module Ea
           # Returns the name-direction triangle `<polygon>` for a connector
           # whose stored LMT box carries DIR=1, or nil. EA seats it beside
           # the name, pointing along the source-to-target direction at the
-          # midpoint (reversed for "Destination -> Source"). Right/down
+          # midpoint. Measured only on Direction="Unspecified" links (all 10
+          # basic.qea DIR=1 links; no DIR=1 link with another Direction exists
+          # in basic, test, simple, ArcGIS or PLATEAU), so other directions
+          # draw no triangle until a native sample shows their form. Right/down
           # geometry is measured on basic.qea's native SVGs (2AAB709F,
           # 4DBDAB9E, 4F421236, D2FA55D3 and 6E95B74E: tip 16px past the
           # name, 10px long, 6px wide; below the name for a vertical leg).
@@ -62,12 +65,13 @@ module Ea
 
             box = stored_name_box(connector, points)
             return nil unless box && box["direction"] == 1
+            return nil unless connector.direction == "Unspecified"
 
             x, y = stored_name_position(connector, points)
             width = Ea::Fonts::Metrics.text_length(midpoint_content(connector), font_size, family: font_family)
             return nil unless x && width
 
-            tri = direction_triangle(x, y, width, travel(points, connector))
+            tri = direction_triangle(x, y, width, travel(points))
             coords = tri.flat_map { |px, py| [translate_x(px), translate_y(py)] }
             %(<polygon points="#{coords.map { |v| Canvas.coord(v) }.join(" ")}" ) +
               %(shape-rendering="auto"   style="fill-rule:evenodd;"/>)
@@ -219,7 +223,7 @@ module Ea
           end
 
           # Unit travel direction [dx, dy] at the midpoint: dominant axis only.
-          def travel(points, connector)
+          def travel(points)
             mid_idx = points.size / 2
             from, to = if points.size.odd?
                          [points[mid_idx - 1], points[mid_idx + 1]]
@@ -228,10 +232,9 @@ module Ea
                        end
             dx = to[0] - from[0]
             dy = to[1] - from[1]
-            sign = connector.direction == "Destination -> Source" ? -1 : 1
-            return [sign * (dx.negative? ? -1 : 1), 0] if dx.abs >= dy.abs
+            return [dx.negative? ? -1 : 1, 0] if dx.abs >= dy.abs
 
-            [0, sign * (dy.negative? ? -1 : 1)]
+            [0, dy.negative? ? -1 : 1]
           end
 
           def direction_triangle(x, y, width, travel)

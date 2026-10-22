@@ -31,6 +31,7 @@ module Ea
       autoload :StereotypeBuilder, "ea/sources/xmi/stereotype_builder"
       autoload :DiagramBuilder, "ea/sources/xmi/diagram_builder"
       autoload :StoredRoute, "ea/sources/xmi/stored_route"
+      autoload :ConnectorIndex, "ea/sources/xmi/connector_index"
       autoload :ExtensionTypes, "ea/sources/xmi/extension_types"
       autoload :ExtensionElements, "ea/sources/xmi/extension_elements"
       autoload :ExtensionGeometryParser, "ea/sources/xmi/extension_geometry_parser"
