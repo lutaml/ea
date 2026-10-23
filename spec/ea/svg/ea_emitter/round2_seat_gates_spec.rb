@@ -30,7 +30,7 @@ RSpec.describe "EA emitter seat widths and direction gate" do
     # with the width the renderer prints, so the role stays on y=35.
     ["role b", "role J", "role 7", "role b,", "role ?"].each do |role|
       it "seats #{role.inspect} 7px above the corner" do
-        Dir.mktmpdir do |dir|
+        Dir.mktmpdir("ea-round2").then do |dir|
           path = edited_copy(dir, "update t_connector set SourceRole='#{role}' where Connector_ID=67")
           text = render(path, "6D0349D5").css("text").find { |node| node.text == "+#{role}" }
 
@@ -51,7 +51,7 @@ RSpec.describe "EA emitter seat widths and direction gate" do
 
     ["Job 7", "role J"].each do |name|
       it "still draws the triangle beside the unmeasured name #{name.inspect}" do
-        Dir.mktmpdir do |dir|
+        Dir.mktmpdir("ea-round2").then do |dir|
           path = edited_copy(dir, "update t_connector set Name='#{name}' where Connector_ID = 30")
           xml = render(path, "2AAB709F")
           text = xml.css("text").find { |node| node.text == name }
@@ -67,7 +67,7 @@ RSpec.describe "EA emitter seat widths and direction gate" do
 
     ["Bi-Directional", "Destination -> Source", "Source -> Destination"].each do |direction|
       it "draws no triangle for #{direction}" do
-        Dir.mktmpdir do |dir|
+        Dir.mktmpdir("ea-round2").then do |dir|
           path = edited_copy(dir, "update t_connector set Direction='#{direction}' where Connector_ID in (29, 30)")
 
           expect(triangles(path)).to be_empty
