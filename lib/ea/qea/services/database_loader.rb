@@ -102,7 +102,6 @@ module Ea
         # @raise [Errno::ENOENT] if QEA file not found
         # @raise [SQLite3::Exception] if database access fails
         def load
-          # Connect but don't use with_connection - we need to keep it open
           @connection.connect unless @connection.connected?
           db = @connection.connection
 
@@ -117,6 +116,10 @@ module Ea
           end
 
           database.freeze
+        ensure
+          # All tables are in memory; nothing reads the connection after
+          # load, and an open handle locks the file on Windows.
+          @connection.close
         end
 
         # Load a single table
