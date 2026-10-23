@@ -16,7 +16,7 @@ RSpec.describe Ea::Svg::EaEmitter::Document, "E7FFECEB native route" do
   before(:context) { @scene = xmi_route_scene("73025C5A-08FC-47ff-AB2F-C7F79CF54B41") }
 
   it "keeps the native x=620, y=640..700 route" do
-    path = xmi_document_connector_path(@scene, "E7FFECEB-996C-45b0-8E47-A56B4834C7DF")
+    path = xmi_document_connector_path(@scene, "E7FFECEB-996C-45b0-8E47-A56B4834C7DF", [[625, 165], [625, 225]])
     actual = xmi_route_geometry(path)
     native = xmi_native_route(@scene, [[625, 165], [625, 225]])
 
@@ -36,7 +36,7 @@ RSpec.describe Ea::Svg::EaEmitter::Document, "D147 native crossings" do
     [808, "691EB32D-B315-430F-BA1E-7A91E05BC70F", [[1086, 522], [1086, 455]], [1086, 497]]
   ].each do |id, guid, endpoints, crossing|
     it "keeps connector #{id} on its native vertical route and crossing" do
-      actual = xmi_route_geometry(xmi_document_connector_path(@scene, guid))
+      actual = xmi_route_geometry(xmi_document_connector_path(@scene, guid, endpoints))
       native = xmi_native_route(@scene, endpoints)
 
       expect(native[:arcs]).to eq([crossing])
@@ -48,7 +48,7 @@ RSpec.describe Ea::Svg::EaEmitter::Document, "D147 native crossings" do
   end
 
   it "preserves connector 848 endpoints and both native crossings" do
-    path = xmi_document_connector_path(@scene, "AD628304-78EA-4E0B-B4AF-39769E39D20E")
+    path = xmi_document_connector_path(@scene, "AD628304-78EA-4E0B-B4AF-39769E39D20E", [[1285, 1153], [656, 497]])
     actual = xmi_route_geometry(path)
     native = xmi_native_route(@scene, [[1285, 1153], [656, 497]])
 

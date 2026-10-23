@@ -632,12 +632,19 @@ module Ea
         # Dependency client→supplier (client_id/supplier_id),
         # Association source_id/target_id.
         def end_refs(rel)
-          case rel
-          when Ea::Model::Generalization then [rel.specific_id, rel.general_id]
-          when Ea::Model::Realization then [rel.realizing_id, rel.contract_id]
-          when Ea::Model::Dependency then [rel.client_id, rel.supplier_id]
-          else [rel.source_id, rel.target_id]
-          end
+          refs = case rel
+                 when Ea::Model::Generalization then [rel.specific_id, rel.general_id]
+                 when Ea::Model::Realization then [rel.realizing_id, rel.contract_id]
+                 when Ea::Model::Dependency then [rel.client_id, rel.supplier_id]
+                 else [rel.source_id, rel.target_id]
+                 end
+          refs.map { |ref| diagram_ref(ref) }
+        end
+
+        # A package is `EAPK_<guid>` in the XMI model but is placed on a
+        # diagram as `EAID_<guid>`; key its ends by the diagram spelling.
+        def diagram_ref(ref)
+          ref.is_a?(String) && ref.start_with?("EAPK_") ? "EAID_#{ref[5..]}" : ref
         end
 
         # Center-to-center ray clipped at both box outlines.

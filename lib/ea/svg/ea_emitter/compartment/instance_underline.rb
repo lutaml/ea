@@ -41,7 +41,7 @@ module Ea
           end
 
           def object_diagram?(context)
-            context.diagram && context.diagram.diagram_type == "Object"
+            context.diagram&.object_diagram?
           end
           module_function :object_diagram?
 

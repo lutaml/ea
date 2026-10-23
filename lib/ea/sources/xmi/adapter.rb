@@ -37,6 +37,7 @@ module Ea
           )
           mark_connector_proxies(doc)
           apply_tagged_values(doc)
+          apply_constraints(doc)
           apply_receptions(doc)
           apply_stereotypes(doc)
           resolve_type_names(doc)
@@ -93,6 +94,17 @@ module Ea
           end
         end
 
+        # Attach the extension's element constraints to their classifiers,
+        # as the QEA adapter does from t_objectconstraint.
+        def apply_constraints(doc)
+          grouped = ConstraintBuilder.new(xmi_path).grouped_by_element
+          return if grouped.empty?
+
+          doc.classifiers.each do |c|
+            c.constraints = grouped[c.id] if c.id && grouped[c.id]
+          end
+        end
+
         # Attach tagged values parsed from the <xmi:Extension><tags>
         # block to their owning classifiers and packages.
         def apply_tagged_values(doc)
@@ -130,11 +142,19 @@ module Ea
             (classifier.properties || []).each do |prop|
               prop.type_name = types.attribute_type(prop.id) ||
                                qualified_by_id[prop.type_ref] || prop.type_name
+              apply_attribute_stereotype(prop, types)
             end
             (classifier.operations || []).each do |op|
               resolve_operation_types(op, qualified_by_id, types)
             end
           end
+        end
+
+        def apply_attribute_stereotype(prop, types)
+          stereotype = types.attribute_stereotype(prop.id)
+          return if stereotype.nil? || prop.stereotype_refs.to_a.any?
+
+          prop.stereotype_refs = [stereotype]
         end
 
         def resolve_operation_types(operation, qualified_by_id, types)

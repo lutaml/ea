@@ -289,6 +289,7 @@ module Ea
               height: grown_bottom + compartment_bottom_padding(size, family, size_unit) - bounds.y
             )
           end
+          bounds = grow_for_tagged_values(bounds, geometry, element, classifier)
           RenderContext.new(
             element: element,
             bounds: bounds,
@@ -322,6 +323,21 @@ module Ea
                    2 * (size - 7)
           offset -= 1 if Ea::Fonts::Metrics.compact_compartment_font?(size, family: family, unit: size_unit)
           offset
+        end
+
+        # A shown tags compartment that overflows the stored box grows
+        # it to the last tag row plus one row (204F4ACC AcmeUmlClass:
+        # QEA stores h70; EA draws h85, the XMI geometry already says 85).
+        # Fitted on that diagram only; boxes whose stored height already
+        # holds the tags are untouched.
+        def grow_for_tagged_values(bounds, geometry, element, classifier)
+          return bounds unless element.show_tagged_values && tagged_values_for(classifier).any?
+
+          tags_bottom = geometry.tagged_values_bottom_y
+          return bounds unless tags_bottom && tags_bottom > bounds.y + bounds.height
+
+          Ea::Model::Bounds.new(x: bounds.x, y: bounds.y, width: bounds.width,
+                                height: tags_bottom - bounds.y)
         end
 
         def compartment_bottom_padding(size, family, size_unit)
@@ -399,12 +415,18 @@ module Ea
         # that were +1: 0114FD24 uro::AbstractConstruction etc.; 20 of
         # 21 now exact, no other compared item moved). The tight ghost
         # variant has no corpus case and keeps the default offsets.
+        #
+        # An Enumeration with literals takes it too (EMPIRICAL FIT, test
+        # B58D1A53 Enumeration: divider 346 = name 339 + 7; the only Cambria 7pt
+        # enumeration with literals in the small corpora).
         def compact_header_offsets?(classifier, header_lines, size, **options)
-          classifier.is_a?(Ea::Model::Klass) &&
+          literals = options[:enum_literals_count]
+          kind_fits = (classifier.is_a?(Ea::Model::Klass) && literals.zero?) ||
+                      (classifier.is_a?(Ea::Model::Enumeration) && literals.positive?)
+          kind_fits &&
             Ea::Fonts::Metrics.compact_compartment_font?(size, family: options[:family], unit: options[:size_unit]) &&
             header_lines.dig(0, 1) != :italic_tight &&
-            options.values_at(:logical_height, :marker_count, :enum_literals_count,
-                              :divider_offset, :attr_first_offset) == [nil, 0, 0, 8, 7] &&
+            options.values_at(:logical_height, :marker_count, :divider_offset, :attr_first_offset) == [nil, 0, 8, 7] &&
             theme.compartments.header_line_offset == 6 && theme.compartments.attr_line_offset == 6
         end
 

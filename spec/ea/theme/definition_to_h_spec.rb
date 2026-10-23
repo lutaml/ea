@@ -116,8 +116,10 @@ RSpec.describe Ea::Theme::Definition do
 
       expect([theme.label_font_size, theme.label_font_size_unit]).to eq([11, "px"])
       expect(theme.to_h.values_at(:label_font_size, :label_font_size_unit)).to eq([nil, nil])
-      expect(Ea::Theme::Registry.default.label_font_size).to be_nil
-      expect(Ea::Theme::Registry.default.label_font_size_unit).to eq("px")
+      # The default theme stores Cambria 7pt connector labels: no published
+      # EA SVG uses the former Yu Gothic UI fallback (test B58D1A53 native).
+      expect(Ea::Theme::Registry.default.label_font_size).to eq(7)
+      expect(Ea::Theme::Registry.default.label_font_size_unit).to eq("pt")
     end
 
     it "clears only the corresponding inherited override on a global change" do

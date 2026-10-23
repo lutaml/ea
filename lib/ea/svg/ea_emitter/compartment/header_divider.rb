@@ -45,7 +45,7 @@ module Ea
           end
 
           def object_diagram?(context)
-            context.diagram && context.diagram.diagram_type == "Object"
+            context.diagram&.object_diagram?
           end
 
           def hand_draw?(context)

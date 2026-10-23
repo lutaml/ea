@@ -36,11 +36,29 @@ module Ea
           @divider_y_by_ref = divider_y_by_ref
         end
 
-        def render
-          texts = visible_connectors.flat_map { |c| texts_for(c) }
-          return "" if texts.empty?
+        TEXT_GROUP = "stroke-width:1;stroke-linecap:round;stroke-linejoin:%<join>s; " \
+                     "fill:#000000;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00"
+        MARKER_GROUP = "stroke-width:1;stroke-linecap:round;stroke-linejoin:round; " \
+                       "fill:#000000;fill-opacity:1.00; stroke:#000000; stroke-opacity:1.00"
 
-          %(<g style="stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#000000;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00">\n#{texts.join("\n")}\n</g>)
+        # A name-direction triangle is a filled shape painted between the
+        # text runs; EA closes the text group around it and keeps the
+        # round-join pen for the text that follows.
+        DirectionMarker = Struct.new(:svg)
+
+        def render
+          items = visible_connectors.flat_map { |c| texts_for(c) }
+          return "" if items.empty?
+
+          join = "bevel"
+          items.slice_when { |a, b| a.is_a?(DirectionMarker) || b.is_a?(DirectionMarker) }.map do |run|
+            if run.first.is_a?(DirectionMarker)
+              join = "round"
+              %(<g style="#{MARKER_GROUP}">\n  #{run.first.svg}\n</g>)
+            else
+              %(<g style="#{format(TEXT_GROUP, join: join)}">\n#{run.join("\n")}\n</g>)
+            end
+          end.join("\n")
         end
 
         # Right edge of the stored end-label boxes (model coordinates)
@@ -51,8 +69,12 @@ module Ea
 
         private
 
+        # Labels follow the connector paint order (as the XMI diagram order
+        # already does), so QEA and XMI emit the same text sequence. Against
+        # native on PLATEAU this is a wash (79/188 exact sequences either way);
+        # it is verified on basic.qea's native SVGs.
         def visible_connectors
-          (diagram.connectors || []).select(&:renderable?)
+          PaintOrder.connectors(diagram).select(&:renderable?)
         end
 
         def texts_for(connector)
@@ -63,22 +85,18 @@ module Ea
           points = label_points(connector)
           return [] if points.size < 2
 
-          texts = []
-
           # Midpoint label: stereotype «import», or relationship
           # Name ("Association A"). Renders at the path midpoint.
           mid_text = midpoint_renderer.text_for(connector, points)
-          texts << mid_text if mid_text
+          return [mid_text, direction_marker(connector, points)].compact unless registry.end_label?(connector)
 
           # End-labels: role name + «property» + multiplicity at
           # positioned LLT/LRT boxes. Only for associations without
           # a midpoint stereotype (stereotyped associations route
-          # to midpoint only).
-          if registry.end_label?(connector)
-            end_label_texts(connector, points).each { |t| texts << t }
-          end
-
-          texts
+          # to midpoint only). EA paints the source end, then the
+          # midpoint label, then the target end (basic.xmi native SVGs).
+          source_texts, target_texts = end_label_texts(connector, points)
+          [*source_texts, mid_text, direction_marker(connector, points), *target_texts].compact
         end
 
         def end_label_texts(connector, points)
@@ -94,24 +112,23 @@ module Ea
           src_tb, src_mb = stored_src || unstored_label_boxes(points, :source, stored_labels, connector)
           tgt_tb, tgt_mb = stored_tgt || unstored_label_boxes(points, :target, stored_labels, connector)
 
-          texts = []
-          end_renderer.texts(text_box: src_tb, mult_box: src_mb,
-                             anchor: source_pt, connector: connector,
-                             end_kind: :source, tree: tree && tree[:source],
-                             heading: (stored_src || stored_labels) && source_heading(connector, points),
-                             stored_labels: stored_labels,
-                             umldi_bounds: available_umldi_bounds(umldi_bounds, boxes, :source),
-                             source_bounds: source_dock_bounds(connector)).each { |t| texts << t }
-          end_renderer.texts(text_box: tgt_tb,
-                             mult_box: tgt_mb,
-                             anchor: target_pt, connector: connector,
-                             end_kind: :target, tree: tree && tree[:target],
-                             bend: Label::TargetBendSeat.reference(points),
-                             heading: (stored_tgt || stored_labels) && target_heading(connector, points),
-                             target_face: target_dock_heading(connector, target_pt, target_heading(connector, points)),
-                             stored_labels: stored_labels,
-                             umldi_bounds: available_umldi_bounds(umldi_bounds, boxes, :target)).each { |t| texts << t }
-          texts
+          source_texts = end_renderer.texts(text_box: src_tb, mult_box: src_mb,
+                                            anchor: source_pt, connector: connector,
+                                            end_kind: :source, tree: tree && tree[:source],
+                                            heading: (stored_src || stored_labels) && source_heading(connector, points),
+                                            stored_labels: stored_labels,
+                                            umldi_bounds: available_umldi_bounds(umldi_bounds, boxes, :source),
+                                            source_bounds: source_dock_bounds(connector))
+          target_texts = end_renderer.texts(text_box: tgt_tb,
+                                            mult_box: tgt_mb,
+                                            anchor: target_pt, connector: connector,
+                                            end_kind: :target, tree: tree && tree[:target],
+                                            bend: Label::TargetBendSeat.reference(points),
+                                            heading: (stored_tgt || stored_labels) && target_heading(connector, points),
+                                            target_face: target_dock_heading(connector, target_pt, target_heading(connector, points)),
+                                            stored_labels: stored_labels,
+                                            umldi_bounds: available_umldi_bounds(umldi_bounds, boxes, :target))
+          [source_texts, target_texts]
         end
 
         # Role bounds the XMI builder keeps belong to this connector's own
@@ -346,6 +363,11 @@ module Ea
             font_weight: label_font_weight,
             font_style: label_font_style
           )
+        end
+
+        def direction_marker(connector, points)
+          svg = midpoint_renderer.direction_marker(connector, points)
+          DirectionMarker.new(svg) if svg
         end
 
         def midpoint_renderer

@@ -34,10 +34,12 @@ module Ea
             )
           end
 
+          # No element font size of its own: QEA marks it inherited, XMI
+          # records the missing size without the flag.
           def default_signal_header?(context)
             context.classifier.is_a?(Ea::Model::Signal) &&
               context.classifier.stereotype_refs.empty? &&
-              context.element.font_size_inherited == true &&
+              context.element.font_size.nil? &&
               context.element.font_family.nil? &&
               !context.element.font_bold && !context.element.font_italic
           end

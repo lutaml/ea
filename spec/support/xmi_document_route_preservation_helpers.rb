@@ -13,30 +13,30 @@ module XmiDocumentRoutePreservationHelpers
     { diagram: diagram, svg: svg, native: native, shift: shifts.first }
   end
 
-  def xmi_solid_connectors(diagram)
-    connectors = diagram.connectors.select(&:renderable?)
-    expect(connectors.map(&:connector_type).uniq - %w[Association Generalization Aggregation]).to be_empty
-    widths = connectors.map { |connector| Ea::Svg::EaEmitter::Connectors.stroke_width_for(connector, 2) }
-    expect(widths.uniq).to eq([2])
-    connectors
+  # The emitter merges adjacent same-style layers and interleaves connector
+  # lines with their markers, so a connector's line is not addressable by a
+  # line-style group or index. Identify it by the native endpoints (translated
+  # into this render's frame) and require exactly one such path; markers and
+  # other connectors never share a line's two endpoints.
+  def xmi_document_connector_path(scene, guid, native_endpoints)
+    xmi_expect_source_connector(scene[:diagram], guid)
+    wanted = xmi_scene_endpoints(scene, native_endpoints)
+    matches = xmi_drawn_paths(scene).select { |path| xmi_native_endpoints(path) == wanted }
+    expect(matches.size).to eq(1), "expected one drawn path between #{wanted.inspect}, got #{matches.size}"
+    matches.first
   end
 
-  # Connector lines precede their markers within each merged line-style group.
-  # Restrict this selector to solid, default-width corpus associations.
-  def xmi_connector_line_paths(scene, count)
-    style = Ea::Svg::EaEmitter::Connectors.new(scene[:diagram]).line_style
-    groups = Nokogiri::XML(scene[:svg]).remove_namespaces!.xpath("//g[@style='#{style}'][count(path)>=#{count}]")
-    expect(groups.size).to eq(1), "expected one solid connector line-style group"
-    groups.first.xpath("./path").first(count)
-  end
-
-  def xmi_document_connector_path(scene, guid)
-    connectors = xmi_solid_connectors(scene[:diagram])
-    lines = xmi_connector_line_paths(scene, connectors.size)
-    expect(lines.size).to eq(connectors.size)
-    index = xmi_source_connector_index(connectors, guid)
+  def xmi_expect_source_connector(diagram, guid)
+    index = xmi_source_connector_index(diagram.connectors.select(&:renderable?), guid)
     expect(index).not_to be_nil, "missing source connector #{guid}"
-    lines.fetch(index)["d"]
+  end
+
+  def xmi_scene_endpoints(scene, native_endpoints)
+    native_endpoints.map { |point| point.zip(scene[:shift]).map { |value, shift| value - shift } }.sort
+  end
+
+  def xmi_drawn_paths(scene)
+    Nokogiri::XML(scene[:svg]).remove_namespaces!.xpath("//path").map { |path| path["d"] }
   end
 
   def xmi_source_connector_index(connectors, guid)

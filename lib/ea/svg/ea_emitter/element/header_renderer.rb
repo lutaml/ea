@@ -11,6 +11,7 @@ module Ea
         # the left edge from text-width approximation since SVG text
         # x= is the start position, not the center).
         class HeaderRenderer
+          OVERFLOW_INSET = 2
           HeaderLine = Struct.new(:text, :style, :x, :y, :text_length,
                                   :weight, :font_style, keyword_init: true)
 
@@ -83,7 +84,13 @@ module Ea
 
           # EA centers text by its INTEGER textLength and floors the
           # resulting x (verified exact against EA-published SVGs).
+          #
+          # EMPIRICAL FIT: a name wider than its box starts 2px inside the
+          # left edge instead of centring past it (simple 204F4ACC
+          # AcmeUmlEnumeration, 106 in a 90 box: x = box x + 2).
           def self.center_x_for(text_length, bounds)
+            return bounds.x + OVERFLOW_INSET if text_length > bounds.width
+
             (bounds.x + (bounds.width - text_length) / 2.0).floor
           end
           private_class_method :center_x_for

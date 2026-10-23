@@ -43,6 +43,12 @@ module Ea
         map "annotations", to: :annotations, render_empty: true
       end
 
+      # True for an object diagram. QEA stores "Object", the XMI adapter
+      # yields lowercase "object"; compare case-insensitively.
+      def object_diagram?
+        diagram_type.to_s.casecmp?("Object")
+      end
+
       # Parses style_ex into a Hash of flag => value. Returns empty
       # Hash when style_ex is nil/empty.
       #

@@ -116,7 +116,12 @@ module Ea
                                          lookup: lookup).to_s
               end
             else
-              ordered_properties(props, stored_order).flat_map do |prop|
+              # EMPIRICAL FIT (test B58D1A53, the only corpus class mixing
+              # stereotyped and plain attributes): EA draws the plain rows
+              # first, then the stereotyped ones in stored order.
+              plain, stereotyped = ordered_properties(props, stored_order)
+                                   .partition { |prop| property_stereotype(prop).nil? }
+              (plain + stereotyped).flat_map do |prop|
                 lines = []
                 stereotype = property_stereotype(prop)
                 lines << "«#{stereotype}»" if stereotype

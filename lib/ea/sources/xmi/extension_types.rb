@@ -26,12 +26,19 @@ module Ea
 
         def initialize(document)
           @attributes = index(document, "attribute", "properties")
+          @attribute_stereotypes = index(document, "attribute", "stereotype", "stereotype")
           @returns = index(document, "operation", "type")
           @parameters = index(document, "parameter", "properties")
         end
 
         def attribute_type(id)
           @attributes[id]
+        end
+
+        # Stereotype EA stores on the attribute row
+        # (<attribute><stereotype stereotype="voidable"/>).
+        def attribute_stereotype(id)
+          @attribute_stereotypes[id]
         end
 
         def return_type(operation_id)
@@ -44,11 +51,11 @@ module Ea
 
         private
 
-        def index(document, owner, child)
+        def index(document, owner, child, attribute = "type")
           return {} unless document
 
           document.xpath(%(//*[local-name()="#{owner}"][@*[local-name()="idref"]])).each_with_object({}) do |node, acc|
-            type = node.at_xpath(%(*[local-name()="#{child}"]/@type))&.value
+            type = node.at_xpath(%(*[local-name()="#{child}"]/@#{attribute}))&.value
             idref = node.at_xpath("@*[local-name()='idref']").value
             acc[idref] = type unless type.nil? || type.empty?
           end

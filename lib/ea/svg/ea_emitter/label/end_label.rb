@@ -134,7 +134,8 @@ module Ea
                          saved_ray_target_property_role(connector, heading, anchor, text_box, role) ||
                          target_diagonal_property_role(connector, heading, anchor, text_box, role) ||
                          target_vertical_role(connector, heading, anchor, text_box, role) ||
-                         target_rightward_role(heading, anchor, text_box, role) || text_pos
+                         target_rightward_role(heading, anchor, text_box, role) ||
+                         aligned_target_role(connector, heading, text_pos, text_box, role) || text_pos
               if horizontal_aligned_target_baseline?(connector, heading, text_box, role)
                 text_pos = [text_pos[0], seat_corner(anchor, text_box)[1] - 7]
               end
@@ -175,8 +176,11 @@ module Ea
             end
 
             role_bounds = umldi_bounds[end_kind == :source ? :source_role : :target_role]
+            # Unmoved lateral roles keep their measured seat: the saved UMLDI
+            # rectangle is stale for them (test B58D1A53 +role2 saved 24px low).
+            role_bounds = nil if PlainTargetSeat.unmoved_lateral_role?(connector, text_box)
             mult_bounds = umldi_bounds[end_kind == :source ? :source_multiplicity : :target_multiplicity]
-            text_pos = umldi_label_position(role_bounds) if role_bounds
+            text_pos = umldi_label_position(role_bounds, text_box) if role_bounds
             centering = role_bounds ? bounds_role_centering(connector, end_kind, role, stereo, text_box) : 0
             text_pos = [text_pos[0] + centering, text_pos[1]] if centering.positive?
             mult_pos = umldi_label_position(mult_bounds) if mult_bounds
@@ -195,6 +199,12 @@ module Ea
           end
 
           private
+
+          # The width the renderer prints (real metrics, else its glyph estimate),
+          # so seats do not vanish for glyphs the metrics table lacks.
+          def seat_width(text)
+            TextRenderer.estimate_width(text, font_size, family: font_family)
+          end
 
           # Measured only for default Cambria 7pt Property roles on a vertical
           # leg rising from the end; other fonts, boxes and legs keep their
@@ -294,12 +304,13 @@ module Ea
           end
 
           def plain_leftward_source_role(connector, direction, anchor, box, role)
-            return nil unless direction == :left && seat_font? && cambria_box?(box) && !role_empty?(role)
+            return nil unless direction == :left && seat_font? && !role_empty?(role)
+            return nil unless box && cambria_box?(box.merge("alignment" => 1))
             return nil unless connector_source_dest_stereotype(connector, :source).to_s.empty?
 
             PlainSourceSeat.position(
               connector: connector, anchor: anchor, box: box,
-              width: Ea::Fonts::Metrics.text_length(role, font_size, family: font_family)
+              width: seat_width(role)
             )
           end
 
@@ -725,6 +736,23 @@ module Ea
             [anchor[0] + 8, anchor[1] - 7]
           end
 
+          # Stored ALN=2 role boxes sit outside their corner; see
+          # PlainTargetSeat.aligned_position.
+          def aligned_target_role(connector, heading, text_pos, box, role)
+            PlainTargetSeat.aligned_role(
+              connector: connector, heading: heading, text_pos: text_pos,
+              box: box, role: role, font_eligible: aligned_seat_font?,
+              width: seat_width(role.to_s),
+              target_stereotype: connector_source_dest_stereotype(connector, :target)
+            )
+          end
+
+          # 7pt regular Cambria, the only face the ALN=2 samples were taken in.
+          def aligned_seat_font?
+            seat_font? && font_family.to_s.casecmp("Cambria").zero? &&
+              font_weight == 400 && font_style == "normal"
+          end
+
           def target_vertical_role(connector, heading, anchor, box, role)
             return nil unless heading && heading[0].zero? && !heading[1].zero?
 
@@ -1045,8 +1073,11 @@ module Ea
                        position[1] - font_pixel_size.ceil + height]
           end
 
-          def umldi_label_position(bounds)
-            [bounds[:x], bounds[:y] + font_pixel_size.ceil]
+          # EA draws an ALN=2 role 1px right of its saved UMLDI bounds
+          # (basic: 9 roles in 8 diagrams, all exactly +1).
+          def umldi_label_position(bounds, box = nil)
+            inset = box && box["alignment"] == 2 ? 1 : 0
+            [bounds[:x] + inset, bounds[:y] + font_pixel_size.ceil]
           end
 
           def umldi_stereotype_position(bounds, role, stereo, text_box)
@@ -1134,12 +1165,13 @@ module Ea
             property unless property && opposite_role_property?(association, end_kind, property)
           end
 
-          # A UML attribute belongs to the classifier opposite its role.
-          # Do not draw that same role again at its anonymous owner end.
+          # A UML attribute belongs to the classifier opposite its role: a
+          # property named after the opposite end's role, and not after this
+          # end's own, is that end's label. Do not draw it again here.
           def opposite_role_property?(association, end_kind, property)
             own = end_kind == :source ? association.source_role_name : association.target_role_name
             other = end_kind == :source ? association.target_role_name : association.source_role_name
-            role_empty?(own) && other == property.name
+            other == property.name && own != property.name
           end
 
           def placed_classifier_id(association, end_kind)

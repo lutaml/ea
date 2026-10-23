@@ -415,12 +415,7 @@ module Ea
         end
 
         def connector_index
-          @connector_index ||= begin
-            conns = root.extension&.connectors&.connector || []
-            conns.each_with_object({}) do |c, acc|
-              acc[c.idref] = c if c.idref
-            end
-          end
+          @connector_index ||= ConnectorIndex.build(root)
         end
 
         def umldi_extractor

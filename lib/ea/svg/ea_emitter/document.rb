@@ -17,7 +17,7 @@ module Ea
         # origins the canvas on the drawn content like EA's native
         # unframed export; off, it keeps the framed 35/40 content origin.
         def initialize(diagram, model_index:, frame: false, document: nil,
-                       content_anchor: true, **_options)
+                       content_anchor: true)
           @diagram = diagram
           @model_index = model_index
           @frame = frame
