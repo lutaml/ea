@@ -24,207 +24,292 @@ module Ea
           @shift = dominant_shift
         end
 
-        # EA crops each published image to its own content bounds, so
-        # the two canvases differ by a per-diagram translation. Estimate
-        # it as the modal delta over content-matched texts and subtract
-        # it before comparing positions.
-        def dominant_shift
-          ref_by_content = @reference.select { |p| p[:kind] == :text }
-                                     .group_by { |p| p[:content] }
-          deltas = []
-          @ours.select { |p| p[:kind] == :text }.each do |ours|
-            ref = ref_by_content[ours[:content]]&.min_by { |c| distance(ours, c) }
-            next unless ref
-
-            deltas << [(ref[:x] - ours[:x]).round, (ref[:y] - ours[:y]).round]
-          end
-          return [0.0, 0.0] if deltas.empty?
-
-          deltas.tally.max_by { |_, count| count }.first.map(&:to_f)
-        end
-        private :dominant_shift
-
-        # --- primitive extraction -----------------------------------
-
-        def parse(svg)
-          doc = Nokogiri::XML(svg)
-          primitives = []
-          doc.css("g").each do |g|
-            g_style = g["style"] || ""
-            g.children.each do |node|
-              next unless node.element?
-
-              case node.name
-              when "text" then primitives << text_primitive(node, g_style)
-              when "rect" then primitives << rect_primitive(node, g_style)
-              when "polygon" then primitives << points_primitive(:polygon, node["points"], g_style)
-              when "line"
-                primitives << points_primitive(:line, "#{node['x1']} #{node['y1']} #{node['x2']} #{node['y2']}", g_style)
-              when "path" then primitives << path_primitive(node, g_style)
-              end
+        # Extracts the primitives consumed by both comparison reports.
+        class PrimitiveParser
+          def parse(svg)
+            Nokogiri::XML(svg).css("g").flat_map do |group|
+              group.element_children.filter_map { |node| primitive(node, group["style"] || "") }
             end
           end
-          primitives
+
+          def primitive(node, style)
+            case node.name
+            when "text" then text_primitive(node, style)
+            when "rect" then rect_primitive(node, style)
+            when "polygon" then points_primitive(:polygon, node["points"], style)
+            when "line" then points_primitive(:line, line_points(node), style)
+            when "path" then path_primitive(node, style)
+            end
+          end
+          private :primitive
+
+          def line_points(node)
+            %w[x1 y1 x2 y2].map { |key| node[key] }.join(" ")
+          end
+          private :line_points
+
+          def text_primitive(node, g_style)
+            style = node["style"] || ""
+            {
+              kind: :text,
+              x: float(node["x"]), y: float(node["y"]),
+              content: node.text.strip,
+              **text_style(style),
+              fill: style[/[^-]fill:([^;]+)/, 1] || g_style[/fill:([^;]+)/, 1]
+            }
+          end
+          private :text_primitive
+
+          def text_style(style)
+            {
+              family: style[/font-family:([^;]+)/, 1],
+              size: style[/font-size:([^;]+)/, 1],
+              weight: normalize_weight(style[/font-weight:([^;]+)/, 1]),
+              style: style[/font-style:([^;]+)/, 1]
+            }
+          end
+          private :text_style
+
+          def rect_primitive(node, g_style)
+            {
+              kind: :rect,
+              x: float(node["x"]), y: float(node["y"]),
+              width: float(node["width"]), height: float(node["height"]),
+              centroid: rect_centroid(node),
+              fill: g_style[/fill:([^;]+)/, 1],
+              stroke: g_style[/stroke:([^;]+)/, 1]
+            }
+          end
+          private :rect_primitive
+
+          def rect_centroid(node)
+            x = float(node["x"])
+            y = float(node["y"])
+            return [0.0, 0.0] if x.nil? || y.nil?
+
+            [x + float(node["width"]).to_f / 2, y + float(node["height"]).to_f / 2]
+          end
+          private :rect_centroid
+
+          def path_primitive(node, g_style)
+            points = (node["d"] || "").scan(/-?\d+(?:\.\d+)?/).each_slice(2)
+                     .map { |(x, y)| [x.to_f, y.to_f] }
+            {
+              kind: :path, points: points,
+              centroid: centroid(points), closed: node["d"].to_s.include?("Z"),
+              stroke: g_style[/stroke:([^;]+)/, 1]
+            }
+          end
+          private :path_primitive
+
+          def points_primitive(kind, points_attr, g_style)
+            points = (points_attr || "").scan(/-?\d+(?:\.\d+)?/).each_slice(2)
+                     .map { |(x, y)| [x.to_f, y.to_f] }
+            {
+              kind: kind, points: points, centroid: centroid(points),
+              stroke: g_style[/stroke:([^;]+)/, 1]
+            }
+          end
+          private :points_primitive
+
+          def centroid(points)
+            return [0.0, 0.0] if points.nil? || points.empty?
+
+            xs = points.map(&:first)
+            ys = points.map(&:last)
+            [xs.sum / points.size, ys.sum / points.size]
+          end
+          private :centroid
+
+          def float(value)
+            value&.to_f
+          end
+          private :float
+
+          def normalize_weight(raw)
+            return "400" if raw.nil? || raw == "0"
+
+            raw
+          end
+          private :normalize_weight
+        end
+        private_constant :PrimitiveParser
+
+        # Matches content and measures text/font drift after canvas alignment.
+        module TextComparison
+          # EA crops each published image to its own content bounds, so
+          # the two canvases differ by a per-diagram translation. Estimate
+          # it as the modal delta over content-matched texts and subtract
+          # it before comparing positions.
+          def dominant_shift
+            references = texts_by_content
+            deltas = our_texts.filter_map { |ours| text_shift(ours, references[ours[:content]]) }
+            return [0.0, 0.0] if deltas.empty?
+
+            deltas.tally.max_by { |_, count| count }.first.map(&:to_f)
+          end
+          private :dominant_shift
+
+          # Texts pair on identical content; positions, family, size and
+          # weight are then compared directly.
+          def text_deltas
+            references = texts_by_content
+            deltas = Hash.new { |hash, key| hash[key] = [] }
+            our_texts.each { |ours| compare_text(ours, references[ours[:content]], deltas) }
+            deltas[:missing_text].concat(references.values.flatten)
+            deltas
+          end
+
+          def our_texts
+            @ours.select { |primitive| primitive[:kind] == :text }
+          end
+          private :our_texts
+
+          def texts_by_content
+            @reference.select { |primitive| primitive[:kind] == :text }.group_by { |primitive| primitive[:content] }
+          end
+          private :texts_by_content
+
+          def text_shift(ours, candidates)
+            reference = candidates&.min_by { |candidate| distance(ours, candidate) }
+            return unless reference
+
+            [(reference[:x] - ours[:x]).round, (reference[:y] - ours[:y]).round]
+          end
+          private :text_shift
+
+          def compare_text(ours, candidates, deltas)
+            reference = candidates&.min_by { |candidate| distance(ours, candidate) }
+            return deltas[:extra_text] << ours unless reference
+
+            candidates.delete(reference)
+            deltas[:moved_text] << ours if moved?(ours, reference)
+            compare_font(ours, reference, deltas)
+          end
+          private :compare_text
+
+          def compare_font(ours, reference, deltas)
+            { family: :wrong_font, size: :wrong_size, weight: :wrong_weight }.each do |key, mismatch|
+              next if font_value(ours, key) == font_value(reference, key)
+
+              deltas[mismatch] << [ours, reference]
+            end
+          end
+          private :compare_font
+
+          def font_value(primitive, key)
+            key == :weight ? normalize_weight(primitive[key]) : primitive[key]
+          end
+          private :font_value
+
+          def moved?(ours, ref)
+            ((ours[:x] + @shift[0]) - ref[:x]).abs > EPSILON ||
+              ((ours[:y] + @shift[1]) - ref[:y]).abs > EPSILON
+          end
+          private :moved?
+
+          def distance(ours, reference)
+            Math.hypot(ours[:x] - reference[:x], ours[:y] - reference[:y])
+          end
+          private :distance
+
+          def normalize_weight(raw)
+            return "400" if raw.nil? || raw == "0"
+
+            raw
+          end
+          private :normalize_weight
+        end
+        private_constant :TextComparison
+        include TextComparison
+
+        def parse(svg)
+          PrimitiveParser.new.parse(svg)
         end
         private :parse
 
-        def text_primitive(node, g_style)
-          style = node["style"] || ""
-          {
-            kind: :text,
-            x: float(node["x"]), y: float(node["y"]),
-            content: node.text.strip,
-            family: style[/font-family:([^;]+)/, 1],
-            size: style[/font-size:([^;]+)/, 1],
-            weight: normalize_weight(style[/font-weight:([^;]+)/, 1]),
-            style: style[/font-style:([^;]+)/, 1],
-            fill: style[/[^-]fill:([^;]+)/, 1] || g_style[/fill:([^;]+)/, 1]
-          }
-        end
-        private :text_primitive
-
-        def rect_primitive(node, g_style)
-          {
-            kind: :rect,
-            x: float(node["x"]), y: float(node["y"]),
-            width: float(node["width"]), height: float(node["height"]),
-            centroid: rect_centroid(node),
-            fill: g_style[/fill:([^;]+)/, 1],
-            stroke: g_style[/stroke:([^;]+)/, 1]
-          }
-        end
-        private :rect_primitive
-
-        def rect_centroid(node)
-          x = float(node["x"]); y = float(node["y"])
-          return [0.0, 0.0] if x.nil? || y.nil?
-
-          [x + float(node["width"]).to_f / 2, y + float(node["height"]).to_f / 2]
-        end
-        private :rect_centroid
-
-        def path_primitive(node, g_style)
-          points = (node["d"] || "").scan(/-?\d+(?:\.\d+)?/).each_slice(2)
-                                    .map { |(x, y)| [x.to_f, y.to_f] }
-          {
-            kind: :path, points: points,
-            centroid: centroid(points), closed: node["d"].to_s.include?("Z"),
-            stroke: g_style[/stroke:([^;]+)/, 1]
-          }
-        end
-        private :path_primitive
-
-        def points_primitive(kind, points_attr, g_style)
-          points = (points_attr || "").scan(/-?\d+(?:\.\d+)?/).each_slice(2)
-                                      .map { |(x, y)| [x.to_f, y.to_f] }
-          {
-            kind: kind, points: points, centroid: centroid(points),
-            stroke: g_style[/stroke:([^;]+)/, 1]
-          }
-        end
-        private :points_primitive
-
-        def centroid(points)
-          return [0.0, 0.0] if points.nil? || points.empty?
-
-          xs = points.map(&:first); ys = points.map(&:last)
-          [xs.sum / points.size, ys.sum / points.size]
-        end
-        private :centroid
-
-        def float(value)
-          value&.to_f
-        end
-        private :float
-
-        def normalize_weight(raw)
-          return "400" if raw.nil? || raw == "0"
-
-          raw
-        end
-        private :normalize_weight
-
-        # --- diffing -------------------------------------------------
-
-        # Texts pair on identical content; positions, family, size and
-        # weight are then compared directly.
-        def text_deltas
-          ref_by_content = @reference.select { |p| p[:kind] == :text }
-                                     .group_by { |p| p[:content] }
-          deltas = Hash.new { |h, k| h[k] = [] }
-
-          @ours.select { |p| p[:kind] == :text }.each do |ours|
-            candidates = ref_by_content[ours[:content]]
-            ref = candidates&.min_by { |c| distance(ours, c) }
-            if ref.nil?
-              deltas[:extra_text] << ours
-              next
-            end
-            candidates.delete(ref)
-
-            deltas[:moved_text] << ours if moved?(ours, ref)
-            deltas[:wrong_font] << [ours, ref] if ours[:family] != ref[:family]
-            deltas[:wrong_size] << [ours, ref] if ours[:size] != ref[:size]
-            deltas[:wrong_weight] << [ours, ref] if normalize_weight(ours[:weight]) != normalize_weight(ref[:weight])
-          end
-
-          unmatched = ref_by_content.values.flatten
-          deltas[:missing_text].concat(unmatched)
-          deltas
-        end
-
-        # Shapes pair greedily by centroid distance within the same
-        # kind; paired shapes count as equal when their bounding boxes
-        # agree within epsilon (routing bend-level diffs need the
-        # point-level comparison and are reported as count mismatches).
+        # Shapes pair greedily by shift-corrected centroid distance
+        # within the same kind. Geometry deltas do not affect these counts.
         def shape_summary
-          our_shapes = @ours.reject { |p| p[:kind] == :text }
-                            .map { |p| shift_primitive(p) }
+          our_count = @ours.count { |p| p[:kind] != :text }
           ref_shapes = @reference.reject { |p| p[:kind] == :text }
+          matched = shape_pairs(ref_shapes).size
 
-          matched = 0
-          our_shapes.each do |ours|
-            ref = ref_shapes.min_by { |c| shape_distance(ours, c) }
-            next unless ref && shape_distance(ours, ref) <= MATCH_DISTANCE
+          {
+            our_shapes: our_count, ref_shapes: ref_shapes.size + matched,
+            matched: matched, missing: ref_shapes.size, extra: our_count - matched
+          }
+        end
+
+        # Signed rectangle deltas are shifted ours minus reference.
+        # Primitives retain their original coordinates; polygon vertices
+        # correspond by index, with unequal counts reported as infinity.
+        def shape_deltas
+          shape_pairs.filter_map do |ours, ref|
+            delta = case ours[:kind]
+                    when :rect
+                      rect_deltas(ours, ref)
+                    when :polygon
+                      { max_point_delta: max_point_delta(ours[:points], ref[:points]) }
+                    end
+            { kind: ours[:kind], ours: ours, reference: ref }.merge(delta) if delta
+          end
+        end
+
+        def rect_deltas(ours, ref)
+          {
+            dx: dimension_delta(ours, ref, :x) + @shift[0],
+            dy: dimension_delta(ours, ref, :y) + @shift[1],
+            dwidth: dimension_delta(ours, ref, :width),
+            dheight: dimension_delta(ours, ref, :height)
+          }
+        end
+        private :rect_deltas
+
+        def dimension_delta(ours, ref, key)
+          ours[key].to_f - ref[key].to_f
+        end
+        private :dimension_delta
+
+        def shape_pairs(ref_shapes = @reference.reject { |p| p[:kind] == :text })
+          @ours.reject { |p| p[:kind] == :text }.filter_map do |ours|
+            shifted = shift_primitive(ours)
+            ref = ref_shapes.min_by { |c| shape_distance(shifted, c) }
+            next unless ref && shape_distance(shifted, ref) <= MATCH_DISTANCE
 
             ref_shapes.delete(ref)
-            matched += 1
+            [ours, ref]
           end
-
-          {
-            our_shapes: our_shapes.size, ref_shapes: ref_shapes.size + matched,
-            matched: matched, missing: ref_shapes.size, extra: our_shapes.size - matched
-          }
         end
+        private :shape_pairs
 
-        def shift_primitive(p)
-          if p[:centroid]
-            p.merge(centroid: [p[:centroid][0] + @shift[0], p[:centroid][1] + @shift[1]])
+        def max_point_delta(ours, ref)
+          return Float::INFINITY unless ours.size == ref.size
+
+          ours.zip(ref).map do |(x, y), (ref_x, ref_y)|
+            Math.hypot(x + @shift[0] - ref_x, y + @shift[1] - ref_y)
+          end.max || 0.0
+        end
+        private :max_point_delta
+
+        def shift_primitive(primitive)
+          if primitive[:centroid]
+            primitive.merge(centroid: [primitive[:centroid][0] + @shift[0], primitive[:centroid][1] + @shift[1]])
           else
-            p
+            primitive
           end
         end
         private :shift_primitive
 
-        def shape_distance(a, b)
-          return Float::INFINITY unless a[:kind] == b[:kind]
-          return Float::INFINITY if a[:centroid].nil? || b[:centroid].nil?
+        def shape_distance(ours, reference)
+          return Float::INFINITY unless ours[:kind] == reference[:kind]
+          return Float::INFINITY if ours[:centroid].nil? || reference[:centroid].nil?
 
-          ax, ay = a[:centroid]; bx, by = b[:centroid]
+          ax, ay = ours[:centroid]
+          bx, by = reference[:centroid]
           Math.sqrt(((ax - bx).abs**2) + ((ay - by).abs**2))
         end
         private :shape_distance
-
-        def moved?(ours, ref)
-          ((ours[:x] + @shift[0]) - ref[:x]).abs > EPSILON ||
-            ((ours[:y] + @shift[1]) - ref[:y]).abs > EPSILON
-        end
-        private :moved?
-
-        def distance(a, b)
-          Math.sqrt(((a[:x] - b[:x]).abs**2) + ((a[:y] - b[:y]).abs**2))
-        end
-        private :distance
       end
     end
   end
