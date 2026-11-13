@@ -34,6 +34,58 @@ RSpec.describe Ea::Svg::Parity::Differ, "connector endpoints" do
 end
 
 RSpec.describe Ea::Svg::Parity::Differ, "connector endpoints" do
+  it "matches a connector independently of a moved open arrowhead" do
+    ref = '<svg><g><path d="M 0 0 L 100 0"/></g><g><path d="M 85 5 L 100 0 L 85 -5"/></g></svg>'
+    ours = ref.sub("M 85 5 L 100 0 L 85 -5", "M 89 5 L 104 0 L 89 -5")
+    differ = described_class.new(ours: ours, reference: ref)
+    deltas = differ.connector_deltas
+
+    expect(deltas.size).to eq(1)
+    expect(deltas.first.values_at(:source_delta, :target_delta)).to eq([0.0, 0.0])
+    expect(deltas.first[:arrowhead_deltas]).to eq(
+      [{ end: :target, ours: differ.ours.last, reference: differ.reference.last, tip_delta: 4.0 }]
+    )
+  end
+end
+
+RSpec.describe Ea::Svg::Parity::Differ, "connector endpoints" do
+  it "matches a moved source when the target endpoint is unchanged" do
+    ref = '<svg><g><rect x="0" y="0" width="100" height="100"/><path d="M 100 50 L 300 50"/></g></svg>'
+    ours = ref.sub("M 100 50", "M 50 100")
+    differ = described_class.new(ours: ours, reference: ref)
+    delta = differ.connector_deltas.first
+
+    expect(differ.connector_deltas.size).to eq(1)
+    expect(delta[:source_delta]).to be_within(0.001).of(Math.sqrt(5_000))
+    expect(delta[:target_delta]).to eq(0.0)
+  end
+end
+
+RSpec.describe Ea::Svg::Parity::Differ, "connector endpoints" do
+  it "preserves global matching for reordered connectors sharing a target" do
+    ref = '<svg><g><path d="M 100 50 L 300 50"/><path d="M 0 50 L 300 50"/></g></svg>'
+    ours = '<svg><g><path d="M 0 50 L 300 50"/><path d="M 50 100 L 300 50"/></g></svg>'
+    deltas = described_class.new(ours: ours, reference: ref).connector_deltas
+
+    expect(deltas.size).to eq(2)
+    expect(deltas.map { |delta| delta[:source_delta] }.sort).to eq([0.0, Math.sqrt(5_000)])
+    expect(deltas.map { |delta| delta[:target_delta] }).to eq([0.0, 0.0])
+  end
+end
+
+RSpec.describe Ea::Svg::Parity::Differ, "connector endpoints" do
+  it "keeps the connector match when the moved source is on a bent path" do
+    ref = '<svg><g><rect x="0" y="0" width="100" height="100"/><path d="M 100 50 L 200 50 L 200 300"/></g></svg>'
+    ours = ref.sub("M 100 50 L 200 50 L 200 300", "M 50 100 L 50 300 L 200 300")
+    deltas = described_class.new(ours: ours, reference: ref).connector_deltas
+
+    expect(deltas.size).to eq(1)
+    expect(deltas.first[:source_delta]).to be_within(0.001).of(Math.sqrt(5_000))
+    expect(deltas.first[:target_delta]).to eq(0.0)
+  end
+end
+
+RSpec.describe Ea::Svg::Parity::Differ, "connector endpoints" do
   it "corrects both endpoints of paths and lines by the dominant shift" do
     ours = <<~SVG
       <svg><g><text x="0" y="0">anchor</text><path d="M 10 5 L 100 5"/>
@@ -93,6 +145,23 @@ RSpec.describe Ea::Svg::Parity::Differ, "connector arrowheads" do
     expect(delta.values_at(:source_delta, :target_delta)).to eq([0.0, 0.0])
     expected = [{ end: :target, ours: differ.ours.last, reference: differ.reference.last, tip_delta: 4.0 }]
     expect(delta[:arrowhead_deltas]).to eq(expected)
+  end
+end
+
+RSpec.describe Ea::Svg::Parity::Differ, "connector arrowheads" do
+  it "preserves a correctly docked open head after a common shift" do
+    ours = <<~SVG
+      <svg><g><text x="0" y="0">anchor</text><path d="M 0 0 L 100 0"/>
+      <path d="M 85 5 L 100 0 L 85 -5"/></g></svg>
+    SVG
+    ref = <<~SVG
+      <svg><g><text x="20" y="30">anchor</text><path d="M 20 30 L 120 30"/>
+      <path d="M 105 35 L 120 30 L 105 25"/></g></svg>
+    SVG
+    delta = described_class.new(ours: ours, reference: ref).connector_deltas.fetch(0)
+
+    expect(delta.values_at(:source_delta, :target_delta)).to eq([0.0, 0.0])
+    expect(delta[:arrowhead_deltas].map { |arrow| arrow[:tip_delta] }).to eq([0.0])
   end
 end
 

@@ -228,9 +228,9 @@ module Ea
         # has infinite drift; correctly placed endpoints and tips have zero.
         module ConnectorComparison
           def connector_deltas
-            polygons = shape_pairs.select { |ours, _| ours[:kind] == :polygon }
-            shape_pairs(connectors(@reference), connectors(@ours)).map do |ours, ref|
-              connector_delta(ours, ref).merge(arrowhead_deltas: arrowhead_deltas(ours, ref, polygons))
+            heads = shape_pairs(arrowheads(@reference), arrowheads(@ours))
+            connector_pairs.map do |ours, ref|
+              connector_delta(ours, ref).merge(arrowhead_deltas: arrowhead_deltas(ours, ref, heads))
             end
           end
 
@@ -245,10 +245,37 @@ module Ea
 
           def connectors(primitives)
             primitives.select do |primitive|
-              %i[path line].include?(primitive[:kind]) && !primitive[:closed] && primitive[:points].size >= 2
+              %i[path line].include?(primitive[:kind]) && !primitive[:closed] &&
+                primitive[:points].size >= 2 && !open_arrowhead?(primitive)
             end
           end
           private :connectors
+
+          # Preserve a match when one dock moves far enough to change the
+          # centroid. Choose the smallest total endpoint drift first, so a
+          # shared target cannot steal another connector's exact match.
+          def connector_pairs
+            candidates = connectors(@ours).product(connectors(@reference))
+            candidates.sort_by! { |ours, ref| connector_distance(ours, ref) }
+            used = {}.compare_by_identity
+            candidates.select do |ours, ref|
+              next false if used[ours] || used[ref] || !connector_distance(ours, ref).finite?
+
+              used[ours] = used[ref] = true
+            end
+          end
+          private :connector_pairs
+
+          def connector_distance(ours, ref)
+            return Float::INFINITY unless ours[:kind] == ref[:kind]
+
+            drifts = connector_delta(ours, ref).values_at(:source_delta, :target_delta)
+            return drifts.sum if drifts.min <= MATCH_DISTANCE
+            return drifts.sum if shape_distance(shift_primitive(ours), ref) <= MATCH_DISTANCE
+
+            Float::INFINITY
+          end
+          private :connector_distance
 
           def endpoint_distance(ours, ref)
             return Float::INFINITY unless ours && ref
@@ -256,10 +283,43 @@ module Ea
             Math.hypot(ours[0] + @shift[0] - ref[0], ours[1] + @shift[1] - ref[1])
           end
           private :endpoint_distance
+        end
+        private_constant :ConnectorComparison
+        include ConnectorComparison
 
-          def arrowhead_deltas(ours, ref, polygons)
+        # EA emits triangle/diamond polygons and symmetric open V paths. The
+        # latter have their tip at the middle vertex, rather than at an end.
+        module ArrowheadComparison
+          def arrowheads(primitives)
+            primitives.select { |primitive| primitive[:kind] == :polygon || open_arrowhead?(primitive) }
+          end
+          private :arrowheads
+
+          def open_arrowhead?(primitive)
+            return false unless primitive[:kind] == :path && !primitive[:closed] && primitive[:points].size == 3
+
+            symmetric_wings?(*primitive[:points])
+          end
+          private :open_arrowhead?
+
+          def symmetric_wings?(first, tip, last)
+            left = point_distance(first, tip)
+            right = point_distance(last, tip)
+            base = point_distance(first, last)
+            # EA rounds each vertex to whole pixels, allowing up to sqrt(2)
+            # error per wing. Ordinary right-angle bends are not arrowheads.
+            (left - right).abs <= 2 * Math.sqrt(2) && base.positive? && base < [left, right].min
+          end
+          private :symmetric_wings?
+
+          def point_distance(first, last)
+            Math.hypot(first[0] - last[0], first[1] - last[1])
+          end
+          private :point_distance
+
+          def arrowhead_deltas(ours, ref, heads)
             { source: 0, target: -1 }.filter_map do |name, index|
-              pair = arrowhead_pair(ours[:points][index], ref[:points][index], polygons)
+              pair = arrowhead_pair(ours[:points][index], ref[:points][index], heads)
               next unless pair
 
               our_head, ref_head, tip = pair
@@ -269,13 +329,13 @@ module Ea
           end
           private :arrowhead_deltas
 
-          def arrowhead_pair(our_point, ref_point, polygons)
-            if (attachment = touching_polygon(@reference, ref_point))
+          def arrowhead_pair(our_point, ref_point, heads)
+            if (attachment = touching_arrowhead(@reference, ref_point))
               ref, tip = attachment
-              ours = polygons.find { |_, candidate| candidate.equal?(ref) }&.first
-            elsif (attachment = touching_polygon(@ours, our_point))
+              ours = heads.find { |_, candidate| candidate.equal?(ref) }&.first
+            elsif (attachment = touching_arrowhead(@ours, our_point))
               ours, tip = attachment
-              ref = polygons.find { |candidate, _| candidate.equal?(ours) }&.last
+              ref = heads.find { |candidate, _| candidate.equal?(ours) }&.last
             else
               return
             end
@@ -284,14 +344,15 @@ module Ea
           end
           private :arrowhead_pair
 
-          def touching_polygon(primitives, endpoint)
-            vertices = primitives.select { |primitive| primitive[:kind] == :polygon }.flat_map do |polygon|
-              polygon[:points].each_index.map { |index| [polygon, index] }
+          def touching_arrowhead(primitives, endpoint)
+            vertices = arrowheads(primitives).flat_map do |head|
+              indices = head[:kind] == :path ? [1] : head[:points].each_index
+              indices.map { |index| [head, index] }
             end
             nearest = vertices.min_by { |polygon, index| vertex_distance(polygon, index, endpoint) }
             nearest if nearest && vertex_distance(*nearest, endpoint) <= EPSILON
           end
-          private :touching_polygon
+          private :touching_arrowhead
 
           def vertex_distance(polygon, index, endpoint)
             point = polygon[:points][index]
@@ -299,8 +360,8 @@ module Ea
           end
           private :vertex_distance
         end
-        private_constant :ConnectorComparison
-        include ConnectorComparison
+        private_constant :ArrowheadComparison
+        include ArrowheadComparison
 
         def parse(svg)
           PrimitiveParser.new.parse(svg)
