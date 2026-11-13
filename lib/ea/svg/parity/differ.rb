@@ -96,7 +96,7 @@ module Ea
                      .map { |(x, y)| [x.to_f, y.to_f] }
             {
               kind: :path, points: points,
-              centroid: centroid(points), closed: node["d"].to_s.include?("Z"),
+              centroid: centroid(points), closed: node["d"].to_s.match?(/[zZ]/),
               stroke: g_style[/stroke:([^;]+)/, 1]
             }
           end
@@ -223,6 +223,171 @@ module Ea
         private_constant :TextComparison
         include TextComparison
 
+        # Endpoint distances are Euclidean distances after canvas alignment.
+        # Arrowhead tips correspond by geometry. An unpaired arrowhead
+        # has infinite drift; correctly placed endpoints and tips have zero.
+        module ConnectorComparison
+          def connector_deltas
+            heads = shape_pairs(arrowheads(@reference), arrowheads(@ours))
+            connector_pairs.map do |ours, ref|
+              connector_delta(ours, ref).merge(arrowhead_deltas: arrowhead_deltas(ours, ref, heads))
+            end
+          end
+
+          def connector_delta(ours, ref)
+            {
+              kind: ours[:kind], ours: ours, reference: ref,
+              source_delta: endpoint_distance(ours[:points].first, ref[:points].first),
+              target_delta: endpoint_distance(ours[:points].last, ref[:points].last)
+            }
+          end
+          private :connector_delta
+
+          def connectors(primitives)
+            primitives.select do |primitive|
+              %i[path line].include?(primitive[:kind]) && !primitive[:closed] &&
+                primitive[:points].size >= 2 && !open_arrowhead?(primitive)
+            end
+          end
+          private :connectors
+
+          # Preserve local matches even when both docks move: the allowance
+          # for total endpoint drift scales with connector length. Choose the
+          # smallest total endpoint drift first, so a shared target cannot
+          # steal another connector's exact match.
+          def connector_pairs
+            candidates = connectors(@ours).product(connectors(@reference))
+            candidates.sort_by! { |ours, ref| connector_distance(ours, ref) }
+            used = {}.compare_by_identity
+            candidates.select do |ours, ref|
+              next false if used[ours] || used[ref] || !connector_distance(ours, ref).finite?
+
+              used[ours] = used[ref] = true
+            end
+          end
+          private :connector_pairs
+
+          def connector_distance(ours, ref)
+            return Float::INFINITY unless ours[:kind] == ref[:kind]
+
+            drifts = connector_delta(ours, ref).values_at(:source_delta, :target_delta)
+            return drifts.sum if drifts.min <= MATCH_DISTANCE
+            return drifts.sum if shape_distance(shift_primitive(ours), ref) <= MATCH_DISTANCE
+            return drifts.sum if drifts.sum <= [connector_length(ours), connector_length(ref)].max
+
+            Float::INFINITY
+          end
+          private :connector_distance
+
+          def connector_length(primitive)
+            primitive[:points].each_cons(2).sum { |first, last| point_distance(first, last) }
+          end
+          private :connector_length
+
+          def endpoint_distance(ours, ref)
+            return Float::INFINITY unless ours && ref
+
+            Math.hypot(ours[0] + @shift[0] - ref[0], ours[1] + @shift[1] - ref[1])
+          end
+          private :endpoint_distance
+        end
+        private_constant :ConnectorComparison
+        include ConnectorComparison
+
+        # EA emits triangle/diamond polygons and symmetric open V paths. The
+        # latter have their tip at the middle vertex, rather than at an end.
+        module ArrowheadComparison
+          def arrowheads(primitives)
+            primitives.select { |primitive| primitive[:kind] == :polygon || open_arrowhead?(primitive) }
+          end
+          private :arrowheads
+
+          def open_arrowhead?(primitive)
+            return false unless primitive[:kind] == :path && !primitive[:closed] && primitive[:points].size == 3
+
+            symmetric_wings?(*primitive[:points])
+          end
+          private :open_arrowhead?
+
+          def symmetric_wings?(first, tip, last)
+            left = point_distance(first, tip)
+            right = point_distance(last, tip)
+            base = point_distance(first, last)
+            # EA rounds each vertex to whole pixels, allowing up to sqrt(2)
+            # error per wing. Ordinary right-angle bends are not arrowheads.
+            (left - right).abs <= 2 * Math.sqrt(2) && base.positive? && base < [left, right].min
+          end
+          private :symmetric_wings?
+
+          def point_distance(first, last)
+            Math.hypot(first[0] - last[0], first[1] - last[1])
+          end
+          private :point_distance
+
+          def arrowhead_deltas(ours, ref, heads)
+            { source: 0, target: -1 }.filter_map do |name, index|
+              pair = arrowhead_pair(ours[:points][index], ref[:points][index], heads)
+              next unless pair
+
+              our_head, ref_head, anchor, tip = pair
+              { end: name, ours: our_head, reference: ref_head,
+                tip_delta: endpoint_distance(corresponding_tip(our_head, anchor, tip),
+                                             corresponding_tip(ref_head, anchor, tip)) }
+            end
+          end
+          private :arrowhead_deltas
+
+          def arrowhead_pair(our_point, ref_point, heads)
+            if (attachment = touching_arrowhead(@reference, ref_point))
+              ref, tip = attachment
+              ours = heads.find { |_, candidate| candidate.equal?(ref) }&.first
+            elsif (attachment = touching_arrowhead(@ours, our_point))
+              ours, tip = attachment
+              ref = heads.find { |candidate, _| candidate.equal?(ours) }&.last
+            else
+              return
+            end
+
+            [ours, ref, attachment.first, tip]
+          end
+          private :arrowhead_pair
+
+          # Removing each head's translation lets the reference tip identify
+          # its counterpart even when polygon vertices start at another corner
+          # or run in the opposite direction.
+          def corresponding_tip(head, anchor, index)
+            return unless head
+            return head[:points][1] if head[:kind] == :path
+
+            offset = centered_point(anchor[:points][index], anchor)
+            head[:points].min_by { |point| point_distance(centered_point(point, head), offset) }
+          end
+          private :corresponding_tip
+
+          def centered_point(point, primitive)
+            [point[0] - primitive[:centroid][0], point[1] - primitive[:centroid][1]]
+          end
+          private :centered_point
+
+          def touching_arrowhead(primitives, endpoint)
+            vertices = arrowheads(primitives).flat_map do |head|
+              indices = head[:kind] == :path ? [1] : head[:points].each_index
+              indices.map { |index| [head, index] }
+            end
+            nearest = vertices.min_by { |polygon, index| vertex_distance(polygon, index, endpoint) }
+            nearest if nearest && vertex_distance(*nearest, endpoint) <= EPSILON
+          end
+          private :touching_arrowhead
+
+          def vertex_distance(polygon, index, endpoint)
+            point = polygon[:points][index]
+            Math.hypot(point[0] - endpoint[0], point[1] - endpoint[1])
+          end
+          private :vertex_distance
+        end
+        private_constant :ArrowheadComparison
+        include ArrowheadComparison
+
         def parse(svg)
           PrimitiveParser.new.parse(svg)
         end
@@ -271,8 +436,9 @@ module Ea
         end
         private :dimension_delta
 
-        def shape_pairs(ref_shapes = @reference.reject { |p| p[:kind] == :text })
-          @ours.reject { |p| p[:kind] == :text }.filter_map do |ours|
+        def shape_pairs(ref_shapes = @reference.reject { |p| p[:kind] == :text },
+                        our_shapes = @ours.reject { |p| p[:kind] == :text })
+          our_shapes.filter_map do |ours|
             shifted = shift_primitive(ours)
             ref = ref_shapes.min_by { |c| shape_distance(shifted, c) }
             next unless ref && shape_distance(shifted, ref) <= MATCH_DISTANCE
