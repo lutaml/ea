@@ -137,6 +137,42 @@ end
 RSpec.describe Ea::Svg::Parity::Differ, "connector arrowheads" do
   include_context "connector arrowhead fixture"
 
+  it "matches reordered arrowhead vertices at the same target tip" do
+    ours = reference.sub("100,0 90,-5 90,5", "90,-5 90,5 100,0")
+    delta = described_class.new(ours: ours, reference: reference).connector_deltas.first
+
+    expect(delta[:arrowhead_deltas].map { |arrow| arrow[:tip_delta] }).to eq([0.0])
+  end
+end
+
+RSpec.describe Ea::Svg::Parity::Differ, "connector arrowheads" do
+  include_context "connector arrowhead fixture"
+
+  it "measures a translated reordered arrowhead tip without snapping it to the endpoint" do
+    ours = reference.sub("100,0 90,-5 90,5", "94,-5 94,5 104,0")
+    delta = described_class.new(ours: ours, reference: reference).connector_deltas.first
+
+    expect(delta.values_at(:source_delta, :target_delta)).to eq([0.0, 0.0])
+    expect(delta[:arrowhead_deltas].map { |arrow| arrow[:tip_delta] }).to eq([4.0])
+  end
+end
+
+RSpec.describe Ea::Svg::Parity::Differ, "connector endpoints" do
+  it "reports source and target movement together" do
+    ref = '<svg><g><path d="M 100 50 L 300 50"/></g></svg>'
+    ours = ref.sub("M 100 50 L 300 50", "M 50 100 L 300 90")
+    deltas = described_class.new(ours: ours, reference: ref).connector_deltas
+
+    expect(deltas.size).to eq(1)
+    delta = deltas.first
+    expect(delta[:source_delta]).to be_within(0.001).of(Math.sqrt(5_000))
+    expect(delta[:target_delta]).to eq(40.0)
+  end
+end
+
+RSpec.describe Ea::Svg::Parity::Differ, "connector arrowheads" do
+  include_context "connector arrowhead fixture"
+
   it "reports a tip moved off the target endpoint" do
     ours = reference.sub("100,0 90,-5 90,5", "104,0 94,-5 94,5")
     differ = described_class.new(ours: ours, reference: reference)

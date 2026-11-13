@@ -223,8 +223,8 @@ module Ea
         private_constant :TextComparison
         include TextComparison
 
-        # Endpoint distances are Euclidean distances after canvas alignment. Polygon tips
-        # correspond by vertex index, as in shape_deltas. An unpaired arrowhead
+        # Endpoint distances are Euclidean distances after canvas alignment.
+        # Arrowhead tips correspond by geometry. An unpaired arrowhead
         # has infinite drift; correctly placed endpoints and tips have zero.
         module ConnectorComparison
           def connector_deltas
@@ -251,9 +251,10 @@ module Ea
           end
           private :connectors
 
-          # Preserve a match when one dock moves far enough to change the
-          # centroid. Choose the smallest total endpoint drift first, so a
-          # shared target cannot steal another connector's exact match.
+          # Preserve local matches even when both docks move: the allowance
+          # for total endpoint drift scales with connector length. Choose the
+          # smallest total endpoint drift first, so a shared target cannot
+          # steal another connector's exact match.
           def connector_pairs
             candidates = connectors(@ours).product(connectors(@reference))
             candidates.sort_by! { |ours, ref| connector_distance(ours, ref) }
@@ -272,10 +273,16 @@ module Ea
             drifts = connector_delta(ours, ref).values_at(:source_delta, :target_delta)
             return drifts.sum if drifts.min <= MATCH_DISTANCE
             return drifts.sum if shape_distance(shift_primitive(ours), ref) <= MATCH_DISTANCE
+            return drifts.sum if drifts.sum <= [connector_length(ours), connector_length(ref)].max
 
             Float::INFINITY
           end
           private :connector_distance
+
+          def connector_length(primitive)
+            primitive[:points].each_cons(2).sum { |first, last| point_distance(first, last) }
+          end
+          private :connector_length
 
           def endpoint_distance(ours, ref)
             return Float::INFINITY unless ours && ref
@@ -322,9 +329,10 @@ module Ea
               pair = arrowhead_pair(ours[:points][index], ref[:points][index], heads)
               next unless pair
 
-              our_head, ref_head, tip = pair
+              our_head, ref_head, anchor, tip = pair
               { end: name, ours: our_head, reference: ref_head,
-                tip_delta: endpoint_distance(our_head&.dig(:points, tip), ref_head&.dig(:points, tip)) }
+                tip_delta: endpoint_distance(corresponding_tip(our_head, anchor, tip),
+                                             corresponding_tip(ref_head, anchor, tip)) }
             end
           end
           private :arrowhead_deltas
@@ -340,9 +348,26 @@ module Ea
               return
             end
 
-            [ours, ref, tip]
+            [ours, ref, attachment.first, tip]
           end
           private :arrowhead_pair
+
+          # Removing each head's translation lets the reference tip identify
+          # its counterpart even when polygon vertices start at another corner
+          # or run in the opposite direction.
+          def corresponding_tip(head, anchor, index)
+            return unless head
+            return head[:points][1] if head[:kind] == :path
+
+            offset = centered_point(anchor[:points][index], anchor)
+            head[:points].min_by { |point| point_distance(centered_point(point, head), offset) }
+          end
+          private :corresponding_tip
+
+          def centered_point(point, primitive)
+            [point[0] - primitive[:centroid][0], point[1] - primitive[:centroid][1]]
+          end
+          private :centered_point
 
           def touching_arrowhead(primitives, endpoint)
             vertices = arrowheads(primitives).flat_map do |head|
