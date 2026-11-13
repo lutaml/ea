@@ -96,7 +96,7 @@ module Ea
                      .map { |(x, y)| [x.to_f, y.to_f] }
             {
               kind: :path, points: points,
-              centroid: centroid(points), closed: node["d"].to_s.include?("Z"),
+              centroid: centroid(points), closed: node["d"].to_s.match?(/[zZ]/),
               stroke: g_style[/stroke:([^;]+)/, 1]
             }
           end
@@ -223,6 +223,85 @@ module Ea
         private_constant :TextComparison
         include TextComparison
 
+        # Endpoint distances are Euclidean distances after canvas alignment. Polygon tips
+        # correspond by vertex index, as in shape_deltas. An unpaired arrowhead
+        # has infinite drift; correctly placed endpoints and tips have zero.
+        module ConnectorComparison
+          def connector_deltas
+            polygons = shape_pairs.select { |ours, _| ours[:kind] == :polygon }
+            shape_pairs(connectors(@reference), connectors(@ours)).map do |ours, ref|
+              connector_delta(ours, ref).merge(arrowhead_deltas: arrowhead_deltas(ours, ref, polygons))
+            end
+          end
+
+          def connector_delta(ours, ref)
+            {
+              kind: ours[:kind], ours: ours, reference: ref,
+              source_delta: endpoint_distance(ours[:points].first, ref[:points].first),
+              target_delta: endpoint_distance(ours[:points].last, ref[:points].last)
+            }
+          end
+          private :connector_delta
+
+          def connectors(primitives)
+            primitives.select do |primitive|
+              %i[path line].include?(primitive[:kind]) && !primitive[:closed] && primitive[:points].size >= 2
+            end
+          end
+          private :connectors
+
+          def endpoint_distance(ours, ref)
+            return Float::INFINITY unless ours && ref
+
+            Math.hypot(ours[0] + @shift[0] - ref[0], ours[1] + @shift[1] - ref[1])
+          end
+          private :endpoint_distance
+
+          def arrowhead_deltas(ours, ref, polygons)
+            { source: 0, target: -1 }.filter_map do |name, index|
+              pair = arrowhead_pair(ours[:points][index], ref[:points][index], polygons)
+              next unless pair
+
+              our_head, ref_head, tip = pair
+              { end: name, ours: our_head, reference: ref_head,
+                tip_delta: endpoint_distance(our_head&.dig(:points, tip), ref_head&.dig(:points, tip)) }
+            end
+          end
+          private :arrowhead_deltas
+
+          def arrowhead_pair(our_point, ref_point, polygons)
+            if (attachment = touching_polygon(@reference, ref_point))
+              ref, tip = attachment
+              ours = polygons.find { |_, candidate| candidate.equal?(ref) }&.first
+            elsif (attachment = touching_polygon(@ours, our_point))
+              ours, tip = attachment
+              ref = polygons.find { |candidate, _| candidate.equal?(ours) }&.last
+            else
+              return
+            end
+
+            [ours, ref, tip]
+          end
+          private :arrowhead_pair
+
+          def touching_polygon(primitives, endpoint)
+            vertices = primitives.select { |primitive| primitive[:kind] == :polygon }.flat_map do |polygon|
+              polygon[:points].each_index.map { |index| [polygon, index] }
+            end
+            nearest = vertices.min_by { |polygon, index| vertex_distance(polygon, index, endpoint) }
+            nearest if nearest && vertex_distance(*nearest, endpoint) <= EPSILON
+          end
+          private :touching_polygon
+
+          def vertex_distance(polygon, index, endpoint)
+            point = polygon[:points][index]
+            Math.hypot(point[0] - endpoint[0], point[1] - endpoint[1])
+          end
+          private :vertex_distance
+        end
+        private_constant :ConnectorComparison
+        include ConnectorComparison
+
         def parse(svg)
           PrimitiveParser.new.parse(svg)
         end
@@ -271,8 +350,9 @@ module Ea
         end
         private :dimension_delta
 
-        def shape_pairs(ref_shapes = @reference.reject { |p| p[:kind] == :text })
-          @ours.reject { |p| p[:kind] == :text }.filter_map do |ours|
+        def shape_pairs(ref_shapes = @reference.reject { |p| p[:kind] == :text },
+                        our_shapes = @ours.reject { |p| p[:kind] == :text })
+          our_shapes.filter_map do |ours|
             shifted = shift_primitive(ours)
             ref = ref_shapes.min_by { |c| shape_distance(shifted, c) }
             next unless ref && shape_distance(shifted, ref) <= MATCH_DISTANCE

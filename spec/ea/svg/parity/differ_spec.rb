@@ -14,6 +14,160 @@ RSpec.shared_context "text svg fixture" do
   end
 end
 
+RSpec.describe Ea::Svg::Parity::Differ, "connector endpoints" do
+  it "reports a source on the wrong box edge despite a matching centroid" do
+    ref = <<~SVG
+      <svg><g><rect x="0" y="0" width="10" height="10"/>
+      <path d="M 10 5 L 50 5 L 100 5"/></g></svg>
+    SVG
+    ours = ref.sub("M 10 5", "M 5 0")
+    differ = described_class.new(ours: ours, reference: ref)
+    delta = differ.connector_deltas.first
+
+    expect(delta[:source_delta]).to be > described_class::EPSILON
+    expect(delta[:source_delta]).to be_within(0.001).of(Math.sqrt(50))
+    expect(delta[:target_delta]).to eq(0.0)
+    expect(delta[:ours]).to eq(differ.ours.last)
+    expect(delta[:reference]).to eq(differ.reference.last)
+    expect(described_class.new(ours: ref, reference: ref).connector_deltas.first[:source_delta]).to eq(0.0)
+  end
+end
+
+RSpec.describe Ea::Svg::Parity::Differ, "connector endpoints" do
+  it "corrects both endpoints of paths and lines by the dominant shift" do
+    ours = <<~SVG
+      <svg><g><text x="0" y="0">anchor</text><path d="M 10 5 L 100 5"/>
+      <line x1="10" y1="50" x2="100" y2="50"/></g></svg>
+    SVG
+    ref = <<~SVG
+      <svg><g><text x="20" y="30">anchor</text><path d="M 30 35 L 120 35"/>
+      <line x1="30" y1="80" x2="120" y2="80"/></g></svg>
+    SVG
+    differ = described_class.new(ours: ours, reference: ref)
+    deltas = differ.connector_deltas
+
+    expect(deltas.map { |delta| delta[:kind] }).to eq(%i[path line])
+    expect(deltas.map { |delta| delta.values_at(:source_delta, :target_delta) }).to eq([[0.0, 0.0], [0.0, 0.0]])
+    expect(differ.connector_deltas).to eq(deltas)
+    expect(differ.shape_summary[:matched]).to eq(2)
+  end
+end
+
+RSpec.describe Ea::Svg::Parity::Differ, "connector endpoints" do
+  it "reports target movement for a line" do
+    ref = '<svg><g><line x1="10" y1="10" x2="100" y2="10"/></g></svg>'
+    ours = ref.sub('x2="100"', 'x2="104"')
+    delta = described_class.new(ours: ours, reference: ref).connector_deltas.first
+
+    expect(delta.values_at(:source_delta, :target_delta)).to eq([0.0, 4.0])
+    expect(delta[:arrowhead_deltas]).to be_empty
+  end
+end
+
+RSpec.describe Ea::Svg::Parity::Differ, "connector endpoints" do
+  it "excludes closed, empty, single-point and unmatched paths" do
+    ours = <<~SVG
+      <svg><g><path d="M 0 0 L 10 0 Z"/><path d="M 0 0 L 10 0 z"/>
+      <path d=""/><path d="M 0 0"/><path d="M 500 500 L 600 500"/></g></svg>
+    SVG
+    ref = ours.sub("M 500 500 L 600 500", "M 900 900 L 1000 900")
+
+    expect(described_class.new(ours: ours, reference: ref).connector_deltas).to be_empty
+  end
+end
+
+RSpec.shared_context "connector arrowhead fixture" do
+  let(:reference) do
+    '<svg><g><path d="M 0 0 L 100 0"/><polygon points="100,0 90,-5 90,5"/></g></svg>'
+  end
+end
+
+RSpec.describe Ea::Svg::Parity::Differ, "connector arrowheads" do
+  include_context "connector arrowhead fixture"
+
+  it "reports a tip moved off the target endpoint" do
+    ours = reference.sub("100,0 90,-5 90,5", "104,0 94,-5 94,5")
+    differ = described_class.new(ours: ours, reference: reference)
+    delta = differ.connector_deltas.first
+
+    expect(delta.values_at(:source_delta, :target_delta)).to eq([0.0, 0.0])
+    expected = [{ end: :target, ours: differ.ours.last, reference: differ.reference.last, tip_delta: 4.0 }]
+    expect(delta[:arrowhead_deltas]).to eq(expected)
+  end
+end
+
+RSpec.describe Ea::Svg::Parity::Differ, "connector arrowheads" do
+  include_context "connector arrowhead fixture"
+
+  it "reports zero for a correctly placed tip after the dominant shift" do
+    ours = <<~SVG
+      <svg><g><text x="0" y="0">anchor</text><path d="M 0 0 L 100 0"/>
+      <polygon points="100,0 90,-5 90,5"/></g></svg>
+    SVG
+    ref = <<~SVG
+      <svg><g><text x="20" y="30">anchor</text><path d="M 20 30 L 120 30"/>
+      <polygon points="120,30 110,25 110,35"/></g></svg>
+    SVG
+    delta = described_class.new(ours: ours, reference: ref).connector_deltas.first
+
+    expect(delta[:arrowhead_deltas].map { |arrow| arrow[:tip_delta] }).to eq([0.0])
+  end
+end
+
+RSpec.describe Ea::Svg::Parity::Differ, "connector arrowheads" do
+  include_context "connector arrowhead fixture"
+
+  it "associates arrowheads with the source as well as the target" do
+    ref = reference.sub("100,0 90,-5 90,5", "10,-5 0,0 10,5")
+    ours = ref.sub("10,-5 0,0 10,5", "10,-1 0,4 10,9")
+    delta = described_class.new(ours: ours, reference: ref).connector_deltas.first
+
+    expect(delta[:arrowhead_deltas]).to contain_exactly(include(end: :source, tip_delta: 4.0))
+  end
+end
+
+RSpec.describe Ea::Svg::Parity::Differ, "connector arrowheads" do
+  include_context "connector arrowhead fixture"
+
+  it "reports an unpaired arrowhead instead of losing its placement error" do
+    ours = reference.sub("100,0 90,-5 90,5", "150,0 140,-5 140,5")
+    delta = described_class.new(ours: ours, reference: reference).connector_deltas.first
+
+    expect(delta[:arrowhead_deltas]).to contain_exactly(
+      include(end: :target, ours: nil, tip_delta: Float::INFINITY)
+    )
+  end
+end
+
+RSpec.describe Ea::Svg::Parity::Differ, "connector arrowheads" do
+  it "keeps each arrowhead with its connector when polygon order differs" do
+    ref = <<~SVG
+      <svg><g><path d="M 0 0 L 100 0"/><path d="M 0 50 L 100 50"/>
+      <polygon points="100,0 90,-5 90,5"/><polygon points="100,50 90,45 90,55"/></g></svg>
+    SVG
+    ours = <<~SVG
+      <svg><g><path d="M 0 0 L 100 0"/><path d="M 0 50 L 100 50"/>
+      <polygon points="104,50 94,45 94,55"/><polygon points="100,0 90,-5 90,5"/></g></svg>
+    SVG
+    deltas = described_class.new(ours: ours, reference: ref).connector_deltas
+
+    expect(deltas.map { |delta| delta[:arrowhead_deltas].map { |arrow| arrow[:tip_delta] } }).to eq([[0.0], [4.0]])
+  end
+end
+
+RSpec.describe Ea::Svg::Parity::Differ, "connector arrowheads" do
+  include_context "connector arrowhead fixture"
+
+  it "reports an extra arrowhead touching only our endpoint" do
+    ref = '<svg><g><path d="M 0 0 L 100 0"/></g></svg>'
+    delta = described_class.new(ours: reference, reference: ref).connector_deltas.first
+
+    expect(delta[:arrowhead_deltas]).to contain_exactly(
+      include(end: :target, reference: nil, tip_delta: Float::INFINITY)
+    )
+  end
+end
+
 RSpec.describe Ea::Svg::Parity::Differ do
   include_context "text svg fixture"
 
