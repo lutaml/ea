@@ -1,0 +1,69 @@
+model: examples/qea/20251010_current_plateau_v5.1.qea
+diagrams:
+  - guid: "{88D0CB44-20D0-44fc-A6E3-B663332EF401}"
+    eaid: EAID_88D0CB44_20D0_44fc_A6E3_B663332EF401
+    name: CityGMLCore
+    covers:
+      - "Class baseline: 11 class placements."
+      - "#52 geometry: 4 connectors with stored edges; 2 labeled connectors."
+  - guid: "{9AAD6C21-B1E7-4472-B64A-FB5E3569D970}"
+    eaid: EAID_9AAD6C21_B1E7_4472_B64A_FB5E3569D970
+    name: LandUse
+    covers:
+      - "Notes and labels: 4 classes and a Text object; 1 labeled connector."
+      - "#52 geometry: 2 connectors with stored edges."
+      - "#53 fonts: 4 placements with explicit font styles."
+  - guid: "{3A77A5D0-4E1B-4116-8AAD-407FC422B47F}"
+    eaid: EAID_3A77A5D0_4E1B_4116_8AAD_407FC422B47F
+    name: Geometric Aggregates
+    covers:
+      - "#52 geometry: 13 classes; 6 connectors with stored edges and 6 labeled connectors."
+      - "#53 fonts: 13 placements with explicit font styles."
+  - guid: "{C028B286-4C85-47d8-B6D5-80B28F556E82}"
+    eaid: EAID_C028B286_4C85_47d8_B6D5_80B28F556E82
+    name: GenericAttribute
+    covers:
+      - "Notes and labels: 9 classes, 2 Note/Text objects, 8 labeled connectors."
+      - "#52 geometry: 8 connectors with stored edges."
+      - "#53 fonts: 9 placements with explicit font styles."
+  - guid: "{ADC8773C-1B27-48ac-BAC1-14C1C919FAF6}"
+    eaid: EAID_ADC8773C_1B27_48ac_BAC1_14C1C919FAF6
+    name: WaterBody
+    covers:
+      - "Notes and labels: 12 classes, a note, 8 labeled connectors."
+      - "#52 geometry: 9 connectors with stored edges."
+      - "#53 fonts: 13 placements with explicit font styles."
+  - guid: "{8FD488EF-BAAB-40ec-A7ED-F7CC831D546E}"
+    eaid: EAID_8FD488EF_BAAB_40ec_A7ED_F7CC831D546E
+    name: 都市計画決定情報の概要
+    covers:
+      - "Dense class diagram: 21 classes and a note."
+      - "#52 geometry: 10 connectors with stored edges; 5 labeled connectors."
+      - "#53 fonts: Japanese text and 21 placements with explicit font styles."
+  - guid: "{0016F797-D055-4717-AF1A-606413D0A166}"
+    eaid: EAID_0016F797_D055_4717_AF1A_606413D0A166
+    name: 位置図_C0601
+    covers:
+      - "#52 reproduction diagram: 3 connectors with stored edges and 3 labeled connectors."
+      - "Notes and labels: 5 classes and a note."
+      - "#53 fonts: Japanese text and 5 placements with explicit font styles."
+  - guid: "{4EB75007-B31D-4f2c-8855-7E9D3A3B17F4}"
+    eaid: EAID_4EB75007_B31D_4f2c_8855_7E9D3A3B17F4
+    name: 屋内ナビゲーションのための拡張属性
+    covers:
+      - "Notes and labels: 17 classes, a note, 15 labeled connectors."
+      - "#52 geometry: 15 connectors with stored edges."
+      - "#53 fonts: Japanese text and 18 placements with explicit font styles."
+  - guid: "{38170608-32B5-4a6f-A68D-A0D7C0C9D019}"
+    eaid: EAID_38170608_32B5_4a6f_A68D_A0D7C0C9D019
+    name: 災害リスク（浸水面）
+    covers:
+      - "Notes and labels: 9 classes, a note, 7 labeled connectors."
+      - "#52 geometry: 7 connectors with stored edges."
+      - "#53 fonts: Japanese text and 2 placements with explicit font styles."
+  - guid: "{0BE81AC5-031B-4973-A9A0-223CCD92BAA1}"
+    eaid: EAID_0BE81AC5_031B_4973_A9A0_223CCD92BAA1
+    name: indoor
+    covers:
+      - "#52 geometry: 17 classes; 12 connectors with stored edges and 12 labeled connectors."
+      - "#53 fonts: 17 placements with explicit font styles."
