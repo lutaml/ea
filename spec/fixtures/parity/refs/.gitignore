@@ -1,0 +1,2 @@
+# Keep native EA reference exports despite the repository's SVG artifact ignore.
+!*.svg
