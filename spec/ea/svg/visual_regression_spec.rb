@@ -11,49 +11,54 @@ require_relative "../../support/svg_canonicalizer"
 #   - how many reference diagrams we have
 #   - how many match structurally (after canonicalization)
 #   - how many differ (and by how many elements)
-RSpec.describe "EA SVG visual regression", :visual_regression do
-  XMI_PATH = "/Users/mulgogi/src/mn/mn-samples-plateau/sources/xmi/plateau_all_packages_export.xmi"
-  # Constants defined inside RSpec.describe leak to top-level, so
-  # use a unique name to avoid collision with qea_regression_spec.
-  VISUAL_REF_DIR = "/Users/mulgogi/src/mn/mn-samples-plateau/sources/001-mds/xmi-images"
-
-  before(:all) do
-    skip "Sample XMI not available at #{XMI_PATH}" unless File.exist?(XMI_PATH)
-    skip "Reference SVG dir not available at #{VISUAL_REF_DIR}" unless File.exist?(VISUAL_REF_DIR)
+# Optional extra: set EA_PLATEAU_XMI and EA_PLATEAU_REF_DIR to a local
+# plateau export to run the wider measurement. Without them the spec
+# skips; the committed parity gate (spec/fixtures/parity) covers CI.
+module VisualRegressionHelpers
+  def load_document(path)
+    root = Xmi::Sparx::Root.parse_xml(File.read(path))
+    Ea::Sources::Xmi::Adapter.new(root, path).to_document
   end
 
-  let(:document) do
-    root = Xmi::Sparx::Root.parse_xml(File.read(XMI_PATH))
-    Ea::Sources::Xmi::Adapter.new(root, XMI_PATH).to_document
+  def render_svg(diagram)
+    Ea::Svg::EaEmitter::Document.new(
+      diagram, model_index: document.index_by_id, frame: true
+    ).render
+  end
+
+  def rect_count(svg)
+    Nokogiri::XML(svg).css("rect").size
+  end
+end
+
+RSpec.describe "EA SVG visual regression", :visual_regression do
+  include VisualRegressionHelpers
+
+  let(:xmi_path) { ENV.fetch("EA_PLATEAU_XMI", nil) }
+  let(:ref_dir) { ENV.fetch("EA_PLATEAU_REF_DIR", nil) }
+  let(:document) { load_document(xmi_path) }
+
+  before do
+    skip "set EA_PLATEAU_XMI to run" unless xmi_path && File.exist?(xmi_path)
+    skip "set EA_PLATEAU_REF_DIR to run" unless ref_dir && Dir.exist?(ref_dir)
   end
 
   it "renders a representative diagram and matches EA structurally" do
-    # Pick a diagram with substantial content and a known reference.
-    target = document.diagrams.find { |d| File.exist?(File.join(VISUAL_REF_DIR, "#{d.id}.svg")) }
+    target = document.diagrams.find { |d| File.exist?(File.join(ref_dir, "#{d.id}.svg")) }
     skip "no overlapping diagram IDs between XMI and reference SVGs" unless target
 
-    svg = Ea::Svg::EaEmitter::Document.new(target, model_index: document.index_by_id, frame: true).render
-    reference = File.read(File.join(VISUAL_REF_DIR, "#{target.id}.svg"))
-
-    # At minimum, our SVG should parse as valid XML.
+    svg = render_svg(target)
+    ours = rect_count(svg)
+    ref = rect_count(File.read(File.join(ref_dir, "#{target.id}.svg")))
     expect { Nokogiri::XML(svg, &:strict) }.not_to raise_error
-
-    # And contain the same number of <rect> elements as the reference.
-    our_rects = Nokogiri::XML(svg).css("rect").size
-    ref_rects = Nokogiri::XML(reference).css("rect").size
-    expect(our_rects).to be > 0
-    # Allow some difference (we may render fewer/more divider rects).
-    ratio = [our_rects.to_f / ref_rects, ref_rects.to_f / our_rects].min
-    expect(ratio).to be > 0.5,
-      "rect count diverges: ours=#{our_rects}, ref=#{ref_rects}"
+    expect(ours).to be > 0
+    expect([ours.to_f / ref, ref.to_f / ours].min).to be > 0.5,
+                                                      "rect count diverges: ours=#{ours}, ref=#{ref}"
   end
 
   it "renders at least N diagrams from the XMI without errors" do
-    sample = document.diagrams.first(10)
-    sample.each do |diagram|
-      expect {
-        Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id, frame: true).render
-      }.not_to raise_error
+    document.diagrams.first(10).each do |diagram|
+      expect { render_svg(diagram) }.not_to raise_error
     end
   end
 end
