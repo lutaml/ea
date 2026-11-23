@@ -601,6 +601,8 @@ module Ea
 
             ::Lutaml::Uml::Value.new.tap do |value|
               value.name = owned_literal.name
+              ext_attr = fetch_attribute_node(owned_literal.id)
+              value.initial = ext_attr.initial if ext_attr&.initial
               value.type = lookup_entity_name(uml_type_id) || uml_type_id
               value.definition = lookup_attribute_documentation(owned_literal.id)
             end

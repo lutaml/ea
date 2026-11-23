@@ -62,10 +62,17 @@ module Ea
         def build_enum_value(ea_attr)
           Lutaml::Uml::Value.new.tap do |value|
             value.name = ea_attr.name
+            value.initial = present_text(ea_attr.default)
             value.id = normalize_guid_to_xmi_format(ea_attr.ea_guid, "EAID")
-            value.definition = ea_attr.notes unless
-              ea_attr.notes.nil? || ea_attr.notes.empty?
+            value.definition = present_text(ea_attr.notes)
           end
+        end
+
+        # @return [String, nil] the text when non-blank, otherwise nil
+        def present_text(text)
+          return nil if text.nil? || text.empty?
+
+          text
         end
 
       end
