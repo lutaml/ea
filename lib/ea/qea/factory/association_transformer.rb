@@ -46,7 +46,7 @@ module Ea
             end
 
             # Map definition/notes
-            assoc.definition = ea_connector.notes unless
+            assoc.definition = normalize_note(ea_connector.notes) unless
               ea_connector.notes.nil? || ea_connector.notes.empty?
 
             # Map stereotype

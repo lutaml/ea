@@ -115,6 +115,11 @@ RSpec.describe Ea::Qea::Factory::BaseTransformer do
       expect(result).to eq(min: "1", max: "1")
     end
 
+    it "parses bare '*' as unbounded 0..*" do
+      result = transformer.parse_cardinality("*")
+      expect(result).to eq(min: "0", max: "*")
+    end
+
     it "returns nil values for nil input" do
       result = transformer.parse_cardinality(nil)
       expect(result).to eq(min: nil, max: nil)
@@ -165,6 +170,40 @@ RSpec.describe Ea::Qea::Factory::BaseTransformer do
     it "handles case insensitively" do
       result = transformer.to_boolean("TRUE")
       expect(result).to be true
+    end
+  end
+
+  describe "#normalize_guid_to_xmi_src_dst_format" do
+    it "returns nil for nil GUID instead of crashing" do
+      expect(transformer.normalize_guid_to_xmi_src_dst_format(nil)).to be_nil
+    end
+
+    it "returns nil for empty GUID" do
+      expect(transformer.normalize_guid_to_xmi_src_dst_format("")).to be_nil
+    end
+
+    it "appends src/dst segment" do
+      guid = "{AAAA1111-0000-0000-0000-000000000001}"
+      expect(transformer.normalize_guid_to_xmi_src_dst_format(guid, "EAID", true))
+        .to eq("EAID_srcAA1111_0000_0000_0000_000000000001")
+      expect(transformer.normalize_guid_to_xmi_src_dst_format(guid, "EAID", false))
+        .to eq("EAID_dstAA1111_0000_0000_0000_000000000001")
+    end
+  end
+
+  describe "#normalize_note" do
+    it "strips RTF markup and normalizes line endings" do
+      rtf = "{\\rtf1\\ansi Note {\\b bold} text\\par  second line}"
+      expect(transformer.normalize_note(rtf))
+        .to eq("Note bold text\n second line")
+    end
+
+    it "passes plain text through with line-ending normalization" do
+      expect(transformer.normalize_note("plain\r\nnote")).to eq("plain\nnote")
+    end
+
+    it "returns nil for nil" do
+      expect(transformer.normalize_note(nil)).to be_nil
     end
   end
 end

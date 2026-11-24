@@ -18,7 +18,7 @@ module Ea
         def self.from_note(note_text, owner_guid, kind: "documentation")
           return [] if note_text.nil? || note_text.empty?
 
-          [new(owner_guid).build(kind, note_text)]
+          [new(owner_guid).build(kind, Ea::Rtf.to_text(note_text))]
         end
 
         def build(kind, body, author: nil, modified_date: nil)

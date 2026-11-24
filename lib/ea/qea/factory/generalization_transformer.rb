@@ -31,7 +31,7 @@ module Ea
 
             # Map definition from ea_connector notes
             if !ea_connector&.notes.nil? && !ea_connector&.notes&.empty?
-              gen.definition = normalize_line_endings(ea_connector.notes)
+              gen.definition = normalize_note(ea_connector.notes)
             end
 
             # Map stereotype from current object

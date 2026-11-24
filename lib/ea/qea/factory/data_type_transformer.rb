@@ -27,7 +27,7 @@ module Ea
             end
 
             # Map definition/notes
-            data_type.definition = ea_object.note unless
+            data_type.definition = normalize_note(ea_object.note) unless
               ea_object.note.nil? || ea_object.note.empty?
 
             # Load and transform attributes

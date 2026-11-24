@@ -34,7 +34,7 @@ module Ea
             end
 
             # Map definition/notes
-            instance.definition = ea_object.note unless
+            instance.definition = normalize_note(ea_object.note) unless
               ea_object.note.nil? || ea_object.note.empty?
 
             # Load and transform tagged values

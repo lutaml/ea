@@ -200,5 +200,40 @@ RSpec.describe Ea::Qea::Infrastructure::DatabaseConnection do
         expect(count).to be >= 0
       end
     end
+
+    it "opens a ZIP-compressed QEA archive" do
+      require "zip"
+      zip_path = File.join(Dir.tmpdir, "ea-spec-#{Process.pid}-test.qea.zip")
+
+      begin
+        Zip::File.open(zip_path, create: true) do |zip|
+          zip.add("model.qea", test_qea_file)
+        end
+
+        conn = described_class.new(zip_path)
+        db = conn.connect
+        count = db.execute("SELECT COUNT(*) as count FROM t_object")
+          .first["count"]
+        expect(count).to be >= 0
+        conn.close
+      ensure
+        File.delete(zip_path) if File.exist?(zip_path)
+      end
+    end
+
+    it "raises Ea::Error for a file that is neither SQLite nor ZIP" do
+      garbage = Tempfile.new(["garbage", ".qea"])
+      garbage.write("this is not a database")
+      garbage.close
+
+      begin
+        conn = described_class.new(garbage.path)
+        expect { conn.connect }.to raise_error(
+          Ea::Error, /not a QEA file/
+        )
+      ensure
+        garbage.close!
+      end
+    end
   end
 end

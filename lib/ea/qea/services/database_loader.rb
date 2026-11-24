@@ -180,21 +180,36 @@ module Ea
 
           rows = reader.all
           rows.each_with_index do |row, index|
-            record = model_class.from_db_row(row)
+            record = model_class.from_db_row(scrub_row(row))
             records << record if record
             if @progress_callback
               report_progress(table_name, index + 1,
                               total)
             end
           rescue ArgumentError, TypeError, EncodingError => e
-            warn "Error loading record from #{table_name}: #{e.message}"
+            warn "Error loading #{table_name} row #{index + 1}: #{e.message}"
           rescue StandardError => e
             # Catch-all for record-level failures: skip bad records,
             # don't abort the entire load. Connection-level errors propagate.
-            warn "Unexpected error loading record from #{table_name}: #{e.message}"
+            warn "Unexpected error loading #{table_name} row #{index + 1}: " \
+                 "#{e.message}"
           end
 
           records
+        end
+
+        # Replace invalid byte sequences (e.g. CP1252 bytes stored by
+        # older EA projects) so one bad field no longer drops the whole
+        # row at model-build time.
+        #
+        # @param row [Hash] database row with string keys
+        # @return [Hash] row with UTF-8-clean string values
+        def scrub_row(row)
+          return row unless row.is_a?(Hash)
+
+          row.transform_values do |value|
+            value.is_a?(String) ? value.scrub : value
+          end
         end
 
         # Report progress to callback

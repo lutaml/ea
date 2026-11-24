@@ -239,6 +239,22 @@ RSpec.describe Ea::Qea::Services::DatabaseLoader do
         # This should not raise even if some records fail to load
         expect { test_loader.load }.not_to raise_error
       end
+
+      it "scrubs invalid UTF-8 bytes instead of dropping the row" do
+        db = SQLite3::Database.new(test_qea_path)
+        db.execute(
+          "INSERT INTO t_object (Object_ID, Name, Object_Type, Package_ID) " \
+          "VALUES (?, ?, ?, ?)",
+          [3, "caf\xe9 ".dup.force_encoding(Encoding::BINARY), "Class", 10],
+        )
+        db.close
+
+        database = test_loader.load
+        record = database.objects.detect { |o| o.ea_object_id == 3 }
+        expect(record).not_to be_nil
+        expect(record.name).to be_valid_encoding
+        expect(record.name).to include("caf")
+      end
     end
 
     describe "#load_table" do
