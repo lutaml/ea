@@ -58,21 +58,24 @@ module Ea
         # @example With limit
         #   reader.all(limit: 10)
         #   # => Returns first 10 records
-        def all(limit: nil, offset: nil) # rubocop:disable Metrics/MethodLength
-          query = "SELECT * FROM #{@table_name}"
-          params = []
-
-          if limit
-            query += " LIMIT ?"
-            params << limit
-          end
-
-          if offset
-            query += " OFFSET ?"
-            params << offset
-          end
-
+        def all(limit: nil, offset: nil)
+          query, params = build_select_query(limit: limit, offset: offset)
           @database.execute(query, params)
+        end
+
+        # Stream records row-by-row without materializing the full
+        # result set (halves peak memory on large tables).
+        #
+        # @param limit [Integer, nil]
+        # @param offset [Integer, nil]
+        # @yieldparam row [Hash] one database row
+        # @return [void]
+        #
+        # @example
+        #   reader.each_row { |row| models << Model.from_db_row(row) }
+        def each_row(limit: nil, offset: nil, &block)
+          query, params = build_select_query(limit: limit, offset: offset)
+          @database.execute(query, params, &block)
         end
 
         # Read records matching a WHERE clause
@@ -226,6 +229,22 @@ module Ea
           end
 
           @database.execute(query, params)
+        end
+
+        private
+
+        def build_select_query(limit: nil, offset: nil)
+          query = +"SELECT * FROM #{@table_name}"
+          params = []
+          if limit
+            query << " LIMIT ?"
+            params << limit
+          end
+          if offset
+            query << " OFFSET ?"
+            params << offset
+          end
+          [query, params]
         end
       end
     end

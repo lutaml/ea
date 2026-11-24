@@ -155,16 +155,34 @@ module Ea
         }.freeze
         GLYPH_FALLBACK = 0.61
 
-        def self.estimate_width(text, size, _width_factor = nil, family: nil,
-                                weight: nil, style: nil, logical_height: nil,
-                                legend_title: false)
-          opts = { family: family, weight: weight, style: style,
-                   logical_height: logical_height, legend_title: legend_title }
-          real = Ea::Fonts::Metrics.text_length(text, size, **opts)
-          return real if real
-          return piecewise_width(text, size, opts) if Ea::Fonts::Metrics.piecewise_family?(family, size)
+        # Text wrapping re-measures the same strings many times per
+        # diagram; the cache is bounded to keep memory flat.
+        WIDTH_CACHE_LIMIT = 20_000
+        WIDTH_CACHE = {}
 
-          text.to_s.each_char.sum { |ch| glyph_estimate(ch, size) }
+        class << self
+          def estimate_width(text, size, _width_factor = nil, family: nil,
+                             weight: nil, style: nil, logical_height: nil,
+                             legend_title: false)
+            opts = { family: family, weight: weight, style: style,
+                     logical_height: logical_height,
+                     legend_title: legend_title }
+            key = [text, size, opts]
+            cached = WIDTH_CACHE[key]
+            return cached unless cached.nil?
+
+            width = compute_width(text, size, opts)
+            WIDTH_CACHE[key] = width if WIDTH_CACHE.size < WIDTH_CACHE_LIMIT
+            width
+          end
+
+          def compute_width(text, size, opts)
+            real = Ea::Fonts::Metrics.text_length(text, size, **opts)
+            return real if real
+            return piecewise_width(text, size, opts) if Ea::Fonts::Metrics.piecewise_family?(opts[:family], size)
+
+            text.to_s.each_char.sum { |ch| glyph_estimate(ch, size) }
+          end
         end
 
         # A Cambria run outside 7pt that is not wholly in the measured

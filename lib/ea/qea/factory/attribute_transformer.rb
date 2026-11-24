@@ -77,15 +77,10 @@ module Ea
           return [] if attribute_id.nil?
           return [] unless database.attribute_tags
 
-          # Filter attribute tags for this attribute from the in-memory
-          # collection
-          ea_tags = database.attribute_tags.select do |tag|
-            tag.element_id == attribute_id
-          end
-
-          # Transform to UML tagged values
           tag_transformer = AttributeTagTransformer.new(database)
-          tag_transformer.transform_collection(ea_tags)
+          tag_transformer.transform_collection(
+            database.attribute_tags_for_element(attribute_id)
+          )
         end
       end
     end

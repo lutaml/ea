@@ -177,21 +177,22 @@ module Ea
 
           total = reader.count
           records = []
+          index = 0
 
-          rows = reader.all
-          rows.each_with_index do |row, index|
+          reader.each_row do |row|
+            index += 1
             record = model_class.from_db_row(scrub_row(row))
             records << record if record
             if @progress_callback
-              report_progress(table_name, index + 1,
+              report_progress(table_name, index,
                               total)
             end
           rescue ArgumentError, TypeError, EncodingError => e
-            warn "Error loading #{table_name} row #{index + 1}: #{e.message}"
+            warn "Error loading #{table_name} row #{index}: #{e.message}"
           rescue StandardError => e
             # Catch-all for record-level failures: skip bad records,
             # don't abort the entire load. Connection-level errors propagate.
-            warn "Unexpected error loading #{table_name} row #{index + 1}: " \
+            warn "Unexpected error loading #{table_name} row #{index}: " \
                  "#{e.message}"
           end
 

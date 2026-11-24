@@ -41,7 +41,7 @@ module Ea
       def serialize_to_liquid(xmi_model, guidance = nil)
         setup_model(xmi_model)
         document = build_document(xmi_model)
-        lookup = LookupService.new(self)
+        lookup = LookupService.new(self, guidance)
         options = {
           xmi_root_model: @xmi_root_model,
           id_name_mapping: @id_name_mapping,
