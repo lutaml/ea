@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
+require "lutaml/model"
+
 module Ea
   module Qea
     module Validation
       # Represents a single validation message with severity, category, and
-      # context information
+      # context information. Serialization (hash/JSON, with nil optional
+      # fields omitted) is declared through lutaml-model mappings.
       #
       # @example Creating an error message
       #   message = ValidationMessage.new(
@@ -18,64 +21,61 @@ module Ea
       #     message: "member_end references non-existent class",
       #     location: "Package::SubPackage"
       #   )
-      class ValidationMessage
-        # Severity levels for validation messages
+      class ValidationMessage < Lutaml::Model::Serializable
+        # Severity levels for validation messages (string tags; symbol
+        # inputs are normalized by the attribute cast)
         module Severity
-          ERROR = :error     # Breaks integrity, must fix
-          WARNING = :warning # May cause issues, should review
-          INFO = :info       # Informational, may be intentional
+          ERROR = "error"     # Breaks integrity, must fix
+          WARNING = "warning" # May cause issues, should review
+          INFO = "info"       # Informational, may be intentional
         end
 
         # Categories of validation issues
         module Category
-          MISSING_REFERENCE = :missing_reference
-          ORPHANED = :orphaned
-          DUPLICATE = :duplicate
-          INVALID_TYPE = :invalid_type
-          CIRCULAR_REFERENCE = :circular_reference
-          MISSING_REQUIRED = :missing_required
-          CONSTRAINT_VIOLATION = :constraint_violation
+          MISSING_REFERENCE = "missing_reference"
+          ORPHANED = "orphaned"
+          DUPLICATE = "duplicate"
+          INVALID_TYPE = "invalid_type"
+          CIRCULAR_REFERENCE = "circular_reference"
+          MISSING_REQUIRED = "missing_required"
+          CONSTRAINT_VIOLATION = "constraint_violation"
         end
 
-        attr_reader :severity, :category, :entity_type, :entity_id,
-                    :entity_name, :field, :reference, :message, :location,
-                    :context
+        attribute :severity, :string
+        attribute :category, :string
+        attribute :entity_type, :string
+        attribute :entity_id, :string
+        attribute :entity_name, :string
+        attribute :field, :string
+        attribute :reference, :string
+        attribute :message, :string
+        attribute :location, :string
+        attribute :context, :hash, default: -> { {} }
 
-        # Creates a new validation message
-        #
-        # @param severity [Symbol] Message severity (:error, :warning, :info)
-        # @param category [Symbol] Category of the issue
-        # @param entity_type [Symbol] Type of entity (e.g., :class,
-        #   :association)
-        # @param entity_id [String] XMI ID or database ID of the entity
-        # @param entity_name [String] Human-readable name of the entity
-        # @param field [String, nil] Field with the issue
-        # @param reference [String, nil] What it's trying to reference
-        # @param message [String] Human-readable description
-        # @param location [String, nil] Package path or context
-        # @param context [Hash] Additional context information
-        def initialize( # rubocop:disable Metrics/ParameterLists
-          severity:,
-          category:,
-          entity_type:,
-          entity_id:,
-          entity_name:,
-          message:,
-          field: nil,
-          reference: nil,
-          location: nil,
-          context: {}
-        )
-          @severity = severity
-          @category = category
-          @entity_type = entity_type
-          @entity_id = entity_id
-          @entity_name = entity_name
-          @field = field
-          @reference = reference
-          @message = message
-          @location = location
-          @context = context
+        json do
+          map "severity", to: :severity, render_nil: :omit
+          map "category", to: :category, render_nil: :omit
+          map "entity_type", to: :entity_type, render_nil: :omit
+          map "entity_id", to: :entity_id, render_nil: :omit
+          map "entity_name", to: :entity_name, render_nil: :omit
+          map "field", to: :field, render_nil: :omit
+          map "reference", to: :reference, render_nil: :omit
+          map "message", to: :message, render_nil: :omit
+          map "location", to: :location, render_nil: :omit
+          map "context", to: :context, render_nil: :omit
+        end
+
+        yaml do
+          map "severity", to: :severity, render_nil: :omit
+          map "category", to: :category, render_nil: :omit
+          map "entity_type", to: :entity_type, render_nil: :omit
+          map "entity_id", to: :entity_id, render_nil: :omit
+          map "entity_name", to: :entity_name, render_nil: :omit
+          map "field", to: :field, render_nil: :omit
+          map "reference", to: :reference, render_nil: :omit
+          map "message", to: :message, render_nil: :omit
+          map "location", to: :location, render_nil: :omit
+          map "context", to: :context, render_nil: :omit
         end
 
         # Checks if this is an error message
@@ -113,30 +113,13 @@ module Ea
           parts.join("\n")
         end
 
-        # Returns a hash representation of the message
+        # Symbol-keyed view of the message. The canonical serialization
+        # (nil fields omitted) is the string-keyed framework output via
+        # #to_hash / #to_json.
         #
         # @return [Hash]
-        def to_h # rubocop:disable Metrics/MethodLength
-          {
-            severity: severity,
-            category: category,
-            entity_type: entity_type,
-            entity_id: entity_id,
-            entity_name: entity_name,
-            field: field,
-            reference: reference,
-            message: message,
-            location: location,
-            context: context,
-          }.compact
-        end
-
-        # Returns a JSON representation of the message
-        #
-        # @return [String]
-        def to_json(*)
-          require "json"
-          to_h.to_json(*)
+        def to_h
+          to_hash.transform_keys(&:to_sym)
         end
       end
     end

@@ -111,7 +111,7 @@ module Ea
         # @param severity [Symbol] The severity to filter by
         # @return [Array<ValidationMessage>]
         def by_severity(severity)
-          @messages.select { |m| m.severity == severity }
+          @messages.select { |m| m.severity == severity.to_s }
         end
 
         # Returns messages filtered by category
@@ -119,7 +119,7 @@ module Ea
         # @param category [Symbol] The category to filter by
         # @return [Array<ValidationMessage>]
         def by_category(category)
-          @messages.select { |m| m.category == category }
+          @messages.select { |m| m.category == category.to_s }
         end
 
         # Returns messages filtered by entity type
@@ -127,7 +127,7 @@ module Ea
         # @param entity_type [Symbol] The entity type to filter by
         # @return [Array<ValidationMessage>]
         def by_entity_type(entity_type)
-          @messages.select { |m| m.entity_type == entity_type }
+          @messages.select { |m| m.entity_type == entity_type.to_s }
         end
 
         # Returns messages grouped by category
