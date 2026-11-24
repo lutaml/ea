@@ -25,9 +25,7 @@ module Ea
               ea_operation.notes.nil? || ea_operation.notes.empty?
 
             # Map stereotype if present
-            if ea_operation.stereotype && !ea_operation.stereotype.empty?
-              op.stereotype = [ea_operation.stereotype]
-            end
+            op.stereotype = [ea_operation.stereotype] if ea_operation.stereotype && !ea_operation.stereotype.empty?
           end
         end
 
@@ -58,7 +56,7 @@ module Ea
           return [] if operation_id.nil?
 
           database.operation_params_for(operation_id)
-            .sort_by { |p| p.pos || 0 }
+                  .sort_by { |p| p.pos || 0 }
         end
       end
     end

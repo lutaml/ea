@@ -16,7 +16,7 @@ RSpec.describe Ea::Qea::Factory::BaseTransformer do
     it "raises NotImplementedError" do
       expect { transformer.transform(nil) }.to raise_error(
         NotImplementedError,
-        /must implement #transform/,
+        /must implement #transform/
       )
     end
   end
@@ -48,7 +48,7 @@ RSpec.describe Ea::Qea::Factory::BaseTransformer do
       expect(result).to eq([
                              { transformed: 1 },
                              { transformed: 2 },
-                             { transformed: 3 },
+                             { transformed: 3 }
                            ])
     end
 
@@ -57,7 +57,7 @@ RSpec.describe Ea::Qea::Factory::BaseTransformer do
       result = concrete_transformer.transform_collection(items)
       expect(result).to eq([
                              { transformed: 1 },
-                             { transformed: 3 },
+                             { transformed: 3 }
                            ])
     end
   end
@@ -205,7 +205,7 @@ RSpec.describe Ea::Qea::Factory::BaseTransformer do
       guids = [
         "{487932BB-EB20-4e0a-B4ED-1D59B8CF688B}",
         "{AAAA1111-0000-0000-0000-000000000001}",
-        "{B6FD8AF3-971F-4b51-8964-3254D1F1EB7A}",
+        "{B6FD8AF3-971F-4b51-8964-3254D1F1EB7A}"
       ]
       guids.each do |guid|
         expect(transformer.normalize_guid_to_xmi_format(guid))

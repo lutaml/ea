@@ -25,7 +25,7 @@ RSpec.describe Ea::Qea::Models::BaseModel do
         described_class.primary_key_column
       end.to raise_error(
         NotImplementedError,
-        /must implement \.primary_key_column/,
+        /must implement \.primary_key_column/
       )
     end
 
@@ -40,7 +40,7 @@ RSpec.describe Ea::Qea::Models::BaseModel do
         described_class.table_name
       end.to raise_error(
         NotImplementedError,
-        /must implement \.table_name/,
+        /must implement \.table_name/
       )
     end
 

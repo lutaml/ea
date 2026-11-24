@@ -41,7 +41,7 @@ module Ea
         # case). An unframed export is finally anchored on the content.
         def lay_out
           canvas = Canvas.from(diagram, model_index: model_index,
-                             content_anchor: content_anchor)
+                                        content_anchor: content_anchor)
           seq = sequence(canvas)
           canvas, seq = redo_on_drawn(canvas, seq)
           return anchor_on_content(canvas, seq) if content_anchor

@@ -32,7 +32,7 @@ module Ea
           parser: parser,
           uml_document: uml_document,
           drop_options: build_drop_options(parser),
-          xmi_id_index: build_xmi_id_index(uml_document),
+          xmi_id_index: build_xmi_id_index(uml_document)
         )
       end
 
@@ -48,7 +48,7 @@ module Ea
           lookup: lookup,
           with_gen: true,
           with_assoc: true,
-          with_absolute_path: true,
+          with_absolute_path: true
         }
       end
 
@@ -57,15 +57,9 @@ module Ea
         index = {}
         collect = lambda do |container|
           index[container.xmi_id] ||= container if container.respond_to?(:xmi_id)
-          if container.respond_to?(:classes)
-            container.classes.each { |n| index[n.xmi_id] ||= n }
-          end
-          if container.respond_to?(:data_types)
-            container.data_types.each { |n| index[n.xmi_id] ||= n }
-          end
-          if container.respond_to?(:enums)
-            container.enums.each { |n| index[n.xmi_id] ||= n }
-          end
+          container.classes.each { |n| index[n.xmi_id] ||= n } if container.respond_to?(:classes)
+          container.data_types.each { |n| index[n.xmi_id] ||= n } if container.respond_to?(:data_types)
+          container.enums.each { |n| index[n.xmi_id] ||= n } if container.respond_to?(:enums)
           (container.packages || []).each { |p| collect.call(p) } if container.respond_to?(:packages)
         end
         collect.call(uml_document)

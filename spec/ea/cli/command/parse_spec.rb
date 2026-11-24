@@ -24,14 +24,14 @@ RSpec.describe Ea::Cli::Command::Parse do
   end
 
   it "raises on unknown format" do
-    expect {
+    expect do
       described_class.new(file: qea_path, format: "bogus").call
-    }.to raise_error(Ea::Cli::Error, /Unknown format/)
+    end.to raise_error(Ea::Cli::Error, /Unknown format/)
   end
 
   it "raises FileNotFound for missing files" do
-    expect {
+    expect do
       described_class.new(file: "/no/such.qea").call
-    }.to raise_error(Ea::Cli::FileNotFound)
+    end.to raise_error(Ea::Cli::FileNotFound)
   end
 end

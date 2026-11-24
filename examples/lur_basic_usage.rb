@@ -101,9 +101,7 @@ if qea_file
   if all_classes.any?
     first_class = all_classes.first
     puts "First class: #{first_class.name}"
-    if first_class.respond_to?(:stereotype) && first_class.stereotype
-      puts "  Stereotype: #{first_class.stereotype}"
-    end
+    puts "  Stereotype: #{first_class.stereotype}" if first_class.respond_to?(:stereotype) && first_class.stereotype
   end
   puts
 
@@ -120,7 +118,7 @@ if qea_file
     puts "\nFirst association:"
     member_end = assoc.member_end
     if member_end.is_a?(Array) && member_end.any?
-      puts "  Name: #{member_end.first&.name || 'unnamed'}"
+      puts "  Name: #{member_end.first&.name || "unnamed"}"
     elsif member_end.respond_to?(:name)
       puts "  Name: #{member_end.name}"
     else

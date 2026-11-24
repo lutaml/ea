@@ -28,7 +28,7 @@ module Ea
             stereotype = load_stereotype(ea_package.ea_guid)
             pkg.stereotype = [stereotype] if stereotype
 
-            # Note: Child packages and contents will be loaded separately
+            # NOTE: Child packages and contents will be loaded separately
             # to avoid circular dependencies and allow lazy loading
             # Don't initialize collections - they have default values
           end
@@ -63,7 +63,7 @@ module Ea
           return [] if parent_id.nil?
 
           database.child_packages_for(parent_id)
-            .sort_by { |p| p.tpos || 0 }
+                  .sort_by { |p| p.tpos || 0 }
         end
 
         # Load package contents (objects and diagrams)
@@ -84,7 +84,7 @@ module Ea
           class: :classes,
           enumeration: :enums,
           data_type: :data_types,
-          instance: :instances,
+          instance: :instances
         }.freeze
 
         # Load objects for a package

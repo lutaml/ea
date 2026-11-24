@@ -35,7 +35,7 @@ module Ea
         # Map EA visibility to UML visibility
         # @param ea_visibility [String] EA visibility value
         # @return [String] UML visibility value
-        def map_visibility(ea_visibility) # rubocop:disable Metrics/CyclomaticComplexity
+        def map_visibility(ea_visibility)
           return "public" if ea_visibility.nil? || ea_visibility.empty?
 
           case ea_visibility.downcase
@@ -52,7 +52,7 @@ module Ea
         # @return [Hash] Hash with :min and :max keys
         def parse_cardinality(cardinality_str)
           return { min: nil, max: nil } if cardinality_str.nil? ||
-            cardinality_str.empty?
+                                           cardinality_str.empty?
 
           parts = cardinality_str.split("..")
           if parts.size == 2
@@ -145,7 +145,7 @@ module Ea
           return [] if object_id.nil?
 
           ea_attributes = database.attributes_for_object(object_id)
-            .sort_by { |a| a.pos || 0 }
+                                  .sort_by { |a| a.pos || 0 }
           AttributeTransformer.new(database).transform_collection(ea_attributes)
         end
 
@@ -156,7 +156,7 @@ module Ea
           return [] if object_id.nil?
 
           ea_operations = database.operations_for_object(object_id)
-            .sort_by { |op| op.pos || 0 }
+                                  .sort_by { |op| op.pos || 0 }
           OperationTransformer.new(database).transform_collection(ea_operations)
         end
 

@@ -15,7 +15,7 @@ module Ea
         def transform(ea_diagram) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity,Metrics/MethodLength
           return nil if ea_diagram.nil?
 
-          Lutaml::Uml::Diagram.new.tap do |diagram| # rubocop:disable Metrics/BlockLength
+          Lutaml::Uml::Diagram.new.tap do |diagram|
             # Map basic properties
             diagram.name = ea_diagram.name
             diagram.xmi_id = normalize_guid_to_xmi_format(ea_diagram.ea_guid,
@@ -37,15 +37,11 @@ module Ea
               ea_diagram.notes.nil? || ea_diagram.notes.empty?
 
             # Map stereotype
-            if ea_diagram.stereotype && !ea_diagram.stereotype.empty?
-              diagram.stereotype = [ea_diagram.stereotype]
-            end
+            diagram.stereotype = [ea_diagram.stereotype] if ea_diagram.stereotype && !ea_diagram.stereotype.empty?
 
             # Load and transform diagram objects (visual placement)
             diagram_objects = load_diagram_objects(ea_diagram.diagram_id)
-            if diagram_objects.any?
-              diagram.diagram_objects.concat(diagram_objects)
-            end
+            diagram.diagram_objects.concat(diagram_objects) if diagram_objects.any?
 
             # Load and transform diagram links (visual routing)
             diagram_links = load_diagram_links(ea_diagram.diagram_id)

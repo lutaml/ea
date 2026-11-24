@@ -16,7 +16,7 @@ module XmiBasicRouteLabelHelpers
     diagram = basic_route_label_diagram(prefix)
     svg = Ea::Svg::EaEmitter::Document.new(
       diagram, model_index: document.index_by_id, document: document,
-      frame: true
+               frame: true
     ).render
     Nokogiri::XML(svg).remove_namespaces!.xpath("//text").map(&:text)
   end

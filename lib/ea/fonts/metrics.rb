@@ -197,7 +197,7 @@ module Ea
         end
 
         _latin, cjk_count = split_advance(text, family: family,
-                                                 weight: weight, style: style)
+                                                weight: weight, style: style)
         (_latin * size_pt.to_f * factor_for(family, size_pt, weight, style) +
          cjk_count * CJK_ADVANCE * size_pt.to_f).round(3)
       end
@@ -324,7 +324,7 @@ module Ea
       def factor_for(family, size_pt, weight, style)
         style = STYLE_KEYS.fetch([bold?(weight), italic?(style)], :regular).to_s
         table = data["factors"].fetch(resolve_family(family), {})
-                                  .fetch(style, {})
+                               .fetch(style, {})
         table[size_pt.to_i.to_s] || table["default"] || 1.0
       end
 
@@ -370,7 +370,7 @@ module Ea
 
           out[style] ||= path
         end
-      rescue LoadError, StandardError => e
+      rescue LoadError, StandardError
         raise if ENV["EA_FONTS_DEBUG"]
 
         {}
@@ -406,7 +406,6 @@ module Ea
           out[cp] = (adv.to_f / upem).round(4) if adv
         end
       end
-
     end
   end
 end

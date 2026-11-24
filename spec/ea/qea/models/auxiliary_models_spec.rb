@@ -73,7 +73,7 @@ RSpec.describe "Ea::Qea auxiliary models (primary key + column map)" do
       it "declares the expected column_map entries" do
         column_map.each do |k, v|
           expect(model_class.column_map[k]).to eq(v),
-            "expected #{model_class}.column_map[#{k.inspect}] = #{v.inspect}"
+                                               "expected #{model_class}.column_map[#{k.inspect}] = #{v.inspect}"
         end
       end
 

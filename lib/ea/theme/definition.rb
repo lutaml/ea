@@ -191,29 +191,29 @@ module Ea
                   :markers, :package, :note, :fills
 
       DEFAULT_GEOMETRY = Geometry.new(inset_left: 35, inset_right: 50,
-                                       inset_top: 40, inset_bottom: 57).freeze
+                                      inset_top: 40, inset_bottom: 57).freeze
       DEFAULT_FRAME = FrameSpec.new(inset: 6, tab_height: 20, tab_slant: 13,
-                                     tab_label_x: 11, tab_label_y: 19,
-                                     tab_padding: 7).freeze
+                                    tab_label_x: 11, tab_label_y: 19,
+                                    tab_padding: 7).freeze
       DEFAULT_COMPARTMENTS = CompartmentSpec.new(header_top_padding: 12,
-                                                   header_line_offset: 6,
-                                                   divider_offset: 8,
-                                                   attr_line_offset: 6,
-                                                   attr_first_offset: 7,
-                                                   op_line_offset: 4).freeze
+                                                 header_line_offset: 6,
+                                                 divider_offset: 8,
+                                                 attr_line_offset: 6,
+                                                 attr_first_offset: 7,
+                                                 op_line_offset: 4).freeze
       DEFAULT_ATTR = AttrSpec.new(visibility_x_offset: 5,
-                                    content_x_offset: 20).freeze
+                                  content_x_offset: 20).freeze
       DEFAULT_MARKERS = MarkerSpec.new(diamond_half_width: 5,
-                                         diamond_half_height: 10,
-                                         triangle_half_base: 6,
-                                         triangle_height: 11,
-                                         arrow_half_base: 6,
-                                         arrow_height: 11).freeze
+                                       diamond_half_height: 10,
+                                       triangle_half_base: 6,
+                                       triangle_height: 11,
+                                       arrow_half_base: 6,
+                                       arrow_height: 11).freeze
       DEFAULT_PACKAGE = PackageSpec.new(tab_height: 20,
-                                          tab_label_padding: 10,
-                                          default_tab_width: 105).freeze
+                                        tab_label_padding: 10,
+                                        default_tab_width: 105).freeze
       DEFAULT_NOTE = NoteSpec.new(fold_size: 12, text_x_offset: 5,
-                                    text_y_offset: 12, line_height: 13).freeze
+                                  text_y_offset: 12, line_height: 13).freeze
 
       def initialize(id:, name: nil, font_family: nil, font_size: nil,
                      label_font_family: nil, label_font_size: nil,

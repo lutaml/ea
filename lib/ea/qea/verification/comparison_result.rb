@@ -16,7 +16,7 @@ module Ea
             data_types: 0,
             associations: 0,
             attributes: 0,
-            operations: 0,
+            operations: 0
           }
           @differences = []
           @xmi_only = {
@@ -24,14 +24,14 @@ module Ea
             classes: [],
             enums: [],
             data_types: [],
-            associations: [],
+            associations: []
           }
           @qea_only = {
             packages: [],
             classes: [],
             enums: [],
             data_types: [],
-            associations: [],
+            associations: []
           }
           @property_differences = []
         end
@@ -76,7 +76,7 @@ module Ea
           @property_differences << {
             type: element_type,
             name: element_name,
-            differences: differences,
+            differences: differences
           }
         end
 
@@ -87,7 +87,7 @@ module Ea
         def equivalent?
           # No critical XMI-only elements (some are acceptable)
           critical_xmi_only = xmi_only[:classes].any? ||
-            xmi_only[:packages].any?
+                              xmi_only[:packages].any?
 
           # No property differences that indicate information loss
           critical_property_diffs = property_differences.any? do |diff|
@@ -124,9 +124,7 @@ module Ea
               elements.first(5).each do |elem|
                 lines << "    - #{elem}"
               end
-              if elements.size > 5
-                lines << "    ... and #{elements.size - 5} more"
-              end
+              lines << "    ... and #{elements.size - 5} more" if elements.size > 5
             end
             lines << ""
           end
@@ -151,15 +149,13 @@ module Ea
                 lines << "    - #{d}"
               end
             end
-            if property_differences.size > 10
-              lines << "  ... and #{property_differences.size - 10} more"
-            end
+            lines << "  ... and #{property_differences.size - 10} more" if property_differences.size > 10
             lines << ""
           end
 
           # Result
           lines << "Result: " \
-                   "#{equivalent? ? '✓ EQUIVALENT' : '✗ NOT EQUIVALENT'}"
+                   "#{equivalent? ? "✓ EQUIVALENT" : "✗ NOT EQUIVALENT"}"
           lines << ""
 
           lines << if equivalent?
@@ -182,7 +178,7 @@ module Ea
             xmi_only: xmi_only,
             qea_only: qea_only,
             property_differences: property_differences,
-            summary: summary,
+            summary: summary
           }
         end
 
@@ -195,7 +191,7 @@ module Ea
             total_xmi_only: xmi_only.values.sum(&:size),
             total_qea_only: qea_only.values.sum(&:size),
             total_property_diffs: property_differences.size,
-            equivalent: equivalent?,
+            equivalent: equivalent?
           }
         end
 
@@ -209,18 +205,14 @@ module Ea
         # Get critical issues (information loss)
         #
         # @return [Array<String>] List of critical issues
-        def critical_issues # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+        def critical_issues # rubocop:disable Metrics/AbcSize
           issues = []
 
           # Missing packages
-          if xmi_only[:packages].any?
-            issues << "Missing #{xmi_only[:packages].size} packages in QEA"
-          end
+          issues << "Missing #{xmi_only[:packages].size} packages in QEA" if xmi_only[:packages].any?
 
           # Missing classes
-          if xmi_only[:classes].any?
-            issues << "Missing #{xmi_only[:classes].size} classes in QEA"
-          end
+          issues << "Missing #{xmi_only[:classes].size} classes in QEA" if xmi_only[:classes].any?
 
           # Property differences with information loss
           property_differences.each do |diff|

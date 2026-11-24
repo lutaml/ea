@@ -56,9 +56,7 @@ module Ea
         rescue Ea::Cli::Error
           raise
         rescue Ea::Error => e
-          if e.message.include?("lutaml-uml")
-            raise Ea::Cli::MissingUmlDependency
-          end
+          raise Ea::Cli::MissingUmlDependency if e.message.include?("lutaml-uml")
 
           raise Ea::Cli::Error, "Failed to parse #{path}: #{e.message}"
         end

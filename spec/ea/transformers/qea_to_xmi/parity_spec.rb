@@ -17,7 +17,7 @@ RSpec.describe "QEA to XMI parity ratchet" do
     "simple" => { only_ours: 1, only_ea: 75, mismatched: 0 },
     "test" => { only_ours: 17, only_ea: 305, mismatched: 3 },
     "ArcGISWorkspace_template" => { only_ours: 1, only_ea: 463, mismatched: 2 },
-    "UmlModel_template" => { only_ours: 0, only_ea: 1, mismatched: 0 },
+    "UmlModel_template" => { only_ours: 0, only_ea: 1, mismatched: 0 }
   }.freeze
 
   XMI_NS = { "xmi" => "http://www.omg.org/spec/XMI/20110701" }.freeze

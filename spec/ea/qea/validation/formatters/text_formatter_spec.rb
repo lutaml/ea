@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-                 "text_formatter"
 
 RSpec.describe Ea::Qea::Validation::Formatters::TextFormatter do
   let(:result) { Ea::Qea::Validation::ValidationResult.new }
@@ -54,7 +53,7 @@ RSpec.describe Ea::Qea::Validation::Formatters::TextFormatter do
           entity_type: :class,
           entity_id: "123",
           entity_name: "TestClass",
-          message: "Class not found",
+          message: "Class not found"
         )
       end
 
@@ -93,7 +92,7 @@ RSpec.describe Ea::Qea::Validation::Formatters::TextFormatter do
             entity_type: :class,
             entity_id: i.to_s,
             entity_name: "Class#{i}",
-            message: "Error #{i}",
+            message: "Error #{i}"
           )
         end
 
@@ -112,7 +111,7 @@ RSpec.describe Ea::Qea::Validation::Formatters::TextFormatter do
           entity_type: :class,
           entity_id: "456",
           entity_name: "UndocumentedClass",
-          message: "Class lacks documentation",
+          message: "Class lacks documentation"
         )
       end
 
@@ -142,7 +141,7 @@ RSpec.describe Ea::Qea::Validation::Formatters::TextFormatter do
           entity_type: :package,
           entity_id: "789",
           entity_name: "ModelPackage",
-          message: "Consider adding more classes",
+          message: "Consider adding more classes"
         )
       end
 
@@ -173,14 +172,14 @@ RSpec.describe Ea::Qea::Validation::Formatters::TextFormatter do
           entity_type: :class,
           entity_id: "1",
           entity_name: "ErrorClass",
-          message: "Critical error",
+          message: "Critical error"
         )
         result.add_warning(
           category: :missing_documentation,
           entity_type: :class,
           entity_id: "2",
           entity_name: "WarningClass",
-          message: "Minor warning",
+          message: "Minor warning"
         )
       end
 

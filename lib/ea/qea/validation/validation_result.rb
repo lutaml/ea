@@ -161,7 +161,7 @@ module Ea
             warnings: warnings.size,
             info: info.size,
             by_category: grouped_by_category.transform_values(&:size),
-            by_entity_type: grouped_by_entity_type.transform_values(&:size),
+            by_entity_type: grouped_by_entity_type.transform_values(&:size)
           }
         end
 
@@ -174,7 +174,7 @@ module Ea
             "Total Messages: #{stats[:total]}",
             "Errors: #{stats[:errors]}",
             "Warnings: #{stats[:warnings]}",
-            "Info: #{stats[:info]}",
+            "Info: #{stats[:info]}"
           ].join("\n")
         end
 
@@ -193,7 +193,7 @@ module Ea
         def to_h
           {
             statistics: statistics,
-            messages: @messages.map(&:to_h),
+            messages: @messages.map(&:to_h)
           }
         end
 

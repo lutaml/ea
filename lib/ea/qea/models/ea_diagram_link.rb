@@ -44,21 +44,17 @@ module Ea
 
         # Parse the Geometry string to extract routing points
         # @return [Hash] Parsed geometry data
-        def parsed_geometry # rubocop:disable Metrics/MethodLength
+        def parsed_geometry
           return {} unless geometry
 
           parts = geometry.split(",")
           result = {}
 
           # First 4 values are typically coordinates
-          if parts.length >= 4
-            result[:coords] = parts[0..3].map(&:strip).map(&:to_i)
-          end
+          result[:coords] = parts[0..3].map(&:strip).map(&:to_i) if parts.length >= 4
 
           # Remaining parts contain additional metadata
-          if parts.length > 4
-            result[:metadata] = parts[4..].join(",")
-          end
+          result[:metadata] = parts[4..].join(",") if parts.length > 4
 
           result
         end
@@ -69,7 +65,7 @@ module Ea
           parsed = parsed_style
           {
             source_oid: parsed["SOID"],
-            dest_oid: parsed["EOID"],
+            dest_oid: parsed["EOID"]
           }
         end
       end

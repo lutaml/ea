@@ -9,7 +9,7 @@ RSpec.describe Ea::Qea::Database do
         constraint_id: 1,
         ea_object_id: 42,
         constraint: "self.size > 0",
-        constraint_type: "Invariant",
+        constraint_type: "Invariant"
       )
     end
 
@@ -17,7 +17,7 @@ RSpec.describe Ea::Qea::Database do
       Ea::Qea::Models::EaTaggedValue.new(
         property_id: 1,
         element_id: "{GUID-1}",
-        tag_value: "version|2.0",
+        tag_value: "version|2.0"
       )
     end
 
@@ -26,7 +26,7 @@ RSpec.describe Ea::Qea::Database do
         property_id: 1,
         ea_object_id: 42,
         property: "isCollection",
-        value: "true",
+        value: "true"
       )
     end
 
@@ -35,7 +35,7 @@ RSpec.describe Ea::Qea::Database do
         client: "{GUID-1}",
         name: "Stereotypes",
         xref_type: "element property",
-        description: "@STEREO;Name=Test;@ENDSTEREO;",
+        description: "@STEREO;Name=Test;@ENDSTEREO;"
       )
     end
 
@@ -44,7 +44,7 @@ RSpec.describe Ea::Qea::Database do
         object_constraints: [constraint],
         tagged_values: [tagged_value],
         object_properties: [object_property],
-        xrefs: [xref],
+        xrefs: [xref]
       )
     end
 

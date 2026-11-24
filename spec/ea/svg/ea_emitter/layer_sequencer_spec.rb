@@ -60,7 +60,7 @@ RSpec.describe Ea::Svg::EaEmitter::LayerSequencer do
 
     it "includes the diagram frame when frame: true" do
       seq = described_class.new(diagram, model_index: model_index,
-                                  canvas: canvas, frame: true)
+                                         canvas: canvas, frame: true)
       layers = seq.layers
       svg = layers.join
       expect(svg).to include("rect") # frame rect or element rect
@@ -99,7 +99,7 @@ RSpec.describe Ea::Svg::EaEmitter::LayerSequencer do
 
     it "renders connector layers between elements and labels" do
       seq = described_class.new(diagram_with_connector,
-                                  model_index: model_index, canvas: canvas)
+                                model_index: model_index, canvas: canvas)
       layers = seq.layers
       svg = layers.join
       expect(svg).to include("<path")

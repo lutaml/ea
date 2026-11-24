@@ -64,7 +64,7 @@ RSpec.describe Ea::Mdg::Registry do
     it "returns the stereotype when found" do
       registry = described_class.new
       registry.register(document)
-      ft = registry.find_classifier_by_name("FeatureType")
+      registry.find_classifier_by_name("FeatureType")
       # FeatureType is a stereotype, not a classifier —
       # classifier lookups won't find it
     end

@@ -12,7 +12,7 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
         entity_type: :class,
         entity_id: "123",
         entity_name: "TestClass",
-        message: "Test error",
+        message: "Test error"
       )
 
       expect(result.messages.size).to eq(1)
@@ -28,7 +28,7 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
         entity_type: :association,
         entity_id: "456",
         entity_name: "TestAssociation",
-        message: "Test warning",
+        message: "Test warning"
       )
 
       expect(result.messages.size).to eq(1)
@@ -44,7 +44,7 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
         entity_type: :package,
         entity_id: "789",
         entity_name: "EmptyPackage",
-        message: "Test info",
+        message: "Test info"
       )
 
       expect(result.messages.size).to eq(1)
@@ -60,7 +60,7 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
         entity_type: :class,
         entity_id: "123",
         entity_name: "TestClass",
-        message: "Error",
+        message: "Error"
       )
       expect(result.has_errors?).to be true
     end
@@ -71,7 +71,7 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
         entity_type: :class,
         entity_id: "123",
         entity_name: "TestClass",
-        message: "Warning",
+        message: "Warning"
       )
       expect(result.has_errors?).to be false
     end
@@ -84,7 +84,7 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
         entity_type: :class,
         entity_id: "123",
         entity_name: "TestClass",
-        message: "Warning",
+        message: "Warning"
       )
       expect(result.valid?).to be true
     end
@@ -95,7 +95,7 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
         entity_type: :class,
         entity_id: "123",
         entity_name: "TestClass",
-        message: "Error",
+        message: "Error"
       )
       expect(result.valid?).to be false
     end
@@ -108,21 +108,21 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
         entity_type: :class,
         entity_id: "1",
         entity_name: "Class1",
-        message: "Error 1",
+        message: "Error 1"
       )
       result.add_warning(
         category: :orphaned,
         entity_type: :association,
         entity_id: "2",
         entity_name: "Assoc1",
-        message: "Warning 1",
+        message: "Warning 1"
       )
       result.add_info(
         category: :orphaned,
         entity_type: :package,
         entity_id: "3",
         entity_name: "Package1",
-        message: "Info 1",
+        message: "Info 1"
       )
     end
 
@@ -179,21 +179,21 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
         entity_type: :class,
         entity_id: "1",
         entity_name: "Class1",
-        message: "Error 1",
+        message: "Error 1"
       )
       result.add_error(
         category: :missing_reference,
         entity_type: :association,
         entity_id: "2",
         entity_name: "Assoc1",
-        message: "Error 2",
+        message: "Error 2"
       )
       result.add_warning(
         category: :orphaned,
         entity_type: :class,
         entity_id: "3",
         entity_name: "Class2",
-        message: "Warning 1",
+        message: "Warning 1"
       )
     end
 
@@ -202,7 +202,7 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
         grouped = result.grouped_by_category
         expect(grouped.keys).to contain_exactly(
           "missing_reference",
-          "orphaned",
+          "orphaned"
         )
         expect(grouped["missing_reference"].size).to eq(2)
         expect(grouped["orphaned"].size).to eq(1)
@@ -235,21 +235,21 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
         entity_type: :class,
         entity_id: "1",
         entity_name: "Class1",
-        message: "Error",
+        message: "Error"
       )
       result.add_warning(
         category: :orphaned,
         entity_type: :association,
         entity_id: "2",
         entity_name: "Assoc1",
-        message: "Warning",
+        message: "Warning"
       )
       result.add_info(
         category: :orphaned,
         entity_type: :package,
         entity_id: "3",
         entity_name: "Package1",
-        message: "Info",
+        message: "Info"
       )
     end
 
@@ -261,12 +261,12 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
       expect(stats[:info]).to eq(1)
       expect(stats[:by_category]).to include(
         "missing_reference" => 1,
-        "orphaned" => 2,
+        "orphaned" => 2
       )
       expect(stats[:by_entity_type]).to include(
         "class" => 1,
         "association" => 1,
-        "package" => 1,
+        "package" => 1
       )
     end
   end
@@ -278,14 +278,14 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
         entity_type: :class,
         entity_id: "1",
         entity_name: "Class1",
-        message: "Error",
+        message: "Error"
       )
       result.add_warning(
         category: :orphaned,
         entity_type: :association,
         entity_id: "2",
         entity_name: "Assoc1",
-        message: "Warning",
+        message: "Warning"
       )
     end
 
@@ -306,7 +306,7 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
         entity_type: :class,
         entity_id: "999",
         entity_name: "OtherClass",
-        message: "Other error",
+        message: "Other error"
       )
 
       result.add_warning(
@@ -314,7 +314,7 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
         entity_type: :package,
         entity_id: "888",
         entity_name: "Package1",
-        message: "Warning",
+        message: "Warning"
       )
 
       result.merge!(other_result)
@@ -332,7 +332,7 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
         entity_type: :class,
         entity_id: "1",
         entity_name: "Class1",
-        message: "Error",
+        message: "Error"
       )
     end
 
@@ -352,7 +352,7 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
         entity_type: :class,
         entity_id: "1",
         entity_name: "Class1",
-        message: "Error",
+        message: "Error"
       )
     end
 

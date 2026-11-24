@@ -119,7 +119,7 @@ module Ea
           "Multiplicity" => :multiplicity,
           "StyleEx" => :styleex,
           "ActionFlags" => :actionflags,
-          "EventFlags" => :eventflags,
+          "EventFlags" => :eventflags
         }.freeze
 
         def self.column_map
@@ -202,7 +202,7 @@ module Ea
           "Interface" => :class,
           "Signal" => :signal,
           "Object" => :instance,
-          "Association" => :association_element,
+          "Association" => :association_element
         }.freeze
 
         # @return [Symbol, nil] Registry key or nil if not a UML model element

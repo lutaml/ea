@@ -10,16 +10,16 @@ module Ea
 
         def check(model)
           valid_pkg_ids = (model.collections[:packages] || [])
-                            .map(&:package_id).to_set
+                          .map(&:package_id).to_set
 
           (model.collections[:objects] || []).select { |o| o.object_type == "Class" }.map do |klass|
             next unless klass.package_id
 
-            unless valid_pkg_ids.include?(klass.package_id)
-              offense(entity_id: klass.object_id,
-                      entity_name: klass.name,
-                      message: "Class references missing package_id=#{klass.package_id}")
-            end
+            next if valid_pkg_ids.include?(klass.package_id)
+
+            offense(entity_id: klass.object_id,
+                    entity_name: klass.name,
+                    message: "Class references missing package_id=#{klass.package_id}")
           end.compact
         end
       end

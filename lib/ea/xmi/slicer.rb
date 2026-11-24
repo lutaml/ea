@@ -51,7 +51,7 @@ module Ea
         model: ["packagedElement", "umldi:Diagram"].freeze,
         elements: ["element"].freeze,
         connectors: ["connector"].freeze,
-        diagrams: ["diagram"].freeze,
+        diagrams: ["diagram"].freeze
       }.freeze
       private_constant :GATED
 
@@ -59,7 +59,7 @@ module Ea
         "elements" => :elements,
         "connectors" => :connectors,
         "diagrams" => :drop,
-        "profiles" => :drop,
+        "profiles" => :drop
       }.freeze
       private_constant :SECTION_CHILD
 
@@ -160,7 +160,11 @@ module Ea
           # the parent is the nearest id-bearing element already on the
           # stack, so it has to be read before this element is pushed
           parent = nearest_id
-          refs = is_node ? [] : (@stack.last ? @stack.last[1] : [])
+          refs = if is_node
+                   []
+                 else
+                   (@stack.last ? @stack.last[1] : [])
+                 end
           @stack << [is_node ? id : nil, refs]
           unless is_node
             collect_refs(attributes, refs)
@@ -171,7 +175,7 @@ module Ea
             id: id, tag: name,
             xmi_type: attributes["xmi:type"], name: attributes["name"],
             parent_id: parent, section: @section.last, refs: refs,
-            links_refs: [],
+            links_refs: []
           )
           @nodes[id] = node
           collect_refs(attributes, node.refs)
@@ -260,13 +264,13 @@ module Ea
           node.refs.each { |r| frontier << [r, false] }
           node.links_refs.each { |r| frontier << [r, true] }
           # keeping a model element keeps its package ancestry
-          if node.section == :model
-            anc = nodes[node.parent_id]
-            while anc && !keep[anc.id]
-              keep[anc.id] = true
-              anc.refs.each { |r| frontier << [r, false] } unless anc.section == :model
-              anc = nodes[anc.parent_id]
-            end
+          next unless node.section == :model
+
+          anc = nodes[node.parent_id]
+          while anc && !keep[anc.id]
+            keep[anc.id] = true
+            anc.refs.each { |r| frontier << [r, false] } unless anc.section == :model
+            anc = nodes[anc.parent_id]
           end
         end
         keep_diagrams(nodes, keep)
@@ -318,7 +322,7 @@ module Ea
         def initialize(keeps, outputs)
           @keeps = keeps
           @outputs = outputs
-          @open = []   # [name, keys] - keys = group indexes keeping this element
+          @open = [] # [name, keys] - keys = group indexes keeping this element
           @section = []
           @events = 0
         end

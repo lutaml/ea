@@ -33,9 +33,7 @@ module Ea
       #
       # @param connection [SQLite3::Database] Database connection
       # @return [void]
-      def connection=(connection)
-        @connection = connection
-      end
+      attr_writer :connection
 
       # Close the database connection if open
       # @return [void]
@@ -70,30 +68,30 @@ module Ea
       # each maintain their own case/when dispatch. Adding a new
       # table = adding one hash entry.
       TABLE_TO_COLLECTION = {
-        "t_package"           => :packages,
-        "t_object"            => :objects,
-        "t_attribute"         => :attributes,
-        "t_operation"         => :operations,
-        "t_operationparams"   => :operation_params,
-        "t_connector"         => :connectors,
-        "t_diagram"           => :diagrams,
-        "t_diagramobjects"    => :diagram_objects,
-        "t_diagramlinks"      => :diagram_links,
-        "t_objectconstraint"  => :object_constraints,
-        "t_objectproperties"  => :object_properties,
-        "t_taggedvalue"       => :tagged_values,
-        "t_attributetag"      => :attribute_tags,
-        "t_xref"              => :xrefs,
-        "t_stereotypes"       => :stereotypes,
-        "t_datatypes"         => :datatypes,
-        "t_constrainttypes"   => :constraint_types,
-        "t_connectortypes"    => :connector_types,
-        "t_diagramtypes"      => :diagram_types,
-        "t_objecttypes"       => :object_types,
-        "t_statustypes"       => :status_types,
-        "t_complexitytypes"   => :complexity_types,
-        "t_documents"         => :documents,
-        "t_scripts"           => :scripts,
+        "t_package" => :packages,
+        "t_object" => :objects,
+        "t_attribute" => :attributes,
+        "t_operation" => :operations,
+        "t_operationparams" => :operation_params,
+        "t_connector" => :connectors,
+        "t_diagram" => :diagrams,
+        "t_diagramobjects" => :diagram_objects,
+        "t_diagramlinks" => :diagram_links,
+        "t_objectconstraint" => :object_constraints,
+        "t_objectproperties" => :object_properties,
+        "t_taggedvalue" => :tagged_values,
+        "t_attributetag" => :attribute_tags,
+        "t_xref" => :xrefs,
+        "t_stereotypes" => :stereotypes,
+        "t_datatypes" => :datatypes,
+        "t_constrainttypes" => :constraint_types,
+        "t_connectortypes" => :connector_types,
+        "t_diagramtypes" => :diagram_types,
+        "t_objecttypes" => :object_types,
+        "t_statustypes" => :status_types,
+        "t_complexitytypes" => :complexity_types,
+        "t_documents" => :documents,
+        "t_scripts" => :scripts
       }.freeze
 
       # @param table_name [String] EA SQL table name (e.g., "t_object")
@@ -123,7 +121,7 @@ module Ea
         return @objects if defined?(@objects)
 
         @objects = Repositories::ObjectRepository.new(
-          @collections[:objects] || [],
+          @collections[:objects] || []
         )
       end
 

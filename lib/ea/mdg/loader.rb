@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 module Ea
   module Mdg
     # Parses an MDG technology file into an Mdg::Document.

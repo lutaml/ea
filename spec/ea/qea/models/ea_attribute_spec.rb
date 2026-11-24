@@ -178,7 +178,7 @@ RSpec.describe Ea::Qea::Models::EaAttribute do
         "Name" => "myAttribute",
         "Type" => "Integer",
         "Scope" => "private",
-        "Stereotype" => "property",
+        "Stereotype" => "property"
       }
 
       attr = described_class.from_db_row(row)

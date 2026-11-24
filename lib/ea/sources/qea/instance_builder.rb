@@ -17,7 +17,7 @@ module Ea
           (?:Value=(?<value>[^;]*);)?
           (?:Op=(?<op>[^;]*);)?
           @ENDVAR;
-        /x.freeze
+        /x
 
         attr_reader :database
 
@@ -43,7 +43,7 @@ module Ea
             qualified_name: qualified_name_for(row),
             slots: slots_for(row),
             annotations: AnnotationBuilder.from_note(row.note, row.ea_guid,
-                                                      kind: "documentation")
+                                                     kind: "documentation")
           )
         end
 

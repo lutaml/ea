@@ -28,7 +28,7 @@ RSpec.describe Ea::Qea::Factory::DocumentBuilder do
     FakeAssociation.new(
       xmi_id: "ASSOC-001",
       member_end: "Building", member_end_xmi_id: "CLASS-001",
-      owner_end: "Site", owner_end_xmi_id: "CLASS-002",
+      owner_end: "Site", owner_end_xmi_id: "CLASS-002"
     )
   end
 
@@ -231,14 +231,14 @@ RSpec.describe Ea::Qea::Factory::DocumentBuilder do
       it "collects xmi_ids from nested packages" do
         inner_class = FakeClass.new(xmi_id: "INNER-CLASS-001", name: "InnerClass")
         inner_package = make_package(xmi_id: "INNER-PKG-001", name: "Inner",
-                                      classes: [inner_class])
+                                     classes: [inner_class])
         outer_package = make_package(xmi_id: "OUTER-PKG-001", name: "Outer",
-                                      packages: [inner_package])
+                                     packages: [inner_package])
 
         assoc = FakeAssociation.new(
           xmi_id: "ASSOC-001",
           member_end: "InnerClass", member_end_xmi_id: "INNER-CLASS-001",
-          owner_end: "OuterClass", owner_end_xmi_id: "OUTER-CLASS-001",
+          owner_end: "OuterClass", owner_end_xmi_id: "OUTER-CLASS-001"
         )
 
         outer_class = FakeClass.new(xmi_id: "OUTER-CLASS-001", name: "OuterClass")
@@ -253,16 +253,16 @@ RSpec.describe Ea::Qea::Factory::DocumentBuilder do
       it "finds classes deeply nested in package hierarchy" do
         deep_class = FakeClass.new(xmi_id: "DEEP-CLASS-001", name: "Deep")
         level3_pkg = make_package(xmi_id: "PKG-L3", name: "L3",
-                                   classes: [deep_class])
+                                  classes: [deep_class])
         level2_pkg = make_package(xmi_id: "PKG-L2", name: "L2",
-                                   packages: [level3_pkg])
+                                  packages: [level3_pkg])
         level1_pkg = make_package(xmi_id: "PKG-L1", name: "L1",
-                                   packages: [level2_pkg])
+                                  packages: [level2_pkg])
 
         assoc = FakeAssociation.new(
           xmi_id: "ASSOC-DEEP",
           member_end: "DeepClass", member_end_xmi_id: "DEEP-CLASS-001",
-          owner_end: "TopClass", owner_end_xmi_id: "TOP-CLASS-001",
+          owner_end: "TopClass", owner_end_xmi_id: "TOP-CLASS-001"
         )
 
         top_class = FakeClass.new(xmi_id: "TOP-CLASS-001", name: "Top")
@@ -281,7 +281,7 @@ RSpec.describe Ea::Qea::Factory::DocumentBuilder do
         assoc = FakeAssociation.new(
           xmi_id: "ASSOC-001",
           member_end: "InvalidClass", member_end_xmi_id: "INVALID-ID",
-          owner_end: "ValidClass", owner_end_xmi_id: nil,
+          owner_end: "ValidClass", owner_end_xmi_id: nil
         )
 
         builder.add_associations([assoc])
@@ -296,7 +296,7 @@ RSpec.describe Ea::Qea::Factory::DocumentBuilder do
         assoc = FakeAssociation.new(
           xmi_id: "ASSOC-001",
           member_end: "ValidClass", member_end_xmi_id: "CLASS-001",
-          owner_end: "InvalidClass", owner_end_xmi_id: "INVALID-TYPE",
+          owner_end: "InvalidClass", owner_end_xmi_id: "INVALID-TYPE"
         )
 
         builder.add_classes([klass])
@@ -311,11 +311,11 @@ RSpec.describe Ea::Qea::Factory::DocumentBuilder do
   describe "method chaining" do
     it "supports fluent interface", :aggregate_failures do
       doc = builder
-        .add_packages([mock_package])
-        .add_classes([mock_class])
-        .add_enums([mock_enum])
-        .set_metadata(title: "Test", caption: "Caption")
-        .build(validate: false)
+            .add_packages([mock_package])
+            .add_classes([mock_class])
+            .add_enums([mock_enum])
+            .set_metadata(title: "Test", caption: "Caption")
+            .build(validate: false)
 
       expect(doc.packages.size).to eq(1)
       expect(doc.classes.size).to eq(1)

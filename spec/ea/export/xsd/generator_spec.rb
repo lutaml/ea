@@ -86,8 +86,8 @@ RSpec.describe Ea::Export::Xsd do
     let(:generator) { described_class::Generator.new(class_mapping: mapping, namespaces: registry) }
 
     let(:model) do
-      fake_class = Struct.new(:name, :object_type, :object_id, :ea_guid)
-      fake_attr = Struct.new(:name, :type, :object_id)
+      Struct.new(:name, :object_type, :object_id, :ea_guid)
+      Struct.new(:name, :type, :object_id)
 
       Class.new do
         attr_reader :collections
@@ -100,14 +100,15 @@ RSpec.describe Ea::Export::Xsd do
           }
         end
 
-        def add_class(name, type, attrs = [])
+        def add_class(name, _type, attrs = [])
           id = collections[:objects].size + 1
-          collections[:objects] << Struct.new(:name, :object_type, :object_id, :ea_guid).new(name, "Class", id, "{guid-#{id}}")
+          collections[:objects] << Struct.new(:name, :object_type, :object_id, :ea_guid).new(name, "Class", id,
+                                                                                             "{guid-#{id}}")
           attrs.each do |attr_name, attr_type|
             collections[:attributes] << Struct.new(:name, :type, :object_id).new(attr_name, attr_type, id)
           end
         end
-      end.new.tap { |m| m.add_class("MyClass", "Class", [["name", "string"], ["count", "integer"]]) }
+      end.new.tap { |m| m.add_class("MyClass", "Class", [%w[name string], %w[count integer]]) }
     end
 
     it "emits a valid XSD schema root element" do

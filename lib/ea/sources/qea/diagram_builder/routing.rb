@@ -1292,17 +1292,17 @@ module Ea
             v_gap = v_dir = h_gap = h_dir = nil
             if src.y >= tgt.y + tgt.height
               v_gap = src.y - (tgt.y + tgt.height)
-              v_dir = [:t, :b]
+              v_dir = %i[t b]
             elsif tgt.y >= src.y + src.height
               v_gap = tgt.y - (src.y + src.height)
-              v_dir = [:b, :t]
+              v_dir = %i[b t]
             end
             if src.x >= tgt.x + tgt.width
               h_gap = src.x - (tgt.x + tgt.width)
-              h_dir = [:l, :r]
+              h_dir = %i[l r]
             elsif tgt.x >= src.x + src.width
               h_gap = tgt.x - (tgt.x + tgt.width)
-              h_dir = [:r, :l]
+              h_dir = %i[r l]
             end
             return points if v_gap.nil? && h_gap.nil?
 

@@ -21,7 +21,7 @@ module Ea
         # @param xmi_path [String] Path to XMI file
         # @param qea_path [String] Path to QEA file
         # @return [ComparisonResult] Verification result
-        def verify(xmi_path, qea_path) # rubocop:disable Metrics/MethodLength
+        def verify(xmi_path, qea_path)
           # Parse documents
           xmi_doc = parse_xmi(xmi_path)
           qea_doc = parse_qea(qea_path)
@@ -87,7 +87,7 @@ module Ea
           qea_enums = count_all_enums(qea_doc)
           if qea_enums < xmi_enums
             result.add_difference(
-              "Enums: #{xmi_enums} (XMI) vs #{qea_enums} (QEA) - QEA has fewer",
+              "Enums: #{xmi_enums} (XMI) vs #{qea_enums} (QEA) - QEA has fewer"
             )
           end
 
@@ -96,7 +96,7 @@ module Ea
           qea_dt = count_all_data_types(qea_doc)
           if qea_dt < xmi_dt
             result.add_difference(
-              "Data types: #{xmi_dt} (XMI) vs #{qea_dt} (QEA) - QEA has fewer",
+              "Data types: #{xmi_dt} (XMI) vs #{qea_dt} (QEA) - QEA has fewer"
             )
           end
 
@@ -104,12 +104,12 @@ module Ea
           xmi_assocs = count_all_associations(xmi_doc)
           qea_assocs = count_all_associations(qea_doc)
           result.add_matches(:associations, [xmi_assocs, qea_assocs].min)
-          if qea_assocs < xmi_assocs
-            result.add_difference(
-              "Associations: #{xmi_assocs} (XMI) " \
-              "vs #{qea_assocs} (QEA) - QEA has fewer",
-            )
-          end
+          return unless qea_assocs < xmi_assocs
+
+          result.add_difference(
+            "Associations: #{xmi_assocs} (XMI) " \
+            "vs #{qea_assocs} (QEA) - QEA has fewer"
+          )
         end
 
         # Verify element names are preserved
@@ -230,7 +230,7 @@ module Ea
         end
 
         # Verify class properties
-        def verify_class_properties(matches) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength
+        def verify_class_properties(matches) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
           attr_count = 0
           op_count = 0
 
@@ -244,7 +244,7 @@ module Ea
               result.add_property_difference(
                 :class,
                 qualified_name,
-                comparison[:differences],
+                comparison[:differences]
               )
             end
 
@@ -255,15 +255,15 @@ module Ea
             attr_matches[:matches].each do |attr_name, attr_pair|
               attr_comparison = comparator.compare_attributes(
                 attr_pair[:xmi],
-                attr_pair[:qea],
+                attr_pair[:qea]
               )
-              unless attr_comparison[:equal]
-                result.add_property_difference(
-                  :attribute,
-                  "#{qualified_name}.#{attr_name}",
-                  attr_comparison[:differences],
-                )
-              end
+              next if attr_comparison[:equal]
+
+              result.add_property_difference(
+                :attribute,
+                "#{qualified_name}.#{attr_name}",
+                attr_comparison[:differences]
+              )
             end
 
             # Compare operations
@@ -273,15 +273,15 @@ module Ea
             op_matches[:matches].each do |op_sig, op_pair|
               op_comparison = comparator.compare_operations(
                 op_pair[:xmi],
-                op_pair[:qea],
+                op_pair[:qea]
               )
-              unless op_comparison[:equal]
-                result.add_property_difference(
-                  :operation,
-                  "#{qualified_name}.#{op_sig}",
-                  op_comparison[:differences],
-                )
-              end
+              next if op_comparison[:equal]
+
+              result.add_property_difference(
+                :operation,
+                "#{qualified_name}.#{op_sig}",
+                op_comparison[:differences]
+              )
             end
           end
 
@@ -293,13 +293,13 @@ module Ea
         def verify_package_properties(matches)
           matches.each do |qualified_path, pair|
             comparison = comparator.compare_packages(pair[:xmi], pair[:qea])
-            unless comparison[:equal]
-              result.add_property_difference(
-                :package,
-                qualified_path,
-                comparison[:differences],
-              )
-            end
+            next if comparison[:equal]
+
+            result.add_property_difference(
+              :package,
+              qualified_path,
+              comparison[:differences]
+            )
           end
         end
 
@@ -310,11 +310,11 @@ module Ea
           xmi_assocs = count_all_associations(xmi_doc)
           qea_assocs = count_all_associations(qea_doc)
 
-          if qea_assocs < xmi_assocs
-            result.add_difference(
-              "Missing #{xmi_assocs - qea_assocs} associations in QEA",
-            )
-          end
+          return unless qea_assocs < xmi_assocs
+
+          result.add_difference(
+            "Missing #{xmi_assocs - qea_assocs} associations in QEA"
+          )
         end
       end
     end

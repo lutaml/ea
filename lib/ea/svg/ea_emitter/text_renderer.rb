@@ -61,7 +61,7 @@ module Ea
         # boxes without offsets); EA always has a position, so render
         # at the origin rather than crashing the whole diagram.
         def format_attrs
-          %(x="#{format('%.2f', x.to_f)}" y="#{format('%.2f', y.to_f)}")
+          %(x="#{format("%.2f", x.to_f)}" y="#{format("%.2f", y.to_f)}")
         end
 
         def format_style
@@ -172,7 +172,7 @@ module Ea
         WIDTH_CACHE = {}
 
         class << self
-          def estimate_width(text, size, _width_factor = nil, family: nil, # rubocop:disable Metrics/ParameterLists,Naming/MethodParameterName
+          def estimate_width(text, size, _width_factor = nil, family: nil, # rubocop:disable Metrics/ParameterLists
                              weight: nil, style: nil, logical_height: nil,
                              legend_title: false)
             opts = { family: family, weight: weight, style: style,
@@ -221,7 +221,7 @@ module Ea
         end
 
         def formatted_transform
-          "rotate(#{format('%<r>.2f', r: rotation)} #{format('%.2f', x.to_f)} #{format('%.2f', y.to_f)})"
+          "rotate(#{format("%<r>.2f", r: rotation)} #{format("%.2f", x.to_f)} #{format("%.2f", y.to_f)})"
         end
 
         def escaped_content

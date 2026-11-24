@@ -13,7 +13,7 @@ RSpec.describe Ea::Qea::Models::EaObjectConstraint do
         "ConstraintType" => "Invariant",
         "Weight" => "0.0",
         "Notes" => "Test note",
-        "Status" => "Approved",
+        "Status" => "Approved"
       }
 
       constraint = described_class.from_db_row(row)
@@ -35,7 +35,7 @@ RSpec.describe Ea::Qea::Models::EaObjectConstraint do
         "ConstraintType" => "Invariant",
         "Weight" => "10000.0",
         "Notes" => nil,
-        "Status" => "Approved",
+        "Status" => "Approved"
       }
 
       constraint = described_class.from_db_row(row)
@@ -43,7 +43,7 @@ RSpec.describe Ea::Qea::Models::EaObjectConstraint do
       expect(constraint.constraint_id).to eq(2)
       expect(constraint.ea_object_id).to eq(5)
       expect(constraint.constraint).to include("crs")
-      expect(constraint.weight).to eq(10000.0)
+      expect(constraint.weight).to eq(10_000.0)
       expect(constraint.notes).to be_nil
     end
 
@@ -59,7 +59,7 @@ RSpec.describe Ea::Qea::Models::EaObjectConstraint do
         "ConstraintType" => "Invariant",
         "Weight" => nil,
         "Notes" => nil,
-        "Status" => "Approved",
+        "Status" => "Approved"
       }
 
       constraint = described_class.from_db_row(row)

@@ -34,7 +34,7 @@ RSpec.describe Ea::Svg::EaEmitter::Element::StereotypeIconRenderer do
     let(:fake_doc) do
       Struct.new(:technology_name, :stereotypes).new(
         "Test", [Struct.new(:name, :notes).new("CustomIcon",
-          "shape CustomIcon { rectangle(0, 0, 8, 8); }")]
+                                               "shape CustomIcon { rectangle(0, 0, 8, 8); }")]
       )
     end
     let(:registry) do

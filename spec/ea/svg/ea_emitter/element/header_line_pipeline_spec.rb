@@ -47,7 +47,7 @@ RSpec.describe Ea::Svg::EaEmitter::Element::HeaderLinePipeline do
     it "prefers umldi_keyword over stereotype_refs" do
       klass = Ea::Model::Klass.new(name: "X", stereotype_refs: ["Foo"])
       lines = described_class.for(klass, diagram_package_id: nil,
-                                  umldi_keyword: "Type")
+                                         umldi_keyword: "Type")
       expect(lines).to eq([["«Type»", :normal], ["X", :bold]])
     end
 
@@ -71,7 +71,7 @@ RSpec.describe Ea::Svg::EaEmitter::Element::HeaderLinePipeline do
     it "suppresses classifier stereotypes under HideEStereo" do
       dt = Ea::Model::DataType.new(name: "Quantity", stereotype_refs: ["Foo"])
       lines = described_class.for(dt, diagram_package_id: nil,
-                                  suppress_stereotypes: true)
+                                      suppress_stereotypes: true)
       expect(lines).to eq([["Quantity", :bold]])
     end
   end

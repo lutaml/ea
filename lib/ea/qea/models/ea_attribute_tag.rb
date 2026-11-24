@@ -37,10 +37,9 @@ module Ea
           "t_attributetag"
         end
 
-
         COLUMN_MAP = {
           "PropertyID" => :property_id,
-          "ElementID" => :element_id,
+          "ElementID" => :element_id
         }.freeze
 
         def self.column_map

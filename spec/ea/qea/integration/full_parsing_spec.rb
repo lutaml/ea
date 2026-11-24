@@ -184,9 +184,7 @@ RSpec.describe "QEA Full Parsing Integration", :integration do
       expect(document.classes.size).to be >= 0
       expect(document.associations.size).to be >= 0
 
-      if db_stats["packages"]
-        expect(document.packages.size).to be <= db_stats["packages"]
-      end
+      expect(document.packages.size).to be <= db_stats["packages"] if db_stats["packages"]
     end
   end
 

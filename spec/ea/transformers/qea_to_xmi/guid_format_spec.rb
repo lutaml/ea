@@ -69,7 +69,7 @@ RSpec.describe Ea::Transformers::QeaToXmi::GuidFormat do
       # EAID_1137B03A_... → EAID_dst37B03A_... (drop first 2 chars "11")
       result = described_class.connector_end_xmi_id(
         "EAID_1137B03A_C00A_443b_A3A8_D5CF6A7AFF13",
-        side: :destination,
+        side: :destination
       )
       expect(result).to eq("EAID_dst37B03A_C00A_443b_A3A8_D5CF6A7AFF13")
     end

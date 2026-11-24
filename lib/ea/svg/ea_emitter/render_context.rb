@@ -43,7 +43,7 @@ module Ea
         def content_below_header?
           !attr_lines.empty? || !op_lines.empty? ||
             enum_literals.any? || tagged_values.any? ||
-            (constraints&.any?) ||
+            constraints&.any? ||
             (!package_content_lines.nil? && !package_content_lines.empty?) ||
             hidden_features_present?
         end

@@ -47,7 +47,7 @@ module Ea
 
             def self.explicit_stereotype(classifier, stereotype_fqname = nil)
               return nil unless classifier.is_a?(Ea::Model::Classifier) ||
-                                 classifier.is_a?(Ea::Model::Package)
+                                classifier.is_a?(Ea::Model::Package)
 
               refs = classifier.stereotype_refs
               return nil unless refs&.any?

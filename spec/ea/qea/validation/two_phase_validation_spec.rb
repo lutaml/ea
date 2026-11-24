@@ -42,14 +42,14 @@ RSpec.describe "Two-Phase Validation System" do
 
   describe "Phase 1: QEA Database Validation" do
     it "validates database referential integrity", :aggregate_failures do
-      result = engine.validate_qea_database(engine.build_context())
+      result = engine.validate_qea_database(engine.build_context)
 
       expect(result).to be_a(Ea::Qea::Validation::ValidationResult)
       expect(result.messages).to be_an(Array)
     end
 
     it "uses db_packages not UML packages", :aggregate_failures do
-      context = engine.build_context()
+      context = engine.build_context
 
       expect(context[:db_packages]).to be_an(Array)
       expect(context[:db_packages]).not_to be_empty
@@ -58,7 +58,7 @@ RSpec.describe "Two-Phase Validation System" do
     end
 
     it "uses db_objects not UML classes", :aggregate_failures do
-      context = engine.build_context()
+      context = engine.build_context
 
       expect(context[:db_objects]).to be_an(Array)
       expect(context[:db_objects]).not_to be_empty
@@ -67,7 +67,7 @@ RSpec.describe "Two-Phase Validation System" do
     end
 
     it "checks package parent references" do
-      result = engine.validate_qea_database(engine.build_context())
+      result = engine.validate_qea_database(engine.build_context)
 
       # Should find orphaned packages if any exist
       orphan_errors = result.messages.select do |msg|
@@ -80,14 +80,14 @@ RSpec.describe "Two-Phase Validation System" do
 
   describe "Phase 2: UML Tree Validation" do
     it "validates UML document structure", :aggregate_failures do
-      result = engine.validate_uml_tree(engine.build_context())
+      result = engine.validate_uml_tree(engine.build_context)
 
       expect(result).to be_a(Ea::Qea::Validation::ValidationResult)
       expect(result.messages).to be_an(Array)
     end
 
     it "uses UML packages not database packages", :aggregate_failures do
-      context = engine.build_context()
+      context = engine.build_context
 
       expect(context[:packages]).to be_an(Array)
       if context[:packages].any?
@@ -97,7 +97,7 @@ RSpec.describe "Two-Phase Validation System" do
     end
 
     it "validates package hierarchy" do
-      result = engine.validate_uml_tree(engine.build_context())
+      result = engine.validate_uml_tree(engine.build_context)
 
       # Should validate UML document structure
       structure_messages = result.messages.select do |msg|
@@ -139,7 +139,7 @@ RSpec.describe "Two-Phase Validation System" do
   describe "Validator Separation" do
     it "Phase 1 validators work with database models", :aggregate_failures do
       # Test that database validators use EaPackage which has root? method
-      context = engine.build_context()
+      context = engine.build_context
       db_packages = context[:db_packages]
 
       expect(db_packages).not_to be_empty
@@ -149,7 +149,7 @@ RSpec.describe "Two-Phase Validation System" do
 
     it "Phase 2 validators work with UML models", :aggregate_failures do
       # Test that UML validators use Lutaml::Uml::Package
-      context = engine.build_context()
+      context = engine.build_context
       uml_packages = context[:packages]
 
       if uml_packages&.any?

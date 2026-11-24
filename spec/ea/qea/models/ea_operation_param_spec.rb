@@ -148,7 +148,7 @@ RSpec.describe Ea::Qea::Models::EaOperationParam do
         "Name" => "myParam",
         "Type" => "Integer",
         "Kind" => "in",
-        "Default" => "0",
+        "Default" => "0"
       }
 
       param = described_class.from_db_row(row)

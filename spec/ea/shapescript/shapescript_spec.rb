@@ -108,7 +108,7 @@ RSpec.describe Ea::Shapescript do
       SHAPESCRIPT
       shapes = described_class::Parser.parse(source)
       svg = described_class::Renderer.render(shapes, fill: "#FAF1EC",
-                                              stroke: "#69738C")
+                                                     stroke: "#69738C")
       expect(svg).to include("<rect")
       expect(svg).to include("<polygon")
       expect(svg).to include("8,2 14,8 8,14 2,8")

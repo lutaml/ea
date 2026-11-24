@@ -9,7 +9,7 @@ module Ea
       # parsed QEA model. Each UML Class becomes a `$defs` entry
       # with `properties` derived from its attributes.
       class Generator
-        SCHEMA_URI = "https://json-schema.org/draft/2020-12/schema".freeze
+        SCHEMA_URI = "https://json-schema.org/draft/2020-12/schema"
 
         # EA primitive → JSON Schema type
         TYPE_MAP = {
@@ -35,7 +35,7 @@ module Ea
 
         def call
           classes = (model.collections[:objects] || [])
-                     .select { |o| o.object_type == "Class" }
+                    .select { |o| o.object_type == "Class" }
           defs = classes.each_with_object({}) do |klass, acc|
             acc[klass.name] = class_schema(klass)
           end

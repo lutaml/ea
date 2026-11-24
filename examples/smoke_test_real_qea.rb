@@ -20,7 +20,7 @@ require "ea"
 
 QEA_PATH = ENV.fetch(
   "QEA_PATH",
-  "/Users/mulgogi/src/mn/plateau-model/20251010_current_plateau_v5.1.qea",
+  "/Users/mulgogi/src/mn/plateau-model/20251010_current_plateau_v5.1.qea"
 )
 
 abort "QEA not found: #{QEA_PATH}" unless File.exist?(QEA_PATH)
@@ -32,9 +32,9 @@ puts
 # 1. Quick stats — opens the SQLite DB and counts rows per table, no model load
 puts "== database_info (quick stats, top 12 tables) =="
 Ea::Qea.database_info(QEA_PATH)
-  .sort_by { |_, count| -count.to_i }
-  .first(12)
-  .each { |table, count| puts "  #{table}: #{count}" }
+       .sort_by { |_, count| -count.to_i }
+       .first(12)
+       .each { |table, count| puts "  #{table}: #{count}" }
 puts
 
 # 2. Standalone load — pure QEA parsing, no lutaml-uml needed
@@ -46,8 +46,8 @@ puts
 
 puts "== EA objects by type =="
 database.objects.group_by(:object_type)
-  .sort_by { |_, objs| -objs.size }
-  .each { |type, objs| puts "  #{type}: #{objs.size}" }
+        .sort_by { |_, objs| -objs.size }
+        .each { |type, objs| puts "  #{type}: #{objs.size}" }
 puts
 
 # 3. UML bridge — compose with lutaml-uml to get a Lutaml::Uml::Document

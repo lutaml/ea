@@ -27,7 +27,7 @@ module Ea
             # blocks within <xmi:Extension>. The element itself is in
             # no XML namespace; match by local-name to be safe.
             doc.xpath(%(//*[local-name()="tags"]/*[local-name()="tag"]))
-              .each_with_object({}) do |node, acc|
+               .each_with_object({}) do |node, acc|
               me = node["modelElement"]
               next unless me
 

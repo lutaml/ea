@@ -35,7 +35,7 @@ module Ea
         # Wrap classes/enums in their containing packages.
         def package_lines
           packages_by_id = packages_index
-          root_objects = (model.collections[:objects] || [])
+          root_objects = model.collections[:objects] || []
 
           # Group classes by their package_id; emit each package.
           grouped = root_objects.group_by(&:package_id)
@@ -87,7 +87,7 @@ module Ea
 
         def class_with_attributes_block(obj)
           attrs = class_attributes(obj)
-          body = attrs.map { |a| "+#{a.name}: #{a.type || 'String'}" }
+          body = attrs.map { |a| "+#{a.name}: #{a.type || "String"}" }
           return ["class #{obj.name}"] if body.empty?
 
           ["class #{obj.name} {", *body.map { |b| "  #{b}" }, "}"]

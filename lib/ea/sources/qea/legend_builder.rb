@@ -24,7 +24,7 @@ module Ea
           @VALU=(?<value>[^@]*?)@ENDVALU;
           (?:@PRMT=(?<prmt>[^@]*?)@ENDPRMT;)?
           @ENDPROP;
-        /x.freeze
+        /x
 
         attr_reader :database
 

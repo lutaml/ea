@@ -15,7 +15,7 @@ module C96XmiRayHelpers
     diagram = document.diagrams.first
     Nokogiri::XML(Ea::Svg::EaEmitter::Document.new(
       diagram, model_index: document.index_by_id, document: document,
-      frame: true
+               frame: true
     ).render)
   end
 end

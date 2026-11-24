@@ -103,8 +103,8 @@ module Ea
             operations: OperationBuilder.new(database).build_all_for(object),
             stereotype_refs: stereotype_refs_for(object),
             tagged_values: TaggedValueBuilder.new(database)
-                                              .for_object(object.ea_guid,
-                                                          ea_object_id: object.ea_object_id),
+                                             .for_object(object.ea_guid,
+                                                         ea_object_id: object.ea_object_id),
             constraints: constraints_for(object),
             annotations: AnnotationBuilder.from_note(object.note, object.ea_guid,
                                                      kind: "documentation")
@@ -188,7 +188,11 @@ module Ea
 
           s = card_str.to_s
           parts = s.split("..")
-          val = bound == :lower ? parts.first : (parts.size > 1 ? parts.last : parts.first)
+          val = if bound == :lower
+                  parts.first
+                else
+                  (parts.size > 1 ? parts.last : parts.first)
+                end
           val = val.to_s.strip
           return -1 if val == "*"
 

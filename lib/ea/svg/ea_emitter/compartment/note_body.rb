@@ -39,7 +39,7 @@ module Ea
             # empty source line adds one blank pitch row.
             usable = context.bounds.width - 4
             size = context.size
-            family = context.family
+            context.family
             pitch, first_offset = vertical_layout(context)
             y_index = 0
             paragraphs = NoteHtml.paragraphs(body)

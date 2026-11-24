@@ -36,12 +36,12 @@ module Ea
 
         def source
           ::Ea::Xmi::LiquidDrops::SourceTargetDrop.new(@model.source,
-                                                           @options)
+                                                       @options)
         end
 
         def target
           ::Ea::Xmi::LiquidDrops::SourceTargetDrop.new(@model.target,
-                                                           @options)
+                                                       @options)
         end
 
         def recognized?

@@ -143,16 +143,20 @@ module Ea
             shard_url: shard_url_for.call(p)
           )
         end
-        diagram_entries = render_diagrams? ? document.diagrams.map do |d|
-          SkeletonEntry.new(
-            id: d.id,
-            name: d.name,
-            kind: "diagram",
-            package_id: d.package_id,
-            qualified_name: d.name,
-            shard_url: shard_url_for.call(d)
-          )
-        end : []
+        diagram_entries = if render_diagrams?
+                            document.diagrams.map do |d|
+                              SkeletonEntry.new(
+                                id: d.id,
+                                name: d.name,
+                                kind: "diagram",
+                                package_id: d.package_id,
+                                qualified_name: d.name,
+                                shard_url: shard_url_for.call(d)
+                              )
+                            end
+                          else
+                            []
+                          end
         classifier_entries + package_entries + diagram_entries
       end
 
@@ -263,14 +267,14 @@ module Ea
       def augment_classifier_payload!(payload, classifier)
         rels = document.relationships_for(classifier.id)
         payload["generalizations"] = rels
-          .select { |r| r.is_a?(Ea::Model::Generalization) && r.specific_id == classifier.id }
-          .map { |r| { "id" => r.id, "targetId" => r.general_id } }
+                                     .select { |r| r.is_a?(Ea::Model::Generalization) && r.specific_id == classifier.id }
+                                     .map { |r| { "id" => r.id, "targetId" => r.general_id } }
         payload["specializations"] = rels
-          .select { |r| r.is_a?(Ea::Model::Generalization) && r.general_id == classifier.id }
-          .map { |r| { "id" => r.id, "targetId" => r.specific_id } }
+                                     .select { |r| r.is_a?(Ea::Model::Generalization) && r.general_id == classifier.id }
+                                     .map { |r| { "id" => r.id, "targetId" => r.specific_id } }
         payload["associations"] = rels
-          .select { |r| r.is_a?(Ea::Model::Association) }
-          .map { |r| association_stub(r, classifier.id) }
+                                  .select { |r| r.is_a?(Ea::Model::Association) }
+                                  .map { |r| association_stub(r, classifier.id) }
         payload
       end
 

@@ -28,7 +28,7 @@ module Ea
               )
               assoc.owner_end_attribute_name = ea_connector.sourcerole
               assoc.owner_end_cardinality = build_cardinality_from_string(
-                ea_connector.sourcecard,
+                ea_connector.sourcecard
               )
             end
 
@@ -41,7 +41,7 @@ module Ea
               )
               assoc.member_end_attribute_name = ea_connector.destrole
               assoc.member_end_cardinality = build_cardinality_from_string(
-                ea_connector.destcard,
+                ea_connector.destcard
               )
             end
 
@@ -50,9 +50,7 @@ module Ea
               ea_connector.notes.nil? || ea_connector.notes.empty?
 
             # Map stereotype
-            if ea_connector.stereotype && !ea_connector.stereotype.empty?
-              assoc.stereotype = [ea_connector.stereotype]
-            end
+            assoc.stereotype = [ea_connector.stereotype] if ea_connector.stereotype && !ea_connector.stereotype.empty?
 
             # Load and transform tagged values
             assoc.tagged_values = load_tagged_values(ea_connector.ea_guid)
@@ -84,7 +82,6 @@ module Ea
             card.max = parsed[:max]
           end
         end
-
       end
     end
   end

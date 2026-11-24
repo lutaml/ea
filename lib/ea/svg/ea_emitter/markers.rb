@@ -52,7 +52,9 @@ module Ea
           entries = visible_connectors.flat_map { |c| entries_for(c) }
 
           if grouped
-            entries.group_by { |e| [e.style_key, e.stroke_width, e.stroke_color] }.map do |(key, width, color), grouped_entries|
+            entries.group_by do |e|
+              [e.style_key, e.stroke_width, e.stroke_color]
+            end.map do |(key, width, color), grouped_entries|
               # EA emits ONE marker per connector regardless of
               # anchor overlap. Verified against plateau Bridge
               # diagram: 9 generalizations fanning from the same

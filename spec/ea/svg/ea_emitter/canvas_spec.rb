@@ -24,7 +24,7 @@ RSpec.describe Ea::Svg::EaEmitter::Canvas do
 
     it "unions element image bounds with frame insets" do
       canvas = described_class.from(diagram)
-      expect(canvas.min_x).to eq(100)   # 100 (source min, no subtraction)
+      expect(canvas.min_x).to eq(100) # 100 (source min, no subtraction)
       expect(canvas.min_y).to eq(100)
       # canvas_width = element_extent + INSET_LEFT(35) + INSET_RIGHT(50) = 500 + 85 = 585
       # canvas_height = element_extent + INSET_TOP(40) + INSET_BOTTOM(36) = 180 + 76 = 256

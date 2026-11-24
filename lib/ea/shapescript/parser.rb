@@ -43,8 +43,8 @@ module Ea
 
       def tokenize(source)
         clean = source.gsub(%r{//[^\n]*}, "")
-                      .gsub(/\/\*.*?\*\//m, "")
-        clean.scan(/[A-Za-z_][A-Za-z0-9_]*|-?\d+\.?\d*|"[^"]*"|'[^']*'|[{}(),;=+\-*\/]/)
+                      .gsub(%r{/\*.*?\*/}m, "")
+        clean.scan(%r{[A-Za-z_][A-Za-z0-9_]*|-?\d+\.?\d*|"[^"]*"|'[^']*'|[{}(),;=+\-*/]})
       end
 
       # Consume statements until matching close brace or end.
@@ -99,7 +99,7 @@ module Ea
         Shape.new(kind: kind, params: params)
       end
 
-      def consume_label(tokens, env)
+      def consume_label(tokens, _env)
         tokens.shift # "("
         text = tokens.shift
         text = text.to_s.gsub(/\A["']|["']\z/, "")
@@ -111,7 +111,7 @@ module Ea
 
       def consume_var_decl(tokens, env)
         name = tokens.shift
-        eq = tokens.shift # "="
+        tokens.shift # "="
         value = resolve_expr(tokens.shift, tokens, env)
         consume_semicolon(tokens)
         env[name] = value if value.is_a?(Numeric) || value.is_a?(String)

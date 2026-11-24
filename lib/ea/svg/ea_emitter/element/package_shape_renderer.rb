@@ -121,9 +121,9 @@ module Ea
 
           def text_at(x, y, content, weight:)
             TextRenderer.new(content: content,
-                              x: x, y: y,
-                              family: family, size: size, size_unit: size_unit,
-                              weight: weight, fill: text_fill).to_svg
+                             x: x, y: y,
+                             family: family, size: size, size_unit: size_unit,
+                             weight: weight, fill: text_fill).to_svg
           end
 
           def label_x
@@ -228,7 +228,6 @@ module Ea
           def self.body_width_for(label:, stereotype:, size:, family: nil)
             autosized_tab_width(label: label, stereotype: stereotype, size: size, family: family) + TAB_BODY_EXTRA
           end
-
         end
       end
     end

@@ -18,24 +18,24 @@ module Ea
           packages.each do |pkg|
             next if pkg.root?
 
-            unless package_exists?(pkg.parent_id)
-              result.add_error(
-                category: :referential_integrity,
-                entity_type: :package,
-                entity_id: pkg.package_id.to_s,
-                entity_name: pkg.name,
-                field: "parent_id",
-                reference: pkg.parent_id.to_s,
-                message: "Foreign key violation: parent_id #{pkg.parent_id} " \
-                         "not found in t_package",
-              )
-            end
+            next if package_exists?(pkg.parent_id)
+
+            result.add_error(
+              category: :referential_integrity,
+              entity_type: :package,
+              entity_id: pkg.package_id.to_s,
+              entity_name: pkg.name,
+              field: "parent_id",
+              reference: pkg.parent_id.to_s,
+              message: "Foreign key violation: parent_id #{pkg.parent_id} " \
+                       "not found in t_package"
+            )
           end
         end
 
-        def validate_all_object_references # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength
+        def validate_all_object_references # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
           # Check all package_id references in objects
-          objects.each do |obj| # rubocop:disable Metrics/BlockLength
+          objects.each do |obj|
             next unless obj.package_id
 
             unless package_exists?(obj.package_id)
@@ -47,24 +47,24 @@ module Ea
                 field: "package_id",
                 reference: obj.package_id.to_s,
                 message: "Foreign key violation: package_id " \
-                         "#{obj.package_id} not found in t_package",
+                         "#{obj.package_id} not found in t_package"
               )
             end
 
             # Check classifier references
             next unless obj.classifier&.positive?
 
-            unless object_exists?(obj.classifier)
-              result.add_warning(
-                category: :referential_integrity,
-                entity_type: :class,
-                entity_id: obj.ea_object_id.to_s,
-                entity_name: obj.name,
-                field: "classifier",
-                reference: obj.classifier.to_s,
-                message: "Classifier object #{obj.classifier} not found",
-              )
-            end
+            next if object_exists?(obj.classifier)
+
+            result.add_warning(
+              category: :referential_integrity,
+              entity_type: :class,
+              entity_id: obj.ea_object_id.to_s,
+              entity_name: obj.name,
+              field: "classifier",
+              reference: obj.classifier.to_s,
+              message: "Classifier object #{obj.classifier} not found"
+            )
           end
         end
 
@@ -80,22 +80,22 @@ module Ea
                 field: "start_object_id",
                 reference: conn.start_object_id.to_s,
                 message: "Foreign key violation: start_object_id " \
-                         "#{conn.start_object_id} not found in t_object",
+                         "#{conn.start_object_id} not found in t_object"
               )
             end
 
-            unless object_exists?(conn.end_object_id)
-              result.add_error(
-                category: :referential_integrity,
-                entity_type: :connector,
-                entity_id: conn.connector_id.to_s,
-                entity_name: conn.name || "Unnamed",
-                field: "end_object_id",
-                reference: conn.end_object_id.to_s,
-                message: "Foreign key violation: end_object_id " \
-                         "#{conn.end_object_id} not found in t_object",
-              )
-            end
+            next if object_exists?(conn.end_object_id)
+
+            result.add_error(
+              category: :referential_integrity,
+              entity_type: :connector,
+              entity_id: conn.connector_id.to_s,
+              entity_name: conn.name || "Unnamed",
+              field: "end_object_id",
+              reference: conn.end_object_id.to_s,
+              message: "Foreign key violation: end_object_id " \
+                       "#{conn.end_object_id} not found in t_object"
+            )
           end
         end
 

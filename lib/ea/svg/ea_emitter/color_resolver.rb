@@ -31,7 +31,7 @@ module Ea
           @stereotype_resolver = stereotype_resolver
         end
 
-        def fill_for(element, classifier)
+        def fill_for(element, _classifier)
           bcol = Element::BColDecoder.to_hex(element&.background_color)
           return bcol if bcol
 

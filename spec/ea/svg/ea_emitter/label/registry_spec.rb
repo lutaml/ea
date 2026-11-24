@@ -26,7 +26,7 @@ RSpec.describe Ea::Svg::EaEmitter::Label::Registry do
 
   def connector_for(rel)
     Ea::Model::DiagramConnector.new(id: "dc_#{rel.id}",
-                                      relationship_ref: rel.id)
+                                    relationship_ref: rel.id)
   end
 
   it "identifies plain associations as end-label path" do
@@ -55,7 +55,7 @@ RSpec.describe Ea::Svg::EaEmitter::Label::Registry do
     )
     r = described_class.new(model_index: doc.index_by_id)
     conn = Ea::Model::DiagramConnector.new(id: "dc_sa",
-                                            relationship_ref: stereotyped_assoc.id)
+                                           relationship_ref: stereotyped_assoc.id)
     expect(r.midpoint?(conn)).to eq("«import»")
     expect(r.end_label?(conn)).to be false
   end

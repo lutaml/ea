@@ -4,7 +4,7 @@ module Ea
   module Xmi
     module LiquidDrops
       class GeneralizationAttributeDrop < Liquid::Drop
-        def initialize(attr, upper_klass, gen_name, guidance = nil) # rubocop:disable Lint/MissingSuper,Metrics/ParameterLists,Layout/LineLength
+        def initialize(attr, upper_klass, gen_name, guidance = nil) # rubocop:disable Lint/MissingSuper
           @attr = attr
           @upper_klass = upper_klass
           @gen_name = gen_name
@@ -51,13 +51,7 @@ module Ea
           @attr.type_ns
         end
 
-        def upper_klass
-          @upper_klass
-        end
-
-        def gen_name
-          @gen_name
-        end
+        attr_reader :upper_klass, :gen_name
 
         def name_ns
           @attr.name_ns

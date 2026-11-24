@@ -18,13 +18,13 @@ RSpec.describe Ea::Qea::Factory::DiagramTransformer do
         name: "Class Diagram",
         ea_guid: "{DIAG-GUID}",
         package_id: 5,
-        notes: "Main class diagram",
+        notes: "Main class diagram"
       )
 
       ea_package = Ea::Qea::Models::EaPackage.new(
         package_id: 5,
         name: "Domain",
-        ea_guid: "{PKG-GUID}",
+        ea_guid: "{PKG-GUID}"
       )
 
       allow(database).to receive(:find_package).with(5).and_return(ea_package)
@@ -45,7 +45,7 @@ RSpec.describe Ea::Qea::Factory::DiagramTransformer do
       ea_diagram = Ea::Qea::Models::EaDiagram.new(
         diagram_id: 1,
         name: "Diagram",
-        package_id: nil,
+        package_id: nil
       )
 
       allow(database).to receive(:diagram_objects_for).with(1).and_return([])
@@ -61,7 +61,7 @@ RSpec.describe Ea::Qea::Factory::DiagramTransformer do
       ea_diagram = Ea::Qea::Models::EaDiagram.new(
         diagram_id: 1,
         name: "Diagram",
-        package_id: 99,
+        package_id: 99
       )
 
       allow(database).to receive(:find_package).with(99).and_return(nil)
@@ -78,7 +78,7 @@ RSpec.describe Ea::Qea::Factory::DiagramTransformer do
       ea_diagram = Ea::Qea::Models::EaDiagram.new(
         diagram_id: 1,
         name: "Diagram",
-        stereotype: "logical",
+        stereotype: "logical"
       )
 
       allow(database).to receive(:diagram_objects_for).with(1).and_return([])
@@ -93,7 +93,7 @@ RSpec.describe Ea::Qea::Factory::DiagramTransformer do
       ea_diagram = Ea::Qea::Models::EaDiagram.new(
         diagram_id: 1,
         name: "Diagram",
-        notes: "",
+        notes: ""
       )
 
       allow(database).to receive(:diagram_objects_for).with(1).and_return([])

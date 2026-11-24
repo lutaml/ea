@@ -35,8 +35,10 @@ module Ea
             direction = connector.direction.to_s
             return [] if direction.empty? || direction == "Unspecified"
 
-            return bidirectional_specs(source, target, before_target,
-                                       after_source) if bidirectional?(connector)
+            if bidirectional?(connector)
+              return bidirectional_specs(source, target, before_target,
+                                         after_source)
+            end
 
             whole_end_at_source = whole_end_at_source?(connector)
             anchor = whole_end_at_source ? target : source

@@ -26,7 +26,7 @@ module Ea
         # @return [Lutaml::Uml::Document] Complete UML document
         def create_document # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
           builder = DocumentBuilder.new(
-            name: options[:document_name] || "EA Model",
+            name: options[:document_name] || "EA Model"
           )
 
           # Transform packages with hierarchy (includes all classes)
@@ -49,14 +49,12 @@ module Ea
           # Build document with both connector-level and
           # class-level associations
           builder.add_packages(packages)
-            .add_classes(orphan_classes)
-            .add_associations(associations)
-            .add_associations(class_associations)
+                 .add_classes(orphan_classes)
+                 .add_associations(associations)
+                 .add_associations(class_associations)
 
           # Add diagrams if requested
-          if options[:include_diagrams]
-            builder.add_diagrams(transform_diagrams)
-          end
+          builder.add_diagrams(transform_diagrams) if options[:include_diagrams]
 
           builder.build(validate: options[:validate])
         end
@@ -72,7 +70,7 @@ module Ea
           root_packages.filter_map do |ea_package|
             uml_package = package_transformer.transform_with_hierarchy(
               ea_package,
-              include_children: true,
+              include_children: true
             )
 
             register_package_hierarchy(uml_package)
@@ -120,13 +118,13 @@ module Ea
 
         # Transform all associations
         # @return [Array<Lutaml::Uml::Association>] All UML associations
-        def transform_associations # rubocop:disable Metrics/MethodLength
+        def transform_associations
           association_transformer = get_transformer(:association)
 
           ea_associations = database.connectors.select(&:association?)
 
           uml_associations = association_transformer.transform_collection(
-            ea_associations,
+            ea_associations
           )
 
           uml_associations.each do |uml_assoc|
@@ -157,7 +155,7 @@ module Ea
           {
             include_diagrams: true,
             validate: true,
-            document_name: "EA Model",
+            document_name: "EA Model"
           }
         end
 
@@ -168,9 +166,7 @@ module Ea
           return @transformers[type] if @transformers.key?(type)
 
           transformer_class = TransformerRegistry.transformer_for(type)
-          unless transformer_class
-            raise ArgumentError, "Unknown transformer type: #{type}"
-          end
+          raise ArgumentError, "Unknown transformer type: #{type}" unless transformer_class
 
           @transformers[type] = transformer_class.new(database)
         end
@@ -212,11 +208,9 @@ module Ea
           associations
         end
 
-        def collect_package_associations(package, associations) # rubocop:disable Metrics/CyclomaticComplexity
+        def collect_package_associations(package, associations)
           package.classes&.each do |klass|
-            if klass.associations && !klass.associations.empty?
-              associations.concat(klass.associations)
-            end
+            associations.concat(klass.associations) if klass.associations && !klass.associations.empty?
           end
 
           package.packages&.each do |child_package|

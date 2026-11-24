@@ -27,7 +27,7 @@ module Ea
 
     class UnknownAction < Error
       def initialize(action, valid:)
-        super("Unknown action '#{action}'. Valid: #{valid.join(', ')}")
+        super("Unknown action '#{action}'. Valid: #{valid.join(", ")}")
       end
     end
   end

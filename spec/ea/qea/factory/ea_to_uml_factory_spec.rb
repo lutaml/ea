@@ -48,11 +48,11 @@ RSpec.describe Ea::Qea::Factory::EaToUmlFactory do
           end
 
           # Recursively check child packages
-          if pkg.packages
-            result = find_class_in_packages(pkg.packages, class_name,
-                                            current_path)
-            return result if result
-          end
+          next unless pkg.packages
+
+          result = find_class_in_packages(pkg.packages, class_name,
+                                          current_path)
+          return result if result
         end
         nil
       end

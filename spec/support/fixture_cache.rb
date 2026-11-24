@@ -6,7 +6,7 @@ module FixtureCache
   def cached_qea_database(path, **options)
     key = :"qea_db:#{path}:#{options.hash}"
     CACHE[key] ||= Ea::Qea::Services::DatabaseLoader
-      .new(path, options[:config]).load
+                   .new(path, options[:config]).load
   end
 
   def cached_qea_parse(path, **options)

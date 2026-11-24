@@ -114,11 +114,11 @@ module Ea
             texts = lines.each_with_index.map do |line, idx|
               y = bounds.y + TEXT_Y_OFFSET + (idx * LINE_HEIGHT)
               TextRenderer.new(content: line,
-                                x: bounds.x + TEXT_X_OFFSET,
-                                y: y,
-                                family: family,
-                                size: size,
-                                fill: text_fill).to_svg
+                               x: bounds.x + TEXT_X_OFFSET,
+                               y: y,
+                               family: family,
+                               size: size,
+                               fill: text_fill).to_svg
             end
             texts.join("\n  ")
           end

@@ -63,14 +63,14 @@ module Ea
             packages: build_package_index(document.packages),
             classes: build_class_index(document),
             enums: build_enum_index(document),
-            data_types: build_data_type_index(document),
+            data_types: build_data_type_index(document)
           }
         end
 
         private
 
         # Build package index with qualified paths
-        def build_package_index(packages, parent_path = "") # rubocop:disable Metrics/MethodLength
+        def build_package_index(packages, parent_path = "")
           index = {}
           return index unless packages
 
@@ -89,7 +89,7 @@ module Ea
         end
 
         # Build class index from document and packages
-        def build_class_index(document) # rubocop:disable Metrics/MethodLength
+        def build_class_index(document)
           index = {}
 
           # Index top-level classes
@@ -109,7 +109,7 @@ module Ea
         end
 
         # Recursively index classes in packages
-        def index_classes_in_packages(packages, parent_path, index) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/MethodLength
+        def index_classes_in_packages(packages, parent_path, index) # rubocop:disable Metrics/MethodLength
           return unless packages
 
           packages.each do |package|
@@ -130,7 +130,7 @@ module Ea
         end
 
         # Build enum index from document and packages
-        def build_enum_index(document) # rubocop:disable Metrics/MethodLength
+        def build_enum_index(document)
           index = {}
 
           # Index top-level enums
@@ -150,7 +150,7 @@ module Ea
         end
 
         # Recursively index enums in packages
-        def index_enums_in_packages(packages, parent_path, index) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/MethodLength
+        def index_enums_in_packages(packages, parent_path, index) # rubocop:disable Metrics/MethodLength
           return unless packages
 
           packages.each do |package|
@@ -171,7 +171,7 @@ module Ea
         end
 
         # Build data type index from document and packages
-        def build_data_type_index(document) # rubocop:disable Metrics/MethodLength
+        def build_data_type_index(document)
           index = {}
 
           # Index top-level data types
@@ -191,7 +191,7 @@ module Ea
         end
 
         # Recursively index data types in packages
-        def index_data_types_in_packages(packages, parent_path, index) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/MethodLength
+        def index_data_types_in_packages(packages, parent_path, index) # rubocop:disable Metrics/MethodLength
           return unless packages
 
           packages.each do |package|
@@ -263,7 +263,7 @@ module Ea
             if qea_index.key?(key)
               matches[key] = {
                 xmi: xmi_element,
-                qea: qea_index[key],
+                qea: qea_index[key]
               }
             else
               xmi_only << key
@@ -278,7 +278,7 @@ module Ea
           {
             matches: matches,
             xmi_only: xmi_only.sort,
-            qea_only: qea_only.sort,
+            qea_only: qea_only.sort
           }
         end
       end

@@ -55,9 +55,9 @@ RSpec.describe Ea::Svg::EaEmitter::Label::EndLabel do
 
   it "emits role name + «Property» + multiplicity at the source box" do
     out = renderer.texts(text_box: { "ox" => 10, "oy" => 15 },
-                          mult_box: { "ox" => 0, "oy" => 0 },
-                          anchor: [0, 0], connector: connector,
-                          end_kind: :source)
+                         mult_box: { "ox" => 0, "oy" => 0 },
+                         anchor: [0, 0], connector: connector,
+                         end_kind: :source)
     joined = out.join
     expect(joined).to include("+items")
     expect(joined).to include("«Property»")
@@ -74,9 +74,9 @@ RSpec.describe Ea::Svg::EaEmitter::Label::EndLabel do
       label_boxes: connector.label_boxes
     )
     out = renderer.texts(text_box: { "ox" => 10, "oy" => 15 },
-                          mult_box: { "ox" => 0, "oy" => 0 },
-                          anchor: [0, 0], connector: bare,
-                          end_kind: :source)
+                         mult_box: { "ox" => 0, "oy" => 0 },
+                         anchor: [0, 0], connector: bare,
+                         end_kind: :source)
     joined = out.join
     expect(joined).to include("+items")
     expect(joined).not_to include("«Property»")
@@ -85,9 +85,9 @@ RSpec.describe Ea::Svg::EaEmitter::Label::EndLabel do
   it "renders the stored cardinality verbatim when present" do
     source_property.multiplicity_raw = "*"
     out = renderer.texts(text_box: { "ox" => 10, "oy" => 15 },
-                          mult_box: { "ox" => 0, "oy" => 0 },
-                          anchor: [0, 0], connector: connector,
-                          end_kind: :source)
+                         mult_box: { "ox" => 0, "oy" => 0 },
+                         anchor: [0, 0], connector: connector,
+                         end_kind: :source)
     joined = out.join
     expect(joined).not_to include("0..*")
     expect(joined).to include(">*</text>")
@@ -124,8 +124,8 @@ RSpec.describe Ea::Svg::EaEmitter::Label::EndLabel do
 
   it "returns [] when no text or mult box is positioned" do
     out = renderer.texts(text_box: nil, mult_box: nil,
-                          anchor: [0, 0], connector: connector,
-                          end_kind: :source)
+                         anchor: [0, 0], connector: connector,
+                         end_kind: :source)
     expect(out).to eq([])
   end
 

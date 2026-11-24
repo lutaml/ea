@@ -17,12 +17,12 @@ RSpec.describe Ea::Model::Diagram do
 
     it "parses semicolon-separated key=value pairs" do
       d = described_class.new(id: "d1", name: "X",
-                               style_ex: "Theme=:119;SuppressFOC=1;AttPkg=1")
+                              style_ex: "Theme=:119;SuppressFOC=1;AttPkg=1")
       expect(d.style_ex_flags).to eq({
-        "Theme" => ":119",
-        "SuppressFOC" => "1",
-        "AttPkg" => "1"
-      })
+                                       "Theme" => ":119",
+                                       "SuppressFOC" => "1",
+                                       "AttPkg" => "1"
+                                     })
     end
 
     it "skips pairs without =" do

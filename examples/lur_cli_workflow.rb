@@ -141,7 +141,7 @@ puts "Workflow 3: Model validation"
 puts "=" * 80
 
 result = loaded_repo.validate
-puts "Validation result: #{result.valid? ? 'VALID ✓' : 'INVALID ✗'}"
+puts "Validation result: #{result.valid? ? "VALID ✓" : "INVALID ✗"}"
 puts "Errors: #{result.errors.size}"
 puts "Warnings: #{result.warnings.size}"
 
@@ -202,12 +202,8 @@ if all_classes.any?
   puts "\nSample classes:"
   sample_classes.each do |klass|
     puts "  - #{klass.name}"
-    if klass.respond_to?(:stereotype) && klass.stereotype
-      puts "    Stereotype: #{klass.stereotype}"
-    end
-    if klass.respond_to?(:attributes) && klass.attributes
-      puts "    Attributes: #{klass.attributes.size}"
-    end
+    puts "    Stereotype: #{klass.stereotype}" if klass.respond_to?(:stereotype) && klass.stereotype
+    puts "    Attributes: #{klass.attributes.size}" if klass.respond_to?(:attributes) && klass.attributes
   end
 
   # Search example
@@ -226,7 +222,7 @@ puts "Smart caching automatically uses LUR if newer than source:"
 puts
 puts "# First run - builds from source"
 puts "repo = Repository.from_file_cached('#{test_file}')"
-puts "# Creates #{test_file.sub(/\.(xmi|qea)$/, '.lur')}"
+puts "# Creates #{test_file.sub(/\.(xmi|qea)$/, ".lur")}"
 puts
 puts "# Subsequent runs - loads from cache"
 puts "repo = Repository.from_file_cached('#{test_file}')"

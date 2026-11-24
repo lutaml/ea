@@ -40,8 +40,8 @@ module Ea
           "Association" => :association,
           "Aggregation" => :association,
           "Composition" => :association,
-          "Dependency"  => :dependency,
-          "Usage"       => :dependency,
+          "Dependency" => :dependency,
+          "Usage" => :dependency
         }.freeze
 
         # OCP registry: maps EaObject#transformer_type to the builder
@@ -53,12 +53,12 @@ module Ea
         # run inside the Transformer instance and can call its private
         # helpers without `send`/`public_send` dispatch.
         CLASSIFIER_BUILDERS = {
-          class:       ->(obj) { build_class(obj) },
+          class: ->(obj) { build_class(obj) },
           enumeration: ->(obj) { build_enumeration(obj) },
-          data_type:   ->(obj) { build_data_type(obj) },
-          signal:      ->(obj) { build_class(obj, xmi_type: "uml:Signal") },
-          instance:    ->(obj) { build_instance(obj) },
-          association_element: ->(obj) { build_association_element(obj) },
+          data_type: ->(obj) { build_data_type(obj) },
+          signal: ->(obj) { build_class(obj, xmi_type: "uml:Signal") },
+          instance: ->(obj) { build_instance(obj) },
+          association_element: ->(obj) { build_association_element(obj) }
         }.freeze
 
         # What each builder in CLASSIFIER_BUILDERS actually emits, keyed
@@ -142,8 +142,8 @@ module Ea
 
           if xml.include?("<xmi:Extension")
             xml.sub(%r{<xmi:Extension ([^>]+)>\s*</xmi:Extension>},
-                   "<xmi:Extension \\1>\n#{content}\n\t</xmi:Extension>")
-               .sub(/<xmi:Extension ([^>]+)\/>/,
+                    "<xmi:Extension \\1>\n#{content}\n\t</xmi:Extension>")
+               .sub(%r{<xmi:Extension ([^>]+)/>},
                     "<xmi:Extension \\1>\n#{content}\n\t</xmi:Extension>")
           else
             xml
@@ -158,7 +158,7 @@ module Ea
           ::Xmi::Sparx::Root.new(
             documentation: build_documentation,
             model: build_model,
-            extension: build_extension,
+            extension: build_extension
           )
         end
 
@@ -166,7 +166,7 @@ module Ea
           ::Xmi::Documentation.new(
             exporter: EXPORTER,
             exporter_version: EXPORTER_VERSION,
-            exporter_id: BUILD_ID,
+            exporter_id: BUILD_ID
           )
         end
 
@@ -174,7 +174,7 @@ module Ea
           ::Xmi::Uml::UmlModel.new(
             type: "uml:Model",
             name: MODEL_NAME,
-            packaged_element: root_packages.map { |pkg| build_package(pkg) } + profile_elements,
+            packaged_element: root_packages.map { |pkg| build_package(pkg) } + profile_elements
           )
         end
 
@@ -184,8 +184,8 @@ module Ea
 
         def root_packages
           @database.packages
-                  .select(&:root?)
-                  .sort_by { |p| [p.tpos || 0, p.name.to_s] }
+                   .select(&:root?)
+                   .sort_by { |p| [p.tpos || 0, p.name.to_s] }
         end
 
         # MDG stereotype definitions to include in the model tree.
@@ -203,7 +203,7 @@ module Ea
             id: @context.xmi_id_for(pkg, prefix: "EAPK"),
             name: pkg.name,
             owned_comment: package_comments(pkg),
-            packaged_element: package_children(pkg),
+            packaged_element: package_children(pkg)
           )
         end
 
@@ -211,7 +211,7 @@ module Ea
           [
             *subpackages(pkg),
             *classifier_objects(pkg),
-            *package_level_relationships(pkg),
+            *package_level_relationships(pkg)
           ].compact
         end
 
@@ -409,7 +409,7 @@ module Ea
             interface_realization: interface_realizations_for(obj),
             owned_attribute: attributes_for(obj),
             owned_operation: operations_for(obj),
-            nested_classifier: nested_children_for(obj),
+            nested_classifier: nested_children_for(obj)
           )
         end
 
@@ -425,7 +425,7 @@ module Ea
             id: @context.xmi_id_for(obj),
             name: obj.name,
             visibility: Visibility.from_scope(obj.scope),
-            owned_literal: enum_literals(obj),
+            owned_literal: enum_literals(obj)
           )
         end
 
@@ -436,7 +436,7 @@ module Ea
             name: obj.name,
             visibility: Visibility.from_scope(obj.scope),
             owned_attribute: attributes_for(obj),
-            owned_operation: operations_for(obj),
+            owned_operation: operations_for(obj)
           )
         end
 
@@ -447,7 +447,7 @@ module Ea
             name: obj.name,
             visibility: Visibility.from_scope(obj.scope),
             classifier: classifier_ref_for(obj),
-            slot: slots_for(obj),
+            slot: slots_for(obj)
           )
         end
 
@@ -465,7 +465,7 @@ module Ea
             type: "uml:Comment",
             id: @context.xmi_id_for(obj),
             body_element: (Ea::Rtf.to_text(obj.note) if obj.note) ||
-                           obj.name || "",
+                           obj.name || ""
           )
         end
 
@@ -517,7 +517,7 @@ module Ea
             is_derived: Visibility.boolean_from_flag(attr.derived),
             uml_type: type_reference_model(attr.type, attr.classifier),
             upper_value: upper,
-            lower_value: lower,
+            lower_value: lower
           )
         end
 
@@ -530,7 +530,7 @@ module Ea
             is_abstract: Visibility.boolean_from_flag(op.abstract),
             is_query: Visibility.boolean_from_flag(op.pure),
             concurrency: normalize_concurrency(op.concurrency),
-            owned_parameter: operation_parameters(op),
+            owned_parameter: operation_parameters(op)
           )
         end
 
@@ -538,7 +538,7 @@ module Ea
           ::Xmi::Uml::OwnedLiteral.new(
             type: "uml:EnumerationLiteral",
             id: @context.xmi_id_for(attr),
-            name: attr.name,
+            name: attr.name
           )
         end
 
@@ -549,7 +549,7 @@ module Ea
           ::Xmi::Uml::AssociationGeneralization.new(
             type: "uml:Generalization",
             id: @context.xmi_id_for(conn),
-            general: @context.xmi_id_for(parent),
+            general: @context.xmi_id_for(parent)
           )
         end
 
@@ -575,7 +575,7 @@ module Ea
             type: "uml:Dependency",
             id: @context.xmi_id_for(conn),
             client: client,
-            supplier: supplier,
+            supplier: supplier
           )
         end
 
@@ -607,9 +607,9 @@ module Ea
             name: conn.name,
             member_ends: [
               ::Xmi::Uml::MemberEnd.new(idref: dest_end.xmi_id),
-              ::Xmi::Uml::MemberEnd.new(idref: src_end.xmi_id),
+              ::Xmi::Uml::MemberEnd.new(idref: src_end.xmi_id)
             ],
-            owned_end: [dest_end.model, src_end.model],
+            owned_end: [dest_end.model, src_end.model]
           )
         end
 
@@ -640,7 +640,7 @@ module Ea
             association: @context.xmi_id_for(conn),
             uml_type: target_ref ? ::Xmi::Uml::Type.new(idref: target_ref) : nil,
             upper_value: upper,
-            lower_value: lower,
+            lower_value: lower
           )
 
           AssociationEnd.new(end_id, model)
@@ -657,9 +657,9 @@ module Ea
             id: @context.id_allocator.allocate(
               prefix: IdAllocator::LITERAL_INTEGER,
               seed: seed,
-              owner_id: owner_id,
+              owner_id: owner_id
             ),
-            value: Cardinality.normalize_upper(raw),
+            value: Cardinality.normalize_upper(raw)
           )
         end
 
@@ -669,9 +669,9 @@ module Ea
             id: @context.id_allocator.allocate(
               prefix: IdAllocator::LITERAL_INTEGER,
               seed: seed,
-              owner_id: owner_id,
+              owner_id: owner_id
             ),
-            value: Cardinality.normalize_lower(raw),
+            value: Cardinality.normalize_lower(raw)
           )
         end
 
@@ -679,8 +679,8 @@ module Ea
 
         def operation_parameters(op)
           params = @context.params_for_operation(op.operationid)
-            .reject(&:return?)
-            .map { |p| build_owned_parameter(p) }
+                           .reject(&:return?)
+                           .map { |p| build_owned_parameter(p) }
           params << build_return_parameter(op) if synthesized_return?(op)
           params
         end
@@ -702,7 +702,7 @@ module Ea
           ::Xmi::Uml::OwnedParameter.new(
             id: @context.xmi_id_for(param),
             name: param.name,
-            direction: normalize_direction(param.kind),
+            direction: normalize_direction(param.kind)
           )
         end
 
@@ -711,7 +711,7 @@ module Ea
             id: @context.id_allocator.allocate(
               prefix: IdAllocator::RETURN_PARAMETER,
               seed: "return-#{op.operationid}",
-              owner_id: @context.xmi_id_for(op),
+              owner_id: @context.xmi_id_for(op)
             ),
             name: "return",
             direction: "return",
@@ -719,7 +719,7 @@ module Ea
             # type= attribute; the xmi-namespaced xmi:type is the
             # metaclass discriminator and stays unset here. The xmi
             # gem's classifier_type slot round-trips EA's spelling.
-            classifier_type: type_reference(op.type, op.classifier),
+            classifier_type: type_reference(op.type, op.classifier)
           )
         end
 
@@ -789,7 +789,7 @@ module Ea
         end
 
         def note?(obj)
-          obj.object_type == "Note" || obj.object_type == "Text"
+          %w[Note Text].include?(obj.object_type)
         end
 
         def package_object?(obj)
@@ -880,7 +880,7 @@ module Ea
             type: "uml:Slot",
             id: slot_id_for(instance, binding),
             defining_feature: defining_feature_for(instance, binding),
-            value: [build_slot_value(instance, binding)],
+            value: [build_slot_value(instance, binding)]
           )
         end
 
@@ -888,7 +888,7 @@ module Ea
           ::Xmi::Uml::OpaqueExpression.new(
             type: "uml:OpaqueExpression",
             id: opaque_expression_id_for(instance, binding),
-            body_attribute: binding.body,
+            body_attribute: binding.body
           )
         end
 
@@ -896,7 +896,7 @@ module Ea
           @context.id_allocator.allocate(
             prefix: IdAllocator::SLOT,
             seed: "slot-#{instance.ea_object_id}-#{binding.variable}",
-            owner_id: @context.xmi_id_for(instance),
+            owner_id: @context.xmi_id_for(instance)
           )
         end
 
@@ -904,7 +904,7 @@ module Ea
           @context.id_allocator.allocate(
             prefix: IdAllocator::OPAQUE_EXPRESSION,
             seed: "oe-#{instance.ea_object_id}-#{binding.variable}",
-            owner_id: @context.xmi_id_for(instance),
+            owner_id: @context.xmi_id_for(instance)
           )
         end
 
@@ -920,7 +920,7 @@ module Ea
           return nil unless classifier
 
           attr = @context.attributes_for(classifier.ea_object_id)
-            .find { |a| a.name == binding.variable }
+                         .find { |a| a.name == binding.variable }
           attr ? @context.xmi_id_for(attr) : nil
         end
       end

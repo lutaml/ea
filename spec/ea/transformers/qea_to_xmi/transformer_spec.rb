@@ -135,8 +135,9 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
     it "emits EAPK_ identifiers for all packages" do
       database.packages.each do |pkg|
         next unless pkg.ea_guid
+
         expected = Ea::Transformers::QeaToXmi::GuidFormat.ea_guid_to_xmi_id(
-          pkg.ea_guid, prefix: "EAPK",
+          pkg.ea_guid, prefix: "EAPK"
         )
         expect(xml).to include(%(xmi:id="#{expected}"))
       end
@@ -146,6 +147,7 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
       database.objects.each do |obj|
         next unless obj.ea_guid
         next unless obj.object_type == "Class"
+
         expected = Ea::Transformers::QeaToXmi::GuidFormat.ea_guid_to_xmi_id(obj.ea_guid)
         expect(xml).to include(%(xmi:id="#{expected}"))
       end
@@ -422,9 +424,9 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
     end
 
     it "does not mutate the database during serialization" do
-      expect { described_class.new(database).serialize(with_extensions: false) }.not_to change {
+      expect { described_class.new(database).serialize(with_extensions: false) }.not_to(change do
         [database.packages.size, database.objects.size, database.connectors.size]
-      }
+      end)
     end
   end
 

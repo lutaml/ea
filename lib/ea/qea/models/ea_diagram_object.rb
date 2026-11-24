@@ -26,9 +26,8 @@ module Ea
           "t_diagramobjects"
         end
 
-
         COLUMN_MAP = {
-          "Object_ID" => :ea_object_id,
+          "Object_ID" => :ea_object_id
         }.freeze
 
         def self.column_map
@@ -44,7 +43,7 @@ module Ea
             right: rectright,
             bottom: rectbottom,
             width: rectright - rectleft,
-            height: rectbottom - recttop,
+            height: rectbottom - recttop
           }
         end
 
@@ -53,7 +52,7 @@ module Ea
         def center_point
           {
             x: (rectleft + rectright) / 2,
-            y: (recttop + rectbottom) / 2,
+            y: (recttop + rectbottom) / 2
           }
         end
 

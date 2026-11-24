@@ -51,7 +51,7 @@ module Ea
         # @param validators [Array<Symbol>, nil] List of validators to run,
         #   or nil to run all
         # @return [ValidationResult]
-        def validate(validators: nil) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+        def validate(validators: nil)
           result = ValidationResult.new
           context = build_context
           context[:result] = result
@@ -176,7 +176,7 @@ module Ea
           context = {
             document: @document,
             database: @database,
-            options: @options,
+            options: @options
           }
 
           # Extract entities from transformed document (preferred source)
@@ -277,7 +277,7 @@ module Ea
         # @return [ValidationResult]
         def filter_result(result)
           return result unless @options[:min_severity] ||
-            @options[:categories]
+                               @options[:categories]
 
           filtered_result = ValidationResult.new
 
@@ -301,7 +301,7 @@ module Ea
           severity_levels = {
             info: 0,
             warning: 1,
-            error: 2,
+            error: 2
           }
 
           min_level = severity_levels[@options[:min_severity]] || 0
@@ -375,7 +375,7 @@ module Ea
         # @return [void]
         def display_messages_by_category(messages)
           messages.group_by(&:category).each do |category, msgs|
-            puts "  #{category.to_s.split('_').map(&:capitalize).join(' ')} " \
+            puts "  #{category.to_s.split("_").map(&:capitalize).join(" ")} " \
                  "(#{msgs.size}):"
             msgs.each do |msg|
               puts "    #{msg}"

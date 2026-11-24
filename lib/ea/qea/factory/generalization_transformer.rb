@@ -15,11 +15,9 @@ module Ea
           return nil if current_object.nil?
 
           # ea_connector can be nil for terminal nodes (classes with no parent)
-          if ea_connector && !ea_connector.generalization?
-            return nil
-          end
+          return nil if ea_connector && !ea_connector.generalization?
 
-          Lutaml::Uml::Generalization.new.tap do |gen| # rubocop:disable Metrics/BlockLength
+          Lutaml::Uml::Generalization.new.tap do |gen|
             # Map properties from CURRENT object (not parent)
             # This matches XMI's self-referential pattern
             gen.general_id = normalize_guid_to_xmi_format(
@@ -55,7 +53,7 @@ module Ea
                                 false
                               end
 
-            # Note: general_attributes, attributes, owned_props, assoc_props,
+            # NOTE: general_attributes, attributes, owned_props, assoc_props,
             # general, inherited_props, inherited_assoc_props
             # will be populated in ClassTransformer.load_generalization
           end

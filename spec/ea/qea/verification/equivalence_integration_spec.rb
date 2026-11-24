@@ -17,7 +17,7 @@ RSpec.describe "XMI/QEA Equivalence Integration" do
       ["ArcGISWorkspace_template.xmi", "ArcGISWorkspace_template.qea",
        "ArcGISWorkspace_template"],
       ["20251010_current_plateau_v5.1.xmi",
-       "20251010_current_plateau_v5.1.qea", "20251010_current_plateau_v5.1"],
+       "20251010_current_plateau_v5.1.qea", "20251010_current_plateau_v5.1"]
     ]
 
     @cached_results = {}
@@ -44,22 +44,20 @@ RSpec.describe "XMI/QEA Equivalence Integration" do
       let(:result) { @cached_results[description] } # rubocop:disable RSpec/InstanceVariable
 
       before do
-        unless File.exist?(xmi_path) && File.exist?(qea_path)
-          skip "Files not found"
-        end
+        skip "Files not found" unless File.exist?(xmi_path) && File.exist?(qea_path)
         skip "No cached result" unless result
       end
 
       it "has same or more packages" do
         xmi_only = result.xmi_only[:packages]
         expect(xmi_only).to be_empty,
-                            "QEA missing packages: #{xmi_only.join(', ')}"
+                            "QEA missing packages: #{xmi_only.join(", ")}"
       end
 
       it "has same or more classes" do
         xmi_only = result.xmi_only[:classes]
         expect(xmi_only).to be_empty,
-                            "QEA missing classes: #{xmi_only.join(', ')}"
+                            "QEA missing classes: #{xmi_only.join(", ")}"
       end
 
       it "preserves element-level properties" do
@@ -74,7 +72,7 @@ RSpec.describe "XMI/QEA Equivalence Integration" do
         expect(element_diffs).to be_empty,
                                  "Element property differences: #{element_diffs.map do |d|
                                    d[:name]
-                                 end.join(', ')}"
+                                 end.join(", ")}"
       end
 
       it "does not lose critical information" do
@@ -84,9 +82,9 @@ RSpec.describe "XMI/QEA Equivalence Integration" do
         missing_packages = result.xmi_only[:packages]
 
         expect(missing_classes).to be_empty,
-                                   "Missing classes: #{missing_classes.join(', ')}"
+                                   "Missing classes: #{missing_classes.join(", ")}"
         expect(missing_packages).to be_empty,
-                                    "Missing packages: #{missing_packages.join(', ')}"
+                                    "Missing packages: #{missing_packages.join(", ")}"
       end
 
       it "has reasonable statistics" do
@@ -124,9 +122,7 @@ RSpec.describe "XMI/QEA Equivalence Integration" do
     let(:result) { @cached_results["test"] } # rubocop:disable RSpec/InstanceVariable
 
     before do
-      unless File.exist?(xmi_path) && File.exist?(qea_path)
-        skip "Files not found"
-      end
+      skip "Files not found" unless File.exist?(xmi_path) && File.exist?(qea_path)
     end
 
     it "generates a detailed summary" do
@@ -199,9 +195,7 @@ RSpec.describe "XMI/QEA Equivalence Integration" do
     let(:qea_doc) { Ea::Qea.parse(qea_path) }
 
     before do
-      unless File.exist?(xmi_path) && File.exist?(qea_path)
-        skip "Files not found"
-      end
+      skip "Files not found" unless File.exist?(xmi_path) && File.exist?(qea_path)
     end
 
     it "matches packages correctly" do
@@ -284,13 +278,13 @@ RSpec.describe "XMI/QEA Equivalence Integration" do
     end
 
     it "records XMI-only elements" do
-      result.add_xmi_only(:classes, ["Class1", "Class2"])
-      expect(result.xmi_only[:classes]).to eq(["Class1", "Class2"])
+      result.add_xmi_only(:classes, %w[Class1 Class2])
+      expect(result.xmi_only[:classes]).to eq(%w[Class1 Class2])
     end
 
     it "records QEA-only elements" do
-      result.add_qea_only(:classes, ["Class3", "Class4"])
-      expect(result.qea_only[:classes]).to eq(["Class3", "Class4"])
+      result.add_qea_only(:classes, %w[Class3 Class4])
+      expect(result.qea_only[:classes]).to eq(%w[Class3 Class4])
     end
 
     it "is equivalent when no critical issues" do
@@ -307,7 +301,7 @@ RSpec.describe "XMI/QEA Equivalence Integration" do
     it "generates statistics" do
       result.add_matches(:classes, 5)
       result.add_xmi_only(:packages, ["Pkg1"])
-      result.add_qea_only(:classes, ["Class1", "Class2"])
+      result.add_qea_only(:classes, %w[Class1 Class2])
 
       stats = result.statistics
       expect(stats[:total_matches]).to eq(5)

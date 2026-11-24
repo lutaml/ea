@@ -116,8 +116,6 @@ module Ea
           @divider_y[element.model_element_ref] = context.geometry.divider_y
         end
 
-
-
         # Build the RenderContext for one element. Returns nil when
         # the element has no usable bounds (skip rendering).
         def build_context(element)
@@ -132,7 +130,6 @@ module Ea
           size_unit = font_resolver.size_unit_for(element)
           logical_height = font_resolver.logical_height_for(element)
           parent_name = off_canvas_parent_name_for(classifier)
-
 
           is_classifier = classifier.is_a?(Ea::Model::Classifier)
           # Interfaces DO render attribute compartments when they own
@@ -158,13 +155,13 @@ module Ea
                        end
           op_lines = if is_classifier && show_operations? &&
                         (operations_visible?(element) || regenerated_context?)
-                        Element::OperationRenderer.lines_for(
-                          classifier,
-                          parameter_detail: display_config.operation_parameter_detail
-                        )
-                      else
-                        []
-                      end
+                       Element::OperationRenderer.lines_for(
+                         classifier,
+                         parameter_detail: display_config.operation_parameter_detail
+                       )
+                     else
+                       []
+                     end
           # Titles wrap; content rows grow the drawn box to fit their insets.
           row_w = [row_content_width(attr_lines, 5, size, family,
                                      logical_height: logical_height,
@@ -184,28 +181,32 @@ module Ea
             )
           end
           stereotype_fqname = element.style&.fetch(:stereotype_fqname, nil)
-          header_lines = classifier ? Element::HeaderLines.for(classifier,
-                                                                diagram_package_id: diagram.package_id,
-                                                                visually_nested: visually_nested?(element),
-                                                                umldi_keyword: element.umldi_keyword,
-                                                                stereotype_fqname: stereotype_fqname,
-                                                                bounds_width: bounds.width,
-                                                                font_size: size, logical_height: logical_height,
-                                                                family: family,
-                                                                off_canvas_parent_name: parent_name,
-                                                                foreign_package_name: foreign_package_name_for(classifier),
-                                                                suppress_stereotypes: suppress_stereotypes?) : []
+          header_lines = if classifier
+                           Element::HeaderLines.for(classifier,
+                                                    diagram_package_id: diagram.package_id,
+                                                    visually_nested: visually_nested?(element),
+                                                    umldi_keyword: element.umldi_keyword,
+                                                    stereotype_fqname: stereotype_fqname,
+                                                    bounds_width: bounds.width,
+                                                    font_size: size, logical_height: logical_height,
+                                                    family: family,
+                                                    off_canvas_parent_name: parent_name,
+                                                    foreign_package_name: foreign_package_name_for(classifier),
+                                                    suppress_stereotypes: suppress_stereotypes?)
+                         else
+                           []
+                         end
           header_lines = header_lines.map do |text, style|
             [text, font_resolver.header_style_for(style, element)]
           end
           geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
                                           tagged_values_for(classifier).size,
                                           header_lines, classifier: classifier, family: family,
-                                          size_unit: size_unit, logical_height: logical_height,
-                                          constraints_count: constraints_for(classifier).size,
-                                          marker_count: marker_lines_for(classifier, element).size,
-                                          enum_literals_count: enum_row_count_for(classifier),
-                                          attr_group_lead: Element::AttributeRenderer.group_lead_total(attr_lines))
+                                                        size_unit: size_unit, logical_height: logical_height,
+                                                        constraints_count: constraints_for(classifier).size,
+                                                        marker_count: marker_lines_for(classifier, element).size,
+                                                        enum_literals_count: enum_row_count_for(classifier),
+                                                        attr_group_lead: Element::AttributeRenderer.group_lead_total(attr_lines))
           # EA suppresses the whole attribute compartment when its
           # rows do not fit the stored box height (never truncates
           # rows) - the AOS box on CityFurniture hides its
@@ -225,11 +226,11 @@ module Ea
             geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
                                             tagged_values_for(classifier).size,
                                             header_lines, classifier: classifier, family: family,
-                                            size_unit: size_unit, logical_height: logical_height,
-                                            constraints_count: constraints_for(classifier).size,
-                                            marker_count: marker_lines_for(classifier, element).size,
-                                            enum_literals_count: enum_row_count_for(classifier),
-                                            attr_group_lead: Element::AttributeRenderer.group_lead_total(attr_lines))
+                                                          size_unit: size_unit, logical_height: logical_height,
+                                                          constraints_count: constraints_for(classifier).size,
+                                                          marker_count: marker_lines_for(classifier, element).size,
+                                                          enum_literals_count: enum_row_count_for(classifier),
+                                                          attr_group_lead: Element::AttributeRenderer.group_lead_total(attr_lines))
           end
           # EA suppresses the operations compartment when its rows
           # overflow the stored box height (same rule as attributes)
@@ -246,22 +247,22 @@ module Ea
             geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
                                             tagged_values_for(classifier).size,
                                             header_lines, classifier: classifier, family: family,
-                                            size_unit: size_unit, logical_height: logical_height,
-                                            constraints_count: constraints_for(classifier).size,
-                                            marker_count: marker_lines_for(classifier, element).size,
-                                            enum_literals_count: enum_row_count_for(classifier),
-                                            attr_group_lead: Element::AttributeRenderer.group_lead_total(attr_lines))
+                                                          size_unit: size_unit, logical_height: logical_height,
+                                                          constraints_count: constraints_for(classifier).size,
+                                                          marker_count: marker_lines_for(classifier, element).size,
+                                                          enum_literals_count: enum_row_count_for(classifier),
+                                                          attr_group_lead: Element::AttributeRenderer.group_lead_total(attr_lines))
           elsif op_lines.any? && geometry.op_first_y &&
-             geometry.op_bottom_y.to_i > bounds.y + bounds.height
+                geometry.op_bottom_y.to_i > bounds.y + bounds.height
             op_lines = []
             geometry = compartment_geometry(bounds, size, attr_lines, op_lines,
                                             tagged_values_for(classifier).size,
                                             header_lines, classifier: classifier, family: family,
-                                            size_unit: size_unit, logical_height: logical_height,
-                                            constraints_count: constraints_for(classifier).size,
-                                            marker_count: marker_lines_for(classifier, element).size,
-                                            enum_literals_count: enum_row_count_for(classifier),
-                                            attr_group_lead: Element::AttributeRenderer.group_lead_total(attr_lines))
+                                                          size_unit: size_unit, logical_height: logical_height,
+                                                          constraints_count: constraints_for(classifier).size,
+                                                          marker_count: marker_lines_for(classifier, element).size,
+                                                          enum_literals_count: enum_row_count_for(classifier),
+                                                          attr_group_lead: Element::AttributeRenderer.group_lead_total(attr_lines))
           end
           # Real attributes grow the DRAWN box past the stored
           # height instead of being dropped (0CABA7D7: stored h44
@@ -390,23 +391,23 @@ module Ea
           end
           CompartmentGeometry.new(bounds: bounds, size: size, family: family,
                                   size_unit: size_unit, logical_height: logical_height,
-                                   compact_standard_operations: compact_standard,
-                                   header_ghost: header_lines.any? &&
-                                                  %i[italic italic_tight].include?(header_lines.first.last),
-                                   header_ghost_tight: Element::HeaderLines.parent_ghost_gap(header_lines) == 3,
-                                   header_lines_count: header_lines.size,
-                                   attr_lines_count: attr_lines.size,
-                                   op_lines_count: op_lines.size,
-                                   tagged_values_count: tagged_count,
-                                   constraints_count: constraints_count,
-                                   marker_count: marker_count,
-                                   enum_literals_count: enum_literals_count,
-                                   header_top_padding: header_padding_for(header_lines, classifier),
-                                   header_line_offset: theme.compartments.header_line_offset,
-                                   divider_offset: divider_offset,
-                                   attr_line_offset: theme.compartments.attr_line_offset,
-                                   attr_first_offset: attr_first_offset,
-                                   attr_group_lead: attr_group_lead)
+                                  compact_standard_operations: compact_standard,
+                                  header_ghost: header_lines.any? &&
+                                                 %i[italic italic_tight].include?(header_lines.first.last),
+                                  header_ghost_tight: Element::HeaderLines.parent_ghost_gap(header_lines) == 3,
+                                  header_lines_count: header_lines.size,
+                                  attr_lines_count: attr_lines.size,
+                                  op_lines_count: op_lines.size,
+                                  tagged_values_count: tagged_count,
+                                  constraints_count: constraints_count,
+                                  marker_count: marker_count,
+                                  enum_literals_count: enum_literals_count,
+                                  header_top_padding: header_padding_for(header_lines, classifier),
+                                  header_line_offset: theme.compartments.header_line_offset,
+                                  divider_offset: divider_offset,
+                                  attr_line_offset: theme.compartments.attr_line_offset,
+                                  attr_first_offset: attr_first_offset,
+                                  attr_group_lead: attr_group_lead)
         end
 
         # A ghost-led header (italic parent label above the stereotype /
@@ -459,7 +460,7 @@ module Ea
           first = header_lines.first
           return theme.compartments.header_top_padding unless first
 
-          if first.last == :italic || first.last == :italic_tight
+          if %i[italic italic_tight].include?(first.last)
             6 # ghost-led: EA seats the right-aligned ghost at +13
           elsif first.first.to_s.start_with?("«")
             fallback_stereotype_label?(first.first, classifier) ? 6 : 9
@@ -533,7 +534,7 @@ module Ea
 
         def drawn_association_ids
           (diagram.connectors || []).select(&:renderable?)
-                                    .map(&:relationship_ref).compact.to_set
+            .map(&:relationship_ref).compact.to_set
         end
 
         def enum_literals_for(classifier)
@@ -582,7 +583,7 @@ module Ea
           parts = []
           parts << "root" if classifier.is_root
           parts << "leaf" if classifier.is_leaf
-          parts.empty? ? nil : "{#{parts.join(',')}}"
+          parts.empty? ? nil : "{#{parts.join(",")}}"
         end
 
         def marker_constraint(text)
@@ -824,7 +825,7 @@ module Ea
         # classifier id to the Classifier instance. Returns nil
         # when not found or not a Classifier.
         def attribute_lookup
-          lambda { |id| model_index[id] if model_index && model_index[id].is_a?(Ea::Model::Classifier) }
+          ->(id) { model_index[id] if model_index && model_index[id].is_a?(Ea::Model::Classifier) }
         end
 
         def model_element_for(element)

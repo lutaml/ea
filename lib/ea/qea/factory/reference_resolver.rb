@@ -79,7 +79,7 @@ module Ea
         def stats
           {
             total_elements: @guid_to_element.size,
-            total_objects: @object_id_to_name.size,
+            total_objects: @object_id_to_name.size
           }
         end
 

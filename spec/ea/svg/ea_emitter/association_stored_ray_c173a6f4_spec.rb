@@ -43,7 +43,7 @@ RSpec.describe "C173A6F4 route and label controls" do
 
     svg = Ea::Svg::EaEmitter::Document.new(
       diagram, model_index: document.index_by_id, document: document,
-      frame: true
+               frame: true
     ).render
     labels = Nokogiri::XML(svg).xpath("//*[local-name()='text']").map(&:text)
     expect(labels).to include("+lod0Geometry", "«property»", "0..1")

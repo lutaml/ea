@@ -63,6 +63,7 @@ module Ea
               ).round
             end
             return [text] if context.bounds_width.nil?
+
             usable = context.bounds_width.to_i - 6
             return [text] if width.call(text) <= usable
 
@@ -94,11 +95,11 @@ module Ea
               word.split(/(::)/).each_slice(2) do |part, sep|
                 chunk << pending << part
                 pending = ""
-                if sep
-                  chunk << sep
-                  segments << chunk.dup
-                  chunk.clear
-                end
+                next unless sep
+
+                chunk << sep
+                segments << chunk.dup
+                chunk.clear
               end
               unless chunk.empty?
                 segments << chunk.dup

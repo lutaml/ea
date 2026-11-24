@@ -13,9 +13,9 @@ module Ea
       # their configuration is parsed from t_xref and attached as
       # an `Ea::Model::Legend` payload on the Note.
       class NoteBuilder
-        NOTE_OBJECT_TYPE = "Note".freeze
-        TEXT_OBJECT_TYPE = "Text".freeze
-        LEGEND_STYLEEX_TOKEN = "LegendOpts=".freeze
+        NOTE_OBJECT_TYPE = "Note"
+        TEXT_OBJECT_TYPE = "Text"
+        LEGEND_STYLEEX_TOKEN = "LegendOpts="
 
         attr_reader :database
 
@@ -49,7 +49,7 @@ module Ea
         end
 
         def note_type?(object_type)
-          object_type == NOTE_OBJECT_TYPE || object_type == TEXT_OBJECT_TYPE
+          [NOTE_OBJECT_TYPE, TEXT_OBJECT_TYPE].include?(object_type)
         end
 
         def legend_for(obj)

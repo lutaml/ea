@@ -69,7 +69,7 @@ module Ea
           Layer.new(style_key: :frame_tab, style: TAB_STYLE, body: body)
         end
 
-        def tab_label_layer(canvas, diagram)
+        def tab_label_layer(_canvas, diagram)
           label = tab_label(diagram)
           return nil unless label
 
@@ -84,7 +84,7 @@ module Ea
           "M #{inset} #{inset} L #{inset} #{bottom} L #{right} #{bottom} L #{right} #{inset} L #{inset} #{inset}"
         end
 
-        def tab_points(canvas, diagram)
+        def tab_points(_canvas, diagram)
           label_width = tab_label_width(diagram)
           x1 = theme.frame.inset
           x2 = x1 + label_width

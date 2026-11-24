@@ -135,7 +135,7 @@ RSpec.describe Ea::Qea::Models::EaScript do
         "ScriptName" => "TestScript",
         "ScriptAuthor" => "Author Name",
         "Notes" => "Script notes",
-        "Script" => "alert('test');",
+        "Script" => "alert('test');"
       }
 
       script = described_class.from_db_row(row)

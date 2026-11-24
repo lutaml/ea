@@ -92,7 +92,7 @@ RSpec.describe Ea::Svg::EaEmitter::Element::HeaderLines do
   describe ".display_name with package scoping" do
     it "always returns the plain name (qualification comes from the pipeline)" do
       klass = Ea::Model::Klass.new(id: "K", name: "X",
-                                     qualified_name: "pkg::X")
+                                   qualified_name: "pkg::X")
       expect(described_class.display_name(klass, nil)).to eq("X")
       expect(described_class.display_name(klass, "PK1")).to eq("X")
     end
@@ -108,16 +108,16 @@ RSpec.describe Ea::Svg::EaEmitter::Element::HeaderLines do
     it "wraps the qualified name when it exceeds the bounds width" do
       klass = Ea::Model::Klass.new(id: "K", name: "CV_SequenceType")
       lines = described_class.for(klass, foreign_package_name: "Quadrilateral Grid",
-                                            bounds_width: 118, font_size: 7,
-                                            family: "Carlito")
+                                         bounds_width: 118, font_size: 7,
+                                         family: "Carlito")
       expect(lines).to eq([["Quadrilateral Grid::", :bold], ["CV_SequenceType", :bold]])
     end
 
     it "keeps a fitting qualified name on one line" do
       klass = Ea::Model::Klass.new(id: "K", name: "CV_GridPoint")
       lines = described_class.for(klass, foreign_package_name: "Quadrilateral Grid",
-                                            bounds_width: 174, font_size: 7,
-                                            family: "Carlito")
+                                         bounds_width: 174, font_size: 7,
+                                         family: "Carlito")
       expect(lines).to eq([["Quadrilateral Grid::CV_GridPoint", :bold]])
     end
 

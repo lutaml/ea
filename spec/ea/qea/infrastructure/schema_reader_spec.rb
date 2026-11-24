@@ -90,7 +90,7 @@ RSpec.describe Ea::Qea::Infrastructure::SchemaReader do
         "Object_Type",
         "Name",
         "Package_ID",
-        "ea_guid",
+        "ea_guid"
       )
     end
 
@@ -101,7 +101,7 @@ RSpec.describe Ea::Qea::Infrastructure::SchemaReader do
         "Package_ID",
         "Name",
         "Parent_ID",
-        "ea_guid",
+        "ea_guid"
       )
     end
   end
@@ -211,9 +211,7 @@ RSpec.describe Ea::Qea::Infrastructure::SchemaReader do
         reader.row_count(table) == 0
       end
 
-      if empty_table
-        expect(reader.row_count(empty_table)).to eq(0)
-      end
+      expect(reader.row_count(empty_table)).to eq(0) if empty_table
     end
   end
 

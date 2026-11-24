@@ -12,9 +12,9 @@ RSpec.describe Ea::Cli::Output do
     end
 
     it "raises ArgumentError for unknown names with a list of registered ones" do
-      expect {
+      expect do
         described_class.for(:bogus)
-      }.to raise_error(ArgumentError, /No output formatter 'bogus'/)
+      end.to raise_error(ArgumentError, /No output formatter 'bogus'/)
     end
   end
 

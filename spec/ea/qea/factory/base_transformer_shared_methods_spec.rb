@@ -20,7 +20,7 @@ RSpec.describe Ea::Qea::Factory::BaseTransformer do
           property_id: 1,
           element_id: "{OTHER-GUID}",
           tag_name: "test",
-          value: "val",
+          value: "val"
         )
         db = build_test_database(tagged_values: [tag])
         t = described_class.new(db)
@@ -33,7 +33,7 @@ RSpec.describe Ea::Qea::Factory::BaseTransformer do
         tag = Ea::Qea::Models::EaTaggedValue.new(
           property_id: 1,
           element_id: "{TARGET-GUID}",
-          tag_value: "version|1.0",
+          tag_value: "version|1.0"
         )
         db = build_test_database(tagged_values: [tag])
         t = described_class.new(db)

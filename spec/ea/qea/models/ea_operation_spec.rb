@@ -219,7 +219,7 @@ RSpec.describe Ea::Qea::Models::EaOperation do
         "Name" => "myMethod",
         "Type" => "String",
         "Scope" => "public",
-        "Stereotype" => "method",
+        "Stereotype" => "method"
       }
 
       op = described_class.from_db_row(row)

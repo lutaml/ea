@@ -51,9 +51,11 @@ module Ea
 
       def convert(svg_path, target)
         converter = self.class.available_converter
-        raise Ea::Cli::Error,
-              "No SVG→#{target.upcase} converter available. " \
-              "Install rsvg-convert (librsvg) or ImageMagick." unless converter
+        unless converter
+          raise Ea::Cli::Error,
+                "No SVG→#{target.upcase} converter available. " \
+                "Install rsvg-convert (librsvg) or ImageMagick."
+        end
 
         with_tempfile(".#{target}") do |out_path|
           run_converter(converter, svg_path, out_path, target)

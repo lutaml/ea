@@ -96,12 +96,11 @@ module Ea
           private_class_method :parameter_text
 
           def self.reception_params(operation, parameter_detail)
-            params = (operation.parameters || []).filter_map { |p|
+            (operation.parameters || []).filter_map do |p|
               next nil if p.type_name.to_s.empty?
 
               parameter_text(p, p.type_name, parameter_detail)
-            }.join(", ")
-            params
+            end.join(", ")
           end
           private_class_method :reception_params
 

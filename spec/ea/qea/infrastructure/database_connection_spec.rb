@@ -152,7 +152,7 @@ RSpec.describe Ea::Qea::Infrastructure::DatabaseConnection do
       connection.with_connection do |db|
         tables = db.execute(
           "SELECT name FROM sqlite_master WHERE type='table' " \
-          "AND name='t_object'",
+          "AND name='t_object'"
         )
         expect(tables).not_to be_empty
         expect(tables.first["name"]).to eq("t_object")
@@ -189,14 +189,14 @@ RSpec.describe Ea::Qea::Infrastructure::DatabaseConnection do
       conn.with_connection do |db|
         # Verify we can read tables
         tables = db.execute(
-          "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name",
+          "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name"
         ).map { |row| row["name"] }
 
         expect(tables).to include("t_object", "t_package", "t_attribute")
 
         # Verify we can count records
         count = db.execute("SELECT COUNT(*) as count FROM t_object")
-          .first["count"]
+                  .first["count"]
         expect(count).to be >= 0
       end
     end

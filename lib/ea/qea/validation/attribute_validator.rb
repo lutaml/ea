@@ -14,31 +14,31 @@ module Ea
 
         def validate_parent_object_references # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
           attributes.each do |attr|
-            unless reference_exists?("t_object", "ea_object_id",
-                                     attr.ea_object_id)
-              parent = database&.objects&.all&.find do |o|
-                o.ea_object_id == attr.ea_object_id
-              end
-              attr_location = if parent
-                                "#{resolve_class_path(
-                                  parent.ea_object_id,
-                                  parent.name,
-                                )}::#{attr.name}"
-                              else
-                                "Unknown::#{attr.name} " \
-                                  "(attribute_id: #{attr.id})"
-                              end
-              result.add_error(
-                category: :missing_reference,
-                entity_type: :attribute,
-                entity_id: attr.id.to_s,
-                entity_name: attr.name,
-                field: "ea_object_id",
-                reference: attr.ea_object_id.to_s,
-                message: "Parent object #{attr.ea_object_id} does not exist",
-                location: attr_location,
-              )
+            next if reference_exists?("t_object", "ea_object_id",
+                                      attr.ea_object_id)
+
+            parent = database&.objects&.all&.find do |o|
+              o.ea_object_id == attr.ea_object_id
             end
+            attr_location = if parent
+                              "#{resolve_class_path(
+                                parent.ea_object_id,
+                                parent.name
+                                )}::#{attr.name}"
+                            else
+                              "Unknown::#{attr.name} " \
+                                "(attribute_id: #{attr.id})"
+                            end
+            result.add_error(
+              category: :missing_reference,
+              entity_type: :attribute,
+              entity_id: attr.id.to_s,
+              entity_name: attr.name,
+              field: "ea_object_id",
+              reference: attr.ea_object_id.to_s,
+              message: "Parent object #{attr.ea_object_id} does not exist",
+              location: attr_location
+            )
           end
         end
 
@@ -67,7 +67,7 @@ module Ea
               field: "classifier",
               reference: attr.classifier,
               message: "Classifier '#{attr.classifier}' not found",
-              location: attr_location,
+              location: attr_location
             )
           end
         end
@@ -84,7 +84,6 @@ module Ea
             o.ea_object_id.to_s == classifier_id.to_s
           end
         end
-
       end
     end
   end

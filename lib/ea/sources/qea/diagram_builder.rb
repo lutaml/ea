@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "set"
-
 module Ea
   module Sources
     module Qea
@@ -185,7 +183,7 @@ module Ea
         end
 
         def truthy?(raw)
-          raw == "1" || raw == "-1"
+          ["1", "-1"].include?(raw)
         end
 
         def stereotype_fqname_for(placement)
@@ -375,9 +373,9 @@ module Ea
 
         def build_phantom_connector(conn, diagram_row, idx)
           source_placement = diagram_object_placement(diagram_row.diagram_id,
-                                                       conn.start_object_id)
+                                                      conn.start_object_id)
           target_placement = diagram_object_placement(diagram_row.diagram_id,
-                                                       conn.end_object_id)
+                                                      conn.end_object_id)
           return nil unless source_placement && target_placement
 
           source_bounds = bounds_from_rect(source_placement)
@@ -429,11 +427,19 @@ module Ea
 
           if dx.abs * bounds.height > dy.abs * bounds.width
             x = dx > 0 ? bounds.x + bounds.width : bounds.x
-            y = cy + dy * (x - cx).abs / dx.abs rescue cy
+            y = begin
+              cy + dy * (x - cx).abs / dx.abs
+            rescue StandardError
+              cy
+            end
             [x, y]
           else
             y = dy > 0 ? bounds.y + bounds.height : bounds.y
-            x = cx + dx * (y - cy).abs / dy.abs rescue cx
+            x = begin
+              cx + dx * (y - cy).abs / dy.abs
+            rescue StandardError
+              cx
+            end
             [x, y]
           end
         end
@@ -462,34 +468,42 @@ module Ea
           context = ContextDiagramSupport.package_context(diagram_row) ||
                     ContextDiagramSupport.element_regenerate?(diagram_row)
           model = collapse_computed_jog(Ea::Model::DiagramConnector.new(
-            id: IdNormalizer.synthetic("dc", diagram_row.diagram_id,
-                                       link_row.instance_id),
-            diagram_id: IdNormalizer.from_guid(diagram_row.ea_guid),
-            relationship_ref: ref_for_connector(link_row),
-            source_element_ref: unique_placement_ref(diagram_row.diagram_id, connector&.start_object_id),
-            target_element_ref: unique_placement_ref(diagram_row.diagram_id, connector&.end_object_id),
-            paint_order: paint_order_for(diagram_row.diagram_id, connector),
-            connector_type: connector&.connector_type,
-            direction: connector&.direction,
-            source_stereotype: connector&.sourcestereotype,
-            target_stereotype: connector&.deststereotype,
-            waypoints: context ? context_waypoints_for(connector, diagram_row) :
-                         waypoints_for_link(link_row, diagram_row),
-            source_anchor: port_anchor_for(connector, diagram_row,
-                                           geom, :source),
-            target_anchor: port_anchor_for(connector, diagram_row,
-                                           geom, :target),
-            source_port: connection_port(diagram_row, connector, :source, geom),
-            target_port: connection_port(diagram_row, connector, :target, geom),
-            label_boxes: context ? {} : (geom[:label_boxes] || {}),
-            style: context ? { direct: true } :
-                     DiagramStyleParser.parse(link_row.style),
-            hidden: hidden?(link_row),
-            line_width: connector&.isbold,
-            ghost_labels: ghost_labels_for(connector, diagram_row, link_row),
-            has_geometry_offsets: geometry_has_offsets?(link_row.geometry),
-            is_substitutable: substitutable_connector?(connector)
-          ), link_row, diagram_row, geom)
+                                          id: IdNormalizer.synthetic("dc", diagram_row.diagram_id,
+                                                                     link_row.instance_id),
+                                          diagram_id: IdNormalizer.from_guid(diagram_row.ea_guid),
+                                          relationship_ref: ref_for_connector(link_row),
+                                          source_element_ref: unique_placement_ref(diagram_row.diagram_id,
+                                                                                   connector&.start_object_id),
+                                          target_element_ref: unique_placement_ref(diagram_row.diagram_id,
+                                                                                   connector&.end_object_id),
+                                          paint_order: paint_order_for(diagram_row.diagram_id, connector),
+                                          connector_type: connector&.connector_type,
+                                          direction: connector&.direction,
+                                          source_stereotype: connector&.sourcestereotype,
+                                          target_stereotype: connector&.deststereotype,
+                                          waypoints: if context
+                                                       context_waypoints_for(connector, diagram_row)
+                                                     else
+                                                       waypoints_for_link(link_row, diagram_row)
+                                                     end,
+                                          source_anchor: port_anchor_for(connector, diagram_row,
+                                                                         geom, :source),
+                                          target_anchor: port_anchor_for(connector, diagram_row,
+                                                                         geom, :target),
+                                          source_port: connection_port(diagram_row, connector, :source, geom),
+                                          target_port: connection_port(diagram_row, connector, :target, geom),
+                                          label_boxes: context ? {} : (geom[:label_boxes] || {}),
+                                          style: if context
+                                                   { direct: true }
+                                                 else
+                                                   DiagramStyleParser.parse(link_row.style)
+                                                 end,
+                                          hidden: hidden?(link_row),
+                                          line_width: connector&.isbold,
+                                          ghost_labels: ghost_labels_for(connector, diagram_row, link_row),
+                                          has_geometry_offsets: geometry_has_offsets?(link_row.geometry),
+                                          is_substitutable: substitutable_connector?(connector)
+                                        ), link_row, diagram_row, geom)
           mark_plain_source_seat(model, link_row, context)
           mark_plain_target_seat(model, link_row, context)
           model = collapse_partial_port_jog(model, link_row, diagram_row)
@@ -517,8 +531,11 @@ module Ea
         def port_anchor_for(connector, diagram_row, geom, end_kind)
           return nil unless connector
 
-          object_id = end_kind == :source ? connector.start_object_id :
-                                           connector.end_object_id
+          object_id = if end_kind == :source
+                        connector.start_object_id
+                      else
+                        connector.end_object_id
+                      end
           placement = diagram_object_placement(diagram_row.diagram_id,
                                                object_id)
           return nil unless placement
@@ -640,7 +657,7 @@ module Ea
         # Ghost label anchors at the on-canvas end of the connector.
         # When the source is off-canvas, anchor at the target's
         # first waypoint; vice versa for target off-canvas.
-        def ghost_anchor(end_kind, connector, link_row, diagram_row)
+        def ghost_anchor(end_kind, connector, _link_row, diagram_row)
           placement = if end_kind == :source
                         target_placement_for(connector, diagram_row)
                       else
@@ -686,9 +703,9 @@ module Ea
           return [] unless connector
 
           source_placement = diagram_object_placement(diagram_row.diagram_id,
-                                                       connector.start_object_id)
+                                                      connector.start_object_id)
           target_placement = diagram_object_placement(diagram_row.diagram_id,
-                                                       connector.end_object_id)
+                                                      connector.end_object_id)
           return [] unless source_placement && target_placement
 
           geom = parse_geometry_fields(link_row.geometry)
@@ -698,10 +715,16 @@ module Ea
           target_port = connection_port(diagram_row, connector, :target, geom)
           # Waypoint points flow through this method as [x, y] arrays;
           # keep the ports in the same shape.
-          source_point = source_port ? [source_port.x, source_port.y] :
-                         element_edge_point(source_placement, :source, edge_out)
-          target_point = target_port ? [target_port.x, target_port.y] :
-                         element_edge_point(target_placement, :target, edge_out)
+          source_point = if source_port
+                           [source_port.x, source_port.y]
+                         else
+                           element_edge_point(source_placement, :source, edge_out)
+                         end
+          target_point = if target_port
+                           [target_port.x, target_port.y]
+                         else
+                           element_edge_point(target_placement, :target, edge_out)
+                         end
 
           intermediate = intermediate_waypoints(link_row)
           if DiagramStyleParser.parse(link_row.style)[:mode] == "1"
@@ -774,9 +797,7 @@ module Ea
             end
           end
 
-          if intermediate.any? && !tree_route
-            points = level_entry_route(points, link_row, connector, src, tgt)
-          end
+          points = level_entry_route(points, link_row, connector, src, tgt) if intermediate.any? && !tree_route
           points = drop_zero_length_tree_segments(points, link_row)
           points.map do |x, y|
             Ea::Model::Waypoint.new(position: Ea::Model::Point.new(x: x, y: y))
@@ -830,8 +851,16 @@ module Ea
           dy = -y_off.to_f
           return nil if dx.zero? && dy.zero?
 
-          tx = dx.zero? ? Float::INFINITY : (dx > 0 ? b.x + b.width - center_x : b.x - center_x) / dx
-          ty = dy.zero? ? Float::INFINITY : (dy > 0 ? b.y + b.height - center_y : b.y - center_y) / dy
+          tx = if dx.zero?
+                 Float::INFINITY
+               else
+                 (dx > 0 ? b.x + b.width - center_x : b.x - center_x) / dx
+               end
+          ty = if dy.zero?
+                 Float::INFINITY
+               else
+                 (dy > 0 ? b.y + b.height - center_y : b.y - center_y) / dy
+               end
           t = [tx, ty].min
           Ea::Model::Point.new(x: (center_x + t * dx).round, y: (center_y + t * dy).round)
         end
@@ -989,7 +1018,7 @@ module Ea
           end
         end
 
-        def effective_edge(edge_code, end_kind)
+        def effective_edge(edge_code, _end_kind)
           mapping = {
             1 => :top, 2 => :right, 3 => :bottom, 4 => :left,
             5 => :top, 6 => :right, 7 => :bottom, 8 => :left

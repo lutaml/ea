@@ -42,20 +42,22 @@ module Ea
         # source checkout before `npm run build`).
         def frontend_app_js
           return nil unless File.exist?(FRONTEND_APP_JS)
+
           File.read(FRONTEND_APP_JS)
         end
 
         def frontend_style_css
           return nil unless File.exist?(FRONTEND_STYLE_CSS)
+
           File.read(FRONTEND_STYLE_CSS)
         end
 
         def assert_frontend_bundle!
-          unless File.exist?(FRONTEND_APP_JS) && File.exist?(FRONTEND_STYLE_CSS)
-            raise Ea::Error,
-                  "SPA frontend bundle not found under #{FRONTEND_DIST_DIR}. " \
-                  "Run `cd frontend && npm install && npm run build`."
-          end
+          return if File.exist?(FRONTEND_APP_JS) && File.exist?(FRONTEND_STYLE_CSS)
+
+          raise Ea::Error,
+                "SPA frontend bundle not found under #{FRONTEND_DIST_DIR}. " \
+                "Run `cd frontend && npm install && npm run build`."
         end
 
         private

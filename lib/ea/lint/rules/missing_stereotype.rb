@@ -11,7 +11,7 @@ module Ea
 
         def check(model)
           classes = (model.collections[:objects] || [])
-                     .select { |o| o.object_type == "Class" }
+                    .select { |o| o.object_type == "Class" }
           xrefs = model.collections[:xrefs] || []
           classes.map do |klass|
             next nil if stereotype_name_for(klass, xrefs)

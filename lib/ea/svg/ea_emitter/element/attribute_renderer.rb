@@ -38,7 +38,6 @@ module Ea
           STEREOTYPE_HEADER_X_OFFSET = 12
           ROW_LINE_OFFSET = 6
 
-
           # EA scales the row text inset with point size:
           # 7pt rows sit at box.x+22, 9pt at box.x+26 (the '+ '
           # visibility run stays at box.x+5 for both).
@@ -51,7 +50,6 @@ module Ea
                           fill: "#000000",
                           visibility_x_offset: DEFAULT_VISIBILITY_X_OFFSET,
                           content_x_offset: nil)
-
             line_h = Ea::Fonts::Metrics.compartment_line_height(
               size, family: family, unit: size_unit, offset: ROW_LINE_OFFSET, logical_height: logical_height
             )
@@ -113,7 +111,7 @@ module Ea
               header = "«#{canonical_stereotype(stereotypes.first)}»"
               [header] + ordered_properties(props, stored_order, case_sensitive: true).map do |prop|
                 AttributeLineBuilder.new(prop, host: classifier,
-                                         lookup: lookup).to_s
+                                               lookup: lookup).to_s
               end
             else
               # EMPIRICAL FIT (test B58D1A53, the only corpus class mixing
@@ -126,7 +124,7 @@ module Ea
                 stereotype = property_stereotype(prop)
                 lines << "«#{stereotype}»" if stereotype
                 lines << AttributeLineBuilder.new(prop, host: classifier,
-                                                  lookup: lookup).to_s
+                                                        lookup: lookup).to_s
               end
             end
           end

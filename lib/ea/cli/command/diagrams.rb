@@ -52,13 +52,13 @@ module Ea
           end
 
           svg = Ea::Svg::EaEmitter::Document.new(diagram,
-                                                   model_index: document.index_by_id,
-                                                   document: document,
-                                                   frame: options[:frame] ? true : false).render
+                                                 model_index: document.index_by_id,
+                                                 document: document,
+                                                 frame: options[:frame] ? true : false).render
           path = options[:output] || begin
             base = File.basename(file_path, ".*")
             dir = File.dirname(file_path)
-            safe_name = (diagram.name || "diagram").gsub(/[^\w.\-]+/, "_")
+            safe_name = (diagram.name || "diagram").gsub(/[^\w.-]+/, "_")
             File.join(dir, "#{base}.#{safe_name}.svg")
           end
           FileUtils.mkdir_p(File.dirname(path))

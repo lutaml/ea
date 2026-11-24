@@ -13,23 +13,23 @@ module Ea
 
         private
 
-        def validate_package_references # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+        def validate_package_references # rubocop:disable Metrics/MethodLength
           objects.each do |obj|
             next unless obj.package_id
 
-            unless package_exists?(obj.package_id)
-              class_path = resolve_class_path(obj.ea_object_id, obj.name)
-              result.add_error(
-                category: :missing_reference,
-                entity_type: :class,
-                entity_id: obj.ea_object_id.to_s,
-                entity_name: obj.name,
-                field: "package_id",
-                reference: obj.package_id.to_s,
-                message: "Package #{obj.package_id} does not exist",
-                location: class_path,
-              )
-            end
+            next if package_exists?(obj.package_id)
+
+            class_path = resolve_class_path(obj.ea_object_id, obj.name)
+            result.add_error(
+              category: :missing_reference,
+              entity_type: :class,
+              entity_id: obj.ea_object_id.to_s,
+              entity_name: obj.name,
+              field: "package_id",
+              reference: obj.package_id.to_s,
+              message: "Package #{obj.package_id} does not exist",
+              location: class_path
+            )
           end
         end
 
@@ -57,7 +57,7 @@ module Ea
                   field: "name",
                   message: "Duplicate class name '#{dup_name}' " \
                            "in #{package_path}",
-                  location: class_path,
+                  location: class_path
                 )
               end
             end
@@ -68,25 +68,25 @@ module Ea
           connectors.select(&:generalization?).each do |gen|
             parent_id = gen.end_object_id
 
-            unless object_exists?(parent_id)
-              child = objects.find { |o| o.ea_object_id == gen.start_object_id }
-              child_path = if child
-                             resolve_class_path(child.ea_object_id,
-                                                child.name)
-                           else
-                             "Unknown"
-                           end
-              result.add_error(
-                category: :missing_reference,
-                entity_type: :generalization,
-                entity_id: gen.connector_id.to_s,
-                entity_name: child&.name || "Unknown",
-                field: "end_object_id",
-                reference: parent_id.to_s,
-                message: "Generalization parent #{parent_id} does not exist",
-                location: child_path,
-              )
-            end
+            next if object_exists?(parent_id)
+
+            child = objects.find { |o| o.ea_object_id == gen.start_object_id }
+            child_path = if child
+                           resolve_class_path(child.ea_object_id,
+                                              child.name)
+                         else
+                           "Unknown"
+                         end
+            result.add_error(
+              category: :missing_reference,
+              entity_type: :generalization,
+              entity_id: gen.connector_id.to_s,
+              entity_name: child&.name || "Unknown",
+              field: "end_object_id",
+              reference: parent_id.to_s,
+              message: "Generalization parent #{parent_id} does not exist",
+              location: child_path
+            )
           end
         end
 

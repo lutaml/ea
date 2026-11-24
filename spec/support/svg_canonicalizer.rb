@@ -37,7 +37,7 @@ module SvgCanonicalizer
     if attrs.empty?
       "<#{name}>"
     else
-      "<#{name} #{attrs.join(' ')}>"
+      "<#{name} #{attrs.join(" ")}>"
     end
   end
 

@@ -26,7 +26,7 @@ module Ea
           else
             raise Ea::Cli::Error,
                   "Unsupported target '#{target}'. " \
-                  "Valid: #{SUPPORTED_TARGETS.join(', ')}"
+                  "Valid: #{SUPPORTED_TARGETS.join(", ")}"
           end
         end
 
@@ -39,7 +39,7 @@ module Ea
                   raise Ea::Cli::UnsupportedFormat.new(
                     file_path,
                     "supported inputs: " \
-                    "#{SUPPORTED_INPUT_FORMATS.join(', ')}",
+                    "#{SUPPORTED_INPUT_FORMATS.join(", ")}"
                   )
                 end
           path = write_output(xml, default_name: "#{file_path}.xmi")

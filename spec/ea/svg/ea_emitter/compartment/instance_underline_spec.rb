@@ -15,8 +15,10 @@ RSpec.describe Ea::Svg::EaEmitter::Compartment::InstanceUnderline do
   end
 
   def context_for(diagram_type, header_lines)
-    diagram = diagram_type ? Ea::Model::Diagram.new(id: "D1", name: "X",
-                                                     diagram_type: diagram_type) : nil
+    diagram = if diagram_type
+                Ea::Model::Diagram.new(id: "D1", name: "X",
+                                       diagram_type: diagram_type)
+              end
     Ea::Svg::EaEmitter::RenderContext.new(
       element: nil, bounds: bounds, model_element: nil, classifier: nil,
       fill: "#FFF", stroke: "#000", stroke_width: 2,

@@ -14,7 +14,7 @@ RSpec.describe Ea::Qea::Factory::ClassTransformer do
 
     it "returns nil for non-class objects" do
       ea_obj = Ea::Qea::Models::EaObject.new(
-        object_type: "Package",
+        object_type: "Package"
       )
 
       result = transformer.transform(ea_obj)
@@ -30,7 +30,7 @@ RSpec.describe Ea::Qea::Factory::ClassTransformer do
         ea_guid: "{CLASS-GUID}",
         abstract: "0",
         visibility: "Public",
-        note: "Represents a building",
+        note: "Represents a building"
       )
 
       database.add_collection(:objects, [ea_obj])
@@ -50,7 +50,7 @@ RSpec.describe Ea::Qea::Factory::ClassTransformer do
         ea_object_id: 1,
         object_type: "Class",
         name: "Shape",
-        abstract: "1",
+        abstract: "1"
       )
 
       database.add_collection(:objects, [ea_obj])
@@ -64,7 +64,7 @@ RSpec.describe Ea::Qea::Factory::ClassTransformer do
       ea_obj = Ea::Qea::Models::EaObject.new(
         ea_object_id: 1,
         object_type: "Interface",
-        name: "IDrawable",
+        name: "IDrawable"
       )
 
       database.add_collection(:objects, [ea_obj])
@@ -78,7 +78,7 @@ RSpec.describe Ea::Qea::Factory::ClassTransformer do
       ea_obj = Ea::Qea::Models::EaObject.new(
         ea_object_id: 1,
         object_type: "Class",
-        name: "Person",
+        name: "Person"
       )
 
       ea_attr = Ea::Qea::Models::EaAttribute.new(
@@ -87,7 +87,7 @@ RSpec.describe Ea::Qea::Factory::ClassTransformer do
         name: "firstName",
         type: "String",
         scope: "Private",
-        pos: 0,
+        pos: 0
       )
 
       database.add_collection(:objects, [ea_obj])
@@ -103,7 +103,7 @@ RSpec.describe Ea::Qea::Factory::ClassTransformer do
       ea_obj = Ea::Qea::Models::EaObject.new(
         ea_object_id: 1,
         object_type: "Class",
-        name: "Calculator",
+        name: "Calculator"
       )
 
       ea_op = Ea::Qea::Models::EaOperation.new(
@@ -112,7 +112,7 @@ RSpec.describe Ea::Qea::Factory::ClassTransformer do
         name: "add",
         type: "Integer",
         scope: "Public",
-        pos: 0,
+        pos: 0
       )
 
       database.add_collection(:objects, [ea_obj])
@@ -129,7 +129,7 @@ RSpec.describe Ea::Qea::Factory::ClassTransformer do
         ea_object_id: 1,
         object_type: "Class",
         name: "Entity",
-        stereotype: "entity",
+        stereotype: "entity"
       )
 
       database.add_collection(:objects, [ea_obj])

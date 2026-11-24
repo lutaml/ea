@@ -18,9 +18,9 @@ RSpec.describe Ea::Cli::Command::Diagrams do
     end
 
     it "raises FileNotFound for missing files" do
-      expect {
+      expect do
         described_class.new(action: "list", file: "/no/such.qea").call
-      }.to raise_error(Errno::ENOENT)
+      end.to raise_error(Errno::ENOENT)
     end
   end
 
@@ -35,7 +35,7 @@ RSpec.describe Ea::Cli::Command::Diagrams do
           action: "extract",
           file: qea_path,
           name: "Starter Object Diagram",
-          output: out_path,
+          output: out_path
         ).call
         expect(File.exist?(out_path)).to be(true)
         expect(File.size(out_path)).to be > 500
@@ -51,7 +51,7 @@ RSpec.describe Ea::Cli::Command::Diagrams do
           action: "extract",
           file: xmi_path,
           name: "Starter Object Diagram",
-          output: out_path,
+          output: out_path
         ).call
         expect(File.exist?(out_path)).to be(true)
         expect(File.size(out_path)).to be > 500
@@ -63,18 +63,18 @@ RSpec.describe Ea::Cli::Command::Diagrams do
 
   describe "unknown action" do
     it "raises UnknownAction" do
-      expect {
+      expect do
         described_class.new(action: "bogus", file: qea_path).call
-      }.to raise_error(Ea::Cli::UnknownAction, /bogus/)
+      end.to raise_error(Ea::Cli::UnknownAction, /bogus/)
     end
   end
 
   describe "missing name on extract" do
     it "raises Cli::Error" do
       # No name passed → options[:name] is nil → Cli::Error
-      expect {
+      expect do
         described_class.new(action: "extract", file: qea_path).call
-      }.to raise_error(Ea::Cli::Error, /missing required NAME/)
+      end.to raise_error(Ea::Cli::Error, /missing required NAME/)
     end
   end
 end

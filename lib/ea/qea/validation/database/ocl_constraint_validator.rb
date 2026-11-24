@@ -29,7 +29,7 @@ module Ea
               entity_type: :class,
               entity_id: owner.ea_object_id.to_s,
               entity_name: owner.name,
-              message: "OCL constraint '#{constraint.constraint_type}' passed",
+              message: "OCL constraint '#{constraint.constraint_type}' passed"
             )
           else
             result.add_warning(
@@ -37,7 +37,7 @@ module Ea
               entity_type: :class,
               entity_id: owner.ea_object_id.to_s,
               entity_name: owner.name,
-              message: "OCL constraint '#{constraint.constraint_type}' failed: #{constraint.constraint}",
+              message: "OCL constraint '#{constraint.constraint_type}' failed: #{constraint.constraint}"
             )
           end
         rescue Ea::Ocl::UnsupportedError => e
@@ -46,7 +46,7 @@ module Ea
             entity_type: :class,
             entity_id: owner&.ea_object_id.to_s,
             entity_name: owner&.name,
-            message: "Skipping OCL constraint (unsupported syntax): #{e.message}",
+            message: "Skipping OCL constraint (unsupported syntax): #{e.message}"
           )
         end
 

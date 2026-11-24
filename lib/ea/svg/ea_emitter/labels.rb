@@ -162,7 +162,7 @@ module Ea
         def tree_shaped?(points)
           return nil unless points.size == 3
           return nil unless points[0][1] == points[1][1] &&
-                           points[1][0] == points[2][0]
+                            points[1][0] == points[2][0]
 
           { source: true, target: true }
         end

@@ -7,7 +7,7 @@ module XmiConnectorRouteStyleHelpers
     connector = diagram.connectors.find { |item| item.relationship_ref.include?("3677D889") }
     svg = Ea::Svg::EaEmitter::Document.new(
       diagram, model_index: document.index_by_id, document: document,
-      frame: true
+               frame: true
     ).render
     svg_document = Nokogiri::XML(svg)
     role = svg_document.xpath("//*[local-name()='text']")

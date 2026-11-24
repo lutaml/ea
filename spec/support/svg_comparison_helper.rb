@@ -27,8 +27,8 @@ module SvgComparisonHelper
     "//comment()",                    # XML comments
     "//*[@id]",                       # Element IDs (EA generates these)
     "//*[contains(@class, 'ea-')]", # EA-specific classes
-    "//metadata",                     # Metadata elements
-    "//defs/style",                   # Style definitions (may vary)
+    "//metadata", # Metadata elements
+    "//defs/style" # Style definitions (may vary)
   ].freeze
 
   # Normalize SVG for comparison by removing EA-specific metadata
@@ -36,7 +36,7 @@ module SvgComparisonHelper
   #
   # @param svg_string [String] Raw SVG content
   # @return [String] Normalized SVG string
-  def normalize_svg(svg_string) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+  def normalize_svg(svg_string) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
     return "" if svg_string.nil? || svg_string.empty?
 
     doc = Nokogiri::XML(svg_string)
@@ -67,7 +67,7 @@ module SvgComparisonHelper
     doc.to_xml(
       indent: 2,
       save_with: Nokogiri::XML::Node::SaveOptions::NO_DECLARATION |
-                 Nokogiri::XML::Node::SaveOptions::FORMAT,
+                 Nokogiri::XML::Node::SaveOptions::FORMAT
     )
   end
 
@@ -103,7 +103,7 @@ module SvgComparisonHelper
       matching: differences.empty?,
       generated_elements: gen_elements,
       reference_elements: ref_elements,
-      differences: differences,
+      differences: differences
     }
   end
 
@@ -126,9 +126,7 @@ module SvgComparisonHelper
 
     # Check for extra elements
     gen_elements.each do |elem_type, gen_count|
-      unless ref_elements.key?(elem_type)
-        differences << "#{elem_type}: unexpected element (count: #{gen_count})"
-      end
+      differences << "#{elem_type}: unexpected element (count: #{gen_count})" unless ref_elements.key?(elem_type)
     end
 
     differences
@@ -149,7 +147,7 @@ module SvgComparisonHelper
         x: elem["x"].to_f,
         y: elem["y"].to_f,
         width: elem["width"]&.to_f,
-        height: elem["height"]&.to_f,
+        height: elem["height"]&.to_f
       }
     end
 
@@ -159,7 +157,7 @@ module SvgComparisonHelper
         x: elem["x"].to_f,
         y: elem["y"].to_f,
         width: elem["width"].to_f,
-        height: elem["height"].to_f,
+        height: elem["height"].to_f
       }
     end
 
@@ -168,7 +166,7 @@ module SvgComparisonHelper
       coordinates["circle"] << {
         cx: elem["cx"].to_f,
         cy: elem["cy"].to_f,
-        r: elem["r"].to_f,
+        r: elem["r"].to_f
       }
     end
 
@@ -178,7 +176,7 @@ module SvgComparisonHelper
         x1: elem["x1"].to_f,
         y1: elem["y1"].to_f,
         x2: elem["x2"].to_f,
-        y2: elem["y2"].to_f,
+        y2: elem["y2"].to_f
       }
     end
 
@@ -186,7 +184,7 @@ module SvgComparisonHelper
     doc.xpath("//path").each do |elem|
       coordinates["path"] << {
         d: elem["d"],
-        length: elem["d"]&.length || 0,
+        length: elem["d"]&.length || 0
       }
     end
 
@@ -283,7 +281,7 @@ module SvgComparisonHelper
       return {
         success: false,
         error: "Visual comparison tools not available",
-        similarity: nil,
+        similarity: nil
       }
     end
 
@@ -332,7 +330,7 @@ module SvgComparisonHelper
               success: true,
               similarity: similarity,
               diff_pixels: diff_pixels,
-              total_pixels: total_pixels,
+              total_pixels: total_pixels
             }
           end
         end
@@ -360,7 +358,7 @@ module SvgComparisonHelper
   # @param reference_dir [String] Directory containing reference SVGs
   # @return [String, nil] Path to reference file, or nil if not found
   def find_reference_svg(diagram_name,
-reference_dir: "spec/fixtures/ea_svg_references")
+                         reference_dir: "spec/fixtures/ea_svg_references")
     filename = "#{sanitize_diagram_filename(diagram_name)}.svg"
     path = File.join(reference_dir, filename)
 

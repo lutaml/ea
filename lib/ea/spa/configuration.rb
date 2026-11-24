@@ -27,9 +27,7 @@ module Ea
 
       def self.load(path)
         return nil if path.nil? || path.empty?
-        unless File.exist?(path)
-          raise ArgumentError, "SPA config not found: #{path}"
-        end
+        raise ArgumentError, "SPA config not found: #{path}" unless File.exist?(path)
 
         new(path, YAML.safe_load(File.read(path)) || {})
       end
@@ -68,7 +66,7 @@ module Ea
         return model_metadata unless model_metadata
 
         merged = model_metadata_to_hash(model_metadata)
-                                     .merge(stringify_keys(metadata_override))
+                 .merge(stringify_keys(metadata_override))
         hash_to_metadata(merged)
       end
 

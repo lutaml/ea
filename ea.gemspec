@@ -41,8 +41,8 @@ Gem::Specification.new do |spec|
   # method body and raises a clear error if the gem is not installed.
   spec.add_dependency "lutaml-model", "~> 0.8.159"
   spec.add_dependency "lutaml-path"
-  spec.add_dependency "sqlite3"
   spec.add_dependency "rubyzip", "~> 3.7"
+  spec.add_dependency "sqlite3"
   # xmi 0.7.0 added nestedClassifier support and lowerValue-first
   # ordering; 0.7.2 additionally constrains lutaml-model below
   # 0.8.20, where Sparx type refs are silently dropped. 0.7.5 split
@@ -50,10 +50,10 @@ Gem::Specification.new do |spec|
   # exporter writes the classifier to classifier_type, which does
   # not exist before 0.7.5 (NoMethodError at serialization). All
   # three are required for faithful QEA→XMI export.
-  spec.add_dependency "xmi", "~> 0.7.5"
-  spec.add_dependency "nokogiri", "~> 1.18"
   spec.add_dependency "liquid", "~> 5"
+  spec.add_dependency "nokogiri", "~> 1.18"
   spec.add_dependency "thor", "~> 1.4"
+  spec.add_dependency "xmi", "~> 0.7.5"
 
   # benchmark was removed from Ruby 4.0 default gems
   spec.add_dependency "benchmark"

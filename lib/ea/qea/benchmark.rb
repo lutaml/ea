@@ -35,7 +35,7 @@ module Ea
             qea: qea_result,
             xmi: xmi_result,
             speedup: speedup,
-            improvement_percent: ((speedup - 1) * 100).round(1),
+            improvement_percent: ((speedup - 1) * 100).round(1)
           }
         end
 
@@ -49,14 +49,12 @@ module Ea
         #   puts "Time: #{result[:time]}s"
         #   puts "Packages: #{result[:stats][:packages]}"
         def measure_qea(path) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
-          unless File.exist?(path)
-            return { error: "File not found: #{path}" }
-          end
+          return { error: "File not found: #{path}" } unless File.exist?(path)
 
           result = {
             file: path,
             file_size_mb: (File.size(path) / 1024.0 / 1024.0).round(2),
-            format: "QEA",
+            format: "QEA"
           }
 
           # Measure parsing time
@@ -70,7 +68,7 @@ module Ea
             packages: document.packages&.size || 0,
             classes: document.classes&.size || 0,
             associations: document.associations&.size || 0,
-            diagrams: document.diagrams&.size || 0,
+            diagrams: document.diagrams&.size || 0
           }
 
           # Calculate throughput
@@ -84,7 +82,7 @@ module Ea
           {
             error: e.message,
             file: path,
-            format: "QEA",
+            format: "QEA"
           }
         end
 
@@ -97,14 +95,12 @@ module Ea
         #   result = Ea::Qea::Benchmark.measure_xmi("model.xmi")
         #   puts "Time: #{result[:time]}s"
         def measure_xmi(path) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
-          unless File.exist?(path)
-            return { error: "File not found: #{path}" }
-          end
+          return { error: "File not found: #{path}" } unless File.exist?(path)
 
           result = {
             file: path,
             file_size_mb: (File.size(path) / 1024.0 / 1024.0).round(2),
-            format: "XMI",
+            format: "XMI"
           }
 
           # Measure parsing time
@@ -120,7 +116,7 @@ module Ea
             packages: document.packages&.size || 0,
             classes: document.classes&.size || 0,
             associations: document.associations&.size || 0,
-            diagrams: document.diagrams&.size || 0,
+            diagrams: document.diagrams&.size || 0
           }
 
           # Calculate throughput
@@ -134,7 +130,7 @@ module Ea
           {
             error: e.message,
             file: path,
-            format: "XMI",
+            format: "XMI"
           }
         end
 

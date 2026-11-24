@@ -15,7 +15,7 @@ module Ea
           "uml:Realization" => "Ea::Model::Realization",
           "uml:Dependency" => "Ea::Model::Dependency",
           "uml:Usage" => "Ea::Model::Dependency",
-          "uml:Abstraction" => "Ea::Model::Dependency",
+          "uml:Abstraction" => "Ea::Model::Dependency"
         }.freeze
 
         def class_for(xmi_type)

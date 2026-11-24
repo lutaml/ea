@@ -30,8 +30,8 @@ RSpec.describe Ea::Transformers::QeaToXmi::RunState do
       raw = "@VAR;Variable=a;Value=1;Op==;@ENDVAR;@VAR;Variable=b;Value=2;Op==;@ENDVAR;"
       result = described_class.parse(raw)
       expect(result.size).to eq(2)
-      expect(result.map(&:variable)).to eq(["a", "b"])
-      expect(result.map(&:value)).to eq(["1", "2"])
+      expect(result.map(&:variable)).to eq(%w[a b])
+      expect(result.map(&:value)).to eq(%w[1 2])
     end
 
     it "parses real EA RunState from basic.qea (Object A)" do

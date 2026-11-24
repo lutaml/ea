@@ -25,9 +25,9 @@ module Ea
         end
 
         def general
-          if @gen.general
-            GeneralizationDrop.new(@gen.general, @guidance, @options)
-          end
+          return unless @gen.general
+
+          GeneralizationDrop.new(@gen.general, @guidance, @options)
         end
 
         def has_general?

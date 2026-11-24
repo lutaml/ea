@@ -60,7 +60,7 @@ RSpec.describe Ea::Diagram::DisplayConfig do
 
     it "parses multiple flags across Style + StyleEx" do
       config = described_class.from_style(style: "HideOps=1",
-                                           style_ex: "AttPub=1;ShowNotes=0;Theme=:119")
+                                          style_ex: "AttPub=1;ShowNotes=0;Theme=:119")
       expect(config.show_operations?).to be(false)
       expect(config.show_attributes?).to be(true)
       expect(config.show_public_attributes?).to be(true)
@@ -80,7 +80,7 @@ RSpec.describe Ea::Diagram::DisplayConfig do
   describe "#to_style_ex" do
     it "preserves both Style and StyleEx flags in the merged output" do
       config = described_class.from_style(style: "HideAtts=1",
-                                           style_ex: "AttPub=0;ShowNotes=1")
+                                          style_ex: "AttPub=0;ShowNotes=1")
       merged = config.to_style_ex
       expect(merged).to include("HideAtts=1")
       expect(merged).to include("AttPub=0")

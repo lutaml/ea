@@ -19,8 +19,8 @@ RSpec.describe Ea::Qea::Validation::AttributeValidator do
       Ea::Qea::Models::EaPackage.new(
         package_id: 1,
         name: "TestPackage",
-        parent_id: 0,
-      ),
+        parent_id: 0
+      )
     ]
   end
 
@@ -32,14 +32,14 @@ RSpec.describe Ea::Qea::Validation::AttributeValidator do
             ea_object_id: 100,
             name: "TestClass",
             object_type: "Class",
-            package_id: 1,
+            package_id: 1
           ),
           Ea::Qea::Models::EaObject.new(
             ea_object_id: 226,
             name: "doubleBetween0and1",
             object_type: "DataType",
-            package_id: 1,
-          ),
+            package_id: 1
+          )
         ]
       end
       let(:attributes) do
@@ -48,8 +48,8 @@ RSpec.describe Ea::Qea::Validation::AttributeValidator do
             id: 1,
             ea_object_id: 100,
             name: "testAttr",
-            classifier: "226",
-          ),
+            classifier: "226"
+          )
         ]
       end
 
@@ -68,14 +68,14 @@ RSpec.describe Ea::Qea::Validation::AttributeValidator do
             ea_object_id: 100,
             name: "TestClass",
             object_type: "Class",
-            package_id: 1,
+            package_id: 1
           ),
           Ea::Qea::Models::EaObject.new(
             ea_object_id: 226,
             name: "doubleBetween0and1",
             object_type: "DataType",
-            package_id: 1,
-          ),
+            package_id: 1
+          )
         ]
       end
       let(:attributes) do
@@ -84,8 +84,8 @@ RSpec.describe Ea::Qea::Validation::AttributeValidator do
             id: 1,
             ea_object_id: 100,
             name: "probability",
-            classifier: "226",
-          ),
+            classifier: "226"
+          )
         ]
       end
 
@@ -111,14 +111,14 @@ RSpec.describe Ea::Qea::Validation::AttributeValidator do
             ea_object_id: 100,
             name: "TestClass",
             object_type: "Class",
-            package_id: 1,
+            package_id: 1
           ),
           Ea::Qea::Models::EaObject.new(
             ea_object_id: 226,
             name: "SomeType",
             object_type: "DataType",
-            package_id: 1,
-          ),
+            package_id: 1
+          )
         ]
       end
 
@@ -129,8 +129,8 @@ RSpec.describe Ea::Qea::Validation::AttributeValidator do
               id: 1,
               ea_object_id: 100,
               name: "attr1",
-              classifier: "226",
-            ),
+              classifier: "226"
+            )
           ]
         end
 
@@ -147,8 +147,8 @@ RSpec.describe Ea::Qea::Validation::AttributeValidator do
               id: 1,
               ea_object_id: 100,
               name: "attr1",
-              classifier: 226,
-            ),
+              classifier: 226
+            )
           ]
         end
 
@@ -166,8 +166,8 @@ RSpec.describe Ea::Qea::Validation::AttributeValidator do
             ea_object_id: 100,
             name: "TestClass",
             object_type: "Class",
-            package_id: 1,
-          ),
+            package_id: 1
+          )
         ]
       end
       let(:attributes) do
@@ -176,8 +176,8 @@ RSpec.describe Ea::Qea::Validation::AttributeValidator do
             id: 1,
             ea_object_id: 100,
             name: "missingTypeAttr",
-            classifier: "999",
-          ),
+            classifier: "999"
+          )
         ]
       end
 
@@ -201,8 +201,8 @@ RSpec.describe Ea::Qea::Validation::AttributeValidator do
             ea_object_id: 100,
             name: "TestClass",
             object_type: "Class",
-            package_id: 1,
-          ),
+            package_id: 1
+          )
         ]
       end
       let(:attributes) do
@@ -211,20 +211,20 @@ RSpec.describe Ea::Qea::Validation::AttributeValidator do
             id: 1,
             ea_object_id: 100,
             name: "stringAttr",
-            classifier: "String",
+            classifier: "String"
           ),
           Ea::Qea::Models::EaAttribute.new(
             id: 2,
             ea_object_id: 100,
             name: "intAttr",
-            classifier: "Integer",
+            classifier: "Integer"
           ),
           Ea::Qea::Models::EaAttribute.new(
             id: 3,
             ea_object_id: 100,
             name: "boolAttr",
-            classifier: "Boolean",
-          ),
+            classifier: "Boolean"
+          )
         ]
       end
 
@@ -243,8 +243,8 @@ RSpec.describe Ea::Qea::Validation::AttributeValidator do
             id: 1,
             ea_object_id: 999,
             name: "orphanAttr",
-            classifier: "String",
-          ),
+            classifier: "String"
+          )
         ]
       end
 
@@ -268,8 +268,8 @@ RSpec.describe Ea::Qea::Validation::AttributeValidator do
             ea_object_id: 100,
             name: "TestClass",
             object_type: "Class",
-            package_id: 1,
-          ),
+            package_id: 1
+          )
         ]
       end
       let(:attributes) do
@@ -278,14 +278,14 @@ RSpec.describe Ea::Qea::Validation::AttributeValidator do
             id: 1,
             ea_object_id: 100,
             name: "noTypeAttr",
-            classifier: nil,
+            classifier: nil
           ),
           Ea::Qea::Models::EaAttribute.new(
             id: 2,
             ea_object_id: 100,
             name: "emptyTypeAttr",
-            classifier: "",
-          ),
+            classifier: ""
+          )
         ]
       end
 
@@ -303,14 +303,14 @@ RSpec.describe Ea::Qea::Validation::AttributeValidator do
             ea_object_id: 100,
             name: "TestClass",
             object_type: "Class",
-            package_id: 1,
+            package_id: 1
           ),
           Ea::Qea::Models::EaObject.new(
             ea_object_id: 0,
             name: "ZeroType",
             object_type: "DataType",
-            package_id: 1,
-          ),
+            package_id: 1
+          )
         ]
       end
       let(:attributes) do
@@ -319,8 +319,8 @@ RSpec.describe Ea::Qea::Validation::AttributeValidator do
             id: 1,
             ea_object_id: 100,
             name: "zeroAttr",
-            classifier: "0",
-          ),
+            classifier: "0"
+          )
         ]
       end
 
@@ -337,8 +337,8 @@ RSpec.describe Ea::Qea::Validation::AttributeValidator do
             ea_object_id: 100,
             name: "TestClass",
             object_type: "Class",
-            package_id: 1,
-          ),
+            package_id: 1
+          )
         ]
       end
       let(:attributes) do
@@ -347,14 +347,14 @@ RSpec.describe Ea::Qea::Validation::AttributeValidator do
             id: 1,
             ea_object_id: 999,
             name: "orphan",
-            classifier: "String",
+            classifier: "String"
           ),
           Ea::Qea::Models::EaAttribute.new(
             id: 2,
             ea_object_id: 100,
             name: "badType",
-            classifier: "888",
-          ),
+            classifier: "888"
+          )
         ]
       end
 
