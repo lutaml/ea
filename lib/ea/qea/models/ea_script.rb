@@ -21,12 +21,11 @@ module Ea
           "t_script"
         end
 
-
         COLUMN_MAP = {
           "ScriptID" => :script_id,
           "ScriptCategory" => :script_category,
           "ScriptName" => :script_name,
-          "ScriptAuthor" => :script_author,
+          "ScriptAuthor" => :script_author
         }.freeze
 
         def self.column_map
@@ -34,10 +33,10 @@ module Ea
         end
 
         # Convenience aliases
-        alias_method :id, :script_id
-        alias_method :name, :script_name
-        alias_method :category, :script_category
-        alias_method :author, :script_author
+        alias id script_id
+        alias name script_name
+        alias category script_category
+        alias author script_author
 
         # Check if this is a debugging script
         # @return [Boolean]

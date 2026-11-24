@@ -26,8 +26,7 @@ RSpec.describe Ea::Qea::Services::DatabaseLoader do
 
   describe "#on_progress" do
     it "sets progress callback" do
-      callback_called = false
-      loader.on_progress { |_table, _current, _total| callback_called = true }
+      loader.on_progress { |_table, _current, _total| true }
       expect(loader).to respond_to(:on_progress)
     end
 
@@ -46,7 +45,7 @@ RSpec.describe Ea::Qea::Services::DatabaseLoader do
         "t_operationparams" => Ea::Qea::Models::EaOperationParam,
         "t_connector" => Ea::Qea::Models::EaConnector,
         "t_package" => Ea::Qea::Models::EaPackage,
-        "t_diagram" => Ea::Qea::Models::EaDiagram,
+        "t_diagram" => Ea::Qea::Models::EaDiagram
       )
     end
   end
@@ -75,12 +74,12 @@ RSpec.describe Ea::Qea::Services::DatabaseLoader do
       db.execute(
         "INSERT INTO t_object (Object_ID, Name, Object_Type, Package_ID) " \
         "VALUES (?, ?, ?, ?)",
-        [1, "TestClass", "Class", 10],
+        [1, "TestClass", "Class", 10]
       )
       db.execute(
         "INSERT INTO t_object (Object_ID, Name, Object_Type, Package_ID) " \
         "VALUES (?, ?, ?, ?)",
-        [2, "TestInterface", "Interface", 10],
+        [2, "TestInterface", "Interface", 10]
       )
 
       # Create t_package table
@@ -94,98 +93,98 @@ RSpec.describe Ea::Qea::Services::DatabaseLoader do
 
       db.execute(
         "INSERT INTO t_package (Package_ID, Name, Parent_ID) VALUES (?, ?, ?)",
-        [10, "TestPackage", 0],
+        [10, "TestPackage", 0]
       )
 
       # Create other required tables (empty)
       db.execute(
         "CREATE TABLE " \
-        "t_attribute (ID INTEGER PRIMARY KEY, Name TEXT)",
+        "t_attribute (ID INTEGER PRIMARY KEY, Name TEXT)"
       )
       db.execute(
         "CREATE TABLE " \
-        "t_operation (OperationID INTEGER PRIMARY KEY, Name TEXT)",
+        "t_operation (OperationID INTEGER PRIMARY KEY, Name TEXT)"
       )
       db.execute(
         "CREATE TABLE " \
-        "t_operationparams (OperationID INTEGER, Name TEXT)",
+        "t_operationparams (OperationID INTEGER, Name TEXT)"
       )
       db.execute(
         "CREATE TABLE " \
-        "t_connector (Connector_ID INTEGER PRIMARY KEY, Name TEXT)",
+        "t_connector (Connector_ID INTEGER PRIMARY KEY, Name TEXT)"
       )
       db.execute(
         "CREATE TABLE " \
-        "t_diagram (Diagram_ID INTEGER PRIMARY KEY, Name TEXT)",
+        "t_diagram (Diagram_ID INTEGER PRIMARY KEY, Name TEXT)"
       )
       db.execute(
         "CREATE TABLE " \
-        "t_objectconstraint (ConstraintID INTEGER, Constraint TEXT)",
+        "t_objectconstraint (ConstraintID INTEGER, Constraint TEXT)"
       )
       db.execute(
         "CREATE TABLE " \
-        "t_objectproperties (PropertyID INTEGER, Object_ID INTEGER)",
+        "t_objectproperties (PropertyID INTEGER, Object_ID INTEGER)"
       )
       db.execute(
         "CREATE TABLE " \
-        "t_connectortypes (Connector_Type TEXT PRIMARY KEY, Description TEXT)",
+        "t_connectortypes (Connector_Type TEXT PRIMARY KEY, Description TEXT)"
       )
       db.execute(
         "CREATE TABLE " \
-        "t_diagramobjects (Instance_ID INTEGER PRIMARY KEY, Object_ID INTEGER)",
+        "t_diagramobjects (Instance_ID INTEGER PRIMARY KEY, Object_ID INTEGER)"
       )
       db.execute(
         "CREATE TABLE " \
-        "t_diagramlinks (Instance_ID INTEGER PRIMARY KEY, Path TEXT)",
+        "t_diagramlinks (Instance_ID INTEGER PRIMARY KEY, Path TEXT)"
       )
       db.execute(
         "CREATE TABLE " \
-        "t_diagramtypes (Diagram_Type TEXT PRIMARY KEY, Name TEXT)",
+        "t_diagramtypes (Diagram_Type TEXT PRIMARY KEY, Name TEXT)"
       )
       db.execute(
         "CREATE TABLE " \
-        "t_taggedvalue (PropertyID INTEGER PRIMARY KEY, TagValue TEXT)",
+        "t_taggedvalue (PropertyID INTEGER PRIMARY KEY, TagValue TEXT)"
       )
       db.execute(
         "CREATE TABLE " \
-        "t_attributetag (PropertyID INTEGER PRIMARY KEY, Property TEXT)",
+        "t_attributetag (PropertyID INTEGER PRIMARY KEY, Property TEXT)"
       )
       db.execute(
         "CREATE TABLE " \
-        "t_xref (XrefID TEXT PRIMARY KEY, Name TEXT)",
+        "t_xref (XrefID TEXT PRIMARY KEY, Name TEXT)"
       )
       db.execute(
         "CREATE TABLE " \
-        "t_stereotypes (Stereotype TEXT)",
+        "t_stereotypes (Stereotype TEXT)"
       )
       db.execute(
         "CREATE TABLE " \
-        "t_datatypes (DatatypeID INTEGER PRIMARY KEY, DataType TEXT)",
+        "t_datatypes (DatatypeID INTEGER PRIMARY KEY, DataType TEXT)"
       )
       db.execute(
         "CREATE TABLE " \
-        "t_constrainttypes ('Constraint' TEXT PRIMARY KEY, Description TEXT)",
+        "t_constrainttypes ('Constraint' TEXT PRIMARY KEY, Description TEXT)"
       )
       db.execute(
         "CREATE TABLE " \
-        "t_objecttypes (Object_Type TEXT PRIMARY KEY, Description TEXT)",
+        "t_objecttypes (Object_Type TEXT PRIMARY KEY, Description TEXT)"
       )
       db.execute(
         "CREATE TABLE " \
-        "t_statustypes (Status TEXT PRIMARY KEY, Description TEXT)",
+        "t_statustypes (Status TEXT PRIMARY KEY, Description TEXT)"
       )
       db.execute(
         "CREATE TABLE " \
         "t_complexitytypes (Complexity TEXT PRIMARY KEY, " \
-        "NumericWeight INTEGER)",
+        "NumericWeight INTEGER)"
       )
       db.execute(
         "CREATE TABLE " \
-        "t_document (DocID TEXT PRIMARY KEY, DocName TEXT)",
+        "t_document (DocID TEXT PRIMARY KEY, DocName TEXT)"
       )
       db.execute(
         "CREATE TABLE " \
-        "t_script (ScriptID INTEGER PRIMARY KEY, ScriptName TEXT)",
+        "t_script (ScriptID INTEGER PRIMARY KEY, ScriptName TEXT)"
       )
 
       db.close
@@ -245,7 +244,7 @@ RSpec.describe Ea::Qea::Services::DatabaseLoader do
         db.execute(
           "INSERT INTO t_object (Object_ID, Name, Object_Type, Package_ID) " \
           "VALUES (?, ?, ?, ?)",
-          [3, "caf\xe9 ".dup.force_encoding(Encoding::BINARY), "Class", 10],
+          [3, "caf\xe9 ".dup.force_encoding(Encoding::BINARY), "Class", 10]
         )
         db.close
 
@@ -277,7 +276,7 @@ RSpec.describe Ea::Qea::Services::DatabaseLoader do
 
       it "raises error for disabled table" do
         disabled_table = Ea::Qea::Services::Configuration::TableDefinition.new(
-          table_name: "t_object", enabled: false,
+          table_name: "t_object", enabled: false
         )
         allow(test_loader.config)
           .to receive(:table_config_for).with("t_object")
@@ -369,7 +368,7 @@ RSpec.describe Ea::Qea::Services::DatabaseLoader do
       "t_complexitytypes" =>
         "Complexity TEXT PRIMARY KEY, NumericWeight INTEGER",
       "t_document" => "DocID TEXT PRIMARY KEY, DocName TEXT",
-      "t_script" => "ScriptID INTEGER PRIMARY KEY, ScriptName TEXT",
+      "t_script" => "ScriptID INTEGER PRIMARY KEY, ScriptName TEXT"
     }
     tables.each do |name, cols|
       db.execute("CREATE TABLE #{name} (#{cols})")

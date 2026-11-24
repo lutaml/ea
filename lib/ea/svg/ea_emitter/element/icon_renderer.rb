@@ -22,7 +22,7 @@ module Ea
         class IconRenderer
           OUTER_FILL = "#DCF8F0"
           OUTER_STROKE = "#577AC1"
-          CORNER_FILL = "##{0.to_s.rjust(6, '0')}" # transparent black
+          CORNER_FILL = "##{0.to_s.rjust(6, "0")}" # transparent black
           WIDTH = 9
           HEIGHT = 11
           FOLD_WIDTH = 3

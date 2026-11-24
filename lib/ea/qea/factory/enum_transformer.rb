@@ -54,7 +54,7 @@ module Ea
           return [] if object_id.nil?
 
           ea_attrs = database.attributes_for_object(object_id)
-            .sort_by { |a| a.pos || 0 }
+                             .sort_by { |a| a.pos || 0 }
 
           ea_attrs.filter_map { |ea_attr| build_enum_value(ea_attr) }
         end
@@ -74,7 +74,6 @@ module Ea
 
           text
         end
-
       end
     end
   end

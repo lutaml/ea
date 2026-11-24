@@ -102,11 +102,11 @@ RSpec.describe "ea spa CLI --config flag" do
   end
 
   it "raises FileNotFound when config path does not exist" do
-    expect {
+    expect do
       capture_stdout do
         app.invoke(:spa, [qea_fixture], output: "/tmp/x.html",
-                    config: "/tmp/ea-does-not-exist-#{Time.now.to_i}.yml")
+                                        config: "/tmp/ea-does-not-exist-#{Time.now.to_i}.yml")
       end
-    }.to raise_error(Ea::Cli::FileNotFound, /SPA config not found/)
+    end.to raise_error(Ea::Cli::FileNotFound, /SPA config not found/)
   end
 end

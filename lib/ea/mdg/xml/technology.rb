@@ -13,7 +13,7 @@ module Ea
         # as direct children of <MDG.Technology> alongside
         # <UMLProfiles>, not inside it.
         attribute :standalone_profiles, UmlProfile, collection: true,
-                                                   initialize_empty: true
+                                                    initialize_empty: true
 
         xml do
           root "MDG.Technology"

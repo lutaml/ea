@@ -39,17 +39,17 @@ RSpec.describe Ea::Cli::Command::List do
 
   describe "invalid --type" do
     it "raises a Cli::Error naming valid types" do
-      expect {
+      expect do
         described_class.new(file: qea_path, type: "bogus").call
-      }.to raise_error(Ea::Cli::Error, /Unknown type 'bogus'/)
+      end.to raise_error(Ea::Cli::Error, /Unknown type 'bogus'/)
     end
   end
 
   describe "missing file" do
     it "raises FileNotFound" do
-      expect {
+      expect do
         described_class.new(file: "/does/not/exist.qea").call
-      }.to raise_error(Ea::Cli::FileNotFound)
+      end.to raise_error(Ea::Cli::FileNotFound)
     end
   end
 end

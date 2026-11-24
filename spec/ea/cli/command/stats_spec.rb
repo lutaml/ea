@@ -29,8 +29,8 @@ RSpec.describe Ea::Cli::Command::Stats do
   end
 
   it "raises FileNotFound for missing files" do
-    expect {
+    expect do
       described_class.new(file: "/no/such/file.qea").call
-    }.to raise_error(Ea::Cli::FileNotFound)
+    end.to raise_error(Ea::Cli::FileNotFound)
   end
 end

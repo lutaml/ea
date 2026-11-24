@@ -70,7 +70,7 @@ module Ea
           "t_diagramtypes" => Models::EaDiagramType,
           "t_objecttypes" => Models::EaObjectType,
           "t_statustypes" => Models::EaStatusType,
-          "t_complexitytypes" => Models::EaComplexityType,
+          "t_complexitytypes" => Models::EaComplexityType
         }.freeze
 
         # Initialize loader
@@ -168,9 +168,7 @@ module Ea
         # @return [Array] Array of model instances
         def load_table_records(db, table_name) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
           model_class = MODEL_CLASSES[table_name]
-          unless model_class
-            raise ArgumentError, "No model class for table #{table_name}"
-          end
+          raise ArgumentError, "No model class for table #{table_name}" unless model_class
 
           reader = Infrastructure::TableReader.new(db, table_name)
           return [] unless reader.table_exists?

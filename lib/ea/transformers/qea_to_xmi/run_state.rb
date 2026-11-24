@@ -85,7 +85,7 @@ module Ea
           Binding.new(
             fields["Variable"] || "",
             fields["Value"] || "",
-            fields["Op"] || "",
+            fields["Op"] || ""
           )
         end
 

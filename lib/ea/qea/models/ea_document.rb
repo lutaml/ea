@@ -21,14 +21,13 @@ module Ea
           "t_document"
         end
 
-
         COLUMN_MAP = {
           "DocID" => :doc_id,
           "DocName" => :doc_name,
           "DocType" => :doc_type,
           "StrContent" => :str_content,
           "BinContent" => :bin_content,
-          "ElementID" => :element_id,
+          "ElementID" => :element_id
         }.freeze
 
         def self.column_map
@@ -36,9 +35,9 @@ module Ea
         end
 
         # Convenience aliases
-        alias_method :id, :doc_id
-        alias_method :name, :doc_name
-        alias_method :type, :doc_type
+        alias id doc_id
+        alias name doc_name
+        alias type doc_type
 
         # Check if this is a style document
         # @return [Boolean]

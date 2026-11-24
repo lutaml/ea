@@ -118,7 +118,7 @@ module Ea
         # @return [Integer] Total number of records
         def count
           result = @database.execute(
-            "SELECT COUNT(*) as count FROM #{@table_name}",
+            "SELECT COUNT(*) as count FROM #{@table_name}"
           )
           result.first["count"]
         end

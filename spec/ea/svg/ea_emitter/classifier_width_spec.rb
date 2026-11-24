@@ -12,7 +12,7 @@ RSpec.describe Ea::Svg::EaEmitter::Document do
       stereotype_refs: ["FeatureType"],
       properties: [
         Ea::Model::Property.new(id: "p1", name: "height", type_name: "Integer",
-                                 owner_id: "c1")
+                                owner_id: "c1")
       ],
       operations: [
         Ea::Model::Operation.new(
@@ -20,7 +20,7 @@ RSpec.describe Ea::Svg::EaEmitter::Document do
           return_type_name: "Building",
           parameters: [
             Ea::Model::Parameter.new(id: "op1", name: "spec", type_name: "BuildingType",
-                                      owner_id: "o1", direction: "inout")
+                                     owner_id: "o1", direction: "inout")
           ]
         )
       ]

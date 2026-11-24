@@ -3,7 +3,8 @@
 module QeaPlainTargetSeatHelpers
   def public_target_seat_svg(document, instance_id)
     diagram = document.diagrams.find { |entry| entry.connectors.any? { |connector| connector.id == instance_id } }
-    svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id, document: document, frame: true).render
+    svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id, document: document,
+                                                    frame: true).render
     Nokogiri::XML(svg)
   end
 

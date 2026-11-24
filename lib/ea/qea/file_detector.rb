@@ -52,14 +52,12 @@ module Ea
             return {
               valid: false,
               errors: ["File not found: #{path}"],
-              warnings: [],
+              warnings: []
             }
           end
 
           # Check file extension
-          unless path.end_with?(".qea")
-            warnings << "File does not have .qea extension"
-          end
+          warnings << "File does not have .qea extension" unless path.end_with?(".qea")
 
           # Check SQLite format
           unless sqlite_file?(path)
@@ -73,17 +71,13 @@ module Ea
             tables = get_table_names(db)
 
             REQUIRED_EA_TABLES.each do |required_table|
-              unless tables.include?(required_table)
-                errors << "Missing required EA table: #{required_table}"
-              end
+              errors << "Missing required EA table: #{required_table}" unless tables.include?(required_table)
             end
 
             # Check for data
             if tables.include?("t_object")
               count = db.execute("SELECT COUNT(*) FROM t_object").first.first
-              if count.zero?
-                warnings << "No objects found in t_object table"
-              end
+              warnings << "No objects found in t_object table" if count.zero?
             end
           rescue SQLite3::Exception => e
             errors << "Failed to open database: #{e.message}"
@@ -94,7 +88,7 @@ module Ea
           {
             valid: errors.empty?,
             errors: errors,
-            warnings: warnings,
+            warnings: warnings
           }
         end
 
@@ -115,7 +109,7 @@ module Ea
             size_bytes: File.size(path),
             size_mb: (File.size(path) / 1024.0 / 1024.0).round(2),
             modified: File.mtime(path),
-            is_qea: qea_file?(path),
+            is_qea: qea_file?(path)
           }
 
           if sqlite_file?(path)

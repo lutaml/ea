@@ -93,9 +93,7 @@ puts "=" * 80
 puts "2. Package Structure"
 puts "=" * 80
 
-if stats[:max_package_depth]
-  puts "Package hierarchy depth: #{stats[:max_package_depth]}"
-end
+puts "Package hierarchy depth: #{stats[:max_package_depth]}" if stats[:max_package_depth]
 
 packages = repo.packages_index
 if packages.any?
@@ -149,8 +147,8 @@ if all_classes.any?
   # Find most complex classes
   puts "\nMost complex classes (by attribute count):"
   complex_classes = all_classes.map { |c| [c.name, c.attributes&.size || 0] }
-    .sort_by { |_, count| -count }
-    .first(5)
+                               .sort_by { |_, count| -count }
+                               .first(5)
 
   complex_classes.each do |name, count|
     puts "  #{name}: #{count} attributes"
@@ -200,7 +198,7 @@ if all_classes.any?
     puts "\nDeepest inheritance hierarchy: #{max_depth} levels"
     puts "  Class: #{deepest_class.name}"
     ancestors = repo.ancestors_of(deepest_class)
-    puts "  Ancestors: #{ancestors.map(&:name).join(' < ')}"
+    puts "  Ancestors: #{ancestors.map(&:name).join(" < ")}"
   end
 end
 puts
@@ -248,7 +246,7 @@ puts "=" * 80
 # Run validation
 validation = repo.validate
 
-puts "Validation status: #{validation.valid? ? 'PASS ✓' : 'FAIL ✗'}"
+puts "Validation status: #{validation.valid? ? "PASS ✓" : "FAIL ✗"}"
 puts "  Errors: #{validation.errors.size}"
 puts "  Warnings: #{validation.warnings.size}"
 
@@ -297,21 +295,19 @@ summary = {
     data_types: stats[:total_data_types],
     enumerations: stats[:total_enums],
     associations: stats[:total_associations],
-    diagrams: stats[:total_diagrams],
+    diagrams: stats[:total_diagrams]
   },
   structure: {
-    max_package_depth: stats[:max_package_depth],
+    max_package_depth: stats[:max_package_depth]
   },
   validation: {
     valid: validation.valid?,
     errors: validation.errors.size,
-    warnings: validation.warnings.size,
-  },
+    warnings: validation.warnings.size
+  }
 }
 
-if stats[:classes_by_stereotype]
-  summary[:stereotypes] = stats[:classes_by_stereotype]
-end
+summary[:stereotypes] = stats[:classes_by_stereotype] if stats[:classes_by_stereotype]
 
 puts JSON.pretty_generate(summary)
 puts

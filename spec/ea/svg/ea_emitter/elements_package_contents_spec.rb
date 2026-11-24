@@ -20,14 +20,14 @@ RSpec.describe Ea::Svg::EaEmitter::Elements do
       "PKG1" => Ea::Model::Package.new(id: "PKG1", name: "Outer"),
       "SUB1" => Ea::Model::Package.new(id: "SUB1", name: "Sub", parent_id: "PKG1"),
       "KLS1" => Ea::Model::Klass.new(id: "KLS1", name: "Widget",
-                                       package_id: "PKG1",
-                                       stereotype_refs: []),
+                                     package_id: "PKG1",
+                                     stereotype_refs: []),
       "ENM1" => Ea::Model::Enumeration.new(id: "ENM1", name: "Color",
-                                            package_id: "PKG1",
-                                            stereotype_refs: []),
+                                           package_id: "PKG1",
+                                           stereotype_refs: []),
       "ENMS" => Ea::Model::Klass.new(id: "ENMS", name: "Status",
-                                       package_id: "PKG1",
-                                       stereotype_refs: ["enumeration"])
+                                     package_id: "PKG1",
+                                     stereotype_refs: ["enumeration"])
     }
   end
 
@@ -41,18 +41,18 @@ RSpec.describe Ea::Svg::EaEmitter::Elements do
 
     it "returns [] when show_package_contents is false" do
       diagram.show_package_contents = false
-      result = elements.package_content_lines_for( model_index["PKG1"])
+      result = elements.package_content_lines_for(model_index["PKG1"])
       expect(result).to eq([])
     end
 
     it "returns alphabetical rows for each child" do
-      rows = elements.package_content_lines_for( model_index["PKG1"])
+      rows = elements.package_content_lines_for(model_index["PKG1"])
       names = rows.map(&:name)
       expect(names).to eq(%w[Color Status Sub Widget])
     end
 
     it "includes both classifier and sub-package children" do
-      rows = elements.package_content_lines_for( model_index["PKG1"])
+      rows = elements.package_content_lines_for(model_index["PKG1"])
       kinds = rows.map { |r| [r.name, r.kind] }.to_h
       expect(kinds["Sub"]).to eq(:package)
       expect(kinds["Widget"]).to eq(:default)
@@ -60,7 +60,7 @@ RSpec.describe Ea::Svg::EaEmitter::Elements do
     end
 
     it "uses :enumeration kind for classifiers with 'enumeration' stereotype" do
-      rows = elements.package_content_lines_for( model_index["PKG1"])
+      rows = elements.package_content_lines_for(model_index["PKG1"])
       status_row = rows.find { |r| r.name == "Status" }
       expect(status_row.kind).to eq(:enumeration)
     end

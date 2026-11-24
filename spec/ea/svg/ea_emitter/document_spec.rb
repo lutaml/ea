@@ -19,7 +19,7 @@ RSpec.describe Ea::Svg::EaEmitter::Document do
           stereotype_refs: ["FeatureType"],
           properties: [
             Ea::Model::Property.new(id: "p1", name: "height", type_name: "Integer",
-                                     owner_id: "c1")
+                                    owner_id: "c1")
           ]
         )
       ],
@@ -138,7 +138,7 @@ RSpec.describe Ea::Svg::EaEmitter::Document do
     polygons = svg_with_package.scan(/<polygon\b/).size
     expect(polygons).to be >= 3
     expect(svg_with_package).to include("fill-rule:evenodd;")
-    expect(svg_with_package).not_to match(%r{<rect [^>]*x="#{PACKAGE_BOUNDS_X}"})
+    expect(svg_with_package).not_to match(/<rect [^>]*x="#{PACKAGE_BOUNDS_X}"/)
   end
 
   it "aliases EAPK_ package ids as EAID_ for diagram element refs" do
@@ -164,10 +164,10 @@ RSpec.describe Ea::Svg::EaEmitter::Document do
           name: "X",
           properties: [
             Ea::Model::Property.new(id: "p_simple", name: "simpleAttr",
-                                     type_name: "String", owner_id: "k1"),
+                                    type_name: "String", owner_id: "k1"),
             Ea::Model::Property.new(id: "p_assoc", name: "assocAttr",
-                                     type_name: "Y", owner_id: "k1",
-                                     association_id: "r_assoc")
+                                    type_name: "Y", owner_id: "k1",
+                                    association_id: "r_assoc")
           ]
         )
       ],

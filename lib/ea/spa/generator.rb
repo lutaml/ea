@@ -32,9 +32,9 @@ module Ea
 
       def projector
         @projector ||= Projector.new(document,
-                                      shard_url_for: shard_url_for,
-                                      configuration: configuration,
-                                      frame: @frame)
+                                     shard_url_for: shard_url_for,
+                                     configuration: configuration,
+                                     frame: @frame)
       end
 
       def strategy_class

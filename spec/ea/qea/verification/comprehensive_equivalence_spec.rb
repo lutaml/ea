@@ -18,36 +18,34 @@ RSpec.describe "XMI/QEA Comprehensive Equivalence Verification" do
         xmi: File.join(__dir__,
                        "../../../../examples/xmi/UmlModel_template.xmi"),
         qea: File.join(__dir__,
-                       "../../../../examples/qea/UmlModel_template.qea"),
+                       "../../../../examples/qea/UmlModel_template.qea")
       },
       {
         name: "Test Model",
         xmi: File.join(__dir__, "../../../../examples/xmi/test.xmi"),
-        qea: File.join(__dir__, "../../../../examples/qea/test.qea"),
+        qea: File.join(__dir__, "../../../../examples/qea/test.qea")
       },
       {
         name: "ArcGIS Workspace Template",
         xmi: File.join(__dir__,
                        "../../../../examples/xmi/ArcGISWorkspace_template.xmi"),
         qea: File.join(__dir__,
-                       "../../../../examples/qea/ArcGISWorkspace_template.qea"),
+                       "../../../../examples/qea/ArcGISWorkspace_template.qea")
       },
       {
         name: "Plateau v5.1",
         xmi: File.join(__dir__,
                        "../../../../examples/xmi/20251010_current_plateau_v5.1.xmi"),
         qea: File.join(__dir__,
-                       "../../../../examples/qea/20251010_current_plateau_v5.1.qea"),
-      },
+                       "../../../../examples/qea/20251010_current_plateau_v5.1.qea")
+      }
     ]
 
     @available_files = test_files.select do |file_pair|
       File.exist?(file_pair[:xmi]) && File.exist?(file_pair[:qea])
     end
 
-    if @available_files.empty?
-      skip "No XMI/QEA file pairs available for testing"
-    end
+    skip "No XMI/QEA file pairs available for testing" if @available_files.empty?
 
     # Parse each file pair once and cache via FixtureCache global hash.
     # Shares results with other spec files parsing the same fixtures.
@@ -56,8 +54,8 @@ RSpec.describe "XMI/QEA Comprehensive Equivalence Verification" do
       @repos[fp[:name]] = {
         xmi: cached_xmi_repository(fp[:xmi]),
         qea: Lutaml::UmlRepository::Repository.new(
-          document: cached_ea_to_uml_document(fp[:qea]),
-        ),
+          document: cached_ea_to_uml_document(fp[:qea])
+        )
       }
     end
   end
@@ -165,9 +163,7 @@ RSpec.describe "XMI/QEA Comprehensive Equivalence Verification" do
             expect(matching_qea.name).to eq(xmi_attr.name)
             expect(matching_qea.owner_name).to eq(xmi_attr.owner_name)
 
-            if xmi_attr.type && matching_qea.type
-              expect(matching_qea.type).to eq(xmi_attr.type)
-            end
+            expect(matching_qea.type).to eq(xmi_attr.type) if xmi_attr.type && matching_qea.type
           end
         end
 
@@ -207,9 +203,7 @@ RSpec.describe "XMI/QEA Comprehensive Equivalence Verification" do
             expect(matching_qea.source_type).to eq(xmi_assoc.source_type)
             expect(matching_qea.target_type).to eq(xmi_assoc.target_type)
 
-            if xmi_assoc.name && matching_qea.name
-              expect(matching_qea.name).to eq(xmi_assoc.name)
-            end
+            expect(matching_qea.name).to eq(xmi_assoc.name) if xmi_assoc.name && matching_qea.name
           end
         end
 
@@ -369,7 +363,7 @@ RSpec.describe "XMI/QEA Comprehensive Equivalence Verification" do
           qea_packages: qea_repo.statistics[:total_packages],
           xmi_classes: xmi_classes,
           qea_classes: qea_classes,
-          ratio: qea_classes.to_f / [xmi_classes, 1].max,
+          ratio: qea_classes.to_f / [xmi_classes, 1].max
         }
       end
 
@@ -434,13 +428,13 @@ RSpec.describe "XMI/QEA Comprehensive Equivalence Verification" do
 
             repo.classes.each do |klass|
               klass.attributes.each do |attr|
-                if attr.type && !attr.type.empty?
-                  # The type should be resolvable in the repository
-                  # We don't require strict resolution for all types
-                  # (primitives, external refs)
-                  # This is just a consistency check
-                  type_names.include?(attr.type)
-                end
+                next unless attr.type && !attr.type.empty?
+
+                # The type should be resolvable in the repository
+                # We don't require strict resolution for all types
+                # (primitives, external refs)
+                # This is just a consistency check
+                type_names.include?(attr.type)
               end
             end
           end

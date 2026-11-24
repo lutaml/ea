@@ -101,7 +101,7 @@ module Ea
               entity_name: entity_name,
               field: field,
               reference: reference_id.to_s,
-              message: "#{field} references non-existent #{table} entry",
+              message: "#{field} references non-existent #{table} entry"
             )
           end
 
@@ -247,7 +247,7 @@ module Ea
           if path_parts.empty?
             "Unknown (package_id: #{package_id})"
           else
-            "#{path_parts.join('::')} (package_id: #{package_id})"
+            "#{path_parts.join("::")} (package_id: #{package_id})"
           end
         end
 
@@ -257,7 +257,7 @@ module Ea
         # @param object_name [String, nil] Object name if already known
         # @return [String] Qualified name like "Package::ClassName
         # (object_id: 456)"
-        def resolve_class_path(object_id, object_name = nil) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def resolve_class_path(object_id, object_name = nil) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
           return "Unknown (object_id: #{object_id})" if object_id.nil?
 
           # Get object from collection directly
@@ -275,9 +275,9 @@ module Ea
             # Remove the package_id suffix from package path and add class
             base_package_path = package_path.sub(/ \(package_id: \d+\)$/, "")
             "#{base_package_path}::" \
-              "#{class_name || 'Unknown'} (object_id: #{object_id})"
+              "#{class_name || "Unknown"} (object_id: #{object_id})"
           else
-            "#{class_name || 'Unknown'} (object_id: #{object_id})"
+            "#{class_name || "Unknown"} (object_id: #{object_id})"
           end
         end
       end

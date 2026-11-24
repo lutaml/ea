@@ -240,7 +240,11 @@ module Ea
           value = end_element.lower_value
           return 1 unless value
 
-          Integer(value.value) rescue 1
+          begin
+            Integer(value.value)
+          rescue StandardError
+            1
+          end
         end
 
         def parse_upper(end_element)
@@ -252,7 +256,11 @@ module Ea
           raw = value.value
           return -1 if raw.to_s == "*"
 
-          Integer(raw) rescue 1
+          begin
+            Integer(raw)
+          rescue StandardError
+            1
+          end
         end
 
         def connector_index

@@ -15,18 +15,18 @@ RSpec.describe Ea::Qea::Validation::PackageValidator do
           Ea::Qea::Models::EaPackage.new(
             package_id: 1,
             name: "Root",
-            parent_id: 0,
+            parent_id: 0
           ),
           Ea::Qea::Models::EaPackage.new(
             package_id: 2,
             name: "Child",
-            parent_id: 1,
+            parent_id: 1
           ),
           Ea::Qea::Models::EaPackage.new(
             package_id: 3,
             name: "Grandchild",
-            parent_id: 2,
-          ),
+            parent_id: 2
+          )
         ]
       end
 
@@ -44,8 +44,8 @@ RSpec.describe Ea::Qea::Validation::PackageValidator do
           Ea::Qea::Models::EaPackage.new(
             package_id: 1,
             name: "Orphan",
-            parent_id: 999,
-          ),
+            parent_id: 999
+          )
         ]
       end
 
@@ -69,18 +69,18 @@ RSpec.describe Ea::Qea::Validation::PackageValidator do
           Ea::Qea::Models::EaPackage.new(
             package_id: 1,
             name: "Root",
-            parent_id: 0,
+            parent_id: 0
           ),
           Ea::Qea::Models::EaPackage.new(
             package_id: 2,
             name: "Duplicate",
-            parent_id: 1,
+            parent_id: 1
           ),
           Ea::Qea::Models::EaPackage.new(
             package_id: 3,
             name: "Duplicate",
-            parent_id: 1,
-          ),
+            parent_id: 1
+          )
         ]
       end
 
@@ -101,18 +101,18 @@ RSpec.describe Ea::Qea::Validation::PackageValidator do
           Ea::Qea::Models::EaPackage.new(
             package_id: 1,
             name: "A",
-            parent_id: 3,
+            parent_id: 3
           ),
           Ea::Qea::Models::EaPackage.new(
             package_id: 2,
             name: "B",
-            parent_id: 1,
+            parent_id: 1
           ),
           Ea::Qea::Models::EaPackage.new(
             package_id: 3,
             name: "C",
-            parent_id: 2,
-          ),
+            parent_id: 2
+          )
         ]
       end
 
@@ -134,18 +134,18 @@ RSpec.describe Ea::Qea::Validation::PackageValidator do
           Ea::Qea::Models::EaPackage.new(
             package_id: 1,
             name: "Root",
-            parent_id: 999,
+            parent_id: 999
           ),
           Ea::Qea::Models::EaPackage.new(
             package_id: 2,
             name: "Dup",
-            parent_id: 0,
+            parent_id: 0
           ),
           Ea::Qea::Models::EaPackage.new(
             package_id: 3,
             name: "Dup",
-            parent_id: 0,
-          ),
+            parent_id: 0
+          )
         ]
       end
 

@@ -45,7 +45,7 @@ RSpec.describe Ea::Qea::Models::EaObject do
 
     it "allows reading and writing ea_guid" do
       obj = described_class
-        .new(ea_guid: "{12345678-1234-1234-1234-123456789012}")
+            .new(ea_guid: "{12345678-1234-1234-1234-123456789012}")
       expect(obj.ea_guid).to eq("{12345678-1234-1234-1234-123456789012}")
     end
 
@@ -186,7 +186,7 @@ RSpec.describe Ea::Qea::Models::EaObject do
         "Name" => "MyClass",
         "Package_ID" => 456,
         "ea_guid" => "{GUID}",
-        "Abstract" => "1",
+        "Abstract" => "1"
       }
 
       obj = described_class.from_db_row(row)

@@ -71,7 +71,7 @@ module Ea
         def table_exists?(table_name)
           result = @database.execute(
             "SELECT name FROM sqlite_master WHERE type='table' AND name=?",
-            table_name,
+            table_name
           )
           !result.empty?
         end
@@ -94,7 +94,7 @@ module Ea
         def table_schema(table_name)
           result = @database.execute(
             "SELECT sql FROM sqlite_master WHERE type='table' AND name=?",
-            table_name,
+            table_name
           )
           result.first&.fetch("sql", nil)
         end
@@ -107,7 +107,7 @@ module Ea
           @database.execute(
             "SELECT name, sql FROM sqlite_master " \
             "WHERE type='index' AND tbl_name=?",
-            table_name,
+            table_name
           )
         end
 
@@ -117,7 +117,7 @@ module Ea
         # @return [Integer] Number of rows in the table
         def row_count(table_name)
           result = @database.execute(
-            "SELECT COUNT(*) as count FROM #{table_name}",
+            "SELECT COUNT(*) as count FROM #{table_name}"
           )
           result.first["count"]
         end

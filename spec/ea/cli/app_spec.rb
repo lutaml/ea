@@ -29,7 +29,7 @@ RSpec.describe Ea::Cli::App do
     end
 
     it "exposes -o as alias for --output on the spa command" do
-      output = capture_stdout { described_class.start(%W[help spa]) }
+      output = capture_stdout { described_class.start(%w[help spa]) }
       expect(output).to match(/-o,\s+\[--output=OUTPUT\]/)
     end
 

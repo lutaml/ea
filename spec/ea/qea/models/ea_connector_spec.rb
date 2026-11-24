@@ -187,7 +187,7 @@ RSpec.describe Ea::Qea::Models::EaConnector do
         "Connector_Type" => "Association",
         "Start_Object_ID" => 456,
         "End_Object_ID" => 789,
-        "ea_guid" => "{GUID}",
+        "ea_guid" => "{GUID}"
       }
 
       conn = described_class.from_db_row(row)

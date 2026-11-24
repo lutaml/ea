@@ -11,7 +11,7 @@ RSpec.describe Ea::Qea::Database do
       ea_object_id: 1,
       name: "TestClass",
       object_type: "Class",
-      package_id: 10,
+      package_id: 10
     )
   end
 
@@ -19,7 +19,7 @@ RSpec.describe Ea::Qea::Database do
     Ea::Qea::Models::EaPackage.new(
       package_id: 10,
       name: "TestPackage",
-      parent_id: 0,
+      parent_id: 0
     )
   end
 
@@ -28,7 +28,7 @@ RSpec.describe Ea::Qea::Database do
       id: 100,
       ea_object_id: 1,
       name: "testAttr",
-      type: "String",
+      type: "String"
     )
   end
 
@@ -125,7 +125,7 @@ RSpec.describe Ea::Qea::Database do
       expect(stats).to eq({
                             "objects" => 2,
                             "packages" => 1,
-                            "attributes" => 3,
+                            "attributes" => 3
                           })
     end
   end
@@ -225,7 +225,7 @@ RSpec.describe Ea::Qea::Database do
       Ea::Qea::Models::EaObject.new(
         ea_object_id: 5,
         name: "GuidObject",
-        ea_guid: "{ABC-123}",
+        ea_guid: "{ABC-123}"
       )
     end
 
@@ -245,17 +245,17 @@ RSpec.describe Ea::Qea::Database do
   describe "#attributes_for_object" do
     let(:first_attr_for_target_obj) do
       Ea::Qea::Models::EaAttribute.new(
-        id: 1, ea_object_id: 10, name: "attr1",
+        id: 1, ea_object_id: 10, name: "attr1"
       )
     end
     let(:second_attr_for_target_obj) do
       Ea::Qea::Models::EaAttribute.new(
-        id: 2, ea_object_id: 10, name: "attr2",
+        id: 2, ea_object_id: 10, name: "attr2"
       )
     end
     let(:attr_for_other_obj) do
       Ea::Qea::Models::EaAttribute.new(
-        id: 3, ea_object_id: 20, name: "other",
+        id: 3, ea_object_id: 20, name: "other"
       )
     end
 
@@ -287,12 +287,12 @@ RSpec.describe Ea::Qea::Database do
   describe "#operations_for_object" do
     let(:op_for_target_obj) do
       Ea::Qea::Models::EaOperation.new(
-        operationid: 1, ea_object_id: 10, name: "op1",
+        operationid: 1, ea_object_id: 10, name: "op1"
       )
     end
     let(:op_for_other_obj) do
       Ea::Qea::Models::EaOperation.new(
-        operationid: 2, ea_object_id: 30, name: "op2",
+        operationid: 2, ea_object_id: 30, name: "op2"
       )
     end
 
@@ -313,7 +313,7 @@ RSpec.describe Ea::Qea::Database do
   describe "#operation_params_for" do
     let(:param1) do
       Ea::Qea::Models::EaOperationParam.new(
-        operationid: 5, name: "param1",
+        operationid: 5, name: "param1"
       )
     end
 
@@ -333,12 +333,12 @@ RSpec.describe Ea::Qea::Database do
   describe "#connectors_for_object" do
     let(:conn_start) do
       Ea::Qea::Models::EaConnector.new(
-        connector_id: 1, start_object_id: 10, end_object_id: 20,
+        connector_id: 1, start_object_id: 10, end_object_id: 20
       )
     end
     let(:conn_end) do
       Ea::Qea::Models::EaConnector.new(
-        connector_id: 2, start_object_id: 30, end_object_id: 10,
+        connector_id: 2, start_object_id: 30, end_object_id: 10
       )
     end
 
@@ -364,17 +364,17 @@ RSpec.describe Ea::Qea::Database do
   describe "#child_packages_for" do
     let(:child_pkg_alpha) do
       Ea::Qea::Models::EaPackage.new(
-        package_id: 2, name: "Child1", parent_id: 1,
+        package_id: 2, name: "Child1", parent_id: 1
       )
     end
     let(:child_pkg_beta) do
       Ea::Qea::Models::EaPackage.new(
-        package_id: 3, name: "Child2", parent_id: 1,
+        package_id: 3, name: "Child2", parent_id: 1
       )
     end
     let(:root_pkg) do
       Ea::Qea::Models::EaPackage.new(
-        package_id: 1, name: "Root", parent_id: 0,
+        package_id: 1, name: "Root", parent_id: 0
       )
     end
 
@@ -396,7 +396,7 @@ RSpec.describe Ea::Qea::Database do
   describe "#objects_in_package" do
     let(:obj_in_pkg) do
       Ea::Qea::Models::EaObject.new(
-        ea_object_id: 1, name: "Obj1", package_id: 5,
+        ea_object_id: 1, name: "Obj1", package_id: 5
       )
     end
 
@@ -416,7 +416,7 @@ RSpec.describe Ea::Qea::Database do
   describe "#diagrams_in_package" do
     let(:diag) do
       Ea::Qea::Models::EaDiagram.new(
-        diagram_id: 1, name: "Diagram1", package_id: 5,
+        diagram_id: 1, name: "Diagram1", package_id: 5
       )
     end
 
@@ -436,7 +436,7 @@ RSpec.describe Ea::Qea::Database do
   describe "#find_connector" do
     let(:conn) do
       Ea::Qea::Models::EaConnector.new(
-        connector_id: 42, start_object_id: 1, end_object_id: 2,
+        connector_id: 42, start_object_id: 1, end_object_id: 2
       )
     end
 
@@ -456,7 +456,7 @@ RSpec.describe Ea::Qea::Database do
   describe "#find_diagram" do
     let(:diag) do
       Ea::Qea::Models::EaDiagram.new(
-        diagram_id: 7, name: "Diagram",
+        diagram_id: 7, name: "Diagram"
       )
     end
 
@@ -476,7 +476,7 @@ RSpec.describe Ea::Qea::Database do
   describe "#diagram_objects_for" do
     let(:dobj) do
       Ea::Qea::Models::EaDiagramObject.new(
-        diagram_id: 3, ea_object_id: 10,
+        diagram_id: 3, ea_object_id: 10
       )
     end
 
@@ -496,7 +496,7 @@ RSpec.describe Ea::Qea::Database do
   describe "#diagram_links_for" do
     let(:dlink) do
       Ea::Qea::Models::EaDiagramLink.new(
-        diagramid: 3,
+        diagramid: 3
       )
     end
 

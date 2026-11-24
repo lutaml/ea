@@ -24,20 +24,20 @@ module Ea
           "public" => "public",
           "private" => "private",
           "protected" => "protected",
-          "package" => "package",
+          "package" => "package"
         }.freeze
 
         SCOPE_MAP = {
           0 => "public",
           1 => "private",
           2 => "protected",
-          3 => "package",
+          3 => "package"
         }.freeze
 
         AGGREGATION_MAP = {
           0 => nil,
           1 => "shared",
-          2 => "composite",
+          2 => "composite"
         }.freeze
 
         module_function

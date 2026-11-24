@@ -8,7 +8,7 @@ RSpec.describe Ea::Qea::Repositories::BaseRepository do
       ea_object_id: 1,
       name: "ClassA",
       object_type: "Class",
-      visibility: "Public",
+      visibility: "Public"
     )
   end
 
@@ -17,7 +17,7 @@ RSpec.describe Ea::Qea::Repositories::BaseRepository do
       ea_object_id: 2,
       name: "ClassB",
       object_type: "Interface",
-      visibility: "Public",
+      visibility: "Public"
     )
   end
 
@@ -26,7 +26,7 @@ RSpec.describe Ea::Qea::Repositories::BaseRepository do
       ea_object_id: 3,
       name: "ClassC",
       object_type: "Class",
-      visibility: "Private",
+      visibility: "Private"
     )
   end
 
@@ -65,7 +65,7 @@ RSpec.describe Ea::Qea::Repositories::BaseRepository do
       # answers for a duplicated key.
       duplicate = Ea::Qea::Models::EaObject.new(
         ea_object_id: 1, name: "Shadow", object_type: "Class",
-        visibility: "Public",
+        visibility: "Public"
       )
       repo = described_class.new([object1, duplicate])
       expect(repo.find(1)).to eq(repo.find_by_key(:ea_object_id, 1))
@@ -180,7 +180,7 @@ RSpec.describe Ea::Qea::Repositories::BaseRepository do
       expect(result).to eq([
                              { name: "ClassA" },
                              { name: "ClassB" },
-                             { name: "ClassC" },
+                             { name: "ClassC" }
                            ])
     end
 
@@ -189,7 +189,7 @@ RSpec.describe Ea::Qea::Repositories::BaseRepository do
       expect(result).to eq([
                              { ea_object_id: 1, name: "ClassA" },
                              { ea_object_id: 2, name: "ClassB" },
-                             { ea_object_id: 3, name: "ClassC" },
+                             { ea_object_id: 3, name: "ClassC" }
                            ])
     end
   end
@@ -206,12 +206,12 @@ RSpec.describe Ea::Qea::Repositories::BaseRepository do
   describe "#order_by" do
     it "sorts ascending by default" do
       result = repository.order_by(:name)
-      expect(result.map(&:name)).to eq(["ClassA", "ClassB", "ClassC"])
+      expect(result.map(&:name)).to eq(%w[ClassA ClassB ClassC])
     end
 
     it "sorts descending when specified" do
       result = repository.order_by(:name, :desc)
-      expect(result.map(&:name)).to eq(["ClassC", "ClassB", "ClassA"])
+      expect(result.map(&:name)).to eq(%w[ClassC ClassB ClassA])
     end
   end
 

@@ -8,7 +8,7 @@ module Ea
         # Transform EA attribute to UML attribute
         # @param ea_attribute [EaAttribute] EA attribute model
         # @return [Lutaml::Uml::TopElementAttribute] UML attribute
-        def transform(ea_attribute) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def transform(ea_attribute) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength
           return nil if ea_attribute.nil?
 
           Lutaml::Uml::TopElementAttribute.new.tap do |attr|
@@ -30,7 +30,7 @@ module Ea
             if ea_attribute.lowerbound || ea_attribute.upperbound
               attr.cardinality = build_cardinality(
                 ea_attribute.lowerbound,
-                ea_attribute.upperbound,
+                ea_attribute.upperbound
               )
             end
 
@@ -48,7 +48,7 @@ module Ea
         # Look up the type object's XMI ID from classifier
         # @param classifier_id [Integer] Classifier ID
         # @return [String, nil] Type's XMI ID
-        def lookup_type_xmi_id(classifier_id) # rubocop:disable Metrics/AbcSize
+        def lookup_type_xmi_id(classifier_id)
           return nil if classifier_id.nil? || classifier_id.to_i.zero?
 
           obj = database.find_object(classifier_id.to_i)

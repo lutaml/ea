@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "set"
 require "ea/sources/qea/context_diagram_support"
 
 RSpec.describe Ea::Sources::Qea::ContextDiagramSupport do
@@ -66,7 +65,7 @@ RSpec.describe Ea::Sources::Qea::ContextDiagramSupport do
 
   def connector_row(id, type, start_id, end_id)
     ContextConnectorRow.new(connector_id: id, connector_type: type,
-                         start_object_id: start_id, end_object_id: end_id)
+                            start_object_id: start_id, end_object_id: end_id)
   end
 
   subject(:support) { described_class }
@@ -74,7 +73,7 @@ RSpec.describe Ea::Sources::Qea::ContextDiagramSupport do
   describe ".context?" do
     it "matches the prefix case-insensitively" do
       row = ContextDiagramRow.new(diagram_id: 1, name: "Context diagram: Bag",
-                               styleex: "")
+                                  styleex: "")
       expect(support.context?(row)).to be(true)
     end
 
@@ -87,8 +86,8 @@ RSpec.describe Ea::Sources::Qea::ContextDiagramSupport do
   describe ".package_context" do
     it "parses Clients and Suppliers variants" do
       row = ContextDiagramRow.new(diagram_id: 1,
-                               name: "Context Diagram: Package Clients of X",
-                               styleex: "")
+                                  name: "Context Diagram: Package Clients of X",
+                                  styleex: "")
       expect(support.package_context(row))
         .to eq("variant" => "Clients", "focal_name" => "X")
     end
@@ -105,7 +104,7 @@ RSpec.describe Ea::Sources::Qea::ContextDiagramSupport do
 
     it "returns nil for element contexts" do
       row = ContextDiagramRow.new(diagram_id: 1, name: "Context Diagram: Bag",
-                               styleex: "")
+                                  styleex: "")
       expect(support.package_context(row)).to be_nil
     end
   end
@@ -122,15 +121,15 @@ RSpec.describe Ea::Sources::Qea::ContextDiagramSupport do
 
     it "is false when SuppressFOC=1 freezes the stored links" do
       row = ContextDiagramRow.new(diagram_id: 1, name: "Context Diagram: Bag",
-                               styleex: "SuppressFOC=1")
+                                  styleex: "SuppressFOC=1")
       expect(support.element_regenerate?(row)).to be(false)
     end
 
     it "is true when SuppressFOC=0 or absent" do
       absent = ContextDiagramRow.new(diagram_id: 1, name: "Context Diagram: Bag",
-                                  styleex: "")
+                                     styleex: "")
       zero = ContextDiagramRow.new(diagram_id: 1, name: "Context Diagram: Bag",
-                                styleex: "SuppressFOC=0")
+                                   styleex: "SuppressFOC=0")
       expect(support.element_regenerate?(absent)).to be(true)
       expect(support.element_regenerate?(zero)).to be(true)
     end
@@ -158,8 +157,8 @@ RSpec.describe Ea::Sources::Qea::ContextDiagramSupport do
 
     let(:diagram_row) do
       ContextDiagramRow.new(diagram_id: 7,
-                         name: "Context Diagram: Package Clients of Focal",
-                         styleex: "")
+                            name: "Context Diagram: Package Clients of Focal",
+                            styleex: "")
     end
 
     it "returns one candidate per placed client without a visible link" do
@@ -199,7 +198,7 @@ RSpec.describe Ea::Sources::Qea::ContextDiagramSupport do
 
     let(:diagram_row) do
       ContextDiagramRow.new(diagram_id: 7, name: "Context Diagram: Focal",
-                         styleex: "SuppressFOC=0")
+                            styleex: "SuppressFOC=0")
     end
 
     it "draws the focal star and ring1-ring2, skips ring1-ring1" do
@@ -210,7 +209,7 @@ RSpec.describe Ea::Sources::Qea::ContextDiagramSupport do
 
     it "returns nothing when SuppressFOC=1" do
       frozen = ContextDiagramRow.new(diagram_id: 7, name: "Context Diagram: Focal",
-                                  styleex: "SuppressFOC=1")
+                                     styleex: "SuppressFOC=1")
       expect(support.regenerated_element_connectors(frozen, database))
         .to be_empty
     end
@@ -237,7 +236,7 @@ RSpec.describe Ea::Sources::Qea::ContextDiagramSupport do
 
     let(:diagram_row) do
       ContextDiagramRow.new(diagram_id: 7, name: "Context Diagram: Old Name",
-                         styleex: "SuppressFOC=0")
+                            styleex: "SuppressFOC=0")
     end
 
     it "falls back to the placed element most connected within the diagram" do

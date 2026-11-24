@@ -14,7 +14,7 @@ RSpec.describe Ea::Qea::Validation::ValidationMessage do
       reference: "456",
       message: "parent_id references non-existent package",
       location: "Package::SubPackage",
-      context: { table: "t_object" },
+      context: { table: "t_object" }
     }
   end
 
@@ -42,7 +42,7 @@ RSpec.describe Ea::Qea::Validation::ValidationMessage do
         entity_type: :association,
         entity_id: "789",
         entity_name: "MyAssociation",
-        message: "association is orphaned",
+        message: "association is orphaned"
       )
 
       expect(msg.field).to be_nil
@@ -95,7 +95,7 @@ RSpec.describe Ea::Qea::Validation::ValidationMessage do
         entity_type: :package,
         entity_id: "999",
         entity_name: "EmptyPackage",
-        message: "package contains no elements",
+        message: "package contains no elements"
       )
       result = msg.to_s
 
@@ -131,7 +131,7 @@ RSpec.describe Ea::Qea::Validation::ValidationMessage do
         entity_type: :package,
         entity_id: "999",
         entity_name: "EmptyPackage",
-        message: "package contains no elements",
+        message: "package contains no elements"
       )
       hash = msg.to_h
 

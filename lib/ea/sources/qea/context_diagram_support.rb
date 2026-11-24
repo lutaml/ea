@@ -135,8 +135,8 @@ module Ea
 
         def focal_element_id(diagram_row, database, placed_ids)
           focal_name = diagram_row.name.to_s
-                              .sub(/\AContext [Dd]iagram:\s*/, "")
-                              .strip
+                                  .sub(/\AContext [Dd]iagram:\s*/, "")
+                                  .strip
           focal = (database.diagram_objects_for(diagram_row.diagram_id) || [])
                   .select do |placement|
             obj = database.find_object(placement.ea_object_id.to_i)

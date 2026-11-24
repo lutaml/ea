@@ -76,7 +76,7 @@ RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do # rubocop:disable Metrics/
   end
 
   it "keeps Association tree and legacy geometry on their centerline docks" do
-    ["LV", "LH", "H", "V"].each do |tree|
+    %w[LV LH H V].each do |tree|
       fixture = redock_fixture(type: "Association", source: [115, 527, 161, 80],
                                target: [122, 361, 146, 80],
                                anchors: [[195, 567], [195, 401]],
@@ -134,8 +134,8 @@ RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do # rubocop:disable Metrics/
       fixture[:diagram].connectors.first.style.merge!(tree: "LV", mode: "3")
 
       expect(described_class.pairs_for(fixture[:diagram].connectors.first,
-                                      fixture[:diagram], fixture[:model_index],
-                                      fixture[:drawn_bounds])).to be_nil
+                                       fixture[:diagram], fixture[:model_index],
+                                       fixture[:drawn_bounds])).to be_nil
     end
     fixture = redock_fixture(type: "Association", points: [[50, 100], [20, 100], [20, 0]])
     fixture[:diagram].connectors.first.style.merge!(tree: "LV", mode: "3")

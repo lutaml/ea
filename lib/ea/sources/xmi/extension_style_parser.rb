@@ -40,7 +40,7 @@ module Ea
         # as hidden in practice).
         def tri_state_icon(value)
           return nil if value.nil? || value.empty?
-          return :hidden if value == "1" || value == "true" || value == "-1"
+          return :hidden if ["1", "true", "-1"].include?(value)
           return :shown if value == "0"
 
           nil
@@ -64,7 +64,7 @@ module Ea
         end
 
         def truthy?(value)
-          value == "1" || value == "true" || value == "-1"
+          ["1", "true", "-1"].include?(value)
         end
 
         # fontsz is EA's tenths of a point, rendered through GDI's double

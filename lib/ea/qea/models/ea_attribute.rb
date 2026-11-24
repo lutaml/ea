@@ -42,9 +42,8 @@ module Ea
           "t_attribute"
         end
 
-
         COLUMN_MAP = {
-          "Object_ID" => :ea_object_id,
+          "Object_ID" => :ea_object_id
         }.freeze
 
         def self.column_map

@@ -25,7 +25,7 @@ module Ea
           klass ||
             raise(ArgumentError,
                   "No output formatter '#{name}'. " \
-                  "Registered: #{@formatters.keys.join(', ')}")
+                  "Registered: #{@formatters.keys.join(", ")}")
         end
 
         # Convenience: returns a fresh formatter instance for `name`.

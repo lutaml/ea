@@ -14,7 +14,7 @@ RSpec.describe "Attribute Tags Support" do
           "Property" => "isMetadata",
           "VALUE" => "false",
           "NOTES" => nil,
-          "ea_guid" => "{CB7388F0-4FF7-4c90-9849-996F41297C17}",
+          "ea_guid" => "{CB7388F0-4FF7-4c90-9849-996F41297C17}"
         }
 
         tag = described_class.from_db_row(row)
@@ -92,7 +92,7 @@ RSpec.describe "Attribute Tags Support" do
           property_id: 1,
           element_id: 367,
           property: "isMetadata",
-          value: "false",
+          value: "false"
         )
 
         uml_tag = transformer.transform(ea_tag)
@@ -112,7 +112,7 @@ RSpec.describe "Attribute Tags Support" do
           property_id: 1,
           element_id: 367,
           property: nil,
-          value: "false",
+          value: "false"
         )
 
         uml_tag = transformer.transform(ea_tag)
@@ -163,8 +163,8 @@ RSpec.describe "Attribute Tags Support" do
         expect(uml_attr.tagged_values).not_to be_empty
 
         tag_names = database.attribute_tags
-          .select { |t| t.element_id == attr_with_tags.id }
-          .map(&:property)
+                            .select { |t| t.element_id == attr_with_tags.id }
+                            .map(&:property)
 
         uml_tag_names = uml_attr.tagged_values.map(&:name)
 

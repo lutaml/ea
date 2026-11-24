@@ -5,12 +5,12 @@ require "spec_helper"
 RSpec.describe Ea::Qea::Factory::AssociationTransformer do
   let(:source_obj) do
     Ea::Qea::Models::EaObject.new(
-      ea_object_id: 10, name: "Person", ea_guid: "{PERSON-GUID}",
+      ea_object_id: 10, name: "Person", ea_guid: "{PERSON-GUID}"
     )
   end
   let(:dest_obj) do
     Ea::Qea::Models::EaObject.new(
-      ea_object_id: 20, name: "Building", ea_guid: "{BUILDING-GUID}",
+      ea_object_id: 20, name: "Building", ea_guid: "{BUILDING-GUID}"
     )
   end
   let(:database) { build_test_database(objects: [source_obj, dest_obj]) }
@@ -29,7 +29,7 @@ RSpec.describe Ea::Qea::Factory::AssociationTransformer do
         destrole: "property",
         sourcecard: "1",
         destcard: "0..*",
-        notes: "Ownership relationship",
+        notes: "Ownership relationship"
       )
     end
 
@@ -40,7 +40,7 @@ RSpec.describe Ea::Qea::Factory::AssociationTransformer do
 
     it "returns nil for non-association connectors" do
       ea_conn = Ea::Qea::Models::EaConnector.new(
-        connector_type: "Generalization",
+        connector_type: "Generalization"
       )
 
       result = transformer.transform(ea_conn)
@@ -66,7 +66,7 @@ RSpec.describe Ea::Qea::Factory::AssociationTransformer do
         connector_type: "Association",
         start_object_id: 10,
         end_object_id: 20,
-        sourcecard: "1..*",
+        sourcecard: "1..*"
       )
 
       result = transformer.transform(ea_conn)
@@ -81,7 +81,7 @@ RSpec.describe Ea::Qea::Factory::AssociationTransformer do
         connector_type: "Association",
         start_object_id: 10,
         end_object_id: 20,
-        stereotype: "create",
+        stereotype: "create"
       )
 
       result = transformer.transform(ea_conn)

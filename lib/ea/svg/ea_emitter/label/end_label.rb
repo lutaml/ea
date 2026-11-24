@@ -79,7 +79,7 @@ module Ea
             from_property, role, mult = role_and_multiplicity(connector, end_kind)
             if role_empty?(role) && mult_empty?(mult)
               other_from_prop, other_role, other_mult = role_and_multiplicity(connector,
-                                                              opposite(end_kind))
+                                                                              opposite(end_kind))
               if stored_labels || connector.style.to_h[:explicit_end_roles] ||
                  connector.style.to_h[:phantom_outline] == true
                 return [] if role_empty?(other_role) && mult_empty?(other_mult)
@@ -384,7 +384,7 @@ module Ea
             end
           end
 
-          def tree_positions(end_kind, anchor, role, text_pos, mult_pos)
+          def tree_positions(end_kind, anchor, role, _text_pos, _mult_pos)
             if end_kind == :source
               [[anchor[0] + 3, anchor[1] - 23],
                [anchor[0] + 3, anchor[1]]]
@@ -1050,9 +1050,7 @@ module Ea
                                                     y + property_y_offset(text_box)]
                 texts << text_at(stereo_x, stereo_y, stereo)
               end
-              if mult && !mult.empty? && mult_pos
-                texts << text_at(*mult_pos, mult)
-              end
+              texts << text_at(*mult_pos, mult) if mult && !mult.empty? && mult_pos
               texts
             elsif standalone && !standalone.empty? && mult_pos
               note_reach(mult_pos, mult_box)
@@ -1109,8 +1107,11 @@ module Ea
           PROPERTY_KEYWORD = "property"
 
           def connector_source_dest_stereotype(connector, end_kind)
-            stereo = end_kind == :source ? connector.source_stereotype :
+            stereo = if end_kind == :source
+                       connector.source_stereotype
+                     else
                        connector.target_stereotype
+                     end
             stereo.to_s.strip
           end
 
@@ -1195,7 +1196,6 @@ module Ea
           # Linear-scan fallback for callers that did not wire in
           # the Document. Production paths go through Document's
           # property_index for O(1) lookup.
-
 
           def fallback_property_lookup(id)
             return nil unless model_index

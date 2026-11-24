@@ -53,7 +53,7 @@ module Ea
           mapping = load_if_present("spec/fixtures/mdg/ea_config/gml/GMLClassMapping.xml",
                                     Ea::Export::Xsd::ClassMapping)
           namespaces = load_if_present("spec/fixtures/mdg/ea_config/gml/GMLNamespaces.xml",
-                                        Ea::Export::Xsd::NamespaceRegistry)
+                                       Ea::Export::Xsd::NamespaceRegistry)
           opts[:class_mapping] = mapping if mapping
           opts[:namespaces] = namespaces if namespaces
           opts

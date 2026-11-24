@@ -130,7 +130,7 @@ RSpec.describe Ea::Qea::Models::EaDocument do
         "DocType" => "SSDOCSTYLE",
         "StrContent" => "Content",
         "BinContent" => "Binary",
-        "ElementID" => "EL456",
+        "ElementID" => "EL456"
       }
 
       doc = described_class.from_db_row(row)

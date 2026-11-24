@@ -24,9 +24,7 @@ module Ea
       # Set a custom configuration
       #
       # @param config [Services::Configuration] The configuration to use
-      def configuration=(config)
-        @configuration = config
-      end
+      attr_writer :configuration
 
       # Reload configuration from file
       #
@@ -66,7 +64,7 @@ module Ea
           reader = Infrastructure::SchemaReader.new(db)
           {
             tables: reader.tables,
-            statistics: reader.statistics,
+            statistics: reader.statistics
           }
         end
       ensure
@@ -127,7 +125,7 @@ module Ea
       # @return [Lutaml::Uml::Document, Hash] Document, or hash with
       #   :document and :validation_result
       # @raise [Ea::Error] if lutaml-uml is not available
-      def parse(qea_path, options = {}) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+      def parse(qea_path, options = {}) # rubocop:disable Metrics/MethodLength
         require_uml!
         config = options.delete(:config)
         validate = options.delete(:validate)
@@ -143,13 +141,13 @@ module Ea
             engine = Validation::ValidationEngine.new(
               document,
               database: ea_database,
-              **options,
+              **options
             )
             validation_result = engine.validate
 
             {
               document: document,
-              validation_result: validation_result,
+              validation_result: validation_result
             }
           else
             document

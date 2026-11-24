@@ -44,6 +44,7 @@ module Ea
 
       def source_point
         return nil unless source_bounds
+
         pt = if @edge_code && @edge_code != 0
                edge_point(source_bounds, @edge_code)
              else
@@ -56,6 +57,7 @@ module Ea
 
       def target_point
         return nil unless target_bounds
+
         pt = if @edge_code && @edge_code != 0
                opposite_edge_point(source_bounds, target_bounds, @edge_code)
              else
@@ -78,17 +80,17 @@ module Ea
         when 2 then [bounds.x + bounds.width, center_y(bounds)]
         when 3 then [center_x(bounds), bounds.y + bounds.height]
         when 4 then [bounds.x, center_y(bounds)]
-        else      [center_x(bounds), center_y(bounds)]
+        else [center_x(bounds), center_y(bounds)]
         end
       end
 
-      def opposite_edge_point(source, target, code)
+      def opposite_edge_point(_source, target, code)
         case code
         when 1 then [center_x(target), target.y + target.height]
         when 2 then [target.x, center_y(target)]
         when 3 then [center_x(target), target.y]
         when 4 then [target.x + target.width, center_y(target)]
-        else      [center_x(target), center_y(target)]
+        else [center_x(target), center_y(target)]
         end
       end
 

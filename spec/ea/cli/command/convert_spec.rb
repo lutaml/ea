@@ -17,7 +17,7 @@ RSpec.describe Ea::Cli::Command::Convert do
           file: qea_path,
           to: "xmi",
           output: out_path,
-          format: "table",
+          format: "table"
         ).call
       end
 
@@ -35,7 +35,7 @@ RSpec.describe Ea::Cli::Command::Convert do
         described_class.new(
           file: qea_path,
           to: "xmi",
-          output: out_path,
+          output: out_path
         ).call
       end
       parsed = ::Xmi::Sparx::Root.parse_xml(File.read(out_path))
@@ -45,17 +45,17 @@ RSpec.describe Ea::Cli::Command::Convert do
 
   describe "missing --to" do
     it "raises Cli::Error" do
-      expect {
+      expect do
         described_class.new(file: qea_path).call
-      }.to raise_error(Ea::Cli::Error, /missing required --to/)
+      end.to raise_error(Ea::Cli::Error, /missing required --to/)
     end
   end
 
   describe "unsupported --to" do
     it "raises Cli::Error listing valid targets" do
-      expect {
+      expect do
         described_class.new(file: qea_path, to: "bogus").call
-      }.to raise_error(Ea::Cli::Error, /Unsupported target 'bogus'/)
+      end.to raise_error(Ea::Cli::Error, /Unsupported target 'bogus'/)
     end
   end
 
@@ -67,9 +67,9 @@ RSpec.describe Ea::Cli::Command::Convert do
     end
 
     it "raises UnsupportedFormat for non-qea input" do
-      expect {
+      expect do
         described_class.new(file: temp_path, to: "xmi").call
-      }.to raise_error(Ea::Cli::UnsupportedFormat, /supported inputs: qea/)
+      end.to raise_error(Ea::Cli::UnsupportedFormat, /supported inputs: qea/)
     end
   end
 end

@@ -6,15 +6,15 @@ RSpec.describe Ea::Lint::Offense do
   describe "#error?" do
     it "is true when severity is :error" do
       offense = described_class.new(rule: "r", severity: :error,
-                                     entity_id: "1", entity_name: "Foo",
-                                     message: "bad")
+                                    entity_id: "1", entity_name: "Foo",
+                                    message: "bad")
       expect(offense.error?).to be true
     end
 
     it "is false when severity is :warning" do
       offense = described_class.new(rule: "r", severity: :warning,
-                                     entity_id: "1", entity_name: "Foo",
-                                     message: "bad")
+                                    entity_id: "1", entity_name: "Foo",
+                                    message: "bad")
       expect(offense.error?).to be false
     end
   end
@@ -22,15 +22,15 @@ RSpec.describe Ea::Lint::Offense do
   describe "#warning?" do
     it "is true when severity is :warning" do
       offense = described_class.new(rule: "r", severity: :warning,
-                                     entity_id: "1", entity_name: "Foo",
-                                     message: "bad")
+                                    entity_id: "1", entity_name: "Foo",
+                                    message: "bad")
       expect(offense.warning?).to be true
     end
 
     it "is false when severity is :error" do
       offense = described_class.new(rule: "r", severity: :error,
-                                     entity_id: "1", entity_name: "Foo",
-                                     message: "bad")
+                                    entity_id: "1", entity_name: "Foo",
+                                    message: "bad")
       expect(offense.warning?).to be false
     end
   end
@@ -117,13 +117,13 @@ RSpec.describe Ea::Lint::Engine do
       rule_a = Class.new(Ea::Lint::LintRule) do
         def check(_model)
           [Ea::Lint::Offense.new(rule: "A", severity: :warning,
-                                  entity_id: "1", entity_name: "x", message: "a")]
+                                 entity_id: "1", entity_name: "x", message: "a")]
         end
       end
       rule_b = Class.new(Ea::Lint::LintRule) do
         def check(_model)
           [Ea::Lint::Offense.new(rule: "B", severity: :warning,
-                                  entity_id: "2", entity_name: "y", message: "b")]
+                                 entity_id: "2", entity_name: "y", message: "b")]
         end
       end
       engine = described_class.new(rules: [rule_a, rule_b])

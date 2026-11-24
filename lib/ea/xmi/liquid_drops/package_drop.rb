@@ -41,9 +41,9 @@ module Ea
               @guidance,
               @options.merge(
                 {
-                  absolute_path: "#{@options[:absolute_path]}::#{name}",
-                },
-              ),
+                  absolute_path: "#{@options[:absolute_path]}::#{name}"
+                }
+              )
             )
           end
         end
@@ -75,9 +75,9 @@ module Ea
               @guidance,
               @options.merge(
                 {
-                  absolute_path: "#{@options[:absolute_path]}::#{name}",
-                },
-              ),
+                  absolute_path: "#{@options[:absolute_path]}::#{name}"
+                }
+              )
             )
           end
         end
@@ -89,9 +89,9 @@ module Ea
               @guidance,
               @options.merge(
                 {
-                  absolute_path: "#{@options[:absolute_path]}::#{name}",
-                },
-              ),
+                  absolute_path: "#{@options[:absolute_path]}::#{name}"
+                }
+              )
             )
           end
         end

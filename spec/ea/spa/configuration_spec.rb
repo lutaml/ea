@@ -11,9 +11,9 @@ RSpec.describe Ea::Spa::Configuration do
     end
 
     it "raises ArgumentError for missing file" do
-      expect {
+      expect do
         described_class.load("/tmp/does-not-exist-#{Time.now.to_i}.yml")
-      }.to raise_error(ArgumentError, /SPA config not found/)
+      end.to raise_error(ArgumentError, /SPA config not found/)
     end
 
     it "parses YAML into a Configuration" do
@@ -38,7 +38,7 @@ RSpec.describe Ea::Spa::Configuration do
       Ea::Model::Metadata.new(
         title: "Original",
         source_format: "qea",
-        source_tool: "EA",
+        source_tool: "EA"
       )
     end
 

@@ -7,11 +7,11 @@ require "ea/svg/ea_emitter/markers"
 RSpec.describe Ea::Svg::EaEmitter::Markers::Entry do
   it "compares equal when anchors match (regardless of body)" do
     a = described_class.new(style_key: :diamond_filled,
-                             body: "<polygon points=\"10 10 20 20\"/>",
-                             anchor: [10, 10])
+                            body: "<polygon points=\"10 10 20 20\"/>",
+                            anchor: [10, 10])
     b = described_class.new(style_key: :diamond_filled,
-                             body: "<polygon points=\"10 10 21 21\"/>",
-                             anchor: [10, 10])
+                            body: "<polygon points=\"10 10 21 21\"/>",
+                            anchor: [10, 10])
     expect(a.eql?(b)).to be(true)
     expect(a.hash == b.hash).to be(true)
   end

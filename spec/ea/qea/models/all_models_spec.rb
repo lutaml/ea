@@ -28,7 +28,7 @@ RSpec.describe "Ea::Qea remaining models (table + pk)" do
     [Ea::Qea::Models::EaPhase,          "t_phase",            :phase_id],
     [Ea::Qea::Models::EaStatusType,     "t_statustypes",      "Status"],
     [Ea::Qea::Models::EaTaggedValue,    "t_taggedvalue",      :property_id],
-    [Ea::Qea::Models::EaVersion,        "t_versions",         :version_id],
+    [Ea::Qea::Models::EaVersion,        "t_versions",         :version_id]
   ].freeze
 
   it "covers 18 models" do

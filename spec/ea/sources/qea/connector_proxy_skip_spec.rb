@@ -18,7 +18,7 @@ RSpec.describe "QEA ProxyConnector placements" do
     document = Ea::Sources::Qea::Adapter.new(database, "proxy.qea").to_document
     svg = Ea::Svg::EaEmitter::Document.new(
       document.diagrams.first, model_index: document.index_by_id,
-      document: document, frame: false, content_anchor: false
+                               document: document, frame: false, content_anchor: false
     ).render
     Nokogiri::XML(svg).remove_namespaces!.xpath("//rect").size
   end

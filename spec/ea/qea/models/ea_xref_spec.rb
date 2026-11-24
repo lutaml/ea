@@ -140,7 +140,7 @@ RSpec.describe Ea::Qea::Models::EaXref do
     context "with @STEREO format" do
       it "parses stereotype description", :aggregate_failures do
         xref = described_class.new(
-          description: "@STEREO;Name=FeatureType;GUID={ABC-123};",
+          description: "@STEREO;Name=FeatureType;GUID={ABC-123};"
         )
 
         parsed = xref.parsed_description
@@ -154,7 +154,7 @@ RSpec.describe Ea::Qea::Models::EaXref do
     context "with @TAG format" do
       it "parses tag description", :aggregate_failures do
         xref = described_class.new(
-          description: "@TAG;Name=author;Value=John;GUID={DEF-456};",
+          description: "@TAG;Name=author;Value=John;GUID={DEF-456};"
         )
 
         parsed = xref.parsed_description
@@ -169,7 +169,7 @@ RSpec.describe Ea::Qea::Models::EaXref do
     context "with key=value format" do
       it "parses key-value description", :aggregate_failures do
         xref = described_class.new(
-          description: "aggregation=composite;direction=source;",
+          description: "aggregation=composite;direction=source;"
         )
 
         parsed = xref.parsed_description
@@ -212,7 +212,7 @@ RSpec.describe Ea::Qea::Models::EaXref do
         "Type" => "element property",
         "Client" => "{CLIENT-GUID}",
         "Supplier" => "{SUPPLIER-GUID}",
-        "Description" => "@STEREO;Name=FeatureType;",
+        "Description" => "@STEREO;Name=FeatureType;"
       }
 
       xref = described_class.from_db_row(row)

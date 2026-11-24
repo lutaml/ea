@@ -7,15 +7,15 @@ require "ea/svg/ea_emitter/element/attribute_line_builder"
 RSpec.describe Ea::Svg::EaEmitter::Element::AttributeLineBuilder do
   let(:host) do
     Ea::Model::Klass.new(id: "HOST", name: "Host", package_id: "PKG_HOST",
-                          package_name: "host_pkg")
+                         package_name: "host_pkg")
   end
 
   let(:foreign_owner) do
     Ea::Model::Klass.new(id: "OWNER", name: "Owner", package_id: "PKG_OTHER",
-                          package_name: "other_pkg")
+                         package_name: "other_pkg")
   end
 
-  let(:lookup) { lambda { |id| id == "OWNER" ? foreign_owner : nil } }
+  let(:lookup) { ->(id) { id == "OWNER" ? foreign_owner : nil } }
 
   def build_property(attrs = {})
     defaults = { name: "prop", visibility: "public" }
@@ -133,8 +133,8 @@ RSpec.describe Ea::Svg::EaEmitter::Element::AttributeLineBuilder do
 
     it "is omitted when owner is in the same package as host" do
       same_pkg_owner = Ea::Model::Klass.new(id: "SIBLING", package_id: "PKG_HOST",
-                                              package_name: "host_pkg")
-      lookup = lambda { |id| id == "SIBLING" ? same_pkg_owner : nil }
+                                            package_name: "host_pkg")
+      lookup = ->(id) { id == "SIBLING" ? same_pkg_owner : nil }
       prop = build_property(name: "cousin", owner_id: "SIBLING")
       line = described_class.new(prop, host: host, lookup: lookup).to_s
       expect(line).to include("+ cousin")

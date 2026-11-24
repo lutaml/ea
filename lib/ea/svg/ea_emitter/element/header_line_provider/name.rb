@@ -35,9 +35,7 @@ module Ea
             def self.wrapped_name_lines(classifier, context, weight)
               name = display_name(classifier)
               name = "#{context.foreign_package_name}::#{name}" if context.foreign_package_name
-              unless context.bounds_width && name_exceeds_bounds?(name, context, weight)
-                return [[name, weight]]
-              end
+              return [[name, weight]] unless context.bounds_width && name_exceeds_bounds?(name, context, weight)
 
               if (qualified = name.match(/\A(.+?:{1,2})([^:\s].*)\z/))
                 [[qualified[1], weight], [qualified[2], weight]]

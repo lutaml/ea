@@ -51,9 +51,7 @@ RSpec.describe Ea::Qea::Infrastructure::TableReader do
 
     it "returns records as hashes" do
       results = reader.all(limit: 1)
-      if results.any?
-        expect(results.first).to be_a(Hash)
-      end
+      expect(results.first).to be_a(Hash) if results.any?
     end
 
     it "respects limit parameter" do
@@ -98,7 +96,7 @@ RSpec.describe Ea::Qea::Infrastructure::TableReader do
         results = reader.where(
           "Object_Type = ? AND Package_ID = ?",
           obj_type,
-          pkg_id,
+          pkg_id
         )
         results.each do |record|
           expect(record["Object_Type"]).to eq(obj_type)
@@ -113,7 +111,7 @@ RSpec.describe Ea::Qea::Infrastructure::TableReader do
     end
 
     it "returns empty array when no matches" do
-      results = reader.where("Object_ID = ?", -999999)
+      results = reader.where("Object_ID = ?", -999_999)
       expect(results).to eq([])
     end
   end
@@ -152,7 +150,7 @@ RSpec.describe Ea::Qea::Infrastructure::TableReader do
     end
 
     it "returns 0 when no matches" do
-      count = reader.count_where("Object_ID = ?", -999999)
+      count = reader.count_where("Object_ID = ?", -999_999)
       expect(count).to eq(0)
     end
   end
@@ -171,7 +169,7 @@ RSpec.describe Ea::Qea::Infrastructure::TableReader do
     end
 
     it "returns nil when not found" do
-      result = reader.find_by_pk("Object_ID", -999999)
+      result = reader.find_by_pk("Object_ID", -999_999)
       expect(result).to be_nil
     end
   end
@@ -190,7 +188,7 @@ RSpec.describe Ea::Qea::Infrastructure::TableReader do
     end
 
     it "returns nil when not found" do
-      result = reader.find_first("Object_ID = ?", -999999)
+      result = reader.find_first("Object_ID = ?", -999_999)
       expect(result).to be_nil
     end
 
@@ -232,14 +230,14 @@ RSpec.describe Ea::Qea::Infrastructure::TableReader do
     end
 
     it "returns false when no records match" do
-      exists = reader.exists?("Object_ID = ?", -999999)
+      exists = reader.exists?("Object_ID = ?", -999_999)
       expect(exists).to be false
     end
   end
 
   describe "#select" do
     it "selects specific columns", :aggregate_failures do
-      results = reader.select(["Object_ID", "Name"], nil, limit: 5)
+      results = reader.select(%w[Object_ID Name], nil, limit: 5)
       expect(results).to be_an(Array)
       if results.any?
         result = results.first
@@ -252,12 +250,12 @@ RSpec.describe Ea::Qea::Infrastructure::TableReader do
       if all_results.any? && all_results.first["Object_Type"]
         obj_type = all_results.first["Object_Type"]
         results = reader.select(
-          ["Object_ID", "Name"],
+          %w[Object_ID Name],
           "Object_Type = ?",
-          obj_type,
+          obj_type
         )
         results.each do |record|
-          expect(record.keys.sort).to eq(["Name", "Object_ID"].sort)
+          expect(record.keys.sort).to eq(%w[Name Object_ID].sort)
         end
       end
     end
@@ -310,9 +308,7 @@ RSpec.describe Ea::Qea::Infrastructure::TableReader do
       it "reads connector records", :aggregate_failures do
         results = conn_reader.all(limit: 5)
         expect(results).to be_an(Array)
-        if results.any?
-          expect(results.first).to have_key("Connector_ID")
-        end
+        expect(results.first).to have_key("Connector_ID") if results.any?
       end
     end
   end

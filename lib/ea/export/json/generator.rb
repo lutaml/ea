@@ -76,27 +76,27 @@ module Ea
         # Per-class projections: each entry is a proc returning a Hash.
         # Add new entries here as we curate more model types.
         PROJECTORS = {
-          Ea::Qea::Models::EaObject => ->(r) do
+          Ea::Qea::Models::EaObject => lambda do |r|
             {
               "id" => r.ea_object_id, "name" => r.name,
               "type" => r.object_type, "author" => r.author,
               "package_id" => r.package_id, "version" => r.version
             }
           end,
-          Ea::Qea::Models::EaAttribute => ->(r) do
+          Ea::Qea::Models::EaAttribute => lambda do |r|
             {
               "id" => r.id, "name" => r.name,
               "type" => r.type, "object_id" => r.ea_object_id,
               "visibility" => r.scope
             }
           end,
-          Ea::Qea::Models::EaPackage => ->(r) do
+          Ea::Qea::Models::EaPackage => lambda do |r|
             {
               "id" => r.package_id, "name" => r.name,
               "parent_id" => r.parent_id
             }
           end,
-          Ea::Qea::Models::EaConnector => ->(r) do
+          Ea::Qea::Models::EaConnector => lambda do |r|
             {
               "id" => r.connector_id, "name" => r.name,
               "type" => r.connector_type,
@@ -104,7 +104,7 @@ module Ea
               "end_object_id" => r.end_object_id
             }
           end,
-          Ea::Qea::Models::EaDiagram => ->(r) do
+          Ea::Qea::Models::EaDiagram => lambda do |r|
             {
               "id" => r.diagram_id, "name" => r.name,
               "type" => r.diagram_type, "package_id" => r.package_id

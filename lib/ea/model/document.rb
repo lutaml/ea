@@ -46,7 +46,7 @@ module Ea
       attribute :stereotypes, Stereotype, collection: true, initialize_empty: true
       attribute :notes, Note, collection: true, initialize_empty: true
       attribute :instance_specifications, InstanceSpecification, collection: true,
-                                          initialize_empty: true
+                                                                 initialize_empty: true
       attribute :diagrams, Diagram, collection: true, initialize_empty: true
 
       # Flat lookup indexes, built lazily by consumers. Not
@@ -135,7 +135,7 @@ module Ea
         map "stereotypes", to: :stereotypes, render_empty: true
         map "notes", to: :notes, render_empty: true
         map "instanceSpecifications", to: :instance_specifications,
-            render_empty: true
+                                      render_empty: true
         map "diagrams", to: :diagrams, render_empty: true
       end
     end

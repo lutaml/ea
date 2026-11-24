@@ -153,7 +153,7 @@ module Ea
 
       def show_connector_labels?
         style_ex_flags.fetch("SuppConnectorLabels",
-                              DEFAULT_SUPPRESS_CONN_LABELS) != "1"
+                             DEFAULT_SUPPRESS_CONN_LABELS) != "1"
       end
 
       def hide_qualifiers?

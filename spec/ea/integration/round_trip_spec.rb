@@ -15,7 +15,7 @@ RSpec.describe "Round-trip stability" do
     collections = parsed["collections"]
     db.collections.each do |name, records|
       expect(collections[name.to_s].size).to eq(records.size),
-        "collection #{name}: serialized #{records.size}, deserialized #{collections[name.to_s].size}"
+                                             "collection #{name}: serialized #{records.size}, deserialized #{collections[name.to_s].size}"
     end
   end
 

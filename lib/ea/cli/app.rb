@@ -99,7 +99,10 @@ module Ea
       option :frame, type: :boolean, default: false,
                      desc: "Draw EA's diagram frame (border, tab, label); default is unframed"
       def svg(name = nil, file = nil)
-        name, file = nil, name if options[:all] && file.nil?
+        if options[:all] && file.nil?
+          file = name
+          name = nil
+        end
         Command::Svg.new(name: name, file: file, **symbolize(options)).call
       end
 
@@ -123,7 +126,10 @@ module Ea
       option :frame, type: :boolean, default: false,
                      desc: "Draw EA's diagram frame (border, tab, label); default is unframed"
       def render(name = nil, file = nil)
-        name, file = nil, name if options[:all] && file.nil?
+        if options[:all] && file.nil?
+          file = name
+          name = nil
+        end
         Command::Render.new(name: name, file: file, **symbolize(options)).call
       end
 

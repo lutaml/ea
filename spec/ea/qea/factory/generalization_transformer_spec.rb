@@ -14,14 +14,14 @@ RSpec.describe Ea::Qea::Factory::GeneralizationTransformer do
 
     it "returns nil for non-generalization connectors" do
       ea_conn = Ea::Qea::Models::EaConnector.new(
-        connector_type: "Association",
+        connector_type: "Association"
       )
 
       current_obj = Ea::Qea::Models::EaObject.new(
         ea_object_id: 10,
         name: "SomeClass",
         object_type: "Class",
-        ea_guid: "{SOME-GUID}",
+        ea_guid: "{SOME-GUID}"
       )
 
       result = transformer.transform(ea_conn, current_obj)
@@ -36,20 +36,20 @@ RSpec.describe Ea::Qea::Factory::GeneralizationTransformer do
         connector_type: "Generalization",
         start_object_id: 10,
         end_object_id: 20,
-        notes: "Inheritance relationship",
+        notes: "Inheritance relationship"
       )
 
       subtype_obj = Ea::Qea::Models::EaObject.new(
         ea_object_id: 10,
         name: "Car",
         object_type: "Class",
-        ea_guid: "{CAR-GUID}",
+        ea_guid: "{CAR-GUID}"
       )
 
       supertype_obj = Ea::Qea::Models::EaObject.new(
         ea_object_id: 20,
         name: "Vehicle",
-        ea_guid: "{VEHICLE-GUID}",
+        ea_guid: "{VEHICLE-GUID}"
       )
 
       # The transformer calls find_package for the current object's package_id
@@ -75,14 +75,14 @@ RSpec.describe Ea::Qea::Factory::GeneralizationTransformer do
       ea_conn = Ea::Qea::Models::EaConnector.new(
         connector_type: "Generalization",
         start_object_id: 10,
-        end_object_id: 99,
+        end_object_id: 99
       )
 
       subtype_obj = Ea::Qea::Models::EaObject.new(
         ea_object_id: 10,
         name: "Subclass",
         object_type: "Class",
-        ea_guid: "{SUB-GUID}",
+        ea_guid: "{SUB-GUID}"
       )
 
       allow(database).to receive(:find_package).and_return(nil)

@@ -19,7 +19,7 @@ RSpec.describe Ea::Qea::Factory::OperationTransformer do
         type: "String",
         scope: "Public",
         ea_guid: "{OP-GUID}",
-        notes: "Returns the name",
+        notes: "Returns the name"
       )
 
       allow(database).to receive(:operation_params_for).with(1).and_return([])
@@ -37,7 +37,7 @@ RSpec.describe Ea::Qea::Factory::OperationTransformer do
     it "builds parameter type from operation parameters" do
       ea_op = Ea::Qea::Models::EaOperation.new(
         operationid: 1,
-        name: "setName",
+        name: "setName"
       )
 
       param = Ea::Qea::Models::EaOperationParam.new(
@@ -45,7 +45,7 @@ RSpec.describe Ea::Qea::Factory::OperationTransformer do
         name: "newName",
         type: "String",
         kind: "in",
-        pos: 0,
+        pos: 0
       )
 
       allow(database).to receive(:operation_params_for).with(1).and_return([param])
@@ -58,7 +58,7 @@ RSpec.describe Ea::Qea::Factory::OperationTransformer do
     it "handles multiple parameters" do
       ea_op = Ea::Qea::Models::EaOperation.new(
         operationid: 1,
-        name: "calculate",
+        name: "calculate"
       )
 
       params = [
@@ -67,15 +67,15 @@ RSpec.describe Ea::Qea::Factory::OperationTransformer do
           name: "x",
           type: "Integer",
           kind: "in",
-          pos: 0,
+          pos: 0
         ),
         Ea::Qea::Models::EaOperationParam.new(
           operationid: 1,
           name: "y",
           type: "Integer",
           kind: "in",
-          pos: 1,
-        ),
+          pos: 1
+        )
       ]
 
       allow(database).to receive(:operation_params_for).with(1).and_return(params)
@@ -88,7 +88,7 @@ RSpec.describe Ea::Qea::Factory::OperationTransformer do
     it "filters out return parameters" do
       ea_op = Ea::Qea::Models::EaOperation.new(
         operationid: 1,
-        name: "getValue",
+        name: "getValue"
       )
 
       params = [
@@ -97,8 +97,8 @@ RSpec.describe Ea::Qea::Factory::OperationTransformer do
           name: "return",
           type: "String",
           kind: "return",
-          pos: 0,
-        ),
+          pos: 0
+        )
       ]
 
       allow(database).to receive(:operation_params_for).with(1).and_return(params)
@@ -112,7 +112,7 @@ RSpec.describe Ea::Qea::Factory::OperationTransformer do
       ea_op = Ea::Qea::Models::EaOperation.new(
         operationid: 1,
         name: "create",
-        stereotype: "constructor",
+        stereotype: "constructor"
       )
 
       allow(database).to receive(:operation_params_for).with(1).and_return([])

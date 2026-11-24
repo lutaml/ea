@@ -12,7 +12,7 @@ module Ea
 
         private
 
-        def detect_circular_packages # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity,Metrics/MethodLength
+        def detect_circular_packages # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength
           packages.each do |package|
             next if package.root?
 
@@ -28,7 +28,7 @@ module Ea
                   entity_name: package.name,
                   field: "parent_id",
                   message: "Circular package hierarchy: " \
-                           "#{visited.to_a.join(' -> ')} -> #{current_id}",
+                           "#{visited.to_a.join(" -> ")} -> #{current_id}"
                 )
                 break
               end
@@ -42,7 +42,7 @@ module Ea
           end
         end
 
-        def detect_circular_generalizations # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def detect_circular_generalizations # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength
           # Build generalization graph
           generalizations = connectors.select(&:generalization?)
 
@@ -56,8 +56,8 @@ module Ea
 
               # Find all parents of current object
               parents = generalizations
-                .select { |g| g.start_object_id == current_id }
-                .map(&:end_object_id)
+                        .select { |g| g.start_object_id == current_id }
+                        .map(&:end_object_id)
 
               parents.each do |parent_id|
                 if visited.include?(parent_id)
@@ -68,7 +68,7 @@ module Ea
                     entity_id: obj.ea_object_id.to_s,
                     entity_name: obj.name,
                     message: "Circular inheritance detected: " \
-                             "#{format_inheritance_path(visited, parent_id)}",
+                             "#{format_inheritance_path(visited, parent_id)}"
                   )
                   next
                 end
@@ -80,7 +80,7 @@ module Ea
           end
         end
 
-        def format_inheritance_path(visited_ids, circular_id) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+        def format_inheritance_path(visited_ids, circular_id) # rubocop:disable Metrics/CyclomaticComplexity
           path = visited_ids.map do |id|
             obj = objects.find { |o| o.ea_object_id == id }
             obj&.name || id.to_s

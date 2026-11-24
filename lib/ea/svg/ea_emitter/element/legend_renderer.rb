@@ -196,7 +196,7 @@ module Ea
 
           def title_text_width
             estimated_width(legend.title, title_font_size, weight: 700, text_family: heading_family,
-                                       legend_title: true)
+                                                           legend_title: true)
           end
 
           def heading_family

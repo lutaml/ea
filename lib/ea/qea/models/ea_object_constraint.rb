@@ -37,11 +37,10 @@ module Ea
           "t_objectconstraint"
         end
 
-
         COLUMN_MAP = {
           "ConstraintID" => :constraint_id,
           "Object_ID" => :ea_object_id,
-          "ConstraintType" => :constraint_type,
+          "ConstraintType" => :constraint_type
         }.freeze
 
         def self.column_map

@@ -27,7 +27,7 @@ module Ea
               field: "package_id",
               reference: obj.package_id.to_s,
               message: "Orphaned object: package #{obj.package_id} " \
-                       "does not exist",
+                       "does not exist"
             )
           end
         end
@@ -44,7 +44,7 @@ module Ea
               field: "object_id",
               reference: attr.ea_object_id.to_s,
               message: "Orphaned attribute: parent object " \
-                       "#{attr.ea_object_id} does not exist",
+                       "#{attr.ea_object_id} does not exist"
             )
           end
         end
@@ -61,7 +61,7 @@ module Ea
               field: "object_id",
               reference: op.ea_object_id.to_s,
               message: "Orphaned operation: parent object " \
-                       "#{op.ea_object_id} does not exist",
+                       "#{op.ea_object_id} does not exist"
             )
           end
         end
@@ -82,9 +82,7 @@ module Ea
           # Objects referenced by attributes (as classifiers)
           attributes.each do |attr|
             referenced_ids << attr.ea_object_id
-            if attr.classifier&.to_i&.positive?
-              referenced_ids << attr.classifier.to_i
-            end
+            referenced_ids << attr.classifier.to_i if attr.classifier&.to_i&.positive?
           end
 
           # Objects referenced by operations
@@ -111,7 +109,7 @@ module Ea
               entity_type: :class,
               entity_id: obj_id.to_s,
               entity_name: obj.name,
-              message: "Unreferenced object (not used in any relationship)",
+              message: "Unreferenced object (not used in any relationship)"
             )
           end
         end

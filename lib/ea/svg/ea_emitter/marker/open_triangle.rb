@@ -23,10 +23,10 @@ module Ea
             anchor = whole_end_at_source ? target : source
             base = whole_end_at_source ? before_target : after_source
             shape = if %w[Dependency InformationFlow].include?(effective_type?(connector))
-                    :dependency_arrow
-                  else
-                    :triangle
-                  end
+                      :dependency_arrow
+                    else
+                      :triangle
+                    end
             [Registry::Spec.new(shape: shape, anchor: anchor, base: base)]
           end
 

@@ -36,4 +36,3 @@ module Ea
     end
   end
 end
-

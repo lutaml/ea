@@ -51,9 +51,7 @@ module Ea
         # @raise [Ea::Error] if the file is neither SQLite nor a ZIP archive
         # @raise [SQLite3::Exception] if connection fails
         def connect
-          unless File.exist?(@file_path)
-            raise Errno::ENOENT, "QEA file not found: #{@file_path}"
-          end
+          raise Errno::ENOENT, "QEA file not found: #{@file_path}" unless File.exist?(@file_path)
 
           @connection = SQLite3::Database.new(openable_path, readonly: true)
           @connection.results_as_hash = true

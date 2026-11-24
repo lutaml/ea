@@ -12,13 +12,13 @@ require "ea/svg/parity"
 # it, so any divergence is a real emitter bug.
 RSpec.describe "EA QEA-direct regression", :qea_regression do
   QEA_PATH = File.expand_path("../../../examples/qea/20251010_current_plateau_v5.1.qmi",
-                                __dir__)
+                              __dir__)
   QEA_PATH_ALT = File.expand_path("../../../examples/qea/20251010_current_plateau_v5.1.qea",
-                                    __dir__)
+                                  __dir__)
   # Constants defined inside RSpec.describe leak to top-level, so
   # use a unique name to avoid collision with visual_regression_spec.
   QEA_REF_DIR = File.expand_path("../../../examples/exports/20251010_current_plateau_v5/Images",
-                                  __dir__).freeze
+                                 __dir__).freeze
 
   before(:all) do
     skip "QEA not available at #{QEA_PATH} or #{QEA_PATH_ALT}" unless File.exist?(QEA_PATH_ALT)
@@ -28,9 +28,9 @@ RSpec.describe "EA QEA-direct regression", :qea_regression do
   it "renders every diagram from the QEA without raising" do
     doc = build_qea_doc
     doc.diagrams.each do |diagram|
-      expect {
+      expect do
         Ea::Svg::EaEmitter::Document.new(diagram, model_index: doc.index_by_id, frame: true).render
-      }.not_to raise_error
+      end.not_to raise_error
     end
   end
 
@@ -59,8 +59,8 @@ RSpec.describe "EA QEA-direct regression", :qea_regression do
 
     ratio = within.to_f / total
     expect(ratio).to be > 0.6,
-      "only #{within}/#{total} within tolerance; first 5:\n" +
-      failures.first(5).join("\n")
+                     "only #{within}/#{total} within tolerance; first 5:\n" +
+                     failures.first(5).join("\n")
   end
 
   # ---- helpers ----

@@ -72,48 +72,48 @@ RSpec.describe Ea::Ocl do
 
     it "evaluates boolean literals" do
       expect(described_class::Evaluator.evaluate(
-        described_class::Parser.parse("true"), context
-      )).to be(true)
+               described_class::Parser.parse("true"), context
+             )).to be(true)
     end
 
     it "evaluates 'and' / 'or' / 'not'" do
       expect(described_class::Evaluator.evaluate(
-        described_class::Parser.parse("true and false"), context
-      )).to be(false)
+               described_class::Parser.parse("true and false"), context
+             )).to be(false)
       expect(described_class::Evaluator.evaluate(
-        described_class::Parser.parse("true or false"), context
-      )).to be(true)
+               described_class::Parser.parse("true or false"), context
+             )).to be(true)
       expect(described_class::Evaluator.evaluate(
-        described_class::Parser.parse("not false"), context
-      )).to be(true)
+               described_class::Parser.parse("not false"), context
+             )).to be(true)
     end
 
     describe "collection size() and isEmpty()" do
       it "returns the count for an Array" do
         ast = described_class::Parser.parse("self.items->size()")
         result = described_class::Evaluator.evaluate(ast,
-          Struct.new(:items).new([1, 2, 3, 4, 5]))
+                                                     Struct.new(:items).new([1, 2, 3, 4, 5]))
         expect(result).to eq(5)
       end
 
       it "returns 0 for an empty Array" do
         ast = described_class::Parser.parse("self.items->size()")
         result = described_class::Evaluator.evaluate(ast,
-          Struct.new(:items).new([]))
+                                                     Struct.new(:items).new([]))
         expect(result).to eq(0)
       end
 
       it "isEmpty returns true for an empty Array" do
         ast = described_class::Parser.parse("self.items->isEmpty()")
         result = described_class::Evaluator.evaluate(ast,
-          Struct.new(:items).new([]))
+                                                     Struct.new(:items).new([]))
         expect(result).to be(true)
       end
 
       it "isEmpty returns false for a non-empty Array" do
         ast = described_class::Parser.parse("self.items->isEmpty()")
         result = described_class::Evaluator.evaluate(ast,
-          Struct.new(:items).new([1]))
+                                                     Struct.new(:items).new([1]))
         expect(result).to be(false)
       end
     end
@@ -122,27 +122,27 @@ RSpec.describe Ea::Ocl do
       it "evaluates >, <, >=, <=" do
         ctx = Struct.new(:age, :count, :max).new(20, 5, 10)
         expect(described_class::Evaluator.evaluate(
-          described_class::Parser.parse("self.age >= 18"), ctx
-        )).to be(true)
+                 described_class::Parser.parse("self.age >= 18"), ctx
+               )).to be(true)
         expect(described_class::Evaluator.evaluate(
-          described_class::Parser.parse("self.age < 30"), ctx
-        )).to be(true)
+                 described_class::Parser.parse("self.age < 30"), ctx
+               )).to be(true)
         expect(described_class::Evaluator.evaluate(
-          described_class::Parser.parse("self.count > self.max"), ctx
-        )).to be(false)
+                 described_class::Parser.parse("self.count > self.max"), ctx
+               )).to be(false)
         expect(described_class::Evaluator.evaluate(
-          described_class::Parser.parse("self.count <= self.max"), ctx
-        )).to be(true)
+                 described_class::Parser.parse("self.count <= self.max"), ctx
+               )).to be(true)
       end
 
       it "evaluates = and !=" do
         ctx = Struct.new(:x, :y).new(5, 5)
         expect(described_class::Evaluator.evaluate(
-          described_class::Parser.parse("self.x = self.y"), ctx
-        )).to be(true)
+                 described_class::Parser.parse("self.x = self.y"), ctx
+               )).to be(true)
         expect(described_class::Evaluator.evaluate(
-          described_class::Parser.parse("self.x != self.y"), ctx
-        )).to be(false)
+                 described_class::Parser.parse("self.x != self.y"), ctx
+               )).to be(false)
       end
 
       it "raises UnsupportedError for non-numeric operands" do

@@ -46,7 +46,7 @@ module Ea
 
           attrs = attributes_for(element)
           rows.concat(attrs.each_with_index.map do |a, i|
-            ["attr[#{i}]", "#{a.name}: #{a.type || 'void'}"]
+            ["attr[#{i}]", "#{a.name}: #{a.type || "void"}"]
           end)
 
           rows

@@ -63,8 +63,10 @@ RSpec.describe "ea svg/render CLI corrections" do
   let(:framed_box) { "0 0 390 127" }
 
   around do |example|
-    Dir.mktmpdir do |dir| @dir = dir
- example.run end
+    Dir.mktmpdir do |dir|
+      @dir = dir
+      example.run
+    end
   end
 
   def run_cli(*args)

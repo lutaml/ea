@@ -9,7 +9,7 @@ module Ea
 
         def check(model)
           classes = (model.collections[:objects] || [])
-                     .select { |o| o.object_type == "Class" }
+                    .select { |o| o.object_type == "Class" }
           grouped = classes.group_by { |c| [c.package_id, c.name] }
           grouped.flat_map do |(pkg_id, name), group|
             next [] if group.size == 1

@@ -51,7 +51,7 @@ module Ea
             return nil if shapes.empty?
 
             Ea::Shapescript::Renderer.render(shapes, fill: "#FAF1EC",
-                                             stroke: "#69738C")
+                                                     stroke: "#69738C")
           end
 
           # @return [String, nil] ShapeScript source for the stereotype, if any

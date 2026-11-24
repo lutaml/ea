@@ -55,12 +55,12 @@ RSpec.describe "ea spa CLI command" do
   describe "mode handling" do
     it "rejects an unsupported mode" do
       @bogus_out = "/tmp/ea_spa_bogus.html"
-      expect {
+      expect do
         capture_stdout do
           app.invoke(:spa, [fixtures_path("basic.qea")],
                      mode: "bogus", output: @bogus_out)
         end
-      }.to raise_error(ArgumentError, /Unknown SPA mode/)
+      end.to raise_error(ArgumentError, /Unknown SPA mode/)
     end
   end
 end

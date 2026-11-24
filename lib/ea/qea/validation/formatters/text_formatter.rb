@@ -30,7 +30,7 @@ module Ea
             @options = {
               color: true,
               verbose: false,
-              limit: nil,
+              limit: nil
             }.merge(options)
           end
 
@@ -99,7 +99,7 @@ module Ea
               "Messages:",
               "  Errors:   #{colorize(result.errors.size.to_s, :red)}",
               "  Warnings: #{colorize(result.warnings.size.to_s, :yellow)}",
-              "  Info:     #{result.info.size}",
+              "  Info:     #{result.info.size}"
             ].join("\n")
           end
 
@@ -141,7 +141,7 @@ module Ea
               remaining = messages.size - options[:limit]
               lines << colorize(
                 "  ... and #{remaining} more (use --verbose to see all)",
-                :yellow,
+                :yellow
               )
             end
 
@@ -163,7 +163,7 @@ module Ea
             [
               "    #{icon} #{colorize(entity_info, :blue)}",
               "      #{message.message}",
-              "      ID: #{message.entity_id}",
+              "      ID: #{message.entity_id}"
             ].join("\n")
           end
 
@@ -226,7 +226,7 @@ module Ea
                      else 0
                      end
 
-            "\e[#{codes.join(';')}m#{text}\e[0m"
+            "\e[#{codes.join(";")}m#{text}\e[0m"
           end
         end
       end

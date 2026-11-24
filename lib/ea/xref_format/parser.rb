@@ -37,7 +37,7 @@ module Ea
         @STEREO;
         (.*?)
         (?:@ENDSTEREO;|\z)
-      /mx.freeze
+      /mx
 
       def parse_stereotype(description)
         match = description.match(STEREO_REGEX)
@@ -56,7 +56,7 @@ module Ea
         @PROP=
         (.*?)
         @ENDPROP;
-      /mx.freeze
+      /mx
 
       def parse_properties(description)
         blocks = description.scan(PROP_REGEX).flatten
@@ -98,7 +98,7 @@ module Ea
       # Extracts the content between @TAG=...@ENDTAG; markers.
       # Returns nil when the tag is absent.
       def extract_tagged_value(block, tag)
-        pattern = /@#{tag}=(.*?)@END#{tag};/m.freeze
+        pattern = /@#{tag}=(.*?)@END#{tag};/m
         match = block.match(pattern)
         match ? match[1] : nil
       end

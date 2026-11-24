@@ -2,7 +2,6 @@
 
 require "spec_helper"
 require "json"
-                 "json_formatter"
 
 RSpec.describe Ea::Qea::Validation::Formatters::JsonFormatter do
   let(:result) { Ea::Qea::Validation::ValidationResult.new }
@@ -56,7 +55,7 @@ RSpec.describe Ea::Qea::Validation::Formatters::JsonFormatter do
           entity_type: :class,
           entity_id: "123",
           entity_name: "TestClass",
-          message: "Class not found",
+          message: "Class not found"
         )
       end
 
@@ -116,7 +115,7 @@ RSpec.describe Ea::Qea::Validation::Formatters::JsonFormatter do
           entity_type: :class,
           entity_id: "456",
           entity_name: "UndocumentedClass",
-          message: "Class lacks documentation",
+          message: "Class lacks documentation"
         )
       end
 
@@ -144,7 +143,7 @@ RSpec.describe Ea::Qea::Validation::Formatters::JsonFormatter do
           entity_type: :class,
           entity_id: "123",
           entity_name: "TestClass",
-          message: "Test error",
+          message: "Test error"
         )
 
         formatter = described_class.new(result: result, pretty: true)
@@ -161,7 +160,7 @@ RSpec.describe Ea::Qea::Validation::Formatters::JsonFormatter do
           entity_type: :class,
           entity_id: "123",
           entity_name: "TestClass",
-          message: "Test error",
+          message: "Test error"
         )
 
         pretty_formatter = described_class.new(result: result, pretty: true)
@@ -181,21 +180,21 @@ RSpec.describe Ea::Qea::Validation::Formatters::JsonFormatter do
           entity_type: :class,
           entity_id: "1",
           entity_name: "ErrorClass",
-          message: "Critical error",
+          message: "Critical error"
         )
         result.add_warning(
           category: :missing_documentation,
           entity_type: :class,
           entity_id: "2",
           entity_name: "WarningClass",
-          message: "Minor warning",
+          message: "Minor warning"
         )
         result.add_info(
           category: :usage_tip,
           entity_type: :package,
           entity_id: "3",
           entity_name: "InfoPackage",
-          message: "Helpful tip",
+          message: "Helpful tip"
         )
       end
 

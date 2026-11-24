@@ -34,10 +34,10 @@ module Ea
 
         # @return name of the upper packaged element
         def upper_packaged_element
-          if @options[:with_gen]
-            e = @lookup.find_upper_level_packaged_element(@model.xmi_id)
-            e&.name
-          end
+          return unless @options[:with_gen]
+
+          e = @lookup.find_upper_level_packaged_element(@model.xmi_id)
+          e&.name
         end
 
         def subtype_of

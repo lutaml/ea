@@ -4,7 +4,7 @@ module Ea
   module Qea
     module Factory
       class AssociationBuilder < BaseTransformer
-        ASSOC_TYPES = ["Association", "Aggregation", "Composition"].freeze
+        ASSOC_TYPES = %w[Association Aggregation Composition].freeze
 
         def load_class_associations(object_id, object_guid)
           return [] if object_id.nil?
@@ -13,7 +13,7 @@ module Ea
                                                                  "EAID")
 
           assoc_connectors = database.connectors_for_object(object_id)
-            .select { |c| ASSOC_TYPES.include?(c.connector_type) }
+                                     .select { |c| ASSOC_TYPES.include?(c.connector_type) }
 
           assoc_connectors.filter_map do |ea_connector|
             build_association(ea_connector, object_id, normalized_owner_xmi_id)
@@ -24,7 +24,7 @@ module Ea
           return [] if object_id.nil?
 
           assoc_connectors = database.connectors_for_object(object_id)
-            .select { |c| ASSOC_TYPES.include?(c.connector_type) }
+                                     .select { |c| ASSOC_TYPES.include?(c.connector_type) }
           obj = find_object_by_id(object_id)
           obj_pkg_name = find_package_name(obj&.package_id)
 
@@ -35,7 +35,7 @@ module Ea
         end
 
         def build_connector_attribute(ea_connector, object_id, obj,
-obj_pkg_name)
+                                      obj_pkg_name)
           if ea_connector.start_object_id == object_id
             build_end_attribute(ea_connector, obj, obj_pkg_name)
           elsif ea_connector.end_object_id == object_id
@@ -176,7 +176,7 @@ obj_pkg_name)
             gen_name: obj.name,
             name_ns: obj_pkg_name,
             type_ns: find_package_name(peer_obj.package_id),
-            is_src: is_src,
+            is_src: is_src
           )
         end
 

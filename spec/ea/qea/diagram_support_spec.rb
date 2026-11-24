@@ -105,7 +105,7 @@ RSpec.describe "Comprehensive Diagram Support" do
       expect(uml_diagram).to be_a(Lutaml::Uml::Diagram)
       expect(uml_diagram.name).to eq(ea_diagram.name)
       expect(uml_diagram.xmi_id)
-        .to eq("EAID_#{ea_diagram.ea_guid.tr('{}', '').tr('-', '_')}")
+        .to eq("EAID_#{ea_diagram.ea_guid.tr("{}", "").tr("-", "_")}")
     end
 
     it "includes diagram type in transformation" do
@@ -206,11 +206,11 @@ RSpec.describe "Comprehensive Diagram Support" do
     it "handles diagrams with many objects" do
       # Find a diagram with the most objects
       diagram_objects_by_diagram = database.diagram_objects
-        .group_by(&:diagram_id)
+                                           .group_by(&:diagram_id)
 
       largest_diagram_id = diagram_objects_by_diagram
-        .max_by { |_id, objs| objs.size }
-        &.first
+                           .max_by { |_id, objs| objs.size }
+                           &.first
 
       if largest_diagram_id
         diagram = database.find_diagram(largest_diagram_id)

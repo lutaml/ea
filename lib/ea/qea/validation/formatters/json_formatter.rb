@@ -26,7 +26,7 @@ module Ea
           def initialize(result: nil, **options)
             @result = result
             @options = {
-              pretty: false,
+              pretty: false
             }.merge(options)
           end
 
@@ -53,7 +53,7 @@ module Ea
               summary: build_summary,
               messages: build_messages,
               by_category: build_by_category,
-              by_severity: build_by_severity,
+              by_severity: build_by_severity
             }
           end
 
@@ -66,7 +66,7 @@ module Ea
               total_messages: result.messages.size,
               error_count: result.errors.size,
               warning_count: result.warnings.size,
-              info_count: result.info.size,
+              info_count: result.info.size
             }
           end
 
@@ -82,7 +82,7 @@ module Ea
                 entity_id: message.entity_id,
                 entity_name: message.entity_name,
                 message: message.message,
-                context: message.context,
+                context: message.context
               }
             end
           end
@@ -94,7 +94,7 @@ module Ea
             result.messages.group_by(&:category).transform_values do |msgs|
               {
                 count: msgs.size,
-                messages: msgs.map(&:message),
+                messages: msgs.map(&:message)
               }
             end
           end
@@ -106,7 +106,7 @@ module Ea
             {
               errors: format_severity_group(result.errors),
               warnings: format_severity_group(result.warnings),
-              info: format_severity_group(result.info),
+              info: format_severity_group(result.info)
             }
           end
 
@@ -118,16 +118,16 @@ module Ea
             {
               count: messages.size,
               by_category: messages
-                .group_by(&:category).transform_values do |msgs|
-                  msgs.map do |msg|
-                    {
-                      entity_type: msg.entity_type,
-                      entity_id: msg.entity_id,
-                      entity_name: msg.entity_name,
-                      message: msg.message,
-                    }
-                  end
-                end,
+                           .group_by(&:category).transform_values do |msgs|
+                msgs.map do |msg|
+                  {
+                    entity_type: msg.entity_type,
+                    entity_id: msg.entity_id,
+                    entity_name: msg.entity_name,
+                    message: msg.message
+                  }
+                end
+              end
             }
           end
         end

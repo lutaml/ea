@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 module Ea
   module Model
     # A "ghost" classifier name rendered near a connector endpoint

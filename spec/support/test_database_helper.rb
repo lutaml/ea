@@ -28,7 +28,7 @@ module TestDatabaseHelper
       diagram_types: [],
       object_types: [],
       status_types: [],
-      complexity_types: [],
+      complexity_types: []
     }
     default_collections.merge(collections).each do |name, records|
       db.add_collection(name, records)

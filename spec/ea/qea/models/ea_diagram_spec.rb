@@ -188,7 +188,7 @@ RSpec.describe Ea::Qea::Models::EaDiagram do
         "Package_ID" => 456,
         "Name" => "MyDiagram",
         "Diagram_Type" => "Logical",
-        "ea_guid" => "{GUID}",
+        "ea_guid" => "{GUID}"
       }
 
       diagram = described_class.from_db_row(row)

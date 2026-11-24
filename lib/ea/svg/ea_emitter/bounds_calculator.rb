@@ -31,8 +31,6 @@ module Ea
         INSET_TOP = 40
         INSET_BOTTOM = 36
 
-        attr_reader :diagram, :model_index
-
         # Where the leftmost model x lands: 30 + min_x capped at 35. A
         # negative min_x keeps the 30 of min_x 0 (the corpus has none),
         # so content left of the origin is not drawn off the canvas.
@@ -45,7 +43,7 @@ module Ea
           @model_index = model_index
         end
 
-        attr_reader :effective_inset_left, :max_x, :max_y
+        attr_reader :diagram, :model_index, :effective_inset_left, :max_x, :max_y
 
         def compute
           points = element_points
@@ -78,7 +76,7 @@ module Ea
             next unless subtitle_extends_below?(e)
 
             pts << [primary.x, primary.y + primary.height +
-                                 SUBTITLE_CANVAS_EXTRA]
+                               SUBTITLE_CANVAS_EXTRA]
           end
           pts
         end
@@ -105,14 +103,14 @@ module Ea
               pts << [primary.x + primary.width, primary.y + primary.height]
               if subtitle_extends_below?(e)
                 pts << [primary.x, primary.y + primary.height +
-                                     SUBTITLE_CANVAS_EXTRA]
+                                   SUBTITLE_CANVAS_EXTRA]
               end
             end
-            if e.bounds && e.image_bounds
-              ib = e.image_bounds
-              pts << [ib.x, ib.y]
-              pts << [ib.x + ib.width, ib.y + ib.height]
-            end
+            next unless e.bounds && e.image_bounds
+
+            ib = e.image_bounds
+            pts << [ib.x, ib.y]
+            pts << [ib.x + ib.width, ib.y + ib.height]
           end
           pts
         end

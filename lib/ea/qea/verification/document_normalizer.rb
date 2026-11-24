@@ -21,7 +21,7 @@ module Ea
         #
         # @param document [Lutaml::Uml::Document] The document to process
         # @return [void]
-        def remove_xmi_ids(document) # rubocop:disable Metrics/AbcSize
+        def remove_xmi_ids(document)
           # Remove XMI IDs from packages recursively
           process_packages(document.packages) if document.packages
 
@@ -71,7 +71,7 @@ module Ea
         private
 
         # Process packages recursively to remove XMI IDs
-        def process_packages(packages) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
+        def process_packages(packages)
           packages.each do |package|
             package.xmi_id = nil
             process_classes(package.classes) if package.classes
@@ -100,9 +100,7 @@ module Ea
             end
 
             # Process nested classes
-            if klass.is_a?(Lutaml::Uml::Package) && klass.classes
-              process_classes(klass.classes)
-            end
+            process_classes(klass.classes) if klass.is_a?(Lutaml::Uml::Package) && klass.classes
           end
         end
 
@@ -110,12 +108,8 @@ module Ea
         def process_associations(associations)
           associations.each do |assoc|
             assoc.xmi_id = nil
-            if assoc.owner_end_xmi_id
-              assoc.owner_end_xmi_id = nil
-            end
-            if assoc.member_end_xmi_id
-              assoc.member_end_xmi_id = nil
-            end
+            assoc.owner_end_xmi_id = nil if assoc.owner_end_xmi_id
+            assoc.member_end_xmi_id = nil if assoc.member_end_xmi_id
           end
         end
 
@@ -147,7 +141,7 @@ module Ea
         end
 
         # Sort collections within classes
-        def sort_class_collections(classes) # rubocop:disable Metrics/CyclomaticComplexity
+        def sort_class_collections(classes)
           classes.each do |klass|
             klass.attributes&.sort_by! { |a| a.name || "" }
             klass.operations&.sort_by! { |o| o.name || "" }

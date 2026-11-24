@@ -14,7 +14,7 @@ RSpec.describe Ea::Svg::EaEmitter::Element::ConstraintRenderer do
   describe ".render" do
     it "emits bare {name} lines with no caption" do
       svg = described_class.render([constraint], bounds: bounds,
-                                     first_y: 240, family: "Carlito", size: 7)
+                                                 first_y: 240, family: "Carlito", size: 7)
       expect(svg).not_to include(">constraints</text>")
       expect(svg).to include(">{pattern}</text>")
       expect(svg).to start_with(%(<g style="))
@@ -23,7 +23,7 @@ RSpec.describe Ea::Svg::EaEmitter::Element::ConstraintRenderer do
 
     it "right-aligns each line to the box right edge" do
       svg = described_class.render([constraint], bounds: bounds,
-                                     first_y: 240, family: "Carlito", size: 7)
+                                                 first_y: 240, family: "Carlito", size: 7)
       len = Ea::Svg::EaEmitter::TextRenderer.estimate_width("{pattern}", 7, nil,
                                                             family: "Carlito").round
       expect(svg).to include(%(x="#{bounds.x + bounds.width - len}.00"))
@@ -33,8 +33,8 @@ RSpec.describe Ea::Svg::EaEmitter::Element::ConstraintRenderer do
       # E0C65C12/47581C14: EA's {root} x is uniformly 6px left of a
       # flush right-aligned render.
       svg = described_class.render([constraint], bounds: bounds,
-                                     first_y: 240, family: "Carlito", size: 7,
-                                     right_inset: 6)
+                                                 first_y: 240, family: "Carlito", size: 7,
+                                                 right_inset: 6)
       len = Ea::Svg::EaEmitter::TextRenderer.estimate_width("{pattern}", 7, nil,
                                                             family: "Carlito").round
       expect(svg).to include(%(x="#{bounds.x + bounds.width - len - 6}.00"))
@@ -46,7 +46,7 @@ RSpec.describe Ea::Svg::EaEmitter::Element::ConstraintRenderer do
         Ea::Model::Constraint.new(name: "beta")
       ]
       svg = described_class.render(constraints, bounds: bounds,
-                                     first_y: 240, family: "Carlito", size: 7)
+                                                first_y: 240, family: "Carlito", size: 7)
       ys = svg.scan(/y="([\d.]+)"/).flatten.map(&:to_f)
       expect(ys).to eq([240, 253])
     end

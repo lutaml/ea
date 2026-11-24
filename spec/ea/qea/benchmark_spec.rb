@@ -97,9 +97,7 @@ RSpec.describe Ea::Qea::Benchmark do
 
   describe ".compare" do
     it "compares QEA and XMI parsing" do
-      unless File.exist?(qea_file_path) && File.exist?(xmi_file_path)
-        skip "Test files not available"
-      end
+      skip "Test files not available" unless File.exist?(qea_file_path) && File.exist?(xmi_file_path)
 
       result = described_class.compare(qea_file_path, xmi_file_path)
 
@@ -113,9 +111,7 @@ RSpec.describe Ea::Qea::Benchmark do
     end
 
     it "calculates speedup correctly" do
-      unless File.exist?(qea_file_path) && File.exist?(xmi_file_path)
-        skip "Test files not available"
-      end
+      skip "Test files not available" unless File.exist?(qea_file_path) && File.exist?(xmi_file_path)
 
       result = described_class.compare(qea_file_path, xmi_file_path)
 
@@ -129,9 +125,7 @@ RSpec.describe Ea::Qea::Benchmark do
     end
 
     it "calculates improvement percentage" do
-      unless File.exist?(qea_file_path) && File.exist?(xmi_file_path)
-        skip "Test files not available"
-      end
+      skip "Test files not available" unless File.exist?(qea_file_path) && File.exist?(xmi_file_path)
 
       result = described_class.compare(qea_file_path, xmi_file_path)
 
@@ -141,9 +135,7 @@ RSpec.describe Ea::Qea::Benchmark do
 
   describe ".format_results" do
     it "formats comparison results as text" do
-      unless File.exist?(qea_file_path) && File.exist?(xmi_file_path)
-        skip "Test files not available"
-      end
+      skip "Test files not available" unless File.exist?(qea_file_path) && File.exist?(xmi_file_path)
 
       results = described_class.compare(qea_file_path, xmi_file_path)
       formatted = described_class.format_results(results)
@@ -158,9 +150,7 @@ RSpec.describe Ea::Qea::Benchmark do
     end
 
     it "includes speedup information" do
-      unless File.exist?(qea_file_path) && File.exist?(xmi_file_path)
-        skip "Test files not available"
-      end
+      skip "Test files not available" unless File.exist?(qea_file_path) && File.exist?(xmi_file_path)
 
       results = described_class.compare(qea_file_path, xmi_file_path)
       formatted = described_class.format_results(results)
@@ -173,7 +163,7 @@ RSpec.describe Ea::Qea::Benchmark do
 
     it "handles errors in results" do
       results = {
-        error: "Test error message",
+        error: "Test error message"
       }
 
       formatted = described_class.format_results(results)

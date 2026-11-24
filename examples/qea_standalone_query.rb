@@ -15,7 +15,7 @@ require "ea"
 
 QEA_PATH = ENV.fetch(
   "QEA_PATH",
-  "/Users/mulgogi/src/mn/plateau-model/20251010_current_plateau_v5.1.qea",
+  "/Users/mulgogi/src/mn/plateau-model/20251010_current_plateau_v5.1.qea"
 )
 
 abort "QEA not found: #{QEA_PATH}" unless File.exist?(QEA_PATH)
@@ -37,10 +37,10 @@ puts
 # 1. Find a class with attributes inside a real package.
 #    Use `ea_object_id` (the DB primary key), never `object_id`.
 sample = database.objects
-  .select { |o| o.object_type == "Class" && o.name && !o.name.empty? }
-  .select { |o| database.find_package(o.package_id) }
-  .select { |o| database.attributes_for_object(o.ea_object_id).any? }
-  .first
+                 .select { |o| o.object_type == "Class" && o.name && !o.name.empty? }
+                 .select { |o| database.find_package(o.package_id) }
+                 .select { |o| database.attributes_for_object(o.ea_object_id).any? }
+                 .first
 puts "Sample class: #{sample.name} (ea_object_id=#{sample.ea_object_id})"
 puts
 

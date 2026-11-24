@@ -37,7 +37,7 @@ module Ea
           return [] if object_id.nil?
 
           gen_connectors = database.connectors_for_object(object_id)
-            .select { |c| c.generalization? && c.start_object_id == object_id }
+                                   .select { |c| c.generalization? && c.start_object_id == object_id }
 
           gen_connectors.filter_map do |ea_connector|
             build_assoc_generalization(ea_connector)
@@ -76,7 +76,7 @@ module Ea
             cardinality: attr.cardinality,
             definition: attr.definition&.strip,
             association: attr.association,
-            type_ns: attr.type_ns,
+            type_ns: attr.type_ns
           }
         end
 
@@ -141,7 +141,7 @@ module Ea
 
         def ea_connector_for(object_id)
           database.connectors_for_object(object_id)
-            .find { |c| c.generalization? && c.start_object_id == object_id }
+                  .find { |c| c.generalization? && c.start_object_id == object_id }
         end
 
         def populate_generalization_attrs(generalization, object_id)
@@ -149,22 +149,22 @@ module Ea
           apply_namespace_to_attrs(general_attrs, generalization)
 
           generalization.general_attributes = general_attrs
-            .sort_by { |a| [a.name.to_s, a.id] }
+                                              .sort_by { |a| [a.name.to_s, a.id] }
 
           generalization.attributes = transform_general_attributes(
-            generalization,
+            generalization
           )
 
           generalization.owned_props = generalization.attributes
-            .reject(&:has_association)
+                                                     .reject(&:has_association)
           generalization.assoc_props = generalization.attributes
-            .select(&:has_association)
+                                                     .select(&:has_association)
         end
 
         def build_general_attrs(object_id)
           current_attrs = load_attributes(object_id)
           current_assoc_attrs = AssociationBuilder.new(database)
-            .load_association_attributes(object_id)
+                                                  .load_association_attributes(object_id)
           convert_to_general_attributes(current_attrs + current_assoc_attrs)
         end
 
@@ -177,7 +177,7 @@ module Ea
         end
 
         def populate_parent_generalization(generalization, ea_connector,
-visited)
+                                           visited)
           parent_object_id = ea_connector&.end_object_id
           return unless parent_object_id
 

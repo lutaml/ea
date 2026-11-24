@@ -459,9 +459,12 @@ module Ea
         # Interior rays use the nearest forward exit. External saved sources
         # can request the first intersecting edge in clockwise perimeter order.
         def anchor_exit(anchor, bounds, other, perimeter: false)
-          ax, ay = anchor.x.to_f, anchor.y.to_f
-          ox, oy = other.x.to_f, other.y.to_f
-          dx, dy = ox - ax, oy - ay
+          ax = anchor.x.to_f
+          ay = anchor.y.to_f
+          ox = other.x.to_f
+          oy = other.y.to_f
+          dx = ox - ax
+          dy = oy - ay
           candidates = []
           if dx != 0
             [bounds.x, bounds.x + bounds.width].each do |x|

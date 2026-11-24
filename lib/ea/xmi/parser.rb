@@ -47,7 +47,7 @@ module Ea
           id_name_mapping: @id_name_mapping,
           lookup: lookup,
           with_gen: true,
-          with_absolute_path: true,
+          with_absolute_path: true
         }
         LiquidDrops::RootDrop.new(document, guidance, options)
       end
@@ -63,9 +63,7 @@ module Ea
         @xmi_index
       end
 
-      def id_name_mapping
-        @id_name_mapping
-      end
+      attr_reader :id_name_mapping
 
       # Public lookup methods used by LookupService and Liquid drops
 
@@ -92,13 +90,11 @@ module Ea
         end
       end
 
-      def get_package_name(package) # rubocop:disable Metrics/AbcSize
+      def get_package_name(package)
         return package.name unless package.name.nil?
 
         connector = fetch_connector(package.id)
-        if connector.target&.model&.name
-          return "#{connector.target.model.name} (#{package.type.split(':').last})"
-        end
+        return "#{connector.target.model.name} (#{package.type.split(":").last})" if connector.target&.model&.name
 
         "unnamed"
       end
@@ -111,7 +107,7 @@ module Ea
         xmi_index.find_parent(klass_id)
       end
 
-      def find_subtype_of_from_owned_attribute_type(id) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+      def find_subtype_of_from_owned_attribute_type(id) # rubocop:disable Metrics/CyclomaticComplexity
         @pkg_elements_owned_attributes ||= begin
           cache = {}
           all_packaged_elements.each do |e|
@@ -119,6 +115,7 @@ module Ea
 
             e.owned_attribute.each do |oa|
               next unless oa.association && oa.uml_type && oa.uml_type.idref
+
               cache[oa.uml_type.idref] = e.name
             end
           end
@@ -128,7 +125,7 @@ module Ea
         @pkg_elements_owned_attributes[id]
       end
 
-      def find_subtype_of_from_generalization(id) # rubocop:disable Metrics/AbcSize,Metrics:CyclomaticComplexity,Metrics:MethodLength,Metrics:PerceivedComplexity
+      def find_subtype_of_from_generalization(id) # rubocop:disable Metrics:CyclomaticComplexity,Metrics:MethodLength,Metrics:PerceivedComplexity
         matched_element = xmi_index.find_element(id)
         return unless matched_element&.links&.any?
 
@@ -139,14 +136,13 @@ module Ea
         end
 
         return if matched_generalization&.end.nil?
+
         lookup_entity_name(matched_generalization.end)
       end
 
       def find_klass_packaged_element(path)
         lutaml_path = Lutaml::Path.parse(path)
-        if lutaml_path.segments.one?
-          return find_klass_packaged_element_by_name(path)
-        end
+        return find_klass_packaged_element_by_name(path) if lutaml_path.segments.one?
 
         find_klass_packaged_element_by_path(lutaml_path)
       end
@@ -240,10 +236,10 @@ module Ea
 
       def setup_model(xmi_model)
         @xmi_root_model ||= xmi_model
-        if @xmi_index.nil?
-          @xmi_index = @xmi_root_model.index
-          @id_name_mapping = @xmi_index.id_name_map
-        end
+        return unless @xmi_index.nil?
+
+        @xmi_index = @xmi_root_model.index
+        @id_name_mapping = @xmi_index.id_name_map
       end
 
       # --- Document building ---
@@ -371,8 +367,8 @@ module Ea
         return [] if package.packaged_element.nil?
 
         package.packaged_element
-          .select { |e| e.type?("uml:InstanceSpecification") }
-          .map { |spec| build_instance(spec) }
+               .select { |e| e.type?("uml:InstanceSpecification") }
+               .map { |spec| build_instance(spec) }
       end
 
       def build_instance(spec)
@@ -385,7 +381,7 @@ module Ea
         end
       end
 
-      def build_class(klass) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize,Metrics:CyclomaticComplexity,Metrics:PerceivedComplexity
+      def build_class(klass) # rubocop:disable Metrics:CyclomaticComplexity,Metrics:PerceivedComplexity
         ::Lutaml::Uml::UmlClass.new.tap do |k|
           k.xmi_id = klass.id
           k.name = klass.name
@@ -401,9 +397,7 @@ module Ea
           k.constraints = build_constraints(klass.id)
           k.association_generalization = build_assoc_generalizations(klass)
 
-          if klass.type?("uml:Class")
-            k.generalization = build_generalization(klass)
-          end
+          k.generalization = build_generalization(klass) if klass.type?("uml:Class")
         end
       end
 
@@ -411,44 +405,46 @@ module Ea
         return [] if package.packaged_element.nil?
 
         package.packaged_element
-          .select { |e| e.type?("uml:Enumeration") }
-          .map do |enum|
-            ::Lutaml::Uml::Enum.new.tap do |en|
-              en.xmi_id = enum.id
-              en.name = enum.name
-              en.values = build_values(enum)
-              en.definition = doc_node_attribute_value(enum.id, "documentation")
-              en_st = doc_node_attribute_value(enum.id, "stereotype")
-              en.stereotype = [en_st] if en_st
-            end
-          end
+               .select { |e| e.type?("uml:Enumeration") }
+               .map do |enum|
+                 ::Lutaml::Uml::Enum.new.tap do |en|
+                   en.xmi_id = enum.id
+                   en.name = enum.name
+                   en.values = build_values(enum)
+                   en.definition = doc_node_attribute_value(enum.id, "documentation")
+                   en_st = doc_node_attribute_value(enum.id, "stereotype")
+                   en.stereotype = [en_st] if en_st
+                 end
+               end
       end
 
       def build_data_types(package) # rubocop:disable Metrics:AbcSize,Metrics:MethodLength
         return [] if package.packaged_element.nil?
 
         package.packaged_element
-          .select { |e| e.type?("uml:DataType") }
-          .map do |dt|
-            ::Lutaml::Uml::DataType.new.tap do |data_type|
-              data_type.xmi_id = dt.id
-              data_type.name = dt.name
-              data_type.is_abstract = doc_node_attribute_value(dt.id, "isAbstract")
-              data_type.definition = doc_node_attribute_value(dt.id, "documentation")
-              dt_st = doc_node_attribute_value(dt.id, "stereotype")
-              data_type.stereotype = [dt_st] if dt_st
+               .select { |e| e.type?("uml:DataType") }
+               .map do |dt|
+                 ::Lutaml::Uml::DataType.new.tap do |data_type|
+                   data_type.xmi_id = dt.id
+                   data_type.name = dt.name
+                   data_type.is_abstract = doc_node_attribute_value(dt.id, "isAbstract")
+                   data_type.definition = doc_node_attribute_value(dt.id, "documentation")
+                   dt_st = doc_node_attribute_value(dt.id, "stereotype")
+                   data_type.stereotype = [dt_st] if dt_st
 
-              data_type.attributes = build_class_attributes(dt)
-              data_type.operations = build_operations(dt)
-              data_type.associations = build_associations(dt.id)
-              data_type.constraints = build_constraints(dt.id)
-              data_type.association_generalization = build_assoc_generalizations(dt)
-              # build_generalization always returns a Generalization for the
-              # element itself, so only attach when XMI declares a parent.
-              data_type.generalization =
-                build_generalization(dt) if dt.generalization&.any?
-            end
-          end
+                   data_type.attributes = build_class_attributes(dt)
+                   data_type.operations = build_operations(dt)
+                   data_type.associations = build_associations(dt.id)
+                   data_type.constraints = build_constraints(dt.id)
+                   data_type.association_generalization = build_assoc_generalizations(dt)
+                   # build_generalization always returns a Generalization for the
+                   # element itself, so only attach when XMI declares a parent.
+                   if dt.generalization&.any?
+                     data_type.generalization =
+                       build_generalization(dt)
+                   end
+                 end
+               end
       end
 
       def build_diagrams(node_id) # rubocop:disable Metrics:AbcSize,Metrics:MethodLength
@@ -529,8 +525,8 @@ module Ea
         owner_end_attribute_name = find_owner_attribute_name(xmi_id, assoc.id)
 
         return nil unless member_end &&
-          ((member_end_type != "aggregation") ||
-           (member_end_type == "aggregation" && member_end_attribute_name))
+                          ((member_end_type != "aggregation") ||
+                           (member_end_type == "aggregation" && member_end_attribute_name))
 
         ::Lutaml::Uml::Association.new.tap do |association|
           association.xmi_id = assoc.id
@@ -595,18 +591,18 @@ module Ea
         return [] if enum.owned_literal.nil?
 
         enum.owned_literal
-          .select { |lit| lit.type?("uml:EnumerationLiteral") }
-          .map do |owned_literal|
-            uml_type_id = owned_literal&.uml_type&.idref
+            .select { |lit| lit.type?("uml:EnumerationLiteral") }
+            .map do |owned_literal|
+              uml_type_id = owned_literal&.uml_type&.idref
 
-            ::Lutaml::Uml::Value.new.tap do |value|
-              value.name = owned_literal.name
-              ext_attr = fetch_attribute_node(owned_literal.id)
-              value.initial = ext_attr.initial if ext_attr&.initial
-              value.type = lookup_entity_name(uml_type_id) || uml_type_id
-              value.definition = lookup_attribute_documentation(owned_literal.id)
+              ::Lutaml::Uml::Value.new.tap do |value|
+                value.name = owned_literal.name
+                ext_attr = fetch_attribute_node(owned_literal.id)
+                value.initial = ext_attr.initial if ext_attr&.initial
+                value.type = lookup_entity_name(uml_type_id) || uml_type_id
+                value.definition = lookup_attribute_documentation(owned_literal.id)
+              end
             end
-          end
       end
 
       # --- Generalization building ---
@@ -764,12 +760,12 @@ module Ea
           end
         end
 
-        if general_item&.has_general && general_item.general
-          level += 1
-          loop_general_item(
-            general_item.general, level, inherited_props, inherited_assoc_props
-          )
-        end
+        return unless general_item&.has_general && general_item.general
+
+        level += 1
+        loop_general_item(
+          general_item.general, level, inherited_props, inherited_assoc_props
+        )
       end
 
       def build_assoc_generalizations(klass) # rubocop:disable Metrics:AbcSize
@@ -849,9 +845,7 @@ module Ea
             fetch_owned_attribute_node(xmi_id)
         end
 
-        if fetch_connector_name(link.id)
-          member_end = fetch_connector_name(link.id)
-        end
+        member_end = fetch_connector_name(link.id) if fetch_connector_name(link.id)
 
         [member_end, member_end_type, member_end_cardinality,
          member_end_attribute_name, xmi_id]
@@ -906,7 +900,7 @@ module Ea
 
       def fetch_owned_attribute_node(xmi_id)
         oa = xmi_index.find_owned_attrs_by_type(xmi_id)
-          .find { |a| !!a.association }
+                      .find { |a| !!a.association }
 
         if oa
           cardinality = cardinality_min_max_value(
@@ -977,8 +971,8 @@ module Ea
         return node.name if node&.name
 
         return if node.nil? ||
-          node.public_send(source_or_target.to_sym).nil? ||
-          node.public_send(source_or_target.to_sym).model.nil?
+                  node.public_send(source_or_target.to_sym).nil? ||
+                  node.public_send(source_or_target.to_sym).model.nil?
 
         node.public_send(source_or_target.to_sym).model.name
       end
@@ -1025,7 +1019,7 @@ module Ea
 
       def iterate_relative_packaged_element(name_array)
         matched_elements = xmi_index.packaged_elements_of_type("uml:Package")
-          .select { |e| e.name == name_array[0] }
+                                    .select { |e| e.name == name_array[0] }
 
         result = matched_elements.map do |e|
           iterate_packaged_element(e, name_array, type: "uml:Class")

@@ -20,7 +20,7 @@ require "lutaml/uml_repository"
 
 QEA_PATH = ENV.fetch(
   "QEA_PATH",
-  "/Users/mulgogi/src/mn/plateau-model/20251010_current_plateau_v5.1.qea",
+  "/Users/mulgogi/src/mn/plateau-model/20251010_current_plateau_v5.1.qea"
 )
 
 abort "QEA not found: #{QEA_PATH}" unless File.exist?(QEA_PATH)

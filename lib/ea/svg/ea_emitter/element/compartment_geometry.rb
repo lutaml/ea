@@ -29,21 +29,21 @@ module Ea
                       :attr_first_offset
 
           def initialize(bounds:, size:, header_lines_count:,
-                          attr_lines_count:, op_lines_count:,
-                          tagged_values_count:,
-                          constraints_count: 0,
-                          marker_count: 0,
-                          enum_literals_count: 0,
-                          header_top_padding: 12,
-                          header_line_offset: 6,
-                          divider_offset: 8,
-                          attr_line_offset: 6,
-                          attr_first_offset: 7,
-                          attr_group_lead: 0,
+                         attr_lines_count:, op_lines_count:,
+                         tagged_values_count:,
+                         constraints_count: 0,
+                         marker_count: 0,
+                         enum_literals_count: 0,
+                         header_top_padding: 12,
+                         header_line_offset: 6,
+                         divider_offset: 8,
+                         attr_line_offset: 6,
+                         attr_first_offset: 7,
+                         attr_group_lead: 0,
                          compact_standard_operations: false,
                          family: nil, size_unit: "pt", logical_height: nil,
-                          header_ghost: false,
-                          header_ghost_tight: false)
+                         header_ghost: false,
+                         header_ghost_tight: false)
             @bounds = bounds
             @size = size
             @family = family
@@ -102,7 +102,11 @@ module Ea
             # The off-canvas parent ghost shifts every following
             # header line +3, and the divider tracks the LAST header
             # baseline + 8 (936AA434: ghost 100, stereo 116 = +16).
-            ghost_shift = header_ghost ? (header_ghost_tight ? 3 : 6) : 0
+            ghost_shift = if header_ghost
+                            header_ghost_tight ? 3 : 6
+                          else
+                            0
+                          end
 
             header_first_y +
               ([header_lines_count, 1].max - 1) * line_height(header_line_offset || 6) +

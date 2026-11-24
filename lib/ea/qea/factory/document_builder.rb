@@ -108,7 +108,7 @@ module Ea
         # Validate document integrity
         # @return [Boolean] True if valid
         # @raise [ValidationError] If validation fails
-        def validate! # rubocop:disable Metrics/MethodLength
+        def validate!
           errors = []
           warnings = []
 
@@ -138,7 +138,7 @@ module Ea
             enums: @document.enums.size,
             data_types: @document.data_types.size,
             instances: @document.instances.size,
-            associations: @document.associations.size,
+            associations: @document.associations.size
           }
         end
 
@@ -149,17 +149,17 @@ module Ea
         def check_duplicate_xmi_ids(errors)
           xmi_ids = collect_all_xmi_ids
           duplicates = xmi_ids.group_by { |id| id }
-            .select { |_, v| v.size > 1 }
-            .keys
+                              .select { |_, v| v.size > 1 }
+                              .keys
 
-          unless duplicates.empty?
-            errors << "Duplicate xmi_ids found: #{duplicates.join(', ')}"
-          end
+          return if duplicates.empty?
+
+          errors << "Duplicate xmi_ids found: #{duplicates.join(", ")}"
         end
 
         # Collect all xmi_ids from document
         # @return [Array<String>] All xmi_ids
-        def collect_all_xmi_ids # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength
+        def collect_all_xmi_ids # rubocop:disable Metrics/AbcSize
           ids = []
 
           # Collect from top-level elements
@@ -180,18 +180,14 @@ module Ea
         # Recursively collect all xmi_ids from a package and its descendants
         # @param package [Lutaml::Uml::Package] Package to collect from
         # @return [Array<String>] All xmi_ids in package hierarchy
-        def collect_package_xmi_ids(package) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def collect_package_xmi_ids(package) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
           ids = []
 
           # Collect from package's elements
           ids.concat(package.classes.filter_map(&:xmi_id)) if package.classes
           ids.concat(package.enums.filter_map(&:xmi_id)) if package.enums
-          if package.data_types
-            ids.concat(package.data_types.filter_map(&:xmi_id))
-          end
-          if package.instances
-            ids.concat(package.instances.filter_map(&:xmi_id))
-          end
+          ids.concat(package.data_types.filter_map(&:xmi_id)) if package.data_types
+          ids.concat(package.instances.filter_map(&:xmi_id)) if package.instances
 
           # Recursively collect from child packages
           package.packages&.each do |child_package|
@@ -217,27 +213,27 @@ module Ea
               assoc, :owner_end_xmi_id, all_xmi_ids
             )
 
-            if has_invalid_member || has_invalid_owner
-              invalid_associations << assoc
-              if has_invalid_member
-                add_invalid_end_warning(assoc, :member_end_xmi_id, all_xmi_ids,
-                                        warnings)
-              end
-              if has_invalid_owner
-                add_invalid_end_warning(assoc, :owner_end_xmi_id, all_xmi_ids,
-                                        warnings)
-              end
+            next unless has_invalid_member || has_invalid_owner
+
+            invalid_associations << assoc
+            if has_invalid_member
+              add_invalid_end_warning(assoc, :member_end_xmi_id, all_xmi_ids,
+                                      warnings)
+            end
+            if has_invalid_owner
+              add_invalid_end_warning(assoc, :owner_end_xmi_id, all_xmi_ids,
+                                      warnings)
             end
           end
 
           # Remove invalid associations from document
-          unless invalid_associations.empty?
-            @document.associations.reject! do |a|
-              invalid_associations.include?(a)
-            end
-            warnings << "Removed #{invalid_associations.size} association(s) " \
-                        "with invalid references"
+          return if invalid_associations.empty?
+
+          @document.associations.reject! do |a|
+            invalid_associations.include?(a)
           end
+          warnings << "Removed #{invalid_associations.size} association(s) " \
+                      "with invalid references"
         end
 
         # Check if association end reference is valid
@@ -257,16 +253,16 @@ module Ea
         # @param attr [Symbol] Attribute to check (should be xmi_id attribute)
         # @param valid_ids [Set<String>] Set of valid xmi_ids
         # @param warnings [Array<String>] Warning accumulator
-        def add_invalid_end_warning(assoc, attr, valid_ids, warnings) # rubocop:disable Metrics/MethodLength
+        def add_invalid_end_warning(assoc, attr, valid_ids, warnings)
           value = association_end_xmi_id(assoc, attr)
           return if value.nil?
 
-          unless valid_ids.include?(value)
-            name_value = association_end_name(assoc, attr)
+          return if valid_ids.include?(value)
 
-            warnings << "Association #{assoc.xmi_id} references " \
-                        "invalid #{attr}: #{name_value}"
-          end
+          name_value = association_end_name(assoc, attr)
+
+          warnings << "Association #{assoc.xmi_id} references " \
+                      "invalid #{attr}: #{name_value}"
         end
 
         # Explicit dispatch for association end xmi_id attributes.

@@ -48,9 +48,9 @@ RSpec.describe Ea::Svg::EaEmitter::Elements do
 
   def rendered_lines
     svg = described_class.new(diagram, model_index: model_index,
-                              document: document).render
+                                       document: document).render
     svg.scan(/<text[^>]*y="([\d.]+)"[^>]*>([^<]*)</)
-        .map { |y, content| [y.to_f, content.strip] }
+       .map { |y, content| [y.to_f, content.strip] }
   end
 
   it "seats the interface parent ghost at box top + 13" do

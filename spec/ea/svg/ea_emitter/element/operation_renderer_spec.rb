@@ -16,7 +16,7 @@ RSpec.describe Ea::Svg::EaEmitter::Element::OperationRenderer do
     it "returns a <g> wrapping one operation as two <text> elements" do
       ops = [build_op]
       svg = described_class.render(ops, bounds: bounds, first_y: 50,
-                                     family: "Carlito", size: 7)
+                                        family: "Carlito", size: 7)
       texts = Nokogiri::XML("<svg>#{svg}</svg>").css("text")
       expect(texts.size).to eq(2)
     end
@@ -24,7 +24,7 @@ RSpec.describe Ea::Svg::EaEmitter::Element::OperationRenderer do
     it "emits the visibility marker and content text at correct x offsets" do
       ops = [build_op(name: "draw")]
       svg = described_class.render(ops, bounds: bounds, first_y: 50,
-                                     family: "Carlito", size: 7)
+                                        family: "Carlito", size: 7)
       texts = Nokogiri::XML("<svg>#{svg}</svg>").css("text")
       # First text at visibility offset (5), second at content offset (20)
       expect(texts[0]["x"].to_i).to eq(10 + described_class::VISIBILITY_X_OFFSET)
@@ -34,7 +34,7 @@ RSpec.describe Ea::Svg::EaEmitter::Element::OperationRenderer do
     it "stacks operations by (size + 6) line height" do
       ops = [build_op(name: "a"), build_op(name: "b"), build_op(name: "c")]
       svg = described_class.render(ops, bounds: bounds, first_y: 50,
-                                     family: "Carlito", size: 7)
+                                        family: "Carlito", size: 7)
       texts = Nokogiri::XML("<svg>#{svg}</svg>").css("text")
       # Each op produces 2 text elements; op index 1 is at y = 50 + (7+6) = 63
       expect(texts[2]["y"].to_i).to eq(63)
@@ -43,7 +43,7 @@ RSpec.describe Ea::Svg::EaEmitter::Element::OperationRenderer do
 
     it "returns an empty group when operations list is empty" do
       svg = described_class.render([], bounds: bounds, first_y: 50,
-                                     family: "Carlito", size: 7)
+                                       family: "Carlito", size: 7)
       expect(Nokogiri::XML("<svg>#{svg}</svg>").css("text").size).to eq(0)
     end
 
@@ -84,7 +84,7 @@ RSpec.describe Ea::Svg::EaEmitter::Element::OperationRenderer do
       op = build_op(name: "draw")
       op.parameters = []
       op.return_type_name = "void"
-      text = described_class.operation_text( op)
+      text = described_class.operation_text(op)
       expect(text).to eq("draw(): void")
     end
 
@@ -92,7 +92,7 @@ RSpec.describe Ea::Svg::EaEmitter::Element::OperationRenderer do
       op = build_op(name: "draw")
       op.parameters = []
       op.return_type_name = nil
-      text = described_class.operation_text( op)
+      text = described_class.operation_text(op)
       expect(text).to eq("draw()")
     end
 

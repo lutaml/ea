@@ -14,18 +14,18 @@ module Ea
 
         def validate_parent_object_references # rubocop:disable Metrics/MethodLength
           operations.each do |op|
-            unless reference_exists?("t_object", "ea_object_id",
-                                     op.ea_object_id)
-              result.add_error(
-                category: :missing_reference,
-                entity_type: :operation,
-                entity_id: op.operationid.to_s,
-                entity_name: op.name,
-                field: "ea_object_id",
-                reference: op.ea_object_id.to_s,
-                message: "Parent object #{op.ea_object_id} does not exist",
-              )
-            end
+            next if reference_exists?("t_object", "ea_object_id",
+                                      op.ea_object_id)
+
+            result.add_error(
+              category: :missing_reference,
+              entity_type: :operation,
+              entity_id: op.operationid.to_s,
+              entity_name: op.name,
+              field: "ea_object_id",
+              reference: op.ea_object_id.to_s,
+              message: "Parent object #{op.ea_object_id} does not exist"
+            )
           end
         end
 
@@ -47,7 +47,7 @@ module Ea
               entity_name: "#{parent&.name}.#{op.name}()",
               field: "classifier",
               reference: op.classifier,
-              message: "Return type '#{op.classifier}' not found",
+              message: "Return type '#{op.classifier}' not found"
             )
           end
         end
@@ -64,7 +64,6 @@ module Ea
             o.ea_object_id.to_s == classifier_id.to_s
           end
         end
-
       end
     end
   end

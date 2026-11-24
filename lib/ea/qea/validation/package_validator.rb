@@ -13,23 +13,23 @@ module Ea
 
         private
 
-        def validate_parent_references # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+        def validate_parent_references # rubocop:disable Metrics/MethodLength
           packages.each do |package|
             next if package.root?
 
-            unless parent_exists?(package.parent_id)
-              package_path = resolve_package_path(package.package_id)
-              result.add_error(
-                category: :missing_reference,
-                entity_type: :package,
-                entity_id: package.package_id.to_s,
-                entity_name: package.name,
-                field: "parent_id",
-                reference: package.parent_id.to_s,
-                message: "Parent package #{package.parent_id} does not exist",
-                location: package_path,
-              )
-            end
+            next if parent_exists?(package.parent_id)
+
+            package_path = resolve_package_path(package.package_id)
+            result.add_error(
+              category: :missing_reference,
+              entity_type: :package,
+              entity_id: package.package_id.to_s,
+              entity_name: package.name,
+              field: "parent_id",
+              reference: package.parent_id.to_s,
+              message: "Parent package #{package.parent_id} does not exist",
+              location: package_path
+            )
           end
         end
 
@@ -57,14 +57,14 @@ module Ea
                   field: "name",
                   message: "Duplicate package name '#{dup_name}' " \
                            "in parent #{parent_path}",
-                  location: package_path,
+                  location: package_path
                 )
               end
             end
           end
         end
 
-        def validate_circular_hierarchy # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def validate_circular_hierarchy # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength
           packages.each do |package|
             next if package.root?
 
@@ -81,8 +81,8 @@ module Ea
                   entity_name: package.name,
                   field: "parent_id",
                   message: "Circular package hierarchy detected: " \
-                           "#{path.join(' -> ')} -> #{current_id}",
-                  location: package_path,
+                           "#{path.join(" -> ")} -> #{current_id}",
+                  location: package_path
                 )
                 break
               end

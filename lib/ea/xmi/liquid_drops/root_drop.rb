@@ -21,7 +21,7 @@ module Ea
         def packages
           Array(@model.packages).map do |package|
             ::Ea::Xmi::LiquidDrops::PackageDrop.new(package, @guidance,
-                                                        @options)
+                                                    @options)
           end
         end
 

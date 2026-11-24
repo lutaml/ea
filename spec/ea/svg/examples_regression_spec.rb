@@ -62,9 +62,9 @@ RSpec.describe "EA examples regression", :examples_regression do
         path = model_xml_path(ex[:export])
         skip "no model.xml for #{ex[:name]}" unless File.exist?(path)
 
-        expect {
+        expect do
           Ea::Sources::Xmi::Adapter.from_path(path)
-        }.not_to raise_error
+        end.not_to raise_error
       end
 
       it "renders every diagram with a reference SVG without raising" do
@@ -75,11 +75,11 @@ RSpec.describe "EA examples regression", :examples_regression do
           ref_path = File.join(images, "#{eaid}.svg")
           next unless File.exist?(ref_path)
 
-          expect {
+          expect do
             Ea::Svg::EaEmitter::Document.new(diagram,
-                                              model_index: qea_doc.index_by_id,
-                                              document: qea_doc, frame: true).render
-          }.not_to raise_error, "render failed for #{diagram.name.inspect}"
+                                             model_index: qea_doc.index_by_id,
+                                             document: qea_doc, frame: true).render
+          end.not_to raise_error, "render failed for #{diagram.name.inspect}"
         end
       end
 
@@ -93,8 +93,8 @@ RSpec.describe "EA examples regression", :examples_regression do
           next unless File.exist?(ref_path)
 
           ours = Ea::Svg::EaEmitter::Document.new(diagram,
-                                                    model_index: qea_doc.index_by_id,
-                                                    document: qea_doc, frame: true).render
+                                                  model_index: qea_doc.index_by_id,
+                                                  document: qea_doc, frame: true).render
           reference = File.read(ref_path)
           report = Ea::Svg::Parity::Checker.new(ours: ours, reference: reference).report
           overlaps << report.text_overlap

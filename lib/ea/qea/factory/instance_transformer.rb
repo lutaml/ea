@@ -21,16 +21,12 @@ module Ea
             # Map classifier (the class this is an instance of)
             if ea_object.classifier&.positive?
               classifier_obj = find_classifier(ea_object.classifier)
-              if classifier_obj
-                instance.classifier = classifier_obj.name
-              end
+              instance.classifier = classifier_obj.name if classifier_obj
             elsif ea_object.classifier_guid && !ea_object.classifier_guid.empty?
               classifier_obj = find_classifier_by_guid(
-                ea_object.classifier_guid,
+                ea_object.classifier_guid
               )
-              if classifier_obj
-                instance.classifier = classifier_obj.name
-              end
+              instance.classifier = classifier_obj.name if classifier_obj
             end
 
             # Map definition/notes
@@ -61,7 +57,6 @@ module Ea
 
           database.find_object_by_guid(classifier_guid)
         end
-
       end
     end
   end

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 module Ea
   module Mdg
     # One MDG technology file's parsed model. Immutable container

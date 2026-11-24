@@ -14,9 +14,7 @@ module Ea
           differences = []
 
           # Compare basic properties
-          unless names_equal?(xmi_pkg.name, qea_pkg.name)
-            differences << "Name: '#{xmi_pkg.name}' vs '#{qea_pkg.name}'"
-          end
+          differences << "Name: '#{xmi_pkg.name}' vs '#{qea_pkg.name}'" unless names_equal?(xmi_pkg.name, qea_pkg.name)
 
           # Compare collection counts
           compare_collection_count(
@@ -34,7 +32,7 @@ module Ea
 
           {
             equal: differences.empty?,
-            differences: differences,
+            differences: differences
           }
         end
 
@@ -43,7 +41,7 @@ module Ea
         # @param xmi_class [Lutaml::Uml::UmlClass] XMI class
         # @param qea_class [Lutaml::Uml::UmlClass] QEA class
         # @return [Hash] Comparison result with :equal and :differences
-        def compare_classes(xmi_class, qea_class) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def compare_classes(xmi_class, qea_class) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
           differences = []
 
           # Compare name
@@ -64,7 +62,7 @@ module Ea
 
           # Compare modifier
           if normalize_value(xmi_class.modifier) !=
-              normalize_value(qea_class.modifier)
+             normalize_value(qea_class.modifier)
             differences << "modifier: '#{xmi_class.modifier}' " \
                            "vs '#{qea_class.modifier}'"
           end
@@ -81,7 +79,7 @@ module Ea
 
           {
             equal: differences.empty?,
-            differences: differences,
+            differences: differences
           }
         end
 
@@ -100,13 +98,13 @@ module Ea
 
           # Compare type
           if normalize_value(xmi_attr.type) !=
-              normalize_value(qea_attr.type)
+             normalize_value(qea_attr.type)
             differences << "type: '#{xmi_attr.type}' vs '#{qea_attr.type}'"
           end
 
           # Compare visibility
           if normalize_value(xmi_attr.visibility) !=
-              normalize_value(qea_attr.visibility)
+             normalize_value(qea_attr.visibility)
             differences << "visibility: '#{xmi_attr.visibility}' " \
                            "vs '#{qea_attr.visibility}'"
           end
@@ -128,7 +126,7 @@ module Ea
 
           {
             equal: differences.empty?,
-            differences: differences,
+            differences: differences
           }
         end
 
@@ -137,24 +135,22 @@ module Ea
         # @param xmi_op [Lutaml::Uml::Operation] XMI operation
         # @param qea_op [Lutaml::Uml::Operation] QEA operation
         # @return [Hash] Comparison result with :equal and :differences
-        def compare_operations(xmi_op, qea_op) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def compare_operations(xmi_op, qea_op) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
           differences = []
 
           # Compare name
-          unless names_equal?(xmi_op.name, qea_op.name)
-            differences << "Name: '#{xmi_op.name}' vs '#{qea_op.name}'"
-          end
+          differences << "Name: '#{xmi_op.name}' vs '#{qea_op.name}'" unless names_equal?(xmi_op.name, qea_op.name)
 
           # Compare return type
           if normalize_value(xmi_op.return_type) !=
-              normalize_value(qea_op.return_type)
+             normalize_value(qea_op.return_type)
             differences << "return_type: '#{xmi_op.return_type}' " \
                            "vs '#{qea_op.return_type}'"
           end
 
           # Compare visibility
           if normalize_value(xmi_op.visibility) !=
-              normalize_value(qea_op.visibility)
+             normalize_value(qea_op.visibility)
             differences << "visibility: '#{xmi_op.visibility}' " \
                            "vs '#{qea_op.visibility}'"
           end
@@ -166,7 +162,7 @@ module Ea
 
           {
             equal: differences.empty?,
-            differences: differences,
+            differences: differences
           }
         end
 
@@ -180,25 +176,25 @@ module Ea
 
           # Compare owner end
           unless normalize_value(xmi_assoc.owner_end) ==
-              normalize_value(qea_assoc.owner_end)
+                 normalize_value(qea_assoc.owner_end)
             differences << "owner_end: '#{xmi_assoc.owner_end}' " \
                            "vs '#{qea_assoc.owner_end}'"
           end
 
           # Compare member end
           unless normalize_value(xmi_assoc.member_end) ==
-              normalize_value(qea_assoc.member_end)
+                 normalize_value(qea_assoc.member_end)
             differences << "member_end: '#{xmi_assoc.member_end}' " \
                            "vs '#{qea_assoc.member_end}'"
           end
 
           # Compare owner end cardinality
           if xmi_assoc.owner_end_cardinality &&
-              qea_assoc.owner_end_cardinality &&
-              !cardinalities_equal?(
-                xmi_assoc.owner_end_cardinality,
-                qea_assoc.owner_end_cardinality,
-              )
+             qea_assoc.owner_end_cardinality &&
+             !cardinalities_equal?(
+               xmi_assoc.owner_end_cardinality,
+               qea_assoc.owner_end_cardinality
+             )
             differences << "owner_end_cardinality: " \
                            "#{format_cardinality(xmi_assoc
                            .owner_end_cardinality)} " \
@@ -208,11 +204,11 @@ module Ea
 
           # Compare member end cardinality
           if xmi_assoc.member_end_cardinality &&
-              qea_assoc.member_end_cardinality &&
-              !cardinalities_equal?(
-                xmi_assoc.member_end_cardinality,
-                qea_assoc.member_end_cardinality,
-              )
+             qea_assoc.member_end_cardinality &&
+             !cardinalities_equal?(
+               xmi_assoc.member_end_cardinality,
+               qea_assoc.member_end_cardinality
+             )
             differences << "member_end_cardinality: " \
                            "#{format_cardinality(xmi_assoc
                             .member_end_cardinality)} " \
@@ -222,7 +218,7 @@ module Ea
 
           {
             equal: differences.empty?,
-            differences: differences,
+            differences: differences
           }
         end
 
@@ -242,7 +238,7 @@ module Ea
         end
 
         # Compare collection counts
-        def compare_collection_count(xmi_coll, qea_coll, name, differences) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def compare_collection_count(xmi_coll, qea_coll, name, differences)
           xmi_count = xmi_coll&.size || 0
           qea_count = qea_coll&.size || 0
 

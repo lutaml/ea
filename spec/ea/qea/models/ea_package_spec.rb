@@ -125,7 +125,7 @@ RSpec.describe Ea::Qea::Models::EaPackage do
         "Package_ID" => 123,
         "Name" => "MyPackage",
         "Parent_ID" => 456,
-        "ea_guid" => "{GUID}",
+        "ea_guid" => "{GUID}"
       }
 
       pkg = described_class.from_db_row(row)

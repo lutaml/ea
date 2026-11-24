@@ -34,12 +34,11 @@ module Ea
           "t_taggedvalue"
         end
 
-
         COLUMN_MAP = {
           "PropertyID" => :property_id,
           "ElementID" => :element_id,
           "BaseClass" => :base_class,
-          "TagValue" => :tag_value,
+          "TagValue" => :tag_value
         }.freeze
 
         def self.column_map
@@ -85,7 +84,7 @@ module Ea
         # Extract ea_notes if present in TagValue
         #
         # @return [String, nil] Extracted notes
-        def parsed_notes # rubocop:disable Metrics/CyclomaticComplexity
+        def parsed_notes
           return notes if notes && !notes.empty?
           return nil unless tag_value&.include?("$ea_notes=")
 

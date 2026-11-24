@@ -11,7 +11,7 @@ RSpec.describe Ea::Qea::Repositories::ObjectRepository do
       package_id: 10,
       visibility: "Public",
       abstract: "0",
-      stereotype: "entity",
+      stereotype: "entity"
     )
   end
 
@@ -22,7 +22,7 @@ RSpec.describe Ea::Qea::Repositories::ObjectRepository do
       object_type: "Class",
       package_id: 10,
       visibility: "Public",
-      abstract: "1",
+      abstract: "1"
     )
   end
 
@@ -32,7 +32,7 @@ RSpec.describe Ea::Qea::Repositories::ObjectRepository do
       name: "IService",
       object_type: "Interface",
       package_id: 10,
-      visibility: "Public",
+      visibility: "Public"
     )
   end
 
@@ -42,7 +42,7 @@ RSpec.describe Ea::Qea::Repositories::ObjectRepository do
       name: "Status",
       object_type: "Enumeration",
       package_id: 20,
-      visibility: "Public",
+      visibility: "Public"
     )
   end
 
@@ -51,7 +51,7 @@ RSpec.describe Ea::Qea::Repositories::ObjectRepository do
       object_id: 5,
       name: "ServiceComponent",
       object_type: "Component",
-      package_id: 20,
+      package_id: 20
     )
   end
 
@@ -174,7 +174,7 @@ RSpec.describe Ea::Qea::Repositories::ObjectRepository do
                             "Class" => 2,
                             "Interface" => 1,
                             "Enumeration" => 1,
-                            "Component" => 1,
+                            "Component" => 1
                           })
     end
   end
@@ -184,7 +184,7 @@ RSpec.describe Ea::Qea::Repositories::ObjectRepository do
       stats = repository.package_statistics
       expect(stats).to eq({
                             10 => 3,
-                            20 => 2,
+                            20 => 2
                           })
     end
   end
@@ -250,7 +250,7 @@ RSpec.describe Ea::Qea::Repositories::ObjectRepository do
         object_id: 6,
         name: "Test",
         alias: "SearchMe",
-        object_type: "Class",
+        object_type: "Class"
       )
       repo_with_alias = described_class.new([obj_with_alias])
 

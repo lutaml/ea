@@ -11,7 +11,7 @@ RSpec.describe Ea::Qea::Factory::EnumTransformer do
       ea_object_id: 92,
       object_type: "Enumeration",
       name: "brashIce",
-      ea_guid: "{ENUM-GUID}",
+      ea_guid: "{ENUM-GUID}"
     )
   end
 
@@ -24,7 +24,7 @@ RSpec.describe Ea::Qea::Factory::EnumTransformer do
       ea_obj = Ea::Qea::Models::EaObject.new(
         ea_object_id: 1,
         object_type: "Class",
-        name: "NotAnEnum",
+        name: "NotAnEnum"
       )
 
       expect(transformer.transform(ea_obj)).to be_nil
@@ -42,16 +42,16 @@ RSpec.describe Ea::Qea::Factory::EnumTransformer do
       literals = [
         Ea::Qea::Models::EaAttribute.new(
           ea_object_id: 92, name: "0/10 - 1/10", default: "1", pos: 0,
-          ea_guid: "{LIT-1}",
+          ea_guid: "{LIT-1}"
         ),
         Ea::Qea::Models::EaAttribute.new(
           ea_object_id: 92, name: "1/10", default: "10", pos: 1,
-          ea_guid: "{LIT-2}",
+          ea_guid: "{LIT-2}"
         ),
         Ea::Qea::Models::EaAttribute.new(
           ea_object_id: 92, name: "1/10 - 2/10", default: "12", pos: 2,
-          ea_guid: "{LIT-3}",
-        ),
+          ea_guid: "{LIT-3}"
+        )
       ]
 
       database.add_collection(:objects, [enum_object])
@@ -67,7 +67,7 @@ RSpec.describe Ea::Qea::Factory::EnumTransformer do
 
     it "leaves initial unset when the literal has no default" do
       literal = Ea::Qea::Models::EaAttribute.new(
-        ea_object_id: 92, name: "noCode", pos: 0, ea_guid: "{LIT-1}",
+        ea_object_id: 92, name: "noCode", pos: 0, ea_guid: "{LIT-1}"
       )
 
       database.add_collection(:objects, [enum_object])
@@ -81,7 +81,7 @@ RSpec.describe Ea::Qea::Factory::EnumTransformer do
     it "maps literal notes to definition" do
       literal = Ea::Qea::Models::EaAttribute.new(
         ea_object_id: 92, name: "0/10 - 1/10", default: "1", pos: 0,
-        ea_guid: "{LIT-1}", notes: "Ice thickness up to 10 cm",
+        ea_guid: "{LIT-1}", notes: "Ice thickness up to 10 cm"
       )
 
       database.add_collection(:objects, [enum_object])

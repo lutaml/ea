@@ -9,7 +9,7 @@ RSpec.describe Ea::Qea::Factory::StereotypeLoader do
       client: ea_guid,
       name: "Stereotypes",
       xref_type: "element property",
-      description: "@STEREO;Name=ApplicationSchema;FQName=GML::ApplicationSchema;@ENDSTEREO;",
+      description: "@STEREO;Name=ApplicationSchema;FQName=GML::ApplicationSchema;@ENDSTEREO;"
     )
   end
 
@@ -33,7 +33,7 @@ RSpec.describe Ea::Qea::Factory::StereotypeLoader do
         client: ea_guid,
         name: "Stereotypes",
         xref_type: "element property",
-        description: nil,
+        description: nil
       )
       database = build_test_database(xrefs: [empty_xref])
       loader = described_class.new(database)
@@ -46,7 +46,7 @@ RSpec.describe Ea::Qea::Factory::StereotypeLoader do
         client: ea_guid,
         name: "Stereotypes",
         xref_type: "element property",
-        description: "",
+        description: ""
       )
       database = build_test_database(xrefs: [empty_xref])
       loader = described_class.new(database)
@@ -66,7 +66,7 @@ RSpec.describe Ea::Qea::Factory::StereotypeLoader do
         client: ea_guid,
         name: "OtherProperty",
         xref_type: "element property",
-        description: "@STEREO;Name=Test;@ENDSTEREO;",
+        description: "@STEREO;Name=Test;@ENDSTEREO;"
       )
       database = build_test_database(xrefs: [wrong_xref])
       loader = described_class.new(database)

@@ -32,7 +32,7 @@ module Ea
             [:enums,      db.objects.find_by_type("Enumeration").size],
             [:datatypes,  db.objects.find_by_type("DataType").size],
             [:diagrams,   db.diagrams.size],
-            [:connectors, db.connectors.size],
+            [:connectors, db.connectors.size]
           ]
         end
 
@@ -59,7 +59,7 @@ module Ea
 
           raise Ea::Cli::Error,
                 "Unknown type '#{type}'. " \
-                "Valid: #{(OBJECT_TYPE_ALIASES.keys + COLLECTION_ALIASES.keys).join(', ')}"
+                "Valid: #{(OBJECT_TYPE_ALIASES.keys + COLLECTION_ALIASES.keys).join(", ")}"
         end
 
         def named_object_rows(db, ea_type)

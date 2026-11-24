@@ -14,26 +14,26 @@ module Ea
         def check(model)
           offenses = []
           classes = (model.collections[:objects] || [])
-                     .select { |o| o.object_type == "Class" }
+                    .select { |o| o.object_type == "Class" }
           classes.each do |klass|
             next if klass.name.nil? || klass.name.empty?
 
-            unless klass.name.match?(CLASS_PATTERN)
-              offenses << offense(entity_id: klass.object_id,
-                                    entity_name: klass.name,
-                                    message: "Class name is not CamelCase")
-            end
+            next if klass.name.match?(CLASS_PATTERN)
+
+            offenses << offense(entity_id: klass.object_id,
+                                entity_name: klass.name,
+                                message: "Class name is not CamelCase")
           end
 
           attrs = model.collections[:attributes] || []
           attrs.each do |attr|
             next if attr.name.nil? || attr.name.empty?
 
-            unless attr.name.match?(ATTR_PATTERN)
-              offenses << offense(entity_id: attr.attribute_id || attr.object_id,
-                                    entity_name: attr.name,
-                                    message: "Attribute name is not camelCase")
-            end
+            next if attr.name.match?(ATTR_PATTERN)
+
+            offenses << offense(entity_id: attr.attribute_id || attr.object_id,
+                                entity_name: attr.name,
+                                message: "Attribute name is not camelCase")
           end
 
           offenses

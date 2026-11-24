@@ -17,7 +17,7 @@ RSpec.describe Ea::Qea::Factory::PackageTransformer do
         package_id: 1,
         name: "Domain",
         ea_guid: "{PKG-GUID}",
-        notes: "Domain model package",
+        notes: "Domain model package"
       )
 
       result = transformer.transform(ea_pkg)
@@ -34,7 +34,7 @@ RSpec.describe Ea::Qea::Factory::PackageTransformer do
       ea_pkg = Ea::Qea::Models::EaPackage.new(
         package_id: 1,
         name: "Package",
-        notes: "",
+        notes: ""
       )
 
       result = transformer.transform(ea_pkg)
@@ -47,14 +47,14 @@ RSpec.describe Ea::Qea::Factory::PackageTransformer do
     it "loads child packages", :aggregate_failures do
       ea_pkg = Ea::Qea::Models::EaPackage.new(
         package_id: 1,
-        name: "Root",
+        name: "Root"
       )
 
       child_pkg = Ea::Qea::Models::EaPackage.new(
         package_id: 2,
         name: "Child",
         parent_id: 1,
-        ea_guid: "{CHILD-GUID}",
+        ea_guid: "{CHILD-GUID}"
       )
 
       database.add_collection(:packages, [ea_pkg, child_pkg])
@@ -68,14 +68,14 @@ RSpec.describe Ea::Qea::Factory::PackageTransformer do
     it "loads package objects as classes", :aggregate_failures do
       ea_pkg = Ea::Qea::Models::EaPackage.new(
         package_id: 1,
-        name: "Models",
+        name: "Models"
       )
 
       ea_obj = Ea::Qea::Models::EaObject.new(
         ea_object_id: 10,
         object_type: "Class",
         name: "Entity",
-        package_id: 1,
+        package_id: 1
       )
 
       database.add_collection(:packages, [ea_pkg])
@@ -90,13 +90,13 @@ RSpec.describe Ea::Qea::Factory::PackageTransformer do
     it "loads package diagrams", :aggregate_failures do
       ea_pkg = Ea::Qea::Models::EaPackage.new(
         package_id: 1,
-        name: "Views",
+        name: "Views"
       )
 
       ea_diagram = Ea::Qea::Models::EaDiagram.new(
         diagram_id: 5,
         package_id: 1,
-        name: "Class Diagram",
+        name: "Class Diagram"
       )
 
       database.add_collection(:packages, [ea_pkg])

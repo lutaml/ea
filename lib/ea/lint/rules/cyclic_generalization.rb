@@ -13,7 +13,7 @@ module Ea
           cycles.map do |cycle|
             offense(entity_id: cycle.first,
                     entity_name: cycle.join(" → "),
-                    message: "Cyclic generalization: #{cycle.join(' → ')} → #{cycle.first}")
+                    message: "Cyclic generalization: #{cycle.join(" → ")} → #{cycle.first}")
           end
         end
 

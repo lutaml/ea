@@ -25,10 +25,9 @@ module Ea
           "t_xref"
         end
 
-
         COLUMN_MAP = {
           "XrefID" => :xref_id,
-          "Type" => :xref_type,
+          "Type" => :xref_type
         }.freeze
 
         def self.column_map
@@ -36,8 +35,8 @@ module Ea
         end
 
         # Convenience aliases
-        alias_method :id, :xref_id
-        alias_method :type, :xref_type
+        alias id xref_id
+        alias type xref_type
 
         # Parse the Description field into structured data (legacy hash form).
         # Kept for backward compatibility. New code should use
@@ -105,7 +104,7 @@ module Ea
         #
         # @param desc [String] Description field content
         # @return [Hash] Parsed data
-        def parse_description_field(desc) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+        def parse_description_field(desc) # rubocop:disable Metrics/MethodLength
           return {} if desc.nil? || desc.empty?
 
           result = { raw: desc }

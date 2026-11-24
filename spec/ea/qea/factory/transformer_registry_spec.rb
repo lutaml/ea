@@ -44,7 +44,7 @@ RSpec.describe Ea::Qea::Factory::TransformerRegistry do
   describe ".transformer_for" do
     it "returns registered transformer" do
       expect(described_class.transformer_for(:class)).to eq(
-        Ea::Qea::Factory::ClassTransformer,
+        Ea::Qea::Factory::ClassTransformer
       )
     end
 
@@ -71,7 +71,7 @@ RSpec.describe Ea::Qea::Factory::TransformerRegistry do
       expect(transformers).to include(
         class: Ea::Qea::Factory::ClassTransformer,
         association: Ea::Qea::Factory::AssociationTransformer,
-        generalization: Ea::Qea::Factory::GeneralizationTransformer,
+        generalization: Ea::Qea::Factory::GeneralizationTransformer
       )
     end
 
@@ -99,7 +99,7 @@ RSpec.describe Ea::Qea::Factory::TransformerRegistry do
       described_class.reset_defaults
 
       expect(described_class.transformer_for(:class)).to eq(
-        Ea::Qea::Factory::ClassTransformer,
+        Ea::Qea::Factory::ClassTransformer
       )
     end
   end
@@ -107,49 +107,49 @@ RSpec.describe Ea::Qea::Factory::TransformerRegistry do
   describe "default registrations" do
     it "registers class transformer" do
       expect(described_class.transformer_for(:class)).to eq(
-        Ea::Qea::Factory::ClassTransformer,
+        Ea::Qea::Factory::ClassTransformer
       )
     end
 
     it "registers interface transformer" do
       expect(described_class.transformer_for(:interface)).to eq(
-        Ea::Qea::Factory::ClassTransformer,
+        Ea::Qea::Factory::ClassTransformer
       )
     end
 
     it "registers package transformer" do
       expect(described_class.transformer_for(:package)).to eq(
-        Ea::Qea::Factory::PackageTransformer,
+        Ea::Qea::Factory::PackageTransformer
       )
     end
 
     it "registers association transformer" do
       expect(described_class.transformer_for(:association)).to eq(
-        Ea::Qea::Factory::AssociationTransformer,
+        Ea::Qea::Factory::AssociationTransformer
       )
     end
 
     it "registers generalization transformer" do
       expect(described_class.transformer_for(:generalization)).to eq(
-        Ea::Qea::Factory::GeneralizationTransformer,
+        Ea::Qea::Factory::GeneralizationTransformer
       )
     end
 
     it "registers attribute transformer" do
       expect(described_class.transformer_for(:attribute)).to eq(
-        Ea::Qea::Factory::AttributeTransformer,
+        Ea::Qea::Factory::AttributeTransformer
       )
     end
 
     it "registers operation transformer" do
       expect(described_class.transformer_for(:operation)).to eq(
-        Ea::Qea::Factory::OperationTransformer,
+        Ea::Qea::Factory::OperationTransformer
       )
     end
 
     it "registers diagram transformer" do
       expect(described_class.transformer_for(:diagram)).to eq(
-        Ea::Qea::Factory::DiagramTransformer,
+        Ea::Qea::Factory::DiagramTransformer
       )
     end
   end
