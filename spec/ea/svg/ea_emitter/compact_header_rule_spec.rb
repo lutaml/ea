@@ -76,7 +76,7 @@ RSpec.describe "Custom compact header offsets" do
   it "preserves custom divider and line offsets" do
     [{ divider_offset: 10 }, { header_line_offset: 8 }, { attr_line_offset: 8 }].each do |offsets|
       compartments = Ea::Theme::Definition::CompartmentSpec.new(
-        **Ea::Theme::Definition::DEFAULT_COMPARTMENTS.to_h.merge(offsets)
+        **Ea::Theme::Definition::DEFAULT_COMPARTMENTS.to_hash.merge(offsets)
       )
       geometry = compact_geometry_control(compartments: compartments)
       expect([geometry.divider_offset, geometry.attr_first_offset])

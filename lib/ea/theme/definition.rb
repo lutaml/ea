@@ -8,23 +8,174 @@ module Ea
     # fonts, colors, strokes, canvas insets, compartment spacing,
     # marker geometry, etc. No renderer hardcodes appearance
     # numbers — every value comes from the active Definition.
+    #
+    # The nested group classes below are lutaml-model Serializable:
+    # they are the declared wire shapes parsed by ThemeDocument from
+    # config/themes/*.yml. Values are nil-able here — group-level
+    # coalescing defaults are applied by the Loader when flattening
+    # into Definition.
     class Definition
-      Geometry = Struct.new(:inset_left, :inset_right, :inset_top, :inset_bottom,
-                             keyword_init: true)
-      FrameSpec = Struct.new(:inset, :tab_height, :tab_slant, :tab_label_x,
-                              :tab_label_y, :tab_padding, keyword_init: true)
-      CompartmentSpec = Struct.new(:header_top_padding, :header_line_offset,
-                                    :divider_offset, :attr_line_offset,
-                                    :attr_first_offset, :op_line_offset,
-                                    keyword_init: true)
-      AttrSpec = Struct.new(:visibility_x_offset, :content_x_offset, keyword_init: true)
-      MarkerSpec = Struct.new(:diamond_half_width, :diamond_half_height,
-                               :triangle_half_base, :triangle_height,
-                               :arrow_half_base, :arrow_height, keyword_init: true)
-      PackageSpec = Struct.new(:tab_height, :tab_label_padding, :default_tab_width,
-                                keyword_init: true)
-      NoteSpec = Struct.new(:fold_size, :text_x_offset, :text_y_offset,
-                             :line_height, keyword_init: true)
+      class FontSpec < Lutaml::Model::Serializable
+        attribute :family, :string
+        attribute :size, :integer
+        attribute :unit, :string
+        attribute :weight_normal, :integer
+        attribute :weight_bold, :integer
+
+        yaml do
+          map "family", to: :family
+          map "size", to: :size
+          map "unit", to: :unit
+          map "weight_normal", to: :weight_normal
+          map "weight_bold", to: :weight_bold
+        end
+      end
+
+      class ColorsSpec < Lutaml::Model::Serializable
+        attribute :text, :string
+        attribute :attribute_text, :string
+        attribute :method_text, :string
+        attribute :border, :string
+        attribute :fill, :string
+        attribute :background, :string
+        attribute :stroke_in_text, :string
+
+        yaml do
+          map "text", to: :text
+          map "attribute_text", to: :attribute_text
+          map "method_text", to: :method_text
+          map "border", to: :border
+          map "fill", to: :fill
+          map "background", to: :background
+          map "stroke_in_text", to: :stroke_in_text
+        end
+      end
+
+      class StrokesSpec < Lutaml::Model::Serializable
+        attribute :element_border, :integer
+        attribute :connector_line, :integer
+        attribute :divider, :integer
+        attribute :marker, :integer
+
+        yaml do
+          map "element_border", to: :element_border
+          map "connector_line", to: :connector_line
+          map "divider", to: :divider
+          map "marker", to: :marker
+        end
+      end
+
+      class TextMetricsSpec < Lutaml::Model::Serializable
+        attribute :width_factor, :float
+
+        yaml do
+          map "width_factor", to: :width_factor
+        end
+      end
+
+      class Geometry < Lutaml::Model::Serializable
+        attribute :inset_left, :integer
+        attribute :inset_right, :integer
+        attribute :inset_top, :integer
+        attribute :inset_bottom, :integer
+
+        yaml do
+          map "inset_left", to: :inset_left
+          map "inset_right", to: :inset_right
+          map "inset_top", to: :inset_top
+          map "inset_bottom", to: :inset_bottom
+        end
+      end
+
+      class FrameSpec < Lutaml::Model::Serializable
+        attribute :inset, :integer
+        attribute :tab_height, :integer
+        attribute :tab_slant, :integer
+        attribute :tab_label_x, :integer
+        attribute :tab_label_y, :integer
+        attribute :tab_padding, :integer
+
+        yaml do
+          map "inset", to: :inset
+          map "tab_height", to: :tab_height
+          map "tab_slant", to: :tab_slant
+          map "tab_label_x", to: :tab_label_x
+          map "tab_label_y", to: :tab_label_y
+          map "tab_padding", to: :tab_padding
+        end
+      end
+
+      class CompartmentSpec < Lutaml::Model::Serializable
+        attribute :header_top_padding, :integer
+        attribute :header_line_offset, :integer
+        attribute :divider_offset, :integer
+        attribute :attr_line_offset, :integer
+        attribute :attr_first_offset, :integer
+        attribute :op_line_offset, :integer
+
+        yaml do
+          map "header_top_padding", to: :header_top_padding
+          map "header_line_offset", to: :header_line_offset
+          map "divider_offset", to: :divider_offset
+          map "attr_line_offset", to: :attr_line_offset
+          map "attr_first_offset", to: :attr_first_offset
+          map "op_line_offset", to: :op_line_offset
+        end
+      end
+
+      class AttrSpec < Lutaml::Model::Serializable
+        attribute :visibility_x_offset, :integer
+        attribute :content_x_offset, :integer
+
+        yaml do
+          map "visibility_x_offset", to: :visibility_x_offset
+          map "content_x_offset", to: :content_x_offset
+        end
+      end
+
+      class MarkerSpec < Lutaml::Model::Serializable
+        attribute :diamond_half_width, :integer
+        attribute :diamond_half_height, :integer
+        attribute :triangle_half_base, :integer
+        attribute :triangle_height, :integer
+        attribute :arrow_half_base, :integer
+        attribute :arrow_height, :integer
+
+        yaml do
+          map "diamond_half_width", to: :diamond_half_width
+          map "diamond_half_height", to: :diamond_half_height
+          map "triangle_half_base", to: :triangle_half_base
+          map "triangle_height", to: :triangle_height
+          map "arrow_half_base", to: :arrow_half_base
+          map "arrow_height", to: :arrow_height
+        end
+      end
+
+      class PackageSpec < Lutaml::Model::Serializable
+        attribute :tab_height, :integer
+        attribute :tab_label_padding, :integer
+        attribute :default_tab_width, :integer
+
+        yaml do
+          map "tab_height", to: :tab_height
+          map "tab_label_padding", to: :tab_label_padding
+          map "default_tab_width", to: :default_tab_width
+        end
+      end
+
+      class NoteSpec < Lutaml::Model::Serializable
+        attribute :fold_size, :integer
+        attribute :text_x_offset, :integer
+        attribute :text_y_offset, :integer
+        attribute :line_height, :integer
+
+        yaml do
+          map "fold_size", to: :fold_size
+          map "text_x_offset", to: :text_x_offset
+          map "text_y_offset", to: :text_y_offset
+          map "line_height", to: :line_height
+        end
+      end
 
       attr_reader :id, :name,
                   :font_family, :font_size, :font_size_unit,

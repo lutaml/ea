@@ -57,29 +57,54 @@ module Ea
           objs.flat_map { |o| class_block(o) }
         end
 
-        # Emit `class X { +attr: T ... }` or `enum X { LITERAL1 ... }`.
+        # EA connector type → PlantUML arrow. Generalization is
+        # special-cased in connector_lines (reversed `<|--` form);
+        # unregistered types fall back to the dependency arrow.
+        ARROWS = {
+          "Association" => "--",
+          "Aggregation" => "o--",
+          "Composition" => "*--"
+        }.freeze
+
+        # EA object_type → PlantUML declaration keyword for the
+        # body-less emitters; Class/Enumeration have their own body
+        # builders (see class_block). Unregistered types emit `class`.
+        KEYWORD_BY_TYPE = {
+          "Interface" => "interface",
+          "DataType" => "abstract class"
+        }.freeze
+
         def class_block(obj)
           case obj.object_type
           when "Class"
-            attrs = class_attributes(obj)
-            body = attrs.map { |a| "+#{a.name}: #{a.type || 'String'}" }
-            return ["class #{obj.name}"] if body.empty?
-
-            ["class #{obj.name} {", *body.map { |b| "  #{b}" }, "}"]
+            class_with_attributes_block(obj)
           when "Enumeration"
-            literals = enum_literals(obj)
-            return ["enum #{obj.name}"] if literals.empty?
-
-            ["enum #{obj.name} {",
-             *literals.map { |l| "  #{l.name || l}" },
-             "}"]
-          when "Interface"
-            ["interface #{obj.name}"]
-          when "DataType"
-            ["abstract class #{obj.name}"]
+            enum_block(obj)
           else
-            ["class #{obj.name}"]
+            keyword_block(obj)
           end
+        end
+
+        def class_with_attributes_block(obj)
+          attrs = class_attributes(obj)
+          body = attrs.map { |a| "+#{a.name}: #{a.type || 'String'}" }
+          return ["class #{obj.name}"] if body.empty?
+
+          ["class #{obj.name} {", *body.map { |b| "  #{b}" }, "}"]
+        end
+
+        def enum_block(obj)
+          literals = enum_literals(obj)
+          return ["enum #{obj.name}"] if literals.empty?
+
+          ["enum #{obj.name} {",
+           *literals.map { |l| "  #{l.name || l}" },
+           "}"]
+        end
+
+        def keyword_block(obj)
+          keyword = KEYWORD_BY_TYPE.fetch(obj.object_type, "class")
+          ["#{keyword} #{obj.name}"]
         end
 
         # Generalizations: `<|`-style inheritance.
@@ -90,26 +115,14 @@ module Ea
             tgt = find_object(conn.end_object_id)
             next nil unless src && tgt
 
-            case conn.connector_type
-            when "Generalization"
+            if conn.connector_type == "Generalization"
               "#{tgt.name} <|-- #{src.name}"
-            when "Association", "Aggregation", "Composition"
-              assoc_arrow(src, tgt, conn)
             else
+              arrow = ARROWS.fetch(conn.connector_type, "-->")
               label = conn.name ? " : #{conn.name}" : ""
-              "#{src.name} --> #{tgt.name}#{label}"
+              "#{src.name} #{arrow} #{tgt.name}#{label}"
             end
           end
-        end
-
-        def assoc_arrow(src, tgt, conn)
-          arrow = case conn.connector_type
-                  when "Composition" then "*--"
-                  when "Aggregation" then "o--"
-                  else "--"
-                  end
-          label = conn.name ? " : #{conn.name}" : ""
-          "#{src.name} #{arrow} #{tgt.name}#{label}"
         end
 
         def packages_index

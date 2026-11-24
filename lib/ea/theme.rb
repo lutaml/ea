@@ -33,5 +33,6 @@ module Ea
     autoload :Definition, "ea/theme/definition"
     autoload :Registry, "ea/theme/registry"
     autoload :Loader, "ea/theme/loader"
+    autoload :ThemeDocument, "ea/theme/theme_document"
   end
 end

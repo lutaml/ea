@@ -102,18 +102,13 @@ module Ea
         end
 
         def diagram_label_prefix(diagram)
-          case diagram.diagram_type&.downcase
-          when "logical" then "class"
-          when "package" then "pkg"
-          when "usecase" then "uc"
-          when "sequence" then "seq"
-          when "activity" then "act"
-          when "statechart" then "sm"
-          when "deployment" then "dep"
-          when "component" then "comp"
-          when "object" then "object"
-          when "custom", "conceptual" then nil
-          else diagram.diagram_type&.downcase
+          type = diagram.diagram_type&.downcase
+          return unless type
+
+          if DIAGRAM_TYPE_LABELS.key?(type)
+            DIAGRAM_TYPE_LABELS[type]
+          else
+            type
           end
         end
 
@@ -144,6 +139,24 @@ module Ea
         BORDER_STYLE = "stroke-width:1;stroke-linecap:square;stroke-linejoin:miter; fill:#000000;fill-opacity:0.00; stroke:#000000; stroke-opacity:1.00"
         TAB_STYLE = "stroke-width:1;stroke-linecap:square;stroke-linejoin:miter; fill:#FFFFFF;fill-opacity:1.00; stroke:#000000; stroke-opacity:1.00"
         LABEL_STYLE = "stroke-width:1;stroke-linecap:square;stroke-linejoin:miter; fill:#000000;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00"
+
+        # EA diagram type → tab-label prefix. `nil` suppresses the
+        # prefix (custom/conceptual diagrams show only the name).
+        # Unregistered types fall through as-is (downcased).
+        # Register new types here — no dispatch code changes needed.
+        DIAGRAM_TYPE_LABELS = {
+          "logical" => "class",
+          "package" => "pkg",
+          "usecase" => "uc",
+          "sequence" => "seq",
+          "activity" => "act",
+          "statechart" => "sm",
+          "deployment" => "dep",
+          "component" => "comp",
+          "object" => "object",
+          "custom" => nil,
+          "conceptual" => nil
+        }.freeze
       end
     end
   end

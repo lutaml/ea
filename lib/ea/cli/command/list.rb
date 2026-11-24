@@ -36,20 +36,38 @@ module Ea
           ]
         end
 
+        # `ea list --type` keyword registries. Object types go through
+        # EaObjectRepository#find_by_type; the rest map to Database
+        # collections. Register new keywords here — no dispatch code
+        # changes needed.
+        OBJECT_TYPE_ALIASES = {
+          "class" => "Class",
+          "interface" => "Interface",
+          "enum" => "Enumeration"
+        }.freeze
+        COLLECTION_ALIASES = {
+          "package" => :packages,
+          "diagram" => :diagrams,
+          "connector" => :connectors
+        }.freeze
+
         def list_by_type(type)
           db = load_database
-          case type.to_s
-          when "class"     then db.objects.find_by_type("Class").map { |o| [o.name, o.ea_guid] }
-          when "interface" then db.objects.find_by_type("Interface").map { |o| [o.name, o.ea_guid] }
-          when "enum"      then db.objects.find_by_type("Enumeration").map { |o| [o.name, o.ea_guid] }
-          when "package"   then db.packages.map { |p| [p.name, p.ea_guid] }
-          when "diagram"   then db.diagrams.map { |d| [d.name, d.ea_guid] }
-          when "connector" then db.connectors.map { |c| [c.name, c.ea_guid] }
-          else
-            raise Ea::Cli::Error,
-                  "Unknown type '#{type}'. " \
-                  "Valid: class, interface, package, diagram, connector, enum"
-          end
+          key = type.to_s
+          return named_object_rows(db, OBJECT_TYPE_ALIASES.fetch(key)) if OBJECT_TYPE_ALIASES.key?(key)
+          return collection_rows(db, COLLECTION_ALIASES.fetch(key)) if COLLECTION_ALIASES.key?(key)
+
+          raise Ea::Cli::Error,
+                "Unknown type '#{type}'. " \
+                "Valid: #{(OBJECT_TYPE_ALIASES.keys + COLLECTION_ALIASES.keys).join(', ')}"
+        end
+
+        def named_object_rows(db, ea_type)
+          db.objects.find_by_type(ea_type).map { |o| [o.name, o.ea_guid] }
+        end
+
+        def collection_rows(db, collection)
+          db.public_send(collection).map { |r| [r.name, r.ea_guid] }
         end
 
         def columns_for_current_mode

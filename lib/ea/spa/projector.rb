@@ -217,29 +217,37 @@ module Ea
         pkg&.qualified_name || ""
       end
 
+      # Element-kind registries. Register a new Ea::Model type here —
+      # no dispatch code changes needed. Payload augmenters are matched
+      # by ancestry, so Classifier registrations cover its subclasses.
+      KIND_BY_CLASS = {
+        Ea::Model::Klass => "class",
+        Ea::Model::Enumeration => "enumeration",
+        Ea::Model::DataType => "data_type",
+        Ea::Model::PrimitiveType => "primitive_type",
+        Ea::Model::Interface => "interface",
+        Ea::Model::Package => "package",
+        Ea::Model::Diagram => "diagram"
+      }.freeze
+
+      PAYLOAD_AUGMENTERS = {
+        Ea::Model::Classifier => :augment_classifier_payload!,
+        Ea::Model::Package => :augment_package_payload!,
+        Ea::Model::Diagram => :augment_diagram_payload!
+      }.freeze
+
       def kind_of(element)
-        case element
-        when Ea::Model::Klass then "class"
-        when Ea::Model::Enumeration then "enumeration"
-        when Ea::Model::DataType then "data_type"
-        when Ea::Model::PrimitiveType then "primitive_type"
-        when Ea::Model::Interface then "interface"
-        when Ea::Model::Package then "package"
-        when Ea::Model::Diagram then "diagram"
-        else "element"
-        end
+        KIND_BY_CLASS.fetch(element.class, "element")
       end
 
       def payload_for(model_element)
         payload = JSON.parse(model_element.to_json)
-        case model_element
-        when Ea::Model::Classifier
-          augment_classifier_payload!(payload, model_element)
-        when Ea::Model::Package
-          payload["classifierIds"] = classifiers_in_package_ids(model_element.id)
-          payload["diagramIds"] = diagram_ids_for_package(model_element.id)
-        when Ea::Model::Diagram
-          augment_diagram_payload!(payload, model_element)
+        augmenter_class = PAYLOAD_AUGMENTERS.keys.find do |klass|
+          model_element.is_a?(klass)
+        end
+        if augmenter_class
+          public_send(PAYLOAD_AUGMENTERS[augmenter_class], payload,
+                      model_element)
         end
         payload
       end
@@ -248,6 +256,9 @@ module Ea
         (document.packages.find { |p| p.id == package_id }&.diagram_ids ||
           []) + document.diagrams.select { |d| d.package_id == package_id }.map(&:id)
       end
+
+      # Payload augmenters — public (dispatched by PAYLOAD_AUGMENTERS).
+      public
 
       def augment_classifier_payload!(payload, classifier)
         rels = document.relationships_for(classifier.id)
@@ -296,6 +307,12 @@ module Ea
       rescue StandardError => e
         warn "ea: skipping SVG render for diagram #{diagram.id} " \
              "(#{diagram.name.inspect}): #{e.class}: #{e.message}"
+        payload
+      end
+
+      def augment_package_payload!(payload, package)
+        payload["classifierIds"] = classifiers_in_package_ids(package.id)
+        payload["diagramIds"] = diagram_ids_for_package(package.id)
         payload
       end
     end
