@@ -30,9 +30,10 @@ module Ea
         def stereotype_name_for(klass, xrefs)
           return nil unless klass.is_a?(Ea::Qea::Models::EaObject)
 
-          xrefs.find do |xr|
+          xref = xrefs.find do |xr|
             xr.client == klass.ea_guid && xr.description&.include?("@STEREO")
-          end&.description&.match(/Name=([^;]+)/)&.[](1)
+          end
+          Ea::XrefFormat.stereotype_name(xref&.description)
         end
       end
     end

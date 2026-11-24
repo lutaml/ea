@@ -24,7 +24,7 @@ module Ea
           def matching_profile(value, name)
             value.split("@STEREO;").drop(1).each do |block|
               description = "@STEREO;#{block.partition("@ENDSTEREO;").first}@ENDSTEREO;"
-              application = Qea::Xref::Parser.parse(description).stereotype
+              application = Ea::XrefFormat::Parser.parse(description).stereotype
               return application.fqname if application.name == name
             end
             nil

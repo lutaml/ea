@@ -27,11 +27,7 @@ module Ea
         end
 
         def extract_stereotype_name(description)
-          return nil if description.nil? || description.empty?
-
-          if description =~ /@STEREO;Name=([^;]+);/
-            Regexp.last_match(1)
-          end
+          Ea::XrefFormat.stereotype_name(description)
         end
       end
     end

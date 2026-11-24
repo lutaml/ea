@@ -193,7 +193,7 @@ module Ea
           return nil unless object
 
           database.xrefs_for_client(object.ea_guid).each do |xref|
-            application = Xref::Parser.parse(xref.description).stereotype
+            application = Ea::XrefFormat::Parser.parse(xref.description).stereotype
             next unless application && application.name == object.stereotype
 
             return application.fqname

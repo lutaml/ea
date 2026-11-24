@@ -32,6 +32,7 @@ module Ea
   autoload :XmlEscape, "ea/xml_escape"
   autoload :GuidFormat, "ea/guid_format"
   autoload :Rtf, "ea/rtf"
+  autoload :XrefFormat, "ea/xref_format"
   autoload :Fonts, "ea/fonts"
 
   class << self
