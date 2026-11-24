@@ -20,8 +20,8 @@ For SPA generation (optional):
 Or in your Gemfile:
 
  source "https://rubygems.org"
- gem "ea", "~> 0.2"
- gem "lutaml-uml", "~> 0.5"   # optional: SPA + SVG diagram rendering
+ gem "ea"
+ gem "lutaml-uml"   # optional: SPA + UML bridge + diagram rendering
 
 == Quick start
 
@@ -140,10 +140,18 @@ QEA file ──→ Ea::Qea::Database  ──→ Ea::Transformers::QeaToXmi ─�
 | `ea list FILE` | List model elements (auto-detects QEA or XMI)
 | `ea diagrams list FILE` | List diagrams in a QEA/XMI file
 | `ea diagrams extract FILE NAME` | Render a diagram to SVG
+| `ea svg NAME FILE` | Render a diagram to standalone SVG
+| `ea render NAME FILE` | Render a diagram to SVG/PNG/PDF
 | `ea validate FILE` | Validate EA model
+| `ea lint FILE` | Run model quality lint rules
 | `ea stats FILE` | Show collection counts
-| `ea parse FILE` | Parse to internal model representation
+| `ea parse FILE` | Parse QEA/XMI to a `Lutaml::Uml::Document` (requires lutaml-uml)
 | `ea convert FILE --to xmi` | Convert QEA → Sparx XMI
+| `ea diff OLD NEW` | Structural diff between two EA files (table/json/html)
+| `ea export FILE --format xmi/json/plantuml/xsd` | Export the model
+| `ea mdg FILE` | Inspect MDG technologies (list/show)
+| `ea query FILE` | Filter model elements (type, package, stereotype)
+| `ea info NAME FILE` | Show a single element's details
 | `ea version` | Show gem version
 |===
 
@@ -159,9 +167,9 @@ QEA file ──→ Ea::Qea::Database  ──→ Ea::Transformers::QeaToXmi ─�
  git clone https://github.com/lutaml/ea
  cd ea
  bundle install
- bundle exec rspec        # run specs (2036 examples)
+ bundle exec rspec        # run specs
  bundle exec ea help      # see CLI commands
 
 == License
 
-MIT — see `LICENSE` file.
+BSD-2-Clause — see `LICENSE.md`.

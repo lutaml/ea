@@ -17,15 +17,22 @@ Gem::Specification.new do |spec|
   spec.metadata["changelog_uri"] = "https://github.com/lutaml/ea/blob/main/CHANGELOG.md"
 
   gemspec = File.basename(__FILE__)
+  excluded_prefixes = %w[
+    bin/ Gemfile .gitignore .rspec spec/ .github/ .rubocop.yml
+    examples/ frontend/ reference-docs/ docs/ gemfiles/ memory/
+    CLAUDE.md Rakefile
+  ]
   spec.files = IO.popen(%w[git ls-files -z], chdir: __dir__, err: IO::NULL) do |ls|
     ls.readlines("\x0", chomp: true).reject do |f|
       (f == gemspec) ||
-        f.start_with?(*%w[bin/ Gemfile .gitignore .rspec spec/ .github/ .rubocop.yml])
+        f.start_with?("TODO") ||
+        f.start_with?(*excluded_prefixes)
     end
   end
   spec.bindir = "exe"
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
+  spec.licenses = ["BSD-2-Clause"]
 
   # Core dependencies — standalone parser needs only these.
   # `lutaml-uml` is intentionally NOT declared here: the gem is usable

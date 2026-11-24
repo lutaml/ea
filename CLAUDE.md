@@ -74,9 +74,45 @@ bin/console                  # IRB with gem loaded
 ## Architecture
 
 ### Entry Point (`lib/ea.rb`)
-Defines `Ea` module with `autoload` for four subsystems: `Qea`, `Diagram`,
-`Transformations`, `Xmi`. No `require_relative` anywhere in lib — all internal
-loading uses `autoload` defined in the immediate parent namespace file.
+Defines `Ea` module with `autoload` for every subsystem. No `require_relative`
+anywhere in lib — all internal loading uses `autoload` defined in the
+immediate parent namespace file.
+
+### Subsystem map (`lib/ea/`)
+
+| Dir | Purpose | Reached from |
+|---|---|---|
+| `qea/` | SQLite QEA row models, loader, indexes, repositories | `Ea.parse`, `Ea::Qea.load` |
+| `xmi/` | Sparx XMI parsing → `Lutaml::Uml::Document`, Liquid drops | `Ea::Xmi.load`, bridge |
+| `bridge/` | `QeaToUml` / `XmiToUml` → `Lutaml::Uml::Document` (optional dep) | `Ea.to_uml` |
+| `sources/` | QEA/XMI adapters → canonical `Ea::Model` (hexagon domain) | CLI svg/render/spa/export/query |
+| `transformers/` | Native QEA → Sparx XMI round-trip exporter | CLI convert, export xmi |
+| `model/` | `Ea::Model` — tool-agnostic domain model | sources consumers |
+| `svg/` | EA-faithful SVG emitter (ea_emitter), shapes, markers | CLI svg, diagrams extract |
+| `diagram/` | Style resolution, layout, path building | svg emitter |
+| `cli/` | Thor CLI (`exe/ea`), 16 commands | `exe/ea` |
+| `spa/` | Single-page-app generator (shards, search index) | `ea spa` |
+| `diff/` | Structural DB-vs-DB diff with HTML reporter | `ea diff` |
+| `export/` | JSON / JSON-Schema / PlantUML / XSD generators | `ea export` |
+| `query/` | Chainable element-filter DSL | `ea query` |
+| `lint/` | Model quality rule engine | `ea lint` |
+| `mdg/` | MDG technology registry/inspection | `ea mdg` |
+| `render/` | SVG → PNG/PDF via external tools | `ea render` |
+| `fonts/` | Font metrics (shipped JSON width tables) | svg text renderer |
+| `image/` | EMF blob → SVG rendering | svg emitter |
+| `shapescript/` | EA ShapeScript interpreter for stereotype icons | svg icons |
+| `theme/` | Theme registry loading `config/themes/*.yml` | svg emitter |
+| `validation/` | `Qea::Validation::ValidationEngine` validators | `ea validate` |
+| `ocl/` | OCL constraint parser/evaluator | validation |
+| `qea/factory/` | QEA → `Lutaml::Uml::Document` transformers (bridge) | `Ea.to_uml` (.qea) |
+
+### Configuration
+- `config/qea_schema.yml` — table enablement, type mappings (loaded by
+  `Qea::Services::Configuration`)
+- `config/stereotype_colors.yml` — stereotype → color map (svg)
+- `config/themes/{default,39,119}.yml` — SVG themes (theme loader)
+- `config/diagram_styles.yml`, `config/model_transformations.yml` —
+  present but not loaded by any code (kept for reference)
 
 ### Standalone Subsystems (no `lutaml-uml` dependency)
 
@@ -130,11 +166,6 @@ loading uses `autoload` defined in the immediate parent namespace file.
 - `BaseParser` provides template method pattern. Concrete: `QeaParser`,
   `XmiParser`. `FormatRegistry` maps file extensions to parser classes.
   `TransformationEngine` orchestrates parsing. Returns `Lutaml::Uml::Document`.
-
-### Configuration
-- `config/qea_schema.yml` — EA database schema, table definitions, column types
-- `config/diagram_styles.yml` — Default diagram styling
-- `config/model_transformations.yml` — Parser configurations and transformation options
 
 ## Code Quality Rules
 
