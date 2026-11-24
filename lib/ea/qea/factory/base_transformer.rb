@@ -75,32 +75,30 @@ module Ea
           value.to_s == "1" || value.to_s.downcase == "true"
         end
 
-        # Normalize EA GUID to XMI ID format
-        # Converts {GUID-WITH-HYPHENS} to PREFIX_GUID_WITH_UNDERSCORES
+        # Normalize EA GUID to XMI ID format — the canonical conversion
+        # is Ea::GuidFormat, shared with the QEA→XMI exporter and the
+        # Sources adapters so both pipelines emit identical ids.
         # @param ea_guid [String] EA GUID in format
         # "{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}"
         # @param prefix [String] Prefix to add (e.g., "EAID", "EAPK")
         # @return [String, nil] XMI ID in format
         # "PREFIX_XXXXXXXX_XXXX_XXXX_XXXX_XXXXXXXXXXXX"
         def normalize_guid_to_xmi_format(ea_guid, prefix = "EAID")
-          return nil if ea_guid.nil? || ea_guid.empty?
-
-          # Remove braces and replace hyphens with underscores
-          clean = ea_guid.tr("{}", "").tr("-", "_")
-          "#{prefix}_#{clean}"
+          Ea::GuidFormat.ea_guid_to_xmi_id(ea_guid, prefix: prefix)
         end
 
-        # Convert ea_guid to XMI SRC ID format
+        # Convert ea_guid to the connector member-end XMI id (src/dst).
+        # Delegates to Ea::GuidFormat#connector_end_xmi_id — Sparx's
+        # convention drops the first two hex characters of the first
+        # GUID segment (verified against EA-exported XMI).
         def normalize_guid_to_xmi_src_dst_format(
           ea_guid, prefix = "EAID", is_src = true # rubocop:disable Style/OptionalBooleanParameter
         )
-          xmi_id = normalize_guid_to_xmi_format(ea_guid, prefix)
+          xmi_id = Ea::GuidFormat.ea_guid_to_xmi_id(ea_guid, prefix: prefix)
           return nil if xmi_id.nil?
 
-          # Trim prefix and add _src or _dst
-          src_dst = is_src ? "src" : "dst"
-          clean = xmi_id[(prefix.length + 3), xmi_id.length]
-          "#{prefix}_#{src_dst}#{clean}"
+          side = is_src ? :source : :destination
+          Ea::GuidFormat.connector_end_xmi_id(xmi_id, side: side)
         end
 
         # Normalize line endings from Windows (\r\n) to Unix (\n)
