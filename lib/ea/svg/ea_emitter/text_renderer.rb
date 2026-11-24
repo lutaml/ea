@@ -65,7 +65,18 @@ module Ea
         end
 
         def format_style
-          "font-family:#{family}; font-weight:#{weight}; font-style:#{style}; font-size:#{size}#{size_unit}; fill:#{fill};fill-opacity:1.00; stroke:#{stroke_in_text}; stroke-opacity:0.00 stroke-width:0; white-space: pre;"
+          "font-family:#{escape_attr(family)}; font-weight:#{weight}; " \
+            "font-style:#{escape_attr(style)}; font-size:#{size}#{size_unit}; " \
+            "fill:#{escape_attr(fill)};fill-opacity:1.00; " \
+            "stroke:#{escape_attr(stroke_in_text)}; stroke-opacity:0.00 " \
+            "stroke-width:0; white-space: pre;"
+        end
+
+        # EA-stored font names and theme colors flow into a double-quoted
+        # XML attribute; escape them so a stray quote cannot break the
+        # document. Special-char-free values render byte-identical.
+        def escape_attr(value)
+          XmlEscape.call(value.to_s)
         end
 
         # Per-codepoint advance widths (em), least-squares fitted from
@@ -161,7 +172,7 @@ module Ea
         WIDTH_CACHE = {}
 
         class << self
-          def estimate_width(text, size, _width_factor = nil, family: nil,
+          def estimate_width(text, size, _width_factor = nil, family: nil, # rubocop:disable Metrics/ParameterLists,Naming/MethodParameterName
                              weight: nil, style: nil, logical_height: nil,
                              legend_title: false)
             opts = { family: family, weight: weight, style: style,

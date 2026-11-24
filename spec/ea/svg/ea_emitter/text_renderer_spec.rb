@@ -93,4 +93,20 @@ RSpec.describe Ea::Svg::EaEmitter::TextRenderer do
   it "estimates zero width for a nil size instead of crashing" do
     expect(described_class.estimate_width("label", nil)).to eq(0.0)
   end
+
+  it "escapes EA-stored font names in the style attribute" do
+    renderer = described_class.new(
+      content: "x", x: 1, y: 2, family: 'Bad"Font', size: 8
+    )
+    svg = renderer.to_svg
+    expect(svg).to include("font-family:Bad&quot;Font;")
+    expect(svg).not_to include('font-family:Bad"Font;')
+  end
+
+  it "renders special-char-free style values byte-identical" do
+    renderer = described_class.new(
+      content: "x", x: 1, y: 2, family: "Carlito", size: 8
+    )
+    expect(renderer.to_svg).to include("font-family:Carlito;")
+  end
 end
