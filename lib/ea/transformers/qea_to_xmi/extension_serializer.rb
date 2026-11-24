@@ -414,7 +414,7 @@ module Ea
           if note.nil? || note.empty?
             "\t\t\t\t\t<documentation/>"
           else
-            %(\t\t\t\t\t<documentation value="#{escape(note)}"/>)
+            %(\t\t\t\t\t<documentation value="#{escape(Ea::Rtf.to_text(note))}"/>)
           end
         end
 
@@ -673,8 +673,12 @@ module Ea
         # Returns the documentation string for a record. Package notes
         # and object notes come from different columns; both flow
         # through here as the <properties documentation="..."> value.
+        # EA stores styled notes as RTF; export plain text like EA's
+        # own XMI output does.
         def record_documentation(note)
-          note.nil? || note.empty? ? nil : note
+          return nil if note.nil? || note.empty?
+
+          Ea::Rtf.to_text(note)
         end
 
         def escape(text)

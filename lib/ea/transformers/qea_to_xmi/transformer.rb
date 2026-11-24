@@ -464,7 +464,8 @@ module Ea
           ::Xmi::Uml::OwnedComment.new(
             type: "uml:Comment",
             id: @context.xmi_id_for(obj),
-            body_element: obj.note || obj.name || "",
+            body_element: (Ea::Rtf.to_text(obj.note) if obj.note) ||
+                           obj.name || "",
           )
         end
 
