@@ -147,7 +147,7 @@ module Ea
             named = files.select do |e|
               e.name.end_with?(".qea", ".sqlite", ".eap")
             end
-            (named.max_by(&:size) || files.max_by(&:size))
+            named.max_by(&:size) || files.max_by(&:size)
           end
         end
 
@@ -156,6 +156,10 @@ module Ea
 
           File.delete(@extracted_path)
         rescue Errno::ENOENT
+          nil
+        rescue StandardError
+          # On Windows a just-written temp file can still be locked
+          # (EACCES/EBUSY); dropping a temp file must never break close.
           nil
         ensure
           @extracted_path = nil

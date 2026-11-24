@@ -213,11 +213,17 @@ RSpec.describe Ea::Qea::Infrastructure::DatabaseConnection do
         conn = described_class.new(zip_path)
         db = conn.connect
         count = db.execute("SELECT COUNT(*) as count FROM t_object")
-          .first["count"]
+                  .first["count"]
         expect(count).to be >= 0
         conn.close
       ensure
-        File.delete(zip_path) if File.exist?(zip_path)
+        # Windows can keep a just-closed zip briefly locked (EACCES);
+        # temp cleanup is best-effort, the OS clears its temp dir.
+        begin
+          File.delete(zip_path) if File.exist?(zip_path)
+        rescue Errno::EACCES, Errno::EBUSY
+          nil
+        end
       end
     end
 
