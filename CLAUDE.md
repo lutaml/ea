@@ -102,17 +102,16 @@ immediate parent namespace file.
 | `image/` | EMF blob → SVG rendering | svg emitter |
 | `shapescript/` | EA ShapeScript interpreter for stereotype icons | svg icons |
 | `theme/` | Theme registry loading `config/themes/*.yml` | svg emitter |
-| `validation/` | `Qea::Validation::ValidationEngine` validators | `ea validate` |
+| `qea/validation/` | `Qea::Validation::ValidationEngine` validators | `ea validate` |
 | `ocl/` | OCL constraint parser/evaluator | validation |
 | `qea/factory/` | QEA → `Lutaml::Uml::Document` transformers (bridge) | `Ea.to_uml` (.qea) |
 
 ### Configuration
 - `config/qea_schema.yml` — table enablement, type mappings (loaded by
-  `Qea::Services::Configuration`)
+  `Qea::Services::Configuration`; the live table→model map is
+  `DatabaseLoader::MODEL_CLASSES`)
 - `config/stereotype_colors.yml` — stereotype → color map (svg)
 - `config/themes/{default,39,119}.yml` — SVG themes (theme loader)
-- `config/diagram_styles.yml`, `config/model_transformations.yml` —
-  present but not loaded by any code (kept for reference)
 
 ### Standalone Subsystems (no `lutaml-uml` dependency)
 

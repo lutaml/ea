@@ -29,7 +29,6 @@ module Ea
   autoload :Lint, "ea/lint"
   autoload :Query, "ea/query"
   autoload :Ocl, "ea/ocl"
-  autoload :Validation, "ea/validation"
   autoload :XmlEscape, "ea/xml_escape"
   autoload :GuidFormat, "ea/guid_format"
   autoload :Rtf, "ea/rtf"
