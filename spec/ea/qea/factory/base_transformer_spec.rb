@@ -189,6 +189,29 @@ RSpec.describe Ea::Qea::Factory::BaseTransformer do
       expect(transformer.normalize_guid_to_xmi_src_dst_format(guid, "EAID", false))
         .to eq("EAID_dstAA1111_0000_0000_0000_000000000001")
     end
+
+    it "matches the canonical Ea::GuidFormat connector-end conversion" do
+      guid = "{AAAA1111-0000-0000-0000-000000000001}"
+      xmi_id = transformer.normalize_guid_to_xmi_format(guid)
+      expect(transformer.normalize_guid_to_xmi_src_dst_format(guid, "EAID", true))
+        .to eq(Ea::GuidFormat.connector_end_xmi_id(xmi_id, side: :source))
+      expect(transformer.normalize_guid_to_xmi_src_dst_format(guid, "EAID", false))
+        .to eq(Ea::GuidFormat.connector_end_xmi_id(xmi_id, side: :destination))
+    end
+  end
+
+  describe "#normalize_guid_to_xmi_format" do
+    it "matches the canonical Ea::GuidFormat conversion" do
+      guids = [
+        "{487932BB-EB20-4e0a-B4ED-1D59B8CF688B}",
+        "{AAAA1111-0000-0000-0000-000000000001}",
+        "{B6FD8AF3-971F-4b51-8964-3254D1F1EB7A}",
+      ]
+      guids.each do |guid|
+        expect(transformer.normalize_guid_to_xmi_format(guid))
+          .to eq(Ea::GuidFormat.ea_guid_to_xmi_id(guid))
+      end
+    end
   end
 
   describe "#normalize_note" do
