@@ -1,6 +1,7 @@
 # 20 - CI requires an unreleased lutaml-uml
 
-## Status: BLOCKED — waiting on lutaml-uml release
+## Status: RESOLVED — lutaml-uml 1.0.4 (2026-11-23) ships the UmlRepository
+## namespace and the 1.x API the suite targets; published-set CI is green.
 
 ## Problem
 
