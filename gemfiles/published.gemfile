@@ -1,0 +1,24 @@
+# frozen_string_literal: true
+
+# CI-identical published-gem resolution for local testing — the
+# replacement for the removed EA_FORCE_RUBYGEMS env-var switch.
+#
+#   BUNDLE_GEMFILE=gemfiles/published.gemfile bundle install
+#   BUNDLE_GEMFILE=gemfiles/published.gemfile bundle exec rspec
+#
+# Stands alone (does not eval the root Gemfile): every dependency
+# resolves from rubygems, exactly as CI resolves it.
+
+source "https://rubygems.org"
+
+gemspec path: ".."
+
+gem "canon"
+gem "emf"
+gem "emfsvg"
+gem "fontist"
+gem "lutaml-uml"
+gem "xmi"
+
+gem "rake"
+gem "rspec", "~> 3.0"
