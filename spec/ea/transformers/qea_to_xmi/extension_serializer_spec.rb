@@ -402,4 +402,22 @@ RSpec.describe Ea::Transformers::QeaToXmi::ExtensionSerializer do
       expect(output.scan(/<properties pos="(\d+)"/).flatten).to eq(%w[0 1 2])
     end
   end
+  describe "RTF note conversion" do
+    it "exports styled notes as plain text, not RTF markup" do
+      obj = Ea::Qea::Models::EaObject.new(
+        ea_object_id: 1,
+        object_type: "Class",
+        name: "Thing",
+        ea_guid: "{AAAA1111-0000-0000-0000-000000000001}",
+        package_id: 1,
+        note: "{\\rtf1\\ansi styled {\\b note}\\par second line}"
+      )
+      db = build_test_database(objects: [obj])
+      context = Ea::Transformers::QeaToXmi::Context.new(database: db)
+      output = described_class.new(db, context).call
+
+      expect(output).not_to include("rtf1")
+      expect(output).to include("styled note")
+    end
+  end
 end
