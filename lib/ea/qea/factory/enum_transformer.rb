@@ -24,7 +24,7 @@ module Ea
                                                      "EAID")
           enum.visibility = map_visibility(ea_object.visibility)
           enum.stereotype = [ea_object.stereotype] if valid_stereotype?(ea_object)
-          enum.definition = ea_object.note if note_present?(ea_object)
+          enum.definition = normalize_note(ea_object.note) if note_present?(ea_object)
         end
 
         def note_present?(ea_object)
@@ -64,7 +64,7 @@ module Ea
             value.name = ea_attr.name
             value.initial = present_text(ea_attr.default)
             value.id = normalize_guid_to_xmi_format(ea_attr.ea_guid, "EAID")
-            value.definition = present_text(ea_attr.notes)
+            value.definition = normalize_note(ea_attr.notes)
           end
         end
 

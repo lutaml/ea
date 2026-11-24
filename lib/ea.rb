@@ -32,6 +32,7 @@ module Ea
   autoload :Validation, "ea/validation"
   autoload :XmlEscape, "ea/xml_escape"
   autoload :GuidFormat, "ea/guid_format"
+  autoload :Rtf, "ea/rtf"
   autoload :Fonts, "ea/fonts"
 
   class << self

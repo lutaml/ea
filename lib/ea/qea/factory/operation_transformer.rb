@@ -21,7 +21,7 @@ module Ea
             op.parameter_type = build_parameter_type(ea_operation)
 
             # Map definition/notes
-            op.definition = ea_operation.notes unless
+            op.definition = normalize_note(ea_operation.notes) unless
               ea_operation.notes.nil? || ea_operation.notes.empty?
 
             # Map stereotype if present

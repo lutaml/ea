@@ -33,7 +33,7 @@ module Ea
             end
 
             # Map definition/notes
-            diagram.definition = ea_diagram.notes unless
+            diagram.definition = normalize_note(ea_diagram.notes) unless
               ea_diagram.notes.nil? || ea_diagram.notes.empty?
 
             # Map stereotype

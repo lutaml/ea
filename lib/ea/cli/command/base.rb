@@ -47,12 +47,12 @@ module Ea
           raise Ea::Cli::Error, "Failed to load #{path}: #{e.message}"
         end
 
-        # Parse any EA file to a Lutaml::Uml::Document.
-        # Lazy-loads lutaml-uml via Ea::Qea's require_uml! guard.
+        # Parse any EA file (QEA or Sparx XMI) to a Lutaml::Uml::Document.
+        # Lazy-loads lutaml-uml via the bridge's require guard.
         # @return [Lutaml::Uml::Document]
         def parse_to_uml(path = file_path, **parse_options)
           validate_file!(path)
-          Ea::Qea.parse(path, parse_options)
+          Ea.to_uml(path, **parse_options)
         rescue Ea::Cli::Error
           raise
         rescue Ea::Error => e

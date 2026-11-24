@@ -106,4 +106,44 @@ RSpec.describe Ea::Query::Builder do
       expect(names).to contain_exactly("Building", "Structure")
     end
   end
+
+  describe "#with_stereotype" do
+    let(:stereo_object) do
+      Ea::Qea::Models::EaObject.new(
+        object_type: "Class",
+        name: "Tagged",
+        package_id: 1,
+        ea_guid: "{S1}",
+      )
+    end
+    let(:xrefs) do
+      [
+        Ea::Qea::Models::EaXref.new(
+          client: "{S1}",
+          description: "@STEREO; entry without a Name key",
+        ),
+        Ea::Qea::Models::EaXref.new(
+          client: "{S1}",
+          description: "@STEREO;GUID={X};Name=bulletNote;Scale=1;",
+        ),
+      ]
+    end
+    let(:stereo_model) do
+      Struct.new(:collections, keyword_init: true).new(
+        collections: { objects: [stereo_object], xrefs: xrefs },
+      )
+    end
+
+    it "matches stereotypes via the Name key" do
+      result = described_class.new(stereo_model)
+        .with_stereotype("bulletNote").call
+      expect(result).to contain_exactly(stereo_object)
+    end
+
+    it "does not crash on @STEREO xrefs lacking a Name key" do
+      result = described_class.new(stereo_model)
+        .with_stereotype("other").call
+      expect(result).to eq([])
+    end
+  end
 end

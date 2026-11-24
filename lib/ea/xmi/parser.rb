@@ -878,7 +878,8 @@ module Ea
         max = nil
         if assoc_connector_type&.multiplicity
           cardinality = assoc_connector_type.multiplicity.split("..")
-          cardinality.unshift("1") if cardinality.length == 1
+          # EA bare "*" means unbounded (0..*)
+          cardinality.unshift("0") if cardinality.length == 1
           min, max = cardinality
         end
         cardinality_min_max_value(min, max)

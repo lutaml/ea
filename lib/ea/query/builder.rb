@@ -104,7 +104,7 @@ module Ea
         xrefs.select do |xr|
           xr.client == object.ea_guid && xr.description&.include?("@STEREO")
         end.map do |xr|
-          xr.description.match(/Name=([^;]+)/)[1]
+          xr.description.match(/Name=([^;]+)/)&.captures&.first
         end.compact
       end
       private :stereotype_names_for

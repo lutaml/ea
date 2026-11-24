@@ -47,8 +47,8 @@ module Ea
         def format_notes(ea_tag)
           return nil unless ea_tag.notes
 
-          # Clean up EA's note format
-          notes = ea_tag.notes.strip
+          # Clean up EA's note format (RTF when styled)
+          notes = Ea::Rtf.to_text(ea_tag.notes).strip
           notes.empty? ? nil : notes
         end
       end

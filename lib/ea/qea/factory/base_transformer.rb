@@ -58,7 +58,8 @@ module Ea
           if parts.size == 2
             { min: parts[0], max: parts[1] }
           elsif parts.size == 1
-            { min: parts[0], max: parts[0] }
+            # EA bare "*" means unbounded (0..*)
+            { min: parts[0] == "*" ? "0" : parts[0], max: parts[0] }
           else
             { min: nil, max: nil }
           end
@@ -94,6 +95,7 @@ module Ea
           ea_guid, prefix = "EAID", is_src = true # rubocop:disable Style/OptionalBooleanParameter
         )
           xmi_id = normalize_guid_to_xmi_format(ea_guid, prefix)
+          return nil if xmi_id.nil?
 
           # Trim prefix and add _src or _dst
           src_dst = is_src ? "src" : "dst"
@@ -109,6 +111,14 @@ module Ea
           return nil if text.nil?
 
           text.gsub("\r\n", "\n")
+        end
+
+        # Convert an EA note field (RTF when styled, plain otherwise)
+        # to normalized plain text
+        # @param text [String, nil] RTF or plain note text
+        # @return [String, nil] plain text with Unix line endings
+        def normalize_note(text)
+          normalize_line_endings(Ea::Rtf.to_text(text))
         end
 
         # Find object by ID

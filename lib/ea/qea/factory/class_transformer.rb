@@ -39,7 +39,7 @@ module Ea
         def assign_definition(klass, ea_object)
           return if ea_object.note.nil? || ea_object.note.empty?
 
-          klass.definition = normalize_line_endings(ea_object.note)
+          klass.definition = normalize_note(ea_object.note)
         end
 
         def assign_features(klass, ea_object)

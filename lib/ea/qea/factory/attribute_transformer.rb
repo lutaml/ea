@@ -35,7 +35,7 @@ module Ea
             end
 
             # Map definition/notes
-            attr.definition = normalize_line_endings(ea_attribute.notes) unless
+            attr.definition = normalize_note(ea_attribute.notes) unless
               ea_attribute.notes.nil? || ea_attribute.notes.empty?
 
             # Load and transform attribute tags

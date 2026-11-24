@@ -172,7 +172,7 @@ obj_pkg_name)
             type_xmi_id: peer_obj.ea_guid,
             association_xmi_id: ea_connector.ea_guid,
             cardinality: cardinality,
-            definition: ea_connector.notes,
+            definition: normalize_note(ea_connector.notes),
             gen_name: obj.name,
             name_ns: obj_pkg_name,
             type_ns: find_package_name(peer_obj.package_id),

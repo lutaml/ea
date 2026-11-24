@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "sqlite3"
+require "tmpdir"
 
 module Ea
   module Qea
@@ -22,6 +23,9 @@ module Ea
       class DatabaseConnection
         attr_reader :file_path, :connection
 
+        SQLITE_MAGIC = "SQLite format 3\x00"
+        ZIP_MAGIC = "PK\x03\x04"
+
         # Initialize a new database connection
         #
         # @param file_path [String] Path to the .qea file
@@ -34,19 +38,24 @@ module Ea
 
           @file_path = file_path
           @connection = nil
+          @extracted_path = nil
         end
 
         # Connect to the database
         #
+        # ZIP-compressed QEA archives are extracted to a temporary file
+        # first (removed when the connection closes).
+        #
         # @return [SQLite3::Database] The database connection
         # @raise [Errno::ENOENT] if the file does not exist
+        # @raise [Ea::Error] if the file is neither SQLite nor a ZIP archive
         # @raise [SQLite3::Exception] if connection fails
         def connect
           unless File.exist?(@file_path)
             raise Errno::ENOENT, "QEA file not found: #{@file_path}"
           end
 
-          @connection = SQLite3::Database.new(@file_path, readonly: true)
+          @connection = SQLite3::Database.new(openable_path, readonly: true)
           @connection.results_as_hash = true
           @connection
         end
@@ -59,6 +68,7 @@ module Ea
 
           @connection.close
           @connection = nil
+          remove_extracted_file
         end
 
         # Check if the connection is open
@@ -93,6 +103,62 @@ module Ea
           ensure
             close if should_close
           end
+        end
+
+        private
+
+        # Route to the raw file when it is a SQLite database, or to a
+        # fresh temporary extraction when it is a ZIP archive.
+        # @return [String] path SQLite can open
+        # @raise [Ea::Error] on any other file content
+        def openable_path
+          header = File.open(@file_path, "rb") { |f| f.read(16) } || ""
+
+          if header.start_with?(SQLITE_MAGIC)
+            @file_path
+          elsif header.start_with?(ZIP_MAGIC)
+            @extracted_path = extract_sqlite_from_zip
+          else
+            raise Ea::Error,
+                  "#{@file_path} is not a QEA file: expected a SQLite " \
+                  "database or a ZIP archive of one"
+          end
+        end
+
+        # @return [String] path to the extracted SQLite file
+        # @raise [Ea::Error] when no SQLite database entry is in the archive
+        def extract_sqlite_from_zip
+          require "zip"
+
+          entry = sqlite_zip_entry or
+            raise Ea::Error,
+                  "#{@file_path} is a ZIP archive but contains no " \
+                  "SQLite database entry"
+
+          path = File.join(Dir.tmpdir, "ea-#{Process.pid}-#{Time.now.to_i}-" \
+                                      "#{File.basename(@file_path)}.sqlite")
+          File.binwrite(path, entry.get_input_stream.read)
+          path
+        end
+
+        def sqlite_zip_entry
+          Zip::File.open(@file_path) do |zip_file|
+            files = zip_file.entries.select(&:file?)
+            named = files.select do |e|
+              e.name.end_with?(".qea", ".sqlite", ".eap")
+            end
+            (named.max_by(&:size) || files.max_by(&:size))
+          end
+        end
+
+        def remove_extracted_file
+          return unless @extracted_path
+
+          File.delete(@extracted_path)
+        rescue Errno::ENOENT
+          nil
+        ensure
+          @extracted_path = nil
         end
       end
     end
