@@ -9,39 +9,6 @@ last_updated: "2025-10-30"
 phase: "Phase 4 - EA to UML Transformation Layer"
 
 # Model class mappings
-model_classes:
-  t_object: Lutaml::Qea::Models::EaObject
-  t_attribute: Lutaml::Qea::Models::EaAttribute
-  t_operation: Lutaml::Qea::Models::EaOperation
-  t_operationparams: Lutaml::Qea::Models::EaOperationParam
-  t_connector: Lutaml::Qea::Models::EaConnector
-  t_package: Lutaml::Qea::Models::EaPackage
-  t_diagram: Lutaml::Qea::Models::EaDiagram
-  t_diagramobjects: Lutaml::Qea::Models::EaDiagramObject
-  t_diagramlinks: Lutaml::Qea::Models::EaDiagramLink
-  t_objectconstraint: Lutaml::Qea::Models::EaObjectConstraint
-  t_taggedvalue: Lutaml::Qea::Models::EaTaggedValue
-  t_objectproperties: Lutaml::Qea::Models::EaObjectProperty
-  t_attributetag: Lutaml::Qea::Models::EaAttributeTag
-  t_xref: Lutaml::Qea::Models::EaXref
-  t_document: Lutaml::Qea::Models::EaDocument
-  t_image: Lutaml::Qea::Models::EaImage
-  t_glossary: Lutaml::Qea::Models::EaGlossary
-  t_lists: Lutaml::Qea::Models::EaList
-  t_versions: Lutaml::Qea::Models::EaVersion
-  t_phase: Lutaml::Qea::Models::EaPhase
-  t_authors: Lutaml::Qea::Models::EaAuthor
-  t_script: Lutaml::Qea::Models::EaScript
-  t_stereotypes: Lutaml::Qea::Models::EaStereotype
-  t_datatypes: Lutaml::Qea::Models::EaDatatype
-  t_constrainttypes: Lutaml::Qea::Models::EaConstraintType
-  t_connectortypes: Lutaml::Qea::Models::EaConnectorType
-  t_diagramtypes: Lutaml::Qea::Models::EaDiagramType
-  t_objecttypes: Lutaml::Qea::Models::EaObjectType
-  t_statustypes: Lutaml::Qea::Models::EaStatusType
-  t_complexitytypes: Lutaml::Qea::Models::EaComplexityType
-
-# Type mappings for SQLite to Ruby
 type_mappings:
   INTEGER: integer
   TEXT: string
@@ -1326,55 +1293,3 @@ tables:
         type: TEXT
         nullable: true
 
-# Transformation mappings for EA to UML conversion
-transformations:
-  # EA Object Type to UML Model mappings
-  object_types:
-    Class: Lutaml::Uml::Class
-    Interface: Lutaml::Uml::Class  # With interface stereotype
-    Enumeration: Lutaml::Uml::Enum
-    DataType: Lutaml::Uml::DataType
-    Package: Lutaml::Uml::Package
-    Component: Lutaml::Uml::Class  # With component stereotype
-    Node: Lutaml::Uml::Class
-    Actor: Lutaml::Uml::Actor
-    UseCase: Lutaml::Uml::Class
-
-  # EA Connector Type to UML Model mappings
-  connector_types:
-    Association: Lutaml::Uml::Association
-    Generalization: Lutaml::Uml::Generalization
-    Aggregation: Lutaml::Uml::Association  # With aggregation property
-    Composition: Lutaml::Uml::Association  # With composition property
-    Dependency: Lutaml::Uml::Dependency
-    Realization: Lutaml::Uml::Realization
-    Abstraction: Lutaml::Uml::Abstraction
-
-  # Visibility mapping from EA to UML
-  visibility_mapping:
-    Public: public
-    Private: private
-    Protected: protected
-    Package: package
-
-  # Cardinality patterns
-  cardinality_patterns:
-    "0..1": { min: "0", max: "1" }
-    "1": { min: "1", max: "1" }
-    "0..*": { min: "0", max: "*" }
-    "1..*": { min: "1", max: "*" }
-    "*": { min: "0", max: "*" }
-
-  # Transformer class mappings
-  transformers:
-    class: Lutaml::Qea::Factory::ClassTransformer
-    attribute: Lutaml::Qea::Factory::AttributeTransformer
-    operation: Lutaml::Qea::Factory::OperationTransformer
-    association: Lutaml::Qea::Factory::AssociationTransformer
-    generalization: Lutaml::Qea::Factory::GeneralizationTransformer
-    package: Lutaml::Qea::Factory::PackageTransformer
-    diagram: Lutaml::Qea::Factory::DiagramTransformer
-    constraint: Lutaml::Qea::Factory::ConstraintTransformer
-    tagged_value: Lutaml::Qea::Factory::TaggedValueTransformer
-    object_property: Lutaml::Qea::Factory::ObjectPropertyTransformer
-    attribute_tag: Lutaml::Qea::Factory::AttributeTagTransformer
