@@ -51,11 +51,11 @@ module Ea
         end
 
         # Parse Description into a typed Record with named accessors.
-        # @return [Ea::Sources::Qea::Xref::Record]
+        # @return [Ea::XrefFormat::Record]
         def parsed_record
           return @parsed_record if defined?(@parsed_record)
 
-          @parsed_record = Sources::Qea::Xref::Parser.parse(description)
+          @parsed_record = Ea::XrefFormat::Parser.parse(description)
         end
 
         # Check if this xref is for stereotypes

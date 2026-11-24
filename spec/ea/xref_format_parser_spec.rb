@@ -2,13 +2,13 @@
 
 require "spec_helper"
 
-RSpec.describe Ea::Sources::Qea::Xref do
-  let(:parser) { described_class::Parser }
+RSpec.describe Ea::XrefFormat::Parser do
+  let(:parser) { described_class }
 
   describe ".parse" do
     it "returns an empty record for nil" do
       record = parser.parse(nil)
-      expect(record).to be_a(Ea::Sources::Qea::Xref::Record)
+      expect(record).to be_a(Ea::XrefFormat::Record)
       expect(record.stereotype?).to be(false)
       expect(record.properties).to eq([])
     end
@@ -60,7 +60,7 @@ RSpec.describe Ea::Sources::Qea::Xref do
 
       expect(record.properties.size).to eq(1)
       prop = record.properties.first
-      expect(prop).to be_a(Ea::Sources::Qea::Xref::PropertyDefinition)
+      expect(prop).to be_a(Ea::XrefFormat::PropertyDefinition)
       expect(prop.name).to eq("isActive")
       expect(prop.type).to eq("Boolean")
       expect(prop.boolean?).to be(true)
@@ -92,7 +92,7 @@ RSpec.describe Ea::Sources::Qea::Xref do
 
       expect(record.legends.size).to eq(1)
       legend = record.legends.first
-      expect(legend).to be_a(Ea::Sources::Qea::Xref::LegendDefinition)
+      expect(legend).to be_a(Ea::XrefFormat::LegendDefinition)
       expect(legend.name).to eq("GML class")
       expect(legend.legend_type).to eq("LEGEND_OBJECTSTYLE")
       expect(legend.colors[:back_ground_color]).to eq("13434828")
@@ -146,6 +146,29 @@ RSpec.describe Ea::Sources::Qea::Xref do
       expect(record.properties.size).to eq(1)
       expect(record.key_values[:extra]).to eq("meta")
       expect(record.raw).to eq(desc)
+    end
+  end
+end
+
+RSpec.describe Ea::XrefFormat do
+  describe ".stereotype_name" do
+    it "extracts the name from the legacy form" do
+      expect(described_class.stereotype_name("@STEREO;Name=FeatureType;GUID={ABC};"))
+        .to eq("FeatureType")
+    end
+
+    it "unqualifies the plateau FQName form" do
+      expect(described_class.stereotype_name("@STEREO;Name=FeatureType;FQName=GML::FeatureType;@ENDSTEREO;"))
+        .to eq("FeatureType")
+    end
+
+    it "returns nil without a @STEREO block" do
+      expect(described_class.stereotype_name("@PROP=@NAME=x@ENDNAME;@ENDPROP;")).to be_nil
+    end
+
+    it "returns nil for nil and empty descriptions" do
+      expect(described_class.stereotype_name(nil)).to be_nil
+      expect(described_class.stereotype_name("")).to be_nil
     end
   end
 end
