@@ -259,6 +259,11 @@ module Ea
         @xrefs_by_client[ea_guid] || []
       end
 
+      def attribute_tags_for_element(element_id)
+        ensure_lookup_indexes
+        @attribute_tags_by_element_id[element_id] || []
+      end
+
       # Check if database is empty
       #
       # @return [Boolean] true if no collections loaded
@@ -357,6 +362,8 @@ module Ea
         @properties_by_object_id = build_group_index(object_properties,
                                                      :ea_object_id)
         @xrefs_by_client = build_group_index(xrefs, :client)
+        @attribute_tags_by_element_id = build_group_index(attribute_tags,
+                                                          :element_id)
       end
     end
   end

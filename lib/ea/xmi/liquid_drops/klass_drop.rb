@@ -52,6 +52,11 @@ module Ea
         end
 
         def init_guidance(guidance)
+          if @lookup
+            @klass_guidance = @lookup.klass_guidance_for(name, absolute_path)
+            return
+          end
+
           @klass_guidance = guidance["classes"].find do |klass|
             klass["name"] == name || klass["name"] == absolute_path
           end

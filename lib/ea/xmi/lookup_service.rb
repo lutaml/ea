@@ -4,9 +4,13 @@ module Ea
   module Xmi
     # Bridge between Liquid Drop classes and the XMI parser.
     # Drops receive an instance of this service to look up XMI elements.
+    # Shared per serialization run, so it also memoizes the O(elements)
+    # dependency and guidance indexes that drops would otherwise rebuild
+    # per class.
     class LookupService
-      def initialize(parser)
+      def initialize(parser, guidance = nil)
         @parser = parser
+        @guidance = guidance
       end
 
       def doc_node_attribute_value(node_id, attr_name)
@@ -50,11 +54,17 @@ module Ea
       end
 
       def select_dependencies_by_supplier(supplier_id)
-        @parser.select_dependencies_by_supplier(supplier_id)
+        dependencies_by_supplier[supplier_id] || []
       end
 
       def select_dependencies_by_client(client_id)
-        @parser.select_dependencies_by_client(client_id)
+        dependencies_by_client[client_id] || []
+      end
+
+      # Guidance entry for a class by its name or absolute path.
+      # @return [Hash, nil]
+      def klass_guidance_for(name, absolute_path)
+        klass_guidance_index[name] || klass_guidance_index[absolute_path]
       end
 
       def select_all_packaged_elements(all_elements, model, type)
@@ -87,6 +97,33 @@ module Ea
 
       def id_name_mapping
         @parser.id_name_mapping
+      end
+
+      private
+
+      def dependencies_by_supplier
+        @dependencies_by_supplier ||= build_dependency_index(&:supplier)
+      end
+
+      def dependencies_by_client
+        @dependencies_by_client ||= build_dependency_index(&:client)
+      end
+
+      def build_dependency_index(&key)
+        index = {}
+        parser.xmi_index
+              .packaged_elements_of_type("uml:Dependency")
+              .each do |dep|
+          (index[key.call(dep)] ||= []) << dep
+        end
+        index
+      end
+
+      def klass_guidance_index
+        @klass_guidance_index ||=
+          Array(@guidance && @guidance["classes"]).each_with_object({}) do |entry, index|
+            index[entry["name"]] = entry
+          end
       end
     end
   end
