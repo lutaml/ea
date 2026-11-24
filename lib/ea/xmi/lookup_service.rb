@@ -111,9 +111,9 @@ module Ea
 
       def build_dependency_index(&key)
         index = {}
-        parser.xmi_index
-              .packaged_elements_of_type("uml:Dependency")
-              .each do |dep|
+        @parser.xmi_index
+               .packaged_elements_of_type("uml:Dependency")
+               .each do |dep|
           (index[key.call(dep)] ||= []) << dep
         end
         index
