@@ -4,20 +4,30 @@ source "https://rubygems.org"
 
 gemspec
 
-# Sibling-repo path dependencies — used during local development when
-# the sibling checkout exists (monorepo-style workflow). In CI and for
-# gem install, fall back to the published rubygems versions.
+# Sibling checkouts override the published gems when present next door
+# (monorepo-style development — same convention as lutaml-uml). One
+# declaration per gem: path source if the checkout exists, rubygems
+# otherwise. There is deliberately no env-var switch; to test the
+# CI-resolved published versions against local sibling checkouts use:
 #
-# Set EA_FORCE_RUBYGEMS=1 to test the CI-resolved versions locally.
-%w[lutaml-uml canon xmi emfsvg emf fontist].each do |sibling_gem|
-  sibling_path = File.expand_path("../#{sibling_gem}", __dir__)
-  actual_path = sibling_gem == "emfsvg" ? File.expand_path("~/src/claricle/emfsvg") : sibling_path
-  actual_path = sibling_gem == "emf" ? File.expand_path("~/src/claricle/emf") : actual_path
-  actual_path = sibling_gem == "fontist" ? File.expand_path("~/src/fontist/fontist") : actual_path
-  if actual_path && File.directory?(actual_path) && ENV["EA_FORCE_RUBYGEMS"] != "1"
-    gem sibling_gem, path: actual_path
+#   BUNDLE_GEMFILE=gemfiles/published.gemfile bundle install
+#
+# Out-of-tree checkouts (e.g. claricle emf/emfsvg, fontist) join the
+# convention via symlink instead of hardcoded $HOME paths here:
+#
+#   ln -s ~/src/claricle/emf ../emf
+#   ln -s ~/src/claricle/emfsvg ../emfsvg
+#   ln -s ~/src/fontist/fontist ../fontist
+#
+# emf/emfsvg/fontist are consumer-side dependencies by design (lazy
+# requires, never in the gemspec); they are listed here because the
+# dev suite exercises them.
+%w[lutaml-uml canon xmi emfsvg emf fontist].each do |gem_name|
+  path = File.expand_path("../#{gem_name}", __dir__)
+  if File.directory?(path)
+    gem gem_name, path: path
   else
-    gem sibling_gem
+    gem gem_name
   end
 end
 
