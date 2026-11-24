@@ -22,9 +22,10 @@ RSpec.describe Ea::Qea::Validation::ValidationMessage do
     it "creates a message with all attributes", :aggregate_failures do
       msg = described_class.new(**message_attributes)
 
-      expect(msg.severity).to eq(:error)
-      expect(msg.category).to eq(:missing_reference)
-      expect(msg.entity_type).to eq(:class)
+      # symbol inputs are normalized to string tags by the attribute cast
+      expect(msg.severity).to eq("error")
+      expect(msg.category).to eq("missing_reference")
+      expect(msg.entity_type).to eq("class")
       expect(msg.entity_id).to eq("123")
       expect(msg.entity_name).to eq("TestClass")
       expect(msg.field).to eq("parent_id")
@@ -110,9 +111,10 @@ RSpec.describe Ea::Qea::Validation::ValidationMessage do
       msg = described_class.new(**message_attributes)
       hash = msg.to_h
 
-      expect(hash[:severity]).to eq(:error)
-      expect(hash[:category]).to eq(:missing_reference)
-      expect(hash[:entity_type]).to eq(:class)
+      # symbol keys, string-tag values (nil fields omitted)
+      expect(hash[:severity]).to eq("error")
+      expect(hash[:category]).to eq("missing_reference")
+      expect(hash[:entity_type]).to eq("class")
       expect(hash[:entity_id]).to eq("123")
       expect(hash[:entity_name]).to eq("TestClass")
       expect(hash[:field]).to eq("parent_id")

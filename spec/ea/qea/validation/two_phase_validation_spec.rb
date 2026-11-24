@@ -130,9 +130,9 @@ RSpec.describe "Two-Phase Validation System" do
     it "categorizes messages by severity", :aggregate_failures do
       result = engine.validate
 
-      expect(result.errors).to all(have_attributes(severity: :error))
-      expect(result.warnings).to all(have_attributes(severity: :warning))
-      expect(result.info).to all(have_attributes(severity: :info))
+      expect(result.errors).to all(have_attributes(severity: "error"))
+      expect(result.warnings).to all(have_attributes(severity: "warning"))
+      expect(result.info).to all(have_attributes(severity: "info"))
     end
   end
 

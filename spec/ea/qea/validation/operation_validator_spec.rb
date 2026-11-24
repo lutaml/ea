@@ -186,8 +186,8 @@ RSpec.describe Ea::Qea::Validation::OperationValidator do
         expect(result.warnings.size).to eq(1)
 
         warning = result.warnings.first
-        expect(warning.category).to eq(:missing_reference)
-        expect(warning.entity_type).to eq(:operation)
+        expect(warning.category).to eq("missing_reference")
+        expect(warning.entity_type).to eq("operation")
         expect(warning.field).to eq("classifier")
         expect(warning.reference).to eq("999")
         expect(warning.message).to include("Return type '999' not found")
@@ -260,8 +260,8 @@ RSpec.describe Ea::Qea::Validation::OperationValidator do
         expect(result.errors.size).to eq(1)
 
         error = result.errors.first
-        expect(error.category).to eq(:missing_reference)
-        expect(error.entity_type).to eq(:operation)
+        expect(error.category).to eq("missing_reference")
+        expect(error.entity_type).to eq("operation")
         expect(error.field).to eq("ea_object_id")
         expect(error.message).to include("Parent object 999 does not exist")
       end

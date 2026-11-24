@@ -16,7 +16,7 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
       )
 
       expect(result.messages.size).to eq(1)
-      expect(result.messages.first.severity).to eq(:error)
+      expect(result.messages.first.severity).to eq("error")
       expect(result.has_errors?).to be true
     end
   end
@@ -32,7 +32,7 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
       )
 
       expect(result.messages.size).to eq(1)
-      expect(result.messages.first.severity).to eq(:warning)
+      expect(result.messages.first.severity).to eq("warning")
       expect(result.has_warnings?).to be true
     end
   end
@@ -48,7 +48,7 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
       )
 
       expect(result.messages.size).to eq(1)
-      expect(result.messages.first.severity).to eq(:info)
+      expect(result.messages.first.severity).to eq("info")
       expect(result.has_info?).to be true
     end
   end
@@ -129,21 +129,21 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
     describe "#errors" do
       it "returns only error messages", :aggregate_failures do
         expect(result.errors.size).to eq(1)
-        expect(result.errors.first.severity).to eq(:error)
+        expect(result.errors.first.severity).to eq("error")
       end
     end
 
     describe "#warnings" do
       it "returns only warning messages", :aggregate_failures do
         expect(result.warnings.size).to eq(1)
-        expect(result.warnings.first.severity).to eq(:warning)
+        expect(result.warnings.first.severity).to eq("warning")
       end
     end
 
     describe "#info" do
       it "returns only info messages", :aggregate_failures do
         expect(result.info.size).to eq(1)
-        expect(result.info.first.severity).to eq(:info)
+        expect(result.info.first.severity).to eq("info")
       end
     end
 
@@ -159,10 +159,7 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
       it "filters by category", :aggregate_failures do
         orphaned = result.by_category(:orphaned)
         expect(orphaned.size).to eq(2)
-        expect(orphaned.map(&:entity_type)).to contain_exactly(
-          :association,
-          :package,
-        )
+        expect(orphaned.map(&:entity_type)).to contain_exactly("association", "package")
       end
     end
 
@@ -204,29 +201,29 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
       it "groups messages by category", :aggregate_failures do
         grouped = result.grouped_by_category
         expect(grouped.keys).to contain_exactly(
-          :missing_reference,
-          :orphaned,
+          "missing_reference",
+          "orphaned",
         )
-        expect(grouped[:missing_reference].size).to eq(2)
-        expect(grouped[:orphaned].size).to eq(1)
+        expect(grouped["missing_reference"].size).to eq(2)
+        expect(grouped["orphaned"].size).to eq(1)
       end
     end
 
     describe "#grouped_by_severity" do
       it "groups messages by severity", :aggregate_failures do
         grouped = result.grouped_by_severity
-        expect(grouped.keys).to contain_exactly(:error, :warning)
-        expect(grouped[:error].size).to eq(2)
-        expect(grouped[:warning].size).to eq(1)
+        expect(grouped.keys).to contain_exactly("error", "warning")
+        expect(grouped["error"].size).to eq(2)
+        expect(grouped["warning"].size).to eq(1)
       end
     end
 
     describe "#grouped_by_entity_type" do
       it "groups messages by entity type", :aggregate_failures do
         grouped = result.grouped_by_entity_type
-        expect(grouped.keys).to contain_exactly(:class, :association)
-        expect(grouped[:class].size).to eq(2)
-        expect(grouped[:association].size).to eq(1)
+        expect(grouped.keys).to contain_exactly("class", "association")
+        expect(grouped["class"].size).to eq(2)
+        expect(grouped["association"].size).to eq(1)
       end
     end
   end
@@ -263,13 +260,13 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
       expect(stats[:warnings]).to eq(1)
       expect(stats[:info]).to eq(1)
       expect(stats[:by_category]).to include(
-        missing_reference: 1,
-        orphaned: 2,
+        "missing_reference" => 1,
+        "orphaned" => 2,
       )
       expect(stats[:by_entity_type]).to include(
-        class: 1,
-        association: 1,
-        package: 1,
+        "class" => 1,
+        "association" => 1,
+        "package" => 1,
       )
     end
   end

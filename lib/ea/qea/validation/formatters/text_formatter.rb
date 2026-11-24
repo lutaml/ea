@@ -194,13 +194,13 @@ module Ea
 
           # Returns an icon for the severity level
           #
-          # @param severity [Symbol] Severity level
+          # @param severity [String, Symbol] Severity level
           # @return [String]
           def severity_icon(severity)
-            case severity
-            when :error then colorize("✗", :red)
-            when :warning then colorize("⚠", :yellow)
-            when :info then colorize("ℹ", :blue)
+            case severity.to_s
+            when "error" then colorize("✗", :red)
+            when "warning" then colorize("⚠", :yellow)
+            when "info" then colorize("ℹ", :blue)
             else "•"
             end
           end

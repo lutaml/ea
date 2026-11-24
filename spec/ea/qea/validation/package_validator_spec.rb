@@ -55,8 +55,8 @@ RSpec.describe Ea::Qea::Validation::PackageValidator do
         expect(result.errors.size).to eq(1)
 
         error = result.errors.first
-        expect(error.category).to eq(:missing_reference)
-        expect(error.entity_type).to eq(:package)
+        expect(error.category).to eq("missing_reference")
+        expect(error.entity_type).to eq("package")
         expect(error.entity_id).to eq("1")
         expect(error.field).to eq("parent_id")
         expect(error.message).to include("Parent package 999 does not exist")
@@ -89,7 +89,7 @@ RSpec.describe Ea::Qea::Validation::PackageValidator do
         expect(result.warnings.size).to eq(2)
 
         warnings = result.warnings
-        expect(warnings.all? { |w| w.category == :duplicate }).to be true
+        expect(warnings.all? { |w| w.category == "duplicate" }).to be true
         expect(warnings.all? { |w| w.field == "name" }).to be true
         expect(warnings.first.message).to include("Duplicate package name")
       end
@@ -121,7 +121,7 @@ RSpec.describe Ea::Qea::Validation::PackageValidator do
         expect(result.valid?).to be false
 
         circular_errors = result.errors.select do |e|
-          e.category == :circular_reference
+          e.category == "circular_reference"
         end
         expect(circular_errors).not_to be_empty
         expect(circular_errors.first.message).to include("Circular package")
