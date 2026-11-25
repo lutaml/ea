@@ -46,6 +46,10 @@ module Ea
           attribute :collection_name, :string
           attribute :description, :string
           attribute :columns, ColumnDefinition, collection: true
+          # Blob columns (e.g. t_image.Image) are excluded from the load
+          # when the loader runs in blob-free mode; declared per table so
+          # the loader knows what to drop.
+          attribute :blob_columns, :string, collection: true
 
           yaml do
             map "table_name", to: :table_name
@@ -54,6 +58,7 @@ module Ea
             map "collection_name", to: :collection_name
             map "description", to: :description
             map "columns", to: :columns
+            map "blob_columns", to: :blob_columns
           end
 
           # Get column definition by name
@@ -93,6 +98,10 @@ module Ea
         attribute :boolean_fields, :string, collection: true
         attribute :null_handling, NullHandling
         attribute :tables, TableDefinition, collection: true
+        # Runtime toggle (not file-backed): when false, tables declaring
+        # blob_columns are excluded from enabled_tables — the memory win
+        # for consumers that never read embedded images.
+        attribute :include_blobs, :boolean, default: -> { true }
 
         yaml do
           map "version", to: :version
@@ -131,11 +140,16 @@ module Ea
           end
         end
 
-        # Get list of enabled tables
+        # Get list of enabled tables. In blob-free mode tables carrying
+        # declared blob columns are dropped entirely (their content
+        # cannot be partially loaded into the typed models).
         #
         # @return [Array<TableDefinition>] Array of enabled table definitions
         def enabled_tables
-          tables&.select(&:enabled) || []
+          all = tables&.select(&:enabled) || []
+          return all if include_blobs
+
+          all.reject { |t| t.blob_columns&.any? }
         end
 
         # Get table configuration by table name

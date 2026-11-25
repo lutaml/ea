@@ -336,4 +336,20 @@ RSpec.describe Ea::Qea::Services::Configuration do
       end
     end
   end
+
+  describe "blob-free mode" do
+    it "keeps blob tables by default" do
+      config = Ea::Qea::Services::Configuration.load
+      names = config.enabled_tables.map(&:table_name)
+      expect(names).to include("t_image")
+    end
+
+    it "drops blob-declaring tables when include_blobs is false" do
+      config = Ea::Qea::Services::Configuration.load
+      config.include_blobs = false
+      names = config.enabled_tables.map(&:table_name)
+      expect(names).not_to include("t_image")
+      expect(names).to include("t_object")
+    end
+  end
 end
