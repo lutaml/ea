@@ -12,7 +12,7 @@ module Ea
         # Transform EA diagram to UML diagram
         # @param ea_diagram [EaDiagram] EA diagram model
         # @return [Lutaml::Uml::Diagram] UML diagram
-        def transform(ea_diagram) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity,Metrics/MethodLength
+        def transform(ea_diagram)
           return nil if ea_diagram.nil?
 
           Lutaml::Uml::Diagram.new.tap do |diagram|
@@ -78,7 +78,7 @@ module Ea
         # Transform EA diagram object to UML diagram object
         # @param ea_obj [Models::EaDiagramObject] EA diagram object
         # @return [Lutaml::Uml::DiagramObject] UML diagram object
-        def transform_diagram_object(ea_obj) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+        def transform_diagram_object(ea_obj)
           return nil if ea_obj.nil?
 
           Lutaml::Uml::DiagramObject.new.tap do |obj|
@@ -117,7 +117,7 @@ module Ea
         # Transform EA diagram link to UML diagram link
         # @param ea_link [Models::EaDiagramLink] EA diagram link
         # @return [Lutaml::Uml::DiagramLink] UML diagram link
-        def transform_diagram_link(ea_link) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+        def transform_diagram_link(ea_link)
           return nil if ea_link.nil?
 
           Lutaml::Uml::DiagramLink.new.tap do |link|

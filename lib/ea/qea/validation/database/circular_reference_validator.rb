@@ -12,7 +12,7 @@ module Ea
 
         private
 
-        def detect_circular_packages # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength
+        def detect_circular_packages
           packages.each do |package|
             next if package.root?
 
@@ -42,7 +42,7 @@ module Ea
           end
         end
 
-        def detect_circular_generalizations # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength
+        def detect_circular_generalizations
           # Build generalization graph
           generalizations = connectors.select(&:generalization?)
 
@@ -80,7 +80,7 @@ module Ea
           end
         end
 
-        def format_inheritance_path(visited_ids, circular_id) # rubocop:disable Metrics/CyclomaticComplexity
+        def format_inheritance_path(visited_ids, circular_id)
           path = visited_ids.map do |id|
             obj = objects.find { |o| o.ea_object_id == id }
             obj&.name || id.to_s

@@ -6,7 +6,6 @@ require "spec_helper"
 # the reverse of their Start/End objects and a Path (bus 50px above the
 # MultiSolid/MultiSurface boxes) that EA no longer draws. EA routes them from
 # the Start box to the End box with the bus 50px past the End box's facing edge.
-# rubocop:disable Metrics/BlockLength
 RSpec.describe "QEA width-0 vertical tree Associations with reversed SOID/EOID" do
   include QeaRoutingHelpers
   include QeaReversedTreeHelpers
@@ -83,4 +82,3 @@ RSpec.describe "QEA width-0 vertical tree Associations with reversed SOID/EOID" 
     expect(result[:paths].first).to eq("M 358 519 L 238 298")
   end
 end
-# rubocop:enable Metrics/BlockLength

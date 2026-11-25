@@ -127,7 +127,7 @@ module Ea
         # @param table_name [String] Table name to load
         # @return [Array] Array of model instances
         # @raise [ArgumentError] if table not configured or not enabled
-        def load_table(table_name) # rubocop:disable Metrics/MethodLength
+        def load_table(table_name)
           table_def = @config.table_config_for(table_name)
           unless table_def
             raise ArgumentError,
@@ -166,7 +166,7 @@ module Ea
         # @param db [SQLite3::Database] Database connection
         # @param table_name [String] Table name
         # @return [Array] Array of model instances
-        def load_table_records(db, table_name) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+        def load_table_records(db, table_name)
           model_class = MODEL_CLASSES[table_name]
           raise ArgumentError, "No model class for table #{table_name}" unless model_class
 

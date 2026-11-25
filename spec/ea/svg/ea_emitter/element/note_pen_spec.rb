@@ -5,7 +5,7 @@ require "ea"
 
 # EA never sets the note pen: the outline keeps the cap and join left by the
 # previous drawing, or the initial square/miter pen when the note is first.
-RSpec.describe Ea::Svg::EaEmitter::Element::NoteShapeRenderer do # rubocop:disable Metrics/BlockLength
+RSpec.describe Ea::Svg::EaEmitter::Element::NoteShapeRenderer do
   include NotePenPaintHelpers
 
   let(:legend) do

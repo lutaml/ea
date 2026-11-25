@@ -159,7 +159,7 @@ module Ea
 
         # Collect all xmi_ids from document
         # @return [Array<String>] All xmi_ids
-        def collect_all_xmi_ids # rubocop:disable Metrics/AbcSize
+        def collect_all_xmi_ids
           ids = []
 
           # Collect from top-level elements
@@ -180,7 +180,7 @@ module Ea
         # Recursively collect all xmi_ids from a package and its descendants
         # @param package [Lutaml::Uml::Package] Package to collect from
         # @return [Array<String>] All xmi_ids in package hierarchy
-        def collect_package_xmi_ids(package) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+        def collect_package_xmi_ids(package)
           ids = []
 
           # Collect from package's elements
@@ -199,7 +199,7 @@ module Ea
 
         # Check that all association references are valid
         # @param warnings [Array<String>] Warning accumulator
-        def check_association_references(warnings) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def check_association_references(warnings)
           return if @document.associations.empty?
 
           all_xmi_ids = collect_all_xmi_ids.to_set

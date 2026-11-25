@@ -24,7 +24,7 @@ module Ea
         #
         # @param ea_constraint [Models::EaObjectConstraint] EA constraint model
         # @return [Lutaml::Uml::Constraint, nil] UML constraint or nil
-        def transform(ea_constraint) # rubocop:disable Metrics/AbcSize
+        def transform(ea_constraint)
           return nil unless ea_constraint
 
           Lutaml::Uml::Constraint.new.tap do |constraint|

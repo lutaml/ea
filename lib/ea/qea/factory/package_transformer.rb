@@ -8,7 +8,7 @@ module Ea
         # Transform EA package to UML package
         # @param ea_package [EaPackage] EA package model
         # @return [Lutaml::Uml::Package] UML package
-        def transform(ea_package) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+        def transform(ea_package)
           return nil if ea_package.nil?
 
           Lutaml::Uml::Package.new.tap do |pkg|

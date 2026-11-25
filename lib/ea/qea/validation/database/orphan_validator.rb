@@ -14,7 +14,7 @@ module Ea
 
         private
 
-        def find_orphaned_objects # rubocop:disable Metrics/MethodLength
+        def find_orphaned_objects
           objects.each do |obj|
             next unless obj.package_id
             next if package_exists?(obj.package_id)
@@ -32,7 +32,7 @@ module Ea
           end
         end
 
-        def find_orphaned_attributes # rubocop:disable Metrics/MethodLength
+        def find_orphaned_attributes
           attributes.each do |attr|
             next if object_exists?(attr.ea_object_id)
 
@@ -49,7 +49,7 @@ module Ea
           end
         end
 
-        def find_orphaned_operations # rubocop:disable Metrics/MethodLength
+        def find_orphaned_operations
           operations.each do |op|
             next if object_exists?(op.ea_object_id)
 
@@ -66,7 +66,7 @@ module Ea
           end
         end
 
-        def find_unreferenced_objects # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def find_unreferenced_objects
           # Find objects that are not referenced by any connector,
           # attribute, or diagram
           object_ids = objects.to_set(&:ea_object_id)

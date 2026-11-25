@@ -21,7 +21,6 @@ module Ea
 
         private
 
-        # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         def from_document(doc)
           font = doc.font || Definition::FontSpec.new
           label_font = doc.label_font || Definition::FontSpec.new
@@ -146,7 +145,6 @@ module Ea
             line_height: note_cfg.line_height || 12
           )
         end
-        # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
       end
     end
   end

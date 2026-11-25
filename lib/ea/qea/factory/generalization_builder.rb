@@ -36,8 +36,9 @@ module Ea
         def load_association_generalizations(object_id)
           return [] if object_id.nil?
 
-          gen_connectors = database.connectors_for_object(object_id)
-                                   .select { |c| c.generalization? && c.start_object_id == object_id }
+          gen_connectors = Ea::Qea::Rules::Generalization.connectors_from(
+            object_id, database.connectors_for_object(object_id)
+          )
 
           gen_connectors.filter_map do |ea_connector|
             build_assoc_generalization(ea_connector)
@@ -140,8 +141,9 @@ module Ea
         end
 
         def ea_connector_for(object_id)
-          database.connectors_for_object(object_id)
-                  .find { |c| c.generalization? && c.start_object_id == object_id }
+          Ea::Qea::Rules::Generalization.connector_for(
+            object_id, database.connectors_for_object(object_id)
+          )
         end
 
         def populate_generalization_attrs(generalization, object_id)

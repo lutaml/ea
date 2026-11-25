@@ -7,7 +7,6 @@ require "spec_helper"
 # source leaving left (role right edge 60px out and 7px above the anchor,
 # multiplicity ending 3px short of it and 15px below), whichever way the
 # route leaves the Start box.
-# rubocop:disable Metrics/BlockLength
 RSpec.describe "QEA source labels of reversed-end vertical trees" do
   include QeaEndLabelHelpers
 
@@ -15,7 +14,6 @@ RSpec.describe "QEA source labels of reversed-end vertical trees" do
     "SX=86;SY=-4;EX=0;EY=0;EDGE=3;$LRT=CX=19:CY=16:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;"
   end
 
-  # rubocop:disable Metrics/AbcSize
   def reversed_labels(tree:, soid: "PCPC", eoid: "MSMS", geometry: nil, path: nil)
     style = "Mode=3;EOID=#{eoid};SOID=#{soid};Color=-1;LWidth=0;TREE=#{tree};"
     tables = qea_end_label_tables(path, { "LRT" => [-38, -7], "LRB" => [-42, -7] },
@@ -28,7 +26,6 @@ RSpec.describe "QEA source labels of reversed-end vertical trees" do
                                                                     document: document, frame: false).render
     qea_end_label_result(Nokogiri::XML(svg).remove_namespaces!, "0..1")
   end
-  # rubocop:enable Metrics/AbcSize
 
   # Role and multiplicity positions relative to the connector's first point.
   def seat(result)
@@ -56,4 +53,3 @@ RSpec.describe "QEA source labels of reversed-end vertical trees" do
     expect(seat(result)).to eq(role: [3, -23], mult: [3, 0])
   end
 end
-# rubocop:enable Metrics/BlockLength

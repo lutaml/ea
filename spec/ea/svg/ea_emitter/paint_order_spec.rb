@@ -4,7 +4,7 @@ require "spec_helper"
 
 # EA paints placements by descending Sequence and connectors by their
 # stored paint key, each line directly followed by its own heads.
-RSpec.describe "EA paint order" do # rubocop:disable Metrics/BlockLength
+RSpec.describe "EA paint order" do
   include PaintOrderHelpers
 
   let(:index) do

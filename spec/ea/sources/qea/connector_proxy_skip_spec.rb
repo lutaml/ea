@@ -4,7 +4,7 @@ require "spec_helper"
 
 # EA never draws the ProxyConnector stub that anchors an association class.
 RSpec.describe "QEA ProxyConnector placements" do
-  def rendered_rects(object_type) # rubocop:disable Metrics/MethodLength
+  def rendered_rects(object_type)
     rows = Ea::Qea::Models
     database = build_test_database(
       objects: [rows::EaObject.new(ea_object_id: 1, object_type: object_type, name: "Stub",

@@ -3,7 +3,7 @@
 require "spec_helper"
 require "nokogiri"
 
-RSpec.describe Ea::Sources::Xmi::Adapter, "nested classifiers" do # rubocop:disable Metrics/BlockLength
+RSpec.describe Ea::Sources::Xmi::Adapter, "nested classifiers" do
   include XmiBasicRouteLabelHelpers
   include XmiNestedClassifierHelpers
 

@@ -1,5 +1,11 @@
+inherit_from: .rubocop_todo.yml
+
 AllCops:
   TargetRubyVersion: 3.2
+  # Stray git worktrees inside the checkout shadow lib/ files on the
+  # load path; keep the linter out of them too.
+  Exclude:
+    - "wt-*/**/*" 
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes

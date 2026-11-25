@@ -3,7 +3,7 @@
 require "spec_helper"
 
 # Keep the source-backed ray and its boundary preservation controls together.
-RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/BlockLength
+RSpec.describe Ea::Sources::Qea::DiagramBuilder do
   include QeaRoutingHelpers
 
   let(:package_ray) do

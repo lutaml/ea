@@ -69,7 +69,7 @@ module Ea
         # @param xmi_doc [Lutaml::Uml::Document] XMI document
         # @param qea_doc [Lutaml::Uml::Document] QEA document
         # @return [void]
-        def verify_structure(xmi_doc, qea_doc) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+        def verify_structure(xmi_doc, qea_doc)
           # Compare package counts (cache for reuse in verify_properties)
           @cached_package_matches = matcher.match_packages(xmi_doc, qea_doc)
           result.add_matches(:packages, @cached_package_matches[:matches].size)
@@ -230,11 +230,11 @@ module Ea
         end
 
         # Verify class properties
-        def verify_class_properties(matches) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+        def verify_class_properties(matches)
           attr_count = 0
           op_count = 0
 
-          matches.each do |qualified_name, pair| # rubocop:disable Metrics/BlockLength
+          matches.each do |qualified_name, pair|
             xmi_class = pair[:xmi]
             qea_class = pair[:qea]
 

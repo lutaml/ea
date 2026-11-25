@@ -3,7 +3,6 @@
 require "spec_helper"
 require "nokogiri"
 
-# rubocop:disable Metrics/BlockLength
 RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do
   include ConnectorRedockHelpers
   include QeaRoutingHelpers
@@ -107,4 +106,3 @@ RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do
     end
   end
 end
-# rubocop:enable Metrics/BlockLength

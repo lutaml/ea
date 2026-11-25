@@ -8,7 +8,7 @@ module Ea
         # Transform EA object to UML instance
         # @param ea_object [EaObject] EA object model
         # @return [Lutaml::Uml::Instance] UML instance
-        def transform(ea_object) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def transform(ea_object)
           return nil if ea_object.nil?
           return nil unless ea_object.instance?
 

@@ -5,7 +5,7 @@ require "yaml"
 
 # Native exports: lutaml/lutaml@063ca187, examples/xmi/Images/<EAID>.svg.
 # Regenerate baseline.yml with svg:parity_report using the manifest model and refs/.
-RSpec.describe "Committed EA reference parity gate" do # rubocop:disable Metrics/BlockLength
+RSpec.describe "Committed EA reference parity gate" do
   let(:root) { File.expand_path("../../../..", __dir__) }
   let(:fixture_dir) { File.join(root, "spec/fixtures/parity") }
   let(:ref_dir) { File.join(fixture_dir, "refs") }

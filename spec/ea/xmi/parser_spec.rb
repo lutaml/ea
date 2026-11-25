@@ -40,7 +40,7 @@ RSpec.describe Ea::Xmi::Parser do
     end
   end
 
-  describe "data type generalization" do # rubocop:disable Metrics/BlockLength
+  describe "data type generalization" do
     let(:fixture_path) { fixtures_path("datatype_generalization.xmi") }
     let(:document) { parser.parse(xmi_model) }
     let(:data_types) { document.packages.first.data_types }

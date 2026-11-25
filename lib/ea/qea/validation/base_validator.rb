@@ -79,7 +79,7 @@ module Ea
         # @param id_column [String] ID column name in the reference table
         # @param category [Symbol] Validation category
         # @return [Boolean] True if reference exists, false otherwise
-        def check_reference_exists( # rubocop:disable Metrics/MethodLength,Metrics/ParameterLists
+        def check_reference_exists(
           entity_id:,
           entity_name:,
           entity_type:,
@@ -219,7 +219,7 @@ module Ea
         # @param package_id [Integer] Package ID to resolve
         # @return [String] Qualified path like
         # "Root::ModelA::PackageB (package_id: 123)"
-        def resolve_package_path(package_id) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def resolve_package_path(package_id)
           return "Root" if package_id.nil? || package_id.zero?
 
           path_parts = []
@@ -257,7 +257,7 @@ module Ea
         # @param object_name [String, nil] Object name if already known
         # @return [String] Qualified name like "Package::ClassName
         # (object_id: 456)"
-        def resolve_class_path(object_id, object_name = nil) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def resolve_class_path(object_id, object_name = nil)
           return "Unknown (object_id: #{object_id})" if object_id.nil?
 
           # Get object from collection directly

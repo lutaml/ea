@@ -13,7 +13,7 @@ module Ea
 
         private
 
-        def validate_package_references # rubocop:disable Metrics/MethodLength
+        def validate_package_references
           objects.each do |obj|
             next unless obj.package_id
 
@@ -33,7 +33,7 @@ module Ea
           end
         end
 
-        def validate_duplicate_names # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def validate_duplicate_names
           objects_by_package = objects.group_by(&:package_id)
 
           objects_by_package.each do |package_id, package_objects|
@@ -64,7 +64,7 @@ module Ea
           end
         end
 
-        def validate_generalization_parents # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+        def validate_generalization_parents
           connectors.select(&:generalization?).each do |gen|
             parent_id = gen.end_object_id
 
