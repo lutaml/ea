@@ -108,13 +108,7 @@ module Ea
         end
 
         def visibility_from_scope(scope)
-          case scope.to_s
-          when "Public" then "public"
-          when "Protected" then "protected"
-          when "Private" then "private"
-          when "Package" then "package"
-          else "public"
-          end
+          Ea::Qea::Rules::Visibility.canonical(scope)
         end
 
         def stereotype_refs(row)

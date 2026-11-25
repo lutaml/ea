@@ -39,8 +39,9 @@ module Ea
         private
 
         def enum?(ea_object)
-          ea_object.enumeration? ||
-            (ea_object.stereotype && ea_object.stereotype.downcase == "enumeration")
+          Ea::Qea::Rules::EnumLiteral.enumeration?(
+            ea_object.object_type, ea_object.stereotype
+          )
         end
 
         def valid_stereotype?(ea_object)

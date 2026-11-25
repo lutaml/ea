@@ -3,6 +3,7 @@
 module Ea
   module Qea
     autoload :Infrastructure, "ea/qea/infrastructure"
+    autoload :Rules, "ea/qea/rules"
     autoload :Services, "ea/qea/services"
     autoload :Models, "ea/qea/models"
     autoload :Factory, "ea/qea/factory"

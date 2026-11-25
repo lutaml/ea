@@ -60,12 +60,7 @@ module Ea
         end
 
         def visibility_from_scope(scope)
-          case scope.to_s
-          when "Public" then "public"
-          when "Protected" then "protected"
-          when "Private" then "private"
-          else "public"
-          end
+          Ea::Qea::Rules::Visibility.canonical(scope)
         end
 
         def boolean(value)

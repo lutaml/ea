@@ -45,8 +45,9 @@ module Ea
         end
 
         def enumeration_stereotype?(object)
-          stereotype = object.stereotype.to_s
-          !stereotype.empty? && stereotype.downcase == "enumeration"
+          Ea::Qea::Rules::EnumLiteral.enumeration?(
+            object.object_type, object.stereotype
+          )
         end
 
         # Resolves the classifier's full attribute list. Combines:
@@ -302,12 +303,7 @@ module Ea
         end
 
         def visibility_from_scope(scope)
-          case scope.to_s
-          when "Public" then "public"
-          when "Protected" then "protected"
-          when "Private" then "private"
-          else "public"
-          end
+          Ea::Qea::Rules::Visibility.canonical(scope)
         end
 
         def stereotype_refs_for(object)

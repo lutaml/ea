@@ -19,13 +19,13 @@ module Ea
       # association end bare when its card field is blank.
       module Cardinality
         # Tokens EA uses for "unbounded". Matched case-insensitively.
-        UNLIMITED_TOKENS = %w[* *-1 -1 unbounded].freeze
+        UNLIMITED_TOKENS = Ea::Qea::Rules::Cardinality::UNLIMITED_TOKENS
 
         # UML defaults when EA carries no explicit bound. EA's wire
         # form for unlimited is "*" (never "-1" — the reference
         # exports contain no value="-1" at all).
-        DEFAULT_LOWER = "0"
-        DEFAULT_UPPER = "*"
+        DEFAULT_LOWER = Ea::Qea::Rules::Cardinality::DEFAULT_MIN
+        DEFAULT_UPPER = Ea::Qea::Rules::Cardinality::DEFAULT_MAX
 
         # EA writes an explicit 1..1 for a Property whose t_attribute
         # bound columns are BOTH blank, rather than falling back to the
@@ -53,16 +53,8 @@ module Ea
         # @return [Hash{Symbol=>String}] `{ lower:, upper: }` always
         #   populated; never nil. Empty/nil input returns the UML default.
         def parse(raw)
-          return defaults if raw.nil? || raw.to_s.strip.empty?
-
-          stripped = raw.to_s.strip
-          return parse_range(stripped) if stripped.include?("..")
-
-          # Bare unlimited token (e.g. "*") means "many" — lower bound
-          # is unspecified, which renders as 0..*.
-          return defaults if UNLIMITED_TOKENS.include?(stripped.downcase)
-
-          { lower: stripped, upper: stripped }
+          parsed = Ea::Qea::Rules::Cardinality.parse(raw)
+          { lower: parsed[:min], upper: parsed[:max] }
         end
 
         # Normalise an upper-bound token: `*` / `unbounded` → `*`
@@ -70,12 +62,7 @@ module Ea
         # @param raw [String, Integer, nil]
         # @return [String]
         def normalize_upper(raw)
-          return DEFAULT_UPPER if raw.nil?
-
-          stripped = raw.to_s.strip
-          return DEFAULT_UPPER if stripped.empty?
-
-          UNLIMITED_TOKENS.include?(stripped.downcase) ? "*" : stripped
+          Ea::Qea::Rules::Cardinality.normalize_max(raw)
         end
 
         # Normalise a lower-bound token: empty/nil → "0" (UML default).
@@ -84,24 +71,9 @@ module Ea
         # @param raw [String, Integer, nil]
         # @return [String]
         def normalize_lower(raw)
-          return DEFAULT_LOWER if raw.nil?
-
-          stripped = raw.to_s.strip
-          return DEFAULT_LOWER if stripped.empty?
-
-          UNLIMITED_TOKENS.include?(stripped.downcase) ? DEFAULT_LOWER : stripped
+          Ea::Qea::Rules::Cardinality.normalize_min(raw)
         end
 
-        # ---- Internal helpers ----
-
-        def defaults
-          { lower: DEFAULT_LOWER, upper: DEFAULT_UPPER }
-        end
-
-        def parse_range(stripped)
-          lower, upper = stripped.split("..", 2)
-          { lower: normalize_lower(lower), upper: normalize_upper(upper) }
-        end
       end
     end
   end

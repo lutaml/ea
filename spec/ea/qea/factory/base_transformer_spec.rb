@@ -120,14 +120,14 @@ RSpec.describe Ea::Qea::Factory::BaseTransformer do
       expect(result).to eq(min: "0", max: "*")
     end
 
-    it "returns nil values for nil input" do
+    it "returns the UML default 0..* for nil input" do
       result = transformer.parse_cardinality(nil)
-      expect(result).to eq(min: nil, max: nil)
+      expect(result).to eq(min: "0", max: "*")
     end
 
-    it "returns nil values for empty string" do
+    it "returns the UML default 0..* for empty string" do
       result = transformer.parse_cardinality("")
-      expect(result).to eq(min: nil, max: nil)
+      expect(result).to eq(min: "0", max: "*")
     end
   end
 

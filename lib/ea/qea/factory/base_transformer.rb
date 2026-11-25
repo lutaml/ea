@@ -36,14 +36,7 @@ module Ea
         # @param ea_visibility [String] EA visibility value
         # @return [String] UML visibility value
         def map_visibility(ea_visibility)
-          return "public" if ea_visibility.nil? || ea_visibility.empty?
-
-          case ea_visibility.downcase
-          when "private" then "private"
-          when "protected" then "protected"
-          when "package" then "package"
-          else "public"
-          end
+          Ea::Qea::Rules::Visibility.canonical(ea_visibility)
         end
 
         # Parse cardinality string to min/max values
@@ -51,18 +44,7 @@ module Ea
         #   "1..*")
         # @return [Hash] Hash with :min and :max keys
         def parse_cardinality(cardinality_str)
-          return { min: nil, max: nil } if cardinality_str.nil? ||
-                                           cardinality_str.empty?
-
-          parts = cardinality_str.split("..")
-          if parts.size == 2
-            { min: parts[0], max: parts[1] }
-          elsif parts.size == 1
-            # EA bare "*" means unbounded (0..*)
-            { min: parts[0] == "*" ? "0" : parts[0], max: parts[0] }
-          else
-            { min: nil, max: nil }
-          end
+          Ea::Qea::Rules::Cardinality.parse(cardinality_str)
         end
 
         # Convert boolean-like values to actual boolean
