@@ -922,6 +922,8 @@ tables:
     primary_key: ImageID
     collection_name: images
     description: "Embedded images (EMF/WMF bitmaps) for diagrams"
+    blob_columns:
+      - Image
     columns:
       - name: ImageID
         type: INTEGER
