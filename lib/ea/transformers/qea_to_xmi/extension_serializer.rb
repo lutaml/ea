@@ -273,7 +273,7 @@ module Ea
         end
 
         def attribute_scope(attr)
-          (attr.scope || "Public").downcase.capitalize
+          Ea::Qea::Rules::Visibility.extension_scope(attr.scope)
         end
 
         def attribute_properties(attr)
@@ -335,7 +335,7 @@ module Ea
         end
 
         def operation_scope(op)
-          (op.scope || "Public").downcase.capitalize
+          Ea::Qea::Rules::Visibility.extension_scope(op.scope)
         end
 
         def operation_type(op)
