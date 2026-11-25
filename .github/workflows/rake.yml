@@ -18,6 +18,25 @@ jobs:
     secrets:
       pat_token: ${{ secrets.LUTAML_CI_PAT_TOKEN }}
 
+  # The shared generic-rake matrix tests the cimas rubies (3.4, 4.0);
+  # the gemspec declares ">= 3.2.0" and nothing exercised that floor
+  # (issue #253). Additive 3.2 legs here close the gap without
+  # diverging from the shared workflow.
+  ruby-32-floor:
+    name: Test on Ruby 3.2 (gemspec floor)
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+      - run: bundle exec rake spec
+
   # Autonomous release: green main runs release patch directly via
   # workflow_dispatch — the ONE event GITHUB_TOKEN can self-trigger,
   # unlike the repository_dispatch relay the shared template uses,
