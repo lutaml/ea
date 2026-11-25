@@ -2,10 +2,10 @@
 
 require "spec_helper"
 
-RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/BlockLength
+RSpec.describe Ea::Sources::Qea::DiagramBuilder do
   include QeaRoutingHelpers
 
-  it "offsets only width-2 parent-above multi-bend routes, preserving interior bends" do # rubocop:disable Metrics/BlockLength
+  it "offsets only width-2 parent-above multi-bend routes, preserving interior bends" do
     cases = [
       [{ path: "150:-250;450:-250;", style: "TREE=V;LWidth=2;" },
        "M 85 239 L 85 190 L 385 190 L 385 141"],
@@ -48,7 +48,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
 
   # Each row: input, expected route paths, expected marker polygons. The
   # diamond sits on the source end, so its tip follows the first point.
-  it "docks only width-2 parent-above bent Aggregations like Generalizations" do # rubocop:disable Metrics/BlockLength
+  it "docks only width-2 parent-above bent Aggregations like Generalizations" do
     bent = "150:-250;450:-250;"
     docked_tip = "85 239 80 229 85 219 90 229"
     stale = ["M 135 240 L 85 190 L 385 190 L 435 40"]
@@ -417,7 +417,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
       style: "Mode=3;TREE=LH;LWidth=2;" }
   end
 
-  it "retains stored lateral corners and docks each leg on its own box" do # rubocop:disable Metrics/BlockLength
+  it "retains stored lateral corners and docks each leg on its own box" do
     cases = [
       [lateral_corner, "M 145 140 L 145 190 L 364 190",
        ["145 140 150 150 145 160 140 150"]],
@@ -442,7 +442,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     end
   end
 
-  it "preserves other modes, styles, types and invalid lateral corners" do # rubocop:disable Metrics/BlockLength
+  it "preserves other modes, styles, types and invalid lateral corners" do
     path = "M 200 141 L 363 171"
     markers = ["200 141 211 138 220 145 209 148"]
     controls = [
@@ -603,7 +603,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
       geometry: "SX=0;SY=0;EX=0;EY=0;EDGE=4;", style: "Mode=3;TREE=OS;LWidth=2;" }
   end
 
-  it "retains square-routing bends and projects endpoints onto their own edges" do # rubocop:disable Metrics/BlockLength
+  it "retains square-routing bends and projects endpoints onto their own edges" do
     cases = [
       [square_corner, "M 295 152 L 116 152 L 116 265", []],
       [square_corner.merge(path: "621:-627;621:-627;"),
@@ -629,7 +629,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     end
   end
 
-  it "preserves custom diagonals, invalid corners and other square-routing styles" do # rubocop:disable Metrics/BlockLength
+  it "preserves custom diagonals, invalid corners and other square-routing styles" do
     ["Mode=2;TREE=OS;LWidth=2;", "TREE=OS;LWidth=2;", "Mode=3;LWidth=2;",
      "Mode=3;TREE=OS;LWidth=0;", "Mode=3;TREE=OR;LWidth=2;"].each do |style|
       expect(render_qea_route(**square_corner.merge(style: style))[:paths].first)
@@ -690,7 +690,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
       geometry: "EDGE=4;SX=0;SY=24;EX=0;EY=30;", style: "Mode=3;LWidth=2;" }
   end
 
-  it "mirrors stored mathematical Y offsets for direct ray origins" do # rubocop:disable Metrics/BlockLength
+  it "mirrors stored mathematical Y offsets for direct ray origins" do
     cases = [
       [stored_ray, "M 416 72 L 248 72", [416, 72]],
       [stored_ray.merge(connector_type: "Generalization", source: [781, 64, 202, 101],
@@ -738,7 +738,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     expect([connector.target_port.x, connector.target_port.y]).to eq([1250, 780])
   end
 
-  it "keeps custom paths, other modes, tree styles and missing ports on their original origins" do # rubocop:disable Metrics/BlockLength
+  it "keeps custom paths, other modes, tree styles and missing ports on their original origins" do
     controls = [
       { style: "Mode=2;LWidth=2;" }, { style: "LWidth=2;" },
       { style: "Mode=3;TREE=V;LWidth=2;" },
@@ -796,7 +796,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
       geometry: "EDGE=2;EX=-156;EY=-9;SX=39;SY=12;" }
   end
 
-  it "uses direct mathematical rays when an EDGE2 connector has no authored bends" do # rubocop:disable Metrics/BlockLength
+  it "uses direct mathematical rays when an EDGE2 connector has no authored bends" do
     cases = [
       [empty_path_ray, "M 255 281 L 427 281"],
       [empty_path_ray.merge(connector_type: "Generalization", source: [137, 95, 326, 1060],

@@ -7,6 +7,20 @@ AllCops:
   Exclude:
     - "wt-*/**/*" 
 
+# Spec suites legitimately run long describe/it blocks and setup
+# methods; size-complexity cops apply to library code only.
+Metrics:
+  Exclude:
+    - "spec/**/*"
+
+# The codebase does not follow comment-every-module discipline; the
+# cop is noise at this scale.
+Style/Documentation:
+  Enabled: false
+
+Naming/MethodParameterName:
+  Enabled: false
+
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
