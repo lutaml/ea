@@ -6,7 +6,7 @@ require "ea"
 # EA leaves the legend pen to whatever was drawn before it, exactly as it
 # does for notes: square/miter when the legend is the first thing painted,
 # otherwise the pen the previous drawing left behind.
-RSpec.describe Ea::Svg::EaEmitter::Element::LegendRenderer do # rubocop:disable Metrics/BlockLength
+RSpec.describe Ea::Svg::EaEmitter::Element::LegendRenderer do
   include NotePenPaintHelpers
 
   let(:bounds) { Ea::Model::Bounds.new(x: 100, y: 50, width: 194, height: 120) }

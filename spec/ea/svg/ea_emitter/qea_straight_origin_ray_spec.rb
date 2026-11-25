@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe "QEA straight origin rays" do # rubocop:disable Metrics/BlockLength
+RSpec.describe "QEA straight origin rays" do
   include QeaCompartmentFontHelpers
   include QeaRoutingHelpers
 

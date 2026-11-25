@@ -43,7 +43,7 @@ module Ea
           end
         end
 
-        def create_association_attribute( # rubocop:disable Metrics/ParameterLists
+        def create_association_attribute(
           name:, type:, type_xmi_id:,
           association_xmi_id:, cardinality:, definition:,
           gen_name:, name_ns:, type_ns:, is_src: true

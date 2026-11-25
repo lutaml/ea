@@ -74,7 +74,7 @@ module Ea
         # @param context [Hash] Validation context
         # @param validators [Array<Symbol>, nil] Optional validator filter
         # @return [ValidationResult]
-        def validate_qea_database(context, validators = nil) # rubocop:disable Metrics/MethodLength
+        def validate_qea_database(context, validators = nil)
           result = ValidationResult.new
           db_context = context.merge(result: result)
 
@@ -106,7 +106,7 @@ module Ea
         # @param context [Hash] Validation context
         # @param validators [Array<Symbol>, nil] Optional validator filter
         # @return [ValidationResult]
-        def validate_uml_tree(context, validators = nil) # rubocop:disable Metrics/MethodLength
+        def validate_uml_tree(context, validators = nil)
           result = ValidationResult.new
           uml_context = context.merge(result: result)
 
@@ -172,7 +172,7 @@ module Ea
 
         private
 
-        def build_context_internal # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def build_context_internal
           context = {
             document: @document,
             database: @database,
@@ -206,7 +206,7 @@ module Ea
 
         #
         # @return [void]
-        def setup_default_validators # rubocop:disable Metrics/MethodLength
+        def setup_default_validators
           # Phase 1: QEA Database Integrity Validators
           @registry.register(:referential_integrity,
                              ReferentialIntegrityValidator)
@@ -338,7 +338,7 @@ module Ea
         #
         # @param result [ValidationResult]
         # @return [void]
-        def display_text_result(result) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+        def display_text_result(result)
           puts "=" * 80
           puts "VALIDATION REPORT"
           puts "=" * 80

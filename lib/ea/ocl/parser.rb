@@ -33,7 +33,7 @@ module Ea
       end
 
       # Parse one expression. Returns a single AST node.
-      def parse_expression(source) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+      def parse_expression(source)
         s = source.strip
 
         # Strip outer parens
@@ -144,7 +144,7 @@ module Ea
         nil
       end
 
-      def find_top_level_op(source, op) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+      def find_top_level_op(source, op)
         depth = 0
         i = 0
         while i < source.length

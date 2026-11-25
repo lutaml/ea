@@ -6,7 +6,7 @@ require "tmpdir"
 require "yaml"
 require "stringio"
 
-RSpec.describe Ea::Svg::Parity::CorpusReport do # rubocop:disable Metrics/BlockLength
+RSpec.describe Ea::Svg::Parity::CorpusReport do
   let(:classifiers) do
     %w[anchor second label extra].map { |name| Ea::Model::Klass.new(id: name, name: name) }
   end
@@ -127,7 +127,7 @@ RSpec.describe Ea::Svg::Parity::CorpusReport do # rubocop:disable Metrics/BlockL
     end
   end
 
-  context "with rake tasks" do # rubocop:disable Metrics/BlockLength
+  context "with rake tasks" do
     around do |example|
       previous = Rake.application
       Rake.application = Rake::Application.new

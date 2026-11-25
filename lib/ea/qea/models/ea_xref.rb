@@ -104,7 +104,7 @@ module Ea
         #
         # @param desc [String] Description field content
         # @return [Hash] Parsed data
-        def parse_description_field(desc) # rubocop:disable Metrics/MethodLength
+        def parse_description_field(desc)
           return {} if desc.nil? || desc.empty?
 
           result = { raw: desc }

@@ -5,7 +5,7 @@ require "ea"
 
 # Positions below are the values EA's own export draws for the same
 # diagrams in the repository's small example models.
-RSpec.describe "issue 135 small-corpus gaps (QEA)" do # rubocop:disable Metrics/BlockLength
+RSpec.describe "issue 135 small-corpus gaps (QEA)" do
   include FixtureCache
   include Issue135X7cGapHelpers
 

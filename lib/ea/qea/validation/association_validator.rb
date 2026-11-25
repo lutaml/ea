@@ -19,7 +19,7 @@ module Ea
           end
         end
 
-        def validate_start_object(connector) # rubocop:disable Metrics/MethodLength
+        def validate_start_object(connector)
           return if reference_exists?("t_object", "ea_object_id",
                                       connector.start_object_id)
 
@@ -34,7 +34,7 @@ module Ea
           )
         end
 
-        def validate_end_object(connector) # rubocop:disable Metrics/MethodLength
+        def validate_end_object(connector)
           return if reference_exists?("t_object", "ea_object_id",
                                       connector.end_object_id)
 

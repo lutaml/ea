@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module QeaAssociationClassHelpers
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/ParameterLists
   def render_association_class(subtype: "Class", class_id: "205", placed: true,
                                proxy_type: "ProxyConnector", classifier: "base-association",
                                class_bounds: [657, 601, 170, 88], second_classifier: classifier,
@@ -43,5 +42,4 @@ module QeaAssociationClassHelpers
     ).render
     Nokogiri::XML("<svg>#{svg}</svg>").remove_namespaces!
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/ParameterLists
 end

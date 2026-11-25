@@ -36,7 +36,7 @@ module SvgComparisonHelper
   #
   # @param svg_string [String] Raw SVG content
   # @return [String] Normalized SVG string
-  def normalize_svg(svg_string) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
+  def normalize_svg(svg_string)
     return "" if svg_string.nil? || svg_string.empty?
 
     doc = Nokogiri::XML(svg_string)
@@ -136,7 +136,7 @@ module SvgComparisonHelper
   #
   # @param svg_string [String] SVG content
   # @return [Hash] Coordinates grouped by element type
-  def extract_coordinates(svg_string) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+  def extract_coordinates(svg_string)
     doc = Nokogiri::XML(svg_string)
     doc.remove_namespaces!
     coordinates = Hash.new { |h, k| h[k] = [] }
@@ -197,7 +197,7 @@ module SvgComparisonHelper
   # @param ref_coords [Hash] Reference coordinates
   # @param tolerance [Float] Maximum acceptable difference in pixels
   # @return [Array<String>] List of coordinate differences
-  def compare_coordinates(gen_coords, ref_coords, tolerance: 5.0) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+  def compare_coordinates(gen_coords, ref_coords, tolerance: 5.0)
     differences = []
 
     # Check each element type
@@ -240,7 +240,7 @@ module SvgComparisonHelper
   # @param generated_svg [String] Generated SVG content
   # @param reference_svg [String] Reference SVG content
   # @return [Float] Similarity score (0.0 to 1.0)
-  def calculate_similarity_score(generated_svg, reference_svg) # rubocop:disable Metrics/AbcSize
+  def calculate_similarity_score(generated_svg, reference_svg)
     structure_result = compare_svg_structure(generated_svg, reference_svg)
 
     # If structure doesn't match, score is based on element overlap
@@ -276,7 +276,7 @@ module SvgComparisonHelper
   # @param reference_svg [String] Reference SVG content
   # @param output_path [String] Path to save diff image
   # @return [Hash] Result with :success and :similarity keys
-  def visual_similarity(generated_svg, reference_svg, output_path: nil) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+  def visual_similarity(generated_svg, reference_svg, output_path: nil)
     unless visual_comparison_available?
       return {
         success: false,

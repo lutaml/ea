@@ -13,7 +13,7 @@ module Ea
 
         private
 
-        def validate_all_package_references # rubocop:disable Metrics/MethodLength
+        def validate_all_package_references
           # Check all parent_id references in packages
           packages.each do |pkg|
             next if pkg.root?
@@ -33,7 +33,7 @@ module Ea
           end
         end
 
-        def validate_all_object_references # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+        def validate_all_object_references
           # Check all package_id references in objects
           objects.each do |obj|
             next unless obj.package_id
@@ -68,7 +68,7 @@ module Ea
           end
         end
 
-        def validate_all_connector_references # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+        def validate_all_connector_references
           # Check all object references in connectors
           connectors.each do |conn|
             unless object_exists?(conn.start_object_id)

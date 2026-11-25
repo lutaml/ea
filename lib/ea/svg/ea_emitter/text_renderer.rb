@@ -172,7 +172,7 @@ module Ea
         WIDTH_CACHE = {}
 
         class << self
-          def estimate_width(text, size, _width_factor = nil, family: nil, # rubocop:disable Metrics/ParameterLists
+          def estimate_width(text, size, _width_factor = nil, family: nil,
                              weight: nil, style: nil, logical_height: nil,
                              legend_title: false)
             opts = { family: family, weight: weight, style: style,

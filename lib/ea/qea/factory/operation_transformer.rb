@@ -8,7 +8,7 @@ module Ea
         # Transform EA operation to UML operation
         # @param ea_operation [EaOperation] EA operation model
         # @return [Lutaml::Uml::Operation] UML operation
-        def transform(ea_operation) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+        def transform(ea_operation)
           return nil if ea_operation.nil?
 
           Lutaml::Uml::Operation.new.tap do |op|

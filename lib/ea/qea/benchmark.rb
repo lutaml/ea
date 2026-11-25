@@ -21,7 +21,7 @@ module Ea
         #   puts "QEA: #{results[:qea][:time]}s"
         #   puts "XMI: #{results[:xmi][:time]}s"
         #   puts "Speedup: #{results[:speedup]}x"
-        def compare(qea_path, xmi_path) # rubocop:disable Metrics/MethodLength
+        def compare(qea_path, xmi_path)
           qea_result = measure_qea(qea_path)
           xmi_result = measure_xmi(xmi_path)
 
@@ -48,7 +48,7 @@ module Ea
         #   result = Ea::Qea::Benchmark.measure_qea("model.qea")
         #   puts "Time: #{result[:time]}s"
         #   puts "Packages: #{result[:stats][:packages]}"
-        def measure_qea(path) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def measure_qea(path)
           return { error: "File not found: #{path}" } unless File.exist?(path)
 
           result = {
@@ -94,7 +94,7 @@ module Ea
         # @example
         #   result = Ea::Qea::Benchmark.measure_xmi("model.xmi")
         #   puts "Time: #{result[:time]}s"
-        def measure_xmi(path) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def measure_xmi(path)
           return { error: "File not found: #{path}" } unless File.exist?(path)
 
           result = {
@@ -138,7 +138,7 @@ module Ea
         #
         # @param results [Hash] Results from compare method
         # @return [String] Formatted text
-        def format_results(results) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def format_results(results)
           return results[:error] if results[:error]
 
           output = []

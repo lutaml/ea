@@ -8,7 +8,7 @@ module Ea
         attr_reader :matches, :differences, :xmi_only, :qea_only,
                     :property_differences
 
-        def initialize # rubocop:disable Metrics/MethodLength
+        def initialize
           @matches = {
             packages: 0,
             classes: 0,
@@ -100,7 +100,7 @@ module Ea
         # Generate human-readable summary
         #
         # @return [String] Summary text
-        def summary # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def summary
           lines = []
           lines << "=== Verification Summary ==="
           lines << ""
@@ -205,7 +205,7 @@ module Ea
         # Get critical issues (information loss)
         #
         # @return [Array<String>] List of critical issues
-        def critical_issues # rubocop:disable Metrics/AbcSize
+        def critical_issues
           issues = []
 
           # Missing packages
@@ -229,7 +229,7 @@ module Ea
         # Get acceptable differences (QEA has more)
         #
         # @return [Array<String>] List of acceptable differences
-        def acceptable_differences # rubocop:disable Metrics/MethodLength
+        def acceptable_differences
           acceptable = []
 
           # QEA-only elements

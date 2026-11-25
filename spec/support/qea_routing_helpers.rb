@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module QeaRoutingHelpers
-  # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/ParameterLists
   def render_qea_route(path:, style:, source: [100, 300, 200, 100],
                        target: [400, 100, 200, 100],
                        geometry: "SX=0;SY=0;EX=0;EY=0;EDGE=1;",
@@ -50,7 +49,6 @@ module QeaRoutingHelpers
       markers: xml.css("polygon").map { |node| node["points"] }
     }
   end
-  # rubocop:enable Metrics/AbcSize,Metrics/MethodLength,Metrics/ParameterLists
 
   def qea_route_dividers(document)
     elements = Ea::Svg::EaEmitter::Elements.new(

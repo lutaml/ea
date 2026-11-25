@@ -8,11 +8,11 @@ module Ea
         # Transform EA connector to UML association
         # @param ea_connector [EaConnector] EA connector model
         # @return [Lutaml::Uml::Association] UML association
-        def transform(ea_connector) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def transform(ea_connector)
           return nil if ea_connector.nil?
           return nil unless ea_connector.association?
 
-          Lutaml::Uml::Association.new.tap do |assoc| # rubocop:disable Metrics/BlockLength
+          Lutaml::Uml::Association.new.tap do |assoc|
             # Map basic properties
             assoc.name = ea_connector.name unless
               ea_connector.name.nil? || ea_connector.name.empty?

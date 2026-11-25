@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe "QEA NoteLink origin rays" do # rubocop:disable Metrics/BlockLength
+RSpec.describe "QEA NoteLink origin rays" do
   include QeaCompartmentFontHelpers
   include QeaRoutingHelpers
 

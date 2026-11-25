@@ -10,7 +10,7 @@ module Ea
         # @param xmi_pkg [Lutaml::Uml::Package] XMI package
         # @param qea_pkg [Lutaml::Uml::Package] QEA package
         # @return [Hash] Comparison result with :equal and :differences
-        def compare_packages(xmi_pkg, qea_pkg) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+        def compare_packages(xmi_pkg, qea_pkg)
           differences = []
 
           # Compare basic properties
@@ -41,7 +41,7 @@ module Ea
         # @param xmi_class [Lutaml::Uml::UmlClass] XMI class
         # @param qea_class [Lutaml::Uml::UmlClass] QEA class
         # @return [Hash] Comparison result with :equal and :differences
-        def compare_classes(xmi_class, qea_class) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+        def compare_classes(xmi_class, qea_class)
           differences = []
 
           # Compare name
@@ -88,7 +88,7 @@ module Ea
         # @param xmi_attr [Lutaml::Uml::TopElementAttribute] XMI attribute
         # @param qea_attr [Lutaml::Uml::TopElementAttribute] QEA attribute
         # @return [Hash] Comparison result with :equal and :differences
-        def compare_attributes(xmi_attr, qea_attr) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def compare_attributes(xmi_attr, qea_attr)
           differences = []
 
           # Compare name
@@ -135,7 +135,7 @@ module Ea
         # @param xmi_op [Lutaml::Uml::Operation] XMI operation
         # @param qea_op [Lutaml::Uml::Operation] QEA operation
         # @return [Hash] Comparison result with :equal and :differences
-        def compare_operations(xmi_op, qea_op) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+        def compare_operations(xmi_op, qea_op)
           differences = []
 
           # Compare name
@@ -171,7 +171,7 @@ module Ea
         # @param xmi_assoc [Lutaml::Uml::Association] XMI association
         # @param qea_assoc [Lutaml::Uml::Association] QEA association
         # @return [Hash] Comparison result with :equal and :differences
-        def compare_associations(xmi_assoc, qea_assoc) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def compare_associations(xmi_assoc, qea_assoc)
           differences = []
 
           # Compare owner end

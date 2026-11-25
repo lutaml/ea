@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module ConnectorRedockHelpers
-  # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
   def redock_fixture(options = {})
     type = options.fetch(:type, "Generalization")
     relation = if type == "Generalization"
@@ -31,7 +30,6 @@ module ConnectorRedockHelpers
       model_index: { "r" => relation }, drawn_bounds: bounds,
       divider_y_by_ref: options[:dividers] }
   end
-  # rubocop:enable Metrics/AbcSize,Metrics/MethodLength
 
   def redock_point(coordinates)
     coordinates && Ea::Model::Point.new(x: coordinates[0], y: coordinates[1])

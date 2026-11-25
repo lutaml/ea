@@ -66,3 +66,47 @@ RSpec.describe Ea::Qea::Rules do
     end
   end
 end
+
+RSpec.describe Ea::Qea::Rules::Generalization do
+  let(:connectors) do
+    [
+      Ea::Qea::Models::EaConnector.new(
+        connector_id: 1, start_object_id: 10, end_object_id: 20,
+        connector_type: "Generalization"
+      ),
+      Ea::Qea::Models::EaConnector.new(
+        connector_id: 2, start_object_id: 20, end_object_id: 10,
+        connector_type: "Generalization"
+      ),
+      Ea::Qea::Models::EaConnector.new(
+        connector_id: 3, start_object_id: 10, end_object_id: 30,
+        connector_type: "Association"
+      )
+    ]
+  end
+
+  describe ".connector_for" do
+    it "finds the child→parent generalization from the child side" do
+      expect(described_class.connector_for(10, connectors).connector_id).to eq(1)
+    end
+
+    it "returns nil when the object is only a parent" do
+      expect(described_class.connector_for(30, connectors)).to be_nil
+    end
+
+    it "returns nil for nil object id" do
+      expect(described_class.connector_for(nil, connectors)).to be_nil
+    end
+  end
+
+  describe ".connectors_from" do
+    it "returns only the generalization connectors originating at the child" do
+      expect(described_class.connectors_from(10, connectors).map(&:connector_id))
+        .to eq([1])
+    end
+
+    it "returns [] for nil object id" do
+      expect(described_class.connectors_from(nil, connectors)).to eq([])
+    end
+  end
+end

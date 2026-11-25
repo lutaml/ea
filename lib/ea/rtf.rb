@@ -32,7 +32,7 @@ module Ea
 
     # Parse the group starting at text[start] (positioned at "{").
     # @return [Integer] index just past the group's closing brace
-    def parse_group(text, start, out, skipping:) # rubocop:disable Metrics/MethodLength
+    def parse_group(text, start, out, skipping:)
       skipping ||= destination_group?(text, start)
       idx = start + 1
       while idx < text.length
@@ -57,7 +57,7 @@ module Ea
 
     # Handle a backslash escape or control word.
     # @return [Integer] index just past the control sequence
-    def parse_control(text, idx, out, skipping) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+    def parse_control(text, idx, out, skipping)
       case text[idx + 1]
       when "\\", "{", "}"
         out << text[idx + 1] unless skipping

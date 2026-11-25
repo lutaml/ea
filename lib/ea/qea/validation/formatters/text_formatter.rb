@@ -37,7 +37,7 @@ module Ea
           # Formats the validation result as text
           #
           # @return [String] Formatted text output
-          def format # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+          def format
             lines = []
             lines << header
             lines << ""
@@ -84,7 +84,7 @@ module Ea
           # Formats the summary
           #
           # @return [String]
-          def summary # rubocop:disable Metrics/AbcSize
+          def summary
             status = if result.valid?
                        colorize("✓ VALID", :green, bold: true)
                      elsif result.has_errors?
@@ -122,7 +122,7 @@ module Ea
           #
           # @param messages [Array<ValidationMessage>] Messages to format
           # @return [String]
-          def format_messages(messages) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+          def format_messages(messages)
             lines = []
             messages_to_show = apply_limit(messages)
 
@@ -211,7 +211,7 @@ module Ea
           # @param color [Symbol] Color name
           # @param bold [Boolean] Make text bold
           # @return [String]
-          def colorize(text, color = nil, bold: false) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/MethodLength
+          def colorize(text, color = nil, bold: false)
             return text unless options[:color]
 
             codes = []

@@ -3,7 +3,7 @@
 require "spec_helper"
 require "nokogiri"
 
-RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do # rubocop:disable Metrics/BlockLength
+RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do
   include ConnectorRedockHelpers
 
   it "clips a non-tree Association with stored geometry on the stroke outline" do
@@ -142,7 +142,7 @@ RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do # rubocop:disable Metrics/
     expect(redock_output(fixture).first.first).to eq("M 50 100 L 20 100 L 20 0")
   end
 
-  it "clips width-2 generalization and aggregation lines and markers against the stroke outline" do # rubocop:disable Metrics/BlockLength
+  it "clips width-2 generalization and aggregation lines and markers against the stroke outline" do
     [
       [{}, "M 20 99 L 20 41", "20 41 26 57 14 57"],
       [{ source: [0, 0, 40, 40], target: [0, 100, 40, 40], anchors: [[20, 20], [20, 120]] },
@@ -163,7 +163,7 @@ RSpec.describe Ea::Svg::EaEmitter::ConnectorRedock do # rubocop:disable Metrics/
     end
   end
 
-  it "preserves existing clipping outside the explicit type, width and positive-dimension scope" do # rubocop:disable Metrics/BlockLength
+  it "preserves existing clipping outside the explicit type, width and positive-dimension scope" do
     parameters = ["0", "1", "3", nil, "2.0", 2].map { |width| { width: width } }
     parameters += [
       { type: "Association" }, { type: "Dependency" },

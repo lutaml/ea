@@ -109,7 +109,7 @@ module Ea
         end
 
         # Recursively index classes in packages
-        def index_classes_in_packages(packages, parent_path, index) # rubocop:disable Metrics/MethodLength
+        def index_classes_in_packages(packages, parent_path, index)
           return unless packages
 
           packages.each do |package|
@@ -150,7 +150,7 @@ module Ea
         end
 
         # Recursively index enums in packages
-        def index_enums_in_packages(packages, parent_path, index) # rubocop:disable Metrics/MethodLength
+        def index_enums_in_packages(packages, parent_path, index)
           return unless packages
 
           packages.each do |package|
@@ -191,7 +191,7 @@ module Ea
         end
 
         # Recursively index data types in packages
-        def index_data_types_in_packages(packages, parent_path, index) # rubocop:disable Metrics/MethodLength
+        def index_data_types_in_packages(packages, parent_path, index)
           return unless packages
 
           packages.each do |package|
@@ -253,7 +253,7 @@ module Ea
         end
 
         # Match elements between two indexes
-        def match_elements(xmi_index, qea_index) # rubocop:disable Metrics/MethodLength
+        def match_elements(xmi_index, qea_index)
           matches = {}
           xmi_only = []
           qea_only = []

@@ -4,7 +4,6 @@ require "spec_helper"
 require "tmpdir"
 require "fileutils"
 
-# rubocop:disable Metrics/BlockLength
 RSpec.describe "QEA database connection release" do
   let(:dir) { Dir.mktmpdir }
   let(:copy) { File.join(dir, "copy.qea") }
@@ -52,4 +51,3 @@ RSpec.describe "QEA database connection release" do
     expect { 2.times { database.close_connection } }.not_to raise_error
   end
 end
-# rubocop:enable Metrics/BlockLength

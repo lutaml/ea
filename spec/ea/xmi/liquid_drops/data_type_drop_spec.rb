@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe Ea::Xmi::LiquidDrops::DataTypeDrop do # rubocop:disable Metrics/BlockLength
+RSpec.describe Ea::Xmi::LiquidDrops::DataTypeDrop do
   let(:root) { Struct.new(:model).new(Struct.new(:name).new("Root")) }
   let(:lookup) do
     Class.new do

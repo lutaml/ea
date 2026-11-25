@@ -42,7 +42,7 @@ module Ea
         #
         # @param document [Lutaml::Uml::Document] The document to process
         # @return [void]
-        def sort_collections(document) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+        def sort_collections(document)
           # Sort top-level collections by name
           document.packages&.sort_by! { |p| p.name || "" }
           document.classes&.sort_by! { |c| c.name || "" }
@@ -82,7 +82,7 @@ module Ea
         end
 
         # Process classes to remove XMI IDs
-        def process_classes(classes) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def process_classes(classes)
           classes.each do |klass|
             klass.xmi_id = nil
 
@@ -128,7 +128,7 @@ module Ea
         end
 
         # Sort collections within packages
-        def sort_package_collections(packages) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+        def sort_package_collections(packages)
           packages.each do |package|
             package.classes&.sort_by! { |c| c.name || "" }
             package.enums&.sort_by! { |e| e.name || "" }

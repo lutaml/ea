@@ -2,7 +2,6 @@
 
 require "spec_helper"
 
-# rubocop:disable Metrics/BlockLength
 RSpec.describe "Source-backed legend item row cell baselines" do
   include LegendRowCellHelpers
   include QeaCompartmentFontHelpers
@@ -56,8 +55,6 @@ RSpec.describe "Source-backed legend item row cell baselines" do
     end
   end
 end
-# rubocop:enable Metrics/BlockLength
-
 RSpec.describe "Legend item row cell preservation" do
   include LegendRowCellHelpers
 

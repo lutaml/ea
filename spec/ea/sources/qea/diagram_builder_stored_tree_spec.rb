@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/BlockLength
+RSpec.describe Ea::Sources::Qea::DiagramBuilder do
   include QeaRoutingHelpers
 
   it "retains valid tree bends when the boxes also admit a straight facing-edge route" do
@@ -27,7 +27,7 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/Blo
     expect(result[:markers]).to eq(["152 730 147 720 152 710 157 720"])
   end
 
-  it "keeps thin strokes, other tree modes and invalid stored bends on their existing route" do # rubocop:disable Metrics/BlockLength
+  it "keeps thin strokes, other tree modes and invalid stored bends on their existing route" do
     input = {
       connector_type: "Aggregation", source: [649, 331, 216, 241],
       target: [327, 8, 387, 193], path: "755:-251;520:-251;",

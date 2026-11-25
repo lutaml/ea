@@ -96,7 +96,7 @@ module Ea
         #
         # @example With limit
         #   reader.where("Object_Type = ?", "Class", limit: 10)
-        def where(conditions, *values, limit: nil, offset: nil) # rubocop:disable Metrics/MethodLength
+        def where(conditions, *values, limit: nil, offset: nil)
           query = "SELECT * FROM #{@table_name} WHERE #{conditions}"
           params = values.flatten
 
@@ -213,7 +213,7 @@ module Ea
         # @example
         #   reader.select(["Object_ID", "Name"], "Object_Type = ?", "Class")
         #   # => [{"Object_ID"=>1, "Name"=>"Class1"}, ...]
-        def select(columns, conditions = nil, *values, limit: nil) # rubocop:disable Metrics/MethodLength
+        def select(columns, conditions = nil, *values, limit: nil)
           column_list = columns.join(", ")
           query = "SELECT #{column_list} FROM #{@table_name}"
 

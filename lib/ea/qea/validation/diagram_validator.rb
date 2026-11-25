@@ -13,7 +13,7 @@ module Ea
 
         private
 
-        def validate_package_references # rubocop:disable Metrics/MethodLength
+        def validate_package_references
           diagrams.each do |diagram|
             next unless diagram.package_id
 
@@ -31,7 +31,7 @@ module Ea
           end
         end
 
-        def validate_diagram_objects # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+        def validate_diagram_objects
           diagram_objects.each do |diag_obj|
             next if object_exists?(diag_obj.ea_object_id)
 
@@ -51,7 +51,7 @@ module Ea
           end
         end
 
-        def validate_diagram_links # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+        def validate_diagram_links
           diagram_links.each do |diag_link|
             next if connector_exists?(diag_link.connectorid)
 

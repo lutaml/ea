@@ -43,7 +43,7 @@ module Ea
         #   else
         #     puts "Errors: #{result[:errors]}"
         #   end
-        def validate_qea(path) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def validate_qea(path)
           errors = []
           warnings = []
 
@@ -101,7 +101,7 @@ module Ea
         #   info = FileDetector.file_info("model.qea")
         #   puts "Size: #{info[:size_mb]} MB"
         #   puts "Tables: #{info[:table_count]}"
-        def file_info(path) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def file_info(path)
           return { error: "File not found" } unless File.exist?(path)
 
           info = {

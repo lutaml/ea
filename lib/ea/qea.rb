@@ -126,7 +126,7 @@ module Ea
       # @return [Lutaml::Uml::Document, Hash] Document, or hash with
       #   :document and :validation_result
       # @raise [Ea::Error] if lutaml-uml is not available
-      def parse(qea_path, options = {}) # rubocop:disable Metrics/MethodLength
+      def parse(qea_path, options = {})
         require_uml!
         config = options.delete(:config)
         validate = options.delete(:validate)

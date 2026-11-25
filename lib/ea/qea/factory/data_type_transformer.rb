@@ -8,7 +8,7 @@ module Ea
         # Transform EA object to UML data type
         # @param ea_object [EaObject] EA object model
         # @return [Lutaml::Uml::DataType] UML data type
-        def transform(ea_object) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+        def transform(ea_object)
           return nil if ea_object.nil?
           return nil unless ea_object.data_type?
 

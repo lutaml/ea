@@ -12,7 +12,7 @@ module Ea
 
         private
 
-        def validate_parent_object_references # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def validate_parent_object_references
           attributes.each do |attr|
             next if reference_exists?("t_object", "ea_object_id",
                                       attr.ea_object_id)
@@ -42,7 +42,7 @@ module Ea
           end
         end
 
-        def validate_type_references # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def validate_type_references
           attributes.each do |attr|
             next unless attr.classifier && !attr.classifier.empty?
 

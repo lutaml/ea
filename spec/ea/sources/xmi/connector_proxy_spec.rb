@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe Ea::Sources::Xmi::Adapter do # rubocop:disable Metrics/BlockLength
+RSpec.describe Ea::Sources::Xmi::Adapter do
   include XmiConnectorProxyHelpers
 
   subject(:document) { connector_proxy_document }

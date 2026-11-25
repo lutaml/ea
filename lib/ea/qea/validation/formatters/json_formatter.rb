@@ -73,7 +73,7 @@ module Ea
           # Builds the messages array
           #
           # @return [Array<Hash>]
-          def build_messages # rubocop:disable Metrics/MethodLength
+          def build_messages
             result.messages.map do |message|
               {
                 severity: message.severity,
@@ -114,7 +114,7 @@ module Ea
           #
           # @param messages [Array<ValidationMessage>]
           # @return [Hash]
-          def format_severity_group(messages) # rubocop:disable Metrics/MethodLength
+          def format_severity_group(messages)
             {
               count: messages.size,
               by_category: messages

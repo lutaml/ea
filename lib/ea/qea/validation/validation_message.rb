@@ -102,7 +102,7 @@ module Ea
         # Returns a formatted string representation of the message
         #
         # @return [String]
-        def to_s # rubocop:disable Metrics/AbcSize
+        def to_s
           parts = []
           parts << "#{entity_type.to_s.capitalize} '#{entity_name}'"
           parts << "{#{entity_id}}"

@@ -24,7 +24,7 @@ module Ea
 
         # Create complete UML document from EA database
         # @return [Lutaml::Uml::Document] Complete UML document
-        def create_document # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+        def create_document
           builder = DocumentBuilder.new(
             name: options[:document_name] || "EA Model"
           )
@@ -61,7 +61,7 @@ module Ea
 
         # Transform all packages with hierarchy
         # @return [Array<Lutaml::Uml::Package>] Root packages
-        def transform_packages # rubocop:disable Metrics/MethodLength
+        def transform_packages
           root_packages = database.packages.select do |pkg|
             pkg.parent_id.nil? || pkg.parent_id.zero?
           end

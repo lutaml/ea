@@ -13,7 +13,7 @@ module Ea
 
         private
 
-        def validate_parent_references # rubocop:disable Metrics/MethodLength
+        def validate_parent_references
           packages.each do |package|
             next if package.root?
 
@@ -33,7 +33,7 @@ module Ea
           end
         end
 
-        def validate_duplicate_names # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def validate_duplicate_names
           packages_by_parent = packages.group_by(&:parent_id)
 
           packages_by_parent.each do |parent_id, sibling_packages|
@@ -64,7 +64,7 @@ module Ea
           end
         end
 
-        def validate_circular_hierarchy # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength
+        def validate_circular_hierarchy
           packages.each do |package|
             next if package.root?
 

@@ -76,7 +76,7 @@ module Ea
         #
         # @example Block condition
         #   repository.where { |r| r.name.start_with?("Test") }
-        def where(conditions = nil, &block) # rubocop:disable Metrics/MethodLength
+        def where(conditions = nil, &block)
           if block
             @records.select(&block)
           elsif conditions.is_a?(Hash)

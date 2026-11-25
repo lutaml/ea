@@ -121,7 +121,7 @@ RSpec.describe Ea::Svg::EaEmitter::Label::MidpointLabel do
     end
   end
 
-  context "with a stored substitutability label seat" do # rubocop:disable Metrics/BlockLength
+  context "with a stored substitutability label seat" do
     let(:generalization) do
       Ea::Model::Generalization.new(id: "gen1", specific_id: "c1", general_id: "c2",
                                     name: "{isSubstitutable=false}")
@@ -136,7 +136,7 @@ RSpec.describe Ea::Svg::EaEmitter::Label::MidpointLabel do
       }
     end
 
-    it "seats the annotation beside the first vertical segment and preserves other seats" do # rubocop:disable Metrics/BlockLength
+    it "seats the annotation beside the first vertical segment and preserves other seats" do
       points = [[666, 640], [666, 525], [329, 525], [329, 475]]
       box = connector_attributes[:label_boxes][:lmb]
       cases = [

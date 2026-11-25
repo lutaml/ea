@@ -11,7 +11,7 @@ module Ea
         # @param current_object [EaObject]
         # Current object that owns this generalization
         # @return [Lutaml::Uml::Generalization] UML generalization
-        def transform(ea_connector, current_object) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+        def transform(ea_connector, current_object)
           return nil if current_object.nil?
 
           # ea_connector can be nil for terminal nodes (classes with no parent)

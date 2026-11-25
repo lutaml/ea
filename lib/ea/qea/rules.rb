@@ -16,6 +16,7 @@ module Ea
       autoload :Visibility, "ea/qea/rules/visibility"
       autoload :Cardinality, "ea/qea/rules/cardinality"
       autoload :EnumLiteral, "ea/qea/rules/enum_literal"
+      autoload :Generalization, "ea/qea/rules/generalization"
     end
   end
 end

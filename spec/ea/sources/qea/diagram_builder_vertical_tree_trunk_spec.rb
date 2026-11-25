@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe Ea::Sources::Qea::DiagramBuilder do # rubocop:disable Metrics/BlockLength
+RSpec.describe Ea::Sources::Qea::DiagramBuilder do
   include QeaRoutingHelpers
 
   let(:parent_above) { { source: [150, 300, 100, 100], target: [150, 100, 100, 100] } }
