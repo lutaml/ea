@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "moxml"
+require "leptris"
 
 module Ea
   module Sources
@@ -50,17 +51,61 @@ module Ea
           def read_role_stereotypes
             return {} unless @xmi_path
 
-            File.open(@xmi_path) do |file|
-              Nokogiri::XML::Reader(file).each_with_object({}) do |node, roles|
-                next unless node.node_type == Nokogiri::XML::Reader::TYPE_ELEMENT && node.local_name == "connector"
-
-                read_connector_roles(node, roles)
-              end
+            capture_connectors(File.read(@xmi_path)).each_with_object({}) do |connector, roles|
+              read_connector_roles(connector, roles)
             end
           end
 
-          def read_connector_roles(node, roles)
-            connector = Nokogiri::XML(node.outer_xml).root
+          # Single streaming pass over the XMI: reconstruct each
+          # <connector>'s outer XML from the pull stream and parse it as a
+          # subtree for the role lookups below.
+          def capture_connectors(xml)
+            connectors = []
+            buffer = nil
+            depth = 0
+
+            Leptris::XML::Pull.parse(xml).each do |event|
+              case event.type
+              when :start_element
+                if buffer
+                  buffer << write_start(event)
+                  depth += 1
+                elsif event.name == "connector"
+                  buffer = +write_start(event)
+                  depth = 1
+                end
+              when :end_element
+                next unless buffer
+
+                buffer << "</#{event.name}>"
+                depth -= 1
+                if depth.zero?
+                  connectors << Moxml.parse(buffer).root
+                  buffer = nil
+                end
+              when :text
+                buffer << escape_text(event.text) if buffer
+              end
+            end
+            connectors
+          end
+
+          def write_start(event)
+            attrs = (event.attrs || {}).map do |key, value|
+              %( #{key}="#{escape_attribute(value)}")
+            end.join
+            "<#{event.name}#{attrs}>"
+          end
+
+          def escape_attribute(value)
+            value.to_s.gsub("&", "&amp;").gsub("<", "&lt;").gsub('"', "&quot;")
+          end
+
+          def escape_text(text)
+            text.to_s.gsub("&", "&amp;").gsub("<", "&lt;").gsub(">", "&gt;")
+          end
+
+          def read_connector_roles(connector, roles)
             id = connector.at_xpath("@*[local-name()='idref']")&.value
             return unless id
 

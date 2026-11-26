@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "leptris"
 
 module Ea
   module Sources
@@ -32,28 +32,28 @@ module Ea
           @seen_owners = {}
           @blocks_seen = {}
           @skip_block = false
-          File.open(xmi_path) { |io| Nokogiri::XML::Reader(io).each { |node| visit(node) } }
+          Leptris::XML::Pull.parse(File.read(xmi_path)).each { |event| visit(event) }
           @grouped
         end
 
-        def visit(node)
-          case node.node_type
-          when Nokogiri::XML::Reader::TYPE_END_ELEMENT
+        def visit(event)
+          case event.type
+          when :end_element
             @owner = nil if @path.pop == "element"
-          when Nokogiri::XML::Reader::TYPE_ELEMENT
-            enter(node)
-            @path.push(node.local_name) unless node.self_closing?
+          when :start_element
+            enter(event)
+            @path.push(event.name)
           end
         end
 
-        def enter(node)
-          if node.local_name == "element" && @path.last == "elements" && !node.self_closing?
-            @owner = first_block_owner(node.attribute("xmi:idref"))
-          elsif node.local_name == "constraints" && @owner && @path.last == "element"
+        def enter(event)
+          if event.name == "element" && @path.last == "elements"
+            @owner = first_block_owner(event.attrs&.fetch("xmi:idref", nil))
+          elsif event.name == "constraints" && @owner && @path.last == "element"
             @skip_block = @blocks_seen.key?(@owner)
             @blocks_seen[@owner] = true
-          elsif node.local_name == "constraint" && @owner && !@skip_block && @path.last(2) == %w[element constraints]
-            (@grouped[@owner] ||= []) << constraint(node)
+          elsif event.name == "constraint" && @owner && !@skip_block && @path.last(2) == %w[element constraints]
+            (@grouped[@owner] ||= []) << constraint(event)
           end
         end
 
@@ -69,10 +69,10 @@ module Ea
         def constraint(node)
           Ea::Model::Constraint.new(
             id: IdNormalizer.synthetic_id(@owner, "constraint", @grouped[@owner].to_a.size.to_s),
-            name: node.attribute("name").to_s,
-            kind: node.attribute("type").to_s,
-            body: node.attribute("description").to_s,
-            status: node.attribute("status").to_s
+            name: node.attrs&.fetch("name", nil).to_s,
+            kind: node.attrs&.fetch("type", nil).to_s,
+            body: node.attrs&.fetch("description", nil).to_s,
+            status: node.attrs&.fetch("status", nil).to_s
           )
         end
       end
