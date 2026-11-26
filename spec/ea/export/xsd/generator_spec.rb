@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require "moxml"
 require "nokogiri"
 
 RSpec.describe Ea::Export::Xsd do
@@ -53,7 +54,7 @@ RSpec.describe Ea::Export::Xsd do
           </GMLNS>
         </Namespaces>
       XML
-      registry = described_class::NamespaceRegistry.from_nokogiri(Nokogiri::XML(xml))
+      registry = described_class::NamespaceRegistry.from_document(Moxml.parse(xml))
 
       expect(registry.for("gml").target_namespace)
         .to eq("http://www.opengis.net/gml/3.2")
@@ -72,8 +73,8 @@ RSpec.describe Ea::Export::Xsd do
           </GMLNS>
         </Namespaces>
       XML
-      r32 = described_class::NamespaceRegistry.from_nokogiri(Nokogiri::XML(xml), version: "3.2.1")
-      r33 = described_class::NamespaceRegistry.from_nokogiri(Nokogiri::XML(xml), version: "3.3")
+      r32 = described_class::NamespaceRegistry.from_document(Moxml.parse(xml), version: "3.2.1")
+      r33 = described_class::NamespaceRegistry.from_document(Moxml.parse(xml), version: "3.3")
 
       expect(r32.for("gml").target_namespace).to eq("http://gml-3.2")
       expect(r33.for("gml").target_namespace).to eq("http://gml-3.3")
