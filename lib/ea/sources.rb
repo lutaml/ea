@@ -9,6 +9,7 @@ module Ea
   # Adapters do not know about each other or about consumer
   # adapters (Ea::Spa, etc.).
   module Sources
+    autoload :Multiplicity, "ea/sources/multiplicity"
     autoload :Qea, "ea/sources/qea"
     autoload :Xmi, "ea/sources/xmi"
   end

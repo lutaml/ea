@@ -702,18 +702,17 @@ module Ea
         attrs = build_class_attributes(general_node)
 
         attrs.map do |attr|
-          ::Lutaml::Uml::GeneralAttribute.new.tap do |gen_attr|
-            gen_attr.id = attr.id
-            gen_attr.name = attr.name
-            gen_attr.type = attr.type
-            gen_attr.xmi_id = attr.xmi_id
-            gen_attr.is_derived = !!attr.is_derived
-            gen_attr.cardinality = attr.cardinality
-            gen_attr.definition = get_uml_general_attribute_definition(attr)
-            gen_attr.association = attr.association
-            gen_attr.has_association = !!attr.association
-            gen_attr.type_ns = attr.type_ns
-          end
+          Ea::Rules::GeneralAttributeMapping.build(
+            id: attr.id,
+            name: attr.name,
+            type: attr.type,
+            xmi_id: attr.xmi_id,
+            cardinality: attr.cardinality,
+            definition: get_uml_general_attribute_definition(attr),
+            association: attr.association,
+            type_ns: attr.type_ns,
+            is_derived: attr.is_derived
+          )
         end
       end
 

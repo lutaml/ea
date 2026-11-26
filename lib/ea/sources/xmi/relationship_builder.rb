@@ -147,12 +147,12 @@ module Ea
             target_id: target.idref,
             source_role_name: source.role&.name,
             target_role_name: target.role&.name,
-            source_multiplicity_lower: card_lower(source.type&.multiplicity),
-            source_multiplicity_upper: card_upper(source.type&.multiplicity),
-            target_multiplicity_lower: card_lower(target.type&.multiplicity),
-            target_multiplicity_upper: card_upper(target.type&.multiplicity),
-            source_multiplicity_raw: raw_card(source.type&.multiplicity),
-            target_multiplicity_raw: raw_card(target.type&.multiplicity),
+            source_multiplicity_lower: Sources::Multiplicity.lower(source.type&.multiplicity),
+            source_multiplicity_upper: Sources::Multiplicity.upper(source.type&.multiplicity),
+            target_multiplicity_lower: Sources::Multiplicity.lower(target.type&.multiplicity),
+            target_multiplicity_upper: Sources::Multiplicity.upper(target.type&.multiplicity),
+            source_multiplicity_raw: Sources::Multiplicity.raw(source.type&.multiplicity),
+            target_multiplicity_raw: Sources::Multiplicity.raw(target.type&.multiplicity),
             source_aggregation: source_aggregation(connector),
             target_aggregation: target.type&.aggregation || "none",
             source_navigable: navigable?(element.id, :source),
@@ -188,24 +188,6 @@ module Ea
             source_navigable: navigable?(element.id, :source),
             target_navigable: navigable?(element.id, :target)
           }
-        end
-
-        def raw_card(cardinality)
-          text = cardinality.to_s.strip
-          text.empty? ? nil : text
-        end
-
-        def card_lower(cardinality)
-          text = raw_card(cardinality)
-          Integer(text.split("..").first, exception: false) if text
-        end
-
-        def card_upper(cardinality)
-          text = raw_card(cardinality)
-          return nil unless text
-
-          upper = text.split("..").last
-          upper == "*" ? -1 : Integer(upper, exception: false)
         end
 
         def generalization_args(element)
