@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "moxml"
+require "leptris"
 
 module Ea
   module Sources
@@ -76,21 +77,52 @@ module Ea
 
           def scan_metadata
             data = { connectors: {}, proxies: {}, classes: [] }
-            File.open(@xmi_path) do |file|
-              Nokogiri::XML::Reader(file).each { |node| read_node(node, data) }
+            @capture = nil
+            # Single streaming pass over the XMI: reconstruct each
+            # <element>/<connector>'s outer XML from the pull stream and
+            # parse it as a subtree for the attribute lookups below.
+            Leptris::XML::Pull.parse(File.read(@xmi_path)).each do |event|
+              case event.type
+              when :start_element
+                if @capture
+                  @capture[:depth] += 1
+                  @capture[:xml] << write_start(event)
+                elsif %w[element connector].include?(event.name)
+                  @capture = { kind: event.name, depth: 1, xml: +write_start(event) }
+                end
+              when :end_element
+                next unless @capture
+
+                @capture[:xml] << "</#{event.name}>"
+                @capture[:depth] -= 1
+                if @capture[:depth].zero?
+                  subtree = Moxml.parse(@capture[:xml]).root
+                  send("read_#{@capture[:kind]}", subtree, data)
+                  @capture = nil
+                end
+              when :text
+                @capture[:xml] << escape_text(event.text) if @capture
+              end
             end
             data
           end
 
-          def read_node(node, data)
-            return unless node.node_type == Nokogiri::XML::Reader::TYPE_ELEMENT
-
-            read_element(node, data) if node.local_name == "element"
-            read_connector(node, data) if node.local_name == "connector"
+          def write_start(event)
+            attrs = (event.attrs || {}).map do |key, value|
+              %( #{key}="#{escape_attribute(value)}")
+            end.join
+            "<#{event.name}#{attrs}>"
           end
 
-          def read_element(node, data)
-            element = Nokogiri::XML(node.outer_xml).root
+          def escape_attribute(value)
+            value.to_s.gsub("&", "&amp;").gsub("<", "&lt;").gsub('"', "&quot;")
+          end
+
+          def escape_text(text)
+            text.to_s.gsub("&", "&amp;").gsub("<", "&lt;").gsub(">", "&gt;")
+          end
+
+          def read_element(element, data)
             id = attr(element, "idref")
             return unless id
 
@@ -99,8 +131,7 @@ module Ea
             data[:proxies][id] = attr(element, "classifier") if type == "uml:ProxyConnector"
           end
 
-          def read_connector(node, data)
-            connector = Nokogiri::XML(node.outer_xml).root
+          def read_connector(connector, data)
             id = attr(connector, "idref")
             return unless id
 
@@ -114,7 +145,7 @@ module Ea
           end
 
           def attr(node, name)
-            node&.attribute_nodes&.find { |attribute| attribute.name == name }&.value
+            node&.attributes&.find { |attribute| attribute.name == name }&.value
           end
 
           def guid_key(subject)
