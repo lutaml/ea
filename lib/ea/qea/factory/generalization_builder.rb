@@ -120,16 +120,6 @@ module Ea
           end
         end
 
-        def resolve_name_ns(type_ns, upper_klass)
-          ns = case type_ns
-               when "core", "gml"
-                 upper_klass
-               else
-                 type_ns
-               end
-          ns || upper_klass
-        end
-
         def build_generalization(object_id, current_obj)
           ea_connector = ea_connector_for(object_id)
           gen_transformer = GeneralizationTransformer.new(database)
@@ -174,7 +164,9 @@ module Ea
           upper_klass = generalization.general_upper_klass
           general_attrs.each do |attr|
             attr.gen_name = generalization.general_name
-            attr.name_ns = resolve_name_ns(attr.type_ns, upper_klass)
+            attr.name_ns = Ea::Rules::Namespacing.resolve_name_ns(
+              attr.type_ns, upper_klass
+            )
           end
         end
 
@@ -196,7 +188,9 @@ module Ea
 
           generalization.general_attributes.map do |attr|
             transformed = attr.dup
-            transformed.name_ns = resolve_name_ns(attr.type_ns, upper_klass)
+            transformed.name_ns = Ea::Rules::Namespacing.resolve_name_ns(
+              attr.type_ns, upper_klass
+            )
             transformed.gen_name = gen_name
             transformed.name = "" if transformed.name.nil?
             transformed

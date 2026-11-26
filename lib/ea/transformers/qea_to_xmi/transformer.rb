@@ -472,7 +472,9 @@ module Ea
         # ---- Children of a classifier ------------------------------------
 
         def generalizations_for(obj)
-          inheritance_connectors(obj, "Generalization")
+          Qea::Rules::Generalization
+            .connectors_from(obj.ea_object_id,
+                             @context.connectors_for(obj.ea_object_id))
             .filter_map { |conn| build_generalization(conn) }
         end
 
@@ -747,12 +749,6 @@ module Ea
 
           value = raw.to_s.downcase
           value == "in" ? nil : value
-        end
-
-        def inheritance_connectors(obj, type)
-          @context.connectors_for(obj.ea_object_id).select do |conn|
-            conn.start_object_id == obj.ea_object_id && conn.connector_type == type
-          end
         end
 
         # Realization connectors owned by this class — those where

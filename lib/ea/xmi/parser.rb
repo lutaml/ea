@@ -632,15 +632,9 @@ module Ea
         gen_name = uml_general_obj.general_name
 
         gen_attrs&.each do |i|
-          name_ns = case i.type_ns
-                    when "core", "gml"
-                      upper_klass
-                    else
-                      i.type_ns
-                    end
-          name_ns = upper_klass if name_ns.nil?
-
-          i.name_ns = name_ns
+          i.name_ns = Ea::Rules::Namespacing.resolve_name_ns(
+            i.type_ns, upper_klass
+          )
           i.gen_name = gen_name
           i.name = "" if i.name.nil?
         end
