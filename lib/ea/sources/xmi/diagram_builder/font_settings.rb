@@ -52,7 +52,7 @@ module Ea
           def saved_objects
             return [] unless @xmi_path
 
-            doc = Moxml.new.parse(File.read(@xmi_path))
+            doc = Ea::Xml.parse_file(@xmi_path)
             doc.xpath("//*[local-name()='Extension']/*[local-name()='elements']/*[local-name()='element']")
           end
         end

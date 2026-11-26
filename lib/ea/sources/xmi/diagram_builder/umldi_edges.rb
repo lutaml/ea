@@ -127,7 +127,7 @@ module Ea
           end
 
           def doc
-            Moxml.new.parse(File.read(@xmi_path))
+            Ea::Xml.parse_file(@xmi_path)
           end
         end
       end

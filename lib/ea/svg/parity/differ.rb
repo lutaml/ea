@@ -29,7 +29,7 @@ module Ea
           def parse(svg)
             # xpath, not css — css is unreliable on moxml for
             # namespaced documents (lutaml/moxml#582).
-            Moxml.new.parse(svg).xpath('//*[local-name()="g"]').flat_map do |group|
+            Ea::Xml.parse(svg).xpath('//*[local-name()="g"]').flat_map do |group|
               group.element_children.filter_map { |node| primitive(node, group["style"] || "") }
             end
           end

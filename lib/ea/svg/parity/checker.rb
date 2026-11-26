@@ -34,11 +34,11 @@ module Ea
         private
 
         def our_doc
-          @our_doc ||= Moxml.new.parse(@ours)
+          @our_doc ||= Ea::Xml.parse(@ours)
         end
 
         def ref_doc
-          @ref_doc ||= Moxml.new.parse(@reference)
+          @ref_doc ||= Ea::Xml.parse(@reference)
         end
 
         # CSS is not reliable on moxml for namespaced documents
