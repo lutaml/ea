@@ -41,14 +41,18 @@ module Ea
           @ref_doc ||= Moxml.new.parse(@reference)
         end
 
+        # CSS is not reliable on moxml for namespaced documents
+        # (lutaml/moxml#582) — tag counting goes through xpath.
         def count_diff(selector)
-          Diff.new(ours: our_doc.css(selector).size,
-                   reference: ref_doc.css(selector).size)
+          xpath = "//*[local-name()=\"#{selector}\"]"
+          Diff.new(ours: our_doc.xpath(xpath).size,
+                   reference: ref_doc.xpath(xpath).size)
         end
 
         def top_level_group_diff
-          Diff.new(ours: our_doc.css("svg > g").size,
-                   reference: ref_doc.css("svg > g").size)
+          xpath = "/*[local-name()=\"svg\"]/*[local-name()=\"g\"]"
+          Diff.new(ours: our_doc.xpath(xpath).size,
+                   reference: ref_doc.xpath(xpath).size)
         end
 
         def font_family_match
@@ -65,7 +69,8 @@ module Ea
         end
 
         def font_style_histogram(doc, property)
-          doc.css("text").each_with_object(Hash.new(0)) do |node, acc|
+          doc.xpath("//*[local-name()=\"text\"]")
+             .each_with_object(Hash.new(0)) do |node, acc|
             value = (node["style"] || "")[/#{Regexp.quote(property)}:([^;]+)/, 1]
             acc[value] += 1 if value
           end
@@ -76,12 +81,18 @@ module Ea
         end
 
         def text_overlap_ratio
-          our_set = our_doc.css("text").map(&:text).map(&:strip).to_set
-          ref_set = ref_doc.css("text").map(&:text).map(&:strip).to_set
+          our_set = text_set(our_doc)
+          ref_set = text_set(ref_doc)
           return 1.0 if our_set.empty? && ref_set.empty?
           return 0.0 if our_set.empty? || ref_set.empty?
 
           (our_set & ref_set).size.to_f / (our_set | ref_set).size.to_f
+        end
+
+        def text_set(doc)
+          doc.xpath("//*[local-name()=\"text\"]").map do |node|
+            node.text.to_s.strip
+          end.to_set
         end
 
         Diff = Struct.new(:ours, :reference, keyword_init: true) do
