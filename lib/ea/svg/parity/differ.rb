@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "moxml"
 
 module Ea
   module Svg
@@ -27,7 +27,7 @@ module Ea
         # Extracts the primitives consumed by both comparison reports.
         class PrimitiveParser
           def parse(svg)
-            Nokogiri::XML(svg).css("g").flat_map do |group|
+            Moxml.new.parse(svg).css("g").flat_map do |group|
               group.element_children.filter_map { |node| primitive(node, group["style"] || "") }
             end
           end

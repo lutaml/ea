@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "moxml"
 
 module Ea
   module Sources
@@ -52,7 +52,7 @@ module Ea
           def saved_objects
             return [] unless @xmi_path
 
-            doc = Nokogiri::XML(File.read(@xmi_path))
+            doc = Moxml.new.parse(File.read(@xmi_path))
             doc.xpath("//*[local-name()='Extension']/*[local-name()='elements']/*[local-name()='element']")
           end
         end

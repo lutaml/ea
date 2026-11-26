@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "moxml"
 
 module Ea
   module Svg
@@ -34,11 +34,11 @@ module Ea
         private
 
         def our_doc
-          @our_doc ||= Nokogiri::XML(@ours)
+          @our_doc ||= Moxml.new.parse(@ours)
         end
 
         def ref_doc
-          @ref_doc ||= Nokogiri::XML(@reference)
+          @ref_doc ||= Moxml.new.parse(@reference)
         end
 
         def count_diff(selector)

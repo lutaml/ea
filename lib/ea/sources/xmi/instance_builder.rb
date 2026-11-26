@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "moxml"
 
 module Ea
   module Sources
@@ -88,7 +88,7 @@ module Ea
         def extension_runstates
           return {} if xmi_path.nil?
 
-          Nokogiri::XML(File.read(xmi_path))
+          Moxml.new.parse(File.read(xmi_path))
                   .xpath(RUNSTATE_XPATH)
                   .to_h { |node| [node.parent["xmi:idref"], node["runstate"]] }
         end
