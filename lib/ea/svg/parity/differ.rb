@@ -27,7 +27,9 @@ module Ea
         # Extracts the primitives consumed by both comparison reports.
         class PrimitiveParser
           def parse(svg)
-            Moxml.new.parse(svg).css("g").flat_map do |group|
+            # xpath, not css — css is unreliable on moxml for
+            # namespaced documents (lutaml/moxml#582).
+            Moxml.new.parse(svg).xpath('//*[local-name()="g"]').flat_map do |group|
               group.element_children.filter_map { |node| primitive(node, group["style"] || "") }
             end
           end

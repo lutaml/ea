@@ -41,15 +41,20 @@ module Ea
 
           private
 
+          # NodeSet#to_h is not Enumerable-backed across XML adapters —
+          # build the id-keyed maps with an explicit reduction instead.
           def ends
-            @ends ||= doc.xpath("//*[local-name()=\"Diagram\"]").to_h do |diagram|
-              [diagram["id"] || diagram["xmi:id"], diagram_ends(diagram)]
+            @ends ||= doc.xpath("//*[local-name()=\"Diagram\"]")
+                         .each_with_object({}) do |diagram, hash|
+              hash[diagram["id"] || diagram["xmi:id"]] = diagram_ends(diagram)
             end
           end
 
           def label_bounds
-            @label_bounds ||= doc.xpath("//*[local-name()=\"Diagram\"]").to_h do |diagram|
-              [diagram["id"] || diagram["xmi:id"], diagram_label_bounds(diagram)]
+            @label_bounds ||= doc.xpath("//*[local-name()=\"Diagram\"]")
+                                 .each_with_object({}) do |diagram, hash|
+              hash[diagram["id"] || diagram["xmi:id"]] =
+                diagram_label_bounds(diagram)
             end
           end
 
@@ -104,8 +109,9 @@ module Ea
           end
 
           def routes
-            @routes ||= doc.xpath("//*[local-name()=\"Diagram\"]").to_h do |diagram|
-              [diagram["id"] || diagram["xmi:id"], diagram_routes(diagram)]
+            @routes ||= doc.xpath("//*[local-name()=\"Diagram\"]")
+                           .each_with_object({}) do |diagram, hash|
+              hash[diagram["id"] || diagram["xmi:id"]] = diagram_routes(diagram)
             end
           end
 
