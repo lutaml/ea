@@ -88,9 +88,11 @@ module Ea
         def extension_runstates
           return {} if xmi_path.nil?
 
-          Moxml.new.parse(File.read(xmi_path))
-                  .xpath(RUNSTATE_XPATH)
-                  .to_h { |node| [node.parent["xmi:idref"], node["runstate"]] }
+          Ea::Xml.parse_file(xmi_path)
+                 .xpath(RUNSTATE_XPATH)
+                 .each_with_object({}) do |node, acc|
+            acc[node.parent["xmi:idref"]] = node["runstate"]
+          end
         end
       end
     end

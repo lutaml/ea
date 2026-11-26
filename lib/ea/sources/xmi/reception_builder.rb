@@ -15,7 +15,7 @@ module Ea
         def grouped_by_owner
           return {} unless @xmi_path
 
-          @grouped_by_owner ||= read_receptions(Moxml.new.parse(File.read(@xmi_path)))
+          @grouped_by_owner ||= read_receptions(Ea::Xml.parse_file(@xmi_path))
         end
 
         private

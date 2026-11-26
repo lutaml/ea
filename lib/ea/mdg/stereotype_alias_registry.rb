@@ -33,7 +33,7 @@ module Ea
         return new if path.nil? || !File.exist?(path)
 
         require "moxml"
-        doc = Moxml.new.parse(File.read(path))
+        doc = Ea::Xml.parse_file(path)
         from_xml(doc)
       end
 

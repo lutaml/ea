@@ -30,7 +30,7 @@ module Ea
         def self.from_path(path)
           return new if path.nil? || !File.exist?(path)
 
-          from_xml(Moxml.new.parse(File.read(path)))
+          from_xml(Ea::Xml.parse_file(path))
         end
 
         # @param doc [Moxml::Wrappers::Document]

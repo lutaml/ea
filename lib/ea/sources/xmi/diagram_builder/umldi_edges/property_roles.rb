@@ -21,8 +21,10 @@ module Ea
               @property_roles ||= begin
                 document = @doc
                 declared = declared_properties(document)
-                document.xpath("//*[local-name()=\"Diagram\"]").to_h do |diagram|
-                  [diagram["id"] || diagram["xmi:id"], diagram_property_roles(diagram, declared)]
+                document.xpath("//*[local-name()=\"Diagram\"]")
+                        .each_with_object({}) do |diagram, hash|
+                  hash[diagram["id"] || diagram["xmi:id"]] =
+                    diagram_property_roles(diagram, declared)
                 end
               end
             end

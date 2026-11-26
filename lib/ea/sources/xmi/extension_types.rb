@@ -17,7 +17,7 @@ module Ea
         def self.from_path(xmi_path)
           return empty if xmi_path.nil?
 
-          new(Moxml.new.parse(File.read(xmi_path)))
+          new(Ea::Xml.parse_file(xmi_path))
         end
 
         def self.empty

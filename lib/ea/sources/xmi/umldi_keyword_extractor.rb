@@ -59,7 +59,7 @@ module Ea
         end
 
         def doc
-          @doc ||= Moxml.new.parse(File.read(xmi_path))
+          @doc ||= Ea::Xml.parse_file(xmi_path)
         end
 
         def keywords_by_diagram
