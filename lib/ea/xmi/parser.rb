@@ -743,13 +743,21 @@ module Ea
 
         general_item.attributes.reverse_each do |attr|
           attr.upper_klass = gen_upper_klass
-          attr.gen_name = gen_name
           attr.level = level
 
+          # Inherited rows are dup copies (QeaToUml parity): the
+          # ancestor's own attributes keep only upper_klass/level tags,
+          # while the copies carry the full ancestor attribution so
+          # later levels cannot mutate what was already collected.
+          inherited_attr = attr.dup
+          inherited_attr.upper_klass = gen_upper_klass
+          inherited_attr.gen_name = gen_name
+          inherited_attr.level = level
+
           if attr.association
-            inherited_assoc_props << attr
+            inherited_assoc_props << inherited_attr
           else
-            inherited_props << attr
+            inherited_props << inherited_attr
           end
         end
 
