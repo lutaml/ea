@@ -35,6 +35,49 @@ module Ea
       # @return [void]
       attr_writer :connection
 
+      # The DatabaseConnection the loader used. Kept (not connected)
+      # so blob fetches can reopen the QEA file on demand; nil for
+      # hand-constructed Databases.
+      attr_accessor :blob_connection
+
+      # Fetch a blob column value on demand by reopening the QEA file
+      # read-only for the duration of the fetch. The container's load
+      # connection is closed after load (an open handle locks the file
+      # on Windows), so each fetch opens, reads, and closes per call —
+      # fetched values are returned, never stored, keeping the frozen
+      # container contract intact.
+      #
+      # @param table_name [String] EA table carrying the blob
+      # @param pk_column [String] primary-key column of that table
+      # @param column [String] the blob column to read
+      # @param id [Object] primary-key value of the row
+      # @return [String, nil] the blob value, or nil when no connection
+      #   route exists, the row is absent, or the fetch fails
+      def blob_value(table_name, pk_column, column, id)
+        conn = blob_connection
+        return nil unless conn
+
+        conn.with_connection do |db|
+          row = db.get_first_row(
+            "SELECT #{quote_ident(column)} FROM #{quote_ident(table_name)} " \
+            "WHERE #{quote_ident(pk_column)} = ?", [id]
+          )
+          row && row[column]
+        end
+      rescue StandardError
+        # Best-effort accessor: missing/locked file, absent row or table
+        # all mean "blob unavailable"; callers already handle nil.
+        nil
+      end
+
+      # Fetch a t_image blob by its ImageID.
+      #
+      # @param image_id [Integer] t_image.ImageID
+      # @return [String, nil] the Image blob, or nil when unavailable
+      def image_blob(image_id)
+        blob_value("t_image", "ImageID", "Image", image_id)
+      end
+
       # Close the database connection if open
       # @return [void]
       def close_connection
@@ -287,6 +330,12 @@ module Ea
       end
 
       private
+
+      # @param name [String] SQL identifier from the EA schema
+      # @return [String] double-quoted, escaped identifier
+      def quote_ident(name)
+        %("#{name.to_s.gsub('"', '""')}")
+      end
 
       def ensure_lookup_indexes
         return if @lookup_indexes_built

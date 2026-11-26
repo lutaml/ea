@@ -344,12 +344,11 @@ RSpec.describe Ea::Qea::Services::Configuration do
       expect(names).to include("t_image")
     end
 
-    it "drops blob-declaring tables when include_blobs is false" do
+    it "keeps blob-declaring tables when include_blobs is false" do
       config = Ea::Qea::Services::Configuration.load
       config.include_blobs = false
       names = config.enabled_tables.map(&:table_name)
-      expect(names).not_to include("t_image")
-      expect(names).to include("t_object")
+      expect(names).to include("t_image", "t_object")
     end
   end
 end

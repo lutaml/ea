@@ -312,4 +312,27 @@ RSpec.describe Ea::Qea::Infrastructure::TableReader do
       end
     end
   end
+
+  describe "#column_names" do
+    it "returns the table's actual column names" do
+      expect(reader.column_names).to include("Object_ID", "Name")
+    end
+  end
+
+  describe "#each_row with a column subset" do
+    it "streams only the requested columns" do
+      rows = []
+      reader.each_row(columns: %w[Object_ID Name]) { |row| rows << row }
+      expect(rows).not_to be_empty
+      rows.each do |row|
+        expect(row.keys).to contain_exactly("Object_ID", "Name")
+      end
+    end
+
+    it "selects every column when no subset is given" do
+      rows = []
+      reader.each_row { |row| rows << row }
+      expect(rows.first.keys.sort).to eq(reader.column_names.sort)
+    end
+  end
 end
