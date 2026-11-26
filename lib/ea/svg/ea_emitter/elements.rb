@@ -798,7 +798,7 @@ module Ea
         # actual content below (attributes, operations, literals, or
         # tagged values). Classes with only a header (no displayed
         # features) omit the divider entirely.
-        def has_content_below_header?(attr_lines, op_lines, enum_literals, tagged_values = [])
+        def content_below_header?(attr_lines, op_lines, enum_literals, tagged_values = [])
           !attr_lines.empty? || !op_lines.empty? || enum_literals.any? || tagged_values.any?
         end
 

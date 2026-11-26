@@ -160,7 +160,7 @@ module Ea
         # @return [Boolean]
         def valid?(validators: nil)
           result = validate(validators: validators)
-          !result.has_errors?
+          !result.errors?
         end
 
         # Builds validation context from document and database
@@ -346,20 +346,20 @@ module Ea
           puts result.summary
           puts
 
-          if result.has_errors?
+          if result.errors?
             puts "ERRORS (#{result.errors.size}):"
             puts
             display_messages_by_category(result.errors)
           end
 
-          if result.has_warnings?
+          if result.warnings?
             puts
             puts "WARNINGS (#{result.warnings.size}):"
             puts
             display_messages_by_category(result.warnings)
           end
 
-          if result.has_info? && @options[:verbose]
+          if result.info? && @options[:verbose]
             puts
             puts "INFO (#{result.info.size}):"
             puts

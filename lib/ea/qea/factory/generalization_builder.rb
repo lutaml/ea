@@ -56,15 +56,15 @@ module Ea
         def to_general_attribute(attr)
           Lutaml::Uml::GeneralAttribute.new(
             **base_attr_hash(attr),
-            is_derived: !!attr.is_derived,
-            has_association: !!attr.association
+            is_derived: attr.is_derived == true,
+            has_association: !attr.association.nil?
           )
         end
 
         def to_top_element_attribute(attr)
           Lutaml::Uml::TopElementAttribute.new(
             **base_attr_hash(attr),
-            is_derived: !!attr.is_derived
+            is_derived: attr.is_derived == true
           )
         end
 

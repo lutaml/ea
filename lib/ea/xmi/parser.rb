@@ -125,7 +125,7 @@ module Ea
         @pkg_elements_owned_attributes[id]
       end
 
-      def find_subtype_of_from_generalization(id) # :CyclomaticComplexity,Metrics:MethodLength,Metrics:PerceivedComplexity
+      def find_subtype_of_from_generalization(id)
         matched_element = xmi_index.find_element(id)
         return unless matched_element&.links&.any?
 
@@ -381,7 +381,7 @@ module Ea
         end
       end
 
-      def build_class(klass) # :CyclomaticComplexity,Metrics:PerceivedComplexity
+      def build_class(klass)
         ::Lutaml::Uml::UmlClass.new.tap do |k|
           k.xmi_id = klass.id
           k.name = klass.name
@@ -401,7 +401,7 @@ module Ea
         end
       end
 
-      def build_enums(package) # :MethodLength,Metrics:AbcSize
+      def build_enums(package)
         return [] if package.packaged_element.nil?
 
         package.packaged_element
@@ -418,7 +418,7 @@ module Ea
                end
       end
 
-      def build_data_types(package) # :AbcSize,Metrics:MethodLength
+      def build_data_types(package)
         return [] if package.packaged_element.nil?
 
         package.packaged_element
@@ -447,7 +447,7 @@ module Ea
                end
       end
 
-      def build_diagrams(node_id) # :AbcSize,Metrics:MethodLength
+      def build_diagrams(node_id)
         return [] if @xmi_root_model.extension&.diagrams&.diagram.nil?
 
         diagram_lookup[node_id].map do |diagram|
@@ -465,14 +465,14 @@ module Ea
         end
       end
 
-      def build_class_attributes(klass) # :AbcSize,Metrics:CyclomaticComplexity,Metrics:MethodLength
+      def build_class_attributes(klass)
         return [] if klass.owned_attribute.nil?
 
         all_props = klass.owned_attribute.select { |attr| attr.type?("uml:Property") }
         all_props.filter_map { |oa| build_attribute(oa) }
       end
 
-      def build_attribute(owned_attr) # :AbcSize,Metrics:MethodLength
+      def build_attribute(owned_attr)
         uml_type = owned_attr.uml_type
         uml_type_idref = uml_type.idref if uml_type
 
@@ -496,7 +496,7 @@ module Ea
         end
       end
 
-      def build_associations(xmi_id) # :AbcSize,Metrics:CyclomaticComplexity,Metrics:MethodLength,Metrics:PerceivedComplexity
+      def build_associations(xmi_id)
         matched_element = xmi_index&.find_element(xmi_id)
         return if !matched_element || !matched_element.links
 
@@ -510,7 +510,7 @@ module Ea
         end
       end
 
-      def build_association(assoc, xmi_id) # :AbcSize,Metrics:CyclomaticComplexity,Metrics:MethodLength
+      def build_association(assoc, xmi_id)
         link_member = assoc.start == xmi_id ? "end" : "start"
         link_owner = link_member == "start" ? "end" : "start"
 
@@ -551,7 +551,7 @@ module Ea
         end
       end
 
-      def build_operations(klass) # :MethodLength,Metrics:AbcSize
+      def build_operations(klass)
         return [] if klass.owned_operation.nil?
 
         klass.owned_operation.filter_map do |operation|
@@ -569,7 +569,7 @@ module Ea
         end
       end
 
-      def build_constraints(klass_id) # :MethodLength,Metrics:AbcSize
+      def build_constraints(klass_id)
         connector_node = fetch_connector(klass_id)
         return [] if connector_node.nil?
 
@@ -587,7 +587,7 @@ module Ea
         end
       end
 
-      def build_values(enum) # :MethodLength,Metrics:CyclomaticComplexity,Metrics:AbcSize
+      def build_values(enum)
         return [] if enum.owned_literal.nil?
 
         enum.owned_literal
@@ -607,7 +607,7 @@ module Ea
 
       # --- Generalization building ---
 
-      def build_generalization(klass) # :AbcSize,Metrics:MethodLength,Metrics:CyclomaticComplexity,Metrics:PerceivedComplexity
+      def build_generalization(klass)
         uml_general_obj, next_general_node_id = get_uml_general(klass.id)
         return uml_general_obj unless next_general_node_id
 
@@ -626,7 +626,7 @@ module Ea
         uml_general_obj
       end
 
-      def build_generalization_attributes(uml_general_obj) # :AbcSize,Metrics:MethodLength
+      def build_generalization_attributes(uml_general_obj)
         upper_klass = uml_general_obj.general_upper_klass
         gen_attrs = uml_general_obj.general_attributes
         gen_name = uml_general_obj.general_name
@@ -648,7 +648,7 @@ module Ea
         gen_attrs
       end
 
-      def get_uml_general(general_id) # :AbcSize,Metrics:MethodLength
+      def get_uml_general(general_id)
         general_node = find_packaged_element_by_id(general_id)
         return [] unless general_node
 
@@ -704,7 +704,7 @@ module Ea
         uml_general.assoc_props = uml_general.attributes.select(&:association)
       end
 
-      def get_uml_general_attributes(general_node) # :AbcSize,Metrics:MethodLength
+      def get_uml_general_attributes(general_node)
         attrs = build_class_attributes(general_node)
 
         attrs.map do |attr|
@@ -742,7 +742,7 @@ module Ea
         uml_general_obj
       end
 
-      def loop_general_item( # :MethodLength,Metrics:AbcSize,Metrics:PerceivedComplexity,Metrics:CyclomaticComplexity
+      def loop_general_item(
         general_item, level, inherited_props, inherited_assoc_props
       )
         gen_upper_klass = general_item.general_upper_klass
@@ -768,7 +768,7 @@ module Ea
         )
       end
 
-      def build_assoc_generalizations(klass) # :AbcSize
+      def build_assoc_generalizations(klass)
         return [] if klass.generalization.nil? || klass.generalization.empty?
 
         klass.generalization.map do |gen|
@@ -795,7 +795,7 @@ module Ea
         lookup_entity_name(xmi_id) || connector_source_name(xmi_id)
       end
 
-      def serialize_member_end(owner_xmi_id, link) # :MethodLength,Metrics:AbcSize,Metrics:CyclomaticComplexity
+      def serialize_member_end(owner_xmi_id, link)
         case link.name
         when "NoteLink"
           return
@@ -819,7 +819,7 @@ module Ea
         [member_end, member_end_type, xmi_id]
       end
 
-      def member_end_name(xmi_id, source_or_target, link) # :MethodLength
+      def member_end_name(xmi_id, source_or_target, link)
         connector_label = connector_labels(xmi_id, source_or_target)
         entity_name = lookup_entity_name(xmi_id)
         connector_name = connector_name_by_source_or_target(xmi_id, source_or_target)
@@ -832,7 +832,7 @@ module Ea
         end
       end
 
-      def serialize_member_type(owner_xmi_id, link, link_member_name) # :MethodLength,Metrics:AbcSize
+      def serialize_member_type(owner_xmi_id, link, link_member_name)
         member_end, member_end_type, xmi_id =
           serialize_member_end(owner_xmi_id, link)
 
@@ -883,7 +883,7 @@ module Ea
         assoc_connector.role ? assoc_connector.model.name : nil
       end
 
-      def generalization_association(owner_xmi_id, link) # :MethodLength
+      def generalization_association(owner_xmi_id, link)
         member_end_type = "generalization"
         xmi_id = link.start
         source_or_target = :source
@@ -900,7 +900,7 @@ module Ea
 
       def fetch_owned_attribute_node(xmi_id)
         oa = xmi_index.find_owned_attrs_by_type(xmi_id)
-                      .find { |a| !!a.association }
+                      .find { |a| !a.association.nil? }
 
         if oa
           cardinality = cardinality_min_max_value(
@@ -966,7 +966,7 @@ module Ea
         connector_lookup[[source_or_target.to_sym, xmi_id]]
       end
 
-      def connector_name_by_source_or_target(xmi_id, source_or_target) # :AbcSize
+      def connector_name_by_source_or_target(xmi_id, source_or_target)
         node = connector_node_by_id(xmi_id, source_or_target)
         return node.name if node&.name
 
@@ -996,7 +996,7 @@ module Ea
         iterate_tree(items, model, type, method.to_sym)
       end
 
-      def iterate_tree(result, node, type, children_method) # :AbcSize,Metrics:CyclomaticComplexity,Metrics:PerceivedComplexity
+      def iterate_tree(result, node, type, children_method)
         result << node if type.nil? || node.type == type
         return unless node.public_send(children_method)
 

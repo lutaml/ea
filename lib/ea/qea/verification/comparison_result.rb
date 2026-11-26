@@ -198,7 +198,7 @@ module Ea
         # Check if there are any issues
         #
         # @return [Boolean] True if there are issues
-        def has_issues?
+        def issues?
           !equivalent?
         end
 

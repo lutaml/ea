@@ -60,21 +60,21 @@ module Ea
         # Checks if there are any error messages
         #
         # @return [Boolean]
-        def has_errors?
+        def errors?
           @messages.any?(&:error?)
         end
 
         # Checks if there are any warning messages
         #
         # @return [Boolean]
-        def has_warnings?
+        def warnings?
           @messages.any?(&:warning?)
         end
 
         # Checks if there are any info messages
         #
         # @return [Boolean]
-        def has_info?
+        def info?
           @messages.any?(&:info?)
         end
 
@@ -82,7 +82,7 @@ module Ea
         #
         # @return [Boolean]
         def valid?
-          !has_errors?
+          !errors?
         end
 
         # Returns all error messages

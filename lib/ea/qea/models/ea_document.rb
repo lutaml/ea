@@ -47,13 +47,13 @@ module Ea
 
         # Check if document has string content
         # @return [Boolean]
-        def has_content?
+        def content?
           !str_content.nil? && !str_content.empty?
         end
 
         # Check if document has binary content
         # @return [Boolean]
-        def has_binary_content?
+        def binary_content?
           !bin_content.nil? && !bin_content.empty?
         end
       end

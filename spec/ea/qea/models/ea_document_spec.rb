@@ -88,37 +88,37 @@ RSpec.describe Ea::Qea::Models::EaDocument do
     end
   end
 
-  describe "#has_content?" do
+  describe "#content?" do
     it "returns true when str_content is present" do
       doc = described_class.new(str_content: "Some content")
-      expect(doc).to have_content
+      expect(doc.content?).to be(true)
     end
 
     it "returns false when str_content is nil" do
       doc = described_class.new(str_content: nil)
-      expect(doc).not_to have_content
+      expect(doc.content?).to be(false)
     end
 
     it "returns false when str_content is empty" do
       doc = described_class.new(str_content: "")
-      expect(doc).not_to have_content
+      expect(doc.content?).to be(false)
     end
   end
 
-  describe "#has_binary_content?" do
+  describe "#binary_content?" do
     it "returns true when bin_content is present" do
       doc = described_class.new(bin_content: "Binary")
-      expect(doc).to have_binary_content
+      expect(doc.binary_content?).to be(true)
     end
 
     it "returns false when bin_content is nil" do
       doc = described_class.new(bin_content: nil)
-      expect(doc).not_to have_binary_content
+      expect(doc.binary_content?).to be(false)
     end
 
     it "returns false when bin_content is empty" do
       doc = described_class.new(bin_content: "")
-      expect(doc).not_to have_binary_content
+      expect(doc.binary_content?).to be(false)
     end
   end
 
