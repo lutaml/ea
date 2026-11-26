@@ -34,7 +34,7 @@ module Ea
               document.xpath("//*[@association][@xmi:id]", "xmi" => "http://www.omg.org/spec/XMI/20131001")
                       .filter_map do |node|
                 pair = [node["xmi:id"], node["association"]]
-                pair if node["type"] == "uml:Property" && members.include?(pair)
+                pair if node.at_xpath("@type")&.value == "uml:Property" && members.include?(pair)
               end.to_set
             end
 
@@ -50,13 +50,13 @@ module Ea
 
             def unique_edges(diagram)
               diagram.xpath("./ownedElement[@modelElement]")
-                     .select { |node| node["type"].to_s.end_with?("UMLEdge") }
+                     .select { |node| node.at_xpath("@type")&.value.to_s.end_with?("UMLEdge") }
                      .group_by { |edge| edge["modelElement"] }
                      .select { |_, edges| edges.one? }.transform_values(&:first)
             end
 
             def role_key(label)
-              return unless label["type"].to_s.end_with?("UMLAssociationEndLabel")
+              return unless label.at_xpath("@type")&.value.to_s.end_with?("UMLAssociationEndLabel")
 
               case label["xmi:id"] || label["id"]
               when /\AEAID_SEL/ then :source_role

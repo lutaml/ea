@@ -82,7 +82,7 @@ module Ea
           end
 
           def label_key(label)
-            type = label["type"].to_s
+            type = label.at_xpath("@type")&.value.to_s
             role = (label["id"] || label["xmi:id"]).to_s
             end_name = { "EAID_SEL" => "source", "EAID_SML" => "source",
                          "EAID_TEL" => "target", "EAID_TML" => "target" }
@@ -102,7 +102,7 @@ module Ea
           # one edge of the diagram, whatever that edge carries.
           def unique_edges(diagram)
             diagram.xpath("./ownedElement[@modelElement]")
-                   .select { |node| node["type"].to_s.end_with?("UMLEdge") }
+                   .select { |node| node.at_xpath("@type")&.value.to_s.end_with?("UMLEdge") }
                    .group_by { |edge| edge["modelElement"] }
                    .select { |_, same| same.one? }
                    .transform_values(&:first)
