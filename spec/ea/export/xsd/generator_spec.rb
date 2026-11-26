@@ -15,7 +15,7 @@ RSpec.describe Ea::Export::Xsd do
                 typeContent="simple"/>
         </ClassMapping>
       XML
-      mapping = described_class::ClassMapping.from_nokogiri(Nokogiri::XML(xml))
+      mapping = described_class::ClassMapping.from_xml(Moxml.new.parse(xml))
 
       ft = mapping.for("FeatureType")
       expect(ft).not_to be_nil

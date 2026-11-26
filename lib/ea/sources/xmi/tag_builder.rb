@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "moxml"
 
 module Ea
   module Sources
@@ -22,7 +22,7 @@ module Ea
           return {} if xmi_path.nil?
 
           @grouped ||= begin
-            doc = Nokogiri::XML(File.read(xmi_path))
+            doc = Moxml.new.parse(File.read(xmi_path))
             # <tags><tag/></tags> lives inside per-element <element>
             # blocks within <xmi:Extension>. The element itself is in
             # no XML namespace; match by local-name to be safe.

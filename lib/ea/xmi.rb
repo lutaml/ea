@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "moxml"
 require "xmi"
 require "liquid"
 require "cgi"

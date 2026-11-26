@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "moxml"
 
 module Ea
   module Sources
@@ -59,7 +59,7 @@ module Ea
         end
 
         def doc
-          @doc ||= Nokogiri::XML(File.read(xmi_path))
+          @doc ||= Moxml.new.parse(File.read(xmi_path))
         end
 
         def keywords_by_diagram

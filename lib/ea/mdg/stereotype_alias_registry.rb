@@ -32,16 +32,16 @@ module Ea
       def self.from_path(path)
         return new if path.nil? || !File.exist?(path)
 
-        require "nokogiri"
-        doc = Nokogiri::XML(File.read(path))
-        from_nokogiri(doc)
+        require "moxml"
+        doc = Moxml.new.parse(File.read(path))
+        from_xml(doc)
       end
 
-      # Build from a parsed Nokogiri document. Tested separately so
+      # Build from a parsed XML document. Tested separately so
       # the parser path is exercised without file IO.
-      # @param doc [Nokogiri::XML::Document]
+      # @param doc [Moxml::Wrappers::Document]
       # @return [StereotypeAliasRegistry]
-      def self.from_nokogiri(doc)
+      def self.from_xml(doc)
         aliases = {}
         doc.xpath("//Stereotype").each do |stereo|
           canonical = stereo["name"]

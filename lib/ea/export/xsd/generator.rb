@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "moxml"
 
 module Ea
   module Export
@@ -46,13 +46,14 @@ module Ea
         private
 
         def build_schema_doc(target_namespace, prefix)
-          builder = Nokogiri::XML::Builder.new do |xml|
-            xml.schema("xmlns" => XSD_NS,
-                       "xmlns:#{prefix}" => target_namespace,
-                       "targetNamespace" => target_namespace,
-                       "elementFormDefault" => "qualified")
-          end
-          builder.doc
+          doc = Moxml.new.create_document
+          schema = doc.create_element("schema")
+          schema["xmlns"] = XSD_NS
+          schema["xmlns:#{prefix}"] = target_namespace
+          schema["targetNamespace"] = target_namespace
+          schema["elementFormDefault"] = "qualified"
+          doc.root = schema
+          doc
         end
 
         def walk_model(model, doc)
@@ -107,16 +108,16 @@ module Ea
         end
 
         def element_node(doc, name, type_name)
-          el = doc.create_element("element", "xmlns" => XSD_NS)
+          el = xsd_element(doc)
           el["name"] = name
           el["type"] = "tns:#{type_name}"
           el
         end
 
         def complex_type_node(doc, type_name, classifier)
-          ct = doc.create_element("complexType", "xmlns" => XSD_NS)
+          ct = xsd_element(doc, "complexType")
           ct["name"] = type_name
-          seq = doc.create_element("sequence", "xmlns" => XSD_NS)
+          seq = xsd_element(doc, "sequence")
           classifier.attributes.each do |attr|
             seq.add_child(attribute_element(doc, attr))
           end
@@ -125,10 +126,18 @@ module Ea
         end
 
         def attribute_element(doc, attr)
-          el = doc.create_element("element", "xmlns" => XSD_NS)
+          el = xsd_element(doc)
           el["name"] = attr[:name].to_s
           el["type"] = "xs:string"
           el["minOccurs"] = "0"
+          el
+        end
+
+        # Schema children carry the XSD namespace explicitly, matching
+        # the reference EA output.
+        def xsd_element(doc, name = "element")
+          el = doc.create_element(name)
+          el["xmlns"] = XSD_NS
           el
         end
       end

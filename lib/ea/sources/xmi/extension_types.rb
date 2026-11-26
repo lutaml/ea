@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "moxml"
 
 module Ea
   module Sources
@@ -17,7 +17,7 @@ module Ea
         def self.from_path(xmi_path)
           return empty if xmi_path.nil?
 
-          new(Nokogiri::XML(File.read(xmi_path)))
+          new(Moxml.new.parse(File.read(xmi_path)))
         end
 
         def self.empty

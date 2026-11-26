@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "moxml"
 
 module Ea
   module Sources
@@ -77,7 +77,7 @@ module Ea
           end
 
           def label_key(label)
-            type = label.attributes["type"]&.value.to_s
+            type = label["type"].to_s
             role = (label["id"] || label["xmi:id"]).to_s
             end_name = { "EAID_SEL" => "source", "EAID_SML" => "source",
                          "EAID_TEL" => "target", "EAID_TML" => "target" }
@@ -97,7 +97,7 @@ module Ea
           # one edge of the diagram, whatever that edge carries.
           def unique_edges(diagram)
             diagram.xpath("./ownedElement[@modelElement]")
-                   .select { |node| node.attributes["type"]&.value.to_s.end_with?("UMLEdge") }
+                   .select { |node| node["type"].to_s.end_with?("UMLEdge") }
                    .group_by { |edge| edge["modelElement"] }
                    .select { |_, same| same.one? }
                    .transform_values(&:first)
@@ -121,7 +121,7 @@ module Ea
           end
 
           def doc
-            Nokogiri::XML(File.read(@xmi_path))
+            Moxml.new.parse(File.read(@xmi_path))
           end
         end
       end

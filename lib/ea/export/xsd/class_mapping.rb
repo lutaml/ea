@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "moxml"
 
 module Ea
   module Export
@@ -30,12 +30,12 @@ module Ea
         def self.from_path(path)
           return new if path.nil? || !File.exist?(path)
 
-          from_nokogiri(Nokogiri::XML(File.read(path)))
+          from_xml(Moxml.new.parse(File.read(path)))
         end
 
-        # @param doc [Nokogiri::XML::Document]
+        # @param doc [Moxml::Wrappers::Document]
         # @return [ClassMapping]
-        def self.from_nokogiri(doc)
+        def self.from_xml(doc)
           mappings = {}
           doc.xpath("//Class").each do |node|
             name = node["name"]

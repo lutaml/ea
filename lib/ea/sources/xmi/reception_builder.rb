@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "moxml"
 
 module Ea
   module Sources
@@ -15,7 +15,7 @@ module Ea
         def grouped_by_owner
           return {} unless @xmi_path
 
-          @grouped_by_owner ||= read_receptions(Nokogiri::XML(File.read(@xmi_path)))
+          @grouped_by_owner ||= read_receptions(Moxml.new.parse(File.read(@xmi_path)))
         end
 
         private

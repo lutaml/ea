@@ -4,7 +4,7 @@ require "spec_helper"
 require "nokogiri"
 
 RSpec.describe Ea::Mdg::StereotypeAliasRegistry do
-  describe ".from_nokogiri" do
+  describe ".from_xml" do
     it "maps canonical name and aliases to canonical form" do
       xml = <<~XML
         <Stereotypes>
@@ -18,7 +18,7 @@ RSpec.describe Ea::Mdg::StereotypeAliasRegistry do
           </Stereotype>
         </Stereotypes>
       XML
-      registry = described_class.from_nokogiri(Nokogiri::XML(xml))
+      registry = described_class.from_xml(Moxml.new.parse(xml))
 
       expect(registry.canonicalize("featureType")).to eq("FeatureType")
       expect(registry.canonicalize("FEATURETYPE")).to eq("FeatureType")
@@ -28,7 +28,7 @@ RSpec.describe Ea::Mdg::StereotypeAliasRegistry do
     end
 
     it "passes through unknown stereotypes unchanged" do
-      registry = described_class.from_nokogiri(Nokogiri::XML("<Stereotypes/>"))
+      registry = described_class.from_xml(Moxml.new.parse("<Stereotypes/>"))
       expect(registry.canonicalize("UnknownStereo")).to eq("UnknownStereo")
     end
 
@@ -50,7 +50,7 @@ RSpec.describe Ea::Mdg::StereotypeAliasRegistry do
           </Stereotype>
         </Stereotypes>
       XML
-      registry = described_class.from_nokogiri(Nokogiri::XML(xml))
+      registry = described_class.from_xml(Moxml.new.parse(xml))
       expect(registry.canonical_names.sort).to eq(%w[FeatureType Type])
     end
   end
