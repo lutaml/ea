@@ -80,7 +80,7 @@ module Ea
                 buffer << "</#{event.name}>"
                 depth -= 1
                 if depth.zero?
-                  connectors << Moxml.parse(buffer).root
+                  connectors << Moxml.parse(scrub(buffer)).root
                   buffer = nil
                 end
               when :text
@@ -88,6 +88,13 @@ module Ea
               end
             end
             connectors
+          end
+
+          # EA XMI files occasionally carry bytes outside the declared
+          # encoding; the nokogiri outer-xml path tolerated them, so scrub
+          # the reconstructed fragment the same way before parsing.
+          def scrub(buffer)
+            buffer.encode("UTF-8", invalid: :replace, undef: :replace)
           end
 
           def write_start(event)
