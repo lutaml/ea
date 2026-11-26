@@ -45,8 +45,8 @@ module Ea
         end
 
         def recognized?
-          !!@id_name_mapping[@model.source.idref] &&
-            !!@id_name_mapping[@model.target.idref]
+          !@id_name_mapping[@model.source.idref].nil? &&
+            !@id_name_mapping[@model.target.idref].nil?
         end
       end
     end

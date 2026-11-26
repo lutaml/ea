@@ -81,16 +81,16 @@ RSpec.describe "Stereotypes and DataTypes Loading" do
     end
 
     it "handles type size information", :aggregate_failures do
-      sized_types = database.datatypes.select(&:has_length?)
+      sized_types = database.datatypes.select(&:length?)
       expect(sized_types).not_to be_empty
 
-      precision_types = database.datatypes.select(&:has_precision?)
+      precision_types = database.datatypes.select(&:precision?)
       expect(precision_types).not_to be_empty
     end
 
     it "generates type signatures", :aggregate_failures do
       char_type = database.datatypes.find do |dt|
-        dt.data_type == "CHAR" && dt.has_length?
+        dt.data_type == "CHAR" && dt.length?
       end
       expect(char_type).not_to be_nil
       expect(char_type.type_signature).to match(/CHAR\(\d+\)/)

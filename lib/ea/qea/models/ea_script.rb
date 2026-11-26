@@ -46,13 +46,13 @@ module Ea
 
         # Check if script has content
         # @return [Boolean]
-        def has_content?
+        def content?
           !script.nil? && !script.empty?
         end
 
         # Check if script has notes
         # @return [Boolean]
-        def has_notes?
+        def notes?
           !notes.nil? && !notes.empty?
         end
       end

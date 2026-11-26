@@ -44,19 +44,19 @@ module Ea
             lines << summary
             lines << ""
 
-            if result.has_errors?
+            if result.errors?
               lines << section_header("ERRORS", result.errors.size)
               lines << format_messages(result.errors)
               lines << ""
             end
 
-            if result.has_warnings?
+            if result.warnings?
               lines << section_header("WARNINGS", result.warnings.size)
               lines << format_messages(result.warnings)
               lines << ""
             end
 
-            if result.has_info? && options[:verbose]
+            if result.info? && options[:verbose]
               lines << section_header("INFO", result.info.size)
               lines << format_messages(result.info)
               lines << ""
@@ -87,7 +87,7 @@ module Ea
           def summary
             status = if result.valid?
                        colorize("✓ VALID", :green, bold: true)
-                     elsif result.has_errors?
+                     elsif result.errors?
                        colorize("✗ INVALID", :red, bold: true)
                      else
                        colorize("⚠ WARNINGS", :yellow, bold: true)

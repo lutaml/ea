@@ -93,37 +93,37 @@ RSpec.describe Ea::Qea::Models::EaScript do
     end
   end
 
-  describe "#has_content?" do
+  describe "#content?" do
     it "returns true when script is present" do
       script = described_class.new(script: "function test() {}")
-      expect(script).to have_content
+      expect(script.content?).to be(true)
     end
 
     it "returns false when script is nil" do
       script = described_class.new(script: nil)
-      expect(script).not_to have_content
+      expect(script.content?).to be(false)
     end
 
     it "returns false when script is empty" do
       script = described_class.new(script: "")
-      expect(script).not_to have_content
+      expect(script.content?).to be(false)
     end
   end
 
-  describe "#has_notes?" do
+  describe "#notes?" do
     it "returns true when notes is present" do
       script = described_class.new(notes: "Some notes")
-      expect(script).to have_notes
+      expect(script.notes?).to be(true)
     end
 
     it "returns false when notes is nil" do
       script = described_class.new(notes: nil)
-      expect(script).not_to have_notes
+      expect(script.notes?).to be(false)
     end
 
     it "returns false when notes is empty" do
       script = described_class.new(notes: "")
-      expect(script).not_to have_notes
+      expect(script.notes?).to be(false)
     end
   end
 

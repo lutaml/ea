@@ -17,7 +17,7 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
 
       expect(result.messages.size).to eq(1)
       expect(result.messages.first.severity).to eq("error")
-      expect(result.has_errors?).to be true
+      expect(result.errors?).to be true
     end
   end
 
@@ -33,7 +33,7 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
 
       expect(result.messages.size).to eq(1)
       expect(result.messages.first.severity).to eq("warning")
-      expect(result.has_warnings?).to be true
+      expect(result.warnings?).to be true
     end
   end
 
@@ -49,11 +49,11 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
 
       expect(result.messages.size).to eq(1)
       expect(result.messages.first.severity).to eq("info")
-      expect(result.has_info?).to be true
+      expect(result.info?).to be true
     end
   end
 
-  describe "#has_errors?" do
+  describe "#errors?" do
     it "returns true when there are errors" do
       result.add_error(
         category: :missing_reference,
@@ -62,7 +62,7 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
         entity_name: "TestClass",
         message: "Error"
       )
-      expect(result.has_errors?).to be true
+      expect(result.errors?).to be true
     end
 
     it "returns false when there are no errors" do
@@ -73,7 +73,7 @@ RSpec.describe Ea::Qea::Validation::ValidationResult do
         entity_name: "TestClass",
         message: "Warning"
       )
-      expect(result.has_errors?).to be false
+      expect(result.errors?).to be false
     end
   end
 

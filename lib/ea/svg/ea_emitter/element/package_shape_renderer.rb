@@ -76,7 +76,7 @@ module Ea
 
           def to_svg
             parts = ["  #{body_polygon}", "  #{tab_polygon}"]
-            parts += header_text_blocks if has_label?
+            parts += header_text_blocks if label?
             %(<g style="#{group_style}">\n#{parts.join("\n")}\n</g>)
           end
 
@@ -85,11 +85,11 @@ module Ea
           attr_reader :bounds, :fill, :stroke, :stroke_width, :label,
                       :stereotype, :family, :size, :size_unit, :text_fill
 
-          def has_label?
+          def label?
             label && !label.empty?
           end
 
-          def has_stereotype?
+          def stereotype?
             stereotype && !stereotype.empty?
           end
 
@@ -110,7 +110,7 @@ module Ea
 
           def header_text_blocks
             blocks = []
-            if has_stereotype?
+            if stereotype?
               blocks << "  #{text_at(label_x, stereotype_y, "«#{stereotype}»", weight: 0)}"
               blocks << "  #{text_at(label_x, name_y, label, weight: 700)}"
             else

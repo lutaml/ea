@@ -64,13 +64,13 @@ module Ea
 
         # Check if type has length parameter
         # @return [Boolean]
-        def has_length?
+        def length?
           size == 1 || !haslength.nil?
         end
 
         # Check if type has precision parameter
         # @return [Boolean]
-        def has_precision?
+        def precision?
           size == 2
         end
 
