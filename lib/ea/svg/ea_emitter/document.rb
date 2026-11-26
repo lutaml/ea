@@ -130,12 +130,23 @@ module Ea
         end
 
         def render_image(image)
-          svg = Ea::Image::EmfRenderer.render(image.bytes)
+          svg = Ea::Image::EmfRenderer.render(blob_for(image))
           return nil unless svg
 
           %(<g>#{svg}</g>)
         end
         private :render_image
+
+        # Blob bytes for one image row. Loaded rows carry their blob;
+        # blob-free loads (column-level exclusion at load time) hold
+        # metadata only, and the blob is fetched from the QEA file on
+        # demand via the database's reopen-per-fetch accessor.
+        #
+        # @param image [Ea::Qea::Models::EaImage]
+        # @return [String, nil] raw blob bytes, or nil when unavailable
+        def blob_for(image)
+          image.bytes || document.image_blob(image.image_id)
+        end
       end
     end
   end

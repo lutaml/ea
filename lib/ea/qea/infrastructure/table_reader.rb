@@ -44,6 +44,13 @@ module Ea
           !row.nil?
         end
 
+        # @return [Array<String>] the table's actual column names
+        def column_names
+          @database
+            .execute("PRAGMA table_info(#{@table_name})")
+            .map { |row| row["name"] }
+        end
+
         # Read all records from the table
         #
         # @param limit [Integer, nil] Maximum number of records to return
@@ -66,6 +73,8 @@ module Ea
         # Stream records row-by-row without materializing the full
         # result set (halves peak memory on large tables).
         #
+        # @param columns [Array<String>, nil] column subset to select;
+        #   nil selects every column
         # @param limit [Integer, nil]
         # @param offset [Integer, nil]
         # @yieldparam row [Hash] one database row
@@ -73,8 +82,12 @@ module Ea
         #
         # @example
         #   reader.each_row { |row| models << Model.from_db_row(row) }
-        def each_row(limit: nil, offset: nil, &block)
-          query, params = build_select_query(limit: limit, offset: offset)
+        #
+        # @example Metadata-only streaming (skip the heavy blob column)
+        #   reader.each_row(columns: %w[ImageID Name Type]) { |row| ... }
+        def each_row(columns: nil, limit: nil, offset: nil, &block)
+          query, params = build_select_query(columns: columns,
+                                             limit: limit, offset: offset)
           @database.execute(query, params, &block)
         end
 
@@ -233,8 +246,8 @@ module Ea
 
         private
 
-        def build_select_query(limit: nil, offset: nil)
-          query = +"SELECT * FROM #{@table_name}"
+        def build_select_query(columns: nil, limit: nil, offset: nil)
+          query = +"SELECT #{select_list(columns)} FROM #{@table_name}"
           params = []
           if limit
             query << " LIMIT ?"
@@ -245,6 +258,15 @@ module Ea
             params << offset
           end
           [query, params]
+        end
+
+        # @param columns [Array<String>, nil] quoted identifier list, or
+        #   "*" when no subset is requested
+        # @return [String] the SELECT list
+        def select_list(columns)
+          return "*" unless columns
+
+          columns.map { |name| %("#{name.to_s.gsub('"', '""')}") }.join(", ")
         end
       end
     end

@@ -557,4 +557,32 @@ RSpec.describe Ea::Qea::Database do
       expect(database.collection_for_table(nil)).to eq([])
     end
   end
+
+  describe "#image_blob" do
+    let(:images_qea) do
+      File.expand_path("../../fixtures/with-images.qea", __dir__)
+    end
+
+    def load_blob_free
+      config = Ea::Qea::Services::Configuration.load
+      config.include_blobs = false
+      Ea::Qea::Services::DatabaseLoader.new(images_qea, config).load
+    end
+
+    it "returns nil when the database has no blob connection" do
+      db = Ea::Qea::Database.new(images_qea)
+      expect(db.image_blob(1)).to be_nil
+    end
+
+    it "fetches the blob from disk through a frozen database" do
+      db = load_blob_free
+      expect(db).to be_frozen
+      expect(db.image_blob(1)).to eq("\x01\x02\x03EMF-PROBE-BYTES\x04".b)
+    end
+
+    it "returns nil for an unknown row id" do
+      db = load_blob_free
+      expect(db.image_blob(999_999)).to be_nil
+    end
+  end
 end

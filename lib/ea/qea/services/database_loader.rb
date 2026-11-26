@@ -106,19 +106,20 @@ module Ea
           db = @connection.connection
 
           database = Database.new(@qea_path, db)
+          # Kept for on-demand blob fetches after load (the connection
+          # itself closes in ensure; Database reopens per fetch).
+          database.blob_connection = @connection
 
           @config.enabled_tables.each do |table_def|
-            table_name = table_def.table_name
-            collection_name = table_def.collection_name
-
-            records = load_table_records(db, table_name)
-            database.add_collection(collection_name, records)
+            records = load_table_records(db, table_def)
+            database.add_collection(table_def.collection_name, records)
           end
 
           database.freeze
         ensure
-          # All tables are in memory; nothing reads the connection after
-          # load, and an open handle locks the file on Windows.
+          # All tables are in memory; nothing keeps the handle open, and
+          # an open handle locks the file on Windows. Blob fetches go
+          # through Database#blob_value, which reopens per call.
           @connection.close
         end
 
@@ -139,7 +140,7 @@ module Ea
           end
 
           @connection.with_connection do |db|
-            load_table_records(db, table_name)
+            load_table_records(db, table_def)
           end
         end
 
@@ -164,20 +165,22 @@ module Ea
         # Load records for a table
         #
         # @param db [SQLite3::Database] Database connection
-        # @param table_name [String] Table name
+        # @param table_def [Configuration::TableDefinition] Table config
         # @return [Array] Array of model instances
-        def load_table_records(db, table_name)
+        def load_table_records(db, table_def)
+          table_name = table_def.table_name
           model_class = MODEL_CLASSES[table_name]
           raise ArgumentError, "No model class for table #{table_name}" unless model_class
 
           reader = Infrastructure::TableReader.new(db, table_name)
           return [] unless reader.table_exists?
 
+          columns = load_columns(reader, table_def)
           total = reader.count
           records = []
           index = 0
 
-          reader.each_row do |row|
+          reader.each_row(columns: columns) do |row|
             index += 1
             record = model_class.from_db_row(scrub_row(row))
             records << record if record
@@ -195,6 +198,23 @@ module Ea
           end
 
           records
+        end
+
+        # Column subset for the load. In blob-free mode the declared
+        # blob columns are cut from the SELECT — the table's metadata
+        # still loads and the blob resolves on demand via
+        # Database#blob_value.
+        #
+        # @param reader [Infrastructure::TableReader]
+        # @param table_def [Configuration::TableDefinition]
+        # @return [Array<String>, nil] columns to select, nil for all
+        def load_columns(reader, table_def)
+          return nil if @config.include_blobs
+
+          blobs = Array(table_def.blob_columns)
+          return nil if blobs.empty?
+
+          reader.column_names - blobs
         end
 
         # Replace invalid byte sequences (e.g. CP1252 bytes stored by

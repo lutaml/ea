@@ -48,5 +48,31 @@ RSpec.describe Ea::Svg::EaEmitter::Document do
 
       expect(emitter.emit_images).to be_nil
     end
+
+    it "fetches the blob on demand when the load is blob-free" do
+      images_qea = File.expand_path("../../../fixtures/with-images.qea", __dir__)
+      config = Ea::Qea::Services::Configuration.load
+      config.include_blobs = false
+      database = Ea::Qea::Services::DatabaseLoader.new(images_qea, config).load
+      image = database.collections[:images].first
+      expect(image.bytes).to be_nil
+
+      emitter = described_class.new(diagram, model_index: {}, document: database)
+
+      received = nil
+      stub_const("Ea::Image::EmfRenderer", Class.new do
+        define_singleton_method(:render) do |bytes|
+          received = bytes
+          "<rect/>"
+        end
+      end)
+
+      result = emitter.emit_images
+      aggregate_failures do
+        expect(result).to include(%(<g id="images">))
+        expect(result).to include("<rect/>")
+        expect(received).to eq("\x01\x02\x03EMF-PROBE-BYTES\x04".b)
+      end
+    end
   end
 end

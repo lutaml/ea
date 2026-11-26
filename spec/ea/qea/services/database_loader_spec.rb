@@ -341,6 +341,36 @@ RSpec.describe Ea::Qea::Services::DatabaseLoader do
     end
   end
 
+  context "with the with-images fixture" do
+    let(:images_qea) do
+      File.expand_path("../../../fixtures/with-images.qea", __dir__)
+    end
+    let(:probe_blob) { "\x01\x02\x03EMF-PROBE-BYTES\x04".b }
+
+    it "loads image metadata and blob by default" do
+      database = described_class.new(images_qea).load
+      image = database.collections[:images].first
+      aggregate_failures do
+        expect(image.name).to eq("TestImage")
+        expect(image.type).to eq("ENHMetafile")
+        expect(image.bytes).to eq(probe_blob)
+      end
+    end
+
+    it "loads metadata only in blob-free mode, blob resolves on demand" do
+      config = Ea::Qea::Services::Configuration.load
+      config.include_blobs = false
+      database = described_class.new(images_qea, config).load
+      image = database.collections[:images].first
+      aggregate_failures do
+        expect(image.name).to eq("TestImage")
+        expect(image.type).to eq("ENHMetafile")
+        expect(image.bytes).to be_nil
+        expect(database.image_blob(image.image_id)).to eq(probe_blob)
+      end
+    end
+  end
+
   def create_minimal_qea_schema(db)
     tables = {
       "t_object" => "Object_ID INTEGER PRIMARY KEY, Name TEXT",

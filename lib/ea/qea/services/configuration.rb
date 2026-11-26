@@ -140,16 +140,14 @@ module Ea
           end
         end
 
-        # Get list of enabled tables. In blob-free mode tables carrying
-        # declared blob columns are dropped entirely (their content
-        # cannot be partially loaded into the typed models).
+        # Get list of enabled tables. In blob-free mode blob-declaring
+        # tables stay enabled — their metadata loads normally while the
+        # loader excludes the blob columns themselves; blob content then
+        # resolves on demand via Database#blob_value.
         #
         # @return [Array<TableDefinition>] Array of enabled table definitions
         def enabled_tables
-          all = tables&.select(&:enabled) || []
-          return all if include_blobs
-
-          all.reject { |t| t.blob_columns&.any? }
+          tables&.select(&:enabled) || []
         end
 
         # Get table configuration by table name
