@@ -96,7 +96,7 @@ module Ea
                 @capture[:xml] << "</#{event.name}>"
                 @capture[:depth] -= 1
                 if @capture[:depth].zero?
-                  subtree = Moxml.parse(@capture[:xml]).root
+                  subtree = Moxml.parse(scrub(@capture[:xml])).root
                   send("read_#{@capture[:kind]}", subtree, data)
                   @capture = nil
                 end
@@ -105,6 +105,13 @@ module Ea
               end
             end
             data
+          end
+
+          # EA XMI files occasionally carry bytes outside the declared
+          # encoding; the nokogiri outer-xml path tolerated them, so scrub
+          # the reconstructed fragment the same way before parsing.
+          def scrub(buffer)
+            buffer.encode("UTF-8", invalid: :replace, undef: :replace)
           end
 
           def write_start(event)
