@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "moxml"
 
 module Ea
   module Export
@@ -32,26 +32,27 @@ module Ea
         def self.from_path(path, version: nil)
           return new if path.nil? || !File.exist?(path)
 
-          from_nokogiri(Nokogiri::XML(File.read(path)), version: version)
+          from_document(Moxml.parse(File.read(path)), version: version)
         end
 
-        # @param doc [Nokogiri::XML::Document]
+        # @param doc [Moxml::Document]
         # @param version [String, nil] GML version filter
         # @return [NamespaceRegistry]
-        def self.from_nokogiri(doc, version: nil)
+        def self.from_document(doc, version: nil)
           namespaces = {}
           # EA stores the prefix in a `xmlns` attribute, which XML
-          # reserves for namespace declarations. Nokogiri interprets
-          # it as the element's namespace, so we read it back via
-          # `namespace` (the parsed NS) rather than `attribute`.
-          # Use local-name() so the lookup is namespace-agnostic.
+          # reserves for namespace declarations. The XML parser
+          # interprets it as the element's namespace, so we read it
+          # back via `namespace` (the parsed NS) rather than
+          # `attribute`. Use local-name() so the lookup is
+          # namespace-agnostic.
           doc.xpath("//*[local-name()='GMLNS']").each do |gmlns|
             next if version && gmlns["version"] != version
 
             gmlns.element_children.each do |node|
               next unless node.name == "Namespace"
 
-              prefix = node.namespace&.href
+              prefix = node.namespace&.uri
               next unless prefix
 
               namespaces[prefix] = Namespace.new(
