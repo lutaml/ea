@@ -40,9 +40,9 @@ Gem::Specification.new do |spec|
   # UML bridge (Ea::Qea.to_uml) lazy-requires `lutaml/uml` inside the
   # method body and raises a clear error if the gem is not installed.
   spec.add_dependency "lutaml-model", "~> 0.8.159"
-  spec.add_dependency "lutaml-path"
+  spec.add_dependency "lutaml-path", "~> 0.2.4"
   spec.add_dependency "rubyzip", "~> 3.7"
-  spec.add_dependency "sqlite3"
+  spec.add_dependency "sqlite3", "~> 2.10"
   # xmi 0.7.0 added nestedClassifier support and lowerValue-first
   # ordering; 0.7.2 additionally constrains lutaml-model below
   # 0.8.20, where Sparx type refs are silently dropped. 0.7.5 split
@@ -56,17 +56,13 @@ Gem::Specification.new do |spec|
   spec.add_dependency "xmi", "~> 0.7.5"
 
   # benchmark was removed from Ruby 4.0 default gems
-  spec.add_dependency "benchmark"
+  spec.add_dependency "benchmark", "~> 0.5"
 
   # Development-only — provides the UML bridge used by the spec suite.
-  # The bridge targets Lutaml::Uml::Document / UmlClass / Association /
-  # etc., all of which remain on those names from 0.2 through 0.5+
-  # (no rename happened despite the major-version bump cadence). Pinned
-  # to 0.5.2+ to pick up the WelcomeView custom-logo fix
-  # (lutaml/lutaml-uml#119) exercised indirectly via the SPA command.
-  # The `~> 0.5` upper bound prevents bundler from resolving to the
-  # pre-existing 1.0.0 release, which has a different API surface.
-  spec.add_development_dependency "lutaml-uml"
+  # The suite resolves 1.0.x (QeaToUml, spa, and the parity fixtures
+  # run green against 1.0.3); the bridge targets the Lutaml::Uml 1.0
+  # API surface, so the floor carries the major line only.
+  spec.add_development_dependency "lutaml-uml", "~> 1.0"
 
   # Development-only — Rakefile's default task runs spec + rubocop.
   # Without this, `bundle exec rake` (invoked by metanorma/ci's
