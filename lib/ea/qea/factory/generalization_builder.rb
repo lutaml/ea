@@ -54,10 +54,16 @@ module Ea
         end
 
         def to_general_attribute(attr)
-          Lutaml::Uml::GeneralAttribute.new(
-            **base_attr_hash(attr),
-            is_derived: attr.is_derived == true,
-            has_association: !attr.association.nil?
+          Ea::Rules::GeneralAttributeMapping.build(
+            id: attr.id,
+            name: attr.name,
+            type: attr.type,
+            xmi_id: attr.xmi_id,
+            cardinality: attr.cardinality,
+            definition: attr.definition,
+            association: attr.association,
+            type_ns: attr.type_ns,
+            is_derived: attr.is_derived
           )
         end
 

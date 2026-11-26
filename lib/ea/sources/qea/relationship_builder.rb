@@ -72,12 +72,12 @@ module Ea
             target_id: id_for_object_id(row.end_object_id),
             source_role_name: row.sourcerole,
             target_role_name: row.destrole,
-            source_multiplicity_lower: parse_lower(row.sourcecard),
-            source_multiplicity_upper: parse_upper(row.sourcecard),
-            target_multiplicity_lower: parse_lower(row.destcard),
-            target_multiplicity_upper: parse_upper(row.destcard),
-            source_multiplicity_raw: raw_card(row.sourcecard),
-            target_multiplicity_raw: raw_card(row.destcard),
+            source_multiplicity_lower: Sources::Multiplicity.lower(row.sourcecard),
+            source_multiplicity_upper: Sources::Multiplicity.upper(row.sourcecard),
+            target_multiplicity_lower: Sources::Multiplicity.lower(row.destcard),
+            target_multiplicity_upper: Sources::Multiplicity.upper(row.destcard),
+            source_multiplicity_raw: Sources::Multiplicity.raw(row.sourcecard),
+            target_multiplicity_raw: Sources::Multiplicity.raw(row.destcard),
             source_aggregation: source_aggregation_for(row),
             target_aggregation: aggregation_from(row.destisaggregate),
             source_navigable: navigable?(row.sourceisnavigable, row.direction,
@@ -91,40 +91,6 @@ module Ea
           return nil unless obj
 
           IdNormalizer.from_guid(obj.ea_guid)
-        end
-
-        # Returns nil when cardinality is absent so the renderer can
-        # distinguish "no multiplicity specified" from an explicit
-        # "1". EA only renders the "1" label when the modeller set it
-        # explicitly (SourceCard/DestCard = "1").
-        # Verbatim cardinality text. Blank cards stay nil so the
-        # renderer keeps suppressing unspecified multiplicities.
-        def raw_card(cardinality)
-          text = cardinality.to_s.strip
-          text.empty? ? nil : text
-        end
-
-        def parse_lower(cardinality)
-          return nil if cardinality.nil? || cardinality.empty?
-
-          begin
-            Integer(cardinality.split("..").first)
-          rescue StandardError
-            nil
-          end
-        end
-
-        def parse_upper(cardinality)
-          return nil if cardinality.nil? || cardinality.empty?
-
-          upper = cardinality.split("..").last
-          return -1 if upper == "*"
-
-          begin
-            Integer(upper)
-          rescue StandardError
-            nil
-          end
         end
 
         # EA stores the aggregate end in t_connector.SourceIsAggregate/
