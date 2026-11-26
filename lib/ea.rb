@@ -9,6 +9,7 @@ module Ea
   class Error < StandardError; end
 
   autoload :Qea, "ea/qea"
+  autoload :Rules, "ea/rules"
   autoload :Model, "ea/model"
   autoload :Sources, "ea/sources"
   autoload :Spa, "ea/spa"
