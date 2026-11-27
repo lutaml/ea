@@ -12,7 +12,7 @@ RSpec.describe "Foreign instance subtitle placement" do
       "157826AA-96A7-4278-89A6-94BD0F31409A" =>
         [[86, 210], [315, 130], [315, 290]]
     }.each do |diagram_id, expected|
-      nodes = object_slot_public_nodes(diagram_id).select { |node| node.text == "(from Objects)" }
+      nodes = object_slot_public_nodes(diagram_id).select { |node| node.content == "(from Objects)" }
 
       expect(nodes.map { |node| [node["x"].to_f, node["y"].to_f] }.sort).to eq(expected)
       expect(nodes.map { |node| node["textLength"].to_i }).to eq([60] * expected.size)
@@ -33,7 +33,7 @@ RSpec.describe "Foreign instance subtitle anchor controls" do
         nodes = object_slot_nodes(context)
 
         expect(nodes.size).to eq(count + 1)
-        expect(nodes.last.text).to eq("(from Foreign)")
+        expect(nodes.last.content).to eq("(from Foreign)")
         expect(nodes.last["y"].to_f).to eq(135)
         expect(nodes.last["style"]).to include("font-family:#{family};", "font-size:#{size}#{unit};")
       end

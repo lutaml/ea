@@ -84,7 +84,7 @@ RSpec.describe Ea::Sources::Xmi::UmldiKeywordExtractor do
   describe "with the basic.xmi example" do
     let(:basic_path) { fixtures_path("basic.xmi") }
     let(:extractor) { described_class.new(basic_path) }
-    let(:diagrams) { Nokogiri::XML(File.read(basic_path)).xpath("//*[local-name()='Diagram']") }
+    let(:diagrams) { Moxml.parse(File.read(basic_path)).xpath("//*[local-name()='Diagram']") }
     let(:all_keywords) do
       diagrams.flat_map { |d| extractor.keywords_for_diagram(d["id"] || d["xmi:id"]).values }
     end

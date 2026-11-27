@@ -11,11 +11,12 @@ RSpec.describe Ea::Svg::EaEmitter::Elements, "tag content width" do
     element = diagram.elements.find { |entry| entry.model_element_ref == "8BB6E86F-144B-4636-8D32-171755674020" }
     svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id, document: document,
                                                     frame: true).render
-    nodes = Nokogiri::XML(svg).remove_namespaces!
-    box = nodes.css('rect[x="35"][y="40"]').first
+    nodes = Moxml.parse(svg)
+    Moxml.parse(svg)
+    box = nodes.xpath("//*[local-name()='rect'][@x='35'][@y='40']").first
 
     expect(box["width"].to_f).to eq(111)
-    expect(nodes.css("text").find { |node| node.text == "noPropertyType = false" }["textLength"]).to eq("101")
+    expect(nodes.xpath("//*[local-name()='text']").find { |node| node.content == "noPropertyType = false" }["textLength"]).to eq("101")
     expect(element.bounds.width).to eq(90)
   end
 
@@ -23,7 +24,7 @@ RSpec.describe Ea::Svg::EaEmitter::Elements, "tag content width" do
     it "fits emitted #{unit} tag rows with logical height #{logical_height.inspect}" do
       width, nodes = tag_width_render({ "HighPrecision" => "false", "Short" => "0" },
                                       unit: unit, logical_height: logical_height)
-      widest_row = nodes.css("text").select { |node| node.text.include?(" = ") }
+      widest_row = nodes.xpath("//*[local-name()='text']").select { |node| node.content.include?(" = ") }
                         .map { |node| node["textLength"].to_i }.max
 
       expect(width).to eq(widest_row + 10)
@@ -43,7 +44,7 @@ RSpec.describe Ea::Svg::EaEmitter::Elements, "tag width preservation" do
   it "ignores disabled tags when sizing the box" do
     width, nodes = tag_width_render({ "A very long tag name" => "false" }, visible: false)
     expect(width).to eq(50)
-    expect(nodes.css("text").map(&:text)).not_to include("A very long tag name = false")
+    expect(nodes.xpath("//*[local-name()='text']").map(&:text)).not_to include("A very long tag name = false")
   end
 
   it "ignores missing and empty tag values when sizing the box" do

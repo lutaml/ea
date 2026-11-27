@@ -13,12 +13,12 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
       diagram, model_index: document.index_by_id, document: document,
                frame: true
     ).render
-    Nokogiri::XML(svg).remove_namespaces!
+    Moxml.parse(svg)
   end
 
   it "keeps a default center route and its caption on the native source row", :aggregate_failures do
-    expect(xml.css("path").map { |node| node["d"] }).to include("M 168 66 L 272 66")
-    caption = xml.css("text").find { |node| node.text == "Link A" }
+    expect(xml.xpath("//*[local-name()='path']").map { |node| node["d"] }).to include("M 168 66 L 272 66")
+    caption = xml.xpath("//*[local-name()='text']").find { |node| node.content == "Link A" }
     expect([caption["x"].to_f, caption["y"].to_f]).to eq([207, 63])
   end
 
@@ -26,8 +26,8 @@ RSpec.describe Ea::Sources::Qea::DiagramBuilder do
     let(:diagram_name) { "Starter Object Diagram" }
 
     it "preserves the native route and caption" do
-      expect(xml.css("path").map { |node| node["d"] }).to include("M 125 65 L 250 65")
-      caption = xml.css("text").find { |node| node.text == "Link A" }
+      expect(xml.xpath("//*[local-name()='path']").map { |node| node["d"] }).to include("M 125 65 L 250 65")
+      caption = xml.xpath("//*[local-name()='text']").find { |node| node.content == "Link A" }
       expect([caption["x"].to_f, caption["y"].to_f]).to eq([174, 62])
     end
   end

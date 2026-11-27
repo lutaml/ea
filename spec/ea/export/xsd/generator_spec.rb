@@ -2,7 +2,6 @@
 
 require "spec_helper"
 require "moxml"
-require "nokogiri"
 
 RSpec.describe Ea::Export::Xsd do
   describe "ClassMapping" do
@@ -114,28 +113,28 @@ RSpec.describe Ea::Export::Xsd do
 
     it "emits a valid XSD schema root element" do
       xsd = generator.call(model, target_namespace: "http://test")
-      parsed = Nokogiri::XML(xsd)
+      parsed = Moxml.parse(xsd)
       expect(parsed.root.name).to eq("schema")
       expect(parsed.root["targetNamespace"]).to eq("http://test")
     end
 
     it "emits element + complexType for each class" do
       xsd = generator.call(model, target_namespace: "http://test")
-      parsed = Nokogiri::XML(xsd)
+      parsed = Moxml.parse(xsd)
       parsed.xpath("//xs:element", "xs" => Ea::Export::Xsd::Generator::XSD_NS)
       # default element name is class name downcase
-      expect(parsed.css("element").map { |n| n["name"] }).to include("myclass")
-      expect(parsed.css("complexType").map { |n| n["name"] })
+      expect(parsed.xpath("//*[local-name()='element']").map { |n| n["name"] }).to include("myclass")
+      expect(parsed.xpath("//*[local-name()='complexType']").map { |n| n["name"] })
         .to include("MyClassType")
     end
 
     it "declares child elements for each attribute" do
       xsd = generator.call(model, target_namespace: "http://test")
-      parsed = Nokogiri::XML(xsd)
+      parsed = Moxml.parse(xsd)
 
-      type_def = parsed.css("complexType[name='MyClassType']").first
+      type_def = parsed.xpath("//*[local-name()='complexType'][@name='MyClassType']").first
       expect(type_def).not_to be_nil
-      child_names = type_def.css("element").map { |n| n["name"] }
+      child_names = type_def.xpath("//*[local-name()='element']").map { |n| n["name"] }
       expect(child_names).to include("name", "count")
     end
 
@@ -148,10 +147,10 @@ RSpec.describe Ea::Export::Xsd do
       )
       gen = described_class::Generator.new(class_mapping: mapping_with)
       xsd = gen.call(model, target_namespace: "http://test")
-      parsed = Nokogiri::XML(xsd)
+      parsed = Moxml.parse(xsd)
 
-      expect(parsed.css("element").map { |n| n["name"] }).to include("myElement")
-      expect(parsed.css("complexType").map { |n| n["name"] }).to include("MyType")
+      expect(parsed.xpath("//*[local-name()='element']").map { |n| n["name"] }).to include("myElement")
+      expect(parsed.xpath("//*[local-name()='complexType']").map { |n| n["name"] }).to include("MyType")
     end
   end
 end

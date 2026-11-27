@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "nokogiri"
+require "moxml"
 require "ea/transformers/qea_to_xmi"
 
 RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
   let(:qea_path) { fixtures_path("basic.qea") }
   let(:database) { Ea::Qea.load(qea_path) }
   let(:xml) { described_class.new(database).serialize(with_extensions: false) }
-  let(:parsed) { Nokogiri::XML(xml) }
+  let(:parsed) { Moxml.parse(xml) }
 
   after { database.close_connection }
 
@@ -32,10 +32,11 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
     it "emits an xmi:XMI root with EA's Sparx namespace declarations" do
       root = parsed.root
       expect(root.name).to eq("XMI")
-      expect(root.namespace.prefix).to eq("xmi")
+      # moxml exposes no namespace objects; the declarations are
+      # asserted against the emitted serialization.
       # EA uses the 2011-07-01 XMI/UML namespace URIs (not 2013-10-01).
-      expect(root.namespaces["xmlns:xmi"]).to eq("http://www.omg.org/spec/XMI/20110701")
-      expect(root.namespaces["xmlns:uml"]).to eq("http://www.omg.org/spec/UML/20110701")
+      expect(xml).to include('xmlns:xmi="http://www.omg.org/spec/XMI/20110701"')
+      expect(xml).to include('xmlns:uml="http://www.omg.org/spec/UML/20110701"')
     end
 
     it "includes the xmi:Documentation block with EA exporter info" do
@@ -114,7 +115,7 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
       end
       # Real Sparx XMI does not emit xmi:type on <ownedOperation>; count by
       # element name. See spec/fixtures/basic.xmi for reference shape.
-      expect(parsed.xpath("//ownedOperation").size).to eq(expected)
+      expect(parsed.xpath("//*[local-name()='ownedOperation']").size).to eq(expected)
     end
 
     it "emits one Association per Association/Aggregation/Composition connector" do
@@ -127,7 +128,7 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
 
     it "emits one Generalization per Generalization connector" do
       expected = database.connectors.count { |c| c.connector_type == "Generalization" }
-      expect(parsed.xpath("//generalization").size).to eq(expected)
+      expect(parsed.xpath("//*[local-name()='generalization']").size).to eq(expected)
     end
   end
 
@@ -252,7 +253,7 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
 
   describe "well-formedness" do
     it "parses without XML errors" do
-      expect(parsed.errors).to be_empty
+      expect { Moxml.parse(xml) }.not_to raise_error
     end
 
     it "is parseable by the xmi gem's Sparx parser" do
@@ -341,22 +342,22 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
 
     it "omits visibility on Property when public (UML default, matches EA)" do
       # EA omits visibility="public" — only non-public visibility is emitted.
-      expect(parsed.xpath("//ownedAttribute[@visibility='public']")).to be_empty
+      expect(parsed.xpath("//*[local-name()='ownedAttribute'][@visibility='public']")).to be_empty
     end
 
     it "emits visibility=private for Private-scoped attributes" do
       # Every t_attribute row in basic.qea has Scope="Private"; EA's
       # reference marks all 102 as visibility="private".
-      expect(parsed.xpath("//ownedAttribute[@visibility='private']").size).to eq(102)
+      expect(parsed.xpath("//*[local-name()='ownedAttribute'][@visibility='private']").size).to eq(102)
     end
 
     it "emits visibility on Operation only when non-public" do
-      ops_without_vis = parsed.xpath("//ownedOperation[not(@visibility)]")
+      ops_without_vis = parsed.xpath("//*[local-name()='ownedOperation'][not(@visibility)]")
       expect(ops_without_vis).not_to be_empty
     end
 
     it "omits isAbstract when false (UML default, matches EA)" do
-      elements_without_abs = parsed.xpath("//packagedElement[not(@isAbstract)]")
+      elements_without_abs = parsed.xpath("//*[local-name()='packagedElement'][not(@isAbstract)]")
       expect(elements_without_abs).not_to be_empty
     end
 
@@ -368,7 +369,7 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
     it "emits slots on InstanceSpecification from t_object.runstate (TODO 35 closed)" do
       # 22 slots in basic.qea — one per RunState @VAR block across the
       # fixture's instance specifications.
-      expect(parsed.xpath("//slot").size).to eq(22)
+      expect(parsed.xpath("//*[local-name()='slot']").size).to eq(22)
     end
 
     it "emits each slot body with the RunState operator prepended verbatim" do
@@ -386,7 +387,7 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
     it "emits definingFeature on slots whose instance has a classifier" do
       # InstanceSpecifications with pdata1 set resolve to a classifier
       # attribute; slots without a classifier omit definingFeature.
-      with_df = parsed.xpath("//slot[@definingFeature]")
+      with_df = parsed.xpath("//*[local-name()='slot'][@definingFeature]")
       expect(with_df).not_to be_empty
     end
 
@@ -405,14 +406,14 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
     # walked explicitly.
 
     it "emits classifier on InstanceSpecification (from t_object.classifier)" do
-      expect(parsed.xpath("//packagedElement[@classifier]")).not_to be_empty
+      expect(parsed.xpath("//*[local-name()='packagedElement'][@classifier]")).not_to be_empty
     end
 
     it "emits aggregation on ownedEnd when EA indicates composite/shared" do
       # basic.qea has aggregation/composition connectors — the
       # aggregation attribute should be emitted from the
       # sourceisaggregate/destisaggregate fields.
-      expect(parsed.xpath("//ownedEnd[@aggregation]")).not_to be_empty
+      expect(parsed.xpath("//*[local-name()='ownedEnd'][@aggregation]")).not_to be_empty
     end
   end
 
@@ -588,7 +589,7 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
     let(:simple_doc) do
       simple_db = Ea::Qea.load("examples/qea/simple.qea")
       begin
-        Nokogiri::XML(Ea::Transformers.qea_to_xmi(simple_db))
+        Moxml.parse(Ea::Transformers.qea_to_xmi(simple_db))
       ensure
         simple_db.close_connection
       end
@@ -728,7 +729,7 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
 
     let(:parsed) do
       database = build_test_database(packages: [synthetic_package], objects: objects)
-      Nokogiri::XML(described_class.new(database).serialize(with_extensions: false))
+      Moxml.parse(described_class.new(database).serialize(with_extensions: false))
     end
 
     def names_at(xpath)
@@ -758,7 +759,7 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
 
     let(:nodes) do
       database = build_test_database(packages: [synthetic_package], objects: objects)
-      parsed = Nokogiri::XML(described_class.new(database).serialize(with_extensions: false))
+      parsed = Moxml.parse(described_class.new(database).serialize(with_extensions: false))
       parsed.xpath(%(//*[@name="GrandchildUnderOrphan"]))
     end
 
@@ -779,7 +780,7 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
     # they would vanish from the export without a word.
     def emitted_names(objects)
       database = build_test_database(packages: [synthetic_package], objects: objects)
-      parsed = Nokogiri::XML(described_class.new(database).serialize(with_extensions: false))
+      parsed = Moxml.parse(described_class.new(database).serialize(with_extensions: false))
       objects.to_h { |obj| [obj.name, parsed.xpath(%(//*[@name="#{obj.name}"])).size] }
     end
 
@@ -820,8 +821,8 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
       )
       database = build_test_database(packages: [synthetic_package], attributes: [attribute],
                                      objects: [synthetic_object(10, type: "Class", name: "C")])
-      node = Nokogiri::XML(described_class.new(database).serialize(with_extensions: false))
-                     .at_xpath("//ownedAttribute")
+      node = Moxml.parse(described_class.new(database).serialize(with_extensions: false))
+                  .at_xpath("//*[local-name()='ownedAttribute']")
       [node.at_xpath("lowerValue")["value"], node.at_xpath("upperValue")["value"]]
     end
 
@@ -844,7 +845,7 @@ RSpec.describe Ea::Transformers::QeaToXmi::Transformer do
     it "emits 1..1 with the reference LI ids for test.qea Union.option1" do
       test_db = Ea::Qea.load("examples/qea/test.qea")
       begin
-        doc = Nokogiri::XML(Ea::Transformers.qea_to_xmi(test_db))
+        doc = Moxml.parse(Ea::Transformers.qea_to_xmi(test_db))
         attr_node = doc.at_xpath(%(//ownedAttribute[@xmi:id="EAID_CDDC5C85_CD8A_48b4_BECD_FBFFBEAC015C"]))
         lower = attr_node.at_xpath("lowerValue")
         upper = attr_node.at_xpath("upperValue")

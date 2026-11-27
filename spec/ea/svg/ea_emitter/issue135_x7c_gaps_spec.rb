@@ -27,7 +27,7 @@ RSpec.describe "issue 135 small-corpus gaps (QEA)" do
   end
 
   it "keeps the bare 10 canvas margin below a nested class of the own package (basic 6D0349D5)" do
-    expect(x7c_svg("basic", "6D0349D5").at_css("svg")["viewBox"]).to eq("0 0 528 250")
+    expect(x7c_svg("basic", "6D0349D5").at_xpath("//*[local-name()='svg']")["viewBox"]).to eq("0 0 528 250")
   end
 
   it "starts a name wider than its box 2px inside the left edge (simple 204F4ACC)" do
@@ -35,7 +35,7 @@ RSpec.describe "issue 135 small-corpus gaps (QEA)" do
   end
 
   it "grows a tags-only box to hold its tagged values (simple 204F4ACC)" do
-    rect = x7c_svg("simple", "204F4ACC").css("rect").find { |node| node["x"] == "10" && node["y"] == "10" }
+    rect = x7c_svg("simple", "204F4ACC").xpath("//*[local-name()='rect']").find { |node| node["x"] == "10" && node["y"] == "10" }
 
     expect(rect["height"]).to eq("85")
   end
@@ -44,10 +44,10 @@ RSpec.describe "issue 135 small-corpus gaps (QEA)" do
     let(:xml) { x7c_svg("test", "B58D1A53") }
 
     it "draws connector labels in Cambria 7pt, not the Yu Gothic UI fallback" do
-      labels = xml.css("text").select { |node| %w[+role1 +role2].include?(node.text) }
+      labels = xml.xpath("//*[local-name()='text']").select { |node| %w[+role1 +role2].include?(node.content) }
 
       expect(labels.map { |node| node["style"][/font-family:([^;]*);/, 1] }).to eq(%w[Cambria Cambria])
-      expect(xml.css("text").map { |node| node["style"].to_s }).not_to include(a_string_matching(/Yu Gothic UI/))
+      expect(xml.xpath("//*[local-name()='text']").map { |node| node["style"].to_s }).not_to include(a_string_matching(/Yu Gothic UI/))
     end
 
     it "seats the zero-offset lateral roles on the native positions" do
@@ -62,7 +62,7 @@ RSpec.describe "issue 135 small-corpus gaps (QEA)" do
     end
 
     it "puts the enumeration divider 7px under the name" do
-      expect(xml.css("path").map { |node| node["d"] }).to include("M 261 346 L 350 346")
+      expect(xml.xpath("//*[local-name()='path']").map { |node| node["d"] }).to include("M 261 346 L 350 346")
     end
   end
 end

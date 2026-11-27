@@ -12,7 +12,7 @@ RSpec.describe Ea::Sources::Xmi::Adapter do
   XMI_FIXTURE = fixtures_path("basic.xmi")
   skip_reason = "XMI fixture not available at #{XMI_FIXTURE}" unless File.exist?(XMI_FIXTURE)
 
-  let(:xml) { Nokogiri::XML(File.read(XMI_FIXTURE)) }
+  let(:xml) { Moxml.parse(File.read(XMI_FIXTURE)) }
   let(:root) { Xmi::Sparx::Root.parse_xml(File.read(XMI_FIXTURE)) }
   let(:adapter) { described_class.new(root, XMI_FIXTURE) }
   let(:document) { adapter.to_document }

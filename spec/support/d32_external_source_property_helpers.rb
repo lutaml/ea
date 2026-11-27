@@ -6,7 +6,7 @@ module D32ExternalSourcePropertyHelpers
     document = Ea::Sources::Qea::Adapter.new(build_test_database(**tables), "external-source.qea").to_document
     svg = Ea::Svg::EaEmitter::Document.new(document.diagrams.first, model_index: document.index_by_id,
                                                                     document: document, frame: false, content_anchor: false).render
-    qea_end_label_result(Nokogiri::XML(svg).remove_namespaces!, "0..1")
+    qea_end_label_result(Moxml.parse(svg), "0..1")
   end
 
   def d32_external_tables(options)
@@ -32,7 +32,7 @@ module D32ExternalSourcePropertyHelpers
                                              source_multiplicity_raw: options[:mult])
     renderer = d32_external_renderer(association, options)
     arguments = d32_external_arguments(association, options)
-    xml = Nokogiri::XML("<svg>#{renderer.texts(**arguments).join}</svg>")
+    xml = Moxml.parse("<svg>#{renderer.texts(**arguments).join}</svg>")
     qea_label_text_positions(xml)
   end
 

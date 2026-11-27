@@ -14,7 +14,7 @@ RSpec.describe "QEA attribute text color" do
   end
 
   let(:attribute_fills) do
-    texts = Nokogiri::XML(svg).remove_namespaces!.css("text").select { |t| t.text.match?(/\A\+|: String/) }
+    texts = Moxml.parse(svg).xpath("//*[local-name()='text']").select { |t| t.content.match?(/\A\+|: String/) }
     texts.map { |t| t["style"][/fill:(#\h{6})/, 1] }.uniq
   end
 

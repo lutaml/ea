@@ -7,7 +7,7 @@ RSpec.describe "Enumeration content width" do
 
   it "fits the IfcUnitEnum literal with five units of right padding" do
     renderer, nodes = enum_width_render
-    literal = nodes.find { |node| node.text == "THERMODYNAMICTEMPERATUREUNIT" }
+    literal = nodes.find { |node| node.content == "THERMODYNAMICTEMPERATUREUNIT" }
 
     expect(literal["textLength"].to_i).to eq(201)
     expect(literal["x"].to_f).to eq(126)
@@ -25,7 +25,7 @@ RSpec.describe "Enumeration width rendering controls" do
       renderer, nodes = enum_width_render(width: 40, literal_name: "Blue", value: "LONG_CODE_VALUE",
                                           size: size, unit: unit, family: family,
                                           offset: offset, logical_height: height, marker: true)
-      literal = nodes.find { |node| node.text == "Blue = LONG_CODE_VALUE" }
+      literal = nodes.find { |node| node.content == "Blue = LONG_CODE_VALUE" }
       expected = literal["x"].to_f - 100 + literal["textLength"].to_i + 5
 
       expect(renderer.drawn_bounds.fetch("enum").width).to eq(expected)

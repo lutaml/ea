@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "nokogiri"
+require "moxml"
 
 RSpec.describe "C96 XMI mathematical ray origins" do
   include C96XmiRayHelpers
@@ -12,7 +12,7 @@ RSpec.describe "C96 XMI mathematical ray origins" do
     document = c96_xmi_document(fixture)
     connector = document.diagrams.first.connectors.first
     svg = c96_render(document)
-    labels = svg.xpath("//*[local-name()='text']").to_h { |node| [node.text, [node["x"], node["y"]]] }
+    labels = svg.xpath("//*[local-name()='text']").to_h { |node| [node.content, [node["x"], node["y"]]] }
 
     expect(svg.xpath("//*[local-name()='path']/@d").map(&:value)).to include("M 120 129 L 120 379")
     expect(labels).to include(

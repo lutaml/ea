@@ -19,12 +19,12 @@ module LegendRowCellHelpers
   def synthetic_legend_row_cell(size:, unit:, logical_height:)
     legend = synthetic_legend
     context = synthetic_legend_context(legend, size, unit, logical_height)
-    svg = Nokogiri::XML("<svg>#{Ea::Svg::EaEmitter::Compartment::Shape.render(context)}</svg>")
+    svg = Moxml.parse("<svg>#{Ea::Svg::EaEmitter::Compartment::Shape.render(context)}</svg>")
     [legend, svg]
   end
 
   def legend_row_cell_offsets(svg, legend)
-    icons = svg.css("rect[width='17'][height='17']")
+    icons = svg.xpath("//*[local-name()='rect'][@width='17'][@height='17']")
     raise "Legend icon count does not match items" unless icons.length == legend.items.length
 
     legend.items.map.with_index do |item, index|
@@ -35,7 +35,7 @@ module LegendRowCellHelpers
   private
 
   def legend_row_cell_offset(svg, icon, item)
-    labels = svg.css("text").select { |text| text.text == item.name }
+    labels = svg.xpath("//*[local-name()='text']").select { |text| text.content == item.name }
     raise "Expected one legend label for #{item.name}" unless labels.one?
 
     label = labels.first
@@ -58,13 +58,13 @@ module LegendRowCellHelpers
     output = Ea::Svg::EaEmitter::Elements.new(
       diagram, model_index: document.index_by_id, document: document
     ).render
-    Nokogiri::XML("<svg>#{output}</svg>")
+    Moxml.parse("<svg>#{output}</svg>")
   end
 
   def source_legend_icon(svg, bounds, index)
     x = format_coordinate(bounds.x + 10)
     y = format_coordinate(bounds.y + 30 + (19 * index))
-    icons = svg.css("rect[width='17'][height='17']").select do |rect|
+    icons = svg.xpath("//*[local-name()='rect'][@width='17'][@height='17']").select do |rect|
       rect["x"] == x && rect["y"] == y
     end
     raise "Expected one source legend icon at #{x},#{y}" unless icons.one?

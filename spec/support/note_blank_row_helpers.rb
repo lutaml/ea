@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "moxml"
 
 module NoteBlankRowHelpers
   def paragraphs(body)
@@ -15,6 +15,6 @@ module NoteBlankRowHelpers
       theme: Ea::Theme::Registry.default
     )
     svg = Ea::Svg::EaEmitter::Compartment::NoteBody.render(context)
-    Nokogiri::XML.fragment(svg).css("text").map { |row| row["y"].to_f }
+    Moxml.parse("<root>#{svg}</root>").xpath("//*[local-name()='text']").map { |row| row["y"].to_f }
   end
 end

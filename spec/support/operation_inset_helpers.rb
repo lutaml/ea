@@ -9,6 +9,6 @@ module OperationInsetHelpers
     svg = Ea::Svg::EaEmitter::Element::OperationRenderer.render(
       [operation], bounds: bounds, first_y: 50, family: family, size: size, size_unit: unit
     )
-    Nokogiri::XML("<svg>#{svg}</svg>").css("text")
+    Moxml.parse("<svg>#{svg}</svg>").xpath("//*[local-name()='text']")
   end
 end

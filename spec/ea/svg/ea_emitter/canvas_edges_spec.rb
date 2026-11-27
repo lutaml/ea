@@ -2,7 +2,7 @@
 
 require "spec_helper"
 require "ea"
-require "nokogiri"
+require "moxml"
 
 # Content drawn right of / below / left of the stored element rects must
 # stay on the canvas, and a framed export of an empty diagram must hold
@@ -32,17 +32,16 @@ RSpec.describe "canvas edges" do
     svg = Ea::Svg::EaEmitter::Document.new(
       diagram, model_index: document.index_by_id, **options
     ).render
-    xml = Nokogiri::XML(svg)
-    xml.remove_namespaces!
+    xml = Moxml.parse(svg)
     [xml, xml.root["viewBox"].split.map(&:to_f)]
   end
 
   def right_edges(xml)
-    xml.xpath("//text").map { |t| t["x"].to_f + t["textLength"].to_f }
+    xml.xpath("//*[local-name()='text']").map { |t| t["x"].to_f + t["textLength"].to_f }
   end
 
   def bottoms(xml, view_box)
-    xml.xpath("//rect").filter_map do |r|
+    xml.xpath("//*[local-name()='rect']").filter_map do |r|
       next if r["width"].to_f >= view_box[2] - 1 && r["height"].to_f >= view_box[3] - 1
 
       r["y"].to_f + r["height"].to_f
@@ -99,8 +98,8 @@ RSpec.describe "canvas edges" do
     it "holds content left of the model origin" do
       bounds = Ea::Model::Bounds.new(x: -100, y: 10, width: 100, height: 50)
       xml, = render(model(name: "Left", bounds: bounds, attributes: 3), frame: true)
-      lefts = xml.xpath("//rect").map { |r| r["x"].to_f } +
-              xml.xpath("//text").map { |t| t["x"].to_f }
+      lefts = xml.xpath("//*[local-name()='rect']").map { |r| r["x"].to_f } +
+              xml.xpath("//*[local-name()='text']").map { |t| t["x"].to_f }
       expect(lefts.min).to be >= 0
     end
 

@@ -11,7 +11,7 @@ RSpec.describe Ea::Svg::EaEmitter::Compartment::NoteText do
   [[10, 10, 20, 62], [327, 10, 337, 62], [10, 180, 20, 232]].each do |x, y, note_x, note_y|
     it "matches native classifier documentation at #{x},#{y}" do
       context = native_note_text_context(left: x, top: y)
-      rows = Nokogiri::XML.fragment(described_class.render(context)).css("text")
+      rows = Moxml.parse("<root>#{described_class.render(context)}</root>").xpath("//*[local-name()='text']")
 
       expect(rows.map { |row| row["x"].to_f }).to eq([note_x, note_x])
       expect(rows.map { |row| row["y"].to_f }).to eq([note_y, note_y + 13])
@@ -24,7 +24,7 @@ RSpec.describe Ea::Svg::EaEmitter::Compartment::NoteText do
   it "preserves ordinary diagram documentation placement" do
     context = native_note_text_context(left: 10, top: 10)
     context.diagram.hand_draw = false
-    rows = Nokogiri::XML.fragment(described_class.render(context)).css("text")
+    rows = Moxml.parse("<root>#{described_class.render(context)}</root>").xpath("//*[local-name()='text']")
 
     expect(rows.map { |row| row["x"].to_f }).to eq([15, 15])
     expect(rows.map { |row| row["y"].to_f }).to eq([66, 79])

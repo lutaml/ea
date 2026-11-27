@@ -13,7 +13,7 @@ RSpec.describe "EA emitter seat widths and direction gate" do
     document = Ea::Sources::Qea::Adapter.from_path(db_path)
     diagram = document.diagrams.find { |entry| entry.id.to_s.upcase.start_with?(guid) }
     svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id, document: document).render
-    Nokogiri::XML(svg).remove_namespaces!
+    Moxml.parse(svg)
   end
 
   def edited_copy(dir, sql)
@@ -32,7 +32,7 @@ RSpec.describe "EA emitter seat widths and direction gate" do
       it "seats #{role.inspect} 7px above the corner" do
         Dir.mktmpdir("ea-round2").then do |dir|
           path = edited_copy(dir, "update t_connector set SourceRole='#{role}' where Connector_ID=67")
-          text = render(path, "6D0349D5").css("text").find { |node| node.text == "+#{role}" }
+          text = render(path, "6D0349D5").xpath("//*[local-name()='text']").find { |node| node.content == "+#{role}" }
 
           expect(text["y"]).to eq("35.00")
         end
@@ -42,7 +42,7 @@ RSpec.describe "EA emitter seat widths and direction gate" do
 
   describe "name-direction triangle (basic 2AAB709F, connectors 29 and 30)" do
     def triangles(path)
-      render(path, "2AAB709F").xpath("//polygon").select { |p| p["points"].split.size == 6 }
+      render(path, "2AAB709F").xpath("//*[local-name()='polygon']").select { |p| p["points"].split.size == 6 }
     end
 
     it "draws the measured triangles for Direction Unspecified" do
@@ -54,7 +54,7 @@ RSpec.describe "EA emitter seat widths and direction gate" do
         Dir.mktmpdir("ea-round2").then do |dir|
           path = edited_copy(dir, "update t_connector set Name='#{name}' where Connector_ID = 30")
           xml = render(path, "2AAB709F")
-          text = xml.css("text").find { |node| node.text == name }
+          text = xml.xpath("//*[local-name()='text']").find { |node| node.content == name }
           tips = triangles(path).map { |p| p["points"].split.map(&:to_f).first(2) }
           printed = text["x"].to_f + text["textLength"].to_f
           seats = [printed + 16, text["x"].to_f + (text["textLength"].to_f / 2)]

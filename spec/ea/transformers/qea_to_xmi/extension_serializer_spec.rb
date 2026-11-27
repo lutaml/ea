@@ -364,7 +364,7 @@ RSpec.describe Ea::Transformers::QeaToXmi::ExtensionSerializer do
       )
       db = build_test_database(objects: [owner], attributes: [attribute])
       xml = Ea::Transformers::QeaToXmi::Transformer.new(db).serialize
-      expect(Nokogiri::XML(xml).errors).to be_empty
+      expect { Moxml.parse(xml) }.not_to raise_error
     end
   end
 

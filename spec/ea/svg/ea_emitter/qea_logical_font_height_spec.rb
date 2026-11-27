@@ -36,7 +36,7 @@ RSpec.describe "QEA source-height compartment metrics" do
       "realEstateIDOfBuildingUnitOwnership: xs:string [0..*]" => [1333, 738, 262],
       "realEstateIDOfLand: xs:string [0..*]" => [1333, 766, 171]
     }.each do |name, expected|
-      row = texts.find { |node| node.text == name }
+      row = texts.find { |node| node.content == name }
 
       # Align source diagram coordinates with the published SVG frame.
       expect([row["x"].to_f - 39, row["y"].to_f + 5, row["textLength"].to_i]).to eq(expected)

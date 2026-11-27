@@ -2,14 +2,14 @@
 
 require "spec_helper"
 require "ea"
-require "nokogiri"
+require "moxml"
 require_relative "../../../support/aggregation_partial_port_09af6b8a_helpers"
 
 RSpec.describe "XMI partial-port aggregation ray source contract 09AF6B8A" do
   include AggregationPartialPort09AF6B8ASupport
 
   it "joins the UMLDI label to the composite property and native connector metadata" do
-    xml = Nokogiri::XML(File.read(fixture_path))
+    xml = Moxml.parse(File.read(fixture_path))
     property = xml.at_xpath("//*[local-name()='ownedAttribute' and @name='demDmAttribute']")
     connector_id = AggregationPartialPort09AF6B8ASupport::CONNECTOR_ID
     property_id = AggregationPartialPort09AF6B8ASupport::PROPERTY_ID
@@ -36,7 +36,7 @@ RSpec.describe "XMI partial-port aggregation ray source contract 09AF6B8A output
     connector_id = AggregationPartialPort09AF6B8ASupport::CONNECTOR_ID
     connector = diagram.connectors.find { |entry| entry.relationship_ref.end_with?(connector_id) }
     svg = render_xml(document, diagram)
-    role = svg.xpath("//*[local-name()='text']").find { |node| node.text.strip == "+demDmAttribute" }
+    role = svg.xpath("//*[local-name()='text']").find { |node| node.content.strip == "+demDmAttribute" }
 
     expect(connector.connector_type).to eq("Aggregation")
     expect(connector.waypoints.map { |point| [point.position.x, point.position.y] }).to eq(

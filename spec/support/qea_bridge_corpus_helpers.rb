@@ -26,7 +26,7 @@ module QeaBridgeCorpusHelpers
     document, diagram = plateau_diagram(guid)
     svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id, document: document,
                                                     frame: true).render
-    paths = Nokogiri::XML(svg).remove_namespaces!.xpath("//path").map { |path| path["d"] }
+    paths = Moxml.parse(svg).xpath("//*[local-name()='path']").map { |path| path["d"] }
     paths.flat_map { |d| arc_seats(d) }.sort
   end
 
@@ -61,6 +61,6 @@ module QeaBridgeCorpusHelpers
     document, diagram = plateau_xmi_diagram(guid)
     svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id, document: document,
                                                     frame: true).render
-    Nokogiri::XML(svg).remove_namespaces!.xpath("//path").map { |path| path["d"] }.select { |d| d.include?(" A ") }
+    Moxml.parse(svg).xpath("//*[local-name()='path']").map { |path| path["d"] }.select { |d| d.include?(" A ") }
   end
 end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "nokogiri"
+require "moxml"
 
 RSpec.describe "XMI stored diagonal association corner" do
   include StoredDiagonalCorner508a37dcHelpers

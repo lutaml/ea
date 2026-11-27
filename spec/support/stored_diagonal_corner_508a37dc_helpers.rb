@@ -12,6 +12,6 @@ module StoredDiagonalCorner508a37dcHelpers
                frame: true
     ).render
 
-    [connector, Nokogiri::XML(svg)]
+    [connector, Moxml.parse(svg)]
   end
 end

@@ -7,7 +7,7 @@ module InstanceSlotInsetHelpers
     diagram = document.diagrams.find { |entry| entry.id == "3B8BD087-1683-46b1-8D0D-6F839C46C578" }
     svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
                                                     document: document, frame: true).render
-    Nokogiri::XML(svg).remove_namespaces!.css("text")
+    Moxml.parse(svg).xpath("//*[local-name()='text']")
   end
 
   def instance_slot_inset_node(family:, size:, unit:, inset:)
@@ -20,7 +20,7 @@ module InstanceSlotInsetHelpers
     )
     context = instance_slot_inset_context(instance, theme, family, size, unit)
     svg = Ea::Svg::EaEmitter::Compartment::InstanceSlots.render(context)
-    Nokogiri::XML("<svg>#{svg}</svg>").at_css("text")
+    Moxml.parse("<svg>#{svg}</svg>").at_xpath("//*[local-name()='text']")
   end
 
   def instance_slot_inset_context(instance, theme, family, size, unit)

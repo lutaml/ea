@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "nokogiri"
+require "moxml"
 require "xmi"
 
 RSpec.describe "XMI classifier member order" do
@@ -16,7 +16,7 @@ RSpec.describe "XMI classifier member order" do
         diagram, model_index: document.index_by_id, document: document,
                  frame: true
       ).render
-      lines = Nokogiri::XML(svg).remove_namespaces!.xpath("//text").map(&:text)
+      lines = Moxml.parse(svg).xpath("//*[local-name()='text']").map(&:text)
       [document, lines]
     end
   end
@@ -43,7 +43,7 @@ RSpec.describe "XMI DataType member order" do
       diagram, model_index: document.index_by_id, document: document,
                frame: true
     ).render
-    lines = Nokogiri::XML(svg).remove_namespaces!.xpath("//text").map(&:text)
+    lines = Moxml.parse(svg).xpath("//*[local-name()='text']").map(&:text)
 
     expect(document.index_by_id.fetch("EAID_4DEF666F_E8F2_4ace_B9AC_E15A5ACDCADD"))
       .to be_a(Ea::Model::DataType)

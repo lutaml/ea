@@ -8,7 +8,7 @@ RSpec.describe "Package font widths and connector docking" do
   it "redocks parsed direct routes against the family-aware drawn package body" do
     diagram, index = font_docking_fixture
     emitter = Ea::Svg::EaEmitter::Elements.new(diagram, model_index: index)
-    polygons = Nokogiri::XML("<svg>#{emitter.render}</svg>").css("polygon")
+    polygons = Moxml.parse("<svg>#{emitter.render}</svg>").xpath("//*[local-name()='polygon']")
 
     expect(polygons.first["points"].split.map(&:to_f).each_slice(2).map(&:first).max).to eq(123)
     expect(emitter.drawn_bounds.fetch("s").width).to eq(123)

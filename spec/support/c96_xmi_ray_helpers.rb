@@ -13,7 +13,7 @@ module C96XmiRayHelpers
 
   def c96_render(document)
     diagram = document.diagrams.first
-    Nokogiri::XML(Ea::Svg::EaEmitter::Document.new(
+    Moxml.parse(Ea::Svg::EaEmitter::Document.new(
       diagram, model_index: document.index_by_id, document: document,
                frame: true
     ).render)

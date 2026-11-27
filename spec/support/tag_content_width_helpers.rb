@@ -13,7 +13,8 @@ module TagContentWidthHelpers
     diagram = document.diagrams.first
     configure_tag_width_element(diagram.elements.first, width, visible, unit, logical_height)
     renderer = Ea::Svg::EaEmitter::Elements.new(diagram, model_index: document.index_by_id)
-    nodes = Nokogiri::XML("<svg>#{renderer.render}</svg>").remove_namespaces!
+    nodes = Moxml.parse("<svg>#{renderer.render}</svg>")
+    Moxml.parse("<svg>#{renderer.render}</svg>")
     [renderer.drawn_bounds.fetch("class").width, nodes]
   end
 

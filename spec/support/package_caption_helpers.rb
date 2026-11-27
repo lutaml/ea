@@ -8,6 +8,6 @@ module PackageCaptionHelpers
       theme: Ea::Theme::Registry.default
     )
     svg = compartment.subtitle("(from 3D都市モデル)", context)
-    Nokogiri::XML("<svg>#{svg}</svg>").at_css("text")["y"].to_f
+    Moxml.parse("<svg>#{svg}</svg>").at_xpath("//*[local-name()='text']")["y"].to_f
   end
 end

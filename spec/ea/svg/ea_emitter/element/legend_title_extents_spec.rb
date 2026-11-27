@@ -14,7 +14,7 @@ RSpec.describe "Legend title extents" do
   it "centers a bold title using its emitted extent and preserves regular item metrics" do
     %w[Carlito Calibri].each do |family|
       svg = Ea::Svg::EaEmitter::Element::LegendRenderer.render(bounds, legend: legend, family: family)
-      texts = Nokogiri::XML("<svg>#{svg}</svg>").css("text")
+      texts = Moxml.parse("<svg>#{svg}</svg>").xpath("//*[local-name()='text']")
       item, title = texts
       block_left = bounds.x + 10
       block_right = item["x"].to_f + item["textLength"].to_i
@@ -34,7 +34,7 @@ RSpec.describe "Legend CJK fallback extents" do
     bounds = Ea::Model::Bounds.new(x: 100, y: 50, width: 300, height: 120)
     legend = Ea::Model::Legend.new(title: "凡例", items: [Ea::Model::LegendItem.new(name: "GMLに定義されたクラス")])
     svg = Ea::Svg::EaEmitter::Element::LegendRenderer.render(bounds, legend: legend, family: "Cambria")
-    item, title = Nokogiri::XML("<svg>#{svg}</svg>").css("text")
+    item, title = Moxml.parse("<svg>#{svg}</svg>").xpath("//*[local-name()='text']")
 
     centered_x = ((bounds.x + 10 + item["x"].to_f + item["textLength"].to_i - title["textLength"].to_i) / 2).floor
     expect(title["x"].to_f).to eq(centered_x)
@@ -49,7 +49,7 @@ RSpec.describe "Legend fallback title centering" do
     ["凡例", "Wide heading"].each do |heading|
       legend = Ea::Model::Legend.new(title: heading, items: [Ea::Model::LegendItem.new(name: "Classification")])
       svg = Ea::Svg::EaEmitter::Element::LegendRenderer.render(bounds, legend: legend, family: "Unavailable Font")
-      item, title = Nokogiri::XML("<svg>#{svg}</svg>").css("text")
+      item, title = Moxml.parse("<svg>#{svg}</svg>").xpath("//*[local-name()='text']")
       block_right = item["x"].to_f + item["textLength"].to_i
       centered_x = ((bounds.x + 10 + block_right - title["textLength"].to_i) / 2).floor
 
@@ -67,7 +67,7 @@ RSpec.describe "Legend fractional metric extents" do
       [["A日", "14", "72.00"], ["A日日", "21", "76.00"]].each do |label, width, title_x|
         legend = Ea::Model::Legend.new(title: "Legend heading", items: [Ea::Model::LegendItem.new(name: label)])
         svg = Ea::Svg::EaEmitter::Element::LegendRenderer.render(bounds, legend: legend, family: family)
-        item, title = Nokogiri::XML("<svg>#{svg}</svg>").css("text")
+        item, title = Moxml.parse("<svg>#{svg}</svg>").xpath("//*[local-name()='text']")
         centered_x = ((bounds.x + 10 + item["x"].to_f + width.to_i - title["textLength"].to_i) / 2).floor
 
         expect(title["x"].to_f).to eq(centered_x)

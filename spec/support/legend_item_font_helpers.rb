@@ -10,6 +10,6 @@ module LegendItemFontHelpers
       element: element, model_element: Ea::Model::Note.new(legend: legend),
       family: family, size: size || 7, size_unit: unit, logical_height: logical_height
     )
-    Nokogiri::XML("<svg>#{Ea::Svg::EaEmitter::Compartment::Shape.render(context)}</svg>").css("text")
+    Moxml.parse("<svg>#{Ea::Svg::EaEmitter::Compartment::Shape.render(context)}</svg>").xpath("//*[local-name()='text']")
   end
 end

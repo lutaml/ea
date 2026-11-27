@@ -13,12 +13,12 @@ RSpec.describe "QEA diagonal target Property seats through the public adapter" d
       diagram = document.diagrams.find { |candidate| candidate.id == id }
       svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
                                                       document: document, frame: true).render
-      texts = Nokogiri::XML(svg).remove_namespaces!.css("text")
-      role = texts.find { |text| text.text == "+referencePoint" }
+      texts = Moxml.parse(svg).xpath("//*[local-name()='text']")
+      role = texts.find { |text| text.content == "+referencePoint" }
       stereotype = role.next_element
 
       expect([role["x"].to_f, role["y"].to_f]).to eq(expected)
-      expect(stereotype.text).to eq("«property»")
+      expect(stereotype.content).to eq("«property»")
       expect([stereotype["x"].to_f, stereotype["y"].to_f]).to eq([expected[0] + 11, expected[1] + 12])
     end
   end

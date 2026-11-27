@@ -9,9 +9,9 @@ module XmiConnectorRouteStyleHelpers
       diagram, model_index: document.index_by_id, document: document,
                frame: true
     ).render
-    svg_document = Nokogiri::XML(svg)
+    svg_document = Moxml.parse(svg)
     role = svg_document.xpath("//*[local-name()='text']")
-                       .find { |node| node.text == "+indoorOpeningAttribute" }
+                       .find { |node| node.content == "+indoorOpeningAttribute" }
     [connector, role]
   end
 end

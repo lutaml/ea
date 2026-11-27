@@ -10,7 +10,9 @@ module Issue135ConnectorMetadataHelpers
       canvas: nil, model_index: {}, font_family: "Carlito", font_size: 7, font_unit: "pt"
     )
     svg = renderer.text_for(connector, [[0, 0], [100, 0]])
-    Nokogiri::XML(svg).at_xpath("//text")&.text
+    return nil unless svg
+
+    Moxml.parse(svg).at_xpath("//*[local-name()='text']")&.content
   end
 
   def metadata_without_file(xrefs)
@@ -25,7 +27,7 @@ module Issue135ConnectorMetadataHelpers
   end
 
   def metadata_connector(source: nil, target: nil, value: nil)
-    xml = Nokogiri::XML(basic_xmi_text)
+    xml = Moxml.parse(basic_xmi_text)
     node = xml.at_xpath("//*[local-name()='connectors']/*[local-name()='connector']")
     node.at_xpath("./source/role")["stereotype"] = source if source
     node.at_xpath("./target/role")["stereotype"] = target if target

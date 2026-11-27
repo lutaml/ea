@@ -10,27 +10,27 @@ RSpec.describe Ea::Svg::EaEmitter::Element::DividerRenderer do
   describe ".render" do
     it "emits a horizontal <path> from the left edge to one inside the right edge" do
       svg = described_class.render(bounds, y: 30, stroke: "#000000", stroke_width: 2)
-      path = Nokogiri::XML("<svg>#{svg}</svg>").at_css("path")
+      path = Moxml.parse("<svg>#{svg}</svg>").at_xpath("//*[local-name()='path']")
       expect(path["d"]).to eq("M 10 30 L 109 30")
     end
 
     it "uses the stroke and stroke-width in the group style" do
       svg = described_class.render(bounds, y: 30, stroke: "#FF0000", stroke_width: 3)
-      group = Nokogiri::XML("<svg>#{svg}</svg>").at_css("g")
+      group = Moxml.parse("<svg>#{svg}</svg>").at_xpath("//*[local-name()='g']")
       expect(group["style"]).to include("stroke:#FF0000")
       expect(group["style"]).to include("stroke-width:3")
     end
 
     it "uses bevel line-join and round line-cap" do
       svg = described_class.render(bounds, y: 30, stroke: "#000000", stroke_width: 2)
-      group = Nokogiri::XML("<svg>#{svg}</svg>").at_css("g")
+      group = Moxml.parse("<svg>#{svg}</svg>").at_xpath("//*[local-name()='g']")
       expect(group["style"]).to include("stroke-linecap:round")
       expect(group["style"]).to include("stroke-linejoin:bevel")
     end
 
     it "has zero fill opacity (pure stroke)" do
       svg = described_class.render(bounds, y: 30, stroke: "#000000", stroke_width: 2)
-      group = Nokogiri::XML("<svg>#{svg}</svg>").at_css("g")
+      group = Moxml.parse("<svg>#{svg}</svg>").at_xpath("//*[local-name()='g']")
       expect(group["style"]).to include("fill-opacity:0.00")
     end
   end

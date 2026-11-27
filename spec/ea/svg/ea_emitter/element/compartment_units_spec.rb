@@ -12,7 +12,7 @@ RSpec.describe "Compartment font units" do
     svg = Ea::Svg::EaEmitter::Element::OperationRenderer.render(
       operations, bounds: bounds, first_y: 50, family: "Cambria", size: 7
     )
-    texts = Nokogiri::XML("<svg>#{svg}</svg>").css("text")
+    texts = Moxml.parse("<svg>#{svg}</svg>").xpath("//*[local-name()='text']")
 
     expect(texts.map { |node| node["y"].to_i }).to eq([50, 50, 63, 63])
   end
@@ -22,9 +22,9 @@ RSpec.describe "Compartment font units" do
       operations, bounds: bounds, first_y: 50, family: "Carlito", size: 9,
                   size_unit: "px", logical_height: 12
     )
-    texts = Nokogiri::XML("<svg>#{svg}</svg>").css("text")
+    texts = Moxml.parse("<svg>#{svg}</svg>").xpath("//*[local-name()='text']")
     original = Ea::Svg::EaEmitter::TextRenderer.new(
-      content: texts.last.text, x: 0, y: 0, family: "Carlito", size: 9
+      content: texts.last.content, x: 0, y: 0, family: "Carlito", size: 9
     ).to_svg
 
     expect(texts.map { |node| node["y"].to_i }).to eq([50, 50, 65, 65])
@@ -38,7 +38,7 @@ RSpec.describe "Compartment font units" do
     ].each do |renderer, rows, pixel_y, point_y|
       { "px" => pixel_y, "pt" => point_y }.each do |unit, positions|
         svg = renderer.render(rows, bounds: bounds, first_y: 50, family: "Cambria", size: 7, size_unit: unit)
-        texts = Nokogiri::XML("<svg>#{svg}</svg>").css("text")
+        texts = Moxml.parse("<svg>#{svg}</svg>").xpath("//*[local-name()='text']")
 
         expect(texts.map { |node| node["y"].to_i }).to eq(positions)
         expect(texts.map { |node| node["style"] }).to all(include("font-size:7#{unit};"))

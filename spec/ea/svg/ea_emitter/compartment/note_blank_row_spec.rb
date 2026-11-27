@@ -28,8 +28,8 @@ RSpec.describe "Note blank rows against the native ArcGIS diagram 1" do
   it "reproduces the native baselines of the note" do
     document = Ea::Sources::Qea::Adapter.from_path("examples/qea/ArcGISWorkspace_template.qea")
     nodes = qea_text_nodes(document, "7D960BD8")
-    start = nodes.index { |n| n.text.start_with?("The model is structured") }
-    ys = nodes[start, 14].map { |n| n["y"].to_f }
+    start = nodes.to_a.index { |n| n.content.start_with?("The model is structured") }
+    ys = nodes.to_a[start, 14].map { |n| n["y"].to_f }
 
     expect(ys.map { |y| y - ys.first }).to eq([0, 16, 32, 48, 64, 80, 112, 128, 160, 176, 192, 224, 240, 256])
   end

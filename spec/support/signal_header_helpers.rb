@@ -13,7 +13,7 @@ module SignalHeaderHelpers
     yield placement if block_given?
     texts = compartment_texts(document, diagram.id)
     stereotype = signal_stereotype(texts, placement.bounds)
-    [stereotype, texts.find { |text| text.text == name }].map do |text|
+    [stereotype, texts.find { |text| text.content == name }].map do |text|
       text["y"].to_f - placement.bounds.y
     end
   end
@@ -28,7 +28,7 @@ module SignalHeaderHelpers
 
   def signal_stereotype(texts, bounds)
     center = bounds.x + bounds.width / 2
-    texts.select { |text| text.text == "«signal»" }.min_by do |text|
+    texts.select { |text| text.content == "«signal»" }.min_by do |text|
       (text["x"].to_f + text["textLength"].to_f / 2 - center).abs
     end
   end

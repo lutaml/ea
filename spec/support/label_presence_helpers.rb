@@ -14,8 +14,8 @@ module LabelPresenceHelpers
       document.diagrams.first,
       model_index: document.index_by_id, document: document
     )
-    Nokogiri::XML(%(<svg>#{labels.render}</svg>)).css("text").map do |node|
-      [node.text, [node["x"].to_f, node["y"].to_f]]
+    Moxml.parse(%(<svg>#{labels.render}</svg>)).xpath("//*[local-name()='text']").map do |node|
+      [node.content, [node["x"].to_f, node["y"].to_f]]
     end
   end
 

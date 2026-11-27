@@ -20,9 +20,9 @@ module PackageBorderDockingHelpers
     diagram, routes, markers = emitters
     connector = diagram.connectors.find { |entry| entry.relationship_ref == ref }
     route_index = diagram.connectors.select(&:renderable?).index(connector)
-    route = Nokogiri::XML(routes.layers.fetch(route_index).body).at_css("path")["d"]
+    route = Moxml.parse(routes.layers.fetch(route_index).body).at_xpath("//*[local-name()='path']")["d"]
     arrowheads = markers.send(:entries_for, connector).map do |entry|
-      Nokogiri::XML(entry.body).at_css("path")["d"]
+      Moxml.parse(entry.body).at_xpath("//*[local-name()='path']")["d"]
     end
     [route, *arrowheads]
   end

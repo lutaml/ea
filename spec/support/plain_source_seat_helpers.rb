@@ -46,8 +46,8 @@ module PlainSourceSeatHelpers
 
   def plain_source_role_offset(labels, connector, canvas)
     anchor = labels.send(:label_points, connector).first
-    texts = Nokogiri::XML("<svg>#{labels.send(:texts_for, connector).join}</svg>")
-    role = texts.css("text").find { |node| node.text == "+developmentProject" }
+    texts = Moxml.parse("<svg>#{labels.send(:texts_for, connector).join}</svg>")
+    role = texts.xpath("//*[local-name()='text']").find { |node| node.content == "+developmentProject" }
     plain_source_qea_position(role, canvas).zip(anchor).map { |value, origin| value - origin }
   end
 

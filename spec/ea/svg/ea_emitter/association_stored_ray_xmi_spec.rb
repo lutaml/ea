@@ -2,7 +2,7 @@
 
 require "spec_helper"
 require "ea"
-require "nokogiri"
+require "moxml"
 require "xmi"
 
 RSpec.describe "XMI stored Association ray" do
@@ -30,7 +30,7 @@ RSpec.describe "XMI stored Association ray" do
 
     svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
                                                     document: document, frame: true).render
-    texts = Nokogiri::XML(svg).css("text").map(&:text)
+    texts = Moxml.parse(svg).xpath("//*[local-name()='text']").map(&:text)
     expect(texts).to include("+lod0Geometry", "«property»", "0..1")
   end
 end

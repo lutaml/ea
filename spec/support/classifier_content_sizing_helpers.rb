@@ -6,8 +6,8 @@ module ClassifierContentSizingHelpers
     placement = classifier_sizing_placement(options)
     diagram = classifier_sizing_diagram(placement, options[:inset])
     renderer = Ea::Svg::EaEmitter::Elements.new(diagram, model_index: { "klass" => classifier_sizing_model })
-    nodes = Nokogiri::XML("<svg>#{renderer.render}</svg>").xpath("//text")
-    row = nodes.find { |node| node.text == "longAttributeName: String" }
+    nodes = Moxml.parse("<svg>#{renderer.render}</svg>").xpath("//*[local-name()='text']")
+    row = nodes.find { |node| node.content == "longAttributeName: String" }
     [placement.bounds, renderer.drawn_bounds.fetch("klass"), row]
   end
 

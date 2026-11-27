@@ -5,8 +5,8 @@ module DefaultAttributeSeatHelpers
     placement = narrow_attribute_placement
     diagram = Ea::Model::Diagram.new(elements: [placement], theme: theme)
     renderer = Ea::Svg::EaEmitter::Elements.new(diagram, model_index: { "klass" => narrow_attribute_model })
-    row = Nokogiri::XML("<svg>#{renderer.render}</svg>").css("text").find do |node|
-      node.text == "longAttributeName: String"
+    row = Moxml.parse("<svg>#{renderer.render}</svg>").xpath("//*[local-name()='text']").find do |node|
+      node.content == "longAttributeName: String"
     end
     [placement.bounds, renderer.drawn_bounds.fetch("klass"), row]
   end
@@ -32,6 +32,6 @@ module DefaultAttributeSeatHelpers
       attr_lines: ["+ value: Integer"], geometry: Struct.new(:attr_first_y).new(60)
     )
     svg = Ea::Svg::EaEmitter::Compartment::Attributes.render(context)
-    Nokogiri::XML("<svg>#{svg}</svg>").css("text")
+    Moxml.parse("<svg>#{svg}</svg>").xpath("//*[local-name()='text']")
   end
 end

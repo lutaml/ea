@@ -5,7 +5,7 @@ require "ea"
 
 RSpec.describe Ea::Sources::Xmi::ExtensionTypes do
   let(:xml) do
-    Nokogiri::XML(<<~XML)
+    Moxml.parse(<<~XML)
       <xmi:XMI xmlns:xmi="http://www.omg.org/spec/XMI/20131001">
         <xmi:Extension><elements><element>
           <attributes>

@@ -17,7 +17,7 @@ module QeaElementPenHelpers
   def rendered_element_pen(document)
     svg = Ea::Svg::EaEmitter::Elements.new(document.diagrams.first,
                                            model_index: document.index_by_id, document: document).render
-    rectangle = Nokogiri::XML("<svg>#{svg}</svg>").at_css("rect[rx]")
+    rectangle = Moxml.parse("<svg>#{svg}</svg>").at_xpath("//*[local-name()='rect'][@rx]")
     rectangle.parent["style"][/stroke:([^;]+)/, 1]
   end
 end

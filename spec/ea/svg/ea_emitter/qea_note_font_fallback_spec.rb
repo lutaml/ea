@@ -16,8 +16,8 @@ RSpec.describe "QEA note font fallback isolation" do
     families = diagrams.flat_map do |diagram|
       svg = Ea::Svg::EaEmitter::Elements.new(diagram, model_index: document.index_by_id,
                                                       document: document).render
-      nodes = Nokogiri::XML("<svg>#{svg}</svg>").css("text")
-      nodes.select { |node| ["Association Classes", "tags"].include?(node.text) }
+      nodes = Moxml.parse("<svg>#{svg}</svg>").xpath("//*[local-name()='text']")
+      nodes.select { |node| ["Association Classes", "tags"].include?(node.content) }
            .map { |node| node["style"][/font-family:([^;]+)/, 1] }
     end
 

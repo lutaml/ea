@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "moxml"
 require "tempfile"
 
 # Actual diagram extract from lutaml-uml 1.0.2 examples/xmi/20251010_current_plateau_v5.1.xmi.
@@ -40,7 +40,7 @@ module Umldi2a339928Helpers
   }.freeze
 
   def held_out_xml
-    Nokogiri::XML(File.read(fixtures_path("issue135_route_style/2a339928-source-roles.xmi")))
+    Moxml.parse(File.read(fixtures_path("issue135_route_style/2a339928-source-roles.xmi")))
   end
 
   def held_out_connector(xml, association)

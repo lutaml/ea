@@ -31,7 +31,7 @@ RSpec.describe Ea::Sources::Xmi::Adapter do
   end
 
   it "does not emit an EA connector proxy as a class title" do
-    svg = Nokogiri::XML(connector_proxy_svg(document))
+    svg = Moxml.parse(connector_proxy_svg(document))
     expect(svg.xpath("//*[local-name()='text']").map(&:text).count("ProxyConnector")).to eq(1)
     expect(svg.xpath("//*[local-name()='rect'][@x='10']")).to be_empty
   end

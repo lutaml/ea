@@ -36,12 +36,12 @@ RSpec.describe "QEA operation signature insets" do
     document = Ea::Sources::Qea::Adapter.from_path("examples/qea/basic.qea")
     %w[2AAB709F D2FA55D3].each do |guid|
       texts = qea_text_nodes(document, guid)
-      signatures = texts.select { |node| node.text.start_with?("Operation ") }
+      signatures = texts.select { |node| node.content.start_with?("Operation ") }
 
       expect(signatures.size).to eq(6)
       signatures.each do |signature|
         marker = signature.previous_element
-        expect(marker.text).to eq("+ ")
+        expect(marker.content).to eq("+ ")
         expect(signature["x"].to_f - marker["x"].to_f).to eq(16)
         expect(signature["style"]).to include("font-family:Cambria;", "font-size:7pt;")
       end

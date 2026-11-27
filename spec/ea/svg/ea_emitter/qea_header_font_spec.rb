@@ -16,7 +16,7 @@ RSpec.describe "QEA Cambria header widths" do
       "uro::DataQualityAttribute" => [426, 377, 121],
       "uro::FacilityIdAttribute" => [704, 361, 111]
     }.each do |name, expected|
-      row = texts.find { |node| node.text == name }
+      row = texts.find { |node| node.content == name }
 
       expect([row["x"].to_f + 3, row["y"].to_f + 2, row["textLength"].to_i]).to eq(expected)
     end

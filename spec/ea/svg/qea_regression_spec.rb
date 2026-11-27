@@ -3,7 +3,7 @@
 require "spec_helper"
 require "ea"
 require "xmi"
-require "nokogiri"
+require "moxml"
 require "ea/svg/parity"
 
 # Renders diagrams directly from the QEA SQLite database and

@@ -27,7 +27,7 @@ module VisualRegressionHelpers
   end
 
   def rect_count(svg)
-    Nokogiri::XML(svg).css("rect").size
+    Moxml.parse(svg).xpath("//*[local-name()='rect']").size
   end
 end
 
@@ -50,7 +50,7 @@ RSpec.describe "EA SVG visual regression", :visual_regression do
     svg = render_svg(target)
     ours = rect_count(svg)
     ref = rect_count(File.read(File.join(ref_dir, "#{target.id}.svg")))
-    expect { Nokogiri::XML(svg, &:strict) }.not_to raise_error
+    expect { Moxml.parse(svg, &:strict) }.not_to raise_error
     expect(ours).to be > 0
     expect([ours.to_f / ref, ref.to_f / ours].min).to be > 0.5,
                                                       "rect count diverges: ours=#{ours}, ref=#{ref}"

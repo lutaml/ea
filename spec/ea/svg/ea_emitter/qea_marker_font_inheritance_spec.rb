@@ -16,8 +16,8 @@ RSpec.describe "QEA default-marker font inheritance" do
     expect([placement.font_family, placement.font_size]).to eq([nil, nil])
     expect(resolver.family_for(placement)).to eq("Cambria")
     rows = compartment_texts(document, diagram.id).select do |node|
-      node.text.start_with?("geometrySrcDescLod", "thematicSrcDesc:", "appearanceSrcDescLod",
-                            "lodType:", "lod1HeightType:", "tranDataAcquisition:")
+      node.content.start_with?("geometrySrcDescLod", "thematicSrcDesc:", "appearanceSrcDescLod",
+                               "lodType:", "lod1HeightType:", "tranDataAcquisition:")
     end
     expect(rows.map { |node| node["y"].to_f }).to eq((701..857).step(12).to_a)
     expect(rows.map { |node| node["style"] }).to all(include("font-family:Cambria;", "font-size:7pt;"))

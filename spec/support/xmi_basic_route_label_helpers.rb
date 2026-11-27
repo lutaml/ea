@@ -18,6 +18,6 @@ module XmiBasicRouteLabelHelpers
       diagram, model_index: document.index_by_id, document: document,
                frame: true
     ).render
-    Nokogiri::XML(svg).remove_namespaces!.xpath("//text").map(&:text)
+    Moxml.parse(svg).xpath("//*[local-name()='text']").map(&:text)
   end
 end

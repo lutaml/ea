@@ -10,7 +10,7 @@ RSpec.describe "QEA enumeration horizontal anchors" do
   let(:enumeration) { document.classifiers.find { |entry| entry.name == "LandSlideTypeValue" } }
 
   it "aligns all published Cambria literal names with the compact attribute inset" do
-    rows = nodes.select { |node| enumeration.literals.map(&:name).include?(node.text) }
+    rows = nodes.select { |node| enumeration.literals.map(&:name).include?(node.content) }
 
     # EA reference x=473, plus the diagram's accepted 25-unit translation.
     expect(rows.size).to eq(18)
@@ -21,7 +21,7 @@ RSpec.describe "QEA enumeration horizontal anchors" do
 
   it "preserves the enumeration header and caption anchors" do
     positions = ["urg::LandSlideTypeValue", "literals"].map do |content|
-      node = nodes.find { |entry| entry.text == content }
+      node = nodes.find { |entry| entry.content == content }
       [node["x"].to_f, node["y"].to_f]
     end
 

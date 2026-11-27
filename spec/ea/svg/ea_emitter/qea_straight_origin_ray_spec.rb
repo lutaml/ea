@@ -14,7 +14,7 @@ RSpec.describe "QEA straight origin rays" do
                                                     document: document, frame: true).render
 
     # Native (780,130)/(715,130), translated by the diagram frame.
-    expect(Nokogiri::XML(svg).css("path").map { |node| node["d"] }).to include("M 808 162 L 743 162")
+    expect(Moxml.parse(svg).xpath("//*[local-name()='path']").map { |node| node["d"] }).to include("M 808 162 L 743 162")
     expect(connector.style[:stored_origin_ray]).to be(true)
   end
 
@@ -27,7 +27,7 @@ RSpec.describe "QEA straight origin rays" do
 
     expect(connector.has_geometry_offsets).to be(false)
     # Native (702,215)/(590,214), translated by the diagram frame.
-    expect(Nokogiri::XML(svg).css("path").map { |node| node["d"] }).to include("M 417 235 L 305 234")
+    expect(Moxml.parse(svg).xpath("//*[local-name()='path']").map { |node| node["d"] }).to include("M 417 235 L 305 234")
     expect(connector.style[:stored_association_ray]).to be(true)
   end
 

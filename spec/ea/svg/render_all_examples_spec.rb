@@ -2,7 +2,7 @@
 
 require "spec_helper"
 require "ea"
-require "nokogiri"
+require "moxml"
 
 # Regression for #51: every diagram in every committed example QEA must
 # render without raising (e.g. TextRenderer TypeError on nil).
@@ -23,7 +23,7 @@ RSpec.describe "Rendering every committed example diagram" do
             ).render
           end.not_to raise_error, "render failed for #{diagram.name.inspect}"
 
-          root_el = Nokogiri::XML(svg).root
+          root_el = Moxml.parse(svg).root
           expect(root_el&.name).to eq("svg")
           expect(root_el.element_children).not_to be_empty,
                                                   "empty svg for #{diagram.name.inspect}"

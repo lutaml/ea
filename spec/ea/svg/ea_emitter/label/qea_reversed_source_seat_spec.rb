@@ -24,7 +24,7 @@ RSpec.describe "QEA source labels of reversed-end vertical trees" do
     document = Ea::Sources::Qea::Adapter.new(build_test_database(**tables), "reversed.qea").to_document
     svg = Ea::Svg::EaEmitter::Document.new(document.diagrams.first, model_index: document.index_by_id,
                                                                     document: document, frame: false).render
-    qea_end_label_result(Nokogiri::XML(svg).remove_namespaces!, "0..1")
+    qea_end_label_result(Moxml.parse(svg), "0..1")
   end
 
   # Role and multiplicity positions relative to the connector's first point.

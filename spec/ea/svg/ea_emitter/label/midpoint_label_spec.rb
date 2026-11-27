@@ -90,7 +90,7 @@ RSpec.describe Ea::Svg::EaEmitter::Label::MidpointLabel do
         node = named_midpoint_nodes(record).first
 
         expect([node["x"].to_f, node["y"].to_f]).to eq(record[:expected])
-        expect(node.text).to eq(record[:name])
+        expect(node.content).to eq(record[:name])
       end
     end
 
@@ -116,7 +116,7 @@ RSpec.describe Ea::Svg::EaEmitter::Label::MidpointLabel do
       split = named_midpoint_nodes(horizontal_name.merge(name: "ownership: LA_Right"))
 
       expect([unknown["x"].to_f, unknown["y"].to_f]).to eq([195, 36])
-      expect(split.map { |node| [node.text, node["x"].to_f, node["y"].to_f] })
+      expect(split.map { |node| [node.content, node["x"].to_f, node["y"].to_f] })
         .to eq([["ownership:", 195, 36], ["LA_Right", 195, 49]])
     end
   end
@@ -163,12 +163,12 @@ RSpec.describe Ea::Svg::EaEmitter::Label::MidpointLabel do
 
       cases.each do |route, attributes, expected|
         connector = Ea::Model::DiagramConnector.new(**connector_attributes.merge(attributes))
-        xml = Nokogiri::XML(renderer.text_for(connector, route))
-        text = xml.at_xpath('//*[local-name()="text"]')
+        xml = Moxml.parse(renderer.text_for(connector, route))
+        text = xml.at_xpath("//*[local-name()='text']")
 
         expect([text["x"].to_f, text["y"].to_f]).to eq(expected),
                                                     "route: #{route}, attributes: #{attributes}"
-        expect(text.text).to eq("{isSubstitutable=false}")
+        expect(text.content).to eq("{isSubstitutable=false}")
       end
     end
 
@@ -177,8 +177,8 @@ RSpec.describe Ea::Svg::EaEmitter::Label::MidpointLabel do
                              :label_boxes, keyword_init: true).new(
                                **connector_attributes.reject { |key, _| key == :id }
                              )
-      text = Nokogiri::XML(renderer.text_for(connector, [[0, 100], [0, 50], [40, 50], [40, 0]]))
-                     .at_xpath('//*[local-name()="text"]')
+      text = Moxml.parse(renderer.text_for(connector, [[0, 100], [0, 50], [40, 50], [40, 0]]))
+                  .at_xpath("//*[local-name()='text']")
 
       expect([text["x"].to_f, text["y"].to_f]).to eq([20, 50])
     end
@@ -188,8 +188,8 @@ RSpec.describe Ea::Svg::EaEmitter::Label::MidpointLabel do
 
       it "retains the existing midpoint" do
         connector = Ea::Model::DiagramConnector.new(**connector_attributes)
-        text = Nokogiri::XML(renderer.text_for(connector, [[0, 100], [0, 50], [40, 50], [40, 0]]))
-                       .at_xpath('//*[local-name()="text"]')
+        text = Moxml.parse(renderer.text_for(connector, [[0, 100], [0, 50], [40, 50], [40, 0]]))
+                    .at_xpath("//*[local-name()='text']")
 
         expect([text["x"].to_f, text["y"].to_f]).to eq([20, 50])
       end
@@ -198,10 +198,10 @@ RSpec.describe Ea::Svg::EaEmitter::Label::MidpointLabel do
     it "keeps an applied stereotype at the existing midpoint" do
       generalization.stereotype = "import"
       connector = Ea::Model::DiagramConnector.new(**connector_attributes)
-      text = Nokogiri::XML(renderer.text_for(connector, [[0, 100], [0, 50], [40, 50], [40, 0]]))
-                     .at_xpath('//*[local-name()="text"]')
+      text = Moxml.parse(renderer.text_for(connector, [[0, 100], [0, 50], [40, 50], [40, 0]]))
+                  .at_xpath("//*[local-name()='text']")
 
-      expect([text["x"].to_f, text["y"].to_f, text.text]).to eq([20, 50, "«import»"])
+      expect([text["x"].to_f, text["y"].to_f, text.content]).to eq([20, 50, "«import»"])
     end
   end # rubocop:enable Metrics/BlockLength
 end

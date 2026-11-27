@@ -33,7 +33,7 @@ module EnumContentWidthHelpers
 
   def enum_width_output(diagram, classifier)
     renderer = Ea::Svg::EaEmitter::Elements.new(diagram, model_index: { "enum" => classifier })
-    nodes = Nokogiri::XML("<svg>#{renderer.render}</svg>").xpath("//text")
+    nodes = Moxml.parse("<svg>#{renderer.render}</svg>").xpath("//*[local-name()='text']")
     [renderer, nodes]
   end
 end

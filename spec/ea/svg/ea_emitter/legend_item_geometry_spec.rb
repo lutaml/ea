@@ -10,10 +10,10 @@ RSpec.describe "Legend item geometry" do
     [[16, 12], [20, 15]].each do |heading_size, point_size|
       legend = Ea::Model::Legend.new(title: "Legend", heading_size: heading_size, items: items)
       svg = Ea::Svg::EaEmitter::Element::LegendRenderer.render(bounds, legend: legend, family: "Carlito")
-      xml = Nokogiri::XML("<svg>#{svg}</svg>")
-      icons = xml.css('rect[rx="0.00"]')
-      labels = xml.css("text").reject { |node| node.text == "Legend" }
-      title = xml.css("text").find { |node| node.text == "Legend" }
+      xml = Moxml.parse("<svg>#{svg}</svg>")
+      icons = xml.xpath("//*[local-name()='rect'][@rx='0.00']")
+      labels = xml.xpath("//*[local-name()='text']").reject { |node| node.content == "Legend" }
+      title = xml.xpath("//*[local-name()='text']").find { |node| node.content == "Legend" }
 
       expect(icons.map { |node| node["y"].to_f - bounds.y }).to eq([30, 49, 68])
       expect(labels.map { |node| node["y"].to_f - bounds.y }).to eq([42, 61, 80])

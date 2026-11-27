@@ -12,7 +12,8 @@ module QeaEndLabelHelpers
     document = Ea::Sources::Qea::Adapter.new(database, "end-labels.qea").to_document
     svg = Ea::Svg::EaEmitter::Document.new(document.diagrams.first, model_index: document.index_by_id,
                                                                     document: document, frame: false, content_anchor: false).render
-    xml = Nokogiri::XML(svg).remove_namespaces!
+    xml = Moxml.parse(svg)
+    Moxml.parse(svg)
     qea_end_label_result(xml, ends.fetch(:mult))
   end
 
@@ -22,17 +23,17 @@ module QeaEndLabelHelpers
 
   def qea_end_label_result(xml, mult)
     points = qea_end_path_points(xml)
-    node = xml.css("text").find { |text| text.text == mult }
+    node = xml.xpath("//*[local-name()='text']").find { |text| text.content == mult }
     { first: points.first, last: points.last, mult: node && [node["x"].to_f, node["y"].to_f],
       texts: qea_label_text_positions(xml) }
   end
 
   def qea_end_path_points(xml)
-    xml.at_css("path")["d"].scan(/-?\d+(?:\.\d+)?/).map(&:to_f).each_slice(2).to_a
+    xml.at_xpath("//*[local-name()='path']")["d"].scan(/-?\d+(?:\.\d+)?/).map(&:to_f).each_slice(2).to_a
   end
 
   def qea_label_text_positions(xml)
-    xml.css("text").map { |text| { text: text.text, x: text["x"].to_f, y: text["y"].to_f } }
+    xml.xpath("//*[local-name()='text']").map { |text| { text: text.content, x: text["x"].to_f, y: text["y"].to_f } }
   end
 
   def qea_end_label_geometry(boxes, alignment: 0)

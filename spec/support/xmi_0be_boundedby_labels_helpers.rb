@@ -29,8 +29,8 @@ module Xmi0beBoundedByLabelsHelpers
       render_diagram, model_index: document.index_by_id, document: document,
                       frame: true
     ).render
-    Nokogiri::XML(svg).xpath("//*[local-name()='text']")
-            .select { |node| node.text == text }
-            .map { |node| [node["x"], node["y"]] }
+    Moxml.parse(svg).xpath("//*[local-name()='text']")
+         .select { |node| node.content == text }
+         .map { |node| [node["x"], node["y"]] }
   end
 end

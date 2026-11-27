@@ -42,8 +42,8 @@ module LabelUpwardPropertyHelpers
   end
 
   def upward_property_coordinates(texts)
-    Nokogiri::XML("<svg>#{texts.join}</svg>").css("text").to_h do |node|
-      [node.text, [node["x"].to_f, node["y"].to_f]]
+    Moxml.parse("<svg>#{texts.join}</svg>").xpath("//*[local-name()='text']").to_h do |node|
+      [node.content, [node["x"].to_f, node["y"].to_f]]
     end
   end
 end

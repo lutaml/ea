@@ -7,8 +7,8 @@ module LabelAnchorHelpers
       diagram, model_index: { "a" => anchor_association }, drawn_bounds: bounds,
                divider_y_by_ref: dividers, theme: anchor_theme
     )
-    Nokogiri::XML("<svg>#{labels.render}</svg>").css("text").to_h do |node|
-      [node.text, [node["x"].to_f, node["y"].to_f]]
+    Moxml.parse("<svg>#{labels.render}</svg>").xpath("//*[local-name()='text']").to_h do |node|
+      [node.content, [node["x"].to_f, node["y"].to_f]]
     end
   end
 

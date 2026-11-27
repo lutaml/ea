@@ -18,6 +18,6 @@ module PackageContentGeometryHelpers
                       label: "Schema", stereotype: stereotype, family: context.family,
                       size: context.size, size_unit: context.size_unit
     )
-    Nokogiri::XML(shape).at_css("polygon")["points"].split[1].to_f
+    Moxml.parse(shape).at_xpath("//*[local-name()='polygon']")["points"].split[1].to_f
   end
 end

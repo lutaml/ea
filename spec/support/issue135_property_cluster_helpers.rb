@@ -22,7 +22,7 @@ module Issue135PropertyClusterHelpers
     document = Ea::Sources::Qea::Adapter.new(build_test_database(**tables), "property-cluster.qea").to_document
     svg = Ea::Svg::EaEmitter::Document.new(document.diagrams.first, model_index: document.index_by_id,
                                                                     document: document, frame: false, content_anchor: false).render
-    issue135_property_cluster_positions(Nokogiri::XML(svg).remove_namespaces!, source)
+    issue135_property_cluster_positions(Moxml.parse(svg), source)
   end
 
   def issue135_property_cluster_tables(role, source, target, geometry, options)
@@ -44,7 +44,7 @@ module Issue135PropertyClusterHelpers
   end
 
   def issue135_property_cluster_positions(xml, source)
-    outline = xml.css("rect").find do |rect|
+    outline = xml.xpath("//*[local-name()='rect']").find do |rect|
       issue135_property_cluster_numbers(rect, %w[width height]) == source.last(2)
     end
     origin = issue135_property_cluster_numbers(outline, %w[x y])
@@ -64,7 +64,7 @@ module Issue135PropertyClusterHelpers
     texts = renderer.texts(text_box: box, mult_box: nil, anchor: [500, 300],
                            connector: issue135_property_cluster_connector(association, options),
                            end_kind: :source, heading: options.fetch(:heading, [-1, 0]))
-    qea_label_text_positions(Nokogiri::XML("<svg>#{texts.join}</svg>"))
+    qea_label_text_positions(Moxml.parse("<svg>#{texts.join}</svg>"))
   end
 
   def issue135_property_cluster_connector(association, options)

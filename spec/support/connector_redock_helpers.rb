@@ -38,9 +38,11 @@ module ConnectorRedockHelpers
   def redock_output(fixture)
     diagram = fixture.fetch(:diagram)
     arguments = fixture.reject { |key, _| key == :diagram }
-    [Ea::Svg::EaEmitter::Connectors, Ea::Svg::EaEmitter::Markers].map do |renderer|
+    [Ea::Svg::EaEmitter::Connectors, Ea::Svg::EaEmitter::Markers].filter_map do |renderer|
       svg = renderer.new(diagram, **arguments).render
-      Nokogiri::XML(svg).css("path, polygon").map { |node| node["d"] || node["points"] }
+      next if svg.empty?
+
+      Moxml.parse(svg).xpath("//*[local-name()='path'] | //*[local-name()='polygon']").map { |node| node["d"] || node["points"] }
     end
   end
 

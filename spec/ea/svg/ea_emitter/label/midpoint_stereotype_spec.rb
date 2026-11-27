@@ -26,19 +26,19 @@ RSpec.describe Ea::Svg::EaEmitter::Label::MidpointLabel, "centered bottom seats"
 
   it "places the plateau 49 centered import in the stored bottom midpoint seat" do
     output = renderer.text_for(connector, [[443, 179], [443, 120]])
-    text = Nokogiri::XML(output).at_xpath("//text")
+    text = Moxml.parse(output).at_xpath("//*[local-name()='text']")
 
-    expect([text["x"].to_f, text["y"].to_f, text.text]).to eq([424, 162, "«import»"])
+    expect([text["x"].to_f, text["y"].to_f, text.content]).to eq([424, 162, "«import»"])
   end
 
   it "applies stored offsets and measured widths independently of the route heading" do
     stored_box.merge!("ox" => 8, "oy" => -5)
     relationship.stereotype = "realize"
     output = renderer.text_for(connector, [[100, 50], [100, 150]])
-    text = Nokogiri::XML(output).at_xpath("//text")
+    text = Moxml.parse(output).at_xpath("//*[local-name()='text']")
     width = Ea::Fonts::Metrics.text_length("«realize»", 7, family: "Cambria")
 
-    expect([text["x"].to_f, text["y"].to_f, text.text])
+    expect([text["x"].to_f, text["y"].to_f, text.content])
       .to eq([108 - (width / 2.0).floor, 108, "«realize»"])
   end
 end
@@ -58,7 +58,7 @@ RSpec.describe Ea::Svg::EaEmitter::Label::MidpointLabel, "native CY13 bottom sea
       [[[309, 120], [393, 190]], [332, 168]]
     ]
     controls.each do |points, expected|
-      text = Nokogiri::XML(renderer.text_for(connector, points)).at_xpath("//text")
+      text = Moxml.parse(renderer.text_for(connector, points)).at_xpath("//*[local-name()='text']")
 
       expect([text["x"].to_f, text["y"].to_f]).to eq(expected), points.inspect
     end
@@ -76,7 +76,7 @@ RSpec.describe Ea::Svg::EaEmitter::Label::MidpointLabel, "unsupported box presen
                 stored_box.reject { |key, _| key == "oy" }]
     controls.each do |box|
       connector.label_boxes = { lmb: box }
-      text = Nokogiri::XML(renderer.text_for(connector, [[100, 50], [200, 50]])).at_xpath("//text")
+      text = Moxml.parse(renderer.text_for(connector, [[100, 50], [200, 50]])).at_xpath("//*[local-name()='text']")
 
       expect([text["x"].to_f, text["y"].to_f]).to eq([150, 50]), box.inspect
     end
@@ -88,7 +88,7 @@ RSpec.describe Ea::Svg::EaEmitter::Label::MidpointLabel, "external connectors" d
 
   it "preserves midpoint placement for non-model connectors" do
     external = Struct.new(:relationship_ref, :label_boxes).new(relationship.id, { lmb: stored_box })
-    text = Nokogiri::XML(renderer.text_for(external, [[100, 50], [200, 50]])).at_xpath("//text")
+    text = Moxml.parse(renderer.text_for(external, [[100, 50], [200, 50]])).at_xpath("//*[local-name()='text']")
 
     expect([text["x"].to_f, text["y"].to_f]).to eq([150, 50])
   end
@@ -102,16 +102,16 @@ RSpec.describe Ea::Svg::EaEmitter::Label::MidpointLabel, "unmeasured fonts and g
     renderers.each do |family, size, unit|
       unmeasured = described_class.new(canvas: nil, model_index: { relationship.id => relationship },
                                        font_family: family, font_size: size, font_unit: unit)
-      text = Nokogiri::XML(unmeasured.text_for(connector, [[100, 50], [200, 50]])).at_xpath("//text")
+      text = Moxml.parse(unmeasured.text_for(connector, [[100, 50], [200, 50]])).at_xpath("//*[local-name()='text']")
 
       expect([text["x"].to_f, text["y"].to_f]).to eq([150, 50])
     end
     connector.label_boxes = {}
-    text = Nokogiri::XML(renderer.text_for(connector, [[100, 50], [200, 50]])).at_xpath("//text")
+    text = Moxml.parse(renderer.text_for(connector, [[100, 50], [200, 50]])).at_xpath("//*[local-name()='text']")
     expect([text["x"].to_f, text["y"].to_f]).to eq([150, 50])
     connector.label_boxes = { lmb: stored_box }
     relationship.stereotype = "☃"
-    text = Nokogiri::XML(renderer.text_for(connector, [[100, 50], [200, 50]])).at_xpath("//text")
+    text = Moxml.parse(renderer.text_for(connector, [[100, 50], [200, 50]])).at_xpath("//*[local-name()='text']")
     expect([text["x"].to_f, text["y"].to_f]).to eq([150, 50])
   end
 end

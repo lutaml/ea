@@ -9,10 +9,10 @@ RSpec.describe "Source title font selection" do
   it "uses the saved marker font beside default Cambria classifiers in plateau diagram164" do
     rows = compartment_texts(public_compartment_document, "38170608-32B5-4a6f-A68D-A0D7C0C9D019")
     %w[uro::KeyValuePairAttribute wtr::WaterBody].each do |name|
-      title = rows.find { |row| row.text == name }
+      title = rows.find { |row| row.content == name }
       expect(title["style"]).to include("font-family:Carlito;", "font-size:9pt;")
     end
-    title = rows.find { |row| row.text == "uro::RiverFloodingRiskAttribute" }
+    title = rows.find { |row| row.content == "uro::RiverFloodingRiskAttribute" }
     expect(title["style"]).to include("font-family:Cambria;", "font-style:normal;")
   end
 
@@ -20,7 +20,7 @@ RSpec.describe "Source title font selection" do
     document = Ea::Sources::Qea::Adapter.from_path("examples/qea/basic.qea")
     rows = compartment_texts(document, "E325B9D8-E955-4aed-8125-63167BD40320")
     ["Concept A", "Concept B", "Concept C"].each do |name|
-      title = rows.find { |row| row.text == name }
+      title = rows.find { |row| row.content == name }
       expect(title["style"]).to include("font-family:Source Sans Pro;", "font-style:italic;", "font-weight:700;")
     end
   end

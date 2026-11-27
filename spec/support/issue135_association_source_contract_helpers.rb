@@ -17,7 +17,7 @@ module Issue135AssociationSourceContractHelpers
     connector = Ea::Model::DiagramConnector.new(id: "generic", relationship_ref: association.id)
     svg = renderer.texts(text_box: { "ox" => 10, "oy" => 10 }, mult_box: { "ox" => 10, "oy" => 30 },
                          anchor: [0, 0], connector: connector, end_kind: :source).join
-    Nokogiri::XML("<g>#{svg}</g>").css("text").map(&:text)
+    Moxml.parse("<g>#{svg}</g>").xpath("//*[local-name()='text']").map(&:text)
   end
 
   def issue135_source_class_c(document)
@@ -28,11 +28,11 @@ module Issue135AssociationSourceContractHelpers
     diagram = document.diagrams.find { |item| item.id.start_with?("EAID_#{diagram_prefix}") }
     svg = Ea::Svg::EaEmitter::Document.new(diagram, document: document,
                                                     model_index: document.index_by_id, frame: true).render
-    Nokogiri::XML(svg).remove_namespaces!.css("text").map(&:text)
+    Moxml.parse(svg).xpath("//*[local-name()='text']").map(&:text)
   end
 
   def issue135_named_source_document
-    xml = Nokogiri::XML(File.read(fixtures_path("basic.xmi")))
+    xml = Moxml.parse(File.read(fixtures_path("basic.xmi")))
     endpoint = xml.at_xpath("//*[@xmi:id='EAID_dstCF64D9_3CAA_41e2_862C_8C4A9BA09AC2']")
     issue135_copy_source_attributes(endpoint)
     issue135_name_source_attribute(endpoint)

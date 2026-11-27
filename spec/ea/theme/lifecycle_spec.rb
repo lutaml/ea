@@ -91,26 +91,27 @@ RSpec.describe "Ea::Theme end-to-end lifecycle" do
 
     it "emits themed font in SVG output" do
       svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: doc.index_by_id, frame: true).render
-      parsed = Nokogiri::XML(svg)
+      parsed = Moxml.parse(svg)
 
-      first_text_style = parsed.css("text").first&.attr("style") || ""
+      first_text = parsed.xpath("//*[local-name()='text']").first
+      first_text_style = first_text ? first_text["style"] : ""
       expect(first_text_style).to include("Carlito")
       expect(first_text_style).to include("fill:#000000")
     end
 
     it "emits themed stroke color" do
       svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: doc.index_by_id, frame: true).render
-      parsed = Nokogiri::XML(svg)
+      parsed = Moxml.parse(svg)
 
-      element_groups = parsed.css('g[style*="stroke:#000000"]')
+      element_groups = parsed.xpath("//*[local-name()='g'][contains(@style,'stroke:#000000')]")
       expect(element_groups.size).to be > 0
     end
 
     it "emits themed stroke-width" do
       svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: doc.index_by_id, frame: true).render
-      parsed = Nokogiri::XML(svg)
+      parsed = Moxml.parse(svg)
 
-      sw1_groups = parsed.css('g[style*="stroke-width:1"]')
+      sw1_groups = parsed.xpath("//*[local-name()='g'][contains(@style,'stroke-width:1')]")
       expect(sw1_groups.size).to be > 0
     end
   end
@@ -120,10 +121,11 @@ RSpec.describe "Ea::Theme end-to-end lifecycle" do
 
     it "emits default font in SVG output" do
       svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: doc.index_by_id, frame: true).render
-      parsed = Nokogiri::XML(svg)
+      parsed = Moxml.parse(svg)
 
       # Default theme uses element-stored or Calibri fallback
-      first_text_style = parsed.css("text").first&.attr("style") || ""
+      first_text = parsed.xpath("//*[local-name()='text']").first
+      first_text_style = first_text ? first_text["style"] : ""
       expect(first_text_style).to include("font-family:")
       expect(first_text_style).to include("fill:#000000")
     end

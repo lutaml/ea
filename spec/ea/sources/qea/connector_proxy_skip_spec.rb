@@ -20,7 +20,7 @@ RSpec.describe "QEA ProxyConnector placements" do
       document.diagrams.first, model_index: document.index_by_id,
                                document: document, frame: false, content_anchor: false
     ).render
-    Nokogiri::XML(svg).remove_namespaces!.xpath("//rect").size
+    Moxml.parse(svg).xpath("//*[local-name()='rect']").size
   end
 
   it "draws one rectangle fewer for a ProxyConnector placement than for a class" do

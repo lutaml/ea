@@ -2,7 +2,7 @@
 
 require "spec_helper"
 require "ea"
-require "nokogiri"
+require "moxml"
 require "tempfile"
 
 RSpec.describe Ea::Sources::Xmi::DiagramBuilder::UmldiEdges do
@@ -18,10 +18,10 @@ RSpec.describe Ea::Sources::Xmi::DiagramBuilder::UmldiEdges do
   end
 
   it "does not infer label bounds for ambiguous connector edges" do
-    document = Nokogiri::XML(File.read(fixtures_path("issue135_route_style/4eb-role-seat-path.xmi")))
+    document = Moxml.parse(File.read(fixtures_path("issue135_route_style/4eb-role-seat-path.xmi")))
     diagram = document.xpath("//*[local-name()='Diagram']").first
     edge = diagram.xpath("./ownedElement").find do |node|
-      node.attributes["type"]&.value.to_s.end_with?("UMLEdge")
+      node.at_xpath("@*[local-name()=\x27type\x27]")&.value.to_s.end_with?("UMLEdge")
     end
     diagram.add_child(edge.dup)
 
