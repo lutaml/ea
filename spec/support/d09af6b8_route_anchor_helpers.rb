@@ -32,14 +32,14 @@ module D09AF6B8RouteAnchorHelpers
 
   def d09_render_document(document)
     diagram = document.diagrams.first
-    Nokogiri::XML(Ea::Svg::EaEmitter::Document.new(
+    Moxml.parse(Ea::Svg::EaEmitter::Document.new(
       diagram, model_index: document.index_by_id, document: document,
                frame: true
     ).render)
   end
 
   def d09_label_position(svg, label)
-    text = svg.xpath("//*[local-name()='text']").find { |node| node.text == label }
+    text = svg.xpath("//*[local-name()='text']").find { |node| node.content == label }
     [text["x"], text["y"]]
   end
 end

@@ -8,8 +8,8 @@ RSpec.describe "QEA association-class tether" do
   it "connects the saved proxy anchor to the placed class with a dashed line" do
     xml = render_association_class
 
-    expect(xml.css("path").map { |node| node["d"] }).to eq(["M 522 644 L 657 645"])
-    expect(xml.at_css("path").parent["style"]).to include("stroke-dasharray:6,3")
+    expect(xml.xpath("//*[local-name()='path']").map { |node| node["d"] }).to eq(["M 522 644 L 657 645"])
+    expect(xml.at_xpath("//*[local-name()='path']").parent["style"]).to include("stroke-dasharray:6,3")
   end
 
   it "docks the class on the side facing the saved anchor" do
@@ -20,7 +20,7 @@ RSpec.describe "QEA association-class tether" do
     ].each do |bounds, expected|
       xml = render_association_class(class_bounds: bounds)
 
-      expect(xml.css("path").map { |node| node["d"] }).to eq([expected])
+      expect(xml.xpath("//*[local-name()='path']").map { |node| node["d"] }).to eq([expected])
     end
   end
 
@@ -29,8 +29,8 @@ RSpec.describe "QEA association-class tether" do
      { proxy_type: "Class" }, { classifier: nil }, { second_classifier: "other" }].each do |attributes|
       xml = render_association_class(**attributes)
 
-      expect(xml.css("path").map { |node| node["d"] }).to eq(["M 522 644 L 522 644"]), attributes.inspect
-      expect(xml.at_css("path").parent["style"]).not_to include("stroke-dasharray"), attributes.inspect
+      expect(xml.xpath("//*[local-name()='path']").map { |node| node["d"] }).to eq(["M 522 644 L 522 644"]), attributes.inspect
+      expect(xml.at_xpath("//*[local-name()='path']").parent["style"]).not_to include("stroke-dasharray"), attributes.inspect
     end
   end
 end

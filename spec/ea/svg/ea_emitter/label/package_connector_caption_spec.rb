@@ -31,7 +31,7 @@ RSpec.describe Ea::Svg::EaEmitter::Label::MidpointLabel do
       [[[509, 266], [375, 268]], [0, 0], [423, 280]]
     ].each do |points, offsets, expected|
       connector.label_boxes = { lmb: box.merge("ox" => offsets[0], "oy" => offsets[1]) }
-      text = Nokogiri::XML(renderer.text_for(connector, points)).at_xpath("//text")
+      text = Moxml.parse(renderer.text_for(connector, points)).at_xpath("//*[local-name()='text']")
 
       expect([text["x"].to_f, text["y"].to_f]).to eq(expected)
     end
@@ -51,9 +51,9 @@ RSpec.describe Ea::Svg::EaEmitter::Label::MidpointLabel do
       relationship.name = name
       connector.label_boxes = { lmt: box.merge("cx" => 27, "cy" => 13, "ox" => 4,
                                                "oy" => offset_y, "alignment" => alignment) }
-      text = Nokogiri::XML(renderer.text_for(connector, points)).at_xpath("//text")
+      text = Moxml.parse(renderer.text_for(connector, points)).at_xpath("//*[local-name()='text']")
 
-      expect([text["x"].to_f, text["y"].to_f, text.text]).to eq([*expected, name])
+      expect([text["x"].to_f, text["y"].to_f, text.content]).to eq([*expected, name])
     end
   end
 end
@@ -65,13 +65,13 @@ RSpec.describe Ea::Svg::EaEmitter::Label::MidpointLabel do
     relationship.stereotype = nil
     relationship.name = "Link A"
     connector.label_boxes = { lmt: box }
-    text = Nokogiri::XML(renderer.text_for(connector, [[100, 50], [200, 50]])).at_xpath("//text")
+    text = Moxml.parse(renderer.text_for(connector, [[100, 50], [200, 50]])).at_xpath("//*[local-name()='text']")
     expect([text["x"].to_f, text["y"].to_f]).to eq([150, 50])
 
     relationship.stereotype = "import"
     [box.merge("rotation" => 30), box.merge("bold" => true), box.merge("hidden" => true)].each do |unsupported|
       connector.label_boxes = { lmb: unsupported }
-      text = Nokogiri::XML(renderer.text_for(connector, [[100, 50], [200, 50]])).at_xpath("//text")
+      text = Moxml.parse(renderer.text_for(connector, [[100, 50], [200, 50]])).at_xpath("//*[local-name()='text']")
       expect([text["x"].to_f, text["y"].to_f]).to eq([150, 50])
     end
   end
@@ -85,11 +85,11 @@ RSpec.describe Ea::Svg::EaEmitter::Label::MidpointLabel do
     [["Carlito", 7, "pt"], ["Cambria", 8, "pt"], ["Cambria", 7, "px"]].each do |family, size, unit|
       unmeasured = described_class.new(canvas: nil, model_index: { relationship.id => relationship },
                                        font_family: family, font_size: size, font_unit: unit)
-      text = Nokogiri::XML(unmeasured.text_for(connector, [[100, 50], [200, 50]])).at_xpath("//text")
+      text = Moxml.parse(unmeasured.text_for(connector, [[100, 50], [200, 50]])).at_xpath("//*[local-name()='text']")
       expect([text["x"].to_f, text["y"].to_f]).to eq([150, 50])
     end
     relationship.stereotype = "☃"
-    text = Nokogiri::XML(renderer.text_for(connector, [[100, 50], [200, 50]])).at_xpath("//text")
+    text = Moxml.parse(renderer.text_for(connector, [[100, 50], [200, 50]])).at_xpath("//*[local-name()='text']")
     expect([text["x"].to_f, text["y"].to_f]).to eq([150, 50])
   end
 end

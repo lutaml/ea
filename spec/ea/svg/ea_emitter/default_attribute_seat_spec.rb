@@ -10,18 +10,18 @@ RSpec.describe "Default attribute content seats" do
   it "matches native default 7pt and explicit 9pt rows in Plateau diagram164" do
     nodes = qea_text_nodes(public_compartment_document, "38170608")
     rows = nodes.select do |node|
-      ["rank: gml:CodeType [0..1]", "class: gml:CodeType [0..1]"].include?(node.text)
+      ["rank: gml:CodeType [0..1]", "class: gml:CodeType [0..1]"].include?(node.content)
     end
 
     # Native box-relative seats are 21 for Cambria 7pt and 26 for Carlito 9pt.
-    expect(rows.map { |node| [node.text, node["x"].to_f, node["y"].to_f] })
+    expect(rows.map { |node| [node.content, node["x"].to_f, node["y"].to_f] })
       .to contain_exactly(["class: gml:CodeType [0..1]", 346, 97],
                           ["rank: gml:CodeType [0..1]", 330, 315])
   end
 
   it "matches the native default attribute seat in test diagram4" do
     document = Ea::Sources::Qea::Adapter.from_path("examples/qea/test.qea")
-    row = qea_text_nodes(document, "B58D1A53").find { |node| node.text == "character: Character" }
+    row = qea_text_nodes(document, "B58D1A53").find { |node| node.content == "character: Character" }
 
     expect([row["x"].to_f, row["y"].to_f]).to eq([56, 101])
   end

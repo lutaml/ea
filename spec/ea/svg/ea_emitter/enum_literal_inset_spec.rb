@@ -8,7 +8,7 @@ RSpec.describe "QEA enumeration literal insets" do
   it "matches the reference's 26-unit inset for Carlito 9pt enum rows" do
     document = Ea::Sources::Qea::Adapter.from_path("examples/qea/20251010_current_plateau_v5.1.qea")
     nodes = qea_text_nodes(document, "6797FEFA")
-    literals = nodes.select { |node| %w[estimated measured].include?(node.text) }
+    literals = nodes.select { |node| %w[estimated measured].include?(node.content) }
 
     # The owning enum box starts at x=1131; the EA reference uses x=1157.
     expect(literals.map { |node| node["style"] }).to all(include("font-size:9pt"))
@@ -21,7 +21,7 @@ RSpec.describe "QEA enumeration literal insets" do
     # These coordinates exercise Calibri insets and row pitch, not font fallback.
     diagram.elements.each { |element| element.font_family = "Calibri" }
     nodes = qea_text_nodes(document, "B58D1A53")
-    literals = nodes.select { |node| %w[val1 val2].include?(node.text) }
+    literals = nodes.select { |node| %w[val1 val2].include?(node.content) }
 
     expect(literals.map { |node| node["style"] }).to all(include("font-family:Calibri;", "font-size:7pt;"))
     expect(literals.map { |node| node["x"].to_f }).to eq([308, 308])
@@ -55,7 +55,7 @@ RSpec.describe "Enumeration literal theme and unit controls" do
 
     expect(node["x"].to_f).to eq(135)
     expect(node["y"].to_f).to eq(60)
-    expect(node.text).to eq("Blue")
+    expect(node.content).to eq("Blue")
   end
 
   it "retains the legacy fallback base when the theme omits its offset" do

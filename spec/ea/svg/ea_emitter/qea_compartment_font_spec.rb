@@ -10,7 +10,7 @@ RSpec.describe "QEA compartment fonts" do
 
   it "uses Cambria cells for attributes without a stored font override" do
     texts = compartment_texts(document, "0114FD24-9E58-4664-98CD-71305B59AD11")
-    rows = texts.select { |node| node.text.start_with?("geometrySrcDescLod") }
+    rows = texts.select { |node| node.content.start_with?("geometrySrcDescLod") }
 
     # Published SVG positions are model coordinates + (3, 2).
     expect(rows.map { |node| [node["x"].to_f + 3, node["y"].to_f + 2] })
@@ -25,7 +25,7 @@ RSpec.describe "QEA compartment fonts" do
       ["0016F797-D055-4717-AF1A-606413D0A166", "routeName:", [[496, 1010]], "9pt"]
     ]
     records.each do |diagram_id, prefix, positions, size|
-      rows = compartment_texts(document, diagram_id).select { |node| node.text.start_with?(prefix) }
+      rows = compartment_texts(document, diagram_id).select { |node| node.content.start_with?(prefix) }
 
       expect(rows.map { |node| [node["x"].to_f, node["y"].to_f] }).to eq(positions)
       expect(rows.map { |node| node["style"] }).to all(include("font-family:Carlito;", "font-size:#{size};"))
@@ -46,7 +46,7 @@ RSpec.describe "QEA classifier font inheritance" do
     expect([placement.font_family, placement.font_size]).to eq(["Yu Gothic UI", 9])
 
     rows = compartment_texts(document, diagram.id).select do |node|
-      node.text.start_with?("class:", "function:", "usage:")
+      node.content.start_with?("class:", "function:", "usage:")
     end
     expect(rows.map { |node| node["y"].to_f }.each_cons(2).map { |a, b| b - a })
       .to eq([15, 15])
@@ -61,7 +61,7 @@ RSpec.describe "QEA font size units" do
 
   it "keeps QEA point sizes when the diagram theme has pixel defaults" do
     texts = compartment_texts(document, "38170608-32B5-4a6f-A68D-A0D7C0C9D019")
-    rows = texts.select { |node| node.text.start_with?("class:", "function:", "usage:") }
+    rows = texts.select { |node| node.content.start_with?("class:", "function:", "usage:") }
 
     expect(rows).not_to be_empty
     expect(rows.map { |node| node["style"] }).to all(include("font-size:9pt;"))

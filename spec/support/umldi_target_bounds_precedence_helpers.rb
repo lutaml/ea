@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "moxml"
 require "tempfile"
 
 module UmldiTargetBoundsPrecedenceHelpers
@@ -23,8 +23,8 @@ module UmldiTargetBoundsPrecedenceHelpers
       document.diagrams.first, model_index: document.index_by_id, document: document,
                                frame: true
     ).render
-    Nokogiri::XML(svg).xpath("//*[local-name()='text']").to_h do |node|
-      [node.text, [node["x"].to_f, node["y"].to_f]]
+    Moxml.parse(svg).xpath("//*[local-name()='text']").to_h do |node|
+      [node.content, [node["x"].to_f, node["y"].to_f]]
     end.slice("+externalReference", "+xalAddress")
   end
 
@@ -39,11 +39,11 @@ module UmldiTargetBoundsPrecedenceHelpers
       document.diagrams.first, model_index: document.index_by_id, document: document,
                                frame: true
     ).render
-    Nokogiri::XML(svg).xpath("//*[local-name()='path']").map { |node| node["d"] }
+    Moxml.parse(svg).xpath("//*[local-name()='path']").map { |node| node["d"] }
   end
 
   def self.without_declared_properties
-    xml = Nokogiri::XML(File.read(fixtures_path(FIXTURE)))
+    xml = Moxml.parse(File.read(fixtures_path(FIXTURE)))
     xml.xpath("//*[@association]").each { |node| node.remove_attribute("association") }
     Tempfile.create(["88d0-undeclared", ".xmi"]) do |file|
       file.write(xml.to_xml)

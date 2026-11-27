@@ -11,6 +11,6 @@ module QeaCompartmentFontHelpers
     diagram = document.diagrams.find { |entry| entry.id == diagram_id }
     svg = Ea::Svg::EaEmitter::Elements.new(diagram, model_index: document.index_by_id,
                                                     document: document).render
-    Nokogiri::XML("<svg>#{svg}</svg>").css("text")
+    Moxml.parse("<svg>#{svg}</svg>").xpath("//*[local-name()='text']")
   end
 end

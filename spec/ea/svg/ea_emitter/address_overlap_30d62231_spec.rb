@@ -2,14 +2,14 @@
 
 require "spec_helper"
 require "ea"
-require "nokogiri"
+require "moxml"
 require_relative "../../../support/address_overlap_30d62231_helpers"
 
 RSpec.describe "XMI address overlap source contract 30D62231" do
   include AddressOverlap30D62231Support
 
   it "joins the authored label rectangle to the address association end" do
-    xml = Nokogiri::XML(File.read(address_fixture_path))
+    xml = Moxml.parse(File.read(address_fixture_path))
     property = xml.at_xpath("//*[local-name()='ownedAttribute' and @name='address']")
     connector_id = AddressOverlap30D62231Support::CONNECTOR_ID
     edge = xml.at_xpath("//*[local-name()='ownedElement' and @modelElement='#{connector_id}']")
@@ -34,12 +34,12 @@ RSpec.describe "XMI address overlap source contract 30D62231 output" do
     connector = diagram.connectors.find do |entry|
       entry.relationship_ref.end_with?(AddressOverlap30D62231Support::CONNECTOR_ID)
     end
-    svg = Nokogiri::XML(Ea::Svg::EaEmitter::Document.new(
+    svg = Moxml.parse(Ea::Svg::EaEmitter::Document.new(
       diagram, model_index: document.index_by_id, document: document,
                frame: true
     ).render)
-    role = svg.xpath("//*[local-name()='text']").find { |node| node.text.strip == "+address" }
-    multiplicity = svg.xpath("//*[local-name()='text']").find { |node| node.text.strip == "0..*" }
+    role = svg.xpath("//*[local-name()='text']").find { |node| node.content.strip == "+address" }
+    multiplicity = svg.xpath("//*[local-name()='text']").find { |node| node.content.strip == "0..*" }
 
     expect(connector.waypoints.map { |point| [point.position.x, point.position.y] }).to eq(
       [[1171, 458], [1051, 458]]

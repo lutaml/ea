@@ -11,7 +11,7 @@ RSpec.describe Ea::Svg::EaEmitter::Elements do
     document = qea_tag_document(values)
     expect(document.diagrams.first.elements.first.show_tagged_values).to be(true)
     before = document.classifiers.first.tagged_values.map { |tag| [tag.key, tag.value] }
-    expect(tag_svg(document).css("text").map(&:text)).to eq(
+    expect(tag_svg(document).xpath("//*[local-name()='text']").map(&:text)).to eq(
       ["Spatial References", "tags", "HighPrecision = false", "WKID = 0"]
     )
     expect(document.classifiers.first.tagged_values.map { |tag| [tag.key, tag.value] }).to eq(before)
@@ -23,7 +23,7 @@ RSpec.describe Ea::Svg::EaEmitter::Elements do
     expect(document.diagrams.first.elements.first.show_tagged_values).to be(true)
     tags = document.classifiers.first.tagged_values.map { |tag| [tag.key, tag.value] }
     expect(tags).to eq([["VCSWKID", nil], ["Empty", nil], %w[WKID 0], %w[HighPrecision false]])
-    expect(tag_svg(document).css("text").map(&:text)).to eq(
+    expect(tag_svg(document).xpath("//*[local-name()='text']").map(&:text)).to eq(
       ["Spatial References", "tags", "HighPrecision = false", "WKID = 0"]
     )
   end
@@ -41,12 +41,12 @@ RSpec.describe Ea::Svg::EaEmitter::Elements, "tag preservation" do
 
   it "retains whitespace, numeric zero and boolean false values" do
     document = qea_tag_document("Space" => " ", "Zero" => 0, "False" => false)
-    expect(tag_svg(document).css("text").map(&:text)).to eq(
+    expect(tag_svg(document).xpath("//*[local-name()='text']").map(&:text)).to eq(
       ["Spatial References", "tags", "False = false", "Space =  ", "Zero = 0"]
     )
   end
 
   it "keeps populated tags hidden when the compartment is disabled" do
-    expect(tag_svg(qea_tag_document(values), visible: false).css("text").map(&:text)).to eq(["Spatial References"])
+    expect(tag_svg(qea_tag_document(values), visible: false).xpath("//*[local-name()='text']").map(&:text)).to eq(["Spatial References"])
   end
 end

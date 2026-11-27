@@ -2,7 +2,7 @@
 
 require "spec_helper"
 require "ea"
-require "nokogiri"
+require "moxml"
 
 RSpec.describe "XMI width-zero Association ray labels" do
   let(:document) { Ea::Sources::Xmi::Adapter.from_path(fixtures_path("association_stored_ray_a081c63e.xmi")) }
@@ -22,7 +22,7 @@ RSpec.describe "XMI width-zero Association ray labels" do
 
     svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
                                                     document: document, frame: true).render
-    role = Nokogiri::XML(svg).css("text").find { |text| text.text == "+relativeGMLGeometry" }
+    role = Moxml.parse(svg).xpath("//*[local-name()='text']").find { |text| text.content == "+relativeGMLGeometry" }
     expect([role["x"].to_f, role["y"].to_f]).to eq([56, 183])
   end
 end

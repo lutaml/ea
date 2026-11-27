@@ -28,6 +28,6 @@ module QeaRemainingPropertySeatHelpers
     document = Ea::Sources::Qea::Adapter.new(build_test_database(**tables), "remaining-property.qea").to_document
     svg = Ea::Svg::EaEmitter::Document.new(document.diagrams.first, model_index: document.index_by_id,
                                                                     document: document, frame: false, content_anchor: false).render
-    qea_end_label_result(Nokogiri::XML(svg).remove_namespaces!, mult)
+    qea_end_label_result(Moxml.parse(svg), mult)
   end
 end

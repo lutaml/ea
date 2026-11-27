@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "moxml"
 
 # Canonicalizes SVG XML for structural comparison. Strips whitespace,
 # sorts attributes, ignores presentation-only attributes (shape-rendering,
@@ -9,12 +9,12 @@ module SvgCanonicalizer
   module_function
 
   def canonicalize(svg_string)
-    doc = Nokogiri::XML(svg_string, &:noblanks)
+    doc = Moxml.parse(svg_string, &:noblanks)
     canonicalize_node(doc.root)
   end
 
   def canonicalize_node(node)
-    return node.text.strip if node.text?
+    return node.content.strip if node.content?
     return "" unless node.element?
 
     attrs = sorted_attrs(node)

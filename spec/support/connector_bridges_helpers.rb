@@ -25,8 +25,8 @@ module ConnectorBridgesHelpers
 
   def bridge_paths(diagram, **options)
     output = Ea::Svg::EaEmitter::Connectors.new(diagram, **options).render
-    xml = Nokogiri::XML("<svg>#{output}</svg>")
-    xml.xpath("//path").map { |path| path["d"] }
+    xml = Moxml.parse("<svg>#{output}</svg>")
+    xml.xpath("//*[local-name()='path']").map { |path| path["d"] }
   end
 end
 

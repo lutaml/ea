@@ -3,7 +3,7 @@
 require "spec_helper"
 require "ea"
 require "xmi"
-require "nokogiri"
+require "moxml"
 require "ea/svg/parity"
 
 # Cross-example regression coverage. Each QEA in examples/qea has a

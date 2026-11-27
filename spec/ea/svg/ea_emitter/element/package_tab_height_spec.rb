@@ -2,7 +2,7 @@
 
 require "spec_helper"
 require "ea"
-require "nokogiri"
+require "moxml"
 
 RSpec.shared_context "package tab renderer" do
   let(:renderer) { Ea::Svg::EaEmitter::Element::PackageShapeRenderer }
@@ -22,16 +22,16 @@ RSpec.describe "Package tab font row heights" do
     ].each do |family, size, stereotype, height, baselines|
       svg = renderer.render(bounds, **paint, label: "Schema", family: family,
                                              size: size, stereotype: stereotype)
-      nodes = Nokogiri::XML(svg)
-      polygons = nodes.css("polygon").map { |node| node["points"].split.map(&:to_f) }
+      nodes = Moxml.parse(svg)
+      polygons = nodes.xpath("//*[local-name()='polygon']").map { |node| node["points"].split.map(&:to_f) }
 
       expect(polygons).to eq([
                                [35, 60 + height, 189, 60 + height, 189, 162, 35, 162, 35, 60 + height],
                                [35, 60, 140, 60, 140, 60 + height, 35, 60 + height, 35, 60]
                              ])
-      expect(nodes.css("text").map { |text| text["y"].to_f }).to eq(baselines)
-      expect(nodes.css("text").map { |text| text["x"].to_f }).to eq([40] * baselines.length)
-      expect(nodes.at_css("g")["style"])
+      expect(nodes.xpath("//*[local-name()='text']").map { |text| text["y"].to_f }).to eq(baselines)
+      expect(nodes.xpath("//*[local-name()='text']").map { |text| text["x"].to_f }).to eq([40] * baselines.length)
+      expect(nodes.at_xpath("//*[local-name()='g']")["style"])
         .to eq("stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; " \
                "fill:#FFFFFF;fill-opacity:1.00; stroke:#000000; stroke-opacity:1.00")
     end
@@ -44,12 +44,12 @@ RSpec.describe "Default package tab heights" do
   it "preserves default font sizing and the nominal package padding" do
     [[nil, 20, [73]], ["Type", 36, [73, 86]]].each do |stereotype, height, baselines|
       svg = renderer.render(bounds, **paint, label: "Schema", stereotype: stereotype)
-      nodes = Nokogiri::XML(svg)
-      body, tab = nodes.css("polygon").map { |node| node["points"].split.map(&:to_f) }
+      nodes = Moxml.parse(svg)
+      body, tab = nodes.xpath("//*[local-name()='polygon']").map { |node| node["points"].split.map(&:to_f) }
 
       expect(tab).to eq([35, 60, 140, 60, 140, 60 + height, 35, 60 + height, 35, 60])
       expect(body).to eq([35, 60 + height, 189, 60 + height, 189, 162, 35, 162, 35, 60 + height])
-      expect(nodes.css("text").map { |text| text["y"].to_f }).to eq(baselines)
+      expect(nodes.xpath("//*[local-name()='text']").map { |text| text["y"].to_f }).to eq(baselines)
     end
   end
 end
@@ -62,12 +62,12 @@ RSpec.describe "Pixel-unit package tab heights" do
       [[nil, 20, [73]], ["Type", 36, [73, 86]]].each do |stereotype, height, baselines|
         svg = renderer.render(bounds, **paint, label: "X", family: family,
                                                size: size, size_unit: "px", stereotype: stereotype)
-        nodes = Nokogiri::XML(svg)
-        body, tab = nodes.css("polygon").map { |node| node["points"].split.map(&:to_f) }
+        nodes = Moxml.parse(svg)
+        body, tab = nodes.xpath("//*[local-name()='polygon']").map { |node| node["points"].split.map(&:to_f) }
 
         expect(tab).to eq([35, 60, 140, 60, 140, 60 + height, 35, 60 + height, 35, 60])
         expect(body).to eq([35, 60 + height, 189, 60 + height, 189, 162, 35, 162, 35, 60 + height])
-        expect(nodes.css("text").map { |text| text["y"].to_f }).to eq(baselines)
+        expect(nodes.xpath("//*[local-name()='text']").map { |text| text["y"].to_f }).to eq(baselines)
       end
     end
   end
@@ -87,11 +87,11 @@ RSpec.describe "Public QEA package tab heights" do
       diagram = document.diagrams.find { |entry| entry.id == id }
       svg = Ea::Svg::EaEmitter::Elements.new(diagram, model_index: document.index_by_id,
                                                       document: document).render
-      nodes = Nokogiri::XML("<svg>#{svg}</svg>")
+      nodes = Moxml.parse("<svg>#{svg}</svg>")
       expected.each do |name, height|
-        titles = nodes.css("text").select { |text| text.text == name }
+        titles = nodes.xpath("//*[local-name()='text']").select { |text| text.content == name }
         expect(titles.length).to eq(1)
-        body, tab = titles.first.parent.css("polygon").map do |polygon|
+        body, tab = titles.first.parent.xpath(".//*[local-name()='polygon']").map do |polygon|
           polygon["points"].split.map(&:to_f)
         end
 

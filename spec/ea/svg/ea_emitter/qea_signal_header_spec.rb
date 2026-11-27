@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "nokogiri"
+require "moxml"
 
 RSpec.describe "QEA default Signal header baselines" do
   include SignalHeaderHelpers

@@ -2,7 +2,7 @@
 
 require "spec_helper"
 require "ea"
-require "nokogiri"
+require "moxml"
 
 RSpec.shared_context "classifier header rendering" do
   let(:bounds) { Ea::Model::Bounds.new(x: 140, y: 33, width: 212, height: 125) }
@@ -14,7 +14,7 @@ RSpec.shared_context "classifier header rendering" do
     described_class.render(lines, bounds: bounds, first_y: 48,
                                   family: "Carlito", size: 9)
   end
-  let(:texts) { Nokogiri::XML(svg).remove_namespaces!.xpath("//text") }
+  let(:texts) { Moxml.parse(svg).xpath("//*[local-name()='text']") }
 end
 
 RSpec.describe Ea::Svg::EaEmitter::Element::HeaderRenderer do

@@ -35,8 +35,8 @@ module C198TargetMultiplicityHelpers
   end
 
   def c198_positions(markup)
-    Nokogiri::XML.fragment(markup).css("text").to_h do |node|
-      [node.text, [node["x"].to_f, node["y"].to_f]]
+    Moxml.parse("<root>#{markup}</root>").xpath("//*[local-name()='text']").to_h do |node|
+      [node.content, [node["x"].to_f, node["y"].to_f]]
     end
   end
 

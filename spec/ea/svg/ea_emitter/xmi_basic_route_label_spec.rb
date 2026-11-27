@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "nokogiri"
+require "moxml"
 
 RSpec.shared_context "basic XMI route label corpus" do
   include XmiBasicRouteLabelHelpers

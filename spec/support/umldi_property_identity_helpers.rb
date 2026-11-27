@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "moxml"
 require "tempfile"
 
 module UmldiPropertyIdentityHelpers
@@ -21,7 +21,7 @@ module UmldiPropertyIdentityHelpers
   XML
 
   def with_property_label_identity(change = nil, label_id: "EAID_TEL_label")
-    xml = Nokogiri::XML(SOURCE)
+    xml = Moxml.parse(SOURCE)
     xml.at_xpath("//*[@modelElement='property']")["xmi:id"] = label_id
     change&.call(xml)
     Tempfile.create(["umldi-property-identity", ".xmi"]) do |file|

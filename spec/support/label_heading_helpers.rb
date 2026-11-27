@@ -43,8 +43,8 @@ module LabelHeadingHelpers
       diagram, model_index: { "heading" => heading_relationship(role, mult) }, drawn_bounds: bounds,
                theme: Ea::Theme::Definition.new(id: "headings", font_family: "Cambria", font_size: 7)
     )
-    Nokogiri::XML("<svg>#{labels.render}</svg>").css("text").to_h do |node|
-      [node.text, [node["x"].to_f, node["y"].to_f]]
+    Moxml.parse("<svg>#{labels.render}</svg>").xpath("//*[local-name()='text']").to_h do |node|
+      [node.content, [node["x"].to_f, node["y"].to_f]]
     end
   end
 

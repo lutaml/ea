@@ -46,15 +46,15 @@ RSpec.describe Ea::Svg::Parity::CorpusReport do
     Ea::Svg::EaEmitter::Document.new(clean_diagram, model_index: document.index_by_id, document: document).render
   end
   let(:reference) do
-    xml = Nokogiri::XML(svg)
-    label = xml.at_css("text:contains('label')")
+    xml = Moxml.parse(svg)
+    label = xml.at_xpath("//*[local-name()='text'][contains(., 'label')]")
     label["x"] = (label["x"].to_f + 4).to_s
     label["style"] = label["style"].sub(/font-family:[^;]+/, "font-family:Arial")
                                    .sub(/font-size:[^;]+/, "font-size:99pt")
                                    .sub("font-weight:700", "font-weight:400")
-    xml.at_css("text:contains('extra')").content = "missing"
-    xml.at_css('rect[x="410"]')["width"] = "121"
-    xml.at_css("path")["d"] = "M 132 50 L 212 50"
+    xml.at_xpath("//*[local-name()='text'][contains(., 'extra')]").content = "missing"
+    xml.at_xpath("//*[local-name()='rect'][@x='410']")["width"] = "121"
+    xml.at_xpath("//*[local-name()='path']")["d"] = "M 132 50 L 212 50"
     xml.to_xml
   end
   let(:report_io) { StringIO.new }

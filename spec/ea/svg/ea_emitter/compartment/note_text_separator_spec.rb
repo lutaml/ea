@@ -11,14 +11,14 @@ RSpec.describe "Classifier documentation word separators" do
   ].each do |adapter, path, family, wrapped_length|
     it "retains the native wrapped separator from #{File.extname(path)} documentation" do
       document = QeaBridgeCorpusHelpers.document_for(adapter, path)
-      rows = qea_text_nodes(document, "E325B9D8").select { |node| node.text.start_with?("[Detailed", "concept.]") }
+      rows = qea_text_nodes(document, "E325B9D8").select { |node| node.content.start_with?("[Detailed", "concept.]") }
 
       expect(rows.map(&:text)).to eq(["[Detailed notes that describe the ", "concept.]"] * 3)
       expect(rows.map { |node| node["textLength"].to_i }).to eq([wrapped_length, 36] * 3)
       expect(rows.map { |node| [node["x"].to_f, node["y"].to_f] })
         .to eq([[45, 92], [45, 105], [362, 92], [362, 105], [45, 262], [45, 275]])
       expect(rows.each_slice(2).map { |first, last| last["y"].to_f - first["y"].to_f }).to eq([13] * 3)
-      expect(rows.map { |node| node["space"] }).to all(eq("preserve"))
+      expect(rows.map { |node| node.at_xpath("@*[local-name()=\x27space\x27]")&.value }).to all(eq("preserve"))
       expect(rows.map { |node| node["style"] }).to all(include("font-family:#{family};", "font-size:7pt;"))
     end
   end

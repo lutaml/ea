@@ -64,6 +64,6 @@ module Issue135AssociationAttributeFilterHelpers
     emitter = Ea::Svg::EaEmitter::Document.new(document.diagrams.first, document: document,
                                                                         model_index: document.index_by_id, frame: false, content_anchor: false)
     svg = emitter.render
-    Nokogiri::XML(svg).remove_namespaces!.css("text").map(&:text)
+    Moxml.parse(svg).xpath("//*[local-name()='text']").map(&:text)
   end
 end

@@ -31,7 +31,7 @@ RSpec.describe Ea::Sources::Xmi::Adapter, "Plateau import captions" do
     counts = document.diagrams.map do |diagram|
       svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
                                                       document: document, frame: true).render
-      Nokogiri::XML(svg).xpath("//*[local-name()='text']").count { |node| node.text == "«import»" }
+      Moxml.parse(svg).xpath("//*[local-name()='text']").count { |node| node.content == "«import»" }
     end
 
     expect(counts).to eq([5, 3])

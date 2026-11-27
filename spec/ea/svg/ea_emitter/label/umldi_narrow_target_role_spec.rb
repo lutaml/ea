@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "nokogiri"
+require "moxml"
 require "tmpdir"
 
 # 159E9DA0 and 90BCA409 draw "+endPoint" (46 wide) over a 49 wide UMLDI
@@ -15,7 +15,7 @@ RSpec.describe "A Property target role narrower than its stereotype" do
       document = Ea::Sources::Xmi::Adapter.from_path(path)
       svg = Ea::Svg::EaEmitter::Document.new(document.diagrams.first, model_index: document.index_by_id,
                                                                       document: document).render
-      Nokogiri::XML(svg).xpath("//*[local-name()='text']").to_h { |n| [n.text, n["x"].to_f] }
+      Moxml.parse(svg).xpath("//*[local-name()='text']").to_h { |n| [n.content, n["x"].to_f] }
     end
   end
 
@@ -27,7 +27,7 @@ RSpec.describe "A Property target role narrower than its stereotype" do
     document = Ea::Sources::Xmi::Adapter.from_path(source_path)
     svg = Ea::Svg::EaEmitter::Document.new(document.diagrams.first, model_index: document.index_by_id,
                                                                     document: document).render
-    x = Nokogiri::XML(svg).xpath("//*[local-name()='text']").to_h { |n| [n.text, n["x"].to_f] }
+    x = Moxml.parse(svg).xpath("//*[local-name()='text']").to_h { |n| [n.content, n["x"].to_f] }
 
     expect(x["+referencePoint"]).to eq(x["«property»"] - 11.0)
   end

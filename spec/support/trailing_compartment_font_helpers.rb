@@ -9,7 +9,7 @@ module TrailingCompartmentFontHelpers
       family: "Carlito", size: 9, size_unit: size_unit, logical_height: logical_height
     )
     svg = Ea::Svg::EaEmitter::Compartment::TaggedValues.render(context)
-    Nokogiri::XML("<svg>#{svg}</svg>").css("text")
+    Moxml.parse("<svg>#{svg}</svg>").xpath("//*[local-name()='text']")
   end
 
   def trailing_slot_nodes(size_unit:, logical_height:)
@@ -21,7 +21,7 @@ module TrailingCompartmentFontHelpers
       theme: Ea::Theme::Registry.lookup("119")
     )
     svg = Ea::Svg::EaEmitter::Compartment::InstanceSlots.render(context)
-    Nokogiri::XML("<svg>#{svg}</svg>").css("text")
+    Moxml.parse("<svg>#{svg}</svg>").xpath("//*[local-name()='text']")
   end
 
   def trailing_slot_instance
@@ -36,13 +36,13 @@ module TrailingCompartmentFontHelpers
     document = Ea::Sources::Qea::Adapter.new(cached_qea_database(path), path).to_document
     diagram = document.diagrams.find { |entry| entry.id == "204F4ACC-2230-4c8d-9861-EF5A6844B712" }
     trailing_public_text_nodes(document, diagram).select do |node|
-      node.text == "tags" || node.text.include?(" = ")
+      node.content == "tags" || node.content.include?(" = ")
     end
   end
 
   def trailing_public_text_nodes(document, diagram)
     svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
                                                     document: document, frame: true).render
-    Nokogiri::XML(svg).remove_namespaces!.css("text")
+    Moxml.parse(svg).xpath("//*[local-name()='text']")
   end
 end

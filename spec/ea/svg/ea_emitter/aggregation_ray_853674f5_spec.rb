@@ -2,7 +2,7 @@
 
 require "spec_helper"
 require "ea"
-require "nokogiri"
+require "moxml"
 require "xmi"
 
 module AggregationRay853674F5Support
@@ -11,7 +11,7 @@ module AggregationRay853674F5Support
   end
 
   def source_xml
-    Nokogiri::XML(File.read(source_path))
+    Moxml.parse(File.read(source_path))
   end
 
   def source_connector
@@ -70,7 +70,7 @@ module AggregationRay853674F5Support
   end
 
   def expect_rendered_route_and_label
-    rendered = Nokogiri::XML(rendered_diagram)
+    rendered = Moxml.parse(rendered_diagram)
     expect(route_data(rendered)).to eq("M 568 86 L 361 86")
     expect(label_position(rendered)).to eq(["505.00", "100.00"])
   end
@@ -81,7 +81,7 @@ module AggregationRay853674F5Support
 
   def label_position(rendered)
     labels = rendered.xpath("//*[local-name()='text']").select do |text|
-      text.text.strip == "1..*"
+      text.content.strip == "1..*"
     end
     expect(labels.length).to eq(1)
     label = labels.first

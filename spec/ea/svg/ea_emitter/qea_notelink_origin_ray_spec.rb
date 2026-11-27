@@ -12,7 +12,7 @@ RSpec.describe "QEA NoteLink origin rays" do
       diagram = document.diagrams.find { |entry| entry.connectors.any? { |connector| connector.id == id } }
       svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
                                                       document: document, frame: true).render
-      expect(Nokogiri::XML(svg).css("path").map { |node| node["d"] }).to include(path), id
+      expect(Moxml.parse(svg).xpath("//*[local-name()='path']").map { |node| node["d"] }).to include(path), id
     end
   end
 

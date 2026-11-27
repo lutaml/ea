@@ -10,6 +10,6 @@ module NoteTextSeparatorHelpers
       geometry: Struct.new(:attr_first_y).new(30), theme: Ea::Theme::Registry.default
     )
     svg = Ea::Svg::EaEmitter::Compartment::NoteText.render(context)
-    Nokogiri::XML.fragment(svg.to_s).css("text")
+    Moxml.parse("<root>#{svg}</root>").xpath("//*[local-name()='text']")
   end
 end

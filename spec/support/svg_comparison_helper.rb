@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "moxml"
 
 # Helper module for comparing SVG files in diagram accuracy tests
 #
@@ -39,9 +39,7 @@ module SvgComparisonHelper
   def normalize_svg(svg_string)
     return "" if svg_string.nil? || svg_string.empty?
 
-    doc = Nokogiri::XML(svg_string)
-    doc.remove_namespaces!
-
+    doc = Moxml.parse(svg_string)
     # Remove EA-specific metadata that varies between exports
     EA_METADATA_XPATHS.each do |xpath|
       doc.xpath(xpath).remove
@@ -51,7 +49,7 @@ module SvgComparisonHelper
     doc.xpath('//meta[@name="generator"]').remove
 
     # Normalize whitespace in text elements
-    doc.xpath("//text").each do |text_node|
+    doc.xpath("//*[local-name()='text']").each do |text_node|
       text_node.content = text_node.content.strip if text_node.content
     end
 
@@ -63,12 +61,8 @@ module SvgComparisonHelper
       end
     end
 
-    # Return formatted XML without declaration
-    doc.to_xml(
-      indent: 2,
-      save_with: Nokogiri::XML::Node::SaveOptions::NO_DECLARATION |
-                 Nokogiri::XML::Node::SaveOptions::FORMAT
-    )
+    # Return formatted XML
+    doc.to_xml(indent: 2)
   end
 
   # Count elements by type in an SVG document
@@ -91,8 +85,8 @@ module SvgComparisonHelper
   # @param reference_svg [String] Reference SVG content
   # @return [Hash] Comparison result with :matching and :differences keys
   def compare_svg_structure(generated_svg, reference_svg)
-    gen_doc = Nokogiri::XML(normalize_svg(generated_svg))
-    ref_doc = Nokogiri::XML(normalize_svg(reference_svg))
+    gen_doc = Moxml.parse(normalize_svg(generated_svg))
+    ref_doc = Moxml.parse(normalize_svg(reference_svg))
 
     gen_elements = count_elements(gen_doc)
     ref_elements = count_elements(ref_doc)
@@ -137,8 +131,7 @@ module SvgComparisonHelper
   # @param svg_string [String] SVG content
   # @return [Hash] Coordinates grouped by element type
   def extract_coordinates(svg_string)
-    doc = Nokogiri::XML(svg_string)
-    doc.remove_namespaces!
+    doc = Moxml.parse(svg_string)
     coordinates = Hash.new { |h, k| h[k] = [] }
 
     # Extract from elements with x/y attributes
@@ -152,7 +145,7 @@ module SvgComparisonHelper
     end
 
     # Extract from rect elements
-    doc.xpath("//rect").each do |elem|
+    doc.xpath("//*[local-name()='rect']").each do |elem|
       coordinates["rect"] << {
         x: elem["x"].to_f,
         y: elem["y"].to_f,
@@ -162,7 +155,7 @@ module SvgComparisonHelper
     end
 
     # Extract from circle elements
-    doc.xpath("//circle").each do |elem|
+    doc.xpath("//*[local-name()='circle']").each do |elem|
       coordinates["circle"] << {
         cx: elem["cx"].to_f,
         cy: elem["cy"].to_f,
@@ -171,7 +164,7 @@ module SvgComparisonHelper
     end
 
     # Extract from line elements
-    doc.xpath("//line").each do |elem|
+    doc.xpath("//*[local-name()='line']").each do |elem|
       coordinates["line"] << {
         x1: elem["x1"].to_f,
         y1: elem["y1"].to_f,
@@ -181,7 +174,7 @@ module SvgComparisonHelper
     end
 
     # Extract from path elements (just check existence, parsing is complex)
-    doc.xpath("//path").each do |elem|
+    doc.xpath("//*[local-name()='path']").each do |elem|
       coordinates["path"] << {
         d: elem["d"],
         length: elem["d"]&.length || 0

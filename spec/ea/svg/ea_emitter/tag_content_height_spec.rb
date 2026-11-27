@@ -9,7 +9,7 @@ RSpec.describe Ea::Svg::EaEmitter::Elements, "tag content height" do
   it "grows a stored h70 box to the native h85 for two shown tags (204F4ACC AcmeUmlClass)" do
     document, diagram = native_tag_document
     svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id, document: document).render
-    box = Nokogiri::XML(svg).remove_namespaces!.css('rect[x="10"][y="10"]').first
+    box = Moxml.parse(svg).xpath("//*[local-name()='rect'][@x='10'][@y='10']").first
 
     expect(diagram.elements.first.bounds.height).to eq(70)
     expect(box["height"]).to eq("85")
@@ -28,7 +28,7 @@ RSpec.describe Ea::Svg::EaEmitter::Elements, "tag content height" do
     document, diagram = native_tag_document
     diagram.elements.first.show_tagged_values = false
     svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id, document: document).render
-    box = Nokogiri::XML(svg).remove_namespaces!.css('rect[x="10"][y="10"]').first
+    box = Moxml.parse(svg).xpath("//*[local-name()='rect'][@x='10'][@y='10']").first
 
     expect(box["height"]).to eq("70")
   end

@@ -9,13 +9,13 @@ RSpec.describe "Legend source default font markers" do
     element = Ea::Model::DiagramElement.new(style: { fontsz: "0" })
     svg = source_default_legend_svg(element: element)
 
-    expect(svg.css("text").first["style"]).to include("font-size:7pt;")
-    expect(svg.css("text").last["style"]).to include("font-size:12pt;", "font-weight:700;")
-    expect(svg.css("rect").map { |node| node.attributes.transform_values(&:value) }).to eq(
+    expect(svg.xpath("//*[local-name()='text']").first["style"]).to include("font-size:7pt;")
+    expect(svg.xpath("//*[local-name()='text']").last["style"]).to include("font-size:12pt;", "font-weight:700;")
+    expect(svg.xpath("//*[local-name()='rect']").map { |node| node.attributes.map(&:value) }).to eq(
       source_default_legend_svg(element: Ea::Model::DiagramElement.new)
-        .css("rect").map { |node| node.attributes.transform_values(&:value) }
+        .xpath("//*[local-name()='rect']").map { |node| node.attributes.map(&:value) }
     )
-    expect(svg.css("text").map { |node| node["y"] }).to eq(["92.00", "70.00"])
+    expect(svg.xpath("//*[local-name()='text']").map { |node| node["y"] }).to eq(["92.00", "70.00"])
   end
 
   it "preserves the resolved size unit and explicit effective font size" do
@@ -25,9 +25,9 @@ RSpec.describe "Legend source default font markers" do
       element: Ea::Model::DiagramElement.new(font_size_inherited: true, font_size: 10), unit: "px"
     )
 
-    expect(inherited.css("text").first["style"]).to include("font-size:11px;")
-    expect(explicit.css("text").first["style"]).to include("font-size:10px;")
-    expect(inherited.css("text").last["style"]).to include("font-size:12pt;")
+    expect(inherited.xpath("//*[local-name()='text']").first["style"]).to include("font-size:11px;")
+    expect(explicit.xpath("//*[local-name()='text']").first["style"]).to include("font-size:10px;")
+    expect(inherited.xpath("//*[local-name()='text']").last["style"]).to include("font-size:12pt;")
   end
 end
 
@@ -38,7 +38,7 @@ RSpec.describe "Legend defaults without source markers" do
     [{}, { fontsz: nil }, { fontsz: "" }, { fontsz: "90" }].each do |style|
       [nil, 0].each do |size|
         svg = source_default_legend_svg(element: Ea::Model::DiagramElement.new(style: style, font_size: size))
-        expect(svg.css("text").first["style"]).to include("font-size:9pt;")
+        expect(svg.xpath("//*[local-name()='text']").first["style"]).to include("font-size:9pt;")
       end
     end
   end
@@ -101,7 +101,7 @@ RSpec.describe "Legend source inheritance units" do
     svg = source_default_legend_svg(element: Ea::Model::DiagramElement.new(font_size_inherited: true),
                                     size: 11, unit: "px")
 
-    expect(svg.css("text").first["style"]).to include("font-size:11px;")
-    expect(svg.css("text").last["style"]).to include("font-size:12pt;")
+    expect(svg.xpath("//*[local-name()='text']").first["style"]).to include("font-size:11px;")
+    expect(svg.xpath("//*[local-name()='text']").last["style"]).to include("font-size:12pt;")
   end
 end

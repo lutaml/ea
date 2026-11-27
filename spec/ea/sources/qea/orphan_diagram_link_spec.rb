@@ -5,7 +5,7 @@ require "ea"
 require "fileutils"
 require "tmpdir"
 require "sqlite3"
-require "nokogiri"
+require "moxml"
 
 RSpec.describe "QEA diagram links and canvas on edited fixture copies" do
   let(:fixtures) { File.expand_path("../../../../examples/qea", __dir__) }
@@ -53,14 +53,14 @@ RSpec.describe "QEA diagram links and canvas on edited fixture copies" do
 
     # Connector vertices outside the frame border (the first path drawn).
     def outside_border(svg)
-      border, *drawn = Nokogiri::XML(svg).xpath("//*[local-name()='path']")
+      border, *drawn = Moxml.parse(svg).xpath("//*[local-name()='path']")
       xs, ys = vertices(border).transpose
       drawn.flat_map { |path| vertices(path) }
            .reject { |x, y| x.between?(xs.min, xs.max) && y.between?(ys.min, ys.max) }
     end
 
     def overflow(svg)
-      doc = Nokogiri::XML(svg)
+      doc = Moxml.parse(svg)
       _x, _y, width, height = doc.root["viewBox"].split.map(&:to_f)
       all = doc.xpath("//*[local-name()='path']").flat_map { |path| vertices(path) }
       all.reject { |x, y| x.between?(0, width) && y.between?(0, height) } +
@@ -81,7 +81,7 @@ RSpec.describe "QEA diagram links and canvas on edited fixture copies" do
 
     it "keeps the canvas of an unedited diagram" do
       document = load_document(File.join(fixtures, "basic.qea"))
-      box = Nokogiri::XML(render(document, "F0F20BDF", frame: true)).root["viewBox"]
+      box = Moxml.parse(render(document, "F0F20BDF", frame: true)).root["viewBox"]
       expect(box).to eq("0 0 627 330")
     end
   end

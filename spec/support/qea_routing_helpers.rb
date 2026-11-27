@@ -43,10 +43,10 @@ module QeaRoutingHelpers
       document.diagrams.first, model_index: document.index_by_id,
                                document: document, frame: false, content_anchor: false
     ).render
-    xml = Nokogiri::XML(svg).remove_namespaces!
+    xml = Moxml.parse(svg)
     {
-      paths: xml.css("path").map { |node| node["d"] },
-      markers: xml.css("polygon").map { |node| node["points"] }
+      paths: xml.xpath("//*[local-name()='path']").map { |node| node["d"] },
+      markers: xml.xpath("//*[local-name()='polygon']").map { |node| node["points"] }
     }
   end
 
@@ -78,6 +78,6 @@ module QeaRoutingHelpers
     document = Ea::Sources::Qea::Adapter.new(database, "phantom.qea").to_document
     svg = Ea::Svg::EaEmitter::Document.new(document.diagrams.first, model_index: document.index_by_id,
                                                                     document: document, frame: false, content_anchor: false).render
-    Nokogiri::XML(svg).remove_namespaces!.css("path").map { |node| node["d"] }.first
+    Moxml.parse(svg).xpath("//*[local-name()='path']").map { |node| node["d"] }.first
   end
 end

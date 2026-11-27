@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "nokogiri"
+require "moxml"
 
 RSpec.describe "QEA element font fallback" do
   let(:document) { Ea::Sources::Qea::Adapter.from_path("examples/qea/test.qea") }
@@ -29,15 +29,15 @@ RSpec.describe "QEA production constraint font" do
   let(:xml) do
     svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id, document: document,
                                                     frame: true).render
-    Nokogiri::XML(svg).remove_namespaces!
+    Moxml.parse(svg)
   end
 
   it "renders the native constraint font and offsets without a font override" do
-    box = xml.xpath("//rect").find do |node|
+    box = xml.xpath("//*[local-name()='rect']").find do |node|
       node["width"] == "167" && node["height"] == "112"
     end
     nodes = ["constraints", "{pattern}"].map do |text|
-      xml.xpath("//text").find { |node| node.text == text }
+      xml.xpath("//*[local-name()='text']").find { |node| node.content == text }
     end
     offsets = nodes.map do |node|
       [node["x"].to_f - box["x"].to_f,
@@ -77,7 +77,7 @@ RSpec.describe "QEA fallback font connector preservation" do
       diagram, model_index: document.index_by_id, document: document,
                frame: true
     ).render
-    paths = Nokogiri::XML(svg).remove_namespaces!.xpath("//path").map { |node| node["d"] }
+    paths = Moxml.parse(svg).xpath("//*[local-name()='path']").map { |node| node["d"] }
 
     expect(paths).to include("M 207 93 L 296 93")
     expect(paths).not_to include("M 207 106 L 296 93")

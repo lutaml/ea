@@ -18,7 +18,7 @@ module XmiAssociationClassTetherHelpers
         document.diagrams.first, model_index: document.index_by_id, document: document,
                                  frame: true
       ).render
-      Nokogiri::XML(svg).css("path").map { |node| node["d"] }
+      Moxml.parse(svg).xpath("//*[local-name()='path']").map { |node| node["d"] }
     end
   end
 

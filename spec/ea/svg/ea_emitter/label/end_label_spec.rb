@@ -775,7 +775,7 @@ RSpec.describe Ea::Svg::EaEmitter::Label::EndLabel do
         texts = renderer.texts(text_box: box,
                                mult_box: { "ox" => 30, "oy" => 5 },
                                anchor: [100, 200], connector:, end_kind:)
-        parsed = texts.map { |text| Nokogiri::XML(text).at_css("text") }
+        parsed = texts.map { |text| Moxml.parse(text).at_xpath("//*[local-name()='text']") }
 
         expect(parsed.map(&:text)).to eq(
           ["+#{role_name}", stereotype && "«#{stereotype}»", "0..*"].compact

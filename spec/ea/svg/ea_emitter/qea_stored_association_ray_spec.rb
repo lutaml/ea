@@ -11,7 +11,7 @@ RSpec.describe "QEA stored Association ray docking" do
     connector = diagram.connectors.find { |entry| entry.id == "dc:93:500" }
     svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
                                                     document: document, frame: true).render
-    paths = Nokogiri::XML(svg).css("path").map { |node| node["d"] }
+    paths = Moxml.parse(svg).xpath("//*[local-name()='path']").map { |node| node["d"] }
 
     expect(connector.style[:stored_association_ray]).to be(true)
     # Published endpoints (698,477)/(629,482), translated by the diagram frame.

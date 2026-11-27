@@ -18,12 +18,12 @@ RSpec.describe "QEA package content baselines" do
   ].each do |fixture, diagram_id, package_name, expected_rows|
     it "places #{package_name} contents below its native package tab" do
       document = package_width_document(fixture)
-      xml = Nokogiri::XML("<svg>#{package_elements(document, diagram_id).render}</svg>")
-      shape = xml.xpath("//g[polygon][text]").find { |group| group.css("text").last.text == package_name }
-      body_top = shape.css("polygon").first["points"].split[1].to_f
-      package_x = shape.css("text").last["x"].to_f
+      xml = Moxml.parse("<svg>#{package_elements(document, diagram_id).render}</svg>")
+      shape = xml.xpath("//*[local-name()='g'][*[local-name()='polygon']][*[local-name()='text']]").find { |group| group.xpath(".//*[local-name()='text']").last.content == package_name }
+      body_top = shape.xpath(".//*[local-name()='polygon']").first["points"].split[1].to_f
+      package_x = shape.xpath(".//*[local-name()='text']").last["x"].to_f
       expected_rows.each do |name, offset|
-        matches = xml.css("text").select { |text| text.text == "+ #{name}" }
+        matches = xml.xpath("//*[local-name()='text']").select { |text| text.content == "+ #{name}" }
         expect(matches.length).to eq(1)
         expect(matches.first["y"].to_f).to eq(body_top + offset)
         expect(matches.first["x"].to_f).to eq(package_x + 18)
@@ -46,12 +46,12 @@ RSpec.describe "Package content tab geometry controls" do
     ].each do |family, size, unit, stereotype, tab_height|
       context = package_content_geometry_context(bounds, [family, size, unit], stereotype)
       body_top = package_content_body_top(context, stereotype)
-      contents = Nokogiri::XML(Ea::Svg::EaEmitter::Compartment::PackageContents.render(context))
+      contents = Moxml.parse(Ea::Svg::EaEmitter::Compartment::PackageContents.render(context))
 
       expect(body_top).to eq(60 + tab_height)
-      expect(contents.at_css("text")["y"].to_f).to eq(body_top + 15)
-      expect(contents.at_css("text")["x"].to_f).to eq(58)
-      expect(contents.at_css("rect")["y"].to_f).to eq(body_top + 4)
+      expect(contents.at_xpath("//*[local-name()='text']")["y"].to_f).to eq(body_top + 15)
+      expect(contents.at_xpath("//*[local-name()='text']")["x"].to_f).to eq(58)
+      expect(contents.at_xpath("//*[local-name()='rect']")["y"].to_f).to eq(body_top + 4)
     end
   end
 

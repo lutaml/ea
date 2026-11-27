@@ -11,6 +11,6 @@ module EnumInsetHelpers
     )
     literal = Ea::Model::EnumerationLiteral.new(name: "Blue")
     svg = Ea::Svg::EaEmitter::Compartment::EnumLiterals.literal_name_text(context, literal, 60)
-    Nokogiri::XML(svg).at_xpath("//text")
+    Moxml.parse(svg).at_xpath("//*[local-name()='text']")
   end
 end

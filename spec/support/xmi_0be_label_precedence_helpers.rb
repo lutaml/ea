@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "moxml"
 require "tempfile"
 
 module Xmi0beLabelPrecedenceHelpers
@@ -14,7 +14,7 @@ module Xmi0beLabelPrecedenceHelpers
   end
 
   def bounded_by_xml(box, remove_bounds)
-    xml = Nokogiri::XML(File.read(fixtures_path("issue135_route_style/0be-boundedby-umldi.xmi")))
+    xml = Moxml.parse(File.read(fixtures_path("issue135_route_style/0be-boundedby-umldi.xmi")))
     association = Xmi0beBoundedByLabelsHelpers::ASSOCIATIONS.first
     if box
       placement = xml.at_xpath("//*[@subject='#{association}']")

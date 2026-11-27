@@ -18,7 +18,7 @@ RSpec.describe "QEA notes with HTML markup" do
   it "stacks list items on consecutive rows with no blank row between them" do
     ys = ['- Feature classes are contained in the "Features" package.',
           '- Object classes are contained in the "Tables" package.'].map do |line|
-      nodes.find { |node| node.text == line }["y"].to_f
+      nodes.find { |node| node.content == line }["y"].to_f
     end
 
     expect(ys.last - ys.first).to eq(2 * 16)

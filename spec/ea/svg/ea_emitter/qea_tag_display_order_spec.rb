@@ -8,7 +8,7 @@ RSpec.describe "QEA tagged-value display order" do
   it "seats simple.qea tags alphabetically as in its native SVG" do
     nodes = trailing_tag_public_nodes
 
-    expect(nodes.map { |node| [node.text, node["x"].to_f, node["y"].to_f] })
+    expect(nodes.map { |node| [node.content, node["x"].to_f, node["y"].to_f] })
       .to eq([["tags", 82, 89], ["isCollection = false", 40, 101],
               ["noPropertyType = false", 40, 113]])
   end
@@ -23,7 +23,7 @@ RSpec.describe "Tagged-value display preservation" do
             first_y: 50, family: "Carlito", size: 9
     )
 
-    expect(Nokogiri::XML("<svg>#{svg}</svg>").css("text").map(&:text))
+    expect(Moxml.parse("<svg>#{svg}</svg>").xpath("//*[local-name()='text']").map(&:text))
       .to eq(["tags", "isCollection = false", "noPropertyType = a & b"])
     expect(tags.map { |tag| [tag.key, tag.value] })
       .to eq([["noPropertyType", "a & b"], ["isCollection", "false"]])
@@ -36,7 +36,7 @@ RSpec.describe "Tagged-value display preservation" do
       first_y: 50, family: "Carlito", size: 9
     )
 
-    expect(Nokogiri::XML("<svg>#{svg}</svg>").css("text").map(&:text))
+    expect(Moxml.parse("<svg>#{svg}</svg>").xpath("//*[local-name()='text']").map(&:text))
       .to eq(["tags", " = false"])
   end
 end

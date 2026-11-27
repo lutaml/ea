@@ -13,8 +13,8 @@ RSpec.describe "End-label roles saved left of the canvas edge" do
     document = Ea::Sources::Xmi::Adapter.from_path(fixtures_path("issue135_route_style/#{fixture}"))
     svg = Ea::Svg::EaEmitter::Document.new(document.diagrams.first, model_index: document.index_by_id,
                                                                     document: document, frame: true).render
-    Nokogiri::XML(svg).xpath("//*[local-name()='text']")
-            .to_h { |node| [node.text, [node["x"].to_f, node["y"].to_f]] }
+    Moxml.parse(svg).xpath("//*[local-name()='text']")
+         .to_h { |node| [node.content, [node["x"].to_f, node["y"].to_f]] }
   end
 
   {

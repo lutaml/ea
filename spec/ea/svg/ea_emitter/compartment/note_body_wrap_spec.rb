@@ -68,7 +68,7 @@ RSpec.describe "Note source logical height" do
         theme: Ea::Theme::Registry.default
       )
       svg = Ea::Svg::EaEmitter::Compartment::NoteBody.render(context)
-      rows = Nokogiri::XML.fragment(svg).css("text")
+      rows = Moxml.parse("<root>#{svg}</root>").xpath("//*[local-name()='text']")
 
       expect(rows.map(&:text)).to eq(texts)
       expect(rows.map { |row| row["textLength"].to_i }).to eq(lengths)

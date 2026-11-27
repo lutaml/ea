@@ -14,7 +14,7 @@ RSpec.describe "EA emitter native gaps (direction triangle, tagged growth, label
     diagram = document.diagrams.find { |entry| entry.id.include?(guid) }
     svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
                                                     document: document, frame: true).render
-    Nokogiri::XML(svg).remove_namespaces!
+    Moxml.parse(svg)
   end
 
   def unframe(points)
@@ -27,19 +27,19 @@ RSpec.describe "EA emitter native gaps (direction triangle, tagged growth, label
     it "draws the direction triangles at the native positions" do
       # native EAID_2AAB709F: <polygon points="42 162 39 152 45 152"> and
       # <polygon points="277 25 267 22 267 28">
-      triangles = xml.xpath("//polygon").map { |p| unframe(p["points"]) }
+      triangles = xml.xpath("//*[local-name()='polygon']").map { |p| unframe(p["points"]) }
 
       expect(triangles).to include("42 162 39 152 45 152", "277 25 267 22 267 28")
     end
 
     it "keeps the connector name texts" do
-      expect(xml.xpath("//text").map(&:text)).to include("Association A", "Association B")
+      expect(xml.xpath("//*[local-name()='text']").map(&:text)).to include("Association A", "Association B")
     end
   end
 
   describe "basic.qea association without a directed name (F32E5AFE)" do
     it "draws no three-point direction triangle" do
-      polygons = render_xml("examples/qea/basic.qea", "F32E5AFE").xpath("//polygon")
+      polygons = render_xml("examples/qea/basic.qea", "F32E5AFE").xpath("//*[local-name()='polygon']")
 
       expect(polygons.map { |p| p["points"].split.size / 2 }).not_to include(3)
     end
@@ -48,7 +48,7 @@ RSpec.describe "EA emitter native gaps (direction triangle, tagged growth, label
   describe "tagged-value growth (simple.qea 204F4ACC)" do
     it "draws the AcmeUmlClass box at the native height 85" do
       # native EAID_204F4ACC: <rect x="10" y="10" width="111" height="85">
-      rects = render_xml("examples/qea/simple.qea", "204F4ACC").xpath("//rect")
+      rects = render_xml("examples/qea/simple.qea", "204F4ACC").xpath("//*[local-name()='rect']")
       acme = rects.find { |r| r["x"].to_i == 10 + frame_dx && r["y"].to_i == 10 + frame_dy }
 
       expect(acme["height"]).to eq("85")
@@ -56,7 +56,7 @@ RSpec.describe "EA emitter native gaps (direction triangle, tagged growth, label
     end
 
     it "leaves boxes with no tagged overflow at their stored height" do
-      rects = render_xml("examples/qea/simple.qea", "204F4ACC").xpath("//rect")
+      rects = render_xml("examples/qea/simple.qea", "204F4ACC").xpath("//*[local-name()='rect']")
       heights = rects.select { |r| r["x"].to_i == 20 + frame_dx }.map { |r| r["height"] }
 
       expect(heights).to eq(["90"])
@@ -65,7 +65,7 @@ RSpec.describe "EA emitter native gaps (direction triangle, tagged growth, label
 
   describe "end-label paint order (basic.qea F32E5AFE)" do
     it "paints each connector as source role, name, target role like native" do
-      texts = render_xml("examples/qea/basic.qea", "F32E5AFE").xpath("//text").map(&:text)
+      texts = render_xml("examples/qea/basic.qea", "F32E5AFE").xpath("//*[local-name()='text']").map(&:text)
 
       # native EAID_F32E5AFE tail: +roleThree 0..3 +roleTwo 1 +roleOne 1
       expect(texts.last(6)).to eq(["+roleThree", "0..3", "+roleTwo", "1", "+roleOne", "1"])
@@ -74,7 +74,7 @@ RSpec.describe "EA emitter native gaps (direction triangle, tagged growth, label
 
   describe "label order with a named midpoint (basic.qea 2AAB709F)" do
     it "puts the source end texts before the midpoint name and the target end texts after" do
-      texts = render_xml("examples/qea/basic.qea", "2AAB709F").xpath("//text").map(&:text)
+      texts = render_xml("examples/qea/basic.qea", "2AAB709F").xpath("//*[local-name()='text']").map(&:text)
       i = texts.index("Association A")
 
       expect(texts[i - 2, 5]).to eq(["+role a", "0..*", "Association A", "+role b", "0..*"])

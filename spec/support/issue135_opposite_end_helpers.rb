@@ -34,7 +34,7 @@ module Issue135OppositeEndHelpers
       text_box: { "ox" => 10, "oy" => 10 }, mult_box: { "ox" => 10, "oy" => 30 },
       anchor: [0, 0], connector: connector, end_kind: end_kind, stored_labels: stored_labels
     ).join
-    Nokogiri::XML("<g>#{svg}</g>").css("text").map(&:text)
+    Moxml.parse("<g>#{svg}</g>").xpath("//*[local-name()='text']").map(&:text)
   end
 
   def opposite_end_renderer(document)

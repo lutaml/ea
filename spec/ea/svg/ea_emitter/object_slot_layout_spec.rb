@@ -20,9 +20,9 @@ RSpec.describe "Public Object slot row layout" do
     cases.each do |diagram_id, owners|
       nodes = object_slot_public_nodes(diagram_id)
       owners.each do |name, (x, baselines)|
-        expect(nodes.count { |node| node.text.start_with?("#{name} /") }).to eq(1)
+        expect(nodes.count { |node| node.content.start_with?("#{name} /") }).to eq(1)
         rows = nodes.select do |node|
-          node.text.start_with?("attribute") && node["x"].to_i == x &&
+          node.content.start_with?("attribute") && node["x"].to_i == x &&
             node["y"].to_f.between?(baselines.first, baselines.last + 2)
         end
         expect(rows.map { |node| node["y"].to_f }).to eq(baselines)
@@ -60,7 +60,7 @@ RSpec.describe "Object slot subtitle centering" do
       context.model_element.classifier_name = "Classifier"
       node = object_slot_nodes(context).last
 
-      expect(node.text).to eq("(from Foreign)")
+      expect(node.content).to eq("(from Foreign)")
       expect(node["x"].to_f).to eq((10 + (200 - node["textLength"].to_i) / 2.0).floor)
       expect(node["style"]).to include("font-family:#{family};", "font-size:#{size}#{unit};")
     end
@@ -71,7 +71,7 @@ RSpec.describe "Object slot subtitle centering" do
       "14E9F5FD-F6CD-4f48-B1CD-F5A40C6D8E83" => [88, 128, 355, 355, 581],
       "157826AA-96A7-4278-89A6-94BD0F31409A" => [86, 315, 315]
     }.each do |diagram_id, expected_x|
-      nodes = object_slot_public_nodes(diagram_id).select { |node| node.text == "(from Objects)" }
+      nodes = object_slot_public_nodes(diagram_id).select { |node| node.content == "(from Objects)" }
 
       expect(nodes.map { |node| node["x"].to_f }.sort).to eq(expected_x)
       expect(nodes.map { |node| node["textLength"].to_i }).to eq([60] * expected_x.size)

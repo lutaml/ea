@@ -23,6 +23,6 @@ module PackageFontDockingHelpers
 
   def font_docking_path(diagram, index, bounds = nil)
     svg = Ea::Svg::EaEmitter::Connectors.new(diagram, model_index: index, drawn_bounds: bounds).render
-    Nokogiri::XML(svg).at_css("path")["d"]
+    Moxml.parse(svg).at_xpath("//*[local-name()='path']")["d"]
   end
 end

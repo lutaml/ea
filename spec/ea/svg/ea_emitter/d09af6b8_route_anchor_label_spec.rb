@@ -2,7 +2,7 @@
 
 require "spec_helper"
 require "ea"
-require "nokogiri"
+require "moxml"
 require_relative "../../../support/d09af6b8_route_anchor_helpers"
 
 RSpec.describe "D09AF6B8 reliefComponent stored aggregation ray" do

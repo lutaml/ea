@@ -20,6 +20,6 @@ module PaintOrderHelpers
   end
 
   def svg_for(diagram, index)
-    Nokogiri::XML(Ea::Svg::EaEmitter::Document.new(diagram, model_index: index, content_anchor: false).render)
+    Moxml.parse(Ea::Svg::EaEmitter::Document.new(diagram, model_index: index, content_anchor: false).render)
   end
 end

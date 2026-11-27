@@ -13,10 +13,10 @@ RSpec.describe "Navigable target diamonds" do
       markup = Ea::Svg::EaEmitter::Markers.new(
         document.diagrams.first, model_index: document.index_by_id
       ).render
-      markers = Nokogiri::XML("<svg>#{markup}</svg>")
+      markers = Moxml.parse("<svg>#{markup}</svg>")
 
-      expect(markers.xpath("//path").map { |path| path["d"] }).to eq(["M 365 306 L 380 300 L 365 294"])
-      expect(markers.at_xpath("//polygon")["points"]).to eq("400 300 390 305 380 300 390 295")
+      expect(markers.xpath("//*[local-name()='path']").map { |path| path["d"] }).to eq(["M 365 306 L 380 300 L 365 294"])
+      expect(markers.at_xpath("//*[local-name()='polygon']")["points"]).to eq("400 300 390 305 380 300 390 295")
     end
   end
 

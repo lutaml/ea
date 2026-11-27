@@ -2,7 +2,7 @@
 
 require "spec_helper"
 require "ea"
-require "nokogiri"
+require "moxml"
 
 RSpec.describe Ea::Svg::Parity::Checker do
   def svg_with(texts)

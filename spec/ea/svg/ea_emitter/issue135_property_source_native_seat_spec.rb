@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "moxml"
 
 # Native Enterprise Architect seats for the five real Property cases, read
 # through the public XMI Adapter. Registration (native = emitted + t) is pinned
@@ -27,7 +27,7 @@ module Issue135NativeSeatCases
   }.freeze
 
   def self.parse_svg(text)
-    Nokogiri::XML(text).remove_namespaces!
+    Moxml.parse(text)
   end
 
   def self.emitted_svg(path)
@@ -41,8 +41,8 @@ module Issue135NativeSeatCases
   end
 
   def self.class_rect(svg, name, size)
-    texts = svg.xpath("//text").select { |t| t.text.strip.split("::").last == name }
-    svg.xpath("//rect").filter_map { |rect| rect_origin(rect, size, texts) }
+    texts = svg.xpath("//*[local-name()='text']").select { |t| t.content.strip.split("::").last == name }
+    svg.xpath("//*[local-name()='rect']").filter_map { |rect| rect_origin(rect, size, texts) }
   end
 
   def self.rect_origin(rect, size, texts)
@@ -86,10 +86,10 @@ RSpec.describe "Issue 135 Property source native seats (XMI)" do
       end
 
       it "seats the one source role with its own Property stereotype and multiplicity at native positions" do
-        roles = svg.xpath("//text").select { |t| t.text.strip == "+#{name}" }
+        roles = svg.xpath("//*[local-name()='text']").select { |t| t.content.strip == "+#{name}" }
         expect(roles.size).to eq(1)
-        cluster = roles.first.parent.xpath("text")
-        expect(cluster.map { |t| t.text.strip }).to eq(["+#{name}", "«property»", data[:mult]])
+        cluster = roles.first.parent.xpath("*[local-name()=\x27text\x27]")
+        expect(cluster.map { |t| t.content.strip }).to eq(["+#{name}", "«property»", data[:mult]])
 
         seats = cluster.map { |t| [t["x"].to_f + data[:t][0], t["y"].to_f + data[:t][1]] }
         expect(seats).to eq([data[:role], data[:stereo], data[:mult_at]].map { |seat| seat.map(&:to_f) })

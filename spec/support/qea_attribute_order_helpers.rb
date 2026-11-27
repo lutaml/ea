@@ -21,6 +21,6 @@ module QeaAttributeOrderHelpers
   def rendered_attribute_names(document)
     svg = Ea::Svg::EaEmitter::Document.new(document.diagrams.first, model_index: document.index_by_id,
                                                                     document: document, frame: false, content_anchor: false).render
-    Nokogiri::XML(svg).remove_namespaces!.css("text").map(&:text).select { |text| text.include?(": String") }
+    Moxml.parse(svg).xpath("//*[local-name()='text']").map(&:text).select { |text| text.include?(": String") }
   end
 end

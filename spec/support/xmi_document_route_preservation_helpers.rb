@@ -36,7 +36,7 @@ module XmiDocumentRoutePreservationHelpers
   end
 
   def xmi_drawn_paths(scene)
-    Nokogiri::XML(scene[:svg]).remove_namespaces!.xpath("//path").map { |path| path["d"] }
+    Moxml.parse(scene[:svg]).xpath("//*[local-name()='path']").map { |path| path["d"] }
   end
 
   def xmi_source_connector_index(connectors, guid)
@@ -68,7 +68,7 @@ module XmiDocumentRoutePreservationHelpers
   end
 
   def xmi_native_route(scene, endpoints)
-    paths = Nokogiri::XML(scene[:native]).remove_namespaces!.xpath("//path[@shape-rendering='auto']")
+    paths = Moxml.parse(scene[:native]).xpath("//*[local-name()='path'][@shape-rendering='auto']")
     matches = paths.map { |path| path["d"] }.select { |path| xmi_native_endpoints(path) == endpoints.sort }
     expect(matches.size).to eq(1), "native route endpoints must identify one path"
     xmi_route_geometry(matches.first)

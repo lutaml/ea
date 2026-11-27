@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "nokogiri"
+require "moxml"
 
 RSpec.shared_context "QEA constraint diagram" do
   let(:document) { Ea::Sources::Qea::Adapter.from_path("examples/qea/test.qea") }
@@ -12,9 +12,9 @@ RSpec.shared_context "QEA constraint diagram" do
     Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
                                               document: document, frame: true).render
   end
-  let(:texts) { Nokogiri::XML(svg).remove_namespaces!.xpath("//text") }
+  let(:texts) { Moxml.parse(svg).xpath("//*[local-name()='text']") }
   let(:box) do
-    Nokogiri::XML(svg).remove_namespaces!.xpath("//rect").find do |node|
+    Moxml.parse(svg).xpath("//*[local-name()='rect']").find do |node|
       node["width"] == "167" && node["height"] == "112"
     end
   end
@@ -24,11 +24,11 @@ RSpec.describe "QEA constraint compartments" do
   include_context "QEA constraint diagram"
 
   it "renders a centered italic caption and left-aligned OCL rows after attributes" do
-    caption = texts.find { |node| node.text == "constraints" }
-    row = texts.find { |node| node.text == "{pattern}" }
+    caption = texts.find { |node| node.content == "constraints" }
+    row = texts.find { |node| node.content == "{pattern}" }
     expect(caption).not_to be_nil
     attributes = texts.select do |node|
-      ["string: CharacterString [1..*]", "integer: Integer [0..1]"].include?(node.text) &&
+      ["string: CharacterString [1..*]", "integer: Integer [0..1]"].include?(node.content) &&
         node["x"].to_f.between?(box["x"].to_f, box["x"].to_f + box["width"].to_f) &&
         node["y"].to_f.between?(box["y"].to_f, caption["y"].to_f)
     end

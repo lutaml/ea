@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "nokogiri"
+require "moxml"
 
 RSpec.describe "XMI connector route style propagation" do
   include XmiConnectorRouteStyleHelpers
@@ -35,6 +35,6 @@ RSpec.describe "XMI connector route style propagation" do
     expect(connector.style.to_h).not_to include(:mode, :lwidth, :tree)
     expect(connector.waypoints.map { |point| [point.position.x, point.position.y] })
       .to eq([[918, 731], [918, 230], [1160, 190]])
-    expect(role.text).to eq("+indoorOpeningAttribute")
+    expect(role.content).to eq("+indoorOpeningAttribute")
   end
 end

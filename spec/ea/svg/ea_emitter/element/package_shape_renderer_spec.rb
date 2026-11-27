@@ -2,7 +2,7 @@
 
 require "spec_helper"
 require "ea"
-require "nokogiri"
+require "moxml"
 require "ea/svg/ea_emitter/element/package_shape_renderer"
 
 RSpec.describe Ea::Svg::EaEmitter::Element::PackageShapeRenderer do
@@ -74,7 +74,7 @@ RSpec.describe Ea::Svg::EaEmitter::Element::PackageShapeRenderer do
                 label: "Schema", stereotype: "applicationSchema",
                 family: family, size: size, size_unit: unit
       )
-      texts = Nokogiri::XML(svg).css("text")
+      texts = Moxml.parse(svg).xpath("//*[local-name()='text']")
 
       expect(texts.map { |text| text["y"].to_f }).to eq(expected)
       expect(texts.map(&:text)).to eq(["«applicationSchema»", "Schema"])
@@ -87,11 +87,11 @@ RSpec.describe Ea::Svg::EaEmitter::Element::PackageShapeRenderer do
       bounds, fill: "#FAF3F0", stroke: "#9A8484", stroke_width: 2,
               label: "Schema", family: "Cambria", size: 7
     )
-    nodes = Nokogiri::XML(svg)
+    nodes = Moxml.parse(svg)
 
-    expect(nodes.css("text").map { |text| [text["x"], text["y"]] })
+    expect(nodes.xpath("//*[local-name()='text']").map { |text| [text["x"], text["y"]] })
       .to eq([["40.00", "73.00"]])
-    expect(nodes.css("polygon").map { |polygon| polygon["points"] })
+    expect(nodes.xpath("//*[local-name()='polygon']").map { |polygon| polygon["points"] })
       .to eq(["35 79 169 79 169 234 35 234 35 79",
               "35 60 140 60 140 79 35 79 35 60"])
   end

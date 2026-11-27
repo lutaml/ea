@@ -2,7 +2,7 @@
 
 require "spec_helper"
 require "xmi"
-require "nokogiri"
+require "moxml"
 
 RSpec.describe Ea::Sources::Xmi::Adapter, "issue 135 association source contract" do
   include Issue135AssociationSourceContractHelpers

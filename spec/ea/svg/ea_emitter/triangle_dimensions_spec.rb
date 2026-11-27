@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "nokogiri"
+require "moxml"
 
 RSpec.shared_context "native triangle dimensions" do
   let(:connector) do
@@ -27,7 +27,7 @@ RSpec.describe Ea::Svg::EaEmitter::Markers do
       [0, 100] => [[6, 16], [-6, 16]], [0, -100] => [[-6, -16], [6, -16]],
       [100, 100] => [[16, 7], [7, 16]], [-100, -100] => [[-16, -7], [-7, -16]]
     }.each do |base, vertices|
-      polygon = Nokogiri::XML.fragment(renderer.triangle_polygon([0, 0], base)).at_css("polygon")
+      polygon = Moxml.parse("<root>#{renderer.triangle_polygon([0, 0], base)}</root>").at_xpath("//*[local-name()='polygon']")
       points = polygon["points"].split.map(&:to_f).each_slice(2).to_a
 
       expect(points).to eq([[0, 0], *vertices])
@@ -35,7 +35,7 @@ RSpec.describe Ea::Svg::EaEmitter::Markers do
   end
 
   it "matches source connector 702's native near-vertical triangle vertices" do
-    polygon = Nokogiri::XML.fragment(renderer.triangle_polygon([850, 422], [851, 460])).at_css("polygon")
+    polygon = Moxml.parse("<root>#{renderer.triangle_polygon([850, 422], [851, 460])}</root>").at_xpath("//*[local-name()='polygon']")
 
     expect(polygon["points"].split.map(&:to_f)).to eq([850, 422, 856, 438, 844, 438])
   end
@@ -51,8 +51,8 @@ RSpec.describe Ea::Svg::EaEmitter::Markers do
         connector.direction = direction
         [1, 4].each do |width|
           connector.style = { lwidth: width }
-          fragment = Nokogiri::XML.fragment(renderer.render)
-          polygon = fragment.at_css("polygon")
+          fragment = Moxml.parse("<root>#{renderer.render}</root>")
+          polygon = fragment.at_xpath("//*[local-name()='polygon']")
           expected = direction == "Source -> Destination" ? [100, 0, 84, 6, 84, -6] : [0, 0, 16, -6, 16, 6]
 
           expect(polygon["points"].split.map(&:to_f)).to eq(expected)
@@ -72,19 +72,19 @@ RSpec.describe Ea::Svg::EaEmitter::Markers do
       "Aggregation" => ["polygon", "fill:#FFFFFF;fill-opacity:1.00"]
     }.each do |type, (tag, style)|
       connector.connector_type = type
-      fragment = Nokogiri::XML.fragment(renderer.render)
-      polygon = fragment.at_css(tag)
+      fragment = Moxml.parse("<root>#{renderer.render}</root>")
+      polygon = fragment.at_xpath("//*[local-name()='#{tag}']")
 
       expect(polygon["points"].split.map(&:to_f)).to eq([0, 0, 10, -5, 20, 0, 10, 5])
       expect(polygon.parent["style"]).to include(style, "stroke-width:4;")
     end
     { "Association" => "M 85 6 L 100 0 L 85 -6", "Dependency" => "M 85 5 L 100 0 L 85 -5" }.each do |type, path|
       connector.connector_type = type
-      fragment = Nokogiri::XML.fragment(renderer.render)
+      fragment = Moxml.parse("<root>#{renderer.render}</root>")
 
-      expect(fragment.at_css("path")["d"]).to eq(path)
-      expect(fragment.at_css("path").parent["style"]).to include("fill-opacity:0.00", "stroke-width:4;")
-      expect(fragment.css("polygon")).to be_empty
+      expect(fragment.at_xpath("//*[local-name()='path']")["d"]).to eq(path)
+      expect(fragment.at_xpath("//*[local-name()='path']").parent["style"]).to include("fill-opacity:0.00", "stroke-width:4;")
+      expect(fragment.xpath("//*[local-name()='polygon']")).to be_empty
     end
   end
 end

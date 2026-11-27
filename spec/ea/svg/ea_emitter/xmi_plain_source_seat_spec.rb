@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "nokogiri"
+require "moxml"
 
 RSpec.describe "XMI plain source seat metadata" do
   include D159XmiSeatHelpers
@@ -15,8 +15,8 @@ RSpec.describe "XMI plain source seat metadata" do
       diagram, model_index: document.index_by_id, document: document,
                frame: true
     ).render
-    role = Nokogiri::XML(svg).xpath("//*[local-name()='text']").find do |node|
-      node.text == "+developmentProject"
+    role = Moxml.parse(svg).xpath("//*[local-name()='text']").find do |node|
+      node.content == "+developmentProject"
     end
 
     expect(diagram.name).to eq("UrgentUrbanRenewalprogram")
@@ -49,8 +49,8 @@ RSpec.describe "XMI plain target seat metadata" do
       diagram, model_index: document.index_by_id, document: document,
                frame: true
     ).render
-    role = Nokogiri::XML(svg).xpath("//*[local-name()='text']").find do |node|
-      node.text == "+lod0MultiPoint"
+    role = Moxml.parse(svg).xpath("//*[local-name()='text']").find do |node|
+      node.content == "+lod0MultiPoint"
     end
 
     expect(diagram.id).to eq("EAID_785226C1_12B1_4104_A4C1_F19B70B9FB71")

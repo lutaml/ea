@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "nokogiri"
+require "moxml"
 require "ea/transformers/qea_to_xmi"
 
 # Issue #32 parity ratchet: ID-set distance between our exports and
@@ -24,8 +24,8 @@ RSpec.describe "QEA to XMI parity ratchet" do
 
   def id_map(xml)
     map = {}
-    Nokogiri::XML(xml).xpath("//*[@xmi:id]", XMI_NS).each do |element|
-      map[element["xmi:id"]] = [element.name, element.attributes.transform_values(&:value)]
+    Moxml.parse(xml).xpath("//*[@xmi:id]", XMI_NS).each do |element|
+      map[element["xmi:id"]] = [element.name, element.attributes.map(&:value).sort]
     end
     map
   end

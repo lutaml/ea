@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "moxml"
 require "tempfile"
 
 # Retained blocks from examples/xmi/20251010_current_plateau_v5.1.xmi are byte-identical.
@@ -87,7 +87,7 @@ module Issue135PropertySourceAcceptanceHelpers
   }.freeze
 
   def property_source_xml(data)
-    Nokogiri::XML(File.read(fixtures_path("issue135_route_style/#{data[:fixture]}")))
+    Moxml.parse(File.read(fixtures_path("issue135_route_style/#{data[:fixture]}")))
   end
 
   def property_source_document(xml)

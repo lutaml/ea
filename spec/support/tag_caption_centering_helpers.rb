@@ -9,7 +9,7 @@ module TagCaptionCenteringHelpers
       first_y: 50, family: family, size: size, size_unit: size_unit,
       logical_height: logical_height
     )
-    Nokogiri::XML("<svg>#{svg}</svg>").css("text")
+    Moxml.parse("<svg>#{svg}</svg>").xpath("//*[local-name()='text']")
   end
 
   def arcgis_tag_caption_nodes
@@ -17,7 +17,7 @@ module TagCaptionCenteringHelpers
     document = Ea::Sources::Qea::Adapter.new(cached_qea_database(path), path).to_document
     diagram = document.diagrams.find { |entry| entry.id == "7C44AC09-27C1-47b3-9A85-88EC71C081FF" }
     trailing_public_text_nodes(document, diagram).select do |node|
-      node.text == "tags" || node.text.include?(" = ")
+      node.content == "tags" || node.content.include?(" = ")
     end
   end
 end

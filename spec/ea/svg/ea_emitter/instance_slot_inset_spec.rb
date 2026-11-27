@@ -6,7 +6,7 @@ RSpec.describe "Instance slot content inset" do
   include InstanceSlotInsetHelpers
 
   it "matches basic.qea diagram7 RunState rows without moving their headers", :aggregate_failures do
-    texts = basic_runstate_texts.to_h { |node| [node.text, node] }
+    texts = basic_runstate_texts.to_h { |node| [node.content, node] }
     expected = {
       "Variable A = Value One" => [56, 80, 99],
       "Variable B = Value One" => [293, 81, 99],
@@ -38,7 +38,7 @@ RSpec.describe "Instance slot font and theme controls" do
       node = instance_slot_inset_node(family: family, size: size, unit: unit, inset: inset)
 
       expect([node["x"].to_f, node["y"].to_f]).to eq([x, 50])
-      expect(node.text).to eq("Variable A = Value One")
+      expect(node.content).to eq("Variable A = Value One")
       expect(node["style"]).to include("font-family:#{family};", "font-size:#{size}#{unit};")
     end
   end

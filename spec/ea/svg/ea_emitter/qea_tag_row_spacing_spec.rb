@@ -14,7 +14,7 @@ RSpec.describe "QEA tagged-value row spacing" do
     document = Ea::Sources::Qea::Adapter.new(cached_qea_database(path), path).to_document
     diagram = document.diagrams.find { |entry| entry.id == "7C44AC09-27C1-47b3-9A85-88EC71C081FF" }
     nodes = trailing_public_text_nodes(document, diagram).select do |node|
-      node.text == "tags" || node.text.include?(" = ")
+      node.content == "tags" || node.content.include?(" = ")
     end
 
     expect(nodes.map { |node| node["y"].to_f }).to eq((275..467).step(12).to_a)

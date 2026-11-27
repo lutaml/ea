@@ -11,7 +11,7 @@ RSpec.describe Ea::Svg::EaEmitter::Element::ShapeRenderer do
     it "emits a <rect> at bounds position with the given size" do
       svg = described_class.render(bounds, fill: "#FFFFFF", stroke: "#000000",
                                            stroke_width: 2)
-      rect = Nokogiri::XML("<svg>#{svg}</svg>").at_css("rect")
+      rect = Moxml.parse("<svg>#{svg}</svg>").at_xpath("//*[local-name()='rect']")
       expect(rect["x"]).to eq("10")
       expect(rect["y"]).to eq("20")
       expect(rect["width"]).to eq("100")
@@ -21,7 +21,7 @@ RSpec.describe Ea::Svg::EaEmitter::Element::ShapeRenderer do
     it "applies fill and stroke via the group style" do
       svg = described_class.render(bounds, fill: "#FFCC00", stroke: "#990000",
                                            stroke_width: 3)
-      group = Nokogiri::XML("<svg>#{svg}</svg>").at_css("g")
+      group = Moxml.parse("<svg>#{svg}</svg>").at_xpath("//*[local-name()='g']")
       expect(group["style"]).to include("fill:#FFCC00")
       expect(group["style"]).to include("stroke:#990000")
       expect(group["style"]).to include("stroke-width:3")
@@ -30,14 +30,14 @@ RSpec.describe Ea::Svg::EaEmitter::Element::ShapeRenderer do
     it "uses rx=0.00 corner radius" do
       svg = described_class.render(bounds, fill: "#FFF", stroke: "#000",
                                            stroke_width: 2)
-      rect = Nokogiri::XML("<svg>#{svg}</svg>").at_css("rect")
+      rect = Moxml.parse("<svg>#{svg}</svg>").at_xpath("//*[local-name()='rect']")
       expect(rect["rx"]).to eq("0.00")
     end
 
     it "uses shape-rendering=auto" do
       svg = described_class.render(bounds, fill: "#FFF", stroke: "#000",
                                            stroke_width: 2)
-      rect = Nokogiri::XML("<svg>#{svg}</svg>").at_css("rect")
+      rect = Moxml.parse("<svg>#{svg}</svg>").at_xpath("//*[local-name()='rect']")
       expect(rect["shape-rendering"]).to eq("auto")
     end
   end

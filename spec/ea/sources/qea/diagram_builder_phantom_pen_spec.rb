@@ -15,7 +15,7 @@ RSpec.shared_context "a QEA connector pen" do
   let(:xml) do
     svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
                                                     document: document, frame: false, content_anchor: false).render
-    Nokogiri::XML(svg).remove_namespaces!
+    Moxml.parse(svg)
   end
 end
 
@@ -31,7 +31,7 @@ RSpec.describe "QEA phantom connector pens" do
 
       it "uses a one-pixel source pen while preserving the theme default" do
         expect(connector.style[:lwidth]).to eq("1")
-        expect(xml.at_css("path").parent["style"]).to include("stroke-width:1;")
+        expect(xml.at_xpath("//*[local-name()='path']").parent["style"]).to include("stroke-width:1;")
         expect(diagram.theme.connector_line_width).to eq(2)
       end
     end
@@ -48,7 +48,7 @@ RSpec.describe "QEA saved connector pens" do
 
       it "preserves the saved pen and theme fallback" do
         expect(connector.style[:lwidth]).to eq(source_width)
-        expect(xml.at_css("path").parent["style"]).to include("stroke-width:#{width};")
+        expect(xml.at_xpath("//*[local-name()='path']").parent["style"]).to include("stroke-width:#{width};")
         expect(diagram.theme.connector_line_width).to eq(2)
       end
     end

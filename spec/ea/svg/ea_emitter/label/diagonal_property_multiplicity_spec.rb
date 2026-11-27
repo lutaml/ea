@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "nokogiri"
+require "moxml"
 
 # QEA connectors carry no UMLDI label bounds, so the helper clears them.
 RSpec.describe "Multiplicity of a Property target on a steep diagonal" do

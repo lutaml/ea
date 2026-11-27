@@ -8,9 +8,9 @@ module QeaPackageTabWidthHelpers
 
   def package_tab_widths(document, diagram_id)
     emitter = package_elements(document, diagram_id)
-    xml = Nokogiri::XML("<svg>#{emitter.render}</svg>")
-    xml.xpath("//g[polygon][text]").to_h do |group|
-      [group.css("text").last.text, package_tab_width(group)]
+    xml = Moxml.parse("<svg>#{emitter.render}</svg>")
+    xml.xpath("//*[local-name()='g'][*[local-name()='polygon']][*[local-name()='text']]").to_h do |group|
+      [group.xpath(".//*[local-name()='text']").last.content, package_tab_width(group)]
     end
   end
 
@@ -20,7 +20,7 @@ module QeaPackageTabWidthHelpers
   end
 
   def package_tab_width(group)
-    points = group.css("polygon").last["points"].split.map(&:to_f)
+    points = group.xpath(".//*[local-name()='polygon']").last["points"].split.map(&:to_f)
     points[2] - points[0]
   end
 end

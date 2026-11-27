@@ -17,7 +17,7 @@ RSpec.describe Ea::Svg::EaEmitter::Element::OperationRenderer do
       ops = [build_op]
       svg = described_class.render(ops, bounds: bounds, first_y: 50,
                                         family: "Carlito", size: 7)
-      texts = Nokogiri::XML("<svg>#{svg}</svg>").css("text")
+      texts = Moxml.parse("<svg>#{svg}</svg>").xpath("//*[local-name()='text']")
       expect(texts.size).to eq(2)
     end
 
@@ -25,7 +25,7 @@ RSpec.describe Ea::Svg::EaEmitter::Element::OperationRenderer do
       ops = [build_op(name: "draw")]
       svg = described_class.render(ops, bounds: bounds, first_y: 50,
                                         family: "Carlito", size: 7)
-      texts = Nokogiri::XML("<svg>#{svg}</svg>").css("text")
+      texts = Moxml.parse("<svg>#{svg}</svg>").xpath("//*[local-name()='text']")
       # First text at visibility offset (5), second at content offset (20)
       expect(texts[0]["x"].to_i).to eq(10 + described_class::VISIBILITY_X_OFFSET)
       expect(texts[1]["x"].to_i).to eq(10 + described_class::CONTENT_X_OFFSET)
@@ -35,7 +35,7 @@ RSpec.describe Ea::Svg::EaEmitter::Element::OperationRenderer do
       ops = [build_op(name: "a"), build_op(name: "b"), build_op(name: "c")]
       svg = described_class.render(ops, bounds: bounds, first_y: 50,
                                         family: "Carlito", size: 7)
-      texts = Nokogiri::XML("<svg>#{svg}</svg>").css("text")
+      texts = Moxml.parse("<svg>#{svg}</svg>").xpath("//*[local-name()='text']")
       # Each op produces 2 text elements; op index 1 is at y = 50 + (7+6) = 63
       expect(texts[2]["y"].to_i).to eq(63)
       expect(texts[4]["y"].to_i).to eq(76)
@@ -44,7 +44,7 @@ RSpec.describe Ea::Svg::EaEmitter::Element::OperationRenderer do
     it "returns an empty group when operations list is empty" do
       svg = described_class.render([], bounds: bounds, first_y: 50,
                                        family: "Carlito", size: 7)
-      expect(Nokogiri::XML("<svg>#{svg}</svg>").css("text").size).to eq(0)
+      expect(Moxml.parse("<svg>#{svg}</svg>").xpath("//*[local-name()='text']").size).to eq(0)
     end
 
     it "centers the reception heading using its emitted text length" do
@@ -60,7 +60,7 @@ RSpec.describe Ea::Svg::EaEmitter::Element::OperationRenderer do
 
       settings.each do |font|
         svg = described_class.render([operation], bounds: bounds, first_y: 50, **font)
-        heading = Nokogiri::XML("<svg>#{svg}</svg>").at_css("text")
+        heading = Moxml.parse("<svg>#{svg}</svg>").at_xpath("//*[local-name()='text']")
         emitted_width = heading["textLength"].to_f
         center = heading["x"].to_f + emitted_width / 2
 
@@ -71,7 +71,7 @@ RSpec.describe Ea::Svg::EaEmitter::Element::OperationRenderer do
     it "preserves heading baseline and operation rows when receptions are present" do
       operations = [build_op(is_reception: true), build_op(name: "next")]
       svg = described_class.render(operations, bounds: bounds, first_y: 50, family: "Carlito", size: 7)
-      texts = Nokogiri::XML("<svg>#{svg}</svg>").css("text")
+      texts = Moxml.parse("<svg>#{svg}</svg>").xpath("//*[local-name()='text']")
 
       expect(texts[0]["y"].to_f).to eq(50)
       expect(texts[1]["y"].to_f).to eq(63)

@@ -66,6 +66,6 @@ module BlankTagHelpers
     diagram = document.diagrams.first
     diagram.elements.first.show_tagged_values = visible unless visible.nil?
     svg = Ea::Svg::EaEmitter::Elements.new(diagram, model_index: document.index_by_id).render
-    Nokogiri::XML("<svg>#{svg}</svg>").remove_namespaces!
+    Moxml.parse("<svg>#{svg}</svg>")
   end
 end

@@ -40,6 +40,6 @@ module QeaAssociationClassHelpers
     svg = Ea::Svg::EaEmitter::Connectors.new(
       diagram, model_index: document.index_by_id, drawn_bounds: elements.drawn_bounds
     ).render
-    Nokogiri::XML("<svg>#{svg}</svg>").remove_namespaces!
+    Moxml.parse("<svg>#{svg}</svg>")
   end
 end

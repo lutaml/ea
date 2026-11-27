@@ -14,8 +14,8 @@ module LabelSeatHelpers
       model_index: document.index_by_id, document: document,
       theme: label_seat_theme(font_size)
     )
-    Nokogiri::XML(%(<svg>#{labels.render}</svg>)).css("text").map do |node|
-      [node.text, [node["x"].to_f, node["y"].to_f]]
+    Moxml.parse(%(<svg>#{labels.render}</svg>)).xpath("//*[local-name()='text']").map do |node|
+      [node.content, [node["x"].to_f, node["y"].to_f]]
     end
   end
 

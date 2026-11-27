@@ -24,13 +24,13 @@ module QeaMarkerHelpers
                      connector_attributes: connector_attributes) do |document|
       diagram = document.diagrams.first
       index = document.index_by_id
-      markers = Nokogiri::XML("<svg>#{Ea::Svg::EaEmitter::Markers.new(diagram, model_index: index).render}</svg>")
+      markers = Moxml.parse("<svg>#{Ea::Svg::EaEmitter::Markers.new(diagram, model_index: index).render}</svg>")
       line = Ea::Svg::EaEmitter::Connectors.new(diagram, model_index: index).render
       ends = line.scan(/-?\d+ -?\d+/).map { |pair| pair.split.map(&:to_i) }
-      geometry = { tip: markers.at_xpath("//polygon")["points"].split.first(2).map(&:to_i),
+      geometry = { tip: markers.at_xpath("//*[local-name()='polygon']")["points"].split.first(2).map(&:to_i),
                    start: ends.first, finish: ends.last,
-                   arrows: markers.xpath("//path").size,
-                   keys: markers.xpath("//g").map { |g| g["style"][/fill:(#\h+)/, 1] } }
+                   arrows: markers.xpath("//*[local-name()='path']").size,
+                   keys: markers.xpath("//*[local-name()='g']").map { |g| g["style"][/fill:(#\h+)/, 1] } }
     end
     geometry
   end
@@ -60,7 +60,7 @@ module QeaMarkerHelpers
                      connector_type: "Nesting",
                      connector_attributes: { direction: direction }) do |document|
       diagram = document.diagrams.first
-      markup = Nokogiri::XML(
+      markup = Moxml.parse(
         "<svg>#{Ea::Svg::EaEmitter::Markers.new(diagram, model_index: document.index_by_id).render}</svg>"
       )
       line = Ea::Svg::EaEmitter::Connectors.new(diagram, model_index: document.index_by_id).render

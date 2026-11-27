@@ -4,7 +4,7 @@ module HandDrawLabelFontHelpers
   def hand_draw_label_styles(document, theme:)
     svg = Ea::Svg::EaEmitter::Labels.new(document.diagrams.first, model_index: document.index_by_id,
                                                                   theme: theme).render
-    Nokogiri::XML("<svg>#{svg}</svg>").css("text").map { |node| node["style"] }
+    Moxml.parse("<svg>#{svg}</svg>").xpath("//*[local-name()='text']").map { |node| node["style"] }
   end
 
   def hand_draw_label_properties

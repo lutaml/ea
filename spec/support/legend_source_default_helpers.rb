@@ -9,7 +9,7 @@ module LegendSourceDefaultHelpers
       element: element, model_element: Ea::Model::Note.new(legend: legend),
       family: "Cambria", size: size, size_unit: unit
     )
-    Nokogiri::XML("<svg>#{Ea::Svg::EaEmitter::Compartment::Shape.render(context)}</svg>")
+    Moxml.parse("<svg>#{Ea::Svg::EaEmitter::Compartment::Shape.render(context)}</svg>")
   end
 
   def source_default_qea_legend(document, diagram_id, object_id)
@@ -23,7 +23,7 @@ module LegendSourceDefaultHelpers
 
   def unique_source_legend_labels(texts, legend)
     legend.items.map do |item|
-      matches = texts.select { |text| text.text == item.name }
+      matches = texts.select { |text| text.content == item.name }
       raise "Ambiguous legend label" unless matches.one?
 
       matches.first

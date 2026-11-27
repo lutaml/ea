@@ -18,6 +18,6 @@ module MidpointNameHelpers
       is_substitutable: options.fetch(:substitutable, false)
     )
     output = midpoint_name_renderer(options).text_for(connector, record[:points])
-    Nokogiri::XML("<svg>#{output}</svg>").css("text")
+    Moxml.parse("<svg>#{output}</svg>").xpath("//*[local-name()='text']")
   end
 end

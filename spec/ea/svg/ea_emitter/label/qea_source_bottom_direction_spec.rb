@@ -25,7 +25,7 @@ module QeaSourceBottomDirectionHelpers
     document = Ea::Sources::Qea::Adapter.new(database, "bottom-property.qea").to_document
     svg = Ea::Svg::EaEmitter::Document.new(document.diagrams.first, model_index: document.index_by_id,
                                                                     document: document, frame: false, content_anchor: false).render
-    qea_end_label_result(Nokogiri::XML(svg).remove_namespaces!, "0..1")
+    qea_end_label_result(Moxml.parse(svg), "0..1")
   end
 end
 

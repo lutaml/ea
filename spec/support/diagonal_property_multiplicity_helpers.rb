@@ -20,7 +20,7 @@ module DiagonalPropertyMultiplicityHelpers
   end
 
   def text_positions(svg)
-    nodes = Nokogiri::XML(svg).xpath("//*[local-name()='text']")
-    nodes.to_h { |node| [node.text, [node["x"].to_f, node["y"].to_f]] }
+    nodes = Moxml.parse(svg).xpath("//*[local-name()='text']")
+    nodes.to_h { |node| [node.content, [node["x"].to_f, node["y"].to_f]] }
   end
 end

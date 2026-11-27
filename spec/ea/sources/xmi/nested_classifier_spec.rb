@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "nokogiri"
+require "moxml"
 
 RSpec.describe Ea::Sources::Xmi::Adapter, "nested classifiers" do
   include XmiBasicRouteLabelHelpers

@@ -77,8 +77,8 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
                                       label_font_family: "Cambria", font_size: 7)
     labels = described_class.new(diagram, model_index: document.index_by_id,
                                           theme: theme)
-    text = Nokogiri::XML("<svg>#{labels.render}</svg>").css("text")
-                   .find { |node| node.text == "+items" }
+    text = Moxml.parse("<svg>#{labels.render}</svg>").xpath("//*[local-name()='text']")
+                .find { |node| node.content == "+items" }
 
     expect(text["style"]).to include("font-family:Cambria;")
     expect(text["textLength"]).to eq("29")
@@ -127,7 +127,7 @@ RSpec.describe Ea::Svg::EaEmitter::Labels do
       relationship.name = "association name"
       diagram.style_ex = "Theme=:39;"
       labels = described_class.new(diagram, model_index: document.index_by_id, theme: diagram.theme)
-      nodes = Nokogiri::XML("<svg>#{labels.render}</svg>").css("text")
+      nodes = Moxml.parse("<svg>#{labels.render}</svg>").xpath("//*[local-name()='text']")
 
       expect(nodes.map(&:text)).to include("+items", "association name")
       expect(nodes.map { |node| node["style"] }.uniq).to all(include("font-family:Cambria;", "font-size:7pt;"))

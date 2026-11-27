@@ -13,8 +13,8 @@ RSpec.describe "Legend heading font units" do
       "09AF6B8A-557C-43bc-BBB0-47C1E9401EF3" => 9
     }.each do |id, item_size|
       texts = compartment_texts(document, id)
-      title = texts.find { |node| node.text == "凡例" }
-      labels = texts.select { |node| node.text.include?("で定義されたクラス") }
+      title = texts.find { |node| node.content == "凡例" }
+      labels = texts.select { |node| node.content.include?("で定義されたクラス") }
 
       expect(title["style"]).to include("font-size:12pt")
       expect(labels.size).to eq(3)
@@ -24,8 +24,8 @@ RSpec.describe "Legend heading font units" do
 
   it "preserves the default heading size and the item baselines" do
     texts = compartment_texts(document, "0016F797-D055-4717-AF1A-606413D0A166")
-    title = texts.find { |node| node.text == "凡例" }
-    labels = texts.select { |node| node.text.include?("に定義されたクラス") }
+    title = texts.find { |node| node.content == "凡例" }
+    labels = texts.select { |node| node.content.include?("に定義されたクラス") }
 
     expect(title["style"]).to include("font-size:12pt")
     expect(labels.map { |node| node["y"].to_f - title["y"].to_f }).to eq([22, 41, 60])

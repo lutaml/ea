@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "moxml"
 require "tempfile"
 
 module UmlDiLabelBoundsFallbackHelpers
@@ -14,7 +14,7 @@ module UmlDiLabelBoundsFallbackHelpers
   end
 
   def self.stripped_xml(path)
-    xml = Nokogiri::XML(File.read(path))
+    xml = Moxml.parse(File.read(path))
     element = xml.at_xpath(
       "//*[local-name()='element' and @subject='EAID_3677D889_F04B_4fb8_9651_5D1D972FBCD6']"
     )
@@ -40,7 +40,7 @@ module UmlDiLabelBoundsFallbackHelpers
   end
 
   def self.role_count(texts)
-    texts.count { |node| node.text == "+indoorOpeningAttribute" }
+    texts.count { |node| node.content == "+indoorOpeningAttribute" }
   end
 
   def self.explicit_box_state(path)
@@ -60,11 +60,11 @@ module UmlDiLabelBoundsFallbackHelpers
       render_diagram, model_index: document.index_by_id, document: document,
                       frame: true
     ).render
-    Nokogiri::XML(svg).xpath("//*[local-name()='text']")
+    Moxml.parse(svg).xpath("//*[local-name()='text']")
   end
 
   def self.label_position(texts, label)
-    node = texts.find { |item| item.text == label }
+    node = texts.find { |item| item.content == label }
     [node["x"], node["y"]]
   end
 end

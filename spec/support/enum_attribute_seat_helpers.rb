@@ -9,6 +9,6 @@ module EnumAttributeSeatHelpers
   end
 
   def text_xs(nodes, pattern)
-    nodes.select { |node| node.text.match?(pattern) }.map { |node| node["x"].to_f }
+    nodes.select { |node| node.content.match?(pattern) }.map { |node| node["x"].to_f }
   end
 end

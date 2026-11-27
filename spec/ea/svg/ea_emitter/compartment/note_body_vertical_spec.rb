@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "nokogiri"
+require "moxml"
 
 RSpec.describe "Ea::Fonts::Metrics.gdi_cell_metrics" do
   [
@@ -31,7 +31,7 @@ module NoteVerticalHelpers
       theme: Ea::Theme::Registry.default
     )
     svg = Ea::Svg::EaEmitter::Compartment::NoteBody.render(context)
-    Nokogiri::XML.fragment(svg).css("text").map { |row| row["y"].to_f - 100 }
+    Moxml.parse("<root>#{svg}</root>").xpath("//*[local-name()='text']").map { |row| row["y"].to_f - 100 }
   end
 
   def diagram_svg(path, guid)
@@ -39,12 +39,12 @@ module NoteVerticalHelpers
     diagram = document.diagrams.find { |entry| entry.id.include?(guid) }
     svg = Ea::Svg::EaEmitter::Document.new(diagram, model_index: document.index_by_id,
                                                     document: document, frame: true).render
-    Nokogiri::XML(svg).remove_namespaces!
+    Moxml.parse(svg)
   end
 
   # Tops of note outlines: the five-point polygons (the fold triangle has three).
   def shape_tops(xml)
-    xml.xpath("//polygon").filter_map do |node|
+    xml.xpath("//*[local-name()='polygon']").filter_map do |node|
       numbers = node["points"].split.map(&:to_i)
       numbers[1] if numbers.size == 10
     end
@@ -54,7 +54,7 @@ module NoteVerticalHelpers
   def note_layout(path, guid, first_line)
     xml = diagram_svg(path, guid)
     tops = shape_tops(xml)
-    rows = xml.xpath("//text").map { |node| [node.text, node["y"].to_f] }
+    rows = xml.xpath("//*[local-name()='text']").map { |node| [node.content, node["y"].to_f] }
     start = rows.index { |text, _| text.start_with?(first_line) }
     [tops, rows[start, 2].map(&:last)]
   end

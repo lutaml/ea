@@ -10,15 +10,15 @@ RSpec.describe Ea::Svg::EaEmitter::Element::IconRenderer do
   end
 
   def parse_paths(svg)
-    Nokogiri::XML("<svg>#{svg}</svg>").css("path")
+    Moxml.parse("<svg>#{svg}</svg>").xpath("//*[local-name()='path']")
   end
 
   def parse_first_group_style(svg)
-    Nokogiri::XML("<svg>#{svg}</svg>").at_css("g")["style"]
+    Moxml.parse("<svg>#{svg}</svg>").at_xpath("//*[local-name()='g']")["style"]
   end
 
   def parse_first_path(svg)
-    Nokogiri::XML("<svg>#{svg}</svg>").at_css("path")
+    Moxml.parse("<svg>#{svg}</svg>").at_xpath("//*[local-name()='path']")
   end
 
   describe ".render" do

@@ -17,9 +17,9 @@ RSpec.describe "QEA enumeration literal captions" do
   end
 
   it "places the italic caption one row above the first literal" do
-    caption = nodes.find { |node| node.text == "literals" }
-    first = nodes.find { |node| node.text == "val1" }
-    second = nodes.find { |node| node.text == "val2" }
+    caption = nodes.find { |node| node.content == "literals" }
+    first = nodes.find { |node| node.content == "val1" }
+    second = nodes.find { |node| node.content == "val2" }
 
     expect(caption).not_to be_nil
     expect(caption["style"]).to include("font-style:italic")
@@ -32,10 +32,10 @@ RSpec.describe "Enumeration compartment rows" do
   include EnumCaptionHelpers
   let(:literals) { %w[Red Green Blue].map { |name| Ea::Model::EnumerationLiteral.new(name: name) } }
   let(:renderer) { enum_caption_renderer(literals) }
-  let(:nodes) { Nokogiri::XML("<svg>#{renderer.render}</svg>").xpath("//text") }
+  let(:nodes) { Moxml.parse("<svg>#{renderer.render}</svg>").xpath("//*[local-name()='text']") }
 
   it "reserves a row for the caption when growing a box without code values" do
-    last = nodes.find { |node| node.text == "Blue" }
+    last = nodes.find { |node| node.content == "Blue" }
     drawn = renderer.drawn_bounds.fetch("enum")
 
     expect(nodes.map(&:text)).to include("literals")

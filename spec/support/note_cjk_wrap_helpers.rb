@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "moxml"
 
 module NoteCjkWrapHelpers
   PLATEAU = "examples/qea/20251010_current_plateau_v5.1.qea"
@@ -13,7 +13,7 @@ module NoteCjkWrapHelpers
   # beginning with `first`.
   def note_rows(guid, first, count)
     nodes = qea_text_nodes(plateau_document, guid)
-    start = nodes.index { |node| node.text.start_with?(first) }
-    nodes[start, count].map { |node| [node.text, node["textLength"].to_i] }
+    start = nodes.to_a.index { |node| node.content.start_with?(first) }
+    nodes.to_a[start, count].map { |node| [node.content, node["textLength"].to_i] }
   end
 end
