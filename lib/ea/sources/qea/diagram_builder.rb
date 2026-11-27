@@ -124,11 +124,7 @@ module Ea
 
         def build_element(obj_row, diagram_row)
           @current_obj_row = obj_row
-          style_hash = DiagramStyleParser.parse(obj_row.objectstyle)
-          style_hash[:stored_attribute_order] = true
-          style_hash["connector_proxy"] = true if connector_proxy?(obj_row)
-          fqname = stereotype_fqname_for(obj_row)
-          style_hash[:stereotype_fqname] = fqname if fqname
+          style_hash = element_style_for(obj_row)
           font_style = effective_font_style(obj_row, style_hash)
           Ea::Model::DiagramElement.new(
             id: IdNormalizer.synthetic("de", diagram_row.diagram_id,
@@ -138,6 +134,28 @@ module Ea
             z_order: obj_row.sequence,
             bounds: bounds_from_rect(obj_row),
             style: style_hash,
+            **element_font_kwargs(font_style, style_hash),
+            line_width: effective_line_width(obj_row, style_hash),
+            line_color: effective_line_color(obj_row, style_hash),
+            background_color: style_hash[:bcol]&.to_i
+          )
+        end
+
+        # Style hash shared by the element build: parsed object style
+        # plus the stored-order, proxy and stereotype-fqname markers.
+        def element_style_for(obj_row)
+          style_hash = DiagramStyleParser.parse(obj_row.objectstyle)
+          style_hash[:stored_attribute_order] = true
+          style_hash["connector_proxy"] = true if connector_proxy?(obj_row)
+          fqname = stereotype_fqname_for(obj_row)
+          style_hash[:stereotype_fqname] = fqname if fqname
+          style_hash
+        end
+
+        # Font rendering kwargs derived from the stored style plus the
+        # effective font selection.
+        def element_font_kwargs(font_style, style_hash)
+          {
             font_family: presence(font_style[:font]),
             font_size: font_size_from(font_style),
             font_size_inherited: font_size_from(font_style).nil?,
@@ -146,11 +164,8 @@ module Ea
             font_bold: truthy?(style_hash[:bold]),
             font_italic: truthy?(style_hash[:italic]),
             font_underline: truthy?(style_hash[:ul]),
-            show_tagged_values: truthy?(style_hash[:tag]),
-            line_width: effective_line_width(obj_row, style_hash),
-            line_color: effective_line_color(obj_row, style_hash),
-            background_color: style_hash[:bcol]&.to_i
-          )
+            show_tagged_values: truthy?(style_hash[:tag])
+          }
         end
 
         # EA anchors association-class links on ProxyConnector stubs and
@@ -239,14 +254,19 @@ module Ea
           target = diagram_object_placement(diagram_row.diagram_id, target_id)
           return nil unless source && target
 
-          source_bounds = drawn_bounds_for(source)
-          target_bounds = drawn_bounds_for(target)
-          waypoints = if source_id == target_id
-                        self_loop_waypoints(source_bounds)
-                      else
-                        direct_waypoints(source_bounds, target_bounds)
-                      end
           Ea::Model::DiagramConnector.new(
+            **regenerated_common_attrs(conn, diagram_row, idx),
+            waypoints: regenerated_waypoints(source_id, target_id,
+                                             drawn_bounds_for(source),
+                                             drawn_bounds_for(target)),
+            **regenerated_render_attrs(conn)
+          )
+        end
+
+        # Identity/model-side attributes shared by every regenerated
+        # connector row.
+        def regenerated_common_attrs(conn, diagram_row, idx)
+          {
             id: IdNormalizer.synthetic("ec", diagram_row.diagram_id, idx),
             diagram_id: IdNormalizer.from_guid(diagram_row.ea_guid),
             relationship_ref: ref_for_raw_connector(conn),
@@ -254,22 +274,41 @@ module Ea
             direction: conn.direction,
             source_stereotype: conn.sourcestereotype,
             target_stereotype: conn.deststereotype,
-            waypoints: waypoints,
             label_boxes: {},
-            is_substitutable: substitutable_connector?(conn),
-            # Only the Dependency family carries EA's double-back
-            # "M t L s M t" byte form; regenerated generalizations
-            # and associations draw as plain source-first lines
-            # (0CABA7D7's gen "M 125 130 L 125 99"; 568CDFC9's
-            # regenerated assocs).
-            style: if conn.connector_type == "Dependency"
-                     { direct: true, regenerated: true }
-                   else
-                     { regenerated: true }
-                   end,
             hidden: false,
             has_geometry_offsets: false
-          )
+          }
+        end
+
+        # Render-side attributes: substitution flag plus the
+        # regenerated style chosen by connector family.
+        def regenerated_render_attrs(conn)
+          {
+            is_substitutable: substitutable_connector?(conn),
+            style: regenerated_style(conn)
+          }
+        end
+
+        def regenerated_waypoints(source_id, target_id, source_bounds,
+                                  target_bounds)
+          if source_id == target_id
+            self_loop_waypoints(source_bounds)
+          else
+            direct_waypoints(source_bounds, target_bounds)
+          end
+        end
+
+        # Only the Dependency family carries EA's double-back
+        # "M t L s M t" byte form; regenerated generalizations
+        # and associations draw as plain source-first lines
+        # (0CABA7D7's gen "M 125 130 L 125 99"; 568CDFC9's
+        # regenerated assocs).
+        def regenerated_style(conn)
+          if conn.connector_type == "Dependency"
+            { direct: true, regenerated: true }
+          else
+            { regenerated: true }
+          end
         end
 
         # EA's regenerated self-loop: a small elbow exiting and
@@ -298,31 +337,49 @@ module Ea
         end
 
         def context_autoline(conn, diagram_row, object_id)
-          focal = ContextDiagramSupport.focal_placements(diagram_row, database).first
-          return nil unless focal
+          source_bounds, target_bounds = context_autoline_bounds(diagram_row,
+                                                                 object_id)
+          return nil unless source_bounds
 
-          into_focal = ContextDiagramSupport.package_context(diagram_row)["variant"] == "Clients"
-          source_id = into_focal ? object_id : focal.ea_object_id.to_i
-          target_id = into_focal ? focal.ea_object_id.to_i : object_id
-          source_placement = diagram_object_placement(diagram_row.diagram_id, source_id)
-          target_placement = diagram_object_placement(diagram_row.diagram_id, target_id)
-          return nil unless source_placement && target_placement
-
-          source_bounds = drawn_bounds_for(source_placement)
-          target_bounds = drawn_bounds_for(target_placement)
-          waypoints = direct_waypoints(source_bounds, target_bounds)
           Ea::Model::DiagramConnector.new(
             id: IdNormalizer.synthetic("xc", diagram_row.diagram_id, object_id),
             diagram_id: IdNormalizer.from_guid(diagram_row.ea_guid),
             relationship_ref: ref_for_raw_connector(conn),
             connector_type: conn.connector_type,
-            waypoints: waypoints,
+            waypoints: direct_waypoints(source_bounds, target_bounds),
             label_boxes: {},
             is_substitutable: substitutable_connector?(conn),
             style: { direct: true },
             hidden: false,
             has_geometry_offsets: false
           )
+        end
+
+        # Focal-relative endpoints for a Clients/Providers context
+        # autoline; empty when the focal object or either placement
+        # is missing.
+        def context_autoline_bounds(diagram_row, object_id)
+          focal = ContextDiagramSupport.focal_placements(diagram_row, database).first
+          return [] unless focal
+
+          into_focal = ContextDiagramSupport.package_context(diagram_row)["variant"] == "Clients"
+          source_id, target_id = context_autoline_endpoints(into_focal, focal,
+                                                            object_id)
+          source_placement = diagram_object_placement(diagram_row.diagram_id, source_id)
+          target_placement = diagram_object_placement(diagram_row.diagram_id, target_id)
+          return [] unless source_placement && target_placement
+
+          [drawn_bounds_for(source_placement), drawn_bounds_for(target_placement)]
+        end
+
+        # Clients context draws toward the focal object; Providers
+        # draws away from it.
+        def context_autoline_endpoints(into_focal, focal, object_id)
+          if into_focal
+            [object_id, focal.ea_object_id.to_i]
+          else
+            [focal.ea_object_id.to_i, object_id]
+          end
         end
 
         # EA renders PHANTOM CONNECTORS for associations that exist

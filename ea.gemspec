@@ -51,7 +51,11 @@ Gem::Specification.new do |spec|
   # not exist before 0.7.5 (NoMethodError at serialization). All
   # three are required for faithful QEA→XMI export.
   spec.add_dependency "liquid", "~> 5"
-  spec.add_dependency "nokogiri", "~> 1.18"
+  # XML via moxml (default adapter: leptris) — the gem parses every
+  # document through it; moxml declares no adapter dependencies, so
+  # the leptris gem is ours to pin.
+  spec.add_dependency "moxml", "~> 0.6"
+  spec.add_dependency "leptris", "~> 1.9"
   spec.add_dependency "thor", "~> 1.4"
   spec.add_dependency "xmi", "~> 0.7.5"
 
