@@ -36,12 +36,32 @@ module Ea
         # @param guidance [Object, nil] guidance document
         # @return [ParsedResult]
         def parsed(qea_path, guidance: nil)
+          require_uml!
           database = Services::DatabaseLoader.new(qea_path).load
           context = Context.new(database, guidance)
           ParsedResult.new(
             parser: context.parser,
             xmi_id_index: context.xmi_id_index,
             drop_options: context.drop_options
+          )
+        end
+
+        # Load a .qea file into the Loaded graph shape the table
+        # renders consume (parser, uml_document facade, drop options,
+        # lazy id index) — the .qea branch of the XMI load_graph.
+        #
+        # @param qea_path [String] path to the .qea file
+        # @param guidance [Object, nil] guidance document
+        # @return [LazyGraph]
+        def parsed_graph(qea_path, guidance: nil)
+          require_uml!
+          database = Services::DatabaseLoader.new(qea_path).load
+          context = Context.new(database, guidance)
+          LazyGraph.new(
+            parser: context.parser,
+            uml_document: LazyDocument.new(context),
+            drop_options: context.drop_options,
+            xmi_id_index: context.xmi_id_index
           )
         end
 
@@ -157,6 +177,95 @@ module Ea
         def data_type_for(ea_object_id)
           object = database.find_object(ea_object_id)
           object && Factory::DataTypeTransformer.new(database).transform(object)
+        end
+      end
+
+      # The Loaded graph shape the table renders consume. Classes are
+      # constructed per package on demand and memoized on the
+      # context's caches; the database stays the single source.
+      class LazyGraph < Struct.new(:parser, :uml_document, :drop_options,
+                                   :xmi_id_index, keyword_init: true)
+      end
+
+      # Document facade answering RootDrop's reads: name + packages.
+      class LazyDocument
+        def initialize(context)
+          @context = context
+        end
+
+        def name
+          "EA Model"
+        end
+
+        def packages
+          @context.database.packages
+                  .reject { |package| parent(package) }
+                  .map { |package| LazyPackage.new(@context, package) }
+        end
+
+        private
+
+        def parent(package)
+          @context.database.find_package(package.parent_id)
+        end
+      end
+
+      # Package facade over one t_package row: classes, enums, data
+      # types and child packages construct on demand.
+      class LazyPackage
+        def initialize(context, package)
+          @context = context
+          @package = package
+        end
+
+        def name
+          @package.name
+        end
+
+        def xmi_id
+          @package.ea_guid ? ea_id(@package.ea_guid) : nil
+        end
+
+        def definition
+          @package.notes ? Ea::Rtf.to_text(@package.notes.to_s) : nil
+        end
+
+        def stereotype
+          nil
+        end
+
+        def classes
+          @context.database.objects_in_package(@package.package_id)
+                 .select(&:uml_class?)
+                 .map { |row| @context.klass_for(row.ea_object_id) }
+                 .compact
+        end
+
+        def enums
+          @context.database.objects_in_package(@package.package_id)
+                 .select(&:enumeration?)
+                 .filter_map { |row| @context.enum_for(row.ea_object_id) }
+        end
+
+        def data_types
+          @context.database.objects_in_package(@package.package_id)
+                 .select(&:data_type?)
+                 .filter_map { |row| @context.data_type_for(row.ea_object_id) }
+        end
+
+        def packages
+          @context.database.child_packages_for(@package.package_id)
+                 .map { |row| LazyPackage.new(@context, row) }
+        end
+
+        def diagrams
+          []
+        end
+
+        private
+
+        def ea_id(guid)
+          Ea::GuidFormat.ea_guid_to_xmi_id(guid)
         end
       end
 

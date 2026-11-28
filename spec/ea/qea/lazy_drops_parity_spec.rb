@@ -156,3 +156,30 @@ RSpec.describe "Ea::Qea::LazyDrops plugin contract" do
     expect(parent.name).not_to be_empty
   end
 end
+
+RSpec.describe "Ea::Qea::LazyDrops.parsed_graph" do
+  let(:qea_path) { File.expand_path("../../../examples/qea/basic.qea", __dir__) }
+
+  it "serves the load_graph shape the table renders consume" do
+    graph = Ea::Qea::LazyDrops.parsed_graph(qea_path)
+
+    expect(graph.uml_document.name).to eq("EA Model")
+    expect(graph.uml_document.packages).not_to be_empty
+    expect(graph.drop_options[:lookup]).not_to be_nil
+    expect(graph.xmi_id_index).not_to be_nil
+
+    package = graph.uml_document.packages.first
+    expect(package.name).not_to be_empty
+    expect(package.packages.is_a?(Array)).to be true
+  end
+
+  it "constructs a package's classes on demand" do
+    graph = Ea::Qea::LazyDrops.parsed_graph(qea_path)
+    packages = graph.uml_document.packages
+    all_classes = packages.flat_map do |package|
+      package.classes + package.packages.flat_map(&:classes)
+    end
+    expect(all_classes).not_to be_empty
+    expect(all_classes.all?(Lutaml::Uml::UmlClass)).to be true
+  end
+end
