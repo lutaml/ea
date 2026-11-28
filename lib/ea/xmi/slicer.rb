@@ -13,19 +13,28 @@ module Ea
     # Ea graph costs 10+ GB of live objects.
     #
     # The closure is generic: every attribute value that looks like an EA
-    # element id (EAID_/EAPK_/EAEM_) found anywhere inside a kept
+    # element id (EAID_/EAPK_/EAEM_/EAJava_) found anywhere inside a kept
     # element's subtree keeps the referenced element too, transitively -
     # no XMI semantics are encoded here. Only container tags are
-    # membership-gated (packagedElement in the model, element and
-    # connector in the extension); anything nested inside a kept
-    # container is copied verbatim. The diagrams section is dropped.
+    # membership-gated (packagedElement in the model and in the
+    # extension's primitivetypes block, element and connector in the
+    # extension); anything nested inside a kept container is copied
+    # verbatim. The diagrams section is dropped.
+    #
+    # The extension's primitivetypes block carries EA's built-in
+    # primitive types (gml::LengthType, xs::string and friends) under
+    # EAJava_-prefixed ids; a model attribute's <type xmi:idref> points
+    # at one of them, so a kept attribute keeps its referenced primitive
+    # and the primitive's package wrappers. Dropping the block instead
+    # makes sliced parses resolve such attributes to the raw idref,
+    # diverging from the whole-load render.
     #
     # `slices` performs one index pass and one write pass and emits one
     # standalone slice per requested group, so each consumer (one macro,
     # one class table) hydrates only its own class's subgraph: the
     # per-parse peak is the size of one slice, not of the export.
     class Slicer
-      EA_ID_RE = /\A(?:EAID|EAPK|EAEM)_[0-9A-Za-z_]+\z/
+      EA_ID_RE = /\A(?:EAID|EAPK|EAEM|EAJava)_[0-9A-Za-z_]+\z/
       private_constant :EA_ID_RE
 
       XML_DECL = %(<?xml version="1.0" encoding="UTF-8"?>\n)
@@ -46,11 +55,15 @@ module Ea
       # document section. umldi:Diagram carries the embedded diagram
       # shapes (tens of MB with waypoints and bounds in an EA export)
       # and is never referenced by table content, so it gates on the
-      # keep set as well.
+      # keep set as well. The primitivetypes block carries EA's built-in
+      # primitive types, which model attributes reference by id; its
+      # entries gate on the keep set too, so only referenced ones are
+      # kept.
       GATED = {
         model: ["packagedElement", "umldi:Diagram"].freeze,
         elements: ["element"].freeze,
         connectors: ["connector"].freeze,
+        primitivetypes: ["packagedElement"].freeze,
         diagrams: ["diagram"].freeze
       }.freeze
       private_constant :GATED
@@ -58,8 +71,9 @@ module Ea
       SECTION_CHILD = {
         "elements" => :elements,
         "connectors" => :connectors,
-        "diagrams" => :drop,
-        "profiles" => :drop
+        "primitivetypes" => :primitivetypes,
+        "profiles" => :primitivetypes,
+        "diagrams" => :drop
       }.freeze
       private_constant :SECTION_CHILD
 
@@ -132,8 +146,9 @@ module Ea
         end
 
         # Only gated containers become nodes (packagedElement in the
-        # model, element and connector in the extension, and the
-        # embedded umldi:Diagram blocks). Other id-bearing elements -
+        # model and in the extension's primitivetypes block, element and
+        # connector in the extension, and the embedded umldi:Diagram
+        # blocks). Other id-bearing elements -
         # `<type xmi:idref>`, `<model package>` and the like - are pure
         # references: recording them as nodes would let a reference
         # define the element's ancestry, so their EA-id values flow into
@@ -263,8 +278,10 @@ module Ea
           keep[id] = true
           node.refs.each { |r| frontier << [r, false] }
           node.links_refs.each { |r| frontier << [r, true] }
-          # keeping a model element keeps its package ancestry
-          next unless node.section == :model
+          # keeping a model element keeps its package ancestry; a kept
+          # primitive keeps its EA_PrimitiveTypes_Package wrappers, so
+          # the writer's parent-key chain does not cut it off
+          next unless %i[model primitivetypes].include?(node.section)
 
           anc = nodes[node.parent_id]
           while anc && !keep[anc.id]
