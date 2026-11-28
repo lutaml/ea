@@ -12,6 +12,7 @@ module Ea
     autoload :Database, "ea/qea/database"
     autoload :Repositories, "ea/qea/repositories"
     autoload :Benchmark, "ea/qea/benchmark"
+    autoload :LazyDrops, "ea/qea/lazy_drops"
     autoload :FileDetector, "ea/qea/file_detector"
 
     class << self

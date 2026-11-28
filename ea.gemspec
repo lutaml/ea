@@ -54,8 +54,8 @@ Gem::Specification.new do |spec|
   # XML via moxml (default adapter: leptris) — the gem parses every
   # document through it; moxml declares no adapter dependencies, so
   # the leptris gem is ours to pin.
-  spec.add_dependency "moxml", "~> 0.6"
   spec.add_dependency "leptris", "~> 1.9"
+  spec.add_dependency "moxml", "~> 0.6"
   spec.add_dependency "thor", "~> 1.4"
   spec.add_dependency "xmi", "~> 0.7.5"
 
