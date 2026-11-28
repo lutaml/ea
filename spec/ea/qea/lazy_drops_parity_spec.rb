@@ -120,3 +120,39 @@ RSpec.describe Ea::Qea::LazyDrops do
     end
   end
 end
+
+RSpec.describe "Ea::Qea::LazyDrops plugin contract" do
+  let(:qea_path) { File.expand_path("../../../examples/qea/basic.qea", __dir__) }
+
+  it "serves the parsed-source shape the klass-table cache consumes" do
+    parsed = Ea::Qea::LazyDrops.parsed(qea_path)
+
+    expect(parsed.parser.xmi_root_model.model.name).to eq("EA Model")
+
+    klass_record = parsed.parser.xmi_index
+                         .find_packaged_by_name_and_types(
+                           "Class A", ["uml:Class"]
+                         )
+    expect(klass_record).not_to be_nil
+    expect(klass_record.name).to eq("Class A")
+
+    built = parsed.xmi_id_index[klass_record.id]
+    expect(built).to be_a(Lutaml::Uml::UmlClass)
+    expect(built.name).to eq("Class A")
+
+    enums = parsed.parser.xmi_index.packaged_elements_of_type("uml:Enumeration")
+    enums.each do |record|
+      expect(parsed.xmi_id_index[record.id]).to be_a(Lutaml::Uml::Enum)
+    end
+  end
+
+  it "walks parent packages through the index shim" do
+    parsed = Ea::Qea::LazyDrops.parsed(qea_path)
+    index = parsed.parser.xmi_index
+
+    record = index.packaged_elements_of_type("uml:Class").first
+    parent = index.find_parent(record.id)
+    expect(parent).not_to be_nil
+    expect(parent.name).not_to be_empty
+  end
+end
