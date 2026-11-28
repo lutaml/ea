@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<xmi:XMI xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/UML/20161101/UMLDC">
+	<xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5" exporterID="1624"/>
+	<uml:Model xmi:type="uml:Model" name="TestModel">
+		<packagedElement xmi:type="uml:Package" xmi:id="EAPK_ROOT" name="Root">
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_CLS_ABSTRACT" name="_AbstractBuilding" isAbstract="true">
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_ATT_HEIGHT" name="measuredHeight">
+					<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LV_HEIGHT" value="0"/>
+					<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_UV_HEIGHT" value="1"/>
+					<type xmi:idref="EAJava_gml__LengthType"/>
+				</ownedAttribute>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_CLS_BUILDING" name="Building">
+				<generalization xmi:type="uml:Generalization" xmi:id="EAID_GEN_BUILDING" general="EAID_CLS_ABSTRACT" isSubstitutable="true"/>
+			</packagedElement>
+		</packagedElement>
+	</uml:Model>
+	<xmi:Extension extender="Enterprise Architect" extenderID="6.5">
+		<elements>
+			<element xmi:idref="EAID_CLS_ABSTRACT" xmi:type="uml:Class" name="_AbstractBuilding" scope="public">
+				<model package="EAPK_ROOT" ea_localid="1" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Class" nType="0" scope="public" abstract="true"/>
+			</element>
+			<element xmi:idref="EAID_CLS_BUILDING" xmi:type="uml:Class" name="Building" scope="public">
+				<model package="EAPK_ROOT" ea_localid="2" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Class" nType="0" scope="public"/>
+			</element>
+		</elements>
+		<connectors/>
+		<primitivetypes>
+			<packagedElement xmi:type="uml:Package" xmi:id="EAPrimitiveTypesPackage" name="EA_PrimitiveTypes_Package">
+				<packagedElement xmi:type="uml:Package" xmi:id="EAJavaTypesPackage" name="EA_Java_Types_Package">
+					<packagedElement xmi:type="uml:PrimitiveType" xmi:id="EAJava_gml__LengthType" name="gml::LengthType"/>
+					<packagedElement xmi:type="uml:PrimitiveType" xmi:id="EAJava_xs__string" name="xs::string"/>
+				</packagedElement>
+			</packagedElement>
+		</primitivetypes>
+		<profiles/>
+		<diagrams/>
+	</xmi:Extension>
+</xmi:XMI>
